@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": { 
+        "vnet_name_TKG": { "value": "vnet-tkg" },
+        "vnet_cidr_TKG" : { "value": "10.0.0.0/16" },
+        "subnet_name_Bootstrap" : { "value": "subnetBootstrap" },
+        "subnet_cidr_Bootstrap" : { "value": "10.0.0.0/24" },
+        "nsg_name_nic_Bootstrap": { "value": "nsg-vm-bootstrap" },
+        "subnet_name_MgmtControl" : { "value" : "subnetMgmtControlPlane" },
+        "subnet_cidr_MgmtControl" : { "value" : "10.0.1.0/24" },
+        "nsg_name_mgmt_control_plane": { "value": "nsg-MgmtControlPlane" },
+        "subnet_name_MgmtWorker" : { "value" : "subnetMgmtWorker" },
+        "subnet_cidr_MgmtWorker" : { "value" : "10.0.2.0/24" },
+        "nsg_name_mgmt_worker": { "value": "nsg-MgmtWorker" },
+        "subnet_name_WorkloadControl" : { "value" : "subnetWorkloadControlPlane" },
+        "subnet_cidr_WorkloadControl" : { "value" : "10.0.3.0/24" },
+        "nsg_name_workload_control_plane": { "value": "nsg-WorkloadControlPlane" },
+        "subnet_name_WorkloadWorker" : { "value" : "subnetWorkloadWorker" },
+        "subnet_cidr_WorkloadWorker" : { "value" : "10.0.4.0/24" },
+        "nsg_name_workload_worker": { "value": "nsg-WorkloadWorker" },
+        "vm_name_Bootstrap": { "value": "bch-vm-bootstrap-ubuntu" },
+        "nic_name_Bootstrap": { "value": "vm-bootstrap-ubu2004" },
+        "pip_name_vm_bootstrap": { "value": "bch-vm-bootstrap-ubuntu-ip" },
+        "vm_size": { "value": "Standard_D2s_V3" },
+        "vm_admin_name": { "value": "" },
+        "vm_admin_pwd": { "value": "" }
+    }
+}

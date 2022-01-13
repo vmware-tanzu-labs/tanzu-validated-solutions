@@ -1,0 +1,17 @@
+name: dco check
+on: [pull_request]
+
+jobs:
+  dco-check:
+    runs-on: ubuntu-latest
+    name: commits check
+    steps:
+    - name: get commit 
+      id: 'get-pr-commits'
+      uses: tim-actions/get-pr-commits@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: dco check
+      uses: tim-actions/dco@master
+      with:
+        commits: ${{ steps.get-pr-commits.outputs.commits }}

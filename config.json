@@ -1,0 +1,54 @@
+{
+  "tocLocation": "toc.md",
+  "landingPage": "",
+  "variablesLocation": "",
+  "buildsToKeep": 10,
+  "buildVerbosity": "Minimal",
+  "errorSettings": {
+    "treatMissingReferencesAsErrors": false,
+    "treatMissingImageReferencesAsErrors": false,
+    "treatMissingVariablesAsErrors": false,
+    "treatMissingPartialsAsErrors": false
+  },
+  "deployments": {
+    "docs": {
+      "autoDeploy": false,
+      "flattenOutput": true,
+      "metadata": {
+        "publication-name": "VMware Tanzu Validated Solutions",
+        "product-name": "VMware Tanzu",
+        "publication-cms-title": "VMware Tanzu Validated Solutions",
+        "product-version": "services",
+        "publication-version": "1",
+        "publication-version-comments": "",
+        "language": "en",
+        "publication-guid": "tanzu-validated-solutions",
+        "publication-keywords": "tanzu validated solutions solution reference architecture design",
+        "output-file-name": "tanzu-validated-solutions",
+        "publication-author": "traceyc@vmware.com",
+        "edit-audience": "none",
+        "edit-link": "",
+        "pdf-link": ""
+      }
+    }
+  },
+  "repos": [
+    {
+      "name": "tanzu-validated-solutions",
+      "alias": "tanzu-validated-solutions",
+      "uniquePrefix": null
+    }
+  ],
+  "bundle": {
+    "packagingStrategy": "OnlyReferenced",
+    "files": {}
+  },
+  "experimental": {
+    "markdownProcessor": "Markdig",
+    "generatePdf": false,
+    "erbIfSmartTransform": true,
+    "cshPrefix": null,
+    "getModifiedDateFromSourceSystem": false,
+    "parseHtmlBlocks": false
+  }
+}

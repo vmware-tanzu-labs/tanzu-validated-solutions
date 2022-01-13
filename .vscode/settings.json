@@ -1,0 +1,9 @@
+{
+  "cSpell.customDictionaries": {
+    "reference-arch-words": {
+      "name": "reference-arch-words",
+      "path": "${workspaceRoot}/wordlist.txt",
+      "addWords": true,
+    }
+  }
+}
