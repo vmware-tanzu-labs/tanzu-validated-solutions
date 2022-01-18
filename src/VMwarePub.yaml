@@ -1,0 +1,15 @@
+publication:
+  RootMapFile: toc.md
+  OutputFileName: tanzu-reference-architecture
+  PublicationName: VMware Tanzu Reference Architecture
+  ProductName: VMware Tanzu
+  ProductVersion: services
+  PublicationVersion:
+  PublicationVersionComments:
+  Language: en
+  PublicationGuid: tanzu-reference-architecture
+  PublicationKeywords:
+  BatchProcessingInstruction:
+  PDFLink:
+  WordLink:
+  PublicationAuthor: moonc@vmware.com

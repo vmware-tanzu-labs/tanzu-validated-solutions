@@ -1,0 +1,13 @@
+{
+  "language": "en,en-US",
+  "caseSensitive": false,
+  "dictionaries": ["reference-arch-words"],
+  "dictionaryDefinitions": [
+    {
+      "name": "reference-arch-words",
+      "path": "./wordlist.txt"
+    }
+  ],
+  "ignoreRegExpList": ["\\(.*\\)", "`.*`", "id=\".*\""],
+  "files": ["src/**/*.md"]
+}
