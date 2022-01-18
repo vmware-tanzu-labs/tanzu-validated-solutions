@@ -2,21 +2,11 @@
 
 ## Overview
 
-## Try it out
+This repository provides Reference Designs and Deployment Guides for Tanzu products. This content represents best-practices advice for designing and deploying Tanzu solutions to production environments.
 
-### Prerequisites
+## Reference Designs
 
-* Prereq 1
-* Prereq 2
-* Prereq 3
-
-### Build & Run
-
-1. Step 1
-2. Step 2
-3. Step 3
-
-## Documentation
+The current collection of published Reference Designs may be found in our [Table of Contents](./src/toc.md)
 
 ## Contributing
 
@@ -25,5 +15,8 @@ read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All cont
 signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on
 as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
+Please also review our [Contributing Guide](CONTRIBUTING.md) and [testing documentation](TESTING.md) for information on how to effectively provide content and feedback.
+
 ## License
 
+This content in this repository is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International Public License](LICENSE-CC-Attribution-ShareAlike4.0)
