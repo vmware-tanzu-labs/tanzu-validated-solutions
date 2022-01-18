@@ -1,0 +1,14 @@
+name: build preview
+
+on:
+  push:
+  pull_request:
+                
+jobs:
+  build-preview:
+    runs-on: self-hosted
+    container: gtix-cms-docker.artifactory.eng.vmware.com/markdown-cli:612f0d4a
+    steps:
+    - uses: actions/checkout@v1
+    - run: /usr/bin/Markdown-Cli build -i "${PWD}" -g
+
