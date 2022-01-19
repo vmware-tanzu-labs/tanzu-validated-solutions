@@ -1,6 +1,6 @@
-# Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations 
+# Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations
 
-The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the VMware SaaS services for Tanzu for Kubernetes operations. 
+The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the VMware SaaS services for Tanzu for Kubernetes operations.
 
 * [Tanzu Mission Control](#tmc) (TMC)
 * [Tanzu Observability](#to) (TO)
@@ -11,8 +11,8 @@ The following VMware SaaS services provide additional Kubernetes lifecycle manag
 Tanzu Mission Control (TMC) is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds. It provides operators with a single control point to give developers the independence they need to drive business forward, while enabling consistent management and operations across environments for increased security and governance.
 
 We recommended attaching the shared services and workload clusters to Tanzu Mission Control as it enables you to manage your global portfolio of Kubernetes clusters from a centralized a centralized administrative interface.
-  
-If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control. 
+
+If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control.
 
 ### Attach a Tanzu Kubernetes Cluster to Tanzu Mission Control
 
@@ -39,7 +39,7 @@ Registering a Tanzu Kubernetes Grid management cluster in Tanzu Mission Control 
 2.  In the left navigation pane of the Tanzu Mission Control console, click **Clusters > Attach Cluster**.  
     ![](./img/tko-saas-services/image18.png)
 
-3.  Enter a name for the cluster and select the cluster group in which you want to register the cluster. Optionally, provide a description and one or more labels. 
+3.  Enter a name for the cluster and select the cluster group in which you want to register the cluster. Optionally, provide a description and one or more labels.
     ![](./img/tko-saas-services/image14.png)
 
 1. Click **Next**.
@@ -47,22 +47,22 @@ Registering a Tanzu Kubernetes Grid management cluster in Tanzu Mission Control 
 4. (Optional) Select a proxy configuration for the cluster.
 
 	1. Click to toggle the **Set proxy for this cluster** option to **Yes**.
-	
+
 		**Note**: For instructions on the proxy configuration, see [Appendix A](#appendix-a).
-	
+
 	6. Select the proxy configuration you defined for this cluster.
 
 		![](./img/tko-saas-services/image97.png)
 
-7. Click **Next**. 
-	
+7. Click **Next**.
+
 	Tanzu Mission Control generates a YAML manifest specifically for your cluster, and displays the kubectl/tmc command to run the manifest.
 
 8.  Copy the provided command, switch to the bootstrap machine or any other machine which has kubectl/tmc installed and has connectivity to the cluster, and then run the command.
 
 	- If you attach using a proxy configuration, make sure you have the latest version of the Tanzu Mission Control CLI (tmc) installed, and then run the tmc command, replacing &`<kubeconfig>` with the appropriate `kubeconfig` for the cluster.
-	
-		To obtain admin `kubeconfig` of a cluster, execute the following command on the bootstrap machine: 
+
+		To obtain admin `kubeconfig` of a cluster, execute the following command on the bootstrap machine:
 
 		`tanzu cluster kubeconfig get <cluster-name> --admin --export-file <file-name.yaml>`  
 
@@ -77,7 +77,7 @@ Registering a Tanzu Kubernetes Grid management cluster in Tanzu Mission Control 
      
 12.  In Tanzu Mission Control console, click **Verify Connection**. You will see the success message.  
     ![](./img/tko-saas-services/image49.png)
-    
+
 13.  Click **View your Cluster** to see the cluster details.  
     ![](./img/tko-saas-services/image83.png)
 
@@ -98,10 +98,10 @@ Do the following steps to create a proxy configuration object in Tanzu Mission C
     ![](./img/tko-saas-services/image19.png)
 10. Click **Create**. The proxy configuration is added to Tanzu Mission Control. Use this proxy configuration when you add a cluster that is sitting behind the proxy. Based on your environment, you can add multiple proxies in Tanzu Mission Control.  
     ![](./img/tko-saas-services/image33.png)  
-    
+
 
 ## <a id=to> </a> Tanzu Observability
-  
+
 Tanzu Observability (TO) delivers full-stack observability across containerized cloud applications, Kubernetes health, and cloud infrastructure. The solution is consumed through a software-as-a-Service (SaaS) subscription model managed by VMware. This SaaS model allows the solution to scale to meet your metrics requirements without the need to maintain the solution itself.
 
 ### Set up Tanzu Observability to Monitor a Tanzu Kubernetes Clusters
@@ -117,26 +117,26 @@ Before doing the setup, ensure the following:
 * A Service Account in Tanzu Observability to enable communication between Tanzu Observability and Tanzu Mission Control.
 * Tanzu Observability is enabled on your organization. If Tanzu Observability is not enabled, enable it by navigating to the **Administration > Integrations** tab in Tanzu Mission Control.  
 
-#### Register Tanzu Kubernetes Grid Workload Cluster with Tanzu Observability 
+#### Register Tanzu Kubernetes Grid Workload Cluster with Tanzu Observability
 
 To integrate Tanzu Observability on a cluster attached to Tanzu Mission Control, do the following:  
 
-1.  Create a service account in Tanzu Observability (TO) to enable communication between Tanzu Observability and Tanzu Mission Control. 
+1.  Create a service account in Tanzu Observability (TO) to enable communication between Tanzu Observability and Tanzu Mission Control.
 	1. Log in to your Tanzu Observability instance (<instance_name>.wavefront.com) as a user with Accounts, Groups & Roles permission.
 	2. From the gear icon on the top right, select **Account Management**.
 	3. Click on the **Service Accounts** tab and click **Create New Account** to create a service account and an associated API token.  
     	![](./img/tko-saas-services/image65.png)
-	4. Specify the service account name, optionally, provide a description, and click **Create**. 
+	4. Specify the service account name, optionally, provide a description, and click **Create**.
     	![](./img/tko-saas-services/image78.png)
 	5. Select the newly created account and click the Copy to Clipboard icon in the **Tokens** row. You will paste this token into the **Credentials** field on Tanzu Mission Control.  
-   
+
 2.  Enable Tanzu Observability in Tanzu Mission Control.
 	1. Login to Tanzu Mission Control.
 	1. In the left navigation pane of the Tanzu Mission Control console, click **Administration**.
-	2. Click on the **Integrations** tile. 
+	2. Click on the **Integrations** tile.
 	3. From the available integrations options, enable **Tanzu Observability** if not yet enabled.  
     ![](./img/tko-saas-services/image44.png)
-	3. Under **Administration** switch to **Accounts**, click **Create Account Credentials** and select **Tanzu Observability credential**. 
+	3. Under **Administration** switch to **Accounts**, click **Create Account Credentials** and select **Tanzu Observability credential**.
 	4. Enter the following and click **Create**:
 
 		- Credential Name
@@ -144,7 +144,7 @@ To integrate Tanzu Observability on a cluster attached to Tanzu Mission Control,
 		- Tanzu Observability API Token obtained in step 1  
     		![](./img/tko-saas-services/image62.png)  
 
-4. On the Tanzu Mission Control console, click **Clusters** on the left navigation pane. 
+4. On the Tanzu Mission Control console, click **Clusters** on the left navigation pane.
 1. Click on the cluster you want to add to Tanzu Observability.
 5. On the cluster page, click **Add Integration**, and select **Tanzu Observability**.  
     ![](./img/tko-saas-services/image1.png)
@@ -152,7 +152,7 @@ To integrate Tanzu Observability on a cluster attached to Tanzu Mission Control,
     ![](./img/tko-saas-services/image70.png)  
     The Tanzu Mission Control adapter for Tanzu Observability appears in an unhealthy state for a few minutes because the required objects are being created on the cluster.  
     ![](./img/tko-saas-services/image23.png)  
-    
+
 7. On the target cluster, you will see a new namespace, `tanzu-observability-saas` and the required objects being created.  
     ![](./img/tko-saas-services/image64.png)  
 1. Wait for all the pods to successfully initialize.  
@@ -162,14 +162,14 @@ To integrate Tanzu Observability on a cluster attached to Tanzu Mission Control,
     This confirms that the integration is completed and the cluster can be monitored with Tanzu Observability.
 9. Click on the Tanzu Observability link provided in Tanzu Mission Control or Log in to your Tanzu Observability instance (<instance_name>.wavefront.com) to ensure that the metrics are being collected in Tanzu Observability.  
     ![](./img/tko-saas-services/image84.png)  
-      
+
     ![](./img/tko-saas-services/image27.png)
 
 ## <a id=tsm> </a>Tanzu Service Mesh
 VMware Tanzu Service Mesh (TSM) is an enterprise-class service mesh solution that provides consistent control and security for microservices, end-users, and data across all your clusters and clouds in the most demanding multi-cluster and multi-cloud environments.
 
 ### Onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh
-You can onboard Tanzu Service Mesh with or without Tanzu Mission Control. 
+You can onboard Tanzu Service Mesh with or without Tanzu Mission Control.
 
 #### Prerequisites
 
@@ -189,7 +189,7 @@ You can onboard Tanzu Service Mesh with or without Tanzu Mission Control.
 
 Do the following to onboard a cluster to Tanzu Service Mesh without Tanzu Mission Control integration.
 
-1. Login to Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com/csp/gateway/portal/#/consumer/services/organization) page.
+1. Login to Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com/) page.
 
 2. In the upper-left corner of the Tanzu Service Mesh console, click **Add New** and then **Onboard New Cluster** to open the Onboard Clusters panel.
 
@@ -205,14 +205,14 @@ Do the following to onboard a cluster to Tanzu Service Mesh without Tanzu Missio
 
 	This article does not make use of proxy settings for demonstration purposes.
 
-5. Click **Generate Security Token** to generate a security token. You are provided two `kubectl` commands: 
+5. Click **Generate Security Token** to generate a security token. You are provided two `kubectl` commands:
 
     - The first one applies the `operator-deployment.yaml` file to create the required Tanzu Service Mesh objects, such as Namespace, Service Account, RoleBinding, deployments, and secret on the target cluster
     - The second one creates the required secret named `generic` under the namespace `vmware-system-tsm`
 
      ![](./img/tko-saas-services/TKGS-TSM02.jpg)
 
-6. Connect to the target Tanzu Kubernetes Cluster and execute the commands obtained from previous step. A new namespace `vmware-system-tsm` is created on the target cluster. 
+6. Connect to the target Tanzu Kubernetes Cluster and execute the commands obtained from previous step. A new namespace `vmware-system-tsm` is created on the target cluster.
 
 	<!-- /* cSpell:disable */ -->
 
@@ -231,12 +231,12 @@ Do the following to onboard a cluster to Tanzu Service Mesh without Tanzu Missio
 7. After all the required objects are created on the cluster, the Tanzu Service Mesh console prompts you to **Install Tanzu Service Mesh on the cluster**. For this deployment, Tanzu Service Mesh is installed on all namespaces.
    ![](./img/tko-saas-services/TKGS-TSM05.jpg)
 
-   **Note**: 
-   
+   **Note**:
+
     - To install Tanzu Service Mesh in all the namespaces, click Install on all Namespaces. The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
     - To exclude a specific namespace from Tanzu Service Mesh, click Exclude Namespaces, select Is Exactly from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
     - You can also specify the name of a namespace that you plan to create in the cluster at some point in the future.
-    
+
     ![](./img/tko-saas-services/TKGS-TSM05.jpg)
 
 8. When the installation is complete, **Successfully Onboarded** appears next to the cluster name.
@@ -251,20 +251,20 @@ If you have a multi-cluster or hybrid-cloud application, you can connect, secure
 
 Do the following to onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh using Tanzu Mission Control:
 
-1. Login to Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com/csp/gateway/portal/#/consumer/services/organization) page.
-2. In the left navigation pane of the Tanzu Mission Control console, click **Clusters**. 
+1. Login to Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com/) page.
+2. In the left navigation pane of the Tanzu Mission Control console, click **Clusters**.
 2. Click on the Target Cluster name, under integration click on Add Integrations, and select Tanzu Service Mesh.
 
   	![](./img/tko-saas-services/TKGS-TSM08.jpg)
 
-	**Note**: You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh. If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server. 
+	**Note**: You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh. If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server.
 
-4. In **Add Tanzu Service Mesh integration** you can choose to install Tanzu Service mesh on all namespaces or exclude specific namespaces. 
+4. In **Add Tanzu Service Mesh integration** you can choose to install Tanzu Service mesh on all namespaces or exclude specific namespaces.
 
 	In this deployment, Tanzu Service Mesh is installed on all namespaces.
 
 	**Note:**
-	
+
 	* To install Tanzu Service Mesh in all the namespaces, select  "Enable Tanzu Service Mesh on all Namespaces". The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
 
 	* To exclude a specific namespace from Tanzu Service Mesh, choose Exclude Namespaces, select "Is Exactly" from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
@@ -277,7 +277,7 @@ Do the following to onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh usi
 
 6. On the target cluster, you will see a new namespace `vmware-system-tsm` and required objects being created.
 
-7. To view the status of the Tanzu Service Mesh installation, log in to the Tanzu Service Mesh portal. 
+7. To view the status of the Tanzu Service Mesh installation, log in to the Tanzu Service Mesh portal.
 
 	![](./img/tko-saas-services/TKGS-TSM10.jpg)
 
