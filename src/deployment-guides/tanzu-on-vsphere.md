@@ -24,15 +24,15 @@ The number of resource pools depends on the number of workload clusters to be de
 * A datastore with sufficient capacity for the control plane and worker node VM files.
 * Network Time Protocol (NTP) service running on all hosts and vCenter.
 * A host/server/VM based on Linux/MAC/Windows that acts as your bootstrap machine and has docker installed. For this deployment, we will use a virtual machine based on Photon OS.
-* Depending on the OS flavor of the bootstrap VM, [download](https://www.google.com/url?q=https://customerconnect.vmware.com/en/downloads/details?downloadGroup%3DTKG-140%26productId%3D988%26rPId%3D49705&sa=D&source=editors&ust=1635189097880000&usg=AOvVaw13p2eeU5QSL2VoOUmUMTQ_)and configure the following packages. As part of this documentation, refer to the section to configure required packages on Photon Machine.
+* Depending on the OS flavor of the bootstrap VM, [download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705)and configure the following packages. As part of this documentation, refer to the section to configure required packages on Photon Machine.
 
 	* Tanzu CLI 1.4.0
 	* kubectl cluster CLI 1.21.2
 
-* A vSphere account with the permissions described in [Required Permissions for the vSphere Account](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-vsphere.html%23vsphere-permissions&sa=D&source=editors&ust=1635189097880000&usg=AOvVaw2vpWWwEPinNKZ9-Z2qGoq8).
+* A vSphere account with the permissions described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-vsphere.html#vsphere-permissions).
 * If you are working in an Internet-restricted environment that requires a centralized image repository, see [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-airgapped-environments.html) for more information on setting up a centralized image repository.
 * Download and import NSX ALB 20.1.6 OVA to Content Library.
-* [Download](https://www.google.com/url?q=https://customerconnect.vmware.com/en/downloads/details?downloadGroup%3DTKG-140%26productId%3D988%26rPId%3D49705&sa=D&source=editors&ust=1635189097881000&usg=AOvVaw2TZ7oBl5U_cCctQLvzbuMz) the following OVA and import to vCenter. Convert the imported VMs to templates.
+* [Download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705) the following OVA and import to vCenter. Convert the imported VMs to templates.
 
 	* Photon v3 Kubernetes v1.21.2 OVA and/or
 	* Ubuntu 2004 Kubernetes v1.21.2 OVA  
@@ -167,7 +167,7 @@ Once the NSX ALB is successfully deployed and boots up, navigate to NSX ALB on y
 
 This document focuses on enabling NSX ALB using the license model: Essentials License (NSX ALB essentials for Tanzu)  
 By default evaluation license will be making use of Enterprise license, if you intend to use the Enterprise Licensing features, you may add your license key in the licensing section or change the license model to “Essentials”  
-Refer [NSX Advanced Load balancer Editions](https://www.google.com/url?q=https://avinetworks.com/docs/21.1/nsx-license-editions/&sa=D&source=editors&ust=1635189097934000&usg=AOvVaw1UgC25JRYxJGwJT9RqNcQ-) for comparison of available editions.
+Refer [NSX Advanced Load balancer Editions](https://avinetworks.com/docs/21.1/nsx-license-editions/) for comparison of available editions.
 
 To change the license edition to Essentials,
 
@@ -352,11 +352,11 @@ This completes NSX ALB configuration. Next is to deploy and configured Bootstrap
 
 The bootstrap machine can be a laptop, host, or server (running on Linux/MAC/Windows platform) that you deploy management and workload clusters from, and that keeps the Tanzu and Kubernetes configuration files for your deployments, the bootstrap machine is typically local.  
   
-Below procedure provides steps to configure bootstrap virtual machines based on Photon OS, refer [here](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-install-cli.html&sa=D&source=editors&ust=1635189097962000&usg=AOvVaw1VjSpj7P53oN43BRghk9hU) to configure MAC/Windows machines
+Below procedure provides steps to configure bootstrap virtual machines based on Photon OS, refer [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-install-cli.html) to configure MAC/Windows machines
 
 * Ensure that the bootstrap VM is connected to TKG Management Network `tkg_mgmt_pg`
-* [Configure NTP](https://www.google.com/url?q=https://kb.vmware.com/s/article/76088&sa=D&source=editors&ust=1635189097963000&usg=AOvVaw3lntfeLfCfMJopF875Ec0k) on your bootstrap machine
-* As we are working on photon OS , download and unpack below Linux CLI packages from [myvmware](https://www.google.com/url?q=https://customerconnect.vmware.com/en/downloads/details?downloadGroup%3DTKG-140%26productId%3D988%26rPId%3D49705&sa=D&source=editors&ust=1635189097963000&usg=AOvVaw0uAvV9iPJUYiSE5Vg2qsaC)
+* [Configure NTP](https://kb.vmware.com/s/article/76088) on your bootstrap machine
+* As we are working on photon OS , download and unpack below Linux CLI packages from [myvmware](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705)
 
 * VMware Tanzu CLI for Linux
 * kubectl cluster cli v1.21.2 for Linux
@@ -436,7 +436,7 @@ systemctl enable docker
 <!-- /* cSpell:enable */ -->
   
 
-* Ensure that the bootstrap machine is using [cgroup v1](https://www.google.com/url?q=https://man7.org/linux/man-pages/man7/cgroups.7.html&sa=D&source=editors&ust=1635189097972000&usg=AOvVaw3dgMExFBUHgHyOLqeCbza4) by running below command  
+* Ensure that the bootstrap machine is using [cgroup v1](https://man7.org/linux/man-pages/man7/cgroups.7.html) by running below command  
 
 <!-- /* cSpell:disable */ -->
 ```bash 
@@ -488,10 +488,10 @@ You can deploy and manage Tanzu Kubernetes Grid management clusters on:
   
 Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:  
 
-* Go to the [Tanzu Kubernetes Grid downloads](https://www.google.com/url?q=https://customerconnect.vmware.com/en/downloads/details?downloadGroup%3DTKG-140%26productId%3D988%26rPId%3D49705&sa=D&source=editors&ust=1635189097976000&usg=AOvVaw2FaUWoKxaojWynsUGAFoRa) page, and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
+* Go to the [Tanzu Kubernetes Grid downloads](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705) page, and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
 
 * For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.21.2 OVA    
-    Note: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also support, as described in [Build Machine Images](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-build-images-index.html&sa=D&source=editors&ust=1635189097977000&usg=AOvVaw1DhW-WzAwPLIUnLiHEOrIs)
+    Note: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also support, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-build-images-index.html)
 
 * For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release
 
@@ -503,7 +503,7 @@ Important: Make sure you download the most recent OVA base image templates in th
 * Click Finish to deploy the VM. When the OVA deployment finishes, right-click the VM and select Template> Convert to Template.  
     NOTE: Do not power on the VM before you convert it to a template.
 * If using non administrator SSO account: In the VMs and Templates view, right-click the new template, select Add Permission, and assign the TKG user to the template with the TKG role.  
-    For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-vsphere.html%23vsphere-permissions&sa=D&source=editors&ust=1635189097978000&usg=AOvVaw0Cbq_xiTSqaOM51v-LjoEa).
+    For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-vsphere.html#vsphere-permissions).
 
 ### Deploy TKG Management Cluster using UI
 
@@ -559,7 +559,7 @@ It is recommended to set the instance type to `Large` or above. For the purpose
 * Control Plane Endpoint: This is an optional field, if left blank NSX ALB will assign an IP from the pool “tkg_cluster_vip_pg” we created earlier.  
     If you need to provide an IP, pick an IP address from “tkg_cluster_vip_pg”  static IP pools configured in AVI and ensure that the IP address is unused.
 * Machine Health Checks: Enable
-* Enable Audit Logging: Enables to audit logging for Kubernetes API server and node VMs, choose as per environmental needs. For more information see [Audit Logging](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-troubleshooting-tkg-audit-logging.html&sa=D&source=editors&ust=1635189097984000&usg=AOvVaw1YcyWKSjU0Q8ideDs0gfu1)
+* Enable Audit Logging: Enables to audit logging for Kubernetes API server and node VMs, choose as per environmental needs. For more information see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-troubleshooting-tkg-audit-logging.html)
 * Click Next
 
 ![](img/tko-deploy-on-vsphere/image24.png)
@@ -666,7 +666,7 @@ Another difference with the shared services cluster when compared with Workload
 In order to deploy a shared service cluster you need to create a cluster config, in the cluster config file you must specify options in the cluster configuration file to connect to vCenter Server and identify the vSphere resources that the cluster will use.  
 You can also specify standard sizes for the control plane and worker node VMs, or configure the CPU, memory, and disk sizes for control plane and worker nodes explicitly. If you use custom image templates, you can identify which template to use to create node VMs.  
   
-Below is a sample file with the minimum required configurations. To know about all configuration file variables, see the Tanzu CLI Configuration File Variable Reference[https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html&sa=D&source=editors&ust=1635189097992000&usg=AOvVaw3E15rN48z7n3pnKGaIadsi)  
+Below is a sample file with the minimum required configurations. To know about all configuration file variables, see the Tanzu CLI Configuration File Variable Reference[https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html)  
 Modify the parameters as per your requirements.  
 
 <!-- /* cSpell:disable */ -->
@@ -795,7 +795,7 @@ You can also specify standard sizes for the control plane and worker node VMs, o
 
 As per the architecture, workload clusters make use of a separate SE group (Service Engine Group 2) and VIP Network (TKG Workload VIP/Data Network) for application load balancing, this can be controlled by creating a new AKODeploymentConfig. For more details refer [Create and deploy AKO Deployment Config for TKG Workload Cluster](#h.8mw4r95iln0n)  
   
-Below is a sample file with the minimum required configurations to create a TKG workload cluster. To know about all configuration file variables, see the Tanzu CLI Configuration File Variable Reference[https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html&sa=D&source=editors&ust=1635189098006000&usg=AOvVaw2_awOLhy-9vsdfzAQrFBj0)  
+Below is a sample file with the minimum required configurations to create a TKG workload cluster. To know about all configuration file variables, see the Tanzu CLI Configuration File Variable Reference[https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html)  
 Modify the parameters as per your requirements.
 
 <!-- /* cSpell:disable */ -->
@@ -842,7 +842,7 @@ Key config considerations while creating  Workload cluster config file
 | VSPHERE_NETWORK | As per the architecture, TKG workload cluster will be attached to “TKG Workload Network”.  <br>  <br>Note: Based on your requirements, you may create additional networks for new TKG workload clusters.  <br>The architecture supports multiple TKG workload clusters on the same network and/or separate networks for each Workload Clusters |
 | CONTROLPLANE_SIZE & WORKER_SIZE | Consider extra-large, as Harbor will be deployed on this cluster and this cluster may be attached to TMC and TO.  <br>To define custom size, remove “CONTROLPLANE_SIZE” and “WORKER_SIZE” variable from the config file and add below variables with required resource allocation  <br>For Control Plane Nodes:  <br>​​VSPHERE_CONTROL_PLANE_NUM_CPUS<br><br>VSPHERE_CONTROL_PLANE_MEM_MIB<br><br>VSPHERE_CONTROL_PLANE_DISK_GIB<br><br>For Worker Nodes:<br><br>VSPHERE_WORKER_NUM_CPUS<br><br>VSPHERE_WORKER_MEM_MIB<br><br>VSPHERE_WORKER_DISK_GIB |
 | VSPHERE_CONTROL_PLANE_ENDPOINT | This is optional, if left blank NSX ALB will assign an IP from the pool “tkg_cluster_vip_pg” we created earlier.  <br>If you need to provide an IP, pick an IP address from “TKG Cluster VIP/Data Network” static IP pools configured in NSX ALB and ensure that the IP address is unused. |
-| ENABLE_AUTOSCALER | This is an optional parameter, set if you want to override the default value. The default value is false, if set to true,you must include additional variables  <br>AUTOSCALER_MAX_NODES_TOTAL  <br>AUTOSCALER_SCALE_DOWN_DELAY_AFTER_ADD  <br>AUTOSCALER_SCALE_DOWN_DELAY_AFTER_DELETE  <br>AUTOSCALER_SCALE_DOWN_DELAY_AFTER_FAILURE  <br>AUTOSCALER_SCALE_DOWN_UNNEEDED_TIME  <br>AUTOSCALER_MAX_NODE_PROVISION_TIME  <br>AUTOSCALER_MIN_SIZE_0  <br>AUTOSCALER_MAX_SIZE_0<br><br>For more details see [Cluster Autoscalar](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html%23cluster-autoscaler-4&sa=D&source=editors&ust=1635189098016000&usg=AOvVaw0W9ja90ewNYASJS--M1lfr) |
+| ENABLE_AUTOSCALER | This is an optional parameter, set if you want to override the default value. The default value is false, if set to true,you must include additional variables  <br>AUTOSCALER_MAX_NODES_TOTAL  <br>AUTOSCALER_SCALE_DOWN_DELAY_AFTER_ADD  <br>AUTOSCALER_SCALE_DOWN_DELAY_AFTER_DELETE  <br>AUTOSCALER_SCALE_DOWN_DELAY_AFTER_FAILURE  <br>AUTOSCALER_SCALE_DOWN_UNNEEDED_TIME  <br>AUTOSCALER_MAX_NODE_PROVISION_TIME  <br>AUTOSCALER_MIN_SIZE_0  <br>AUTOSCALER_MAX_SIZE_0<br><br>For more details see [Cluster Autoscalar](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html#cluster-autoscaler-4) |
 | WORKER_MACHINE_COUNT | Consider setting the value to 3 or above if the cluster needs to be part of Tanzu Service Mesh(TSM) |
 <!-- /* cSpell:enable */ -->
 
@@ -1127,7 +1127,7 @@ cp /tmp/harbor-package/config/values.yaml <path to harbor-data-values.yaml>
       
     `tanzu package install harbor --package-name harbor.tanzu.vmware.com --version <AVAILABLE-PACKAGE-VERSION> --values-file < path to harbor-data-values.yaml> --namespace tanzu-system-registry --create-namespace `
     
-7.  To address a known issue, patch the Harbor package by following the steps in the Knowledge Base article The [harbor-notary-signer pod fails to start](https://www.google.com/url?q=https://kb.vmware.com/s/article/85725&sa=D&source=editors&ust=1635189098075000&usg=AOvVaw1t94g5_aJMY_8jlIE5WRFI)  
+7.  To address a known issue, patch the Harbor package by following the steps in the Knowledge Base article The [harbor-notary-signer pod fails to start](https://kb.vmware.com/s/article/85725)  
     
 8.  Confirm that the harbor package has been installed, the status must change to “Reconcile succeeded”  
       
@@ -1169,7 +1169,7 @@ You must also have the appropriate permissions to attach the cluster
 
 ##### Procedure
 
-1.  Login to Tanzu Mission Control via [VMware Cloud Services](https://www.google.com/url?q=https://console.cloud.vmware.com&sa=D&source=editors&ust=1635189098078000&usg=AOvVaw2GaFsuoFDISaBEcqqJJ0iE) page
+1.  Login to Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com) page
 2.  In the left navigation pane of the Tanzu Mission Control console, click Clusters, click Attach Cluster.  
     ![](img/tko-deploy-on-vsphere/image18.png)
 3.  Enter a name for the cluster and select the cluster group in which you want to register the cluster, and enter a name for the cluster. You can optionally provide a description and one or more labels and click Next  
@@ -1315,7 +1315,7 @@ Not only that TMC provides a common management layer across your Kubernetes clus
 
 Below steps provides step by step instructions to onboard a cluster to Tanzu Service Mesh without using TMC integration  
 
-1.  Log into Tanzu Mission Control via [VMware Cloud Services](https://www.google.com/url?q=https://console.cloud.vmware.com&sa=D&source=editors&ust=1635189098087000&usg=AOvVaw3UNtTp4aMhAnFxZ8wl7dW4) page
+1.  Log into Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com) page
 2.  In the upper-left corner of the Tanzu Service Mesh Console, click Add New and then Onboard New Cluster to open the Onboard Clusters panel  
     Note: If you're onboarding your first cluster to Tanzu Service Mesh, the Onboard Clusters panel appears automatically when you login to TSM
 3.  In the Onboard Clusters panel, enter a name for the cluster that you want to onboard  
@@ -1352,13 +1352,13 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
     ![](img/tko-deploy-on-vsphere/image47.png)
 10. Now, the Tanzu Service Mesh Console UI displays information about the infrastructure of the onboarded cluster and the microservices deployed there (if any). Tanzu Service Mesh also starts monitoring and collecting infrastructure and service metrics from the cluster (such as number of nodes and services, requests per second, latency, and CPU usage). The Home page of the Tanzu Service Mesh Console provides summary information about the cluster's infrastructure, a topology view of the services in the cluster, and key metrics
 
-Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html&sa=D&source=editors&ust=1635189098090000&usg=AOvVaw1C14ulFTEwNHxnjYOXi5Tp).
+Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html).
 
 #### Procedure - Onboarding via TMC
 
 Below steps provides step by step instructions to onboard a cluster to Tanzu Service Mesh using using TMC integration  
 
-1.  Log into Tanzu Mission Control via [VMware Cloud Services](https://www.google.com/url?q=https://console.cloud.vmware.com&sa=D&source=editors&ust=1635189098091000&usg=AOvVaw2ftwgN4brAer7IvtEoQbA9)page, In the left navigation pane of the Tanzu Mission Control console, click Clusters, and ensure that the cluster that needs to be onboarded to TSM is attached to TMC.  
+1.  Log into Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com)page, In the left navigation pane of the Tanzu Mission Control console, click Clusters, and ensure that the cluster that needs to be onboarded to TSM is attached to TMC.  
     To attached a cluster to TMC, refer [Attaching a Tanzu Kubernetes Cluster Workload/Shared Service Cluster to TMC](#h.c4wsd0fsoloe)  
     
 2.  Click on the Target Cluster name, under integration click on Add Integrations, and select Tanzu Service Mesh  
@@ -1384,4 +1384,4 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
     And in TSM console you will find that the cluster is successfully onboarded  
     ![](img/tko-deploy-on-vsphere/image52.png)
 
-Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://www.google.com/url?q=https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html&sa=D&source=editors&ust=1635189098092000&usg=AOvVaw0EVN30olTOQCFjVLbkpMz7).
+Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html).
