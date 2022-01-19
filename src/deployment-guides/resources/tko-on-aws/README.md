@@ -3,8 +3,9 @@ This terraform project is designed to build an architecture in AWS that correspo
 
 Specifically builds management VPC, a workload VPC, and transit gateway that connects them with all of the associated networking to make it work. It also will build a jumpbox, and run the commands necessary to install TKG , Tanzu packages and register with Tanzu SaaS services in the environment it creates.
 
+<!-- /* cSpell:disable */ -->
 
-This terraform relies on the Tanzu CLI Cloudformation stack to be precreated in the AWS account it is executing against as it uses the IAM permissions for the jumpbox. If this AWS account has never had the Tanzu cloudformation stack run, you should run `tanzu management-cluster permissions aws set` before running terraform.
+This terraform relies on the Tanzu CLI Cloudformation stack to be pre-created in the AWS account it is executing against as it uses the IAM permissions for the jumpbox. If this AWS account has never had the Tanzu cloudformation stack run, you should run `tanzu management-cluster permissions aws set` before running terraform.
 # Set the following environment variables.
 
 export AWS_ACCESS_KEY_ID=< your AWS access key>
@@ -28,7 +29,7 @@ This repository is designed to be customizable -- especially at the root `main.t
 
 # Tanzu Package configurations 
 
-You can add Tanzu packages configurations as needed into templates files to make them funtional. Otherwise they will installed with default values as defined into template files. 
+You can add Tanzu packages configurations as needed into templates files to make them functional. Otherwise they will installed with default values as defined into template files. 
   ## Pinniped 
   Add following external Identity provider(IDP) details into cluster config file(**mgmt.tpl**) to integrate Pinniped with external IDP.
 
@@ -90,9 +91,10 @@ To set your own passwords and secrets, update the following entries in the harbo
 ## Delete Tanzu clusters and aws resources 
 
 ```
-# Login to jumpbox machine and execute command from root directory to delete management and workoad clusters
+# Login to jumpbox machine and execute command from root directory to delete management and workload clusters
   ./tkg-install/clean-up.sh
 
 # Execute following command from bootstrap machine to delete all aws resources (vpc , jumpbox etc)
 $ terraform destroy
 ```
+<!-- /* cSpell:enable */ -->
