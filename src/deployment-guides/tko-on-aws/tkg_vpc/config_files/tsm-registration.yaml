@@ -1,0 +1,20 @@
+{
+  "full_name":
+    {
+      "provisionerName": "attached",
+      "managementClusterName": "attached",
+      "clusterName": "tkg-wl-aws",
+      "name": "tanzu-service-mesh",
+    },
+  "spec":
+    {
+      "configurations":
+        {
+          "enableNamespaceExclusions": true,
+          "namespaceExclusions":
+            [
+              { "match": "no-tsm-example", "type": "EXACT" },
+            ],
+        },
+    },
+}
