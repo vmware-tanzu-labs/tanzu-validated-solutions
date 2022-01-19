@@ -2,9 +2,9 @@
 
 Kubernetes is great at providing development teams with a single API to deploy, manage, and run applications. However, running, maintaining, and securing Kubernetes itself is a complex task. All the way from determining what base OS instances to use, which Kubernetes CNI & CSI to use, how to secure the Kubernetes API itself to monitoring, upgrading, and backing up of clusters, Tanzu for Kubernetes operations helps teams provision, manage, secure and maintain Kubernetes clusters on a day-to-day basis.
 
-The following Tanzu for Kubernetes operation reference architecture shows you how to best use Tanzu components together as a solution for Kubernetes operations on your IaaS of choice. This reference architecture is tested and supported by VMware. 
+The following Tanzu for Kubernetes operation reference architecture shows you how to best use Tanzu components together as a solution for Kubernetes operations on your IaaS of choice. This reference architecture is tested and supported by VMware.
 
-![Tanzu Edition reference architecture diagram](img/index/tkgm-diagram.png)
+![Tanzu Edition reference architecture diagram](./img/index/tkgm-diagram.png)
 
 ## Components
 The following components are used in the reference architecture:
@@ -23,9 +23,9 @@ The following components are used in the reference architecture:
 
 **[User-managed packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-user-managed-index.html)** - Provides in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.
 
-* **[Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html)** - Provides automated certificate management. It runs by default in management clusters. 
+* **[Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html)** - Provides automated certificate management. It runs by default in management clusters.
 * **[Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html)** - Provides layer 7 ingress control to deployed HTTP(S) applications. Tanzu Kubernetes Grid includes signed binaries for Contour. Deploying Contour is a prerequisite for deploying the Prometheus, Grafana, and Harbor extensions.
-* **[ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)** - Publishes DNS records for applications to DNS servers. It uses a declarative Kubernetes-native interface. 
+* **[ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)** - Publishes DNS records for applications to DNS servers. It uses a declarative Kubernetes-native interface.
 * **[Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html)** - Collects data and logs from different sources, unifies them, and sends them to multiple destinations. Tanzu Kubernetes Grid includes signed binaries for Fluent Bit.
 * **[Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html)** - Provides out-of-the box health monitoring of Kubernetes clusters. The Tanzu Kubernetes Grid implementation of Prometheus includes Alert Manager.  You can configure Alert Manager to notify you when certain events occur.
 * **[Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html)** - Provides monitoring dashboards for displaying key health metrics of Kubernetes clusters. Tanzu Kubernetes Grid includes an implementation of Grafana.   
@@ -34,10 +34,11 @@ The following components are used in the reference architecture:
 
 
 ## Reference Design Documentation
-The following documents provide reference designs for specific infrastructure providers. The reference designs are based on the high-level architecture. 
+The following documents provide reference designs for specific infrastructure providers. The reference designs are based on the high-level architecture.
 
 - [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](tko-on-vmc-aws.md)
 - [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](tko-on-vsphere.md)
 - [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Reference Design](tko-on-vsphere-nsx.md)
 - [VMware Tanzu for Kubernetes Operations on AWS Reference Design](tko-on-aws.md)
 - [VMware Tanzu for Kubernetes Operations on Azure Reference Design](tko-on-azure.md)
+- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](tko-on-vsphere-with-tanzu.md)
