@@ -35,7 +35,7 @@ Before attaching a Tanzu Kubernetes Grid cluster in Tanzu Mission Control, compl
 ### Attach a Tanzu Kubernetes Grid Workload Cluster in Tanzu Mission Control
 Registering a Tanzu Kubernetes Grid management cluster in Tanzu Mission Control is not supported. However, you can register Tanzu Kubernetes Grid workload clusters for life-cycle management.
 
-1.  Log in to Tanzu Mission Control from [VMware Cloud Services](https://www.google.com/url?q=https://console.cloud.vmware.com&sa=D&source=editors&ust=1635189098078000&usg=AOvVaw2GaFsuoFDISaBEcqqJJ0iE).
+1.  Log in to Tanzu Mission Control from [VMware Cloud Services](https://console.cloud.vmware.com).
 2.  In the left navigation pane of the Tanzu Mission Control console, click **Clusters > Attach Cluster**.  
     ![](./img/tko-saas-services/image18.png)
 
