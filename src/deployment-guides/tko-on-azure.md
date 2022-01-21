@@ -20,7 +20,7 @@ The following is a list of the components that comprise Tanzu for Kubernetes Ope
 * Tanzu Mission Control (TMC) - A centralized management platform for consistently operating and securing Kubernetes infrastructure and modern applications across multiple teams and clouds, and allows for centralized policy management across all deployed and attached clusters.
 * Tanzu Observability (TO) - Provides enterprise-grade observability and analytics at scale with granular controls, which allows to achieve higher levels of application health and availability for an overall improved end user experience
 * Tanzu Service Mesh (TSM) - Provides end-to-end connectivity, continuity, resiliency, security, compliance, and observability for modern applications running in single and multi-cloud environments. Global Namespace can be used to leverage the power of the hybrid cloud.
-* Tanzu User Managed Packages:
+* Tanzu User Managed Packages (Optional):
     - Contour Ingress Controller - Provides Layer 7 control to deployed HTTP(s) applications
     - Harbor Image Registry - Provides a centralized location to push, pull, store, and scan container images used in Kubernetes workloads. It also supports storing artifacts such as Helm charts and includes enterprise-grade features such as RBAC, retention policies, automated garbage collection of stale images, and DockerHub proxying among many other things
     - Fluent bit - Provides export log streaming of cluster & workload logs to a wide range of supported aggregators provided in the extensions package for TKG
@@ -247,8 +247,10 @@ az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot
 ```
 <!-- cSpell:enable -->
 
+**NOTE:** Please be aware, that because of permission issues, you will need to logout/login to the Bootstrap machine between the installation of Docker and the Download and Install of the Tanzu components. Example script files can be found [here](./resources/tko-on-azure/bootstrapsetup.sh) and [here](./resources/tko-on-azure/bootstraptanzu.sh) if you would like to start here rather than doing a copy/paste.
+
 ### Deployment (TKG)
-The last piece of a TKG deployment is to leverage the installed Tanzu CLI to deploy both a Management Cluster and Workload Cluster into the deployed Azure infrastructure that was deployed at the beginning. To make this possible, you will need to have a YAML config file that tells the CLI where the clusters will be deployed with respect to your Azure infrastructure. A minimal config file can be seen below based on the default values used in the ARM template.
+The last piece of a TKG deployment is to leverage the installed Tanzu CLI to deploy both a Management Cluster and Workload Cluster into the deployed Azure infrastructure that was deployed at the beginning. To make this possible, you will need to have a YAML config file that tells the CLI where the clusters will be deployed with respect to your Azure infrastructure. A minimal config file can be seen below based on the default values used in the ARM template. However, a complete example config file with all available values for an Azure deployment can be downloaded from [here](./resources/tko-on-azure/ex-config.yaml)
 
 <!-- cSpell:disable -->
 ```bash
@@ -288,6 +290,8 @@ TKG_HTTP_PROXY_ENABLED: "false"
 
 **IMPORTANT:** Please be aware that you will need to create an SSH key so that you can pass the necessary Base 64 encoded value of the public key within the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file. How you generate your SSH key and how you then encode the entire Public key is up to you, but you will need to encode it before storing it within configuration file.
 
+If you would like a more detailed walk-through of how to create your config file and what each value corresponds to in Azure, please see the Tanzu documentation, which can be found [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
+
 Once you have put in all of the values that are going to be relevant to your deployment, you will need to run the following commands from your Bootstrap VM.
 
 ```bash
@@ -297,6 +301,34 @@ tanzu cluster create –file config.yaml -v 0-9
 ```
 
 **NOTE:** Please note that the same configuration file can be used for both the Management and Workload cluster deployments. You will need to specify a different cluster name for each one, but many of the same values can be leveraged. However, due to the way that the Tanzu CLI maintains its configuration information for each deployment, keeping different files with different CLUSTER_NAME parameter values is a recommended approach.
+
+### SaaS Services (TMC, TO, TSM)
+The last deployment requirement for a TKO implementation is to connect your TKG Workload Cluster to the different SaaS services: Tanzu Mission (TMC), Tanzu Observabililty (TO), and Tanzu Service Mesh (TSM). The preferred method for this, would be to use the TMC Console and corresponding TO and TSM Consoles as well, because there is a lot of information that flows back and forth between these systems for integration purposes.
+
+However, there is a TMC CLI which can be used to attach your Workload Cluster to TMC and then to integrate that TMC attached cluster with TO and TSM. Within the scope of the Shell script files that are available for this Deployment Guide, there are a number of pieces of information that are required before the TMC CLI can be used successfully. Each of these pieces can be provided at the top of the [bootstraptanzu](./resources/tko-on-azure/bootstraptanzu.sh) shell script as export variables and these will be used within the below shell script lines of code.
+
+**NOTE:** The first two pieces of information in the below variables can only be retrieved by accessing the TMC Console
+
+```bash
+export TMC_API_TOKEN='ALLROLESTOKEN'
+export CLUSTERGROUP='TMCLUSTERGROUPNAME'
+export CLUSTERNAME='WORKLOADCLUSTERNAME'
+```
+
+Make sure to fill in the above variables before running the script on your bootstrap VM.
+
+```bash
+tanzu cluster kubeconfig get $CLUSTERNAME --admin --export-file ./workloadkube.yaml
+kubectl config use-context $CLUSTERNAME-admin@$CLUSTERNAME --kubeconfig ./workloadkube.yaml
+  
+tmc login -name workloadCluster
+
+tmc cluster attach --cluster-group $CLUSTERGROUP --name $CLUSTERNAME -k ./workloadkube.yaml
+```
+
+Once your cluster has been connected to your Cloud Organization within the TMC
+
+**NOTE:** If you would like a more visual version of how to connect your workload cluster to the different SaaS services, there is a separate deployment guide that provides a GUI based walk-through of the necessary steps. This deployment guide can be found [here](./tko-saas-services.md)
 
 ### (OPTIONAL) Deploy Packages
 Once your clusters have been deployed, you may want to deploy some of the available out-of-the-box packages that come with Tanzu. Most of them will not be needed because of the existence of the SaaS services that are part of TKO, but for those functions and features that are not part of the TKO bundle, here are some steps for how to deploy packages such as Harbor or Pinniped. These packages are available for deployment within each Workload Cluster that you deploy, but they are not actually installed and working as Pods within the cluster until you perform the steps below.

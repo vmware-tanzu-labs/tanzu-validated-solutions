@@ -270,6 +270,23 @@
                             "sourceAddressPrefixes": [],
                             "destinationAddressPrefixes": []
                         }
+                    },
+                    {
+                        "name": "SaaS_Pinniped_443",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 320,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
                     }
                 ]
             }
@@ -323,6 +340,23 @@
                             "sourceAddressPrefixes": [],
                             "destinationAddressPrefixes": []
                         }
+                    },
+                    {
+                        "name": "SaaS_Services_443",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "443",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 320,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
                     }
                 ]
             }
@@ -350,10 +384,7 @@
                         "osType": "Linux",
                         "name": "[concat(parameters('vm_name_Bootstrap'), '_OsDisk')]",
                         "createOption": "FromImage",
-                        "caching": "ReadWrite",
-                        "managedDisk": {
-                            "id": "[resourceId('Microsoft.Compute/disks', concat(parameters('vm_name_Bootstrap'), '_OsDisk'))]"
-                        }
+                        "caching": "ReadWrite"
                     },
                     "dataDisks": []
                 },
@@ -368,10 +399,7 @@
                             "patchMode": "ImageDefault",
                             "assessmentMode": "ImageDefault"
                         }
-                    },
-                    "secrets": [],
-                    "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                    }
                 },
                 "networkProfile": {
                     "networkInterfaces": [
