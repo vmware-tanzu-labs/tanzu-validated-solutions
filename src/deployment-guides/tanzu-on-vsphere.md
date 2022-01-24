@@ -150,7 +150,7 @@ Once the NSX ALB is successfully deployed and boots up, navigate to NSX ALB on y
 
 * On the Welcome page,
 
-* Under System Settings: Set backup Passphrase and provide DNSinformation and click Next  
+* Under System Settings: Set backup Passphrase and provide DNS information and click Next  
     ![](img/tko-deploy-on-vsphere/image4.png)
 * Under Email/SMTP: Provide Email or SMTP information  
     ![](img/tko-deploy-on-vsphere/image31.png)
@@ -434,7 +434,6 @@ systemctl start docker   
 systemctl enable docker
 ```
 <!-- /* cSpell:enable */ -->
-
 
 * Ensure that the bootstrap machine is using [cgroup v1](https://man7.org/linux/man-pages/man7/cgroups.7.html) by running below command  
 
