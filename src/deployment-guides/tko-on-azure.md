@@ -1,55 +1,54 @@
 # Deploy Tanzu for Kubernetes Operations on Microsoft Azure
-VMware Tanzu simplifies the operations of Kubernetes for multi-cloud deployments by centralizing management and governance for clusters and teams across on-premises, public clouds and the edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
+VMware Tanzu simplifies the operations of Kubernetes for multi-cloud deployments by centralizing management and governance for clusters and teams across on-premises, public clouds, and the edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
 
-This document provides a step-by-step guide for how to install and deploy Tanzu Kubernetes for Operators within Microsoft Azure. This document will only walk-through the deployment of a base architecture that can be found within the TKO Reference Architecture for Azure which is a production level deployment.
+This document provides a step-by-step guide for how to install and deploy Tanzu for Kubernetes operations on Microsoft Azure.
 
-**NOTE:** Additional Workload clusters and different size workload clusters can absolutely be deployed using this guide, but configuration changes will be needed near the end.
-
-The scope of the document is limited to providing the deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations on Azure Reference Design](../reference-designs/tko-on-azure.md)
-
-## Prerequisites
-The instructions provided in this document assumes that you have the following setup:
-
-* Microsoft Azure subscription
-* Owner level access to Subscription
-
-# Tanzu for Kubernetes Operations: Key Components
-The following is a list of the components that comprise Tanzu for Kubernetes Operations:
-
-* Tanzu Kubernetes Grid (TKG) - Enables creation and lifecycle management of Kubernetes clusters.
-* Tanzu Mission Control (TMC) - A centralized management platform for consistently operating and securing Kubernetes infrastructure and modern applications across multiple teams and clouds, and allows for centralized policy management across all deployed and attached clusters.
-* Tanzu Observability (TO) - Provides enterprise-grade observability and analytics at scale with granular controls, which allows to achieve higher levels of application health and availability for an overall improved end user experience
-* Tanzu Service Mesh (TSM) - Provides end-to-end connectivity, continuity, resiliency, security, compliance, and observability for modern applications running in single and multi-cloud environments. Global Namespace can be used to leverage the power of the hybrid cloud.
-* Tanzu User Managed Packages (Optional):
-    - Contour Ingress Controller - Provides Layer 7 control to deployed HTTP(s) applications
-    - Harbor Image Registry - Provides a centralized location to push, pull, store, and scan container images used in Kubernetes workloads. It also supports storing artifacts such as Helm charts and includes enterprise-grade features such as RBAC, retention policies, automated garbage collection of stale images, and DockerHub proxying among many other things
-    - Fluent bit - Provides export log streaming of cluster & workload logs to a wide range of supported aggregators provided in the extensions package for TKG
-    - Prometheus - Provides out-of-the-box health monitoring of Kubernetes clusters
-    - Grafana - Provides monitoring dashboards for displaying key health metrics of Kubernetes clusters
-
-Tanzu for Kubernetes Operations puts all these components together into a coherent solution.
-
-# Tanzu Kubernetes Grid for Microsoft Azure
-
-## Architecture Overview
-Below, you will find an architecture diagram that is one of the two production-level reference architectures and it will be this architecture that will be deployed through the following set of steps. This architecture shows both the TKG Management Cluster and Workload clusters in the same Virtual Network along with the Bootstrap machine, but each cluster being placed in their own Subnets. In addition, the Control Plane and Worker Nodes of each cluster are also separated by Subnet.
+The scope of this document is limited to providing the deployment steps based on the following reference design. The reference design represents one of the two production-level reference designs described in [VMware Tanzu for Kubernetes Operations on Azure Reference Design](../reference-designs/tko-on-azure.md).
 
 ![TKG on Azure (Single VNet)](img/tko-on-azure/image005.png)
 
-ASSUMPTIONS
+ This design shows both the Tanzu Kubernetes Grid management cluster and workload clusters in the same virtual network along with the bootstrap machine. However, each cluster is placed in their own subnets. In addition, the control plane and worker nodes of each cluster are also separated by a subnet.
 
-1. The above architecture only show the deployments of the base components within TKG.
+1. The reference design only shows the deployment of the base components within Tanzu Kubernetes Grid.
 
-2. The above architecture should fit into any production-level design that a customer may have in place, such as a Hub and Spoke, Global WAN Peering, or just a simple DMZ based implementation
+2. The reference design fits in with any production-level design that a customer may have in place, such as a Hub and Spoke, Global WAN Peering, or just a simple DMZ based implementation.
 
-3. No assumptions were made about a customer’s chosen tooling with respect to Security or DevOps other than what all customers have access to through their default Azure subscription as can be seen in the right-hand column of each architecture.
+3. We did not make any assumptions about your chosen tooling for security or DevOps,  other than what is available with a default Azure subscription.
 
-## Pre-deployment (Azure)
-Using the architectures shown above, if you would like more information about the specific Azure components, please review the [Reference Architecture](../reference-designs/tko-on-azure.md) document to get a better understand of why each component is used.
+**Note:** Additional workload clusters and different size workload clusters can be deployed using this guide. However, additional configuration changes are needed to deploy the additional or different sized workload clusters. You can make the configuration changes after you have gone through the deployment steps provided in this document.
 
-Before we start doing anything with Tanzu to install the actual Kubernetes clusters, let’s make sure that we have everything in place within Azure. To make things easier, we have provided an example Azure ARM template. This template contains a number of parameters that you can fill-in to make your environment fit into your naming standards and fit into your networking requirements.
+## Prerequisites
+Ensure that you have:
 
-The ARM template will deploy the following items that are seen within the diagram above:
+* Read [VMware Tanzu for Kubernetes Operations on Azure Reference Design](../reference-designs/tko-on-azure.md).
+* A Microsoft Azure subscription.
+* Owner level access to the subscription.
+* The following to deploy the ARM template in Microsoft Azure,
+    - Contributor role in Microsoft Azure.
+    - Resource group in Microsoft Azure.
+- An SSH key and the Base 64 encoded value of the public key. You will configure the Base 64 encoded value for the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file for deploying Tanzu Kubernetes Grid. How you generate the SSH key and how you encode the entire Public key is up to you. However, you will need to encode the public key before storing it within configuration file for deploying Tanzu Kubernetes Grid.
+* Access to Customer Connect and the available downloads for Tanzu Kubernetes Grid. To verify, go to [VMware Tanzu Kubernetes Grid Download Product](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652).
+
+## Overview of the Deployment steps
+1. [Set up your Microsoft Azure environment](#azure-environment)
+1. [Set up Bootstrap VM](#set-up-bootstrap)
+1. [Deploy Tanzu Kubernetes Grid](#deploy-TKG)
+1. [Configure SaaS Services](#config-saas)
+1. [(Optional) Deploy Tanzu Kubernetes Grid Packages](#deploy-user-managed-packages)
+
+## <a id=azure-environment> </a> Set up your Microsoft Azure Environment
+Before deploying Tanzu for Kubernetes operations and the actual Kubernetes clusters, ensure that your Azure environment is set up as described in this section.
+
+### Azure ARM Template
+The deployment detailed in this document uses the following resources:
+<!-- cSpell:disable -->
+- [ARM Template](./resources/tko-on-azure/azure-deploy.json)
+- [Parameters](./resources/tko-on-azure/azure-deploy.parameters.json)
+<!-- cSpell:enable -->
+
+The ARM template contains a number of parameters that you can populate or customize so that your Azure environment uses your naming standards and networking requirements.
+
+The ARM template deploys the following items:
 
 * Virtual Network
 * 5 Subnets
@@ -63,139 +62,161 @@ The ARM template will deploy the following items that are seen within the diagra
 * Public IP Address attached to Bootstrap Machine
 * Virtual Machine for Bootstrap (Ubuntu 20.0.4)
 
+In addition, the ARM template,
+
+* Uses the Region where the Resource Group is located to specify where the resources should be deployed.
+* Contains security rules for each of the Network Security Groups attached to the Control Plane clusters. These rules allow for SSH and secure kubectl access from the public Internet. Access from the public Internet allows for easier troubleshooting during the management and workload cluster deployments. You can remove these rules once your deployment is complete.
+
 ### Quotas
-When deploying TKG to Azure you will need to make sure your quotas are sufficient to support both the Management Cluster and Workload Cluster deployments otherwise the deployments will fail. The following quotas will likely need to be increased from their default values. It is important to note that quota increases will be necessary in every region you plan to deploy TKG.
+To successfully deploy Tanzu Kubernetes Grid to Azure, ensure that the quotas are sufficient to support both the management cluster and workload cluster deployments. Otherwise, the deployments will fail.
+
+Review the quotas for the following resources, which are included in the ARM template, and increase their values as needed. Increase the quotas for every region to which you plan to deploy Tanzu Kubernetes Grid.
 
 * Total Regional vCPUs
 * Family vCPUs based on your chosen family of VM (D, E, F, etc.)
 * Static Public IP Addresses
 * Public IP Addresses - Standard
 
-Based on the recommended minimum VM size of D2s_v3, the minimum quota that wll be needed to deploy a minimum deployment per cluster will be the following:
+Based on the recommended minimum VM size of D2s_v3, the following minimum quotas are required per cluster:
 
 * Total Regional vCPUs = 24
 * Family vCPUs for D Family = 24
 * Public IP Addresses - Standard = 6
 * Static Public IP Addresses = 6
 
-The more that you modify the basic configuration of the clusters that you deploy, the more the quota will need to be increased as well.
-
-**NOTE:** For the subsequent discussion points about how to deploy an ARM Template with the necessary resources listed above, you can leverage the example [ARM Template](./resources/tko-on-azure/azure-deploy.json) and example [Parameters](./resources/tko-on-azure/azure-deploy.parameters.json) files provided within this repo.
+Ensure that you increase the quotas if you make changes to the basic configuration of the clusters.
 
 ### ARM Template Deployment
-If you are already very knowledgeable with Azure, then please feel free to update the parameters file and then deploy the ARM template however is most comfortable for you. However, if you are inexperienced in Azure, then here is an example Azure CLI command that you can use either locally or within Azure Cloud Shell as well as an example Azure PowerShell command as well.
+Deploy ARM Template
+There are multiple methods to deploy an ARM template on Azure. If you are experienced with Azure, you can deploy the ARM template in a method that is comfortable to you.
 
-**NOTE:** You will need to have a Resource Group already created before you run these commands. In addition, this template should be run by someone with the “Contributor” role.
+Otherwise, you can use the example Azure CLI commands locally or in Azure Cloud Shell. If you prefer to use Azure PowerShell, use the example command for Azure PowerShell.
+
+Ensure that you have the following to deploy the ARM template in Microsoft Azure,
+
+- Contributor role in Microsoft Azure.
+- Resource group in Microsoft Azure.
 
 #### Azure CLI
+Run the following example Azure CLI command locally or in Azure Cloud Shell  to deploy the ARM template.
+
+<!-- cSpell:disable -->
 ```bash
 az deployment create –template-file azure-deploy.json –parameters azure-deploy.parameters.json –resource-group <Resource Group Name>
 ```
+<!-- cSpell:enable -->
 
-#### Azure Powershell
+#### Azure PowerShell
+Alternatively, run the following example command in Azure PowerShell to deploy the ARM template.
+
+<!-- cSpell:disable -->
 ```bash
 New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateFile azure-deploy.json -TemplateParameterFile azure-deploy.parameters.json
 ```
+<!-- cSpell:enable -->
 
 #### Azure Portal
-If you are more comfortable with the Azure Portal, then it is possible to process an ARM template directly within the Azure Portal.
+If you prefer to use the Azure Portal, do the following to process an ARM template directly on the Azure Portal.
 
-Step 1: Search and click on “Deploy a Custom Template”
-![Custom Deployment](img/tko-on-azure/CustomDeployment.png)
+1. Search and click **Deploy a Custom Template > Build your own template in the editor**.
+    ![Custom Deployment](img/tko-on-azure/CustomDeployment.png)
 
-Make sure to click on the “Build your own template in the editor” link within the Custom Deployment screen shown above. This will take you to the next screen where you can upload the ARM template (azuredeploy.json)
+1. Click **Load file** to upload the ARM template, `azuredeploy.json`.
+    ![Load File](img/tko-on-azure/LoadFile.png)
 
-Step 2 Upload `azuredeploy.json` to be processed
-![Load File](img/tko-on-azure/LoadFile.png)
+1. Fill in the parameter values so that the values are specific to your deployment.
+    ![Provide Parameter Values](img/tko-on-azure/Parameters.png)
 
-The last task is to fill in all of the parameters to make sure that everything is specific to your deployment, naming, and network standards.
+### Azure Service Principal/Application Registration Creation
+The Tanzu CLI requires access to an Azure Service Principal (SP) or Application Registration to programmatically configure the Tanzu cluster’s infrastructure during deployment and during auto-scale events.
 
-Step 3: Fill in Parameter Values
-![Provide Parameter Values](img/tko-on-azure/Parameters.png)
-
-**IMPORTANT**
-
-* The ARM template provided uses the Region where the Resource Group is located to specify where the resources should be deployed.
-* The ARM template contains security rules for each of the Network Security Groups attached to the Control Plane clusters. These rules allow for SSH and Secure Kubectl access from the Public Internet. This was done to allow for Troubleshooting to be done during the Management and Workload cluster deployments. Please feel free to remove these rules once your deployment is complete.
-
-### Azure Service Principal/App Registration Creation
-The Tanzu CLI requires access to an Azure Service Principal (SP) or Application Registration which can be used for programmatic manipulation of the Tanzu cluster’s infrastructure both during deployment and during auto-scale events. If you have the ability and access to create the SP yourself, then it is recommended that you do so using the Azure Portal. However, if you would like to do it using either the Azure CLI or Powershell, links to the corresponding Azure docs for each can be found below.
-
-**IMPORTANT:** The creation of an Azure Service Principal or Application Registration you will either need to be an “Administrator” within your Azure Active Directory tenant or the “App Registrations” setting will need to be set to “Yes” to allow all Users to create Service Principals.
+We recommended that you create the SP on the Azure Portal. However, if you prefer to use either the Azure CLI or Azure PowerShell, see the following Microsoft product documentation:
 
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
 * [Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azps-6.6.0)
 
-#### Portal UI
+**Important:** To create an Azure Service Principal or Application Registration you must be an **Administrator** in your Azure Active Directory tenant. Alternatively, all Users must have **App Registrations** set to **Yes**, which allows all Users to create an Azure Service Principal.
 
-Step 1: Azure Active Directory -> Application Registrations
-![Azure Active Directory Application Registrations](img/tko-on-azure/AADAppReg.png)
+Do the following on the Azure portal to create an Azure Service Principal:
 
-Step 2: New App Registration
-![New Application Registration](img/tko-on-azure/NewReg.png)
+1. Go to **Azure Active Directory > Application Registrations**.
+  ![Azure Active Directory Application Registrations](img/tko-on-azure/AADAppReg.png)
 
-There are only two fields that are required for a new App Registration:
+1. Click **New App Registration**.
+  ![New Application Registration](img/tko-on-azure/NewReg.png)
 
-* Name – Name should be reflective of what the App Registration is being used for. (i.e. tanzucli)
-* URL – When the App Registration is only be used for programmatic purposes like here, the URL can be anything, but the field is required.
+1. Enter the following:
 
-However, the third field, Supported Account Type will automatically select that the new App Registration will only be used for a Single Azure Active Directory tenant and for development clusters, this should be sufficient. Depending on the size of the organization that Tanzu is being deployed within, the App Registration may need to be available across one-to-many Azure Active Directory tenants, so choose which ever is needed for this deployment.
+   - **Name**: Enter a name that reflects for what the App Registration is being used. <br>
+        Example: tanzucli
+   - **URL**: Enter any URL. <br>
+        In this deployment, the App Registration is used for programmatic purposes only. In such cases, the URL can be anything. However, the field is required.
+   - **Supported Account Type**: (Optional) By default, **Accounts in this organizational directory only (Default Directory only - Single tenant)** is selected. <br>
+   In the default case, the new App Registration is used for a Single Azure Active Directory tenant and for development clusters. Depending on the size of the organization that Tanzu is deployed in, the App Registration may need to be available across one-to-many Azure Active Directory tenants. For such cases, select the appropriate multi-tenant option.
 
-Step 3: Fill Out App. Registration Fields
-![Fill Out Application Registration Fields](img/tko-on-azure/AppRegFields.png)
+    ![Fill Out Application Registration Fields](img/tko-on-azure/AppRegFields.png)
 
-Once the App Registration, has been created, an Overview page will appear providing you with two important pieces of information that you will need when actually running the Tanzu CLI, Application Client ID and the Azure Active Directory tenant ID.
+   After the Application Registration is created, an **Overview** page appears.
 
-![Application Registration Overview](img/tko-on-azure/AppRegInfo.png)
-<div align="center">Figure 4: Application Registration Information</div>
+1. Copy the values for the **Application client ID** and **Directory (tenant) ID** from the **Overview** page. You will need the IDs for running the Tanzu CLI.
 
-Make sure to grab the Application Client ID and Tenant ID from the Overview page once the Application Registration (SP) has been created. These are needed for the use of the Tanzu CLI.
+      ![Application Registration Overview](img/tko-on-azure/AppRegInfo.png)
 
-Before you can leverage this new App Registration, you will need to create a Password/Key that can be used during programmatic authentication and execution. Start by clicking on the Certificates and Secrets area of the Application Registration navigation and choose the “Client Secrets” tab.
+1. Add a Key to the Application Registration.
 
-Step 4: Add a Key to an Application Registration
-![Add Application Registration Key](img/tko-on-azure/AppRegSecret.png)
+    You will use the key for programmatic authentication and execution.
 
-Choose the expiration date and then make sure to store the randomly generated Key so that it can be used later.
+      1. Click **Certificates & secrets > Client secrets > New client secret**.
+         ![Add Application Registration Key](img/tko-on-azure/AppRegSecret.png)
 
-After completing the Azure SP creation process, make sure to assign the “VM Contributor” and “Network Contributor” roles to this SP. These two roles provide the minimum level of permissions required for the Tanzu CLI to function properly within Azure.
+      1. Choose the expiration date.
 
-This should be done through the Subscription scope, but it can also be done at the Resource Group scope depending on your security boundaries. Find your specific Subscription within the Azure Portal and click on the “Access Control (IAM)” navigation item and then click on the “Roles” tab.
+      1. Store the randomly generated key so that it can be used later.
 
-Step 5: Click on “Access Control/IAM” navigation
-![Subscription Scoped Identity Access Management(IAM)](img/tko-on-azure/SubscriptionIAM.png)
+1. Assign **VM Contributor** and **Network Contributor** roles to the Azure SP.
 
-Once you are on the Roles page, you will need to perform each of the Role Assignments individually, one for the “Network Contributor” and one for the “VM Contributor”. Once you have selected the specific role that you will be adding, do a quick search for the Name of the App Registration that you created above.
+      The roles provide the minimum level of permissions required for the Tanzu CLI to function properly within Azure.
 
-Step 6: Assign Roles to the App Registrations
-![Assign a Role to Application Registration](img/tko-on-azure/RoleAssign.png)
+      Assign the roles through the Subscription scope. Depending on your security boundaries, you can also assign it at the Resource Group scope.
 
-In the screen above, make sure that the “User, group, or service principal” radio button is selected and then when the “Select Members” screen appears as you can see on the right side of the image, search for your new SP based on the name that you gave it.
+      **Important:** To assign a role to the SP, you must have either the **Owner** role or **User Access Administration** role within the scope of the Azure subscription.
 
-IMPORTANT: To assign a role to the SP, you will need to have either the “Owner” role or “User Access Administration” role within the scope of the Azure subscription.
+      1. Find your specific Subscription on the Azure Portal and go to **Access Control (IAM) > Roles**.
 
-Once you are finished creating your Application Registration/Service Principal, make sure that you have gathered the following pieces of information as they will be needed when putting together the configuration files for the Tanzu CLI and needed during the Bootstrap machine setup:
+         ![Subscription Scoped Identity Access Management(IAM)](img/tko-on-azure/SubscriptionIAM.png)
 
-* Azure Subscription ID
-* Azure Active Directory Tenant ID
-* Azure Application ID (ServicePrincipal)
-* Azure Application Key
+      1. Click **Add role assignment**.
+      1. In the **Add role assignment** page, select **User, group, or service principal**.
+         ![Assign a Role to Application Registration](img/tko-on-azure/RoleAssign.png)
 
-### Pre-Deployment (Bootstrap)
-Now that the Azure Architecture is in place, we need to get all of the correct components installed within the Bootstrap VM as this VM will be used to deploy both the Management and first Workload Cluster for TKG. To make this happen, you will need to create an Application Registration or Service Principal within Azure Active Directory. I would recommend doing this within the Azure Portal, but it can be done using the Azure CLI as well. 
+      1. For **Select Members**, search for the new SP name you created.
 
-Once you have verified that the VM is up and running, connect to the VM through a standard SSH connection. The Bootstrap machine will need to have some updates and installs done on it before we can start to deploy the clusters. It should have the following deployed within before you run the Tanzu CLI can be used:
+1. Make a note of the following information. You will need the information to create the configuration files to set up the Bootstrap machine and Tanzu CLI.
 
-* Docker
-* Azure CLI
-* Tanzu CLI
-* Tanzu Kubectl
+      - Azure Subscription ID
+      - Azure Active Directory Tenant ID
+      - Azure Application ID (ServicePrincipal)
+      - Azure Application Key
 
-Using the below Shell commands, you will be able to handle all of the items listed above. The six variables at the top will need to be filled in before running all of the commands. The first two variables are required for access to the VMWare Customer Connect portal, which is used for downloading the required Tanzu components. Just put in your email address and password that can successfully login to the Customer Connect Portal.
+## <a id=set-up-bootstrap> </a> Set Up Bootstrap VM
+You will use the bootstrap VM to deploy the Tanzu Kubernetes Grid management and workload clusters. Create the bootstrap VM after you have set up your Microsoft Azure environment.  
 
-**NOTE:** If you would like to validate your Customer Connect authentication or view the available downloads for Tanzu Kubernetes Grid, please check the following URL: [https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652)
+You will set up the bootstrap VM with the following:
 
-The remaining variables are all tied to the Azure subscription that you are deploying Tanzu into. The first will be a GUID for your Azure Active Directory Tenant and the next one is the GUID for the Subscription where all the resources were created from the ARM Template above. The last two items are tied to the Client ID and Secret Key that you created above for your Application Registration/Service Principal.
+- Authentication and access to VMware Customer Connect<br>
+  You will download the required Tanzu components from VMware Customer Connect.
+- Azure Tenant, subscription, and client IDs<br>
+  The IDs are for the Azure subscription on which you created resources using the ARM template.
+- Docker
+- Azure CLI
+- Tanzu CLI
+- Tanzu Kubectl
+
+To set up the bootstrap VM:
+1. Verify that the VM is up and running. <_how do you verify?_>
+1. Connect to the VM through a standard SSH connection.
+1. Run the following Shell commands to set up the bootstrap VM.
+    Replace the variables with the VMware account information needed to access VMware Customer Connect and Azure IDs for the Azure subscription on which you created resources using the ARM template and Application Registration/Service Principal.
 
 <!-- cSpell:disable -->
 ```bash
@@ -255,26 +276,37 @@ az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot
 ```
 <!-- cSpell:enable -->
 
-**NOTE:** Please be aware, that because of permission issues, you will need to logout/login to the Bootstrap machine between the installation of Docker and the Download and Install of the Tanzu components. Example script files can be found [here](./resources/tko-on-azure/bootstrapsetup.sh) and [here](./resources/tko-on-azure/bootstraptanzu.sh) if you would like to start here rather than doing a copy/paste.
+**Note:** Because of permission issues, you will have to log out and log in to the bootstrap VM after installing Docker and before you download and install the Tanzu components.
 
-### Deployment (TKG)
-The last piece of a TKG deployment is to leverage the installed Tanzu CLI to deploy both a Management Cluster and Workload Cluster into the deployed Azure infrastructure that was deployed at the beginning. To make this possible, you will need to have a YAML config file that tells the CLI where the clusters will be deployed with respect to your Azure infrastructure. A complete example config file with all available values for an Azure deployment can be downloaded from [here](./resources/tko-on-azure/ex-config.yaml)
+If you prefer not to copy paste code, you can use the following sample script files:
 
-**IMPORTANT:** Please be aware that you will need to create an SSH key so that you can pass the necessary Base 64 encoded value of the public key within the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file. How you generate your SSH key and how you then encode the entire Public key is up to you, but you will need to encode it before storing it within configuration file.
+<!-- cSpell:disable -->
 
-If you would like a more detailed walk-through of how to create your config file and what each value corresponds to in Azure, please see the Tanzu documentation for this topic, which can be found [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
+  - [bootstrapsetup.sh](./resources/tko-on-azure/bootstrapsetup.sh)
+  - [bootstraptanzu.sh](./resources/tko-on-azure/bootstraptanzu.sh)
 
-Once you have put in all of the values that are going to be relevant to your deployment within your respective config files, you will need to run the following commands from your Bootstrap VM.
+<!-- cSpell:enable -->
 
-```bash
-tanzu management-cluster create --file config.yaml -v 0-9
+## <a id=deploy-TKG> </a> Deploy Tanzu Kubernetes Grid
+Deploy Tanzu Kubernetes Grid after you set up your Azure environment and bootstrap VM.
+You will use Tanzu CLI to deploy a management cluster and workload cluster.
 
-tanzu cluster create –file config.yaml -v 0-9
-```
+1. Create a YAML file that contains the required configuration details.
 
-### Configure SaaS Services (TMC, TO, TSM)
-The last deployment requirement for a TKO implementation is to connect your TKG Workload Cluster to the different SaaS services: Tanzu Mission (TMC), Tanzu Observabililty (TO), and Tanzu Service Mesh (TSM). The preferred method for this, would be to use the TMC Console and corresponding TO and TSM Consoles as well, because there is a lot of information that flows back and forth between these systems for integration purposes.
+   The [ex-config.yaml](./resources/tko-on-azure/ex-config.yaml) sample YAML file contains the minimum configuration needed to deploy a management and workload clusters. The configuration contains the default values used in the ARM template. Update the values in the YAML to be relevant to your deployment. For example, replace the values for the Azure IDs, Application Registration/Service Principal, cluster name, and the Base 64 encoded value of the public key.
 
+2. Run the following commands from your bootstrap VM to create the management and workload clusters.
+    <!-- cSpell:disable -->
+    ```bash
+    tanzu management-cluster create --file config.yaml -v 0-9
+
+    tanzu cluster create –file config.yaml -v 0-9
+    ```
+    <!-- cSpell:enable -->   
+
+For additional product documentation on how to create the YAML configuration file and what each value corresponds to in Azure, see [Management Cluster Configuration for Microsoft Azure](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
+
+## <a id=config-saas> </a> Configure SaaS Services
 The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features.
 
 * Tanzu Mission Control (TMC)
@@ -283,12 +315,12 @@ The following VMware SaaS services provide additional Kubernetes lifecycle manag
 
 For configuration information, see [Configure SaaS Services](./tko-saas-services.md).
 
-**NOTE:** Optional scripting options for connecting the SaaS services will be available in the future and found directly within the [bootstraptanzu.sh](./resources/tko-on-azure/bootstraptanzu.sh)
+## <a id=deploy-user-managed-packages> (Optional) Deploy Tanzu Kubernetes Grid Packages
+A package in Tanzu Kubernetes Grid is a collection of related software that supports or extends the core functionality of the Kubernetes cluster in which the package is installed.
 
-### (OPTIONAL) Deploy Packages
-Once your clusters have been deployed, you may want to deploy some of the available out-of-the-box packages that come with Tanzu. Most of them will not be needed because of the existence of the SaaS services that are part of TKO, but for those functions and features that are not part of the TKO bundle, here are some steps for how to deploy packages such as Harbor or Pinniped. These packages are available for deployment within each Workload Cluster that you deploy, but they are not actually installed and working as Pods within the cluster until you perform the steps below.
+These packages are available for deployment in each workload cluster that you deploy, but they are not automatically installed and working as pods.
 
-**NOTE:** Please keep in mind that any cluster can be used to run the available packages. For the purposes of this document, we will use the name "Shared Services Cluster" to denote the cluster where these packages are to be installed.
+Tanzu Kubernetes Grid includes two types of packages, core packages and user-managed packages.
 
 #### Core Packages
 
@@ -315,5 +347,5 @@ We recommend installing the following packages:
 * [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)
 
 * [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html)
-	
+
 If Harbor is required to take on a heavy load and store large images into the registry, you can install Harbor into a separate workload cluster.
