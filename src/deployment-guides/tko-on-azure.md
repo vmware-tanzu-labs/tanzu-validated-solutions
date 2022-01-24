@@ -59,7 +59,7 @@ The ARM template will deploy the following items that are seen within the diagra
     - Workload Cluster Control Plane (API Servers)
     - Workload Cluster Worker Nodes
 * Network Security Group for Bootstrap Machine NIC
-* Network Security Group for each of the Cluster Subnets
+* Network Security Groups for each of the Cluster Subnets
 * Public IP Address attached to Bootstrap Machine
 * Virtual Machine for Bootstrap (Ubuntu 20.0.4)
 
@@ -250,49 +250,13 @@ az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot
 **NOTE:** Please be aware, that because of permission issues, you will need to logout/login to the Bootstrap machine between the installation of Docker and the Download and Install of the Tanzu components. Example script files can be found [here](./resources/tko-on-azure/bootstrapsetup.sh) and [here](./resources/tko-on-azure/bootstraptanzu.sh) if you would like to start here rather than doing a copy/paste.
 
 ### Deployment (TKG)
-The last piece of a TKG deployment is to leverage the installed Tanzu CLI to deploy both a Management Cluster and Workload Cluster into the deployed Azure infrastructure that was deployed at the beginning. To make this possible, you will need to have a YAML config file that tells the CLI where the clusters will be deployed with respect to your Azure infrastructure. A minimal config file can be seen below based on the default values used in the ARM template. However, a complete example config file with all available values for an Azure deployment can be downloaded from [here](./resources/tko-on-azure/ex-config.yaml)
-
-<!-- cSpell:disable -->
-```bash
-AZURE_ENVIRONMENT: "AzurePublicCloud"
-AZURE_CLIENT_ID: <AZURE_CLIENT_ID>
-AZURE_CLIENT_SECRET: <AZURE_CLIENT_SECRET>
-AZURE_CONTROL_PLANE_MACHINE_TYPE: Standard_D2s_v3
-AZURE_CONTROL_PLANE_SUBNET_CIDR: 10.0.1.0/26
-AZURE_CONTROL_PLANE_SUBNET_NAME: mgmt-control-subnet
-AZURE_ENABLE_PRIVATE_CLUSTER: "true"
-AZURE_FRONTEND_PRIVATE_IP: 10.0.1.4
-AZURE_LOCATION: eastus2
-AZURE_NODE_MACHINE_TYPE: Standard_D2s_v3
-AZURE_NODE_SUBNET_CIDR: 10.0.1.64/26
-AZURE_NODE_SUBNET_NAME: mgmt-worker-subnet
-AZURE_RESOURCE_GROUP: bch-tkg-east
-AZURE_SSH_PUBLIC_KEY_B64: <BASE64-SSH-PUBLIC>
-AZURE_SUBSCRIPTION_ID: <AZURE_SUBSCRIPTION_ID>
-AZURE_TENANT_ID: <AZURE_TENANT_ID>
-AZURE_VNET_CIDR: 10.0.0.0/16
-AZURE_VNET_NAME: bch-vnet-tkg
-AZURE_VNET_RESOURCE_GROUP: bch-tkg-east
-CLUSTER_CIDR: 100.96.0.0/11
-CLUSTER_NAME: <CLUSTER_NAME>
-CLUSTER_PLAN: prod
-ENABLE_AUDIT_LOGGING: "true"
-ENABLE_CEIP_PARTICIPATION: "false"
-ENABLE_MHC: "true"
-INFRASTRUCTURE_PROVIDER: azure
-OS_ARCH: amd64
-OS_NAME: ubuntu
-OS_VERSION: "20.04"
-SERVICE_CIDR: 100.64.0.0/13
-TKG_HTTP_PROXY_ENABLED: "false"
-```
-<!-- cSpell:enable -->
+The last piece of a TKG deployment is to leverage the installed Tanzu CLI to deploy both a Management Cluster and Workload Cluster into the deployed Azure infrastructure that was deployed at the beginning. To make this possible, you will need to have a YAML config file that tells the CLI where the clusters will be deployed with respect to your Azure infrastructure. A complete example config file with all available values for an Azure deployment can be downloaded from [here](./resources/tko-on-azure/ex-config.yaml)
 
 **IMPORTANT:** Please be aware that you will need to create an SSH key so that you can pass the necessary Base 64 encoded value of the public key within the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file. How you generate your SSH key and how you then encode the entire Public key is up to you, but you will need to encode it before storing it within configuration file.
 
-If you would like a more detailed walk-through of how to create your config file and what each value corresponds to in Azure, please see the Tanzu documentation, which can be found [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
+If you would like a more detailed walk-through of how to create your config file and what each value corresponds to in Azure, please see the Tanzu documentation for this topic, which can be found [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
 
-Once you have put in all of the values that are going to be relevant to your deployment, you will need to run the following commands from your Bootstrap VM.
+Once you have put in all of the values that are going to be relevant to your deployment within your respective config files, you will need to run the following commands from your Bootstrap VM.
 
 ```bash
 tanzu management-cluster create --file config.yaml -v 0-9
@@ -300,460 +264,48 @@ tanzu management-cluster create --file config.yaml -v 0-9
 tanzu cluster create –file config.yaml -v 0-9
 ```
 
-**NOTE:** Please note that the same configuration file can be used for both the Management and Workload cluster deployments. You will need to specify a different cluster name for each one, but many of the same values can be leveraged. However, due to the way that the Tanzu CLI maintains its configuration information for each deployment, keeping different files with different CLUSTER_NAME parameter values is a recommended approach.
-
-### SaaS Services (TMC, TO, TSM)
+### Configure SaaS Services (TMC, TO, TSM)
 The last deployment requirement for a TKO implementation is to connect your TKG Workload Cluster to the different SaaS services: Tanzu Mission (TMC), Tanzu Observabililty (TO), and Tanzu Service Mesh (TSM). The preferred method for this, would be to use the TMC Console and corresponding TO and TSM Consoles as well, because there is a lot of information that flows back and forth between these systems for integration purposes.
 
-However, there is a TMC CLI which can be used to attach your Workload Cluster to TMC and then to integrate that TMC attached cluster with TO and TSM. Within the scope of the Shell script files that are available for this Deployment Guide, there are a number of pieces of information that are required before the TMC CLI can be used successfully. Each of these pieces can be provided at the top of the [bootstraptanzu](./resources/tko-on-azure/bootstraptanzu.sh) shell script as export variables and these will be used within the below shell script lines of code.
+The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features.
 
-**NOTE:** The first two pieces of information in the below variables can only be retrieved by accessing the TMC Console
+* Tanzu Mission Control (TMC)
+* Tanzu Observability (TO)
+* Tanzu Service Mesh (TSM)
 
-```bash
-export TMC_API_TOKEN='ALLROLESTOKEN'
-export CLUSTERGROUP='TMCLUSTERGROUPNAME'
-export CLUSTERNAME='WORKLOADCLUSTERNAME'
-```
+For configuration information, see [Configure SaaS Services](./tko-saas-services.md).
 
-Make sure to fill in the above variables before running the script on your bootstrap VM.
-
-```bash
-tanzu cluster kubeconfig get $CLUSTERNAME --admin --export-file ./workloadkube.yaml
-kubectl config use-context $CLUSTERNAME-admin@$CLUSTERNAME --kubeconfig ./workloadkube.yaml
-  
-tmc login -name workloadCluster
-
-tmc cluster attach --cluster-group $CLUSTERGROUP --name $CLUSTERNAME -k ./workloadkube.yaml
-```
-
-Once your cluster has been connected to your Cloud Organization within the TMC
-
-**NOTE:** If you would like a more visual version of how to connect your workload cluster to the different SaaS services, there is a separate deployment guide that provides a GUI based walk-through of the necessary steps. This deployment guide can be found [here](./tko-saas-services.md)
+**NOTE:** Optional scripting options for connecting the SaaS services will be available in the future and found directly within the [bootstraptanzu.sh](./resources/tko-on-azure/bootstraptanzu.sh)
 
 ### (OPTIONAL) Deploy Packages
 Once your clusters have been deployed, you may want to deploy some of the available out-of-the-box packages that come with Tanzu. Most of them will not be needed because of the existence of the SaaS services that are part of TKO, but for those functions and features that are not part of the TKO bundle, here are some steps for how to deploy packages such as Harbor or Pinniped. These packages are available for deployment within each Workload Cluster that you deploy, but they are not actually installed and working as Pods within the cluster until you perform the steps below.
 
 **NOTE:** Please keep in mind that any cluster can be used to run the available packages. For the purposes of this document, we will use the name "Shared Services Cluster" to denote the cluster where these packages are to be installed.
 
-Before you deploy any of the available optional packages, you will need to install the Cert Manager, which can be done using the following code:
+#### Core Packages
 
-1.  Obtain admin credentials for the Shared Services Cluster:
-    <!-- /* cSpell:disable */ -->
-    ```bash
-    # Run command
-    tanzu cluster kubeconfig get <Shared_Cluster_Name> --admin
-    
-    # Sample output:
-    #  Credentials of cluster 'tkg-shared' have been saved 
-    #  You can now access the cluster by running 'kubectl config use-context tkg-shared-admin@tkg-shared'
-    ```
-    <!-- /* cSpell:enable */ -->
-2.  Download VMware Tanzu Kubernetes Grid Extensions Manifest 1.3.1 from [here](https://my.vmware.com/en/web/vmware/downloads/details?downloadGroup=TKG-131&productId=988&rPId=65946).
-3.  Connect to the management cluster using TKG CLI and add the following tags:
-    <!-- /* cSpell:disable */ -->
-    ```bash
-    kubectl config use-context tkg-mgmt01-admin@tkg-mgmt01   # Connect to TKG Management Cluster
-    
-    kubectl label cluster.cluster.x-k8s.io/<Shared_Cluster_Name> cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
-    kubectl label cluster <Shared_Cluster_Name> type=workload   # Based on the match labels provided in AKO config file
-    
-    # Run command:
-    tanzu cluster list --include-management-cluster
-    
-    # Sample output:
-    #  NAME        NAMESPACE   STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES           PLAN  
-    #  tkg-shared  default     running  1/1           1/1      v1.20.5+vmware.2  tanzu-services  dev   
-    #  tkg-mgmt01  tkg-system  running  1/1           1/1      v1.20.5+vmware.2  management      dev 
-    ```
-    <!-- /* cSpell:enable */ -->
-4.  Unpack the manifest using the following command.
-    ```bash
-    tar -xzf tkg-extensions-manifests-v1.3.1-vmware.1.tar.gz
-    ```
-5.  Connect to the shared services cluster using the credentials obtained in step 2 and install cert-manager
-    <!-- /* cSpell:disable */ -->
-    ```bash
-    kubectl config use-context tkg-shared-admin@tkg-shared    ##Connect to the Shared Cluster
-     
-    cd ./tkg-extensions-v1.3.1+vmware.1/
-    kubectl apply -f cert-manager/
-     
-    # Ensure required pods are running
-    # Sample output:
-    #   [root@bootstrap tkg-extensions-v1.3.1+vmware.1]# kubectl get pods -A | grep cert-manager
-    #   cert-manager        cert-manager-7c58cb795-b8n4b                                   1/1     Running     0          42s
-    #   cert-manager        cert-manager-cainjector-765684c9d6-mzdqs                       1/1     Running     0          42s
-    #   cert-manager        cert-manager-webhook-ccc946479-dxlcw                           1/1     Running     0          42s
-    
-    #  [root@bootstrap tkg-extensions-v1.3.1+vmware.1]# kubectl get pods -A | grep kapp
-    #  tkg-system          kapp-controller-6d7855d4dd-zn4rs                               1/1     Running     0          106m
-    ```
-    <!-- /* cSpell:enable */ -->
+Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-core-index.html).
 
-#### Harbor
-Harbor is a compliant container registry that can be used to store the images that will eventually be used within the scope of your Workload clusters. Due to the nature of how it is installed, by default this registry would be made available only to those clusters that are within or connected to the network where the cluster is that has Harbor deployed.
+#### User-Managed Packages
 
-**NOTE:** Please keep in mind that Harbor is only one option for a private compliant registry. Azure Container Registry can also be leveraged in this scenario. So can many different registry based virtual appliances. Please see the Reference Architecture for more information.
+A user-managed package is an optional component of a Kubernetes cluster that you can install and manage with the Tanzu CLI. These packages are installed after cluster creation. User-managed packages are grouped into package repositories in the Tanzu CLI. If a package repository that contains user-managed packages is available in the target cluster, you can use the Tanzu CLI to install and manage any of the packages from that repository.
 
-Once you are ready to deploy Harbor into one of your Workload clusters, then please perform the following steps:
+Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cli-reference-packages.html).
 
-1.  Execute the following commands to deploy Harbor not the shared services cluster.
-    <!-- /* cSpell:disable */ -->
-    ```bash
-    cd ./tkg-extensions-v1.3.1+vmware.1/extensions/registry/harbor
-    kubectl apply -f namespace-role.yaml
-    cp harbor-data-values.yaml.example harbor-data-values.yaml
-    ./generate-passwords.sh harbor-data-values.yaml           ## Generates Random Passwords for "harborAdminPassword", "secretKey", "database.password", "core.secret", "core.xsrfKey", "jobservice.secret", and "registry.secret" ##
-    
-    # Update the "hostname" value in "harbor-data-values.yaml" file with the FQDN for accessing Harbor 
-    
-    # (Optional)If using custome or CA certs: Before executing the below steps, update "harbor-data-values.yaml" with the certs, refer step 2 (Updating certs is optional, if certs are not provided, Cert-Manager will generate required certs)
-    
-    kubectl create secret generic harbor-data-values --from-file=values.yaml=harbor-data-values.yaml -n tanzu-system-registry
-    kubectl apply -f harbor-extension.yaml
-     
-    # Validate
-    kubectl get app contour -n tanzu-system-ingress
-    
-    # Note: Once the Harbor app is deployed successfully, the status should change from Reconciling to Reconcile Succeeded
-    
-    # Sample output:
-    #  kubectl get app harbor -n tanzu-system-registry
-    #  NAME     DESCRIPTION           SINCE-DEPLOY   AGE
-    #  harbor   Reconciling           1m50s          1m50s
-    
-    # Wait until we see "Reconciling succeeded" (can take 3-5mins)
-    #  NAME     DESCRIPTION           SINCE-DEPLOY   AGE
-    #  harbor   Reconcile succeeded   5m45s          81m
-    ```
-    <!-- /* cSpell:enable */ -->
+We recommend installing the following packages:
 
-2.  (Optional) Update the `harbor-data-values.yaml` file with the hostname and certificates. Following is an example of the YAML file.
-    
-    **Sample harbor-data-values.yaml**
+* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html)
 
-    <!-- /* cSpell:disable */ -->
-    ```bash
-    #@data/values
-    #@overlay/match-child-defaults missing_ok=True
-    ---
-    
-    # Docker images setting
-    image:
-      repository: projects.registry.vmware.com/tkg/harbor
-      tag: v2.1.3_vmware.1
-      pullPolicy: IfNotPresent
-    # The namespace to install Harbor
-    namespace: tanzu-system-registry
-    # The FQDN for accessing Harbor admin UI and Registry service.
-    hostname: harbor.tanzu.cc
-    # The network port of the Envoy service in Contour or other Ingress Controller.
-    port:
-      https: 443
-    # [Optional] The certificate for the ingress if you want to use your own TLS certificate.
-    # We will issue the certificate by cert-manager when it's empty.
-    tlsCertificate:
-      # [Required] the certificate
-      tls.crt: |
-            -----BEGIN CERTIFICATE-----
-            MIIFGDCCBACgAwIBAgISBBhzkNvPR8+q9o78STsT753tMA0GCSqGSIb3DQEBCwUA
-            MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
-            EwJSMzAeFw0yMTA3MDYxNTA2MzVaFw0yMTEwMDQxNTA2MzRaMBUxEzARBgNVBAMM
-            CioudGFuenUuY2MwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC0EC1i
-            hOO2nBUH4lOjn4EnURm/sdsdss/1XsDzlnSxBLXeP9+uSb1SJckzdPTpJIEbGuak
-            FkiafLfkMnR9rCc7M0KtPQ/qHdLGp3Jz7T4/nzBqLckZfn0fkomaKo8Ku+GoqitZ
-            e9CNGsGOUkifzcPDeBLdU9+oSRXTXiDgSe5txa0OLLrzJRZZ/UBGPDO2LFqxO4/P
-            OPiRduqBobbrya0eCq4zjpKIDWA90K9nKxTphpFioswdgP0P/tIskNkt7sQOeTbQ
-            cVwJ+SsOnnXKAD7oTAJti2Z3dRCABpjNqIaOVsadqQ16j18QRP/KB57piDiCocoC
-            hVlBbAmkYRakx1SLAgMBAAGjggJDMIICPzAOBgNVHQ8BAf8EBAMCBaAwHQYDVR0l
-            BBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0OBBYE
-            FKT9vSt69Cq0H0+yIyG8DLAr5QzsMB8GA1UdIwQYMBaAFBQusxe3WFbLrlAJQOYf
-            r52LFMLGMFUGCCsGAQUFBw1234dkwRzAhBggrBgEFBQcwAYYVaR0cDovL3IzLm8u
-            bGVuY3Iub3JnMCIGCCsGAQUFBzAChhZodHRwOi8vcjMuaS5sZW5jci5vcmcvMBUG
-            A1UdEQQOMAyCCioudGFuenUuY2MwTAYDVR0gBEUwQzAIBgZngQwBAgEwNwYLKwYB
-            BAGC3xMBAQEwKDAmBggrBgEFBQcCARYaaHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5v
-            cmcwggECBgorBgEEAdZ5AgQCBIHzBIHwAO4AdQB9PvL4j/+IVWgkwsDKnlKJeSvF
-            DngJfy5ql2iZfiLw1wAAAXp8kjniAAAEAwBGMEQCIAlo9vQnE+Rq3ZS47q/JTjUD
-            q9kPutXvkd5qgEDha9pfAiAQSmv53fnfNRpO6PX7yCmN6dGNogBeydSN/TM9WkFl
-            qAB1AG9Tdqwx8DEZ2JkApFEV/3cVHBHZAsEAKQaNsgiaN9kTICUBenySOhkAAAQD
-            AEYwRAIgR4EfqlImFdGqcvtlGX+6+zy6bFAzJE4e4YKdCRVHef0CID0KjpOKloqp
-            AmBEOztYpl+mSu6AK29YKYm+T0DilzZdMA0GCSqGSIb3DQEBCwUAA4IBAQC25nWP
-            dHjNfglP5OezNOAWE1UW15vZfAZRpXBo1OE9fE2fSrhn9xgZufGMydycCrNKJf26
-            DKumhbCDzVjwqJ8y/LWblKYOGHdd7x6NgsFThpNpsX6DAo3O5y6XGYARkKAntR/i
-            PgKjWJG9xXU8jNCihmmMBk57sT6Udk+RowI3F0Xl+CF/n8/TTGD2NJmnhMqczUYG
-            p7Y2d8aUxzoKFrwBpUeBD7zYB6SCOWu/2toNjSkJ669hTYat+4Kqw3MDJDoiynZN
-            QjWLki9dbhe7QYWS5lGMJqY12bn45gEVSzFOd1keqJRr1I5PBKZvgpyGDHGyXeiv
-            8kEsxgvnXDz4y/Uj
-            -----END CERTIFICATE-----
-            -----BEGIN CERTIFICATE-----
-            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
-            nLRbwHOoq7hHwg==
-            -----END CERTIFICATE-----
-            -----BEGIN CERTIFICATE-----
-            MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
-            MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
-            DkRTVCBSb290IENBIFgzMB4XDTIx12BNr6E5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
-            TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
-            cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
-            AQUAA4ICDwAwggIKAoICAQCt6CRz9BQ385ueK1coHIe+3LffOJCMbjzmV6B493XC
-            ov71am72AE8o295ohmxEk7axY/0UEmu/H9LqMZshftEzPLpI9d1537O4/xLxIZpL
-            wYqGcWlKZmZsj348cL+tKSIG8+TA5oCu4kuPt5l+lAOf00eXfJlII1PoOK5PCm+D
-            LtFJV4yAdLbaL9A4jXsDcCEbdfIwPPqPrt3aY6vrFk/CjhFLfs8L6P+1dy70sntK
-            4EwSJQxwjQMpoOFTJOwT2e4ZvxCzSow/rBhads6shweU9GNx7C7ib1uYgeGJXDR5
-            bHbvO5BieebbpJovJsXQEOEO3tkQjhb7t/eo98flAgeYjzYIlefiN5YNNnWe+w5y
-            sR2bvAP5SQXYgd0FtCrWQemsAXaVCg/Y39W9Eh81LygXbNKYwagJZHduRze6zqxZ
-            Xmidf3LWicUGQSk+WT7dJvUkyRGnWqNMQB9GoZm1pzpRboY7nn1ypxIFeFntPlF4
-            FQsDj43QLwWyPntKHEtzBRL8xurgUBN8Q5N0s8p0544fAQjQMNRbcTa0B7rBMDBc
-            SLeCO5imfWCKoqMpgsy6vYMEG6KDA0Gh1gXxG8K28Kh8hjtGqEgqiNx2mna/H2ql
-            PRmP6zjzZN7IKw0KKP/32+IVQtQi0Cdd4Xn+GOdwiK1OtmLOsbdJ1Fdu/7xk9TND
-            TwIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
-            SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
-            c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
-            +tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
-            ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
-            b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6LyjcmwuaWRlbnRydXN0LmN9vbS9E
-            U1RST09UQ0FY1ENSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
-            MA0GCSqGSIb3DQEBCwUAA4IBAQAKcwBslm7/DlLQrt2M51oGrS+o44+/yQoDFVDC
-            5WxCu2+b9LRPwkSICHXM6webFGJueN7sJ7o5XPWioW5WlHAQU7G75K/QosMrAdSW
-            9MUgNTP52GE24HGNtLi1qoJFlcDyqSMo59ahy2cI2qBDLKobkx/J3vWraV0T9VuG
-            WCLKTVXkcGdtwlfFRjlBz4phtmf5X6DYO8A4jqv2Il9DjXA6USbW1FzXSLr9YG1O
-            he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
-            Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBp6GtPAQw4dy753easc5
-            -----END CERTIFICATE-----
-      # [Required] the private key
-      tls.key: |
-            -----BEGIN PRIVATE KEY-----
-            MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC0EC1ihOO2nBUH
-            4lOjn4EnURm/wIDcQA/1XsDzlnSxBLXeP9+uSb1SJckzdPTpJIEbGuakFkiafLfk
-            MnR9rCc7M0KtPQ/qHdLGp3Jz7T4/bzAqLckZfn0fkomaKo8Ku+GoqitZe9CNGsGO
-            UkifzcPDeBLdU9+oSRXTXiDgSe5txa0OLLrzJRZZ/UBGPDO2LFqxO4/POPiRduqB
-            obbrya0eCq4zjpKIDWA90K9nKxTphpFioswdgP0P/tIskNkt7sQOeTbQcVwJ+SsO
-            nnXKAD7oTAJti2Z3dRCABpjNqIaOVsadqQ16j18QRP/KB57piDiCocoChVlBbAmk
-            YRakx1SLAgMBAAECggEBAKJNpqsT/7G9NNO7dQqanq8S0jPeUAi3kerpMuEd8CcT
-            iN9BEd0myIjAWICSXqO77MfC0rx6/YyK+LKvrAMPZvlctjAzRyIPKcs4adkGssJk
-            Oh6rEIZzVlNcIb4duHvDaJ9Aa/yntw9JW8hucNnifh+2HsLzdDlbT1oLkXS6DzlP
-            nwsHBuXQ91j11csPvA7HG+maLw6HO1rmLoHeweTJ7IfR2PvRhVEGEIqXG7EvrBrH
-            q3KXKWW+9cNLH/ty27XKzjpa1oPm5K8yUFi+4ZCEZa2NYBidpa+8ZZ1+bQ0rkbqh
-            SiYdhy3qAQ4B6PD8nCMdavNW8v99KXBZwXBDbxl7yKkCgYEA26Y+Um929mcW3S8X
-            8tef83b6w1P6TQs47HxVPFZUXUZtBCQs0mO1dlGQfsQWvm93UTkFJTZZqPm4hkBh
-            07b6jIEWVHiq6hTESu313ojI03PxWGOMGZ3wp/1VR2l9gv7J6taYosXE6WBzxVHl
-            pPj21WV65EfExA8w+cLkxtroEp0CgYECZmfNBQtUiNBkeAgCtlYIegx84tUasAQs
-            8zVFUhr9rBa83gI2z/zXPwCDDnlMI/z3W7/P6dGcEdZ9DzFtTa+cCDTv0GceZvD+
-            iKumWVjlQxmcu1bCgty9tutQk35mrOD4YGkgKNrcZY6XcbFrubDOEPVIdtJSeFqO
-            /OQLANSRZ0cCgYEAttUymzvdMk2tYn+I18NUiTxIj76fYvIsd+0mpgrWPq4YoJHc
-            HWSR7+ME/AANTodKMnncJpWPHHCBgH6m76wn8jyhcb7fxelzW0uolYwWXqzsAD8c
-            p1YotCzTh5Xvu9KKEMiAVT16Iya-scdtlvmWssV+F8lEm3yvnPUKxKciqECgYAAp
-            TU2p1AQTGc15ltq2vOdRe0jvE2WRSuCjJN7Js+osziTJhKII+PfbvFwOoyyrAIQm
-            GG/w0oHmuNHQBag/W8pXiyOPXlwLYm6Vs0J/3xDvzcCc1gxd+NeVgmZPQNcwOu5m
-            +wmLQNeTXSbNB1/uIa/MgpmKWQZGDXyKpM7NkQg0zQKBgQCyq93ZUekz/cgE5AAn
-            9Xp1H45DqX2nMxRknerU/wzAKEebAAxH172VIpyuFHXJhLuQl4nNEdIQ4SRX6ZLd
-            ucUTe6ORWzSI3fcszk9RDui90bYKUmefGX9v/MgdwmB6dS5FpSaKDFgNlESFHjJY
-            1i9Hpt7D0w4eKwvXX11MABcs/A==
-            -----END PRIVATE KEY-----
-      # [Optional] the certificate of CA, this enables the download
-      # link on portal to download the certificate of CA
-      ca.crt:
-    # Use contour http proxy instead of the ingress when it's true
-    enableContourHttpProxy: true
-    # [Required] The initial password of Harbor admin.
-    harborAdminPassword: VMware123!
-    # [Required] The secret key used for encryption. Must be a string of 16 chars.
-    secretKey: 44z5mmTRiDAd3r7o
-    database:
-      # [Required] The initial password of the postgres database.
-      password: L92Lwf92x4nkh2XB
-    core:
-      replicas: 1
-      # [Required] Secret is used when core server communicates with other components.
-      secret: VmMoXdxVJ00PLmoD
-      # [Required] The XSRF key. Must be a string of 32 chars.
-      xsrfKey: DnvQN508M97mGmtK9248sCQ0pFD82BhV
-    jobservice:
-      replicas: 1
-      # [Required] Secret is used when job service communicates with other components.
-      secret: HtRDVOswYgsOoSV7
-    registry:
-      replicas: 1
-      # [Required] Secret is used to secure the upload state from client
-      # and registry storage backend.
-      # See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
-      secret: r9MYJfjMVRrzpkiT
-    notary:
-      # Whether to install Notary
-      enabled: true
-    clair:
-      # Whether to install Clair scanner
-      enabled: true
-      replicas: 1
-      # The interval of clair updaters, the unit is hour, set to 0 to
-      # disable the updaters
-      updatersInterval: 12
-    trivy:
-      # enabled the flag to enable Trivy scanner
-      enabled: true
-      replicas: 1
-      # gitHubToken the GitHub access token to download Trivy DB
-      gitHubToken: ""
-      # skipUpdate the flag to disable Trivy DB downloads from GitHub
-      #
-      # You might want to set the value of this flag to `true` in test or CI/CD environments to avoid GitHub rate limiting issues.
-      # If the value is set to `true` you have to manually download the `trivy.db` file and mount it in the
-      # `/home/scanner/.cache/trivy/db/trivy.db` path.
-      skipUpdate: false
-    # The persistence is always enabled and a default StorageClass
-    # is needed in the k8s cluster to provision volumes dynamicly.
-    # Specify another StorageClass in the "storageClass" or set "existingClaim"
-    # if you have already existing persistent volumes to use
-    #
-    # For storing images and charts, you can also use "azure", "gcs", "s3",
-    # "swift" or "oss". Set it in the "imageChartStorage" section
-    persistence:
-      persistentVolumeClaim:
-        registry:
-          # Use the existing PVC which must be created manually before bound,
-          # and specify the "subPath" if the PVC is shared with other components
-          existingClaim: ""
-          # Specify the "storageClass" used to provision the volume. Or the default
-          # StorageClass will be used(the default).
-          # Set it to "-" to disable dynamic provisioning
-          storageClass: ""
-          subPath: ""
-          accessMode: ReadWriteOnce
-          size: 10Gi
-        jobservice:
-          existingClaim: ""
-          storageClass: ""
-          subPath: ""
-          accessMode: ReadWriteOnce
-          size: 1Gi
-        database:
-          existingClaim: ""
-          storageClass: ""
-          subPath: ""
-          accessMode: ReadWriteOnce
-          size: 1Gi
-        redis:
-          existingClaim: ""
-          storageClass: ""
-          subPath: ""
-          accessMode: ReadWriteOnce
-          size: 1Gi
-        trivy:
-          existingClaim: ""
-          storageClass: ""
-          subPath: ""
-          accessMode: ReadWriteOnce
-          size: 5Gi
-      # Define which storage backend is used for registry and chartmuseum to store
-      # images and charts. Refer to
-      # https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
-      # for the detail.
-      imageChartStorage:
-        # Specify whether to disable `redirect` for images and chart storage, for
-        # backends which not supported it (such as using minio for `s3` storage type), please disable
-        # it. To disable redirects, simply set `disableredirect` to `true` instead.
-        # Refer to
-        # https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect
-        # for the detail.
-        disableredirect: false
-        # Specify the "caBundleSecretName" if the storage service uses a self-signed certificate.
-        # The secret must contain keys named "ca.crt" which will be injected into the trust store
-        # of registry's and chartmuseum's containers.
-        # caBundleSecretName:
-    
-        # Specify the type of storage: "filesystem", "azure", "gcs", "s3", "swift",
-        # "oss" and fill the information needed in the corresponding section. The type
-        # must be "filesystem" if you want to use persistent volumes for registry
-        # and chartmuseum
-        type: filesystem
-        filesystem:
-          rootdirectory: /storage
-          #maxthreads: 100
-        azure:
-          accountname: accountname # required
-          accountkey: base64encodedaccountkey # required
-          container: containername # required
-          realm: core.windows.net # optional
-        gcs:
-          bucket: bucketname # required
-          # The base64 encoded json file which contains the key
-          encodedkey: base64-encoded-json-key-file # optional
-          rootdirectory: null # optional
-          chunksize: 5242880 # optional
-        s3:
-          region: us-west-1 # required
-          bucket: bucketname # required
-          accesskey: null # eg, awsaccesskey
-          secretkey: null # eg, awssecretkey
-          regionendpoint: null # optional, eg, http://myobjects.local
-          encrypt: false # optional
-          keyid: null # eg, mykeyid
-          secure: true # optional
-          v4auth: true # optional
-          chunksize: null # optional
-          rootdirectory: null # optional
-          storageclass: STANDARD # optional
-        swift:
-          authurl: https://storage.myprovider.com/v3/auth
-          username: username
-          password: password
-          container: containername
-          region: null # eg, fr
-          tenant: null # eg, tenantname
-          tenantid: null # eg, tenantid
-          domain: null # eg, domainname
-          domainid: null # eg, domainid
-          trustid: null # eg, trustid
-          insecureskipverify: null # bool eg, false
-          chunksize: null # eg, 5M
-          prefix: null # eg
-          secretkey: null # eg, secretkey
-          accesskey: null # eg, accesskey
-          authversion: null # eg, 3
-          endpointtype: null # eg, public
-          tempurlcontainerkey: null # eg, false
-          tempurlmethods: null # eg
-        oss:
-          accesskeyid: accesskeyid
-          accesskeysecret: accesskeysecret
-          region: regionname
-          bucket: bucketname
-          endpoint: null # eg, endpoint
-          internal: null # eg, false
-          encrypt: null # eg, false
-          secure: null # eg, true
-          chunksize: null # eg, 10M
-          rootdirectory: null # eg, rootdirectory
-    # The http/https network proxy for clair, core, jobservice, trivy
-    proxy:
-      httpProxy:
-      httpsProxy:
-      noProxy: 127.0.0.1,localhost,.local,.internal
-    ```
-    <!-- /* cSpell:enable */ -->
+* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html)
+
+* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html)
+
+* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html)
+
+* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cni-multus.html)
+
+* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)
+
+* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html)
+	
+If Harbor is required to take on a heavy load and store large images into the registry, you can install Harbor into a separate workload cluster.

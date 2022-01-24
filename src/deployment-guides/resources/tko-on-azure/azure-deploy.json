@@ -2,6 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "mgmt-cluster-name": {
+            "type": "string"
+        },
+        "workload-cluster-name": {
+            "type": "string"
+        },
         "vnet_name_TKG": {
             "defaultValue": "vnet-tkg",
             "type": "String"
@@ -42,10 +48,6 @@
             "defaultValue" : "10.0.2.0/24",
             "type" : "string"
         },
-        "nsg_name_mgmt_worker": {
-            "defaultValue": "nsg-MgmtWorker",
-            "type": "String"
-        },
         "subnet_name_WorkloadControl" : {
             "defaultValue" : "subnetWorkloadControlPlane",
             "type" : "string"
@@ -65,10 +67,6 @@
         "subnet_cidr_WorkloadWorker" : {
             "defaultValue" : "10.0.4.0/24",
             "type" : "string"
-        },
-        "nsg_name_workload_worker": {
-            "defaultValue": "nsg-WorkloadWorker",
-            "type": "String"
         },
         "vm_name_Bootstrap": {
             "defaultValue": "bch-vm-bootstrap-ubuntu",
@@ -93,7 +91,10 @@
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "nsg_name_mgmt_worker": "[concat(parameters('mgmt-cluster-name'), '-node-nsg')]",
+        "nsg_name_workload_worker": "[concat(parameters('workload-cluster-name'), '-node-nsg')]"
+    },
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworks",
@@ -102,9 +103,9 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_mgmt_control_plane'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_mgmt_worker'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_mgmt_worker'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_workload_control_plane'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_workload_worker'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_worker'))]"
             ],
             "properties": {
                 "addressSpace": {
@@ -138,7 +139,7 @@
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_MgmtWorker')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_mgmt_worker'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_mgmt_worker'))]"
                             },
                             "serviceEndpoints": [],
                             "delegations": [],
@@ -164,7 +165,7 @@
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_WorkloadWorker')]",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_workload_worker'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_worker'))]"
                             },
                             "serviceEndpoints": [],
                             "delegations": [],
@@ -224,7 +225,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-11-01",
-            "name": "[parameters('nsg_name_workload_worker')]",
+            "name": "[variables('nsg_name_workload_worker')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": []
@@ -294,7 +295,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-11-01",
-            "name": "[parameters('nsg_name_mgmt_worker')]",
+            "name": "[variables('nsg_name_mgmt_worker')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": []
