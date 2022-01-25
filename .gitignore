@@ -3,3 +3,4 @@
 # Markdown Project Tool
 _md-cli/
 output/
+.venv/
