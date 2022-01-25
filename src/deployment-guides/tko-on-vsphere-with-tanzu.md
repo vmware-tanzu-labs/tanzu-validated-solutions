@@ -26,7 +26,7 @@ Ensure that your environment has the following general requirements:
   - A datastore with sufficient capacity for the control plane and worker node VM files.
 *   A Network Time Protocol (NTP) service running on all hosts and vCenter.
 *   A  user account that has vSphere Administrator permissions.
-*   A NSX Advanced Load Balancer 20.1.6 or later OVA downloaded from [Customer Connect](https://customerconnect.vmware.com/) and readily available for deployment.
+*   A NSX Advanced Load Balancer 20.1.6 or later OVA downloaded from [Customer Connect](https://customerconnect.vmware.com/) and readily available for deployment. <!-- markdown-link-check-disable-line -->
 
 ### <a id=network-requirements> </a> Network Requirements
 
@@ -85,14 +85,18 @@ NSX Advanced Load Balancer is deployed in write access mode in the vSphere envir
 For a production-grade deployment, we recommend deploying three instances of the NSX Advanced Load Balancer Controller for high availability and resiliency.
 
 The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:
+
 <!-- /* cSpell:disable */ -->
+
 | Controller Node    | IP Address   | FQDN                   |
 | ------------------ | ------------ | ---------------------- |
 | Node01 (Primary)   | 172.16.80.11 | alb-ctlr01.your-domain |
 | Node02 (Secondary) | 172.16.80.12 | alb-ctlr02.your-domain |
 | Node03 (Secondary) | 172.16.80.13 | alb-ctlr03.your-domain |
 | Controller Cluster | 172.16.80.10 | alb.your-domain        |
+
 <!-- /* cSpell:enable */ -->
+
 ### Deploy NSX Advance Load Balancer Controller Node
 
 Do the following to deploy NSX Advanced Load Balancer Controller node:

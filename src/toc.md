@@ -11,5 +11,5 @@ This is the table of contents from which the TKGm Reference Architecture Documen
 - [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](./reference-designs/tko-on-vsphere-with-tanzu.md)
 - [Deploy Tanzu for Kubernetes Operations](./deployment-guides/overview.md)
 	- [Deploy Tanzu for Kubernetes Operations on AWS](./deployment-guides/tko-aws.md)
-	- [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](./deployment-guides/tko-on-vsphere-with-tanzu-deploy.md)
+	- [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](./deployment-guides/tko-on-vsphere-with-tanzu.md)
 	- [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](./deployment-guides/tko-saas-services.md)
