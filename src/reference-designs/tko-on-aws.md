@@ -154,10 +154,10 @@ See the [Pinniped docs](https://pinniped.dev/docs/) for more information on how 
 We recommend the following best practices for managing identities in Tanzu Kubernetes Grid provisioned clusters:
 
 * Configure Pinniped services during management cluster creation.
-* Limit access to cluster resources following the [least privilege](https://csrc.nist.gov/glossary/term/least_privilege) principle. <!-- markdown-link-check-disable-line -->
+* Limit access to cluster resources following the [least privilege](https://csrc.nist.gov/glossary/term/least_privilege) principle.
 * Limit access to management clusters to the appropriate set of users. For example, provide access only to users who are responsible for managing infrastructure and cloud resources but not to application developers. This is especially important because access to the management cluster inherently provides access to all workload clusters.
 * Limit cluster administrator access for workload clusters to the appropriate set of users. For example, provide access to users who are responsible for managing infrastructure and platform resources in your organization, but not to application developers.
-* Connect to an [identity provider](https://csrc.nist.gov/glossary/term/identity_provider) to manage the user identities allowed to access cluster resources instead of relying on administrator-generated `kubeconfig` files. <!-- markdown-link-check-disable-line -->
+* Connect to an [identity provider](https://csrc.nist.gov/glossary/term/identity_provider) to manage the user identities allowed to access cluster resources instead of relying on administrator-generated `kubeconfig` files.
 
 ## Observability
 
