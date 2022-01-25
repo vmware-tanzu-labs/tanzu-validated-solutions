@@ -76,7 +76,7 @@ The following are the high-level steps for deploying Tanzu Kubernetes operations
 5.  [Integrate Tanzu Kubernetes Clusters with SaaS Endpoints](#integrate-saas)
 6.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
 
-## <a id=config-nsxalb> </a> Deploy and Configure NSX Advanced Load Balancer
+## <a id="config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
 
 NSX Advanced Load Balancer is an enterprise-grade integrated load balancer that provides L4- L7 load balancer support. We recommended deploying NSX Advanced Load Balancer for vSphere deployments without NSX-T, or when there are unique scaling requirements.
 
@@ -85,14 +85,14 @@ NSX Advanced Load Balancer is deployed in write access mode in the vSphere envir
 For a production-grade deployment, we recommend deploying three instances of the NSX Advanced Load Balancer Controller for high availability and resiliency.
 
 The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:
-
+<!-- /* cSpell:disable */ -->
 | Controller Node    | IP Address   | FQDN                   |
 | ------------------ | ------------ | ---------------------- |
 | Node01 (Primary)   | 172.16.80.11 | alb-ctlr01.your-domain |
 | Node02 (Secondary) | 172.16.80.12 | alb-ctlr02.your-domain |
 | Node03 (Secondary) | 172.16.80.13 | alb-ctlr03.your-domain |
 | Controller Cluster | 172.16.80.10 | alb.your-domain        |
-
+<!-- /* cSpell:enable */ -->
 ### Deploy NSX Advance Load Balancer Controller Node
 
 Do the following to deploy NSX Advanced Load Balancer Controller node:
@@ -638,7 +638,7 @@ You can gather this information by running the following commands:
 
    The following example YAML is the minimal configuration required to provision a Tanzu Kubernetes cluster.
    <!-- /* cSpell:disable */ -->
-   ```bash
+   ```yaml
    apiVersion: run.tanzu.vmware.com/v1alpha2
 
    kind: TanzuKubernetesCluster
@@ -771,7 +771,7 @@ Do the following to register the Supervisor Cluster with Tanzu Mission Control:
 
 1. Prepare a YAML file with the following content to install the Tanzu Mission Control agent on the management cluster.
   <!-- /* cSpell:disable */ -->
-  ```bash
+  ```yaml
   # vi tmc-registration.yaml
 
   apiVersion: installers.tmc.cloud.vmware.com/v1alpha1
@@ -962,11 +962,11 @@ The following steps describe the workflow for installing the user-managed packag
 
 1. Create cluster role bindings for installing the user-managed packages.
 
-  By default, the newly created workload cluster does not have a cluster role binding that grants access to authenticated users to install packages using the default PSP v`mware-system-privileged`.
+  By default, the newly created workload cluster does not have a cluster role binding that grants access to authenticated users to install packages using the default PSP `vmware-system-privileged`.
 
    1. Create a role binding deployment YAML as follows:
       <!-- /* cSpell:disable */ -->
-      ``` bash
+      ``` yaml
       kind: ClusterRoleBinding
 
       apiVersion: rbac.authorization.k8s.io/v1
