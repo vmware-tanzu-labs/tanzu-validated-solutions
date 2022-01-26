@@ -7,12 +7,12 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
 The following reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
 
-> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.4 on AWS. 
+> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.4 on AWS.
 
 ![Tanzu Edition reference design diagram](./img/tko-on-aws/tkg-aws-overview.png)
 
 
-## Network Overview 
+## Network Overview
 
 The following network diagram shows the network layout used with this reference design. It shows the layout for a single virtual private cloud (VPC). The network layout uses the following types of subnets:
 
@@ -23,9 +23,9 @@ The following network diagram shows the network layout used with this reference 
 
 ### Network Recommendations
 
-This reference design uses Tanzu Kubernetes Grid to manage the lifecycle of multiple Kubernetes workload clusters by bootstrapping a Kubernetes management cluster with the Tanzu command line tool. Consider the following when configuring the network for Tanzu Kubernetes Grid: 
-  
-* Use an internal load balancer scheme. We recommend creating an internal load balancer as a best practice to avoid exposing the Kubernetes API to the public Internet. To use an internal load balancer, customize the Tanzu Kubernetes Grid templates with a `kustomize` override. If you use an internal load balancer, run Tanzu Kubernetes Grid from a machine with access to the target VPC private IP space. 
+This reference design uses Tanzu Kubernetes Grid to manage the lifecycle of multiple Kubernetes workload clusters by bootstrapping a Kubernetes management cluster with the Tanzu command line tool. Consider the following when configuring the network for Tanzu Kubernetes Grid:
+
+* Use an internal load balancer scheme. We recommend creating an internal load balancer as a best practice to avoid exposing the Kubernetes API to the public Internet. To use an internal load balancer, customize the Tanzu Kubernetes Grid templates with a `kustomize` override. If you use an internal load balancer, run Tanzu Kubernetes Grid from a machine with access to the target VPC private IP space.
 
 * If you don't want an outbound Internet or inbound connection from AWS, you can eliminate the public subnet.
 
@@ -43,7 +43,7 @@ Tanzu Kubernetes Grid ships with the AWS cloud storage driver, which allows you 
 For more information on the available storage options see [Amazon EBS volume types](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html).  
 
 ## VPC Architectures
-In a production deployment, Tanzu Kubernetes Grid creates a multi-AZ deployment. 
+In a production deployment, Tanzu Kubernetes Grid creates a multi-AZ deployment.
 
 We recommend that you create the VPCs before you deploy Tanzu Kubernetes Grid. Also, make sure that you tag a public and private subnet in each AZ, including the control plane cluster, with a key of `kubernetes.io/cluster/<cluster_name>`. As a best practice, ensure that the value you use for the public and private subnets for an AZ can easily identify the subnets as belonging to the same AZ. For example,
 
@@ -52,7 +52,7 @@ aws ec2 create-subnet --vpc-id $vpcId --cidr-block <ip_address>  --availability-
 aws ec2 create-subnet --vpc-id $vpcId --cidr-block <ip_address>  --availability-zone ${AWS_REGION}b  --tag-specifications ‘ResourceType=subnet, Tags=[{Key=Name,Value=pub-b}]’  --output json > $WORKING_DIR/subnet-pub-b
 ```
 
-Based on your application needs and desired outcomes, you can organize your workloads using one of the following VPC architectures. 
+Based on your application needs and desired outcomes, you can organize your workloads using one of the following VPC architectures.
 
 ### Single VPC with Multiple Availability Zones
 
@@ -63,13 +63,13 @@ Most use cases require only a single VPC spread across multiple AZs as shown in 
 
 ### Multiple VPC with Multiple Availability Zones
 
-For more separation of application workloads on AWS, you can deploy separate Kubernetes clusters to independent VPCs. This separation might be desirable for workloads with different compliance requirements, across different business units, or with different levels of Internet ingress and egress. By default, Tanzu Kubernetes Grid creates a VPC per cluster. 
+For more separation of application workloads on AWS, you can deploy separate Kubernetes clusters to independent VPCs. This separation might be desirable for workloads with different compliance requirements, across different business units, or with different levels of Internet ingress and egress. By default, Tanzu Kubernetes Grid creates a VPC per cluster.
 
 The following diagram shows an example architecture with multiple VPCs. The control plane load balancers in the example architecture are configured as internal load balancers.
 
-![TKGm on AWS with Multiple VPCs and Multiple Availability Zones diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az.jpg) 
+![TKGm on AWS with Multiple VPCs and Multiple Availability Zones diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az.jpg)
 
-Another variant of multiple VPC and multiple AZ design is to have one VPC for the control plane and another for just workload clusters. The following diagram shows such a design. 
+Another variant of multiple VPC and multiple AZ design is to have one VPC for the control plane and another for just workload clusters. The following diagram shows such a design.
 
 ![TKGm on AWS with Segregated VPCs for control plane and workloads diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az-separated-control-plane-and-workloads.jpg)
 
@@ -89,7 +89,7 @@ This health check ensures that your worker capacity remains stable and can be  s
 
 Provide sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you will deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you plan to deploy Tanzu Kubernetes Grid.
 
-See [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) for more information on AWS services default quotas. 
+See [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) for more information on AWS services default quotas.
 
 ## Cluster Creation and Management
 
@@ -97,12 +97,12 @@ This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous
 
 ![Tanzu Kubernetes Grid Kickstart Install Screen](./img/tko-on-aws/tkg-kickstart-install.png)  
 
-Tanzu Editions includes components for observability, as well as container registry.  We recommended installing the necessary components into a centralized shared services cluster. 
+Tanzu Editions includes components for observability, as well as container registry.  We recommended installing the necessary components into a centralized shared services cluster.
 
 ## Global Cluster Lifecycle Management
 
 Attaching clusters to Tanzu Mission Control allows you to manage your global portfolio of Kubernetes clusters. You can do the following with Tanzu Mission Control:
-  
+
   * Centralized lifecycle management: managing the creation and deletion of workload clusters using registered management or supervisor clusters
   * Centralized management: viewing the inventory of clusters and the health of clusters and their components
   * Authorization: centralized authentication and authorization with federated identity from multiple sources (e.g., AD, LDAP, and SAML), plus an easy-to-use policy engine for granting the right access to the right users across teams
@@ -139,21 +139,21 @@ In Tanzu Kubernetes Grid, you can optionally deploy the [external-dns package](h
 
 The Pinniped authentication and authorization service components are deployed into the management cluster. Pinniped uses the OIDC or LDAP identity provider (IDP) configurations specified during the management cluster deployment. The workload cluster inherits its authentication configurations from its management cluster. With authentication in place, a Kubernetes administrator can enforce role-based access control (RBAC) with Kubernetes RoleBinding resources. These resources associate an identity provider user with a given Kubernetes role on the workload cluster.
 
-Pinniped consists of following components: 
+Pinniped consists of following components:
 
   * **The Pinniped Supervisor** is an OIDC server that authenticates users through an external identity provider (IDP)/LDAP, and then issues its own federation ID tokens to be passed on to clusters based on the user information from the IDP.
   * **The Pinniped Concierge** is a credential exchange API which takes as input a credential from an identity source (e.g., Pinniped Supervisor, proprietary IDP), authenticates the user via that credential, and returns another credential which is understood by the host Kubernetes cluster or by an impersonation proxy which acts on behalf of the user.
   * **Dex** Pinniped uses Dex as a broker for your upstream LDAP identity provider. Dex is only deployed when LDAP is selected as the OIDC backend during Tanzu Kubernetes Grid management cluster creation.
- 
+
 The following diagram shows the Pinniped authentication flow with an external IDP. In the diagram, the blue arrows represent the authentication flow between the workload cluster, the management cluster and the external IDP. The green arrows represent Tanzu CLI and `kubectl` traffic between the workload cluster, the management cluster and the external IDP.
 
 ![Authentication with pinniped](./img/tko-on-aws/authwith-Pinniped.png)
 
-See the [Pinniped docs](https://pinniped.dev/docs/) for more information on how to integrate Pinniped into Tanzu Kubernetes Grid with OIDC providers and LDAP. 
+See the [Pinniped docs](https://pinniped.dev/docs/) for more information on how to integrate Pinniped into Tanzu Kubernetes Grid with OIDC providers and LDAP.
 
 We recommend the following best practices for managing identities in Tanzu Kubernetes Grid provisioned clusters:
 
-* Configure Pinniped services during management cluster creation. 
+* Configure Pinniped services during management cluster creation.
 * Limit access to cluster resources following the [least privilege](https://csrc.nist.gov/glossary/term/least_privilege) principle.
 * Limit access to management clusters to the appropriate set of users. For example, provide access only to users who are responsible for managing infrastructure and cloud resources but not to application developers. This is especially important because access to the management cluster inherently provides access to all workload clusters.
 * Limit cluster administrator access for workload clusters to the appropriate set of users. For example, provide access to users who are responsible for managing infrastructure and platform resources in your organization, but not to application developers.
@@ -206,4 +206,4 @@ Tanzu Kubernetes Grid on AWS  offers high-performance potential, convenience, an
 This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, configuring your firewall, load balancing, workload compute alignment and other capabilities. Observability is quickly established and easily consumed with Wavefront.
 
 ## Deployment Instructions
-For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on AWS](../deployment-guides/tko-aws.md). 
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on AWS](../deployment-guides/tko-aws.md).
