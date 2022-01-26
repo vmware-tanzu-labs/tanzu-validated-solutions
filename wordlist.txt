@@ -52,3 +52,5 @@ mgmt
 VMFS
 routable
 milliCPU
+overcommitted
+TKGS
