@@ -30,18 +30,19 @@ The number of resource pools depends on the number of workload clusters to be de
 * DHCP is configured on the port group that the nodes in the management cluster
   will use.
 * A host/server/VM based on Linux/MAC/Windows that acts as your bootstrap machine and has docker installed. For this deployment, we will use a virtual machine based on Photon OS.
-* Depending on the OS flavor of the bootstrap VM, [download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705)and configure the following packages. As part of this documentation, refer to the section to configure required packages on Photon Machine.
-
-	* Tanzu CLI 1.4.0
-	* kubectl cluster CLI 1.21.2
-
 * A vSphere account with the permissions described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-vsphere.html#vsphere-permissions).
 * If you are working in an Internet-restricted environment that requires a centralized image repository, see [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-airgapped-environments.html) for more information on setting up a centralized image repository.
-* Download and import NSX ALB 20.1.6 OVA to Content Library.
+* Download and import [the latest version of NSX
+  ALB](https://portal.avipulse.vmware.com/vantage-details/61c1a660584a6a264bef8d12) to Content Library.
 * [Download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705) the following OVA and import to vCenter. Convert the imported VMs to templates.
 
 	* Photon v3 Kubernetes v1.21.2 OVA and/or
 	* Ubuntu 2004 Kubernetes v1.21.2 OVA  
+
+* Depending on the OS flavor of the bootstrap VM, [download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705)and configure the following packages. As part of this documentation, refer to the section to configure required packages on Photon Machine.
+
+	* Tanzu CLI 1.4.0
+	* kubectl cluster CLI 1.21.2
 
 **Note**: You can also [download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup) and import supported older versions of Kubernetes in order to deploy workload clusters on the intended Kubernetes versions
 
