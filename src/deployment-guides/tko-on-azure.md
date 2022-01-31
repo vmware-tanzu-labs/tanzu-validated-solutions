@@ -68,9 +68,17 @@ When deploying TKG to Azure you will need to make sure your quotas are sufficien
 
 * Total Regional vCPUs
 * Family vCPUs based on your chosen family of VM (D, E, F, etc.)
-* Public IP Addresses - Basic
 * Static Public IP Addresses
 * Public IP Addresses - Standard
+
+Based on the recommended minimum VM size of D2s_v3, the minimum quota that wll be needed to deploy a minimum deployment per cluster will be the following:
+
+* Total Regional vCPUs = 24
+* Family vCPUs for D Family = 24
+* Public IP Addresses - Standard = 6
+* Static Public IP Addresses = 6
+
+The more that you modify the basic configuration of the clusters that you deploy, the more the quota will need to be increased as well.
 
 **NOTE:** For the subsequent discussion points about how to deploy an ARM Template with the necessary resources listed above, you can leverage the example [ARM Template](./resources/tko-on-azure/azure-deploy.json) and example [Parameters](./resources/tko-on-azure/azure-deploy.parameters.json) files provided within this repo.
 
