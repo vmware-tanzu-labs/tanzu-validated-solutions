@@ -21,7 +21,11 @@ The following are general requirements that your environment should have:
 	* Dedicated resource pool in which to deploy the Tanzu Kubernetes Grid management cluster, shared services cluster, and workload clusters.
 The number of resource pools depends on the number of workload clusters to be deployed.
 * VM folders in which to collect the Tanzu Kubernetes Grid VMs.
-* A datastore with sufficient capacity for the control plane and worker node VM files.
+* A datastore with at least:
+  * 2GB to store the Tanzu Kubernetes Grid OVAs
+  * 60GB to store the virtual disks for the management control plane
+  * 60GB to store the virtual disks for _each_ workload control plane
+  * 160GB to store the Avi controller and Service Engines.
 * Network Time Protocol (NTP) service running on all hosts and vCenter.
 * A host/server/VM based on Linux/MAC/Windows that acts as your bootstrap machine and has docker installed. For this deployment, we will use a virtual machine based on Photon OS.
 * Depending on the OS flavor of the bootstrap VM, [download](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=49705)and configure the following packages. As part of this documentation, refer to the section to configure required packages on Photon Machine.
