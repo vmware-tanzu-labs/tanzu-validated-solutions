@@ -56,7 +56,7 @@ The following table provides example entries for the required port groups. Creat
 
 After you have created the network entries, the network section in your SDDC must have the following port groups created as shown in the following screen capture:
 
-![Figure 3 - Required `Portgroups` in vCenter](img/tko-deploy-on-vsphere/image12.png)  
+![Figure 3 - Required `Portgroups` in vCenter](img/tko-on-vsphere/image12.png)  
 
 ### <a id="firewall-req"></a>Firewall Requirements
 
@@ -74,9 +74,9 @@ Ensure that resource pools and folders are created in vCenter. The following tab
 | TKG Workload components | tkg-workload01-components | tkg-workload01-components |
 <!-- /* cSpell:enable */ -->
 
-![Figure 3 - Required Resource Pools in vCenter](img/tko-deploy-on-vsphere/image28.png)  
+![Figure 3 - Required Resource Pools in vCenter](img/tko-on-vsphere/image28.png)  
 
-![Figure 4 - Required Folders in vCenter](img/tko-deploy-on-vsphere/image48.png)  
+![Figure 4 - Required Folders in vCenter](img/tko-on-vsphere/image48.png)  
 
 
 ## Deployment Overview
@@ -135,7 +135,7 @@ To deploy NSX ALB,
     Note: If you choose to use DHCP, these entries can be left blank
 1. On the Ready to complete page, review the page and click Finish
 
-![](img/tko-deploy-on-vsphere/image95.png)
+![](img/tko-on-vsphere/image95.png)
 
 A new task for creating the virtual machine appears in the Recent Tasks pane. After the task is complete, the NSX ALB virtual machine is created on the selected resource. Power on the Virtual Machine and give it few minutes for the system to boot, upon successful boot up navigate to NSX ALB on your browser.  
 Note: While the system is booting up, a blank web page or a 503 status code may appear.  
@@ -146,22 +146,22 @@ Once the NSX ALB is successfully deployed and boots up, navigate to NSX ALB on y
 
 * Administrator account setup.  
     Set admin password and click on Create Account.  
-    ![](img/tko-deploy-on-vsphere/image61.png)  
+    ![](img/tko-on-vsphere/image61.png)  
 
 * On the Welcome page,
 
 * Under System Settings: Set backup Passphrase and provide DNS information and click Next  
-    ![](img/tko-deploy-on-vsphere/image4.png)
+    ![](img/tko-on-vsphere/image4.png)
 * Under Email/SMTP: Provide Email or SMTP information  
-    ![](img/tko-deploy-on-vsphere/image31.png)
+    ![](img/tko-on-vsphere/image31.png)
 * Under Multi-Tenant: Configure settings as shown below and click on Save  
     IP Route Domain: Share IP route domain across tenants  
     Service Engines are managed within the: Provider (Shared across tenants)  
     Tenant Access to Service Engine: Read  
-    ![](img/tko-deploy-on-vsphere/image21.png)
+    ![](img/tko-on-vsphere/image21.png)
 * To Configure NTP, navigate to Administration> Settings> DNS/NTP > Edit and add your NTP server details and Save  
     **Note:** You may also delete the default NTP servers  
-    ![](img/tko-deploy-on-vsphere/image82.png)
+    ![](img/tko-on-vsphere/image82.png)
 
 ### <a id="nsx-alb-license"></a>NSX Advanced Load Balancer: Licensing
 
@@ -172,9 +172,9 @@ Refer [NSX Advanced Load balancer Editions](https://avinetworks.com/docs/21.1/ns
 To change the license edition to Essentials,
 
 * Login to NSX ALB > Administration> Settings> Licensing, on licensing page click on the gear icon next to Licensing  
-    ![](img/tko-deploy-on-vsphere/image92.png)
+    ![](img/tko-on-vsphere/image92.png)
 * Select Essentials License and click on Save  
-    ![](img/tko-deploy-on-vsphere/image38.png)
+    ![](img/tko-on-vsphere/image38.png)
 
 ### <a id="nsx-alb-ha"> </a>NSX Advanced Load Balancer: Controller High Availability
 
@@ -188,17 +188,17 @@ Perform the below steps to configure AVI ALB HA:
 
 * Set the Cluster IP for the NSX ALB controllerLog in to the primary NSX ALB controller > Navigate to Administrator > Controller > Nodes, and click Edit. The Edit Controller Configuration popup appears.
 * In the Controller Cluster IP field, enter the Controller Cluster IP for the Controller and click on save.
-    ![](img/tko-deploy-on-vsphere/image56.png)
+    ![](img/tko-on-vsphere/image56.png)
 * Now deploy 2nd and 3rd NSX ALB Node, using steps provided [here](#h.hj0v6pbwmsx2)
 * Log into the Primary NSX ALB controller using the Controller Cluster IP/FQDN, navigate to Administrator > Controller  > Nodes, and click Edit. The Edit Controller Configuration popup appears.
 * In the Cluster Nodes field, enter the IP address for the 2nd and 3rd controller and click on Save  
     Optional - Provide a friendly name for all 3 Nodes  
-    ![](img/tko-deploy-on-vsphere/image86.png)      
+    ![](img/tko-on-vsphere/image86.png)      
 
 After these steps, the primary Avi Controller becomes the leader for the cluster and invites the other controllers to the cluster as members. NSX ALB then performs a warm reboot of the cluster. This process can take 2-3 minutes. The configuration of the primary (leader) Controller is synchronized to the new member nodes when the cluster comes online following the reboot.  
 
 Once the cluster is successfully formed we should see the following status:  
-![](img/tko-deploy-on-vsphere/image37.png)  
+![](img/tko-on-vsphere/image37.png)  
 
 Note: Going forward all NSX ALB configurations will be configured by connecting to the NSX ALB Controller Cluster IP/FQDN  
 
@@ -211,13 +211,13 @@ The default system-generated controller certificate generated for SSL/TSL connec
 * You can either generate a Self-Signed certificate, generate CSR or import a certificate.  
     For the purpose of this document, a self-signed certificate will be generated,
 * Provide all required details as per your infrastructure requirements, and under the Subject Alternate Name (SAN) section, provide IP and FQDN of all NSX ALB controllers including NSX ALB cluster IP and FQDN, and click on Save  
-    ![](img/tko-deploy-on-vsphere/image63.png)
+    ![](img/tko-on-vsphere/image63.png)
 * Once the certificate is created, capture the certificate contents as this is required while deploying the TKG management cluster.  
     To capture the certificate content, click on the “Download” icon next to the certificate, and then click on “Copy to clipboard” under the certificate section  
-    ![](img/tko-deploy-on-vsphere/image6.png)  
+    ![](img/tko-on-vsphere/image6.png)  
 
 * To replace the certificate navigate to Administration> Settings> AccessSettings, and click the pencil icon at the top right to edit the System Access Settings, replace the SSL/TSL certificate and click on Save  
-    ![](img/tko-deploy-on-vsphere/image66.png)  
+    ![](img/tko-on-vsphere/image66.png)  
     Now, logout and login back to the NSX ALB
 
 ### <a id="nsx-alb-vcenter-se"> </a>NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups
@@ -247,16 +247,16 @@ Note:
 <!-- /* cSpell:enable */ -->
 
 1.  Login to NSX ALB > Infrastructure > Clouds > Create > VMware vCenter/vSphere ESX  
-    ![](img/tko-deploy-on-vsphere/image7.png)
+    ![](img/tko-on-vsphere/image7.png)
 2.  Provide Cloud Name and click on Next  
-    ![](img/tko-deploy-on-vsphere/image42.png)
+    ![](img/tko-on-vsphere/image42.png)
 3.  Under the Infrastructure pane, provide vCenter Address, username, and password and set AccessPermission to "Write" and click on Next  
-    ![](img/tko-deploy-on-vsphere/image40.png)
+    ![](img/tko-on-vsphere/image40.png)
 4.  Under the Datacenter pane, Choose the Datacenter for NSX ALB to discover Infrastructure resources  
-    ![](img/tko-deploy-on-vsphere/image76.png)
-5.  Under the Network pane, choose the NSX ALB ManagementNetwork for Service Engines and provide a StaticIPpool for SEs and VIP and click on Complete![](img/tko-deploy-on-vsphere/image43.png)
+    ![](img/tko-on-vsphere/image76.png)
+5.  Under the Network pane, choose the NSX ALB ManagementNetwork for Service Engines and provide a StaticIPpool for SEs and VIP and click on Complete![](img/tko-on-vsphere/image43.png)
 6.  Wait for the status of the Cloud to configure and status to turn Green  
-    ![](img/tko-deploy-on-vsphere/image3.png)
+    ![](img/tko-on-vsphere/image3.png)
 7.  To create a Service Engine group for TKG management clusters, click on the Service Engine Group tab, under Select Cloud, choose the Cloud created in the previous step, and click Create
 8.  Provide a name for the TKG management Service Engine group and set below parameters  
 
@@ -267,11 +267,11 @@ Note:
 | vCPU per Service Engine | 2   |
 
 The rest of the parameters can be left as default  
-![](img/tko-deploy-on-vsphere/image85.png)For advanced configuration click on the Advanced tab, to specify a specific cluster and datastore for service engine placement, to change the AVI SE folder name and Service engine name prefix and, click on Save  
-![](img/tko-deploy-on-vsphere/image90.png)  
+![](img/tko-on-vsphere/image85.png)For advanced configuration click on the Advanced tab, to specify a specific cluster and datastore for service engine placement, to change the AVI SE folder name and Service engine name prefix and, click on Save  
+![](img/tko-on-vsphere/image90.png)  
 
 9.  Follow steps 7 and 8 to create another Service Engine group for TKG workload clusters. Once complete there must be two service engine groups created  
-    ![](img/tko-deploy-on-vsphere/image30.png)
+    ![](img/tko-on-vsphere/image30.png)
 
 ### <a id="nsx-alb-net-ipam"> </a> NSX Advanced Load Balancer: Configure Network and IPAM Profile
 
@@ -287,7 +287,7 @@ TKG Workload VIP/Data Network
 * Login to NSX ALB > Infrastructure > Networks
 * Select the appropriate Cloud
 * All the networks available in vCenter will be listed  
-    ![](img/tko-deploy-on-vsphere/image88.png)
+    ![](img/tko-on-vsphere/image88.png)
 
 * Click on the edit icon next for the network and configure as below. Change the details provided below as per tour SDDC configuration  
     Note: Not all networks will be auto-discovered and for those networks, manually add the subnet.  
@@ -304,10 +304,10 @@ TKG Workload VIP/Data Network
 <!-- /* cSpell:enable */ -->
 
 Below is the snippet of configuring one of the networks, for example: `tkg_cluster_vip_pg`  
-![](img/tko-deploy-on-vsphere/image53.png)  
+![](img/tko-on-vsphere/image53.png)  
 
 * Once the networks configured, the configuration must look like below  
-    ![](img/tko-deploy-on-vsphere/image26.png)
+    ![](img/tko-on-vsphere/image26.png)
 * Once the networks are configured, set the default routes for all VIP/Data networks  
     Click on Routing > Create and add default routes for below networks  
     Change the gateway for VIP networks as per your network configurations  
@@ -320,7 +320,7 @@ Below is the snippet of configuring one of the networks, for example: `tkg_clust
 | tkg_workload_vip_pg | 0.0.0.0/0 | 172.16.70.1 |
 <!-- /* cSpell:enable */ -->
 
-![](img/tko-deploy-on-vsphere/image68.png)  
+![](img/tko-on-vsphere/image68.png)  
 
 
 #### Create IPAM Profile in NSX ALB and attach it to Cloud
@@ -339,11 +339,11 @@ Follow below procedure to create IPAM profile and once created attach it to the 
 | Usable Networks | tkg_cluster_vip_pg  <br>tkg_mgmt_vip_pg  <br>tkg_workload_vip_pg |
 <!-- /* cSpell:enable */ -->
 
-![](img/tko-deploy-on-vsphere/image22.png)
+![](img/tko-on-vsphere/image22.png)
 
 * Now attach the IPAM profile to the “tanzu-vcenter-01” cloud  
     Navigate to Infrastructure> Clouds> Edit the tanzu-vcenter-01cloud > Under IPAM Profile choose the profile created in previous step and Save the configuration  
-    ![](img/tko-deploy-on-vsphere/image36.png)  
+    ![](img/tko-on-vsphere/image36.png)  
 
 
 This completes NSX ALB configuration. Next is to deploy and configured Bootstrap Machine which will be used to deploy and management Tanzu Kubernetes clusters
@@ -531,18 +531,18 @@ Deploying a management cluster may be accomplished by utilizing the Installer in
   `tanzu management-cluster create --ui --bind 172.16.40.135:8000 --browser none`  
 
 * Access Tanzu UI wizard by opening a browser and entering http://<bootstrapper-ip>:port/  
-    ![](img/tko-deploy-on-vsphere/image93.png)
+    ![](img/tko-on-vsphere/image93.png)
 * Click Deploy on the VMware vSphere tile
 * On the "IaaS Provider" section, enter the IP/FQDN and credentials of the vCenter server where the TKG management cluster will be deployed  
-    ![](img/tko-deploy-on-vsphere/image57.png)
+    ![](img/tko-on-vsphere/image57.png)
 * Click on connect and accept the vCenter Server SSL thumbprint
 * If you are running on a vCenter 7.x environment, you would get below popup, select “DEPLOY TKG MANAGEMENT CLUSTER” to proceed further  
-    ![](img/tko-deploy-on-vsphere/image91.png)
+    ![](img/tko-on-vsphere/image91.png)
 * Select the Datacenter and provide the SSH Public Key generated while configuring the Bootstrap VM  
     If you have saved the SSH key in the default location, execute the  following command in you bootstrap machine to get the SSH public key “cat /root/.ssh/id_rsa.pub”
 * Click Next  
 
-![](img/tko-deploy-on-vsphere/image5.png)  
+![](img/tko-on-vsphere/image5.png)  
 
 * On the Management cluster settings section provide the following details,
 
@@ -561,7 +561,7 @@ It is recommended to set the instance type to `Large` or above. For the purpose
 * Enable Audit Logging: Enables to audit logging for Kubernetes API server and node VMs, choose as per environmental needs. For more information see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-troubleshooting-tkg-audit-logging.html)
 * Click Next
 
-![](img/tko-deploy-on-vsphere/image24.png)
+![](img/tko-on-vsphere/image24.png)
 
 * On the NSX Advanced Load Balancer section, provide the following:
 
@@ -581,16 +581,16 @@ Once the above details are provided, click on “Verify Credentials” and choos
 * Click Next.
 
 
-![](img/tko-deploy-on-vsphere/image20.png)
+![](img/tko-on-vsphere/image20.png)
 
 **Important:** With above configurations, when a TKG clusters (Shared service/workload) are tagged with label `type: management`, `ako` pod gets deployed on the cluster,and any applications hosted on the cluster that requires Load Balancing service will be exposed via network `tkg_mgmt_vip_pg` and the virtual service will be placed on SE group `tanzu-mgmt-segroup-01`.  
 As per the defined in the architecture, Cluster Labels specified here will be applied only on shared service cluster  
 If no labels are specified in the “Cluster Labels” section, ako pod gets deployed on all the clusters without any labeling requirement and this deviates from the defined architecture  
                 
 * On the Metadata page, you can specify location and labels and click Next, this is optional  
-    ![](img/tko-deploy-on-vsphere/image73.png)
+    ![](img/tko-on-vsphere/image73.png)
 * On the Resources section, specify the resources to be consumed by TKG management cluster and click on Next  
-    ![](img/tko-deploy-on-vsphere/image72.png)
+    ![](img/tko-on-vsphere/image72.png)
 
 * On the Kubernetes Network section, select the TKG Management Network (`tkg_mgmt_pg`) where the control plane and worker nodes will be placed during management cluster deployment. Ensure that the network has DHCPservice enabled.
     Optionally, change the Pod and Service CIDR.
@@ -604,21 +604,21 @@ If no labels are specified in the “Cluster Labels” section, ako pod gets dep
     * Important: If the kubernetes cluster needs to communicate with external services and infrastructure endpoints in your Tanzu Kubernetes Grid environment, ensure that those endpoints are reachable by your proxies or add them to `TKG_NO_PROXY`. Depending on your environment configuration, this may include, but is not limited to, your OIDC or LDAP server, Harbor, NSX-T, and NSX Advanced Load Balancer, vCenter.
     * For vSphere, you must manually add the CIDR of TKG Management Network and Cluster VIP networks which includes the IP address of your control plane endpoints, to `TKG_NO_PROXY`.
 
-![](img/tko-deploy-on-vsphere/image77.png)
+![](img/tko-on-vsphere/image77.png)
 
 * Optionally Specify Identity Management with OIDC or LDAP - This is not covered as part of this document and will have a separate section for this  
     For the purpose of this document, Identity management integration has been disabled  
-    ![](img/tko-deploy-on-vsphere/image35.png)  
+    ![](img/tko-on-vsphere/image35.png)  
 
 * Select the OS image that will be used for the management cluster deployment.  
     Note: This list will appear empty if you don’t have a compatible template present in your environment. Refer steps provided in [Import Base Image template for TKG Cluster deployment](#h.5x1m5pqg5sz8).
-    ![](img/tko-deploy-on-vsphere/image39.png)
+    ![](img/tko-on-vsphere/image39.png)
 * Register TMC: Currently Tanzu 1.4 does not support registering Management cluster in TMC and only support attaching Workload clusters, this section needs to skipped for the current release  
 
 * Check the “Participate in the Customer Experience Improvement Program”, if you so desire and click Review Configuration
 * Review all the configuration, once reviewed, you can either copy the command provided and execute it in CLI or proceed with UI to Deploy Management Cluster.  
     When the deployment is triggered from the UI, the installer wizard displays the deployment logs on the screen.  
-    ![](img/tko-deploy-on-vsphere/image45.png)
+    ![](img/tko-on-vsphere/image45.png)
 
 
 While the cluster is being deployed, you will find that a Virtual service will be created in NSX Advanced Load Balancer and new service engines will be deployed in vCenter by NSX ALB and the service engines will be mapped to the SE Group `tanzu-mgmt-segroup-01`.​​
@@ -626,20 +626,20 @@ While the cluster is being deployed, you will find that a Virtual service will b
 Behind the scenes when TKG management Cluster is being deployed:  
 
 * NSX ALB Service engines gets deployed in vCenter and this task is orchestrated by NSX ALB controller  
-    ![](img/tko-deploy-on-vsphere/image80.png)
+    ![](img/tko-on-vsphere/image80.png)
 * Service engine status in NSX ALB: Below snippet shows that the first service engine has been initialized successfully and the 2nd one is in Initializing state  
-    ![](img/tko-deploy-on-vsphere/image46.png)
+    ![](img/tko-on-vsphere/image46.png)
 * Service Engine Group Status in NSX ALB: As per our configuration, we can see that the virtual service required for TKG clusters control plane HA will be hosted on service engine group `tkg-mgmt-segroup-01`.  
-    ![](img/tko-deploy-on-vsphere/image11.png)
+    ![](img/tko-on-vsphere/image11.png)
 * VIrtual Service status in NSX ALB  
-    ![](img/tko-deploy-on-vsphere/image98.png)
+    ![](img/tko-on-vsphere/image98.png)
 
-![](img/tko-deploy-on-vsphere/image29.png)
+![](img/tko-on-vsphere/image29.png)
 
 The virtual service health is impacted as the 2nd Service engine is still being initialized and this can be ignored.
 
 * Once the TKG management cluster is successfully deployed, you will find this in the Tanzu Bootstrap UI  
-    ![](img/tko-deploy-on-vsphere/image34.png)
+    ![](img/tko-on-vsphere/image34.png)
 
 * The installer will automatically set the context to the TKG Management Cluster on the bootstrap machine. Now you can access the TKG management cluster from the bootstrap machine and perform additional tasks such as verifying the management cluster health and deploy the workload clusters, etc.
 
@@ -647,10 +647,10 @@ To get the status of TKG Management cluster execute the following command:
 
 `tanzu management-cluster get`
 
-![](img/tko-deploy-on-vsphere/image50.png)
+![](img/tko-on-vsphere/image50.png)
 
 * Use kubectl to get the status of the TKG Management cluster nodes  
-    ![](img/tko-deploy-on-vsphere/image51.png)
+    ![](img/tko-on-vsphere/image51.png)
 
 The TKG management cluster is successfully deployed and now you can created Shared Service and workload clusters  
 
@@ -753,7 +753,7 @@ Upon preparing the cluster configuration file, execute the following command to 
 `tanzu cluster create -f <path-to-config.yaml> -v 6`  
 
 Once the cluster is successfully deployed,  you will see the following results  
-![](img/tko-deploy-on-vsphere/image74.png)  
+![](img/tko-on-vsphere/image74.png)  
 
 
 Now, connect to the Tanzu Management Cluster context and apply following labels:
@@ -776,7 +776,7 @@ Get the admin context of the shared service cluster using the following commands
 
   `kubectl config use-context tkg-shared-svc-admin@tkg-shared-svc`
 
-![](img/tko-deploy-on-vsphere/image8.png)  
+![](img/tko-on-vsphere/image8.png)  
 
 After successfully creating a shared service cluster, you can deploy Harbor. However, before you deploy Harbor, deploy the cert-manager and Contour user packages. Deploy the packages in the following order.   
 
@@ -884,7 +884,7 @@ Upon preparing the cluster configuration file, execute the following command to 
 `tanzu cluster create -f <path-to-config.yaml> -v 6`
 
 Once the cluster is successfully deployed,  you will see below results  
-![](img/tko-deploy-on-vsphere/image15.png)
+![](img/tko-on-vsphere/image15.png)
 
 ### Configure NSX Advanced Load Balancer in TKG Workload Cluster
 
@@ -966,19 +966,19 @@ Once you have the AKO configuration file ready, use kubectl command to set the c
 
 `kubectl apply -f <path_to_akodeploymentconfig.yaml>`
 
-![](img/tko-deploy-on-vsphere/image17.png)
+![](img/tko-on-vsphere/image17.png)
 
 Use below command to list all AKODeploymentConfig created under management cluster
 
 `kubectl get akodeploymentconfig`
 
-![](img/tko-deploy-on-vsphere/image69.png)  
+![](img/tko-on-vsphere/image69.png)  
 
 Now that you have successfully created the AKO deployment config, you need to apply the cluster labels defined in the AKODeploymentConfig to any of the TKG workload clusters , once the labels are applied TKG management cluster will deploy  AKO pod on the target workload cluster.  
 
 `kubectl label cluster <cluster-name> <label>`
 
-![](img/tko-deploy-on-vsphere/image9.png)  
+![](img/tko-on-vsphere/image9.png)  
 
 ### Connect to TKG Workload Cluster and validate the deployment
 
@@ -986,7 +986,7 @@ Now that you have the TKG workload cluster is created and required AKO configura
 
 `tanzu cluster kubeconfig get <cluster-name> --admin`
 
-![](img/tko-deploy-on-vsphere/image55.png)
+![](img/tko-on-vsphere/image55.png)
 
 
 Now connect to the TKG workload cluster using the kubectl command and run below commands to check the status of AKO and other components
@@ -997,7 +997,7 @@ kubectl get pods -n avi-system  # To check the status of AKO pod
 kubectl get pods -A             # Lists all pods and their status
 ```
 
-![](img/tko-deploy-on-vsphere/image32.png)  
+![](img/tko-on-vsphere/image32.png)  
 
 You can see that the workload cluster is successfully deployed and AKO pod is deployed on the cluster. You can now [configure SaaS services](#h.jucrzgpgsxn)for the cluster and/or [deploy user managed packages](#h.wmtc9ocmzfk5) on this cluster.  
 
@@ -1170,15 +1170,15 @@ You must also have the appropriate permissions to attach the cluster
 
 1.  Login to Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com) page
 2.  In the left navigation pane of the Tanzu Mission Control console, click Clusters, click Attach Cluster.  
-    ![](img/tko-deploy-on-vsphere/image18.png)
+    ![](img/tko-on-vsphere/image18.png)
 3.  Enter a name for the cluster and select the cluster group in which you want to register the cluster, and enter a name for the cluster. You can optionally provide a description and one or more labels and click Next  
-    ![](img/tko-deploy-on-vsphere/image14.png)
+    ![](img/tko-on-vsphere/image14.png)
 4.  You can optionally select a proxy configuration for the cluster
 
 1.  Click to toggle the Set proxy option to Yes.
 2.  Select the proxy configuration you defined for this cluster.
 
-![](img/tko-deploy-on-vsphere/image97.png)
+![](img/tko-on-vsphere/image97.png)
 
 5.  Click Next. When you click Next, Tanzu Mission Control generates a YAML manifest specifically for your cluster, and displays the kubectl/tmc command to run the manifest.
 6.  Copy the provided command, switch to the bootstrap machine (or any other machine which has kubectl/tmc installed and has connectivity to the cluster, and then run the command.
@@ -1190,17 +1190,17 @@ To obtain admin `kubeconfig` of a cluster, execute below command on the bootstra
 
 `tanzu cluster kubeconfig get <cluster-name> --admin --export-file <file-name.yaml>`  
 
-![](img/tko-deploy-on-vsphere/image10.png)
+![](img/tko-on-vsphere/image10.png)
 
 7.  Once the command is applied, wait for all pods to initialize in the namespace `vmware-system-tmc`. Monitor the pods status using the command:
     `kubectl get pods -n vmware-system-tmc`
 
-    ![](img/tko-deploy-on-vsphere/image58.png)  
+    ![](img/tko-on-vsphere/image58.png)  
      
 8.  Now back in TMC console, click on “Verify Connection” and you will see the Success message  
-    ![](img/tko-deploy-on-vsphere/image49.png)
+    ![](img/tko-on-vsphere/image49.png)
 9.  Click on “View your Cluster” to get more details  
-    ![](img/tko-deploy-on-vsphere/image83.png)
+    ![](img/tko-on-vsphere/image83.png)
 
 ##### Create a Proxy Configuration Object in TMC
 
@@ -1208,7 +1208,7 @@ Follow below steps to create a proxy configuration object in TMC
 
 1.  In the left navigation pane of the Tanzu Mission Control console, click Administration.
 2.  On the Administration page, click theProxy Configuration tab.  
-    ![](img/tko-deploy-on-vsphere/image59.png)
+    ![](img/tko-on-vsphere/image59.png)
 3.  Click Create Proxy Configuration.
 4.  On the Create proxy page, enter a name for the proxy configuration.
 5.  You can optionally provide a description.
@@ -1216,9 +1216,9 @@ Follow below steps to create a proxy configuration object in TMC
 7.  Enter the credentials (username and password) that permit outbound traffic through the proxy server.
 8.  You can optionally enter an alternative server/port and username/password for HTTPS traffic.
 9.  In No proxy list, you can optionally specify a comma-separated list of outbound destinations that must bypass the proxy server.  
-    ![](img/tko-deploy-on-vsphere/image19.png)
+    ![](img/tko-on-vsphere/image19.png)
 10. Click Create. You will find that the proxy configuration is added to TMC and this can be used while adding the cluster which is sitting behind the added proxy. Based on your environmental needs, you may add multiple proxies in TMC  
-    ![](img/tko-deploy-on-vsphere/image33.png)  
+    ![](img/tko-on-vsphere/image33.png)  
 
 
 ### Tanzu Observability(TO)
@@ -1244,41 +1244,41 @@ To integrate Tanzu Observability on a cluster attached to TMC, follow below step
 1.  Log in to your Tanzu Observability instance (<instance_name>.wavefront.com) as a user with Accounts, Groups & Roles permission
 2.  From the gear icon in the top right, select Account Management
 3.  Click on the Service Accounts tab and click Create New Account to create a service account and an associated API Token.  
-    ![](img/tko-deploy-on-vsphere/image65.png)
+    ![](img/tko-on-vsphere/image65.png)
 4.  Specify the service account name, optionally provide description and click Create  
-    ![](img/tko-deploy-on-vsphere/image78.png)
+    ![](img/tko-on-vsphere/image78.png)
 5.  Select the newly created account and click the Copy to Clipboard icon in the Tokens row. You can now paste this token into the Credentials field inside Tanzu Mission Control  
 
 
 2.  Login to Tanzu Mission Control, In the left navigation pane of the Tanzu Mission Control console, click Administration and click on IntegrationsTile. You will find the available integrations options, and enable the Tanzu Observability if not yet enabled  
-    ![](img/tko-deploy-on-vsphere/image44.png)
+    ![](img/tko-on-vsphere/image44.png)
 3.  Under Administration switch to Accounts, click onCreate Account Credentials and select Tanzu Observability credential and provide the
 
 1.  Credential Name
 2.  Tanzu Observability URL
 3.  Tanzu Observability API Token obtained in step 1 and click on Create  
-    ![](img/tko-deploy-on-vsphere/image62.png)  
+    ![](img/tko-on-vsphere/image62.png)  
 
 
 4.  Once the required account for Tanzu Observability is created, on the  left navigation pane of the Tanzu Mission Control console, click Clusters and click on the intended cluster that needs to be integrated with Tanzu Observability
 5.  On the cluster page, click on Add Integration and select Tanzu Observability  
-    ![](img/tko-deploy-on-vsphere/image1.png)
+    ![](img/tko-on-vsphere/image1.png)
 6.  Select the Tanzu Observability Credentials and click Confirm   
-    ![](img/tko-deploy-on-vsphere/image70.png)  
+    ![](img/tko-on-vsphere/image70.png)  
     You will find that the TMC adapter for TO in unhealthy state for few minutes, this is because required objects are yet to be/being created on the cluster  
-    ![](img/tko-deploy-on-vsphere/image23.png)  
+    ![](img/tko-on-vsphere/image23.png)  
 
 7.  You will see a new namespace `tanzu-observability-saas` and required objects will be created in the target cluster.  
-    ![](img/tko-deploy-on-vsphere/image64.png)  
+    ![](img/tko-on-vsphere/image64.png)  
     Wait for all the pods to successfully initialize  
-    ![](img/tko-deploy-on-vsphere/image60.png)
+    ![](img/tko-on-vsphere/image60.png)
 8.  Once all the pods are initialized, in the TMC console you would see the TMC adapter in healthy state  
-    ![](img/tko-deploy-on-vsphere/image79.png)  
+    ![](img/tko-on-vsphere/image79.png)  
     This confirms that the integration has been completed and the cluster can be monitored via Tanzu Observability
 9.  Either click on the Tanzu Observability link provided in TMC or Log in to your Tanzu Observability instance (<instance_name>.wavefront.com) to ensure that the metrics are being collected in Tanzu Observability  
-    ![](img/tko-deploy-on-vsphere/image84.png)  
+    ![](img/tko-on-vsphere/image84.png)  
 
-    ![](img/tko-deploy-on-vsphere/image27.png)
+    ![](img/tko-on-vsphere/image27.png)
 
 ### Tanzu Service Mesh(TSM)
 
@@ -1318,7 +1318,7 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
 2.  In the upper-left corner of the Tanzu Service Mesh Console, click Add New and then Onboard New Cluster to open the Onboard Clusters panel  
     Note: If you're onboarding your first cluster to Tanzu Service Mesh, the Onboard Clusters panel appears automatically when you login to TSM
 3.  In the Onboard Clusters panel, enter a name for the cluster that you want to onboard  
-    ![](img/tko-deploy-on-vsphere/image71.png)
+    ![](img/tko-on-vsphere/image71.png)
 4.  If the cluster that’s being onboarded has to to connect to Tanzu Service Mesh through a proxy server, check the “Configure a proxy to connect this cluster..” box and provide the required proxy details and pass the certificate of the proxy server  
     Note: If your proxy server uses a globally trusted certificate, you don't need to provide the proxy configuration in Tanzu Service Mesh. Deselect the Configure a proxy to connect this cluster check box  
     For the purpose of this document we will proceed without proxy settings
@@ -1328,16 +1328,16 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
 1.  First one is to apply “operator-deployment.yaml” file which created all required TSM objects, such as Namespace, CRDs, Service Account, RoleBinding, deployments, secret etc. on the target cluster
 2.  The second one will create the required secret named “​​generic” under the namespace “vmware-system-tsm”
 
-![](img/tko-deploy-on-vsphere/image13.png)
+![](img/tko-on-vsphere/image13.png)
 
 7.  Now you must connect to the target TKG workload cluster and run the commands obtained from previous step  
-    ![](img/tko-deploy-on-vsphere/image81.png)  
+    ![](img/tko-on-vsphere/image81.png)  
 
     Using below command check if all pods under the namespace “vmware-system-tsm” is created successfully  
 
     kubectl get pods -n vmware-system-tsm  
 
-    ![](img/tko-deploy-on-vsphere/image75.png)successfully
+    ![](img/tko-on-vsphere/image75.png)successfully
 8.  Once we have all the required objects created on the cluster, the Tanzu Service Mesh console will prompt you to “Install Tanzu Service Mesh on the cluster”. For the purpose of this document TSM will be installed on all namespaces.  
     Note:
 
@@ -1345,10 +1345,10 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
 2.  To exclude a specific namespace from Tanzu Service Mesh, click Exclude Namespaces, select Is Exactly from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
 3.  You can also specify the name of a namespace that you plan to create in the cluster at some point in the future  
 
-    ![](img/tko-deploy-on-vsphere/image2.png)
+    ![](img/tko-on-vsphere/image2.png)
 
 9.  When the installation is complete, `Successfully Onboarded` appears next to the cluster name.  
-    ![](img/tko-deploy-on-vsphere/image47.png)
+    ![](img/tko-on-vsphere/image47.png)
 10. Now, the Tanzu Service Mesh Console UI displays information about the infrastructure of the onboarded cluster and the microservices deployed there (if any). Tanzu Service Mesh also starts monitoring and collecting infrastructure and service metrics from the cluster (such as number of nodes and services, requests per second, latency, and CPU usage). The Home page of the Tanzu Service Mesh Console provides summary information about the cluster's infrastructure, a topology view of the services in the cluster, and key metrics
 
 Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html).
@@ -1362,7 +1362,7 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
 
 2.  Click on the Target Cluster name, under integration click on Add Integrations, and select Tanzu Service Mesh  
 
-    ![](img/tko-deploy-on-vsphere/image96.png)Note: If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server. You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh.  
+    ![](img/tko-on-vsphere/image96.png)Note: If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server. You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh.  
 
 3.  In the “Add Tanzu Service Mesh integration”​​ you can choose to install Tanzu Service mesh on all namespaces or exclude any. For the purpose of this document TSM will be installed on all namespaces.  
     Note:
@@ -1370,17 +1370,17 @@ Below steps provides step by step instructions to onboard a cluster to Tanzu Ser
 1.  To install Tanzu Service Mesh in all the namespaces, click Install on all Namespaces. The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
 2.  To exclude a specific namespace from Tanzu Service Mesh, click Exclude Namespaces, select Is Exactly from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
 3.  You can also specify the name of a namespace that you plan to create in the cluster at some point in the future  
-    ![](img/tko-deploy-on-vsphere/image87.png)
+    ![](img/tko-on-vsphere/image87.png)
 
 4.  Click on Confirm , you will find that the TMC adapter for TSM in unhealthy state for few minutes, this is because required objects are yet to be/being created on the cluster
 5.  On the target cluster, you will see a new namespace “vmware-system-tsm” and required objects are being created.  
-    ![](img/tko-deploy-on-vsphere/image16.png)  
+    ![](img/tko-on-vsphere/image16.png)  
     Meanwhile you see the progress bar of the TSM installation in Tanzu Service Mesh console  
-    ![](img/tko-deploy-on-vsphere/image94.png)  
+    ![](img/tko-on-vsphere/image94.png)  
 
 6.  Once all the required objects and dependencies are created, TSM integration status for the cluster in TMC will show healthy  
-    ![](img/tko-deploy-on-vsphere/image41.png)  
+    ![](img/tko-on-vsphere/image41.png)  
     And in TSM console you will find that the cluster is successfully onboarded  
-    ![](img/tko-deploy-on-vsphere/image52.png)
+    ![](img/tko-on-vsphere/image52.png)
 
 Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html).
