@@ -63,6 +63,48 @@ The following table provides example entries for the required port groups. Creat
 
 After you have created the network entries, the network section in your SDDC must have the following port groups created as shown in the following screen capture:
 
+> ✅ If you're experimenting with TKG on vSphere in a homelab without a router
+> that you can configure, you can install a software-router in your vSphere
+> cluster to emulate the network configuration above.
+>
+> [VyOS](https://vyos.io) is a lightweight network OS that provides packet
+> forwarding and DHCP services.
+>
+> [Download](https://vyos.net/get/nightly-builds/) the ISO for the latest
+> rolling release and [follow the
+> instructions](https://docs.vyos.io/en/latest/installation/install.html#live-installation)
+> to install it onto an ESXi VM. Make sure that you create as many NICs as the
+> port groups shown in the table and that each NIC is assigned to each port
+> group. Also make sure that you create a NIC that is connected to an
+> internet-enabled gateway. (Ideally, make this the VM's first NIC.)
+>
+> Once installed, copy [this](../../include/tanzu-on-vsphere-vyos-config.boot)
+> configuration into the VyOS appliance via SSH:
+>
+> ```sh
+> # Password is vyos
+> scp ./tanzu-on-vsphere-vyos-config.boot \
+>   vyos@$VYOS_IP_ADDRESS:/config/config.boot
+> ```
+>
+> Then apply the configuration:
+>
+> ```text
+> ssh vyos@$VYOS_IP_ADDRESS
+> vyos@vyos:~$ configure
+> [edit]
+> vyos@vyos# load /config/config.boot
+> ...
+> [edit]
+> vyos@vyos# commit
+> [edit]
+> vyos@vyos# commit
+> [edit]
+> vyos@vyos# exit
+> exit
+> vyos@vyos:~$ # You can leave the SSH session now
+> ```
+
 ![Figure 3 - Required `Portgroups` in vCenter](img/tko-deploy-on-vsphere/image12.png)  
 
 ### <a id="firewall-req"></a>Firewall Requirements
