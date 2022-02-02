@@ -1,13 +1,29 @@
 {
   "language": "en,en-US",
   "caseSensitive": false,
-  "dictionaries": ["reference-arch-words"],
+  "dictionaries": [
+    "reference-arch-words"
+  ],
   "dictionaryDefinitions": [
     {
       "name": "reference-arch-words",
       "path": "./wordlist.txt"
     }
   ],
-  "ignoreRegExpList": ["\\(.*\\)", "`.*`", "id=\".*\""],
-  "files": ["src/**/*.md"]
+  "ignoreRegExpList": [
+    "\\(.*\\)",
+    "`.*`",
+    "id=\".*\""
+  ],
+  "files": [
+    "src/**/*.md"
+  ],
+  "languageSettings": [
+    {
+      "languageId": "markdown",
+      "ignoreRegExpList": [
+        "/^\\s*```[\\s\\S]*?^\\s*```/gm"
+      ]
+    }
+  ]
 }
