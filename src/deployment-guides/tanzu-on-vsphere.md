@@ -104,6 +104,12 @@ After you have created the network entries, the network section in your SDDC mus
 > exit
 > vyos@vyos:~$ # You can leave the SSH session now
 > ```
+>
+> NOTE: you'll need to change your vNICs to match the MAC addresses
+> provided.
+>
+> NOTE: You need to use this VyOS machine or a machine in one of the networks
+> connected to it to reach Avi or TKG nodes.
 
 ![Figure 3 - Required `Portgroups` in vCenter](img/tko-deploy-on-vsphere/image12.png)  
 
