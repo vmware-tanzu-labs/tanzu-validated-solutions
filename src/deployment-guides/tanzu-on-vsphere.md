@@ -110,6 +110,29 @@ After you have created the network entries, the network section in your SDDC mus
 >
 > NOTE: You need to use this VyOS machine or a machine in one of the networks
 > connected to it to reach Avi or TKG nodes.
+>
+> If you want to also create a local DNS server to test DNS
+> with TKO, consider installing `dnsmasq` on the same (or a
+> different server). If you do so, make sure that
+> `/etc/hosts` looks like this:
+>
+> ```hosts
+> search tkg.local
+> nameserver 127.0.0.1
+> ```
+>
+> and that `/etc/dnsmasq.conf` looks like this:
+>
+> ```dnsmasq
+> listen-address=::1,127.0.0.1,10.213.234.254
+> server=10.192.2.10
+> server=10.192.2.11
+> server=8.8.8.8
+> server=4.4.4.4
+> address=/dns.tkg.local/127.0.0.1
+> expand-hosts
+> domain=tkg.local
+> ```
 
 ![Figure 3 - Required `Portgroups` in vCenter](img/tko-deploy-on-vsphere/image12.png)  
 
@@ -277,21 +300,29 @@ The default system-generated controller certificate generated for SSL/TSL connec
 
 ### <a id="nsx-alb-vcenter-se"> </a>NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups
 
-Avi Vantage may be deployed in multiple environments for the same system. Each environment is called a “cloud”. Below procedure provides steps on how to create a VMware vCenter cloud, and as shown in the architecture two Service Engine Groups will be created  
-Service Engine Group 1: Service engines part of this Service Engine group hosts:
+Avi Vantage may be deployed in multiple environments for the same system. Each environment is called a “cloud”. Below procedure provides steps on how to create a VMware vCenter cloud, and as shown in the architecture two Service Engine Groups will be created:
+
+#### Service Engine Group 1
+
+Service engines part of this Service Engine group hosts:
 
 * Virtual services for all load balancer functionalities requested by TKG Management Cluster and Workload
 * Virtual services that load balances control plane nodes of all TKG kubernetes clusters
 
-Service Engine Group 2: Service engines part of this Service Engine group, hosts virtual services for all load balancer functionalities requested by TKG Workload clusters mapped to this SE group.  
-Note:
+#### Service Engine Group 2
 
-* Based on your requirements, you can create additional Service Engine groups for the workload clusters.
-* Multiple Workload clusters can be mapped to a single SE group
-* A TKG cluster can be mapped to only one SE group for Application load balancer services    
+Service engines part of this Service Engine group, hosts virtual services for
+all load balancer functionalities requested by TKG Workload clusters mapped to
+this SE group. 
+
+> Note:
+>
+> * Based on your requirements, you can create additional Service Engine groups for the workload clusters.
+> * Multiple Workload clusters can be mapped to a single SE group
+> * A TKG cluster can be mapped to only one SE group for Application load balancer services    
     Refer [Configure NSX Advanced Load Balancer in TKG Workload Cluster](#h.8mw4r95iln0n) for more details on mapping a specific Service engine group to TKG workload cluster  
 
-    The following components are created in NSX ALB.
+The following components are created in NSX ALB.
 
 <!-- /* cSpell:disable */ -->
 | Object | Sample Name |
