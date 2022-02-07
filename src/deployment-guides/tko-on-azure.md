@@ -26,7 +26,7 @@ Ensure that you have:
 * The following to deploy the ARM template in Microsoft Azure,
     - Contributor role in Microsoft Azure.
     - Resource group in Microsoft Azure.
-- An SSH key and the Base 64 encoded value of the public key. You will configure the Base 64 encoded value for the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file for deploying Tanzu Kubernetes Grid. How you generate the SSH key and how you encode the entire Public key is up to you. However, you will need to encode the public key before storing it within configuration file for deploying Tanzu Kubernetes Grid.
+    - An SSH key and the Base 64 encoded value of the public key. You will configure the Base 64 encoded value for the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file for deploying Tanzu Kubernetes Grid. How you generate the SSH key and how you encode the entire Public key is up to you. However, you will need to encode the public key before storing it within configuration file for deploying Tanzu Kubernetes Grid.
 * Access to Customer Connect and the available downloads for Tanzu Kubernetes Grid. To verify, go to [VMware Tanzu Kubernetes Grid Download Product](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652).
 
 ## Overview of the Deployment steps
@@ -38,6 +38,25 @@ Ensure that you have:
 
 ## <a id=azure-environment> </a> Set up your Microsoft Azure Environment
 Before deploying Tanzu for Kubernetes operations and the actual Kubernetes clusters, ensure that your Azure environment is set up as described in this section.
+
+### Quotas
+To successfully deploy Tanzu Kubernetes Grid to Azure, ensure that the quotas are sufficient to support both the management cluster and workload cluster deployments. Otherwise, the deployments will fail.
+
+Review the quotas for the following resources, which are included in the ARM template, and increase their values as needed. Increase the quotas for every region to which you plan to deploy Tanzu Kubernetes Grid.
+
+* Total Regional vCPUs
+* Family vCPUs based on your chosen family of VM (D, E, F, etc.)
+* Static Public IP Addresses
+* Public IP Addresses - Standard
+
+Based on the recommended minimum VM size of D2s_v3, the following minimum quotas are required per cluster:
+
+* Total Regional vCPUs = 24
+* Family vCPUs for D Family = 24
+* Public IP Addresses - Standard = 6
+* Static Public IP Addresses = 6
+
+Ensure that you increase the quotas if you make changes to the basic configuration of the clusters.
 
 ### Azure ARM Template
 The deployment detailed in this document uses the following resources:
@@ -66,25 +85,6 @@ In addition, the ARM template,
 
 * Uses the Region where the Resource Group is located to specify where the resources should be deployed.
 * Contains security rules for each of the Network Security Groups attached to the Control Plane clusters. These rules allow for SSH and secure kubectl access from the public Internet. Access from the public Internet allows for easier troubleshooting during the management and workload cluster deployments. You can remove these rules once your deployment is complete.
-
-### Quotas
-To successfully deploy Tanzu Kubernetes Grid to Azure, ensure that the quotas are sufficient to support both the management cluster and workload cluster deployments. Otherwise, the deployments will fail.
-
-Review the quotas for the following resources, which are included in the ARM template, and increase their values as needed. Increase the quotas for every region to which you plan to deploy Tanzu Kubernetes Grid.
-
-* Total Regional vCPUs
-* Family vCPUs based on your chosen family of VM (D, E, F, etc.)
-* Static Public IP Addresses
-* Public IP Addresses - Standard
-
-Based on the recommended minimum VM size of D2s_v3, the following minimum quotas are required per cluster:
-
-* Total Regional vCPUs = 24
-* Family vCPUs for D Family = 24
-* Public IP Addresses - Standard = 6
-* Static Public IP Addresses = 6
-
-Ensure that you increase the quotas if you make changes to the basic configuration of the clusters.
 
 ### ARM Template Deployment
 Deploy ARM Template
@@ -213,9 +213,9 @@ You will set up the bootstrap VM with the following:
 - Tanzu Kubectl
 
 To set up the bootstrap VM:
-1. Verify that the VM is up and running. <_how do you verify?_>
-1. Connect to the VM through a standard SSH connection.
-1. Run the following Shell commands to set up the bootstrap VM.
+1. Verify that the VM is up and running.
+2. Connect to the VM through a standard SSH connection.
+3. Run the following Shell commands to set up the bootstrap VM.
     Replace the variables with the VMware account information needed to access VMware Customer Connect and Azure IDs for the Azure subscription on which you created resources using the ARM template and Application Registration/Service Principal.
 
 <!-- cSpell:disable -->
