@@ -41,3 +41,7 @@ variable "to_url" {
 variable "to_token" {
   default = ""
 }
+
+variable "harbor_admin_password" {
+  default = ""
+}

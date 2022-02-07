@@ -26,31 +26,31 @@ tlsCertificate:
 enableContourHttpProxy: true
 
 #! [Required] The initial password of Harbor admin.
-harborAdminPassword: "passwordpassword"
+harborAdminPassword: "${harbor_admin_password}"
 
 #! [Required] The secret key used for encryption. Must be a string of 16 chars.
-secretKey: "passwordpassword"
+secretKey: "${harbor_secret_key}"
 
 database:
   #! [Required] The initial password of the postgres database.
-  password: "passwordpassword"
+  password: "${harbor_postgres_password}"
 
 core:
   replicas: 1
   #! [Required] Secret is used when core server communicates with other components.
-  secret: "passwordpassword"
+  secret: "${harbor_core_secret}"
   #! [Required] The XSRF key. Must be a string of 32 chars.
-  xsrfKey: "passwordpasswordpasswordpassword"
+  xsrfKey: "${harbor_core_xsrf_key}"
 jobservice:
   replicas: 1
   #! [Required] Secret is used when job service communicates with other components.
-  secret: "passwordpassword"
+  secret: "${harbor_jobservice_secret}"
 registry:
   replicas: 1
   #! [Required] Secret is used to secure the upload state from client
   #! and registry storage backend.
   #! See: https://github.com/docker/distribution/blob/master/docs/configuration.md#http
-  secret: "passwordpassword"
+  secret: "${harbor_registry_secret}"
 notary:
   #! Whether to install Notary. Not installing notary due to bug https://kb.vmware.com/s/article/85725
   enabled: false

@@ -48,24 +48,30 @@ variable "jb_key_pair" {
   default = "tkg-kp"
 }
 
+variable "harbor_admin_password" {
+  default = ""
+}
+
+
 resource "aws_ec2_transit_gateway" "transitgw" {
   description = "transit gw"
 }
 
 
 module "control_plane" {
-  source        = "./tkg_vpc"
-  vpc_subnet    = "172.16.0.0/16"
-  jumpbox       = true
-  transit_gw    = aws_ec2_transit_gateway.transitgw.id
-  transit_block = "172.16.0.0/12"
-  name          = "control-plane"
-  jb_key_pair   = var.jb_key_pair
-  jb_keyfile    = var.jb_key_file
-  cluster_name  = "tkg-mgmt-aws"
-  azs           = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
-  to_token      = var.to_token
-  to_url        = var.to_url
+  source                = "./tkg_vpc"
+  vpc_subnet            = "172.16.0.0/16"
+  jumpbox               = true
+  transit_gw            = aws_ec2_transit_gateway.transitgw.id
+  transit_block         = "172.16.0.0/12"
+  name                  = "control-plane"
+  jb_key_pair           = var.jb_key_pair
+  jb_keyfile            = var.jb_key_file
+  cluster_name          = "tkg-mgmt-aws"
+  azs                   = ["${var.aws_region}a", "${var.aws_region}b", "${var.aws_region}c"]
+  to_token              = var.to_token
+  to_url                = var.to_url
+  harbor_admin_password = var.harbor_admin_password
 }
 
 module "workload_vpc" {

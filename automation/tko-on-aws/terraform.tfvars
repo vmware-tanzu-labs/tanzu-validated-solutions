@@ -1,0 +1,7 @@
+to_token = "xxx"
+to_url   = "https://xxx.wavefront.com"
+aws_region = "us-east-2"
+jb_key_file = "~/Downloads/testing.pem"
+jb_key_pair = "testing"
+run_id = "manual_run_1"
+harbor_admin_password = "foobar"
