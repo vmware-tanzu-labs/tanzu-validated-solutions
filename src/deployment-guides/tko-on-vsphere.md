@@ -472,7 +472,8 @@ mv kubectl-linux-v1.21.2+vmware.1 /usr/local/bin/kubectl && chmod +x /usr/local/
 for tool in ytt kapp kbld imgpkg;
 do gunzip cli/$tool*.gz &&
   mv cli/$tool*.1 /usr/local/bin/$tool &&
-  chmod ugo+x /usr/local/bin/$tool;
+  chmod ugo+x /usr/local/bin/$tool &&
+  $tool version;
 done
 
 ```
