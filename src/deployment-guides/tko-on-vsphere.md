@@ -462,8 +462,7 @@ sudo install core/v1.4.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
 chmod +x /usr/local/bin/tanzu  
 
 # Install TKG CLI Plugins
-cd ..
-tanzu plugin install --local ./cli all
+tanzu plugin install --local . all
 
 # Install Kubectl CLI
 gunzip kubectl-linux-v1.21.2+vmware.1.gz
