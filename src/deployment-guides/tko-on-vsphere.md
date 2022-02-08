@@ -502,7 +502,7 @@ chmod ugo+x imgpkg-linux-amd64-v0.10.0+vmware.1 && mv ./imgpkg-linux-amd64-v0.10
 <!-- /* cSpell:disable */ -->
 ```bash
 wget https://github.com/mikefarah/yq/releases/download/v4.13.4/yq_linux_amd64.tar.gz  
-tar-xvfyq_linux_amd64.tar&&mvyq_linux_amd64/usr/local/bin/yq
+tar -xvf yq_linux_amd64.tar.gz && mv yq_linux_amd64 /usr/local/bin/yq
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -525,7 +525,7 @@ systemctl enable docker
 
 <!-- /* cSpell:disable */ -->
 ```bash
-dockerinfo| grep -i cgroup  
+dockerinfo | grep -i cgroup  
 
 # You should see the following output:
 #  Cgroup Driver: cgroupfs
