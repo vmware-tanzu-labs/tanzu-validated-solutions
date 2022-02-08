@@ -469,25 +469,12 @@ gunzip kubectl-linux-v1.21.2+vmware.1.gz
 mv kubectl-linux-v1.21.2+vmware.1 /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl  
 
 # Install Carvel tools
-# ytt
-cd ./cli
-gunzip ytt-linux-amd64-v0.34.0+vmware.1.gz
-chmod ugo+x ytt-linux-amd64-v0.34.0+vmware.1 && mv ./ytt-linux-amd64-v0.34.0+vmware.1 /usr/local/bin/ytt
+for tool in ytt kapp kbld imgpkg;
+do gunzip cli/$tool*.gz &&
+  mv cli/$tool*.1 /usr/local/bin/$tool &&
+  chmod ugo+x /usr/local/bin/$tool;
+done
 
-# kapp
-cd ./cli
-gunzip kapp-linux-amd64-v0.37.0+vmware.1.gz
-chmod ugo+x kapp-linux-amd64-v0.37.0+vmware.1 && mv ./kapp-linux-amd64-v0.37.0+vmware.1 /usr/local/bin/kapp
-
-# kbld
-cd ./cli
-gunzip kbld-linux-amd64-v0.30.0+vmware.1.gz
-chmod ugo+x kbld-linux-amd64-v0.30.0+vmware.1 && mv ./kbld-linux-amd64-v0.30.0+vmware.1 /usr/local/bin/kbld
-
-# impkg
-cd ./cli
-gunzip imgpkg-linux-amd64-v0.10.0+vmware.1.gz
-chmod ugo+x imgpkg-linux-amd64-v0.10.0+vmware.1 && mv ./imgpkg-linux-amd64-v0.10.0+vmware.1/usr/local/bin/imgpkg
 ```
 <!-- /* cSpell:enable */ -->
 
