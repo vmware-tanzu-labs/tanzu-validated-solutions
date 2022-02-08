@@ -439,7 +439,7 @@ systemctl enable docker
 
 <!-- /* cSpell:disable */ -->
 ```bash
-dockerinfo| grep -i cgroup  
+dockerinfo | grep -i cgroup  
 
 # You should see the following output:
 #  Cgroup Driver: cgroupfs
