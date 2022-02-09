@@ -29,7 +29,11 @@ The number of resource pools depends on the number of workload clusters to be de
 * Network Time Protocol (NTP) service running on all hosts and vCenter.
 * DHCP is configured on the port group that the nodes in the management cluster
   will use.
-* A host/server/VM based on Linux/MAC/Windows that acts as your bootstrap machine and has docker installed. For this deployment, we will use a virtual machine based on Photon OS.
+* A host/server/VM based on Linux/MAC/Windows that acts as your bootstrap machine and has docker installed.
+  For this deployment, we will use a virtual machine based on Photon OS.
+  Ensure that the machine has at least:
+  * 2 vCPUs, and
+  * 2GB memory
 * A vSphere account with the permissions described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-vsphere.html#vsphere-permissions).
 * If you are working in an Internet-restricted environment that requires a centralized image repository, see [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-airgapped-environments.html) for more information on setting up a centralized image repository.
 * Download and import [the latest version of NSX
