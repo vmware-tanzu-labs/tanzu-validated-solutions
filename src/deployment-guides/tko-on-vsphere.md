@@ -67,78 +67,182 @@ The following table provides example entries for the required port groups. Creat
 
 After you have created the network entries, the network section in your SDDC must have the following port groups created as shown in the following screen capture:
 
-> ✅ If you're experimenting with TKG on vSphere in a homelab without a router
-> that you can configure, you can install a software-router in your vSphere
-> cluster to emulate the network configuration above.
->
-> [VyOS](https://vyos.io) is a lightweight network OS that provides packet
-> forwarding and DHCP services.
->
-> [Download](https://vyos.net/get/nightly-builds/) the ISO for the latest
-> rolling release and [follow the
-> instructions](https://docs.vyos.io/en/latest/installation/install.html#live-installation)
-> to install it onto an ESXi VM. Make sure that you create as many NICs as the
-> port groups shown in the table and that each NIC is assigned to each port
-> group. Also make sure that you create a NIC that is connected to an
-> internet-enabled gateway. (Ideally, make this the VM's first NIC.)
->
-> Once installed, copy [this](../../include/tanzu-on-vsphere-vyos-config.boot)
-> configuration into the VyOS appliance via SSH:
->
-> ```sh
-> # Password is vyos
-> scp ./tanzu-on-vsphere-vyos-config.boot \
->   vyos@$VYOS_IP_ADDRESS:/config/config.boot
-> ```
->
-> Then apply the configuration:
->
-> ```text
-> ssh vyos@$VYOS_IP_ADDRESS
-> vyos@vyos:~$ configure
-> [edit]
-> vyos@vyos# load /config/config.boot
-> ...
-> [edit]
-> vyos@vyos# commit
-> [edit]
-> vyos@vyos# commit
-> [edit]
-> vyos@vyos# exit
-> exit
-> vyos@vyos:~$ # You can leave the SSH session now
-> ```
->
-> NOTE: you'll need to change your vNICs to match the MAC addresses
-> provided.
->
-> NOTE: You need to use this VyOS machine or a machine in one of the networks
-> connected to it to reach Avi or TKG nodes.
->
-> If you want to also create a local DNS server to test DNS
-> with TKO, consider installing `dnsmasq` on the same (or a
-> different server). If you do so, make sure that
-> `/etc/hosts` looks like this:
->
-> ```hosts
-> search tkg.local
-> nameserver 127.0.0.1
-> ```
->
-> and that `/etc/dnsmasq.conf` looks like this:
->
-> ```dnsmasq
-> listen-address=::1,127.0.0.1,10.213.234.254
-> server=10.192.2.10
-> server=10.192.2.11
-> server=8.8.8.8
-> server=4.4.4.4
-> address=/dns.tkg.local/127.0.0.1
-> expand-hosts
-> domain=tkg.local
-> ```
-
 ![Figure 3 - Required `Portgroups` in vCenter](img/tko-on-vsphere/image12.png)  
+
+#### EXTRA: Simulating This Reference Architecture Network Diagram
+
+> ✅ You can skip this section if the port groups created above are already
+> routable in your vSphere cluster.
+
+vSphere distributed switches operate at Layer 2, i.e. they do not talk IP.
+Therefore, you might need to provision a router that can create the network
+above.
+
+[VyOS](https://vyos.io) is a lightweight network OS that provides packet
+forwarding and DHCP services.
+
+[Download](https://vyos.net/get/nightly-builds/) the ISO for the latest rolling
+release and [follow the
+instructions](https://docs.vyos.io/en/latest/installation/install.html#live-installation)
+to install it onto an ESXi VM.
+
+Ensure that this VM:
+
+- Has at least two vCPUs (more is better),
+- Has one NIC connected to a network you can access from the outside,
+- Has one NIC per port group created above (there should be six total), and
+- That all NICs are para-virtual VMXNET NICs
+
+Confirm that the VM's settings looks like image below:
+
+![router settings](images/tko-on-vsphere/vyos-router-settings.png)
+
+Pay close attention to the MAC addresses assigned to each interface, as you'll
+need them later.
+
+Next, go into the vCenter portal and connect to the VM's console. Log in with
+the username `vyos` and the password `vyos`.
+
+Next, configure your WAN interface. We'll assume that the externally-accessible
+network is on subnet `10.213.234.0/24`
+
+First, run `ifconfig eth0`. Take note of the MAC address for this interface. In vCenter,
+ensure that the NIC created for this VM with this MAC address is connected to
+your external network.
+
+
+We'll assume that your externally-accessible NIC is `eth0`.
+
+Once confirmed, assign this interface with a static IP address in its subnet:
+
+```text
+configure
+set interface lo
+set interface ethernet eth0 address 10.213.234.4
+set interfaces ethernet eth0 description WAN
+```
+
+Next, turn on SSH:
+
+```text
+set service ssh
+```
+
+Finally, commit and save your changes:
+
+```text
+commit
+save
+```
+
+Run `ifconfig eth0` again. Verify that its `inet` address matches the IP address
+you provided earlier (`10.213.234.4` in this case).
+
+Next, SSH into the router from your machine:
+
+```sh
+# password is vyos
+ssh vyos@10.213.234.4
+```
+
+Once connected, configure the rest of the interface. First, run `ifconfig` to
+see which device corresponds to each MAC address. Take note of this.
+
+Next, enter configuration mode:
+
+```text
+configure
+```
+
+then repeat the block below for each interface.
+
+```text
+set interface eth1 address 172.16.10.1/24
+# Name this after the port group for each subnet
+set interface eth1 description "nsx_alb_management_pg"
+```
+
+Run `show interfaces` once done. Confirm that your result looks something like
+the below:
+
+```text
+interfaces {
+    ethernet eth0 {
+        address 10.213.234.4/24
+        address dhcp
+        description WAN
+        hw-id 00:50:56:be:00:50
+    }
+    ethernet eth1 {
+        address 172.16.10.1/24
+        description "nsx_alb_management_pg"
+        hw-id 00:50:56:be:ab:b5
+    }
+    ethernet eth2 {
+        address 172.16.40.1/24
+        description "tkg_management_pg"
+        hw-id 00:50:56:be:1a:c0
+    }
+    ethernet eth3 {
+        address 172.16.50.1/24
+        description "tkg_management_vip_pg"
+        hw-id 00:50:56:be:49:98
+    }
+    ethernet eth4 {
+        address 172.16.80.1/24
+        description "tkg_cluster_vip_pg"
+        hw-id 00:50:56:be:10:08
+    }
+    ethernet eth5 {
+        address 172.16.70.1/24
+        description "tkg_workload_vip_pg"
+        hw-id 00:50:56:be:38:77
+    }
+    ethernet eth6 {
+        address 172.16.60.1/24
+        description "tkg_workload_pg"
+        hw-id 00:50:56:be:01:3b
+    }
+    loopback lo {
+    }
+}
+```
+
+Next, enable the DHCP service and create two DHCP pools:
+
+```text
+set service dhcp-server dynamic-dns-update
+set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.40.0/24
+set service dhcp-server shared-network-name tkg-mgmt-network default-router 172.16.40.1
+set service dhcp-server shared-network-name tkg-mgmt-network name-server 8.8.8.8
+set service dhcp-server shared-network-name tkg-mgmt-network name-server 4.4.4.4
+set service dhcp-server shared-network-name tkg-mgmt-network range 0 start 172.16.40.200
+set service dhcp-server shared-network-name tkg-mgmt-network range 0 stop 172.16.40.252
+
+set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.60.0/24
+set service dhcp-server shared-network-name tkg-workload-network default-router 172.16.60.1
+set service dhcp-server shared-network-name tkg-workload-network name-server 8.8.8.8
+set service dhcp-server shared-network-name tkg-workload-network name-server 4.4.4.4
+set service dhcp-server shared-network-name tkg-workload-network range 0 start 172.16.60.200
+set service dhcp-server shared-network-name tkg-workload-network range 0 stop 172.16.60.252
+```
+
+Next, enable NAT so that machines connected to these networks can access the
+Internet through the externally-accessible interface:
+
+```text
+set nat source rule 1 description "allow nat outbound"
+set nat source rule 1 outbound-interface eth0
+set nat source rule 1 translation address masquerade
+```
+
+Finally, configure the router so that any traffic from nodes in the network
+going outbound go through your external network's gateway. In this example, our
+externl gateway is on `10.213.234.1`:
+
+```text
+set protocols static route 0.0.0.0/0 next-hop 10.213.234.1
+```
 
 ### <a id="firewall-req"></a>Firewall Requirements
 
@@ -192,6 +296,8 @@ Follow these steps to deploy and configure NSX Advanced Load Balancer:
 
 1. [Deploy NSX Advanced Load Balancer](#dep-nsx-alb)
 1. [NSX Advanced Load Balancer: Initial setup](#nsx-alb-init)
+
+
 1. [NSX Advanced Load Balancer: Licensing](#nsx-alb-license)
 1. [NSX Advanced Load Balancer: Controller High Availability](#nsx-alb-ha)
 1. [NSX Advanced Load Balancer: Certificate Management](#nsx-alb-cert-mgmt)
@@ -701,6 +807,7 @@ If no labels are specified in the “Cluster Labels” section, ako pod gets dep
 
 While the cluster is being deployed, you will find that a Virtual service will be created in NSX Advanced Load Balancer and new service engines will be deployed in vCenter by NSX ALB and the service engines will be mapped to the SE Group `tanzu-mgmt-segroup-01`.​​
 
+
 Behind the scenes when TKG management Cluster is being deployed:  
 
 * NSX ALB Service engines gets deployed in vCenter and this task is orchestrated by NSX ALB controller  
@@ -731,6 +838,12 @@ To get the status of TKG Management cluster execute the following command:
     ![](img/tko-on-vsphere/image51.png)
 
 The TKG management cluster is successfully deployed and now you can created Shared Service and workload clusters  
+
+### Troubleshooting
+
+#### `tanzu management-cluster create` is stuck! Help!
+
+There are numerous reasons why this 
 
 ## Deploy Tanzu Shared Service Cluster  
 
