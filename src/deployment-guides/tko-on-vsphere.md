@@ -1134,21 +1134,37 @@ Below is the sample AKODeploymentConfig with sample values in place, as per the 
 
 <!-- /* cSpell:disable */ -->
 ```yaml
-apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1kind: AKODeploymentConfig
+kind: AKODeploymentConfig
+apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1
 metadata:
- finalizers:
-     -ako-operator.networking.tkg.tanzu.vmware.comgeneration: 2
- name: tanzu-ako-workload-set01spec:
- adminCredentialRef:
-   name: avi-controller-credentialsnamespace: tkg-system-networkingcertificateAuthorityRef:
-   name: avi-controller-canamespace: tkg-system-networkingcloudName: tanzu-vcenter-01clusterSelector:
-   matchLabels:
-     type: workloadset01controller: avi-ha.lab.vmwdataNetwork:
-   cidr: tkg_workload_vip_pg 
-   name: 172.16.70.0/24extraConfigs:
-   image:
-     pullPolicy: IfNotPresentrepository: projects.registry.vmware.com/tkg/akoversion: v1.3.2_vmware.1ingress:
-     defaultIngressController: falsedisableIngressClass: trueserviceEngineGroup: tanzu-wkld-segroup-01
+  name: tanzu-ako-workload-set01
+  finalizers:
+    - ako-operator.networking.tkg.tanzu.vmware.com
+  generation: 2
+spec:
+  adminCredentialRef:
+    name: avi-controller-credentials
+    namespace: tkg-system-networking
+  certificateAuthorityRef:
+    name: avi-controller-ca
+    namespace: tkg-system-networking
+  cloudName: tanzu-vcenter01
+  dataNetwork:
+    cidr: tkg-workload-vip-pg
+    name: 172.16.70.0/24
+  clusterSelector:
+    matchLabels:
+      type: workloadset01
+  controller: 172.16.10.10
+  extraConfigs:
+    image:
+      pullPolicy: IfNotPresent
+      repository: projects.registry.vmware.com/tkg/ako
+      version: v1.3.2_vmware.1
+    ingress:
+      defaultIngressController: false
+      disableIngressClass: true
+  serviceEngineGroup: tanzu-wkld-segroup-01
 ```
 
 <!-- /* cSpell:enable */ -->
@@ -1706,14 +1722,14 @@ Reference&#32;&#35;1&#46;77b21bb8&#46;1644466551&#46;70c0aa0
 then the VMware Harbor registry in which these packages are hosted might be
 down. Re-install the package with `tanzu package install [PACKAGE-NAME]`.
 
-### My workload cluster doesn't delete when I delete it!
+### My workload cluster doesn't delete when I delete it
 
 When you run `tanzu cluster delete [CLUSTER_NAME]`, the cluster gets stuck in
 the `Deleting` phase indefinitely.
 
 To troubleshoot:
 
-- Try removing the `ako-operator.networking.tkg.tanzu.vmware.com` finalizer from
+* Try removing the `ako-operator.networking.tkg.tanzu.vmware.com` finalizer from
   the cluster's `Cluster` object with `kubectl`:
 
   ```sh
