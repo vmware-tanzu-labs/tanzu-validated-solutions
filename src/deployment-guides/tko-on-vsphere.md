@@ -631,22 +631,23 @@ docker info | grep -i cgroup
 #  Cgroup Driver: cgroupfs
 ```
 
-<!-- /* cSpell:enable */ -->  * Create an SSH Key Pair: This is required for Tanzu CLI to connect to vSphere from the bootstrap machine. The public key part of the generated key will be passed during the TKG management cluster deployment.  
+<!-- /* cSpell:enable */ -->
+* Create an SSH Key Pair: This is required for Tanzu CLI to connect to vSphere
+  from the bootstrap machine. The public key part of the generated key will be
+  passed during the TKG management cluster deployment.  
 
 ```bash
 # Generate SSH key pair
 # When prompted enter file in which to save the key (/home/user/.ssh/id_rsa): press Enter to accept the default and provide password
-
 ssh-keygen -t rsa -b 4096 -C "[email@example.com](mailto:email@example.com)"
-
 # Add the private key to the SSH agent running on your machine, and enter the password you created in the previous step
-
 ssh-add ~/.ssh/id_rsa
-
 # If the above command fails, execute `eval $(ssh-agent)` and then rerun the command.
 ```
 
-* If your bootstrap machine runs Linux or Windows Subsystem for Linux, and it has a Linux kernel built after the May 2021 Linux security patch, for example Linux 5.11 and 5.12 with Fedora, run the following:
+* If your bootstrap machine runs Linux or Windows Subsystem for Linux, and it
+  has a Linux kernel built after the May 2021 Linux security patch, for example
+  Linux 5.11 and 5.12 with Fedora, run the following:
 
 `sudo sysctl net.netfilter.nf_conntrack_max = 131072`
 
@@ -711,14 +712,20 @@ TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE: LS0t\[...\]tLS0tLQ==
 
 * Access Tanzu UI wizard by opening a browser and entering http://<bootstrapper-ip>:port/
     ![](img/tko-on-vsphere/image93.png)
+
 * Click Deploy on the VMware vSphere tile
+
 * On the "IaaS Provider" section, enter the IP/FQDN and credentials of the vCenter server where the TKG management cluster will be deployed
     ![](img/tko-on-vsphere/image57.png)
+
 * Click on connect and accept the vCenter Server SSL thumbprint
+
 * If you are running on a vCenter 7.x environment, you would get below popup, select “DEPLOY TKG MANAGEMENT CLUSTER” to proceed further
     ![](img/tko-on-vsphere/image91.png)
+
 * Select the Datacenter and provide the SSH Public Key generated while configuring the Bootstrap VM
     If you have saved the SSH key in the default location, execute the  following command in you bootstrap machine to get the SSH public key “cat /root/.ssh/id_rsa.pub”
+
 * Click Next
 
 ![](img/tko-on-vsphere/image5.png)
@@ -823,7 +830,8 @@ To get the status of TKG Management cluster execute the following command:
 * Use kubectl to get the status of the TKG Management cluster nodes
     ![](img/tko-on-vsphere/image51.png)
 
-The TKG management cluster is successfully deployed and now you can created Shared Service and workload clusters
+The TKG management cluster is successfully deployed and now you can created
+Shared Service and workload clusters!
 
 > Stuck on a step? Check the [troubleshooting](#troubleshooting) section below!
 
