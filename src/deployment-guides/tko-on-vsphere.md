@@ -1,5 +1,5 @@
 # Deploy Tanzu for Kubernetes Operations on vSphere
-<!-- markdownlint-disable MD013 MD033 MD045 -->
+<!-- markdownlint-disable MD013 MD033 MD045 MD005 -->
 
 This document provides step-by-step instructions for deploying and configuring Tanzu for Kubernetes Operations on a vSphere environment backed by a Virtual Distributed Switch (VDS).  
 
@@ -544,7 +544,9 @@ Follow below procedure to create IPAM profile and once created attach it to the 
 
 * Now attach the IPAM profile to the “tanzu-vcenter-01” cloud
     Navigate to Infrastructure> Clouds> Edit the tanzu-vcenter-01cloud > Under IPAM Profile choose the profile created in previous step and Save the configuration
-    ![](img/tko-on-vsphere/image36.png)  This completes NSX ALB configuration. Next is to deploy and configured Bootstrap Machine which will be used to deploy and management Tanzu Kubernetes clusters
+    ![](img/tko-on-vsphere/image36.png)
+
+This completes NSX ALB configuration. Next is to deploy and configured Bootstrap Machine which will be used to deploy and management Tanzu Kubernetes clusters
 
 ## <a id="bootstrap"> </a>Deploy and Configure Bootstrap Machine
 
@@ -665,7 +667,9 @@ The management cluster is also where you configure the shared and in-cluster ser
 You can deploy and manage Tanzu Kubernetes Grid management clusters on:
 
 * vSphere 6.7u3
-* vSphere 7, if vSphere with Tanzu is not enabled.  ### Import Base Image template for TKG Cluster Deployment
+* vSphere 7, if vSphere with Tanzu is not enabled.
+
+### Import Base Image template for TKG Cluster Deployment
 
 Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
@@ -701,7 +705,9 @@ TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY: false
 TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE: LS0t\[...\]tLS0tLQ==
 ```
 
- <!-- /* cSpell:enable */ -->  Deploying a management cluster may be accomplished by utilizing the Installer interface:
+ <!-- /* cSpell:enable */ -->
+
+Deploying a management cluster may be accomplished by utilizing the Installer interface:
 
 * To launch the UI installer wizard, run the following command on the bootstrapper machine:
 
@@ -764,7 +770,9 @@ Once the above details are provided, click on “Verify Credentials” and choos
 * Management VIP network Name: Select TKG Cluster VIP/Data Network network `tkg_cluster_vip_pg`.
 * Cluster Labels: To adhere to the architecture defining a label is mandatory. Provide required labels, for example, `type: management`.
     **Note:** Based on your requirements you may specify multiple labels
-* Click Next.  ![](img/tko-on-vsphere/image20.png)
+* Click Next.
+
+![](img/tko-on-vsphere/image20.png)
 
 **Important:** With above configurations, when a TKG clusters (Shared service/workload) are tagged with label `type: management`, `ako` pod gets deployed on the cluster,and any applications hosted on the cluster that requires Load Balancing service will be exposed via network `tkg_mgmt_vip_pg` and the virtual service will be placed on SE group `tanzu-mgmt-segroup-01`.
 As per the defined in the architecture, Cluster Labels specified here will be applied only on shared service cluster
@@ -801,7 +809,11 @@ If no labels are specified in the “Cluster Labels” section, ako pod gets dep
 * Check the “Participate in the Customer Experience Improvement Program”, if you so desire and click Review Configuration
 * Review all the configuration, once reviewed, you can either copy the command provided and execute it in CLI or proceed with UI to Deploy Management Cluster.
     When the deployment is triggered from the UI, the installer wizard displays the deployment logs on the screen.
-    ![](img/tko-on-vsphere/image45.png)  While the cluster is being deployed, you will find that a Virtual service will be created in NSX Advanced Load Balancer and new service engines will be deployed in vCenter by NSX ALB and the service engines will be mapped to the SE Group `tanzu-mgmt-segroup-01`.​​  Behind the scenes when TKG management Cluster is being deployed:
+    ![](img/tko-on-vsphere/image45.png)
+
+While the cluster is being deployed, you will find that a Virtual service will be created in NSX Advanced Load Balancer and new service engines will be deployed in vCenter by NSX ALB and the service engines will be mapped to the SE Group `tanzu-mgmt-segroup-01`.​​
+
+Behind the scenes when TKG management Cluster is being deployed:
 
 * NSX ALB Service engines gets deployed in vCenter and this task is orchestrated by NSX ALB controller
     ![](img/tko-on-vsphere/image80.png)
@@ -934,7 +946,9 @@ Upon preparing the cluster configuration file, execute the following command to 
 `tanzu cluster create -f <path-to-config.yaml> -v 6`
 
 Once the cluster is successfully deployed,  you will see the following results
-![](img/tko-on-vsphere/image74.png)  Now, connect to the Tanzu Management Cluster context and apply following labels:
+![](img/tko-on-vsphere/image74.png)
+
+Now, connect to the Tanzu Management Cluster context and apply following labels:
 
 * Add the tanzu-services label to the shared services cluster as its cluster role. In following command “tkg-shared-svc” is the name of the shared service cluster
 
@@ -962,7 +976,9 @@ After successfully creating a shared service cluster, you can deploy Harbor. How
 2. Install Contour User package
 3. Install Harbor User package
 
-To deploy the packages see [Deploy User-Managed Packages on TKG Clusters](#h.wmtc9ocmzfk5)  ## <a id="dep-workload-cluster"> </a>Deploy Tanzu Workload Clusters
+To deploy the packages see [Deploy User-Managed Packages on TKG Clusters](#h.wmtc9ocmzfk5)
+
+## <a id="dep-workload-cluster"> </a>Deploy Tanzu Workload Clusters
 
 In order to deploy a Workload cluster you need to create a cluster config, in the cluster config file you must specify options in the cluster configuration file to connect to vCenter Server and identify the vSphere resources that the cluster will use.
 You can also specify standard sizes for the control plane and worker node VMs, or configure the CPU, memory, and disk sizes for control plane and worker nodes explicitly. If you use custom image templates, you can identify which template to use to create node VMs.
@@ -1135,7 +1151,9 @@ metadata:
      defaultIngressController: falsedisableIngressClass: trueserviceEngineGroup: tanzu-wkld-segroup-01
 ```
 
-<!-- /* cSpell:enable */ -->  Once you have the AKO configuration file ready, use kubectl command to set the context to TKG management cluster and use below command to list the available `AKODeploymentConfig`.
+<!-- /* cSpell:enable */ -->
+
+Once you have the AKO configuration file ready, use kubectl command to set the context to TKG management cluster and use below command to list the available `AKODeploymentConfig`.
 
 `kubectl apply -f <path_to_akodeploymentconfig.yaml>`
 
@@ -1159,7 +1177,9 @@ Now that you have the TKG workload cluster is created and required AKO configura
 
 `tanzu cluster kubeconfig get <cluster-name> --admin`
 
-![](img/tko-on-vsphere/image55.png)  Now connect to the TKG workload cluster using the kubectl command and run below commands to check the status of AKO and other components
+![](img/tko-on-vsphere/image55.png)
+
+Now connect to the TKG workload cluster using the kubectl command and run below commands to check the status of AKO and other components
 
 ```bash
 kubectl get nodes               # List all nodes with status
@@ -1242,7 +1262,9 @@ renewBefore: 360h
 
 5. Validate the Contour package installation, the status must change to “Reconcile succeeded”
 
-    `tanzu package installed list -A | grep contour`  ### Install Harbor User Package
+    `tanzu package installed list -A | grep contour`
+
+### Install Harbor User Package
 <!-- markdownlint-enable MD029 -->
 
 In order to install Harbor, ensure that cert-manager and contour user packages are installed on the cluster
@@ -1270,7 +1292,9 @@ In order to install Harbor, ensure that cert-manager and contour user packages a
 <!-- markdownlint-disable MD029 MD037 MD007 -->
 4. Set the mandatory passwords and secrets in the `harbor-data-values.yaml` file
 
-    `bash /tmp/harbor-package/config/scripts/generate-passwords.sh ./harbor-data-values.yaml`  5.  Update below sections and remove comments in the harbor-data-values.yaml file:
+    `bash /tmp/harbor-package/config/scripts/generate-passwords.sh ./harbor-data-values.yaml`
+
+5. Update below sections and remove comments in the harbor-data-values.yaml file:
 
   * Update required fields
     <!-- /* cSpell:disable */ -->
@@ -1401,7 +1425,11 @@ Follow below steps to create a proxy configuration object in TMC
 9. In No proxy list, you can optionally specify a comma-separated list of outbound destinations that must bypass the proxy server.
     ![](img/tko-on-vsphere/image19.png)
 10. Click Create. You will find that the proxy configuration is added to TMC and this can be used while adding the cluster which is sitting behind the added proxy. Based on your environmental needs, you may add multiple proxies in TMC
-    ![](img/tko-on-vsphere/image33.png)  ### Tanzu Observability(TO)  Tanzu Observability delivers full-stack observability across containerized cloud applications, Kubernetes health, and cloud infrastructure. The solution is consumed through a Software-as-a-Service (SaaS) subscription model, managed by VMware. This SaaS model allows the solution to scale to meet our metrics requirements without the need for customers to maintain the solution itself.
+    ![](img/tko-on-vsphere/image33.png)
+
+### Tanzu Observability(TO)
+
+Tanzu Observability delivers full-stack observability across containerized cloud applications, Kubernetes health, and cloud infrastructure. The solution is consumed through a Software-as-a-Service (SaaS) subscription model, managed by VMware. This SaaS model allows the solution to scale to meet our metrics requirements without the need for customers to maintain the solution itself.
 
 #### Monitoring a Tanzu Kubernetes Cluster Workload/Shared Service Cluster using Tanzu Observability (TO)
 
@@ -1418,20 +1446,24 @@ To integrate Tanzu Observability on a cluster attached to TMC, follow below step
 
 1. A Service Account  needs to be created in Tanzu Observability (TO) to enable communication between TO and TMC. To create a service account in Tanzu Observability
 
-1. Log in to your Tanzu Observability instance (<instance_name>.wavefront.com) as a user with Accounts, Groups & Roles permission
-2. From the gear icon in the top right, select Account Management
-3. Click on the Service Accounts tab and click Create New Account to create a service account and an associated API Token.
-    ![](img/tko-on-vsphere/image65.png)
-4. Specify the service account name, optionally provide description and click Create
-    ![](img/tko-on-vsphere/image78.png)
-5. Select the newly created account and click the Copy to Clipboard icon in the Tokens row. You can now paste this token into the Credentials field inside Tanzu Mission Control  2.  Login to Tanzu Mission Control, In the left navigation pane of the Tanzu Mission Control console, click Administration and click on IntegrationsTile. You will find the available integrations options, and enable the Tanzu Observability if not yet enabled
+  1. Log in to your Tanzu Observability instance (<instance_name>.wavefront.com) as a user with Accounts, Groups & Roles permission
+  2. From the gear icon in the top right, select Account Management
+  3. Click on the Service Accounts tab and click Create New Account to create a service account and an associated API Token.
+      ![](img/tko-on-vsphere/image65.png)
+  4. Specify the service account name, optionally provide description and click Create
+      ![](img/tko-on-vsphere/image78.png)
+  5. Select the newly created account and click the Copy to Clipboard icon in the Tokens row. You can now paste this token into the Credentials field inside Tanzu Mission Control
+
+2. Login to Tanzu Mission Control, In the left navigation pane of the Tanzu Mission Control console, click Administration and click on IntegrationsTile. You will find the available integrations options, and enable the Tanzu Observability if not yet enabled
     ![](img/tko-on-vsphere/image44.png)
 3. Under Administration switch to Accounts, click onCreate Account Credentials and select Tanzu Observability credential and provide the
 
-1. Credential Name
-2. Tanzu Observability URL
-3. Tanzu Observability API Token obtained in step 1 and click on Create
-    ![](img/tko-on-vsphere/image62.png)  4.  Once the required account for Tanzu Observability is created, on the  left navigation pane of the Tanzu Mission Control console, click Clusters and click on the intended cluster that needs to be integrated with Tanzu Observability
+  1. Credential Name
+  2. Tanzu Observability URL
+  3. Tanzu Observability API Token obtained in step 1 and click on Create
+      ![](img/tko-on-vsphere/image62.png)
+
+4. Once the required account for Tanzu Observability is created, on the  left navigation pane of the Tanzu Mission Control console, click Clusters and click on the intended cluster that needs to be integrated with Tanzu Observability
 5. On the cluster page, click on Add Integration and select Tanzu Observability
     ![](img/tko-on-vsphere/image1.png)
 6. Select the Tanzu Observability Credentials and click Confirm
