@@ -1,5 +1,5 @@
-<!-- markdownlint-disable MD013 MD033 MD045 -->
 # Deploy Tanzu for Kubernetes Operations on vSphere
+<!-- markdownlint-disable MD013 MD033 MD045 -->
 
 This document provides step-by-step instructions for deploying and configuring Tanzu for Kubernetes Operations on a vSphere environment backed by a Virtual Distributed Switch (VDS).  
 
