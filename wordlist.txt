@@ -54,3 +54,5 @@ routable
 milliCPU
 overcommitted
 TKGS
+bursty
+allottable
