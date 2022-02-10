@@ -78,8 +78,15 @@ vSphere distributed switches operate at Layer 2, i.e. they do not talk IP.
 Therefore, you might need to provision a router that can create the network
 above.
 
-[VyOS](https://vyos.io) is a lightweight network OS that provides packet
-forwarding and DHCP services.
+[Vyatta VyOS](https://vyos.io) is a lightweight network OS that provides packet
+forwarding and DHCP services. This section will guide you through setting up a
+simple Vyatta router in your lab that can simluate the reference architecture
+network diagram.
+
+Out-of-scope alternatives:
+
+* VMware NSX-T
+* [Enable IP packet forwarding](https://linuxconfig.org/how-to-turn-on-off-ip-forwarding-in-linux)
 
 [Download](https://vyos.net/get/nightly-builds/) the ISO for the latest rolling
 release and [follow the
@@ -88,10 +95,10 @@ to install it onto an ESXi VM.
 
 Ensure that this VM:
 
-- Has at least two vCPUs (more is better),
-- Has one NIC connected to a network you can access from the outside,
-- Has one NIC per port group created above (there should be six total), and
-- That all NICs are para-virtual VMXNET NICs
+* Has at least two vCPUs (more is better),
+* Has one NIC connected to a network you can access from the outside,
+* Has one NIC per port group created above (there should be six total), and
+* That all NICs are para-virtual VMXNET NICs
 
 Confirm that the VM's settings looks like image below:
 
@@ -1546,32 +1553,133 @@ Now, If you have a multi-cluster or hybrid-cloud application, you can connect, s
 
 #### Procedure - Onboarding via TMC
 
-Below steps provides step by step instructions to onboard a cluster to Tanzu Service Mesh using using TMC integration  
+Below steps provides step by step instructions to onboard a cluster to Tanzu Service Mesh using using TMC integration
 
-1.  Log into Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com)page, In the left navigation pane of the Tanzu Mission Control console, click Clusters, and ensure that the cluster that needs to be onboarded to TSM is attached to TMC.  
-    To attached a cluster to TMC, refer [Attaching a Tanzu Kubernetes Cluster Workload/Shared Service Cluster to TMC](#h.c4wsd0fsoloe)  
+1. Log into Tanzu Mission Control via [VMware Cloud Services](https://console.cloud.vmware.com)page, In the left navigation pane of the Tanzu Mission Control console, click Clusters, and ensure that the cluster that needs to be onboarded to TSM is attached to TMC.
+    To attached a cluster to TMC, refer [Attaching a Tanzu Kubernetes Cluster Workload/Shared Service Cluster to TMC](#h.c4wsd0fsoloe)
 
-2.  Click on the Target Cluster name, under integration click on Add Integrations, and select Tanzu Service Mesh  
+2. Click on the Target Cluster name, under integration click on Add Integrations, and select Tanzu Service Mesh
 
-    ![](img/tko-on-vsphere/image96.png)Note: If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server. You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh.  
+    ![](img/tko-on-vsphere/image96.png)Note: If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server. You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh.
 
-3.  In the “Add Tanzu Service Mesh integration”​​ you can choose to install Tanzu Service mesh on all namespaces or exclude any. For the purpose of this document TSM will be installed on all namespaces.  
+3. In the “Add Tanzu Service Mesh integration”​​ you can choose to install Tanzu Service mesh on all namespaces or exclude any. For the purpose of this document TSM will be installed on all namespaces.
     Note:
 
-1.  To install Tanzu Service Mesh in all the namespaces, click Install on all Namespaces. The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
-2.  To exclude a specific namespace from Tanzu Service Mesh, click Exclude Namespaces, select Is Exactly from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
-3.  You can also specify the name of a namespace that you plan to create in the cluster at some point in the future  
+1. To install Tanzu Service Mesh in all the namespaces, click Install on all Namespaces. The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
+2. To exclude a specific namespace from Tanzu Service Mesh, click Exclude Namespaces, select Is Exactly from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
+3. You can also specify the name of a namespace that you plan to create in the cluster at some point in the future
     ![](img/tko-on-vsphere/image87.png)
 
-4.  Click on Confirm , you will find that the TMC adapter for TSM in unhealthy state for few minutes, this is because required objects are yet to be/being created on the cluster
-5.  On the target cluster, you will see a new namespace “vmware-system-tsm” and required objects are being created.  
-    ![](img/tko-on-vsphere/image16.png)  
-    Meanwhile you see the progress bar of the TSM installation in Tanzu Service Mesh console  
-    ![](img/tko-on-vsphere/image94.png)  
+4. Click on Confirm , you will find that the TMC adapter for TSM in unhealthy state for few minutes, this is because required objects are yet to be/being created on the cluster
+5. On the target cluster, you will see a new namespace “vmware-system-tsm” and required objects are being created.
+    ![](img/tko-on-vsphere/image16.png)
+    Meanwhile you see the progress bar of the TSM installation in Tanzu Service Mesh console
+    ![](img/tko-on-vsphere/image94.png)
 
-6.  Once all the required objects and dependencies are created, TSM integration status for the cluster in TMC will show healthy  
-    ![](img/tko-on-vsphere/image41.png)  
-    And in TSM console you will find that the cluster is successfully onboarded  
+6. Once all the required objects and dependencies are created, TSM integration status for the cluster in TMC will show healthy
+    ![](img/tko-on-vsphere/image41.png)
+    And in TSM console you will find that the cluster is successfully onboarded
     ![](img/tko-on-vsphere/image52.png)
 
 Now, If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html).
+
+### Troubleshooting
+
+#### `tanzu management-cluster create` is stuck! HALP
+
+There are numerous reasons why this might happen. This sub-section lists some
+common pitfalls encountered during this step.
+
+#### The Kind bootstrap cluster never starts
+
+If you see errors like this:
+
+```text
+Error: unable to set up management cluster: unable to create bootstrap cluster:
+failed to create kind cluster tkg-kind-c825gmqbfvth8l618q8g: docker run error:
+command "docker run --hostname tkg-kind-c825gmqbfvth8l618q8g-control-plane
+*-name tkg-kind-c825gmqbfvth8l618q8g-control-plane --label
+io.x-k8s.kind.role=control-plane --privileged --security-opt seccomp=unconfined
+*-security-opt apparmor=unconfined --tmpfs /tmp --tmpfs /run --volume /var
+*-volume /lib/modules:/lib/modules:ro --detach --tty --label
+io.x-k8s.kind.cluster=tkg-kind-c825gmqbfvth8l618q8g --net kind
+*-restart=on-failure:1 --init=false
+*-volume=/var/run/docker.sock:/var/run/docker.sock
+*-publish=127.0.0.1:36661:6443/TCP -e KUBECONFIG=/etc/kubernetes/admin.conf
+projects.registry.vmware.com/tkg/kind/node:v1.21.2_vmware.1-v0.8.1" failed with
+error: exit status 125
+```
+
+or this:
+
+```text
+Error: unable to set up management cluster: unable to create bootstrap cluster:
+failed to create kind cluster tkg-kind-c8258k2bfvtgf1ri1uv0: failed to init node
+with kubeadm: command "docker exec --privileged
+tkg-kind-c8258k2bfvtgf1ri1uv0-control-plane kubeadm init --skip-phases=preflight
+*-config=/kind/kubeadm.conf --skip-token-print --v=6" failed with error: exit
+status 1
+```
+
+then the Tanzu CLI was likely unable to start the bootstrap Kubernetes cluster
+needed to deploy your management cluster.
+
+To troubleshoot, check:
+
+* For any stale volumes left behind by previous Kind clusters: `docker volume ls`
+* For any stale networks left behind by previous Kind clusters: `docker network ls`
+
+#### CLI hangs on `Start creating management cluster...`
+
+This usually happens when:
+
+* There aren't enough resources to start a pod deployed by a Tanzu CLI
+  `Deployment` object,
+* One or more `Pod`s are unable to pull their respective images, or
+* One or more `Pod` containers are erroring
+
+To troubleshoot:
+
+* Retrieve the kubeconfig created for your bootstrap cluster. Search for
+  "Kubeconfig: " in your terminal
+* Use this Kubeconfig to see the state of all `Pod`s in your cluster. Ensure
+  that _all_ of them are in a `Running` state:
+
+  ```sh
+  kubectl --kubeconfig=/path/to/kubeconfig get pods -A
+  ```
+
+* If any `Pod`s are in an `ErrImagePull` or `ImagePullBackOff` state, verify
+  that you can pull the image manually both from within the bootstrap cluster
+  (with `docker pull`) and within the Kind container (`docker exec` into the
+  Kind container, then run `crictl pull`)
+
+* If any `Pod`s are in a `CrashLoopBackOff` state, use `kubectl logs` to stream
+  the logs and search for interesting exceptions.
+
+#### Avi isn't creating any service engines
+
+You see a virtual service, virtual service VIP and target pool get created, but
+you don't see any service engines associated with any of the Service Engine
+Groups created for the `tanzu-vcenter01` cloud or any new VMs created in
+vSphere.
+
+To troubleshoot:
+
+* Ensure that your Avi controller is using a "Basic" or "Enterprise" license,
+  NOT "Enterprise with Cloud Services".
+* Ensure that the vCenter credentials provided to the Avi Cloud are correct.
+* Ensure that the `tanzu-vcenter01` cloud has a green status light next to it.
+* Ensure that the `tanzu-vcenter01` cloud is associated with an IPAM profile.
+  The Service Engines will not get created without an IPAM associated with the
+  group.
+
+You can also stream the logs from the (many) daemons powering Avi by logging
+into the controller via SSH and running the command below:
+
+```sh
+tail -f /var/lib/avi/log/*
+```
+
+**NOTE**: Some of the log message you'll see are labelled as `WARNING`s but are
+really errors. Investigate closely.
