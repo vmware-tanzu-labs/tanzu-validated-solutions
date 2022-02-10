@@ -863,33 +863,33 @@ Modify the parameters as per your requirements.
 
 <!-- /* cSpell:disable */ -->
 ```bash
+AVI_CONTROL_PLANE_HA_PROVIDER: "true"
 CLUSTER_CIDR: 100.96.0.0/11
-SERVICE_CIDR: 100.64.0.0/13
+CLUSTER_NAME: <Provide a Name For the TKG Cluster>
 CLUSTER_PLAN: <prod/dev>
+CONTROLPLANE_SIZE: small/medium/large/extra-large
+DEPLOY_TKG_ON_VSPHERE7: 'true'
+ENABLE_AUDIT_LOGGING: true/false
+ENABLE_AUTOSCALER: true/false
 ENABLE_CEIP_PARTICIPATION: 'true'
+ENABLE_DEFAULT_STORAGE_CLASS: true/false
 ENABLE_MHC: 'true'
 IDENTITY_MANAGEMENT_TYPE: none
 INFRASTRUCTURE_PROVIDER: vsphere
+SERVICE_CIDR: 100.64.0.0/13
 TKG_HTTP_PROXY_ENABLED: 'false'
-AVI_CONTROL_PLANE_HA_PROVIDER: "true"
-CLUSTER_NAME: <Provide a Name For the TKG Cluster>
-DEPLOY_TKG_ON_VSPHERE7: 'true'
 VSPHERE_DATACENTER: /<DC-Name>
 VSPHERE_DATASTORE: /<DC-Name>/datastore/<Datastore-Name>
 VSPHERE_FOLDER: /<DC-Name>/vm/<Folder_Name>
 VSPHERE_NETWORK: /<DC-Name>/network/<Network-Name>
+VSPHERE_PASSWORD: <SSO-User-Password>
 VSPHERE_RESOURCE_POOL: /<DC-Name>/host/<Cluster-Name>/Resources/<Resource-Pool-Name>
 VSPHERE_SERVER: <vCenter-Address>
 VSPHERE_SSH_AUTHORIZED_KEY: "ssh-rsa Nc2EA \[...\] h2X8uPYqw== email@example.com"
-VSPHERE_USERNAME: <vCenter-SSO-Username>
-VSPHERE_PASSWORD: <SSO-User-Password>
 VSPHERE_TLS_THUMBPRINT: <vCenter Server Thumbprint>
-ENABLE_AUDIT_LOGGING: true/false
-ENABLE_DEFAULT_STORAGE_CLASS: true/false
-ENABLE_AUTOSCALER: true/false
-CONTROLPLANE_SIZE: small/medium/large/extra-large
-WORKER_SIZE: small/medium/large/extra-large
+VSPHERE_USERNAME: <vCenter-SSO-Username>
 WORKER_MACHINE_COUNT: <# of worker nodes to be deployed>
+WORKER_SIZE: small/medium/large/extra-large
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -911,33 +911,33 @@ Following is an example of a modified Tanzu Kubernetes Grid shared service confi
 
 <!-- /* cSpell:disable */ -->
 ```bash
+AVI_CONTROL_PLANE_HA_PROVIDER: "true"
 CLUSTER_CIDR: 100.96.0.0/11
-SERVICE_CIDR: 100.64.0.0/13
+CLUSTER_NAME: tkg-shared-svc
 CLUSTER_PLAN: dev
+CONTROLPLANE_SIZE: large
+DEPLOY_TKG_ON_VSPHERE7: 'true'
+ENABLE_AUDIT_LOGGING: true
+ENABLE_AUTOSCALER: false
 ENABLE_CEIP_PARTICIPATION: 'true'
+ENABLE_DEFAULT_STORAGE_CLASS: true
 ENABLE_MHC: 'true'
 IDENTITY_MANAGEMENT_TYPE: none
 INFRASTRUCTURE_PROVIDER: vsphere
+SERVICE_CIDR: 100.64.0.0/13
 TKG_HTTP_PROXY_ENABLED: 'false'
-AVI_CONTROL_PLANE_HA_PROVIDER: "true"
-CLUSTER_NAME: tkg-shared-svc
-DEPLOY_TKG_ON_VSPHERE7: 'true'
 VSPHERE_DATACENTER: /arcas-dvs-internet-dc1
 VSPHERE_DATASTORE: /arcas-dvs-internet-dc1/datastore/vsanDatastore
 VSPHERE_FOLDER: /arcas-dvs-internet-dc1/vm/tkg-sharedsvc-components
 VSPHERE_NETWORK: /arcas-dvs-internet-dc1/network/tkg_mgmt_pg
+VSPHERE_PASSWORD: VMware@123
 VSPHERE_RESOURCE_POOL: /arcas-dvs-internet-dc1/host/arcas-dvs-internet-c1/Resources/tkg-sharedsvc-components
 VSPHERE_SERVER: vcenter.lab.vmw
 VSPHERE_SSH_AUTHORIZED_KEY: ssh-rsaAAAAB3NzaC1yc2EAAAADAQABAAACAQC6l1Tnp3EQ24cqskvTi9EXA/1pL/NYSJoT0q+qwTp8jUA1LBo9pV8cu/HmnnA/5gsO/OEefMCfz+CGPOo1mH596EdA/rUQo5K2rqhuNwlA+i+hU87dxQ8KJYhjPOT/lGHQm8VpzNQrF3b0Cq5WEV8b81X/J+H3i57ply2BhC3BE7B0lKbuegnb5aaqvZC+Ig97j1gt5riV/aZg400c3YGJl9pmYpMbyEeJ8xd86wXXyx8X1xp6XIdwLyWGu6zAYYqN4+1pqjV5IBovu6M6rITS0DlgFEFhihZwXxCGyCpshSM2TsIJ1uqdX8zUlhlaQKyAt+2V29nnHDHG1WfMYQG2ypajmE1r4vOkS+C7yUbOTZn9sP7b2m7iDnCG0GvCUT+lNQy8WdFC/Gm0V6+5DeBY790y1NEsl+9RSNNL+MzT/18Yqiq8XIvwT2qs7d5GpSablsITBUNB5YqXNEaf76ro0fZcQNAPfZ67lCTlZFP8v/S5NExqn6P4EHht0m1hZm1FhGdY7pQe8dLz/74MLTEQlP7toOp2ywoArYno8cFVl3PT8YR3TVQARvkS2pfNOquc5iU0r1FXOCrEc3d+LvJYmalmquvghZjblvxQKwguLFIodzdO/3CcpJvwGg0PiANvYZRqVNfTDCjtrN+lFXurlm2pSsA+YI5cbRtZ1ADaPw==administrator@lab.vmw
-VSPHERE_USERNAME: administrator@lab.vmw
-VSPHERE_PASSWORD: VMware@123
 VSPHERE_TLS_THUMBPRINT: 40:1E:6D:30:4C:72:A6:8E:9D:AE:A8:67:DE:DA:C9:CA:B3:A6:C6:C2
-ENABLE_AUDIT_LOGGING: true
-ENABLE_DEFAULT_STORAGE_CLASS: true
-ENABLE_AUTOSCALER: false
-CONTROLPLANE_SIZE: large
-WORKER_SIZE: extra-large
+VSPHERE_USERNAME: administrator@lab.vmw
 WORKER_MACHINE_COUNT: 1
+WORKER_SIZE: extra-large
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1595,7 +1595,7 @@ Now, If you have a multi-cluster or hybrid-cloud application, you can connect, s
 There are numerous reasons why this might happen. This sub-section lists some
 common pitfalls encountered during this step.
 
-#### The Kind bootstrap cluster never starts
+##### The Kind bootstrap cluster never starts
 
 If you see errors like this:
 
@@ -1634,7 +1634,7 @@ To troubleshoot, check:
 * For any stale volumes left behind by previous Kind clusters: `docker volume ls`
 * For any stale networks left behind by previous Kind clusters: `docker network ls`
 
-#### CLI hangs on `Start creating management cluster...`
+##### CLI hangs on `Start creating management cluster...`
 
 This usually happens when:
 
@@ -1662,7 +1662,7 @@ To troubleshoot:
 * If any `Pod`s are in a `CrashLoopBackOff` state, use `kubectl logs` to stream
   the logs and search for interesting exceptions.
 
-#### Avi isn't creating any service engines
+##### Avi isn't creating any service engines
 
 You see a virtual service, virtual service VIP and target pool get created, but
 you don't see any service engines associated with any of the Service Engine
@@ -1688,3 +1688,39 @@ tail -f /var/lib/avi/log/*
 
 **NOTE**: Some of the log message you'll see are labelled as `WARNING`s but are
 really errors. Investigate closely.
+
+#### Some packages fail to install with `tanzu cluster create`
+
+If you see errors like this after running `tanzu cluster create`:
+
+```text
+package reconciliation failed: Error: Syncing directory '0': Syncing directory '.' with imgpkgBundle contents: Imgpkg: exit status 1 (stderr: Error: Checking if image is bundle: Collecting images: Working with projects.registry.vmware.com/tkg/packages/core/antrea@sha256:fb3d3287ce707667ca90ead9f1670db2597342064895a4d54c267610ea814e5f: GET https://projects.registry.vmware.com/service/token?scope=repository%3Atkg%2Fpackages%2Fcore%2Fantrea%3Apull&service=harbor-registry: unexpected status code 504 Gateway Timeout: <HTML><HEAD>
+<TITLE>Gateway Timeout - In read </TITLE>
+</HEAD><BODY>
+<H1>Gateway Timeout</H1>
+The proxy server did not receive a timely response from the upstream server.<P>
+Reference&#32;&#35;1&#46;77b21bb8&#46;1644466551&#46;70c0aa0
+</BODY></HTML>
+```
+
+then the VMware Harbor registry in which these packages are hosted might be
+down. Re-install the package with `tanzu package install [PACKAGE-NAME]`.
+
+### My workload cluster doesn't delete when I delete it!
+
+When you run `tanzu cluster delete [CLUSTER_NAME]`, the cluster gets stuck in
+the `Deleting` phase indefinitely.
+
+To troubleshoot:
+
+- Try removing the `ako-operator.networking.tkg.tanzu.vmware.com` finalizer from
+  the cluster's `Cluster` object with `kubectl`:
+
+  ```sh
+  kubectl edit cluster [CLUSTER-NAME]
+  # Your editor will pop-up. Search for "finalizers", then remove the
+  # aforementioned finalizer
+  ```
+
+  **NOTE**: If you do this, log into Avi and delete any target pools and virtual
+  services created for the cluster manually.
