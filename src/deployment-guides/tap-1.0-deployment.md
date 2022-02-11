@@ -782,7 +782,6 @@ kubectl get all -A | grep route.serving.knative
 #copy  app url and paste into browser to see the sample app
 
 ```
-
 <!-- /* cSpell:enable */ -->
 
 ### Register Entity into tap-gui 
@@ -799,6 +798,7 @@ You can use command to see the tanzu package installation failure reason `kubect
 ### Service Bindings for Kubernetes
 
 You can see [Service Bindings for Kubernetes](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-service-bindings-about.html)  for more details.
+
 ### Tanzu Application Platform GUI auth provider
 
 You can see [auth provider documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-tap-gui-auth.html)  for more details.
