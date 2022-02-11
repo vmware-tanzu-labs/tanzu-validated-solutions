@@ -488,6 +488,10 @@ ootb_supply_chain_basic:
   cluster_builder: default
   service_account: default
 
+learningcenter:
+  ingressDomain: ${app_domain}
+  ingressClass: contour
+
 tap_gui:
   service_type: LoadBalancer
   ingressEnabled: "true"
