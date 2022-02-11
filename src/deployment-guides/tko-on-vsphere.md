@@ -1295,6 +1295,156 @@ certificates:
 
     `tanzu package installed list -A | grep contour`
 
+> ✅ These values files can change from release to release. Here is a quick
+> procedure to retrieve the latest values file.
+>
+> First, pull down the list of packages in the Tanzu package repo cached in your
+> workload cluster:
+>
+> ```sh
+> # Tanzu repos are packaged as Docker images. The list of packages
+> # provided by the repo are stored as a layer in this image.
+> # Since each layer is compressed as tarballs, we need to sequentially-untar
+> # both the repolist Docker image and the layer containing the packages
+> # therein.
+>
+> image=$(kubectl get -n tanzu-package-repo-global \
+>   packagerepositories tanzu-standard \
+>   -o jsonpath='{.spec.fetch.imgpkgBundle.image}{"\n"}') && \
+>   docker pull "$image" && \
+>   docker save "$image" | \
+>   tar --wildcards -axf - */layer.tar -O | \
+>   tar -tf -
+> ```
+>
+> The result should look like this:
+>
+> ```text
+> .
+> .imgpkg
+> .imgpkg/images.yml
+> packages
+> packages/cert-manager.tanzu.vmware.com
+> packages/cert-manager.tanzu.vmware.com/1.1.0+vmware.2-tkg.1.yml
+> packages/cert-manager.tanzu.vmware.com/metadata.yml
+> packages/contour.tanzu.vmware.com
+> packages/contour.tanzu.vmware.com/1.17.2+vmware.1-tkg.2.yml
+> packages/contour.tanzu.vmware.com/metadata.yml
+> packages/external-dns.tanzu.vmware.com
+> packages/external-dns.tanzu.vmware.com/0.8.0+vmware.1-tkg.1.yml
+> packages/external-dns.tanzu.vmware.com/metadata.yml
+> packages/fluent-bit.tanzu.vmware.com
+> packages/fluent-bit.tanzu.vmware.com/1.7.5+vmware.1-tkg.1.yml
+> packages/fluent-bit.tanzu.vmware.com/metadata.yml
+> packages/grafana.tanzu.vmware.com
+> packages/grafana.tanzu.vmware.com/7.5.7+vmware.1-tkg.1.yml
+> packages/grafana.tanzu.vmware.com/metadata.yml
+> packages/harbor.tanzu.vmware.com
+> packages/harbor.tanzu.vmware.com/2.2.3+vmware.1-tkg.2.yml
+> packages/harbor.tanzu.vmware.com/metadata.yml
+> packages/multus-cni.tanzu.vmware.com
+> packages/multus-cni.tanzu.vmware.com/3.7.1+vmware.2-tkg.1.yml
+> packages/multus-cni.tanzu.vmware.com/metadata.yml
+> packages/prometheus.tanzu.vmware.com
+> packages/prometheus.tanzu.vmware.com/2.27.0+vmware.1-tkg.1.yml
+> packages/prometheus.tanzu.vmware.com/metadata.yml
+> ```
+>
+> Select the most recent version of Contour presented in the list, then repeat
+> the process above to obtain its Docker image with a slight modification:
+>
+> ```sh
+> image=$(kubectl get -n tanzu-package-repo-global \
+>   packagerepositories tanzu-standard \
+>   -o jsonpath='{.spec.fetch.imgpkgBundle.image}{"\n"}') && \
+>   docker pull "$image" && \
+>   docker save "$image" | \
+>   tar --wildcards -axf - */layer.tar -O | \
+>   tar -axf - packages/contour.tanzu.vmware.com/1.17.2+vmware.1-tkg.2.yml -O
+> ```
+>
+> This should yield a large YAML file like this (truncated):
+>
+> ```yaml
+> apiVersion: data.packaging.carvel.dev/v1alpha1
+> kind: Package
+> metadata:
+>   name: contour.tanzu.vmware.com.1.17.2+vmware.1-tkg.2
+> spec:
+>   refName: contour.tanzu.vmware.com
+>   version: 1.17.2+vmware.1-tkg.2
+>   releaseNotes: contour 1.17.2 https://github.com/projectcontour/contour/releases/tag/v1.17.2
+>   releasedAt: "2021-07-23T18:00:00Z"
+>   licenses:
+>   - 'VMware’s End User License Agreement (Underlying OSS license: Apache License 2.0)'
+>   template:
+>     spec:
+>       fetch:
+>       - imgpkgBundle:
+>           image: projects.registry.vmware.com/tkg/packages/standard/contour:v1.17.2_vmware.1-tkg.2
+>       template:
+>       - ytt:
+>           paths:
+>           - config/
+>           ignoreUnknownComments: true
+>       - kbld:
+>           paths:
+>           - '-'
+>           - .imgpkg/images.yml
+>       deploy:
+>       - kapp:
+>           rawOptions:
+>           - --wait-timeout=5m
+> ```
+>
+> Search for "imgpkgBundle", then copy the image underneath it (
+> `projects.registry.vmware.com/tkg/packages/standard/contour:v1.17.2_vmware.1-tkg.2`
+> in our case) and run the same command as above, but with a few alterations:
+>
+> ```sh
+> docker pull [IMAGE_NAME] &&
+>   docker save [IMAGE_NAME] | \
+>   tar --wildcards -axf - */layer.tar -O | \
+>   tar -axf - config/values.yaml -O
+> ```
+>
+> This will produce a values file, which you can save to a file and modify as
+> needed:
+>
+> ```yaml
+> ---
+> infrastructure_provider: vsphere
+> namespace: tanzu-system-ingress
+> contour:
+>   configFileContents: {}
+>   useProxyProtocol: false
+>   replicas: 2
+>   pspNames: "vmware-system-restricted"
+>   logLevel: info
+> envoy:
+>   service:
+>     type: null
+>     annotations: {}
+>     nodePorts:
+>       http: null
+>       https: null
+>     externalTrafficPolicy: Cluster
+>     aws:
+>       LBType: classic
+>     disableWait: false
+>   hostPorts:
+>     enable: true
+>     http: 80
+>     https: 443
+>   hostNetwork: false
+>   terminationGracePeriodSeconds: 300
+>   logLevel: info
+>   pspNames: null
+> certificates:
+>   duration: 8760h
+>   renewBefore: 360h
+> ```
+
 ### Install Harbor User Package
 <!-- markdownlint-enable MD029 -->
 
