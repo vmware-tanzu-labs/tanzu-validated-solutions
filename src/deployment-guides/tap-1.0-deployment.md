@@ -7,8 +7,8 @@ Will create 4 following clusters to implement Reference Design of Tanzu Applicat
 
 * Tanzu Application Platform  Build Cluster 
 * Tanzu Application Platform  Run Cluster 
-* Tanzu Application Platform  UI Cluster 
-* Tanzu Application Platform  Workspace Cluster 
+* Tanzu Application Platform  View Cluster 
+* Tanzu Application Platform  Iterate Cluster 
 
 ## Prerequisites
 Before deploying VMware Tanzu Application Platform , ensure that the following are set up.
@@ -37,10 +37,10 @@ The following provides an overview of the major steps necessary to deploy Tanzu 
 
 1. [Setup Tanzu Application Platform Build cluster](#tap-build)
 2. [Setup Tanzu Application Platform Run cluster](#tap-run)
-3. [Setup Tanzu Application Platform UI cluster](#tap-ui)
-4. [Setup Tanzu Application Platform Workspace cluster](#tap-full)
+3. [Setup Tanzu Application Platform View cluster](#tap-ui)
+4. [Setup Tanzu Application Platform Iterate cluster](#tap-full)
 5. [App Deployment](#tap-sample-app)
-6. [Multi-cluster App Lifecycle Demo](./resources/tap/app-full-demo.sh) - Download into your local jumpbox and execute with shell script editor. 
+ 
 
 
 ## <a id=tap-build> </a> Setup Tanzu Application Platform Build cluster
@@ -413,20 +413,20 @@ Perform steps of [Set up developer namespaces to use installed packages](#tap-de
 You can execute above Steps 1-4 of [Setup Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters. 
 
 
-## <a id=tap-ui> </a> Setup Tanzu Application Platform UI cluster
+## <a id=tap-ui> </a> Setup Tanzu Application Platform View cluster
 
-The UI cluster is designed to run the web applications for TAP. Specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal
+The View cluster is designed to run the web applications for TAP. Specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal
 
 ### Step 1: Install tanzu cluster essentials and tanzu cli - 
-Please ensure you login into Kubernetes UI cluster and perform steps of [Install tanzu cluster essentials and tanzu cli](#tanzu-essential). 
+Please ensure you login into Kubernetes View cluster and perform steps of [Install tanzu cluster essentials and tanzu cli](#tanzu-essential). 
 
 ### Step 2: Add the Tanzu Application Platform package repository - 
 Perform steps of [Add the Tanzu Application Platform package repository](#tap-package-repo)
 
 
-### <a id=tap-profile-ui> </a>Step 3: Install Tanzu Application Platform ui profile
+### <a id=tap-profile-ui> </a>Step 3: Install Tanzu Application Platform view profile
 
-Provide following user inputs to set environments variables into commands and execute them to install ui profile
+Provide following user inputs to set environments variables into commands and execute them to install view profile
 
 * registry_server - uri of registry server like Azure container registry or Harbor etc. (example - tappoc.azurecr.io)
 * registry_user - registry server user
@@ -441,7 +441,7 @@ Provide following user inputs to set environments variables into commands and ex
  See [full profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) documentation for further details. 
 
  **Notes** - 
-  1. app_domain could be main domain or subdomain of main domain like example - main domain - **customer0.io** , ui cluster subdomain (app_domain) - **ui.customer0.io** . 
+  1. app_domain could be main domain or subdomain of main domain like example - main domain - **customer0.io** , view cluster subdomain (app_domain) - **ui.customer0.io** . 
   2. You can get run_cluster_serviceAccountToken using below command running into your run cluster
 
 <!-- /* cSpell:disable */ -->
@@ -587,20 +587,20 @@ Perform steps of [Set up developer namespaces to use installed packages](#tap-de
 See the steps to deploy and test [sample application](#tap-sample-app). You can refer [Deploy Application documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-getting-started.html) for further details.
 
 
-## <a id=tap-full> </a> Setup Tanzu Application Platform Workspace cluster
+## <a id=tap-full> </a> Setup Tanzu Application Platform Iterate cluster
 
-The workspace cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features
+The Iterate cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features
 
 ### Step 1: Install tanzu cluster essentials and tanzu cli - 
-Please ensure you login into Kubernetes UI cluster and perform steps of [Install tanzu cluster essentials and tanzu cli](#tanzu-essential). 
+Please ensure you login into Kubernetes View cluster and perform steps of [Install tanzu cluster essentials and tanzu cli](#tanzu-essential). 
 
 ### Step 2: Add the Tanzu Application Platform package repository - 
 Perform steps of [Add the Tanzu Application Platform package repository](#tap-package-repo)
 
 
-### <a id=tap-profile-full> </a>Step 3: Install Tanzu Application Platform Workspace profile
+### <a id=tap-profile-full> </a>Step 3: Install Tanzu Application Platform Iterate profile
 
-Provide following user inputs to set environments variables into commands and execute them to install full profile
+Provide following user inputs to set environments variables into commands and execute them to install Iterate profile
 
 * registry_server - uri of registry server like Azure container registry or Harbor etc. (example - tappoc.azurecr.io)
 * registry_user - registry server user
@@ -623,8 +623,8 @@ export git_catalog_url=<git_catalog_url>
 
 
 #APPEND GUI SETTINGS
-rm tap-values-workspace.yaml
-cat <<EOF | tee tap-values-workspace.yaml
+rm tap-values-Iterate.yaml
+cat <<EOF | tee tap-values-Iterate.yaml
 profile: full
 ceip_policy_disclosed: true
 buildservice:
@@ -685,7 +685,7 @@ excluded_packages:
 
 EOF
 
-tanzu package install tap -p tap.tanzu.vmware.com -v 1.0.0 --values-file tap-values-workspace.yaml -n tap-install
+tanzu package install tap -p tap.tanzu.vmware.com -v 1.0.0 --values-file tap-values-Iterate.yaml -n tap-install
 tanzu package installed get tap -n tap-install
 
 #check all build cluster package installed succesfully
