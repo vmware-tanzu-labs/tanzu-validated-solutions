@@ -76,9 +76,8 @@ After you have created the network entries, the network section in your SDDC mus
 > ✅ You can skip this section if the port groups created above are already
 > routable in your vSphere cluster.
 
-vSphere distributed switches operate at Layer 2, i.e. they do not talk IP.
-Therefore, you might need to provision a router that can create the network
-above.
+vSphere distributed switches operate at Layer 2. Therefore, you might need to
+provision a router that can create the network above.
 
 [Vyatta VyOS](https://vyos.io) is a lightweight network OS that provides packet
 forwarding and DHCP services. This section will guide you through setting up a
@@ -97,8 +96,8 @@ to install it onto an ESXi VM.
 
 Ensure that this VM:
 
-* Has at least two vCPUs (more is better),
-* Has one NIC connected to a network you can access from the outside,
+* Has at least two vCPUs,
+* Has one NIC connected to a network you can access external to the cluster,
 * Has one NIC per port group created above (there should be six total), and
 * That all NICs are para-virtual VMXNET NICs
 
