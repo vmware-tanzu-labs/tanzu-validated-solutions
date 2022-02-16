@@ -577,17 +577,17 @@ To add a VM class to a namespace,
 
 1. Click **Add VM Class** for **VM Service.**
 
-  ![](./img/tko-on-vsphere-with-tanzu/image68.jpg)
+    ![](./img/tko-on-vsphere-with-tanzu/image68.jpg)
 
 1. From the list of the VM Classes, select the classes that you want to include in your namespace.
 
-  ![](./img/tko-on-vsphere-with-tanzu/image47.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image47.jpg) 
 
 1. Click **Ok**.  
 
   The namespace is fully configured now. You are ready to deploy your first Tanzu Kubernetes Cluster.
 
-## <a id=deploy-workload-cluster> </a> Deploy Tanzu Kubernetes Clusters (Workload Cluster)
+## <a id=prepare-deploy-workload-cluster> </a> Prepare to Deploy Tanzu Kubernetes Clusters (Workload Cluster)
 
 Tanzu Kubernetes Clusters are created by invoking the Tanzu Kubernetes Grid Service declarative API using kubectl and a cluster specification defined using YAML. After you provision a cluster, you operate it and deploy workloads to it using kubectl.
 
@@ -597,39 +597,39 @@ You can gather this information by running the following commands:
 
 1. Connect to the Supervisor Cluster using vSphere Plugin for kubectl.
 
-  `kubectl vsphere login --server=<Supervisor Cluster Control Plane VIP> --vsphere-username USERNAME`
+   `kubectl vsphere login --server=<Supervisor Cluster Control Plane VIP> --vsphere-username USERNAME`
 
 1. Switch context to the vSphere Namespace where you plan to provision the Tanzu Kubernetes cluster.
 
-  `kubectl config get-contexts`
+   `kubectl config get-contexts`
 
-  `kubectl config use-context <vSphere-Namespace>`
+   `kubectl config use-context <vSphere-Namespace>`
 
-  Example: **kubectl config use-context prod**
+   Example: **kubectl config use-context prod**
 
 1. List the available virtual machine class bindings
 
-  `kubectl get virtualmachineclassbindings`
+   `kubectl get virtualmachineclassbindings`
 
-  The output of the command list all VM class bindings that are available in the vSphere Namespace where you are deploying the Tanzu Kubernetes Cluster.
+   The output of the command list all VM class bindings that are available in the vSphere Namespace where you are deploying the Tanzu Kubernetes Cluster.
 
-  ![](./img/tko-on-vsphere-with-tanzu/image20.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image20.jpg)
 
 1. List the available storage class in the namespace.
 
-  `kubectl get storageclass`
+   `kubectl get storageclass`
 
-  The output of the command list all storage classes that are available in the vSphere Namespace.
+   The output of the command list all storage classes that are available in the vSphere Namespace.
 
-  ![](./img/tko-on-vsphere-with-tanzu/image50.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image50.jpg)
 
 1. List the available Tanzu Kubernetes releases (TKR)
 
-  `kubectl get tanzukubernetesreleases`
+   `kubectl get tanzukubernetesreleases`
 
-  The command's output lists the TKR versions that are available in the vSphere Namespace. You can only deploy Tanzu Kubernetes Cluster with TKR versions that have compatible=true.
+   The command's output lists the TKR versions that are available in the vSphere Namespace. You can only deploy Tanzu Kubernetes Cluster with TKR versions that have compatible=true.
 
-  ![](./img/tko-on-vsphere-with-tanzu/image52.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image52.jpg)
 
 1. Construct the YAML file for provisioning a Tanzu Kubernetes cluster.
 
@@ -641,53 +641,36 @@ You can gather this information by running the following commands:
    This documentation makes use of v1alpha2 API to provision the Tanzu Kubernetes Clusters.
 
    The following example YAML is the minimal configuration required to provision a Tanzu Kubernetes cluster.
-   <!-- /* cSpell:disable */ -->
+
+  <!-- /* cSpell:disable */ -->
+
    ```yaml
-   apiVersion: run.tanzu.vmware.com/v1alpha2
-
-   kind: TanzuKubernetesCluster
-
-   metadata:
-
-      name: prod-1
-
-      namespace: prod
-
-   spec:
-
-      topology:
-
-        controlPlane:
-
-          replicas: 3
-
-          vmClass: best-effort-large
-
-          storageClass: vsan-default-storage-policy
-
-          tkr:
-
-            reference:
-
-            name: v1.21.2---vmware.1-tkg.1.ee25d55
-
-    nodePools:
-
-    - name: worker-pool01
-
-      replicas: 3
-
-      vmClass: best-effort-large
-
-      storageClass: vsan-default-storage-policy
-
-      tkr:
-
-        reference:
-
+  apiVersion: run.tanzu.vmware.com/v1alpha2
+  kind: TanzuKubernetesCluster
+  metadata:
+    name: prod-1
+    namespace: prod
+  spec:
+    topology:
+      controlPlane:
+        replicas: 3
+        vmClass: best-effort-large
+        storageClass: vsan-default-storage-policy
+        tkr:
+          reference:
           name: v1.21.2---vmware.1-tkg.1.ee25d55
-    ```
-    <!-- /* cSpell:enable */ -->
+      nodePools:
+       - name: worker-pool01
+         replicas: 3
+         vmClass: best-effort-large
+         storageClass: vsan-default-storage-policy
+         tkr:
+           reference:
+             name: v1.21.2---vmware.1-tkg.1.ee25d55
+  ```
+  <!-- /* cSpell:enable */ -->
+
+## <a id=deploy-workload-cluster> </a>Deploy Tanzu Kubernetes Clusters (Workload Cluster)
 1. Customize the cluster as needed by referring to the full list of [cluster configuration parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-31BF8166-5FC8-4D43-933D-5797F3BE4A36.html)
 
 1. To deploy the cluster, run the command:

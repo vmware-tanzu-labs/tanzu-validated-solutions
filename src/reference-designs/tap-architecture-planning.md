@@ -237,18 +237,18 @@ excluded_packages:
 ## TAP Upgrade Approach
 When a new version of TAP is released, it is recommended to first upgrade the operator sandbox environment. A sample subset of applications should live here and any applicable platform tests specific to your organization should take place here before progressing to the production instance. Such tests might include building some representative set of applications and verifying that they still deploy successfully to your sandbox Run Cluster.
 The following upgrade order is recommended:
-* sandbox
- * UI
- * Build
- * Run
-* prod
- * Workspace
- * UI
- * Build
- * Run (dev)
- * Run (test)
- * Run (qa)
- * Run (prod)
+* Sandbox
+    * UI
+    * Build
+    * Run
+* Production
+    * Workspace
+    * UI
+    * Build
+    * Run (dev)
+    * Run (test)
+    * Run (qa)
+    * Run (prod)
 
 
 | Decision ID   | Design Decision   | Justification | Implication
