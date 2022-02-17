@@ -13,9 +13,9 @@ The current collection of published Reference Designs may be found in our [Table
 The tanzu-validated-solutions project team welcomes contributions from the community. Before you start working with tanzu-validated-solutions, please
 read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be
 signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on
-as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+as an open-source patch.
 
-Please also review our [Contributing Guide](CONTRIBUTING.md) and [testing documentation](TESTING.md) for information on how to effectively provide content and feedback.
+Please review our [Contributing Guide](CONTRIBUTING.md) and [testing documentation](TESTING.md) for information on how to effectively provide content and feedback.
 
 ## License
 

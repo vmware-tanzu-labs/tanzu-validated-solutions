@@ -11,18 +11,20 @@ This is a rough outline of what a contributor's workflow looks like:
 
 - Create a topic branch from where you want to base your work
 - Make commits of logical units
-- Make sure your commit messages are in the proper format (see below)
+- Make sure your commit messages are in the proper format and are signed-off (see below)
 - Push your changes to a topic branch in your fork of the repository
 - Submit a pull request
 
 Example:
 
 ``` shell
-git remote add upstream https://github.com/vmware/@(project).git
+git remote add upstream https://github.com/vmware-tanzu-labs/tanzu-validated-solutions.git
 git checkout -b my-new-feature main
-git commit -a
+git commit -a -v --signoff
 git push origin my-new-feature
 ```
+
+**NOTE**: Please *do not* utilize the GitHub Web UI to create new pull requests. VMware requires DCO sign off of all commits, and, unfortunately, this editing mechanism does not lend itself well to meeting that requirement.
 
 ### Staying In Sync With Upstream
 
@@ -30,8 +32,8 @@ When your branch gets out of sync with the vmware/main branch, use the following
 
 ``` shell
 git checkout my-new-feature
-git fetch -a
-git pull --rebase upstream main
+git fetch upstream
+git rebase upstream/main
 git push --force-with-lease origin my-new-feature
 ```
 
@@ -60,6 +62,9 @@ git push --force-with-lease origin my-new-feature
 
 Be sure to add a comment to the PR indicating your new changes are ready to review, as GitHub does not generate a
 notification when you git push.
+
+### Developer Certificate of Origin
+
 
 ### Code Style
 
