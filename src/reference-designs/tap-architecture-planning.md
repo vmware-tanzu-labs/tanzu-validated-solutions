@@ -12,7 +12,7 @@ For production deployments, we recommend that there be two fully independent ins
 |TAP-001  | Install using multiple clusters         |  Utilizing multiple clusters allows you to separate your workloads and environments while still leveraging combined build infrastructure   |  Multiple cluster design requires more installation effort and possibly maintenance versus a single cluster design
 |TAP-002  | Create an operator sandbox environment  |  An operator sandbox environment allows platform operators to test upgrades and architectural changes before introducing them to production |  Operator sandbox requires additional compute resources
 |TAP-003  | Utilize a single Build Cluster and multiple Run Clusters  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production for the build system vs separating into dev/test/qa/prod build systems. Additionally, it raises confidence that the container image does not change between environments.  It also enhances manageability versus having separate components. |  Changes lower environments are not as separated as having separate build environments
-|TAP-004  | Utilize a UI Cluster  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production perception for the build system vs separating into dev/test/qa/prod build systems. Additionally, it raises confidence that the container image does not change between environments.  It also enhances manageability versus having separate components. |  None
+|TAP-004  | Utilize a View Cluster  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production perception for the build system vs separating into dev/test/qa/prod build systems. Additionally, it raises confidence that the container image does not change between environments.  It also enhances manageability versus having separate components. |  None
 
 ### Build Cluster Requirements
 The Build Cluster is responsible for taking a developer's source code commits and applying a supply chain that will produce a container image and Kubernetes manifests for deploying on a Run Cluster.
@@ -119,9 +119,9 @@ excluded_packages:
  - tap-gui.tanzu.vmware.com
  - workshops.learningcenter.tanzu.vmware.com
 ```
-### UI Cluster Requirements
-The UI Cluster is designed to run the web applications for TAP. Specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
-The UI Cluster's requirements will be mostly driven by the respective applications that it will be running.
+### View Cluster Requirements
+The View Cluster is designed to run the web applications for TAP. Specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
+The View Cluster's requirements will be mostly driven by the respective applications that it will be running.
 Kubernetes requirements:
 * LoadBalancer for ingress controller (3 external IPs)
 * Default storage class
@@ -133,22 +133,24 @@ Recommendations:
 * TSM uninstalled or restricted to non-TAP namespaces
 * Utilize a PostgreSQL database for storing user preferences and manually created entities
 
-The UI Cluster includes the following packages:
+The View Cluster includes the following packages:
 
 ```
+accelerator.apps.tanzu.vmware.com
 api-portal.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
 contour.tanzu.vmware.com
+controller.source.apps.tanzu.vmware.com 
+fluxcd.source.controller.tanzu.vmware.com
 image-policy-webhook.signing.apps.tanzu.vmware.com
+learningcenter.tanzu.vmware.com
 tap-gui.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
-fluxcd.source.controller.tanzu.vmware.com
-controller.source.apps.tanzu.vmware.com 
-accelerator.apps.tanzu.vmware.com
+workshops.learningcenter.tanzu.vmware.com
 ```
 
-To install a UI Cluster, use the following package definition:
+To install a View Cluster, use the following package definition:
 ```yaml
 profile: full
 excluded_packages:
@@ -157,8 +159,6 @@ excluded_packages:
  - ootb-delivery-basic.tanzu.vmware.com
  - developer-conventions.tanzu.vmware.com
  - image-policy-webhook.signing.apps.tanzu.vmware.com
- - learningcenter.tanzu.vmware.com
- - workshops.learningcenter.tanzu.vmware.com
  - services-toolkit.tanzu.vmware.com
  - service-bindings.labs.vmware.com
  - build.appliveview.tanzu.vmware.com
@@ -177,10 +177,10 @@ excluded_packages:
  - image-policy-webhook.signing.apps.tanzu.vmware.com
  - cartographer.tanzu.vmware.com
  ```
-### Workspace Cluster Requirements
-The Workspace Cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features. The Workspace Cluster operates distinctly from the outer loop infrastructure. Each developer should be given their own namespace within the Workspace Cluster during their platform onboarding.
+### Iterate Cluster Requirements
+The Iterate Cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features. The Iterate Cluster operates distinctly from the outer loop infrastructure. Each developer should be given their own namespace within the Iterate Cluster during their platform onboarding.
 
-![](img/tap-architecture-planning/workspace-cluster.png)
+![](img/tap-architecture-planning/iterate-cluster.png)
 <!-- https://lucid.app/lucidchart/40663cc1-55aa-4892-ae23-1f462d39f262 -->
 
 Kubernetes requirements:
@@ -193,7 +193,7 @@ Recommendations:
 * Spread across three AZs for high availability
 * TSM uninstalled or restricted to non-TAP namespaces
 
-The Workspace Cluster includes the following packages:
+The Iterate Cluster includes the following packages:
 ```
 build.appliveview.tanzu.vmware.com
 buildservice.tanzu.vmware.com
@@ -220,7 +220,7 @@ tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
 ```
 
-To install a Workspace Cluster, use the following package definition:
+To install a Iterate Cluster, use the following package definition:
 ```yaml
 profile: full
 excluded_packages:
@@ -238,12 +238,12 @@ excluded_packages:
 When a new version of TAP is released, it is recommended to first upgrade the operator sandbox environment. A sample subset of applications should live here and any applicable platform tests specific to your organization should take place here before progressing to the production instance. Such tests might include building some representative set of applications and verifying that they still deploy successfully to your sandbox Run Cluster.
 The following upgrade order is recommended:
 * Sandbox
-    * UI
+    * View
     * Build
     * Run
 * Production
-    * Workspace
-    * UI
+    * Iterate
+    * View
     * Build
     * Run (dev)
     * Run (test)
@@ -262,7 +262,7 @@ There are three primary ways to consume services. Services are consumed by appli
 |TAP-007  | Use services external services and service clusters         |  Utilizing external services allows the service operators to customize their cluster parameters for their specific services and manage their respective life cycles independently   | Utilizing external clusters adds some technical complexity
 
 ### In-Cluster
-Services can be deployed directly into the same cluster running Tanzu Application Service. This kind of deployment is more suited to workspace environments. Two possible implementations include, 1) same namespace, 2) different namespaces. The diagram depicts the latter.
+Services can be deployed directly into the same cluster running Tanzu Application Service. This kind of deployment is more suited to iterate cluster environments. Two possible implementations include, 1) same namespace, 2) different namespaces. The diagram depicts the latter.
 ![](img/tap-architecture-planning/in-cluster.png)
 <!-- slides 80-82 https://onevmw-my.sharepoint.com/:p:/g/personal/mijames_vmware_com/EYK5tKWk83RFia7QHHkaAj0BUnnhenCjlto4qpYDY_ZyFw?e=NhmLnZ -->
 
@@ -284,7 +284,7 @@ Run cluster:
 * Number of pods waiting to be scheduled
 * Maximum number of seconds any pod has waited for scheduling
 * Remaining allottable memory and CPU
-UI components:
+View components:
 * Response time
 * Availability
 
