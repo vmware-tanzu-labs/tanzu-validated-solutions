@@ -7,6 +7,17 @@ As this repository is publicly hosted on GitHub, we utilized GitHub Actions to p
 - Link Validity
 - Orphaned Content
 
+## Testing Locally
+
+We recommend running your tests locally before submitting any pull requests.
+Install Docker Compose then run this command to do so:
+
+```sh
+docker-compose run --rm tests
+```
+
+This will execute all of the tests that are executed by GitHub Actions.
+
 ## Spelling
 
 This check utilizes the [cspell](https://github.com/streetsidesoftware/cspell) spell checker for code. This utility was chosen as it has wide platform support and will accommodate both CI/CD testing as well as IDE-based inline checking during authorship. It is currently utilizing an `en` and `en-US` dictionary, but custom dictionary words may be added to the [wordlist.txt](./wordlist.txt) file. Any word appended to this file will automatically be cleared for spelling.
