@@ -561,6 +561,7 @@ Below procedure provides steps to configure bootstrap virtual machines based on 
 
 * Execute  below commands to install TKG CLI, Kubectl CLIs and Carvel tools
 
+
 <!-- /* cSpell:disable */ -->
 ```bash
 # Install required packages
@@ -588,6 +589,26 @@ do gunzip cli/$tool*.gz &&
   $tool version;
 done
 
+# ytt
+cd ./cli
+gunzip ytt-linux-amd64-v0.34.0+vmware.1.gz
+chmod ugo+x ytt-linux-amd64-v0.34.0+vmware.1 && mv ./ytt-linux-amd64-v0.34.0+vmware.1 /usr/local/bin/ytt
+
+# kapp
+cd ./cli
+gunzip kapp-linux-amd64-v0.37.0+vmware.1.gz
+chmod ugo+x kapp-linux-amd64-v0.37.0+vmware.1 && mv ./kapp-linux-amd64-v0.37.0+vmware.1 /usr/local/bin/kapp
+
+# kbld
+cd ./cli
+gunzip kbld-linux-amd64-v0.30.0+vmware.1.gz
+chmod ugo+x kbld-linux-amd64-v0.30.0+vmware.1 && mv ./kbld-linux-amd64-v0.30.0+vmware.1 /usr/local/bin/kbld
+
+# impkg
+cd ./cli
+gunzip imgpkg-linux-amd64-v0.10.0+vmware.1.gz
+chmod ugo+x imgpkg-linux-amd64-v0.10.0+vmware.1 && mv ./imgpkg-linux-amd64-v0.10.0+vmware.1 /usr/local/bin/imgpkg
+>>>>>>> main
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -604,11 +625,9 @@ done
 wget https://github.com/mikefarah/yq/releases/download/v4.13.4/yq_linux_amd64.tar.gz
 tar -xvf yq_linux_amd64.tar.gz && mv yq_linux_amd64 /usr/local/bin/yq
 ```
-<!-- /* cSpell:enable */ -->
 
 * Photon OS has docker installed by default, use below commands to start the service and enable it to start at system boot.
 
-<!-- /* cSpell:disable */ -->
 ```bash
 # Check Docker service status
 systemctl status docker 
@@ -619,11 +638,9 @@ systemctl start docker   
 # To start Docker Service at boot
 systemctl enable docker
 ```
-<!-- /* cSpell:enable */ -->
 
 * Ensure that the bootstrap machine is using [cgroup v1](https://man7.org/linux/man-pages/man7/cgroups.7.html) by running below command
 
-<!-- /* cSpell:disable */ -->
 ```bash
 docker info | grep -i cgroup
 
@@ -696,7 +713,6 @@ For the bootstrap machine to pull images from private image repository, the `TKG
 
 If your local image repository uses self-signed certificates, also add `TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE` to the global cluster configuration file. Provide the CA certificate in base64encoded format by executing `base64 -w 0 your-ca.crt`.
 
- <!-- /* cSpell:disable */ -->
 ```bash
 TKG_CUSTOM_IMAGE_REPOSITORY: custom-image-repository.io/yourproject
 TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY: false
@@ -859,7 +875,6 @@ You can also specify standard sizes for the control plane and worker node VMs, o
 Below is a sample file with the minimum required configurations. To know about all configuration file variables, see the Tanzu CLI Configuration File Variable Reference[https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html)
 Modify the parameters as per your requirements.
 
-<!-- /* cSpell:disable */ -->
 ```bash
 AVI_CONTROL_PLANE_HA_PROVIDER: "true"
 CLUSTER_CIDR: 100.96.0.0/11
@@ -889,7 +904,6 @@ VSPHERE_USERNAME: <vCenter-SSO-Username>
 WORKER_MACHINE_COUNT: <# of worker nodes to be deployed>
 WORKER_SIZE: small/medium/large/extra-large
 ```
-<!-- /* cSpell:enable */ -->
 
 Key configuration considerations while creating  Shared Service cluster config file
 
@@ -907,7 +921,6 @@ Key configuration considerations while creating  Shared Service cluster config 
 
 Following is an example of a modified Tanzu Kubernetes Grid shared service configuration file:
 
-<!-- /* cSpell:disable */ -->
 ```bash
 AVI_CONTROL_PLANE_HA_PROVIDER: "true"
 CLUSTER_CIDR: 100.96.0.0/11
@@ -937,7 +950,6 @@ VSPHERE_USERNAME: administrator@lab.vmw
 WORKER_MACHINE_COUNT: 1
 WORKER_SIZE: extra-large
 ```
-<!-- /* cSpell:enable */ -->
 
 Upon preparing the cluster configuration file, execute the following command to initiate the cluster deployment:
 
@@ -986,7 +998,6 @@ As per the architecture, workload clusters make use of a separate SE group (Serv
 Below is a sample file with the minimum required configurations to create a TKG workload cluster. To know about all configuration file variables, see the Tanzu CLI Configuration File Variable Reference[https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-config-reference.html)
 Modify the parameters as per your requirements.
 
-<!-- /* cSpell:disable */ -->
 ```bash
 CLUSTER_CIDR: 100.96.0.0/11
 SERVICE_CIDR: 100.64.0.0/13
@@ -1016,7 +1027,6 @@ CONTROLPLANE_SIZE: small/medium/large/extra-large
 WORKER_SIZE: small/medium/large/extra-large
 WORKER_MACHINE_COUNT: # of worker nodes to be deployed>
 ```
-<!-- /* cSpell:enable */ -->
 
 Key config considerations while creating  Workload cluster config file
 
@@ -1036,7 +1046,6 @@ Key config considerations while creating  Workload cluster config file
 
 Below is the modified TKG shared service config file
 
-<!-- /* cSpell:disable */ -->
 ```bash
 CLUSTER_CIDR: 100.96.0.0/11
 SERVICE_CIDR: 100.64.0.0/13
@@ -1066,7 +1075,6 @@ CONTROLPLANE_SIZE: large
 WORKER_SIZE: extra-large
 WORKER_MACHINE_COUNT: 3
 ```
-<!-- /* cSpell:enable */ -->
 
 Upon preparing the cluster configuration file, execute the following command to initiate the cluster deployment:
 
@@ -1089,7 +1097,6 @@ A separate SE group (Service Engine Group 2) and VIP Network (TKG Workload VIP/
 
 Below is the format of the AKODeploymentConfig yaml file.
 
-<!-- /* cSpell:disable */ -->
 ```yaml
 apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1
 kind: AKODeploymentConfig
@@ -1122,7 +1129,6 @@ spec:
   disableIngressClass: true
   serviceEngineGroup: <SERVICE ENGINE NAME>
 ```
-<!-- /* cSpell:enable */ -->
 
 Below is the sample AKODeploymentConfig with sample values in place, as per the below configuration, TKG management cluster will deploy AKO pod on any workload cluster that matches the label `type=workloadset01` and the AKO configuration will be as below
 
@@ -1130,7 +1136,6 @@ Below is the sample AKODeploymentConfig with sample values in place, as per the 
 * service engine Group: `tanzu-wkld-segroup-01`
 * VIP/data network: tkg_workload_vip_pg
 
-<!-- /* cSpell:disable */ -->
 ```yaml
 kind: AKODeploymentConfig
 apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1
@@ -1246,6 +1251,7 @@ Contour is required for the harbor, and Prometheus and Grafana packages
 
 2. Create below configuration file named `contour-data-values.yaml`
 
+
 <!-- /* cSpell:disable */ -->
 ```yaml
 ---
@@ -1277,7 +1283,6 @@ certificates:
   duration: 8760h
   renewBefore: 360h
 ```
-
 <!-- /* cSpell:enable */ -->
 
 <!-- markdownlint-disable MD029 -->
