@@ -81,7 +81,7 @@ provision a router that can create the network above.
 
 [Vyatta VyOS](https://vyos.io) is a lightweight network OS that provides packet
 forwarding and DHCP services. This section will guide you through setting up a
-simple Vyatta router in your lab that can simluate the reference architecture
+simple Vyatta router in your lab that can simulate the reference architecture
 network diagram.
 
 Out-of-scope alternatives:
@@ -102,7 +102,146 @@ Ensure that this VM:
 
 Confirm that the VM's settings looks like image below:
 
-![router settings](img/tko-on-vsphere/image103.png)
+```text
+interfaces {
+    ethernet eth0 {
+        address 10.213.234.4/24
+        address dhcp
+        description WAN
+        hw-id 00:50:56:be:00:50
+    }
+    ethernet eth1 {
+        address 172.16.10.1/24
+        description "NSX ALB Mgmt Network"
+        hw-id 00:50:56:be:ab:b5
+    }
+    ethernet eth2 {
+        address 172.16.40.1/24
+        description "TKG Management Network"
+        hw-id 00:50:56:be:1a:c0
+    }
+    ethernet eth3 {
+        address 172.16.50.1/24
+        description "TKG Mgmt VIP Network"
+        hw-id 00:50:56:be:49:98
+    }
+    ethernet eth4 {
+        address 172.16.80.1/24
+        description "TKG Cluster VIP Network"
+        hw-id 00:50:56:be:10:08
+    }
+    ethernet eth5 {
+        address 172.16.70.1/24
+        description "TKG Workload VIP Network"
+        hw-id 00:50:56:be:38:77
+    }
+    ethernet eth6 {
+        address 172.16.60.1/24
+        description "TKG Workload Segment"
+        hw-id 00:50:56:be:01:3b
+    }
+    loopback lo {
+    }
+}
+nat {
+    source {
+        rule 1 {
+            description "allow nat outbound"
+            outbound-interface eth0
+            translation {
+                address masquerade
+            }
+        }
+    }
+}
+protocols {
+    static {
+        route 0.0.0.0/0 {
+            next-hop 10.213.234.1 {
+            }
+        }
+    }
+}
+service {
+    dhcp-server {
+        dynamic-dns-update
+        shared-network-name tkg-mgmt-network {
+            subnet 172.16.40.0/24 {
+                default-router 172.16.40.1
+                name-server 10.213.234.254
+                range 0 {
+                    start 172.16.40.200
+                    stop 172.16.40.252
+                }
+            }
+        }
+        shared-network-name tkg-workload-network {
+            name-server 10.213.234.254
+            subnet 172.16.60.0/24 {
+                default-router 172.16.60.1
+                name-server 10.213.234.254
+                range 0 {
+                    start 172.16.60.200
+                    stop 172.16.60.252
+                }
+            }
+        }
+    }
+    ssh {
+        port 22
+    }
+}
+system {
+    config-management {
+        commit-revisions 100
+    }
+    conntrack {
+        modules {
+            ftp
+            h323
+            nfs
+            pptp
+            sip
+            sqlnet
+            tftp
+        }
+    }
+    console {
+        device ttyS0 {
+            speed 115200
+        }
+    }
+    host-name vyos
+    login {
+        user vyos {
+            authentication {
+                encrypted-password $6$MBzikxAbGIo/RM10$U9.9fcL0ry/brmlDPyQHVm/7xxIQERcr5/KBrAQN3iJijRXKsRtyPqpaB7j8cGH35T2kycWMxtGgPlcUHxqOZ.
+                plaintext-password ""
+            }
+        }
+    }
+    name-server 10.192.2.10
+    name-server 10.192.2.11
+    ntp {
+        server time1.vyos.net {
+        }
+        server time2.vyos.net {
+        }
+        server time3.vyos.net {
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level info
+            }
+            facility protocols {
+                level debug
+            }
+        }
+    }
+}
+```
 
 Pay close attention to the MAC addresses assigned to each interface, as you'll
 need them later.
@@ -244,7 +383,7 @@ set nat source rule 1 translation address masquerade
 
 Finally, configure the router so that any traffic from nodes in the network
 going outbound go through your external network's gateway. In this example, our
-externl gateway is on `10.213.234.1`:
+external gateway is on `10.213.234.1`:
 
 ```text
 set protocols static route 0.0.0.0/0 next-hop 10.213.234.1
@@ -1369,7 +1508,7 @@ In order to install Harbor, ensure that cert-manager and contour user packages a
 7. Confirm that the harbor package has been installed, the status must change to “Reconcile succeeded”
 
     `tanzu package installed list -A | grep harbor`
-<!-- markdownlint-ensable MD029 -->
+<!-- markdownlint-enable MD029 -->
 
 * * *
 
