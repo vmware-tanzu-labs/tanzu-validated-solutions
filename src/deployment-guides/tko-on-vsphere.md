@@ -76,9 +76,8 @@ After you have created the network entries, the network section in your SDDC mus
 > ✅ You can skip this section if the port groups created above are already
 > routable in your vSphere cluster.
 
-vSphere distributed switches operate at Layer 2, i.e. they do not talk IP.
-Therefore, you might need to provision a router that can create the network
-above.
+vSphere distributed switches operate at Layer 2. Therefore, you might need to
+provision a router that can create the network above.
 
 [Vyatta VyOS](https://vyos.io) is a lightweight network OS that provides packet
 forwarding and DHCP services. This section will guide you through setting up a
@@ -88,7 +87,7 @@ network diagram.
 Out-of-scope alternatives:
 
 * VMware NSX-T
-* [Enable IP packet forwarding](https://linuxconfig.org/how-to-turn-on-off-ip-forwarding-in-linux)
+* [Enable IP packet forwarding](https://linuxhint.com/enable_ip_forwarding_ipv4_debian_linux/)
 
 [Download](https://vyos.net/get/nightly-builds/) the ISO for the latest rolling
 release and [follow the
@@ -97,14 +96,13 @@ to install it onto an ESXi VM.
 
 Ensure that this VM:
 
-* Has at least two vCPUs (more is better),
-* Has one NIC connected to a network you can access from the outside,
+* Has at least two vCPUs,
 * Has one NIC per port group created above (there should be six total), and
 * That all NICs are para-virtual VMXNET NICs
 
 Confirm that the VM's settings looks like image below:
 
-![router settings](images/tko-on-vsphere/vyos-router-settings.png)
+![router settings](img/tko-on-vsphere/image103.png)
 
 Pay close attention to the MAC addresses assigned to each interface, as you'll
 need them later.
@@ -1250,7 +1248,7 @@ Contour is required for the harbor, and Prometheus and Grafana packages
 
 <!-- /* cSpell:disable */ -->
 ```yaml
-*--
+---
 infrastructure_provider: vsphere
 namespace: tanzu-system-ingress
 contour:
@@ -1624,7 +1622,7 @@ Now, If you have a multi-cluster or hybrid-cloud application, you can connect, s
 
 ### Troubleshooting
 
-#### `tanzu management-cluster create` is stuck! HALP
+#### `tanzu management-cluster create` is stuck
 
 There are numerous reasons why this might happen. This sub-section lists some
 common pitfalls encountered during this step.
@@ -1723,7 +1721,7 @@ tail -f /var/lib/avi/log/*
 **NOTE**: Some of the log message you'll see are labelled as `WARNING`s but are
 really errors. Investigate closely.
 
-#### Some packages fail to install with `tanzu cluster create`
+##### Some packages fail to install with `tanzu cluster create`
 
 If you see errors like this after running `tanzu cluster create`:
 
