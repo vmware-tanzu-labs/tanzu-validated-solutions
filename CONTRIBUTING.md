@@ -17,6 +17,15 @@ block of code to your `$HOME/.gitconfig` file:
   cs = commit --signoff
 ```
 
+> ✅ GitHub will not allow you to sign off commits with a personal email
+> if you have chosen to [keep your commits
+> private](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-email-preferences/setting-your-commit-email-address).
+> To work-around this without disabling this feature, add a working email address
+> that you are okay to use for signing off to commit but
+> **do not add it to your profile.**
+>
+> If you wish to sign off com
+
 ## Contribution Flow
 
 This is a rough outline of what a contributor's workflow looks like:
