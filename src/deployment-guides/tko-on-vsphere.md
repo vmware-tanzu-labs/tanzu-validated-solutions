@@ -1589,7 +1589,7 @@ Now, If you have a multi-cluster or hybrid-cloud application, you can connect, s
 
 ### Troubleshooting
 
-#### `tanzu management-cluster create` is stuck! HALP
+#### `tanzu management-cluster create` is stuck
 
 There are numerous reasons why this might happen. This sub-section lists some
 common pitfalls encountered during this step.
