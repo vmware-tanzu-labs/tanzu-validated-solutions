@@ -87,7 +87,7 @@ network diagram.
 Out-of-scope alternatives:
 
 * VMware NSX-T
-* [Enable IP packet forwarding](https://linuxconfig.org/how-to-turn-on-off-ip-forwarding-in-linux)
+* [Enable IP packet forwarding](https://linuxhint.com/enable_ip_forwarding_ipv4_debian_linux/)
 
 [Download](https://vyos.net/get/nightly-builds/) the ISO for the latest rolling
 release and [follow the
@@ -103,7 +103,7 @@ Ensure that this VM:
 
 Confirm that the VM's settings looks like image below:
 
-![router settings](images/tko-on-vsphere/vyos-router-settings.png)
+![router settings](img/tko-on-vsphere/image103.png)
 
 Pay close attention to the MAC addresses assigned to each interface, as you'll
 need them later.
