@@ -561,7 +561,6 @@ Below procedure provides steps to configure bootstrap virtual machines based on 
 
 * Execute  below commands to install TKG CLI, Kubectl CLIs and Carvel tools
 
-
 <!-- /* cSpell:disable */ -->
 ```bash
 # Install required packages
@@ -608,7 +607,6 @@ chmod ugo+x kbld-linux-amd64-v0.30.0+vmware.1 && mv ./kbld-linux-amd64-v0.30.0+v
 cd ./cli
 gunzip imgpkg-linux-amd64-v0.10.0+vmware.1.gz
 chmod ugo+x imgpkg-linux-amd64-v0.10.0+vmware.1 && mv ./imgpkg-linux-amd64-v0.10.0+vmware.1 /usr/local/bin/imgpkg
->>>>>>> main
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1169,7 +1167,6 @@ spec:
       disableIngressClass: true
   serviceEngineGroup: tanzu-wkld-segroup-01
 ```
-
 <!-- /* cSpell:enable */ -->
 
 Once you have the AKO configuration file ready, use kubectl command to set the context to TKG management cluster and use below command to list the available `AKODeploymentConfig`.
@@ -1251,7 +1248,6 @@ Contour is required for the harbor, and Prometheus and Grafana packages
 
 2. Create below configuration file named `contour-data-values.yaml`
 
-
 <!-- /* cSpell:disable */ -->
 ```yaml
 ---
@@ -1283,7 +1279,6 @@ certificates:
   duration: 8760h
   renewBefore: 360h
 ```
-<!-- /* cSpell:enable */ -->
 
 <!-- markdownlint-disable MD029 -->
 3. Using below command to capture the available Contour version
