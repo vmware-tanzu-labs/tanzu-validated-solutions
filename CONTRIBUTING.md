@@ -12,6 +12,7 @@ This is a rough outline of what a contributor's workflow looks like:
 - Create a topic branch from where you want to base your work
 - Make commits of logical units
 - Make sure your commit messages are in the proper format (see below)
+- Test locally
 - Push your changes to a topic branch in your fork of the repository
 - Submit a pull request
 
@@ -21,6 +22,7 @@ Example:
 git remote add upstream https://github.com/vmware/@(project).git
 git checkout -b my-new-feature main
 git commit -a
+docker-compose run --rm tests
 git push origin my-new-feature
 ```
 
