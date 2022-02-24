@@ -262,8 +262,8 @@ Once confirmed, assign this interface with a static IP address in its subnet:
 
 ```text
 configure
-set interface lo
-set interface ethernet eth0 address 10.213.234.4
+set interface loopback lo # Might already exist.
+set interface ethernet eth0 address 10.213.234.4/24
 set interfaces ethernet eth0 description WAN
 ```
 
