@@ -103,6 +103,7 @@ configure
 set interface loopback lo # Might already exist
 set interface ethernet eth0 address 10.213.234.4/24
 set interfaces ethernet eth0 description WAN
+set protocols static route 0.0.0.0/0 next-hop 10.213.234.1
 ```
 
 Next, turn on SSH:
@@ -120,6 +121,16 @@ save
 
 Run `ifconfig eth0` again. Verify that its `inet` address matches the IP address
 you provided earlier (`10.213.234.4` in this case).
+
+Next, verify that your router can communicate with the Internet by using
+`traceroute` to a known IP address, like 1.1.1.1:
+
+```text
+traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
+ 1  10.213.234.1 (10.213.234.1)  0.257 ms  0.248 ms  0.224 ms
+...more hops
+15  1.1.1.1 (1.1.1.1)  5.170 ms 172.68.188.20 (172.68.188.20)  5.717 ms 1.1.1.1 (1.1.1.1)  5.179 ms
+```
 
 Next, SSH into the router from your machine:
 
