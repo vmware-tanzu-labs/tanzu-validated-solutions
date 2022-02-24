@@ -32,6 +32,8 @@ Ensure that your environment has the following general requirements:
 
 The following table provides example entries for the required port groups. Create network entries with the port group name, VLAN ID, and CIDRs that are specific to your environment.
 
+
+
 | Network Type                 | DHCP Service              | Description & Recommendations            |
 | ---------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | NSX ALB Management Network   | Optional                  | NSX ALB controllers and SEs will be attached to this network. <br> Use static IPs for the NSX ALB controllers. <br> The Service Engine’s management network can obtain IP from DHCP.                                                                                  |
@@ -98,8 +100,8 @@ Once confirmed, assign this interface with a static IP address in its subnet:
 
 ```text
 configure
-set interface lo
-set interface ethernet eth0 address 10.213.234.4
+set interface loopback lo # Might already exist
+set interface ethernet eth0 address 10.213.234.4/24
 set interfaces ethernet eth0 description WAN
 ```
 
