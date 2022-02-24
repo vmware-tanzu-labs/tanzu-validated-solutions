@@ -250,7 +250,8 @@ Next, go into the vCenter portal and connect to the VM's console. Log in with
 the username `vyos` and the password `vyos`.
 
 Next, configure your WAN interface. We'll assume that the externally-accessible
-network is on subnet `10.213.234.0/24`
+network is on subnet `10.213.234.0/24` whose Internet gateway is
+`10.213.234.1`.
 
 First, run `ifconfig eth0`. Take note of the MAC address for this interface. In vCenter,
 ensure that the NIC created for this VM with this MAC address is connected to
@@ -265,6 +266,7 @@ configure
 set interface loopback lo # Might already exist.
 set interface ethernet eth0 address 10.213.234.4/24
 set interfaces ethernet eth0 description WAN
+set protocols static route 0.0.0.0/0 next-hop 10.213.234.1
 ```
 
 Next, turn on SSH:
@@ -282,6 +284,16 @@ save
 
 Run `ifconfig eth0` again. Verify that its `inet` address matches the IP address
 you provided earlier (`10.213.234.4` in this case).
+
+Next, verify that you can reach the Internet with `traceroute` and a known
+IP address, like Cloudflare's 1.1.1.1:
+
+```text
+traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
+ 1  10.213.234.1 (10.213.234.1)  0.257 ms  0.248 ms  0.224 ms
+...more hops
+15  1.1.1.1 (1.1.1.1)  5.170 ms 172.68.188.20 (172.68.188.20)  5.717 ms 1.1.1.1 (1.1.1.1)  5.179 ms
+```
 
 Next, SSH into the router from your machine:
 
