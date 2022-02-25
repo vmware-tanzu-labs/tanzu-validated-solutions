@@ -423,9 +423,9 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
    - Select the **Management Network**. This network interface is used by the Service Engines to connect with the Controller.
    - Leave the **Template Service Engine Group** empty.
    - **Management Network IP Address Management**: Select **DHCP Enabled** if DHCP is available on the vSphere port groups.
-   - If DHCP is not available, enter the **IP Subnet**, IP address range (**Add Static IP Address Pool**), **Default Gateway** for the Management Network, then click **Ne**Next**.
+   - If DHCP is not available, enter the **IP Subnet**, IP address range (**Add Static IP Address Pool**), **Default Gateway** for the Management Network, then click **Next**.
 
-   ![](./img/tko-on-vsphere-with-tanzu/image103.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image16.jpg)
 
 1. Verify that the health of Default-Cloud is green.
 
@@ -436,6 +436,12 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
   Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
 
   ![](./img/tko-on-vsphere-with-tanzu/image2.jpg)
+
+
+  > If you are running through this guide in a test environment and do not have
+  > a license to apply, select "Enterprise Tier" to use a 60-day trial license.
+  >
+  > ![](./img/tko-on-vsphere-with-tanzu/image104.png)
 
 1. Configure NTP settings if you want to use an internal NTP server.
 
@@ -485,6 +491,14 @@ To configure the Controller cluster,
   You are automatically logged out of the controller node you are currently logged in. Enter the cluster IP in a browser to see the cluster formation task details.
 
   ![](./img/tko-on-vsphere-with-tanzu/image35.jpg)
+
+  > ✅ You might not see the image above while the cluster initializes. This is
+  > okay.
+
+  Once the controller cluster has been deployed, visit **Administration** >
+  **Controller** > **Nodes** to ensure that all nodes are green.
+
+  ![](./img/tko-on-vsphere-with-tanzu/image105.png)
 
   After the Controller cluster is deployed, use the Controller cluster IP for doing any additional configuration. Do not use the individual Controller node IP.
 
@@ -570,6 +584,10 @@ This document uses an IP pool for the VIP network.
 To configure the VIP network,
 
 1. Navigate to **Infrastructure > Networks** and locate the network that provides the virtual IP addresses.
+
+> Navigate to **Infrastructure** > **Cloud Resources** > **Networks** if you do
+> not see **Networks** in the top-level left nav.
+
 1. Click the edit icon to edit the network settings.
 
   ![](./img/tko-on-vsphere-with-tanzu/image22.jpg)
@@ -577,6 +595,14 @@ To configure the VIP network,
 1. Click **Add Subnet**.
 
 1. In **IP Subnet**, specify the VIP network subnet CIDR.
+
+> ✅ The Avi controller will attempt to find a subnet corresponding to the
+> network selected. There is a chance that its CIDR range or netmask
+> might be incorrect.
+>
+> If that's the case, check the
+> "Exclude Discovered Subnets for Virtual Service Placement" checkbox
+> to remove this discovered subnet from the list of available subnets.
 
 1. Click **Add Static IP Address Pool** to specify the IP address pool for the VIPs and Service Engine. The range must be a subset of the network CIDR configured in **IP Subnet**.
   ![](./img/tko-on-vsphere-with-tanzu/image21.jpg)
