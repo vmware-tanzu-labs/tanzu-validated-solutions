@@ -139,157 +139,166 @@ Next, SSH into the router from your machine:
 ssh vyos@10.213.234.4
 ```
 
-Once connected, configure the rest of the interface. First, run `ifconfig` to
+Once connected, configure the rest of the interfaces. First, run `ifconfig` to
 see which device corresponds to each MAC address. Take note of this.
 
 Next, enter configuration mode:
 
 ```text
-Confirm that the VM's settings looks like image below:
-
-```text
-interfaces {
-    ethernet eth0 {
-        address 10.213.234.4/24
-        address dhcp
-        description WAN
-        hw-id 00:50:56:be:00:50
-    }
-    ethernet eth1 {
-        address 172.16.10.1/24
-        description "NSX ALB Mgmt Network"
-        hw-id 00:50:56:be:ab:b5
-    }
-    ethernet eth2 {
-        address 172.16.40.1/24
-        description "TKG Management Network"
-        hw-id 00:50:56:be:1a:c0
-    }
-    ethernet eth3 {
-        address 172.16.50.1/24
-        description "TKG Mgmt VIP Network"
-        hw-id 00:50:56:be:49:98
-    }
-    ethernet eth4 {
-        address 172.16.80.1/24
-        description "TKG Cluster VIP Network"
-        hw-id 00:50:56:be:10:08
-    }
-    ethernet eth5 {
-        address 172.16.70.1/24
-        description "TKG Workload VIP Network"
-        hw-id 00:50:56:be:38:77
-    }
-    ethernet eth6 {
-        address 172.16.60.1/24
-        description "TKG Workload Segment"
-        hw-id 00:50:56:be:01:3b
-    }
-    loopback lo {
-    }
-}
-nat {
-    source {
-        rule 1 {
-            description "allow nat outbound"
-            outbound-interface eth0
-            translation {
-                address masquerade
-            }
-        }
-    }
-}
-protocols {
-    static {
-        route 0.0.0.0/0 {
-            next-hop 10.213.234.1 {
-            }
-        }
-    }
-}
-service {
-    dhcp-server {
-        dynamic-dns-update
-        shared-network-name tkg-mgmt-network {
-            subnet 172.16.40.0/24 {
-                default-router 172.16.40.1
-                name-server 10.213.234.254
-                range 0 {
-                    start 172.16.40.200
-                    stop 172.16.40.252
-                }
-            }
-        }
-        shared-network-name tkg-workload-network {
-            name-server 10.213.234.254
-            subnet 172.16.60.0/24 {
-                default-router 172.16.60.1
-                name-server 10.213.234.254
-                range 0 {
-                    start 172.16.60.200
-                    stop 172.16.60.252
-                }
-            }
-        }
-    }
-    ssh {
-        port 22
-    }
-}
-system {
-    config-management {
-        commit-revisions 100
-    }
-    conntrack {
-        modules {
-            ftp
-            h323
-            nfs
-            pptp
-            sip
-            sqlnet
-            tftp
-        }
-    }
-    console {
-        device ttyS0 {
-            speed 115200
-        }
-    }
-    host-name vyos
-    login {
-        user vyos {
-            authentication {
-                encrypted-password $6$MBzikxAbGIo/RM10$U9.9fcL0ry/brmlDPyQHVm/7xxIQERcr5/KBrAQN3iJijRXKsRtyPqpaB7j8cGH35T2kycWMxtGgPlcUHxqOZ.
-                plaintext-password ""
-            }
-        }
-    }
-    name-server 10.192.2.10
-    name-server 10.192.2.11
-    ntp {
-        server time1.vyos.net {
-        }
-        server time2.vyos.net {
-        }
-        server time3.vyos.net {
-        }
-    }
-    syslog {
-        global {
-            facility all {
-                level info
-            }
-            facility protocols {
-                level debug
-            }
-        }
-    }
-}
+configure
 ```
 
-Pay close attention to the MAC addresses assigned to each interface, as you'll
-need them later.
+then repeat the block below for each interface.
+
+```text
+set interface eth1 address 172.16.10.1/24
+# Name this after the port group for each subnet
+set interface eth1 description "nsx_alb_management_pg"
+```
+
+Run `show interface ethernet` once done. Confirm that your result looks something like
+the below:
+
+```text
+ ethernet eth0 {
+     address 10.213.234.4/24
+     description WAN
+     hw-id 00:50:56:be:3c:b9
+ }
+ ethernet eth1 {
++    address 172.16.80.1/27
++    description "NSX ALB Management Network"
+     hw-id 00:50:56:be:9a:f9
+ }
+ ethernet eth2 {
++    address 172.16.81.1/27
++    description "TKG Management Network"
+     hw-id 00:50:56:be:85:fc
+ }
+ ethernet eth3 {
++    address 172.16.82.1/27
++    description "TKG VIP Network"
+     hw-id 00:50:56:be:b5:fc
+ }
+ ethernet eth4 {
++    address 172.16.83.1/27
+     hw-id 00:50:56:be:6b:c9
+ }
+[edit]
+```
+
+Next, enable the DHCP service and create two DHCP pools:
+
+<!-- markdownlint-disable-->
+```text
+set service dhcp-server dynamic-dns-update
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 default-router 172.16.80.1
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 range 0 start 172.16.80.200
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 range 0 stop 172.16.80.252
+set service dhcp-server shared-network-name nsx-alb-mgmt-network name-server 8.8.8.8
+set service dhcp-server shared-network-name nsx-alb-mgmt-network name-server 4.4.4.4
+
+set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24
+set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 default-router 172.16.81.1
+set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 range 0 start 172.16.81.200
+set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 range 0 stop 172.16.81.252
+set service dhcp-server shared-network-name tkg-mgmt-network name-server 8.8.8.8
+set service dhcp-server shared-network-name tkg-mgmt-network name-server 4.4.4.4
+
+set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24
+set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 default-router 172.16.82.1
+set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 range 0 start 172.16.82.200
+set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 range 0 stop 172.16.82.252
+set service dhcp-server shared-network-name tkg-workload-network name-server 8.8.8.8
+set service dhcp-server shared-network-name tkg-workload-network name-server 4.4.4.4
+```
+<!-- markdownlint-enable-->
+
+Confirm that this is correct with `show service dhcp-server`. Your output should
+look like the below:
+
+```
+ shared-network-name nsx-alb-mgmt-network {
+     authoritative
+     name-server 10.213.234.252
+     subnet 172.16.80.0/24 {
+         default-router 172.16.80.1
+         domain-name tkg.local
+         domain-search tkg.local,pez.vmware.com
+         name-server 10.213.234.252
+         range 0 {
+             start 172.16.80.200
+             stop 172.16.80.252
+         }
+     }
+ }
+ shared-network-name tkg-mgmt-network {
+     authoritative
+     domain-name tkg.local
+     domain-search tkg.local,pez.vmware.com
+     name-server 10.213.234.252
+     name-server 10.192.2.10
+     name-server 10.192.2.11
+     subnet 172.16.81.0/24 {
+         default-router 172.16.81.1
+         range 0 {
+             start 172.16.81.200
+             stop 172.16.81.252
+         }
+     }
+ }
+ shared-network-name tkg-workload-network {
+     authoritative
+     subnet 172.16.82.0/24 {
+         default-router 172.16.82.1
+         domain-name tkg.local
+         domain-search tkg.local,pez.vmware.com
+         name-server 10.213.234.252
+         name-server 10.192.2.10
+         name-server 10.192.2.11
+         range 0 {
+             start 172.16.82.200
+             stop 172.16.82.252
+         }
+     }
+ }
+```
+
+Next, enable NAT so that machines connected to these networks can access the
+Internet through the externally-accessible interface:
+
+```text
+set nat source rule 1 description "allow nat outbound"
+set nat source rule 1 outbound-interface eth0
+set nat source rule 1 translation address masquerade
+```
+
+Confirm that this is correct with `show nat`. Your output should look like the
+below:
+
+```text
++source {
++    rule 1 {
++        description "allow nat outbound"
++        outbound-interface eth0
++        translation {
++            address masquerade
++        }
++    }
++}
+[edit]
+```
+
+Finally, commit and save your changes.
+
+```sh
+commit
+save
+```
+
+You can terminate your SSH session once finished.
+
 
 ### <a id=firewall-requirements> </a> Firewall Requirements
 
