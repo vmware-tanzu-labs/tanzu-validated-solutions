@@ -394,13 +394,17 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
 1. Click **Save** to exit the post-deployment configuration wizard.
    You are directed to a Dashboard view on the controller.
 
-1. Navigate to **Infrastructure > Clouds** and edit **Default-Cloud**.
+1. Navigate to **Infrastructure > Clouds** and click on the gear to convert the Cloud Type **Default-Cloud**.
+   Select **VMware vCenter/vSphere ESX** as the infrastructure type and click **Yes, Continue**.
 
-  ![](./img/tko-on-vsphere-with-tanzu/image7.jpg)
+  ![](./img/tko-on-vsphere-with-tanzu/image100.png)
 
-1. Select **VMware vCenter/vSphere ESX** as the infrastructure type and click **Next**.
+1. Configure the Infrastructure settings.
+   1. Provide the Username, Password, and DNS or IP address for your vCenter
+      instance.
+   2. Leave everything else as is, then click "Next"
 
-  ![](./img/tko-on-vsphere-with-tanzu/image13.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image101.png)
 
 1. Configure the Data Center settings.
 
@@ -410,7 +414,7 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
       - Select **DHCP Enabled** if DHCP is available on the vSphere port groups.
       - Leave the option unselected if you want the Service Engine interfaces to use only static IP addresses. You can configure them individually for each network.
 
-   1. For Virtual Service Placement, select **Prefer Static Routes vs Directly Connected Network**
+   1. For Virtual Service Placement, select **Prefer Static Routes vs Directly Connected Network**, then click **Next**.
 
     ![](./img/tko-on-vsphere-with-tanzu/image77.jpg)
 
@@ -419,9 +423,9 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
    - Select the **Management Network**. This network interface is used by the Service Engines to connect with the Controller.
    - Leave the **Template Service Engine Group** empty.
    - **Management Network IP Address Management**: Select **DHCP Enabled** if DHCP is available on the vSphere port groups.
-   - If DHCP is not available, enter the **IP Subnet**, IP address range (**Add Static IP Address Pool**), **Default Gateway** for the Management Network.
+   - If DHCP is not available, enter the **IP Subnet**, IP address range (**Add Static IP Address Pool**), **Default Gateway** for the Management Network, then click **Ne**Next**.
 
-   ![](./img/tko-on-vsphere-with-tanzu/image16.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image103.jpg)
 
 1. Verify that the health of Default-Cloud is green.
 
