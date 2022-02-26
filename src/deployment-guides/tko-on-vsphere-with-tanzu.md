@@ -87,6 +87,9 @@ Ensure that this VM:
 Next, go into the vCenter portal and connect to the VM's console. Log in with
 the username `vyos` and the password `vyos`.
 
+Next, install VyOS onto the machine's disk. Type `install image`, follow the
+instructions, then reboot.
+
 Next, configure your WAN interface. We'll assume that the externally-accessible
 network is on subnet `10.213.234.0/24`
 
