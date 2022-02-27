@@ -492,7 +492,7 @@ To configure the Controller cluster,
 
   The Controller cluster setup starts. The Controller nodes are rebooted in the process. It takes approximately 10-15 minutes for cluster formation to complete.
 
-  You are automatically logged out of the controller node you are currently logged in. Enter the cluster IP in a browser to see the cluster formation task details.
+  You are automatically logged out of the controller node you are currently logged into. Enter the cluster IP in a browser to see the cluster formation task details.
 
   ![](./img/tko-on-vsphere-with-tanzu/image35.jpg)
 
