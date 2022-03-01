@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    tkg.tanzu.vmware.com/addon-type: authentication/pinniped
+  finalizers:
+  - tkg.tanzu.vmware.com/addon
+  labels:
+    clusterctl.cluster.x-k8s.io/move: ""
+    tkg.tanzu.vmware.com/addon-name: pinniped
+    # replace with CLUSTER_NAME from Azure KeyVault
+    tkg.tanzu.vmware.com/cluster-name: va-use2-tkgm14-poc
+  # replace CLUSTER_NAME
+  name: CLUSTER_NAME-pinniped-addon
+  namespace: tkg-system
+type: tkg.tanzu.vmware.com/addon
+stringData:
+ overlays.yaml: |
+   #@ load("@ytt:overlay", "overlay")
+   #@overlay/match by=overlay.subset({"kind": "Service", "metadata": {"name": "pinniped-supervisor", "namespace": "pinniped-supervisor"}})
+   ---
+   #@overlay/replace
+   metadata:
+     name: pinniped-supervisor
+     namespace: pinniped-supervisor
+     annotations:
+       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+   #@overlay/replace
+   spec:
+     type: LoadBalancer
+     selector:
+       app: pinniped-supervisor
+     ports:
+       - name: https
+         protocol: TCP
+         port: 443
+         targetPort: 8443
+ values.yaml: |
+   #@data/values
+   #@overlay/match-child-defaults missing_ok=True
+   ---
+   infrastructure_provider: azure
+   tkg_cluster_role: management

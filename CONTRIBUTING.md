@@ -54,7 +54,7 @@ If you need to squash changes into an earlier commit, you can use:
 ``` shell
 git add .
 git commit --fixup <commit>
-git rebase -i --autosquash main
+git rebase -i --autosquash upstream/main
 git push --force-with-lease origin my-new-feature
 ```
 
