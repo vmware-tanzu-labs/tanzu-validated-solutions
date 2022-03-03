@@ -51,7 +51,7 @@ The following describes the steps to create your AWS environment and configure y
 	<!-- /* cSpell:disable */ -->
 
 	```bash
-	WORKING_DIR=`pwd`/tkg-vpc
+	WORKING_DIR="$(pwd)"/tkg-vpc
 	mkdir -p $WORKING_DIR
 	```
 	<!-- /* cSpell:enable */ -->
@@ -197,7 +197,7 @@ After doing the network configuration, complete the steps described in this sect
 	chmod 400 tkgkp.pem
 
 	# Find an AMI for your region https://cloud-images.ubuntu.com/locator/ec2/ (20.04)
-	aws ec2 run-instances --image-id ami-036d46416a34a611c --count 1 --instance-type t2.medium --key-name tkg-kp --security-group-ids  $(jq -r .GroupId $WORKING_DIR/sg_jumpbox_ssh)   --subnet-id $(jq -r .Subnet SubnetId $WORKING_DIR/subnet-pub-a)  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=tkg-jumpbox}]' --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=64}' > $WORKING_DIR/instance_jb_starting
+	aws ec2 run-instances --image-id ami-036d46416a34a611c --count 1 --instance-type t2.medium --key-name tkg-kp --security-group-ids  $(jq -r .GroupId $WORKING_DIR/sg_jumpbox_ssh)   --subnet-id $(jq -r .Subnet.SubnetId $WORKING_DIR/subnet-pub-a)  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=tkg-jumpbox}]' --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=64}' > $WORKING_DIR/instance_jb_starting
 	```
 	<!-- /* cSpell:enable */ -->
 
@@ -276,9 +276,9 @@ After doing the network configuration, complete the steps described in this sect
 	kind: AWSCluster
 	spec:
 	#@overlay/match missing_ok=True
-    controlPlaneLoadBalancer:
+        controlPlaneLoadBalancer:
 	#@overlay/match missing_ok=True
-       scheme: "internal"
+           scheme: "internal"
 
 	EOF
 	```
