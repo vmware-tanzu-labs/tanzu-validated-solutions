@@ -8,32 +8,45 @@ The following VMware SaaS services provide additional Kubernetes lifecycle manag
 
 ## <a id=tmc> </a> Tanzu Mission Control
 
-Tanzu Mission Control (TMC) is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds. It provides operators with a single control point to give developers the independence they need to drive business forward, while enabling consistent management and operations across environments for increased security and governance.
+Tanzu Mission Control (TMC) is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds. It gives you a single control point to drive business forward, while enabling consistent management and operations across environments for increased security and governance.
 
-We recommended attaching the shared services and workload clusters to Tanzu Mission Control as it enables you to manage your global portfolio of Kubernetes clusters from a centralized a centralized administrative interface.
+You can manage your global portfolio of Kubernetes clusters from a centralized administrative interface by performing the following Tanzu Mission Control operations.
+* [Registering Tanzu Kubernetes Grid management cluster](#tmc-tkg-mgmt)
+* [Attaching the shared services and workload clusters](#tmc-tkg-wl)
+
 
 If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control.
 
-### Attach a Tanzu Kubernetes Cluster to Tanzu Mission Control
+### Managing Tanzu Kubernetes Cluster lifecycle from Tanzu Mission Control
 
-Attaching a workload or shared services cluster involves the following:
+Managing Tanzu Kubernetes Clusters lifecycle from Tanzu Mission Control involves the following:
 
-1. Register the cluster name with the Tanzu Mission Control cluster agent service.
-2. Install the cluster agent extensions on the cluster.
+1. Registering the cluster name with the Tanzu Mission Control cluster agent service.
+2. Installing the cluster agent extensions on the cluster.
 
-#### Prerequisites
-Before attaching a Tanzu Kubernetes Grid cluster in Tanzu Mission Control, complete the following:
+### Prerequisites
+Before managing Tanzu Kubernetes Grid clusters lifecycle from Tanzu Mission Control, complete the following:
 
-- Review [About Getting Started with VMware Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-getstart/GUID-6BCCD353-CE6A-494B-A1E4-72304DC9FA7F.html) for information about setting up and using VMware Tanzu Mission Control.
-* You have a subscription to Tanzu Mission Control.
+* Review [About Getting Started with VMware Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-getstart/GUID-6BCCD353-CE6A-494B-A1E4-72304DC9FA7F.html) for information about setting up and using VMware Tanzu Mission Control.
+* Ensure you have a subscription to Tanzu Mission Control.
 * Create a cluster group in Tanzu Mission Control.
 * Create a workspace in the Tanzu Mission Control.
 * Create the policies that are appropriate for your Tanzu Kubernetes Grid deployment.
 * Create a provisioner. A provisioner helps you deploy Tanzu Kubernetes Grid clusters across multiple different platforms, such as AWS and VMware vSphere.
-* Deploy Tanzu Kubernetes Grid workload clusters with the production plan.
+* Deploy Tanzu Kubernetes Grid management and workload clusters with the production plan.
 
-### Attach a Tanzu Kubernetes Grid Workload Cluster in Tanzu Mission Control
-Registering a Tanzu Kubernetes Grid management cluster in Tanzu Mission Control is not supported. However, you can register Tanzu Kubernetes Grid workload clusters for life-cycle management.
+
+ ### <a id=tmc-tkg-mgmt> </a>  Register a Tanzu Kubernetes Grid Management Cluster with Tanzu Mission Control
+
+After you have deployed your management cluster through the Tanzu Kubernetes Grid installer interface or the Tanzu CLI, follow these instructions in the Tanzu Mission Control.
+
+* [Register a Management Cluster with Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EB507AAF-5F4F-400F-9623-BA611233E0BD.html)
+
+* (Optional) After you successfully register a management cluster, you can add any existing Tanzu Kubernetes Grid clusters that are currently managed by the management cluster to Tanzu Mission Control
+
+
+### <a id=tmc-tkg-wl> </a>  Attach a Tanzu Kubernetes Grid Workload Cluster in Tanzu Mission Control
+You can register Tanzu Kubernetes Grid workload clusters for life-cycle management. Follow these steps to attach a workload cluster:
 
 1.  Log in to Tanzu Mission Control from [VMware Cloud Services](https://console.cloud.vmware.com).
 2.  In the left navigation pane of the Tanzu Mission Control console, click **Clusters > Attach Cluster**.  
@@ -102,13 +115,13 @@ Do the following steps to create a proxy configuration object in Tanzu Mission C
 
 ## <a id=to> </a> Tanzu Observability
 
-Tanzu Observability (TO) delivers full-stack observability across containerized cloud applications, Kubernetes health, and cloud infrastructure. The solution is consumed through a software-as-a-Service (SaaS) subscription model managed by VMware. This SaaS model allows the solution to scale to meet your metrics requirements without the need to maintain the solution itself.
+Tanzu Observability (TO) delivers full-stack observability across containerized cloud applications, Kubernetes health, and cloud infrastructure. The solution is consumed through a Software-as-a-Service (SaaS) subscription model managed by VMware. This SaaS model allows the solution to scale to meet your metrics requirements without the need to maintain the solution itself.
 
 ### Set up Tanzu Observability to Monitor a Tanzu Kubernetes Clusters
 
-This setup for monitoring Tanzu Kubernetes Grid clusters with Tanzu Observability is done on Tanzu Mission Control. Tanzu Mission Control provides a common management layer across Kubernetes clusters to configure multiple policies. Tanzu Mission Control also enables the integration of the Kubernetes clusters with other SaaS solutions Tanzu Service Mesh.
+This setup for monitoring Tanzu Kubernetes Grid clusters with Tanzu Observability is done on Tanzu Mission Control. Tanzu Mission Control provides a common management layer across Kubernetes clusters to configure multiple policies. Tanzu Mission Control also enables the integration of the Kubernetes clusters with other SaaS solutions such as Tanzu Service Mesh.
 
-#### Prerequisites
+### Prerequisites
 Before doing the setup, ensure the following:
 
 * An active Tanzu Mission Control subscription.
@@ -117,7 +130,7 @@ Before doing the setup, ensure the following:
 * A Service Account in Tanzu Observability to enable communication between Tanzu Observability and Tanzu Mission Control.
 * Tanzu Observability is enabled on your organization. If Tanzu Observability is not enabled, enable it by navigating to the **Administration > Integrations** tab in Tanzu Mission Control.  
 
-#### Register Tanzu Kubernetes Grid Workload Cluster with Tanzu Observability
+### Register Tanzu Kubernetes Grid Workload Cluster with Tanzu Observability
 
 To integrate Tanzu Observability on a cluster attached to Tanzu Mission Control, do the following:  
 
@@ -171,7 +184,7 @@ VMware Tanzu Service Mesh (TSM) is an enterprise-class service mesh solution tha
 ### Onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh
 You can onboard Tanzu Service Mesh with or without Tanzu Mission Control.
 
-#### Prerequisites
+### Prerequisites
 
 * (Optional) An active Tanzu Mission Control subscription.  Required only if you intend to onboard a cluster to Tanzu Service Mesh via Tanzu Mission Control.
 	* Ensure that the cluster to be onboarded to Tanzu Service Mesh is attached to Tanzu Mission Control.
@@ -185,7 +198,7 @@ You can onboard Tanzu Service Mesh with or without Tanzu Mission Control.
 * If you want the cluster to connect to Tanzu Service Mesh through a proxy server, make sure that you know the details of the proxy configuration, such as the type of proxy in use (transparent or explicit), the protocol (HTTP or HTTPS), the host name or IP address of the proxy server, and the port number.
 * If your corporate proxy server is configured to use a certificate for secure TLS connections, make sure that you know the location of the certificate file. The Tanzu Service Mesh agent on the cluster will use the certificate to connect to the proxy server and trust the connection.
 
-#### Onboard without Tanzu Mission Control
+### Onboard without Tanzu Mission Control
 
 Do the following to onboard a cluster to Tanzu Service Mesh without Tanzu Mission Control integration.
 
@@ -247,7 +260,7 @@ The Tanzu Service Mesh console displays information about the infrastructure of 
 
 If you have a multi-cluster or hybrid-cloud application, you can connect, secure, and manage the services in the application across the clusters with a global namespace. For more information, see [Connect Services with a Global Namespace](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/using-tanzu-service-mesh-guide/GUID-8D483355-6F58-4AAD-9EAF-3B8E0A87B474.html).
 
-#### Onboard with Tanzu Mission Control
+### Onboard with Tanzu Mission Control
 
 Do the following to onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh using Tanzu Mission Control:
 
