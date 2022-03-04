@@ -13,7 +13,7 @@ The following reference design is based on the architecture and components descr
 
 ## Cluster Creation and Management
 
-This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous Kubernetes clusters on Microsoft Azure using Kubernetes [Cluster API](https://cluster-api.sigs.k8s.io/). Tanzu Kubernetes Grid functions through the creation of a management cluster which houses the Cluster API.  The Cluster API then interacts with the infrastructure provider to service workload Kubernetes cluster lifecycle requests. 
+This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous Kubernetes clusters on Microsoft Azure using Kubernetes [Cluster API](https://cluster-api.sigs.k8s.io/). Tanzu Kubernetes Grid functions through the creation of a management cluster which houses the Cluster API.  The Cluster API then interacts with the infrastructure provider to service workload Kubernetes cluster lifecycle requests.
 
 The Tanzu Kubernetes Grid user interface (UI) provides a guided deployment experience tailored Microsoft Azure. The Tanzu Kubernetes Grid installer runs either on an operator's own machine (it uses Docker) or through a bootstrap machine or a jump box.
 
@@ -61,7 +61,7 @@ Tanzu Kubernetes Grid is deployed as an Infrastructure as a Service (IaaS) solut
 
 ### Tanzu Clusters
 
-A Kubernetes cluster is made up of several components that act as a control plane of the cluster and a set of supporting components and worker nodes that actually help run the deployed workloads. There are two types of clusters in the Tanzu Kubernetes Grid setup: management cluster and workload cluster. The Tanzu Kubernetes Grid management cluster hosts all the Tanzu Kubernetes Grid components used to manage workload clusters. Workload clusters, which are spun up by Tanzu Kubernetes Grid administrators, run the containerized applications. Cluster security is a shared responsibility between Tanzu Kubernetes Grid cluster administrators, developers, and operators who run applications on Tanzu Kubernetes Grid clusters. 
+A Kubernetes cluster is made up of several components that act as a control plane of the cluster and a set of supporting components and worker nodes that actually help run the deployed workloads. There are two types of clusters in the Tanzu Kubernetes Grid setup: management cluster and workload cluster. The Tanzu Kubernetes Grid management cluster hosts all the Tanzu Kubernetes Grid components used to manage workload clusters. Workload clusters, which are spun up by Tanzu Kubernetes Grid administrators, run the containerized applications. Cluster security is a shared responsibility between Tanzu Kubernetes Grid cluster administrators, developers, and operators who run applications on Tanzu Kubernetes Grid clusters.
 
 ## Network Design
 
@@ -97,7 +97,7 @@ Consider the following about the network designs:
 
 5. Do not make assumptions or provide designs for the outer perimeter of your network design. You may use Azure or third-party services. The outer perimeter network design should not affect the network designs for Tanzu Kubernetes operations on Microsoft Azure.
 
-6. Integrating with SaaS services, such as Tanzu Mission Control and Tanzu Observability, requires that the Tanzu Kubernetes clusters have outbound SSL based connectivity to the Internet. Add a  rule to allow port 443. Add the rule to the Network Security Groups (NSGs) that are applied to the subnet where the control plane VMs are deployed. Allow port 443 to all targets until VMware can provide a more detailed list of targeted CNAMES or IP ranges. 
+6. Integrating with SaaS services, such as Tanzu Mission Control and Tanzu Observability, requires that the Tanzu Kubernetes clusters have outbound SSL based connectivity to the Internet. Add a  rule to allow port 443. Add the rule to the Network Security Groups (NSGs) that are applied to the subnet where the control plane VMs are deployed. Allow port 443 to all targets until VMware can provide a more detailed list of targeted CNAMES or IP ranges.
 
 
 ## Required Microsoft Azure Components
@@ -122,7 +122,7 @@ The Tanzu Kubernetes Grid documentation suggests that you assign the Contributor
 
 ### Virtual Network
 
-Because Tanzu for Kubernetes operations is deployed as an IaaS solution on Azure, the Kubernetes clusters have to exist within the boundary of an Azure Virtual Network (VNet). Therefore, place the bootstrap machine, which is used to run the Tanzu CLI, in the same VNet as the Tanzu management cluster. Place the management cluster in its own subnet. 
+Because Tanzu for Kubernetes operations is deployed as an IaaS solution on Azure, the Kubernetes clusters have to exist within the boundary of an Azure Virtual Network (VNet). Therefore, place the bootstrap machine, which is used to run the Tanzu CLI, in the same VNet as the Tanzu management cluster. Place the management cluster in its own subnet.
 
 The workload clusters can exist within the same VNet, but in different subnets, or in a completely separate VNet. However, ensure that the  Workload VNet is peered with the VNet where the Management Cluster is deployed.
 
@@ -169,7 +169,7 @@ The Azure Monitor set of services are automatically turned on for all customers 
 The following Microsoft Azure components are optional for deploying the reference architecture.
 
 ### Bastion Host
-Microsoft Azure creates an Azure Bastion service by default. You can use the service as a jump box to the bootstrap machine. 
+Microsoft Azure creates an Azure Bastion service by default. You can use the service as a jump box to the bootstrap machine.
 
 This reference design uses a bootstrap machine that does cluster deployments using the Tanzu CLI. However, your security requirements may not allow access from your cluster to a bootstrap machine inside your firewall. In such cases, after the initial cluster creation, you can connect your clusters to Tanzu Mission Control for lifecycle management.
 
@@ -206,12 +206,12 @@ Similar to Azure Container Registry, there are many options for publicly availab
 
 ## Global Cluster Lifecycle Management
 
-Attaching clusters to Tanzu Mission Control allows you to manage your global portfolio of Kubernetes clusters. 
+Attaching clusters to Tanzu Mission Control allows you to manage your global portfolio of Kubernetes clusters.
 
-**Note:** Ensure that Tanzu Kubernetes clusters have outbound SSL based connectivity to the Internet. 
+**Note:** Ensure that Tanzu Kubernetes clusters have outbound SSL based connectivity to the Internet.
 
 You can do the following with Tanzu Mission Control:
-  
+
   * Centralized lifecycle management: managing the creation and deletion of workload clusters using registered management or supervisor clusters
   * Centralized management: viewing the inventory of clusters and the health of clusters and their components
   * Authorization: centralized authentication and authorization with federated identity from multiple sources (e.g., AD, LDAP, and SAML), plus an easy-to-use policy engine for granting the right access to the right users across teams
@@ -251,7 +251,7 @@ The following diagram shows the Pinniped authentication flow with an external ID
 
 ![Authentication with pinniped](img/tko-on-azure/authwith-Pinniped.png)
 
-See the [Pinniped Docs](https://pinniped.dev/docs/) for more information on how to integrate Pinniped into Tanzu Kubernetes Grid with OIDC providers and LDAP. 
+See the [Pinniped Docs](https://pinniped.dev/docs/) for more information on how to integrate Pinniped into Tanzu Kubernetes Grid with OIDC providers and LDAP.
 
 We recommend the following best practices for managing identities in Tanzu Kubernetes Grid provisioned clusters:
 
@@ -266,7 +266,7 @@ We recommend the following best practices for managing identities in Tanzu Kuber
 
 Observability can be significantly enhanced by using [Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability). Wavefront is a VMware SaaS system which is used to collect and display metrics and trace data from the full stack platform as well as from applications. The service provides the ability to create alerts tuned by advanced analytics, assist in the troubleshooting of systems and to understand the impact of running production code.
 
-**Note:** Ensure that Tanzu Kubernetes clusters have outbound SSL based connectivity to the Internet. 
+**Note:** Ensure that Tanzu Kubernetes clusters have outbound SSL based connectivity to the Internet.
 
 Wavefront is used to collect data from components in Azure, from Kubernetes, and from applications running within Kubernetes.
 
@@ -305,3 +305,6 @@ Tanzu also includes fluent bit for integration with logging platforms such as vR
 Tanzu Kubernetes Grid on Azure offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating cloud based Kubernetes platforms in a consolidated production environment. This validated approach will result in a production quality installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.  
 
 This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, configuring your security groups, load balancing, workload compute alignment and other capabilities. Observability is quickly established and easily consumed with Wavefront.
+
+# Deployment Instructions
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on Microsoft Azure](../deployment-guides/tko-on-azure.md). 
