@@ -3,6 +3,9 @@ locals {
     StartDate = timestamp()
   }
   tags = merge(data.azurerm_subscription.this.tags, var.additional_tags, local.tagOverride)
+
+  vault_name                = var.vault_name != "" ? var.vault_name : data.terraform_remote_state.keeper.outputs.key_vault
+  vault_resource_group_name = var.vault_resource_group_name != "" ? var.vault_resource_group_name : data.terraform_remote_state.keeper.outputs.keeper_resource_group_name
 }
 
 #--------------------------------------

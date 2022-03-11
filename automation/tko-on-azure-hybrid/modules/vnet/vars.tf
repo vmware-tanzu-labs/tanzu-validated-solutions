@@ -15,3 +15,11 @@ variable "boot_diag_sa_name" {
   type        = string
   description = "The name assigned to the boot diag storage account."
 }
+
+variable "CreateNetworkWatcher" {
+  type = number
+}
+
+variable "CreateNetworkWatcherRG" {
+  type = number
+}

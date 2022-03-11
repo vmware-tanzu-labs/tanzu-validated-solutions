@@ -1,8 +1,3 @@
-module "myip" {
-  source  = "4ops/myip/http"
-  version = "1.0.0"
-}
-
 #---------------------------------------------
 #  RESOURCE GROUP
 #---------------------------------------------
@@ -30,6 +25,7 @@ module "akv" {
   random_hex     = random_id.this.hex
   tags           = local.tags
   acl_ip         = module.myip.address
+  acl_obj_id     = local.acl_obj_id
 }
 
 resource "random_id" "this" {
@@ -37,6 +33,26 @@ resource "random_id" "this" {
     sa_id = azurerm_resource_group.this.id
   }
   byte_length = 2
+}
+
+resource "local_file" "netsec_prov" {
+  content  = local.netsec_prov
+  filename = "../1_netsec/provider.tf"
+}
+
+resource "local_file" "dns_prov" {
+  content  = local.dns_prov
+  filename = "../2_dns/provider.tf"
+}
+
+resource "local_file" "bootstrap_prov" {
+  content  = local.bootstrap_prov
+  filename = "../3_bootstrap/provider.tf"
+}
+
+resource "local_file" "bootstrap_data" {
+  content  = local.bootstrap_data
+  filename = "../3_bootstrap/data.tf"
 }
 
 resource "azurerm_storage_account" "this" {
@@ -57,7 +73,7 @@ resource "azurerm_storage_account" "this" {
     bypass         = ["Logging", "Metrics", "AzureServices"]
     # virtual_network_subnet_ids = [data.azurerm_subnet.infra.id]
     # VNETs don't exist yet, so chicken and egg problem
-    ip_rules = [module.myip.address]
+    ip_rules = [local.ipAcl]
   }
 
   tags = azurerm_resource_group.this.tags

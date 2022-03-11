@@ -1,7 +1,3 @@
-output "bindvm_name" {
-  value = module.bindvm[*].vm.name
-}
-
-output "bindvm_ip" {
-  value = module.bindvm[*].vnic.private_ip_address
+output "bindvms" {
+  value = { for n in range(var.bindvms) : module.bindvm[n].vm.name => module.bindvm[n].vnic.private_ip_address }
 }

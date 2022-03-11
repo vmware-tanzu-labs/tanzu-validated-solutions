@@ -44,9 +44,9 @@ resource "azurerm_subnet" "tier_net" {
 #  NSG CREATION
 #---------------------------------------------
 # Example rulesets including defaults
-#-------------   TKGm Node Subnet NSG    -------------
-resource "azurerm_network_security_group" "worker" {
-  name                = "${var.local_data.tkg_cluster_name}-node-nsg"
+#------------- Subnet NSGs    -------------
+resource "azurerm_network_security_group" "tier" {
+  name                = "${var.local_data.tkg_cluster_name}-controlplane-nsg"
   location            = var.local_data.location
   resource_group_name = var.local_data.resource_group_name
 
@@ -59,8 +59,8 @@ resource "azurerm_network_security_group" "worker" {
   }
 }
 
-#------------- Worker Subnet NSG Rules -------------
-resource "azurerm_network_security_rule" "Worker_allow_HealthProbe_in" {
+#------------- Subnet NSG Rules -------------
+resource "azurerm_network_security_rule" "tier_allow_HealthProbe_in" {
   name                        = "Allow_Azure_Healthprobes"
   priority                    = 100
   direction                   = "Inbound"
@@ -71,10 +71,10 @@ resource "azurerm_network_security_rule" "Worker_allow_HealthProbe_in" {
   destination_address_prefix  = "*"
   destination_port_range      = "*"
   resource_group_name         = var.local_data.resource_group_name
-  network_security_group_name = azurerm_network_security_group.worker.name
+  network_security_group_name = azurerm_network_security_group.tier.name
 }
 
-resource "azurerm_network_security_rule" "Worker_allow_Select_in" {
+resource "azurerm_network_security_rule" "tier_allow_Select_in" {
   name                        = "Allow_Select"
   priority                    = 101
   direction                   = "Inbound"
@@ -85,11 +85,11 @@ resource "azurerm_network_security_rule" "Worker_allow_Select_in" {
   destination_address_prefix  = "*"
   destination_port_range      = "*"
   resource_group_name         = var.local_data.resource_group_name
-  network_security_group_name = azurerm_network_security_group.worker.name
+  network_security_group_name = azurerm_network_security_group.tier.name
 }
 
 # Block all public IPs from reaching inside except those rules above this one
-resource "azurerm_network_security_rule" "Worker_block_Internet_in" {
+resource "azurerm_network_security_rule" "tier_block_internet_in" {
   name                        = "Block_Internet_In"
   priority                    = 105
   direction                   = "Inbound"
@@ -100,25 +100,25 @@ resource "azurerm_network_security_rule" "Worker_block_Internet_in" {
   destination_address_prefix  = "*"
   destination_port_range      = "*"
   resource_group_name         = var.local_data.resource_group_name
-  network_security_group_name = azurerm_network_security_group.worker.name
+  network_security_group_name = azurerm_network_security_group.tier.name
 }
 
 # ER is ExpressRoute and represents anything except Internet IPs and anything else already allowed
-resource "azurerm_network_security_rule" "Worker_allow_ER_in" {
+resource "azurerm_network_security_rule" "tier_allow_er_in" {
   name                        = "Allow_ER_Inbound"
   priority                    = 110
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "*"
-  source_address_prefix       = "*"
+  source_address_prefix       = "*" # could be more specific such as RFC 1918 IPs from on-prem/VNETs
   source_port_range           = "*"
   destination_address_prefix  = "*"
   destination_port_range      = "*"
   resource_group_name         = var.local_data.resource_group_name
-  network_security_group_name = azurerm_network_security_group.worker.name
+  network_security_group_name = azurerm_network_security_group.tier.name
 }
 
-resource "azurerm_network_security_rule" "Worker_allow_All_out" {
+resource "azurerm_network_security_rule" "tier_allow_all_out" {
   name                        = "Allow_All_Outbound"
   priority                    = 100
   direction                   = "Outbound"
@@ -129,15 +129,15 @@ resource "azurerm_network_security_rule" "Worker_allow_All_out" {
   destination_address_prefix  = "*"
   destination_port_range      = "*"
   resource_group_name         = var.local_data.resource_group_name
-  network_security_group_name = azurerm_network_security_group.worker.name
+  network_security_group_name = azurerm_network_security_group.tier.name
 }
 
 #------------- NSG Flow Logs -------------
 resource "azurerm_network_watcher_flow_log" "tier" {
-  name                      = "flg-${azurerm_network_security_group.worker.name}"
+  name                      = "flg-${azurerm_network_security_group.tier.name}"
   network_watcher_name      = var.flow_log_data.nw_name
-  resource_group_name       = "NetworkWatcherRG"
-  network_security_group_id = azurerm_network_security_group.worker.id
+  resource_group_name       = var.flow_log_data.nw_rg_name
+  network_security_group_id = azurerm_network_security_group.tier.id
   storage_account_id        = var.flow_log_data.flow_log_sa_id
   enabled                   = true
 
@@ -162,10 +162,10 @@ resource "azurerm_network_watcher_flow_log" "tier" {
   }
 }
 
-#      ------------- NSG Worker Subnet Assocation -------------
-resource "azurerm_subnet_network_security_group_association" "worker" {
-  for_each = var.subnet_settings
+#      ------------- NSG Assocation (all others) -------------
+resource "azurerm_subnet_network_security_group_association" "tier" {
+  for_each = local.subnets
 
   subnet_id                 = azurerm_subnet.tier_net[each.key].id
-  network_security_group_id = azurerm_network_security_group.worker.id
+  network_security_group_id = azurerm_network_security_group.tier.id
 }

@@ -53,7 +53,7 @@ resource "azurerm_network_security_group" "this" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = module.myip.address
+    source_address_prefix      = local.ipAcl
     destination_address_prefix = "*"
   }
 
@@ -145,24 +145,28 @@ resource "azurerm_linux_virtual_machine" "this" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+    # offer     = "UbuntuServer"
+    # sku       = "18.04-LTS"
+    offer   = "0001-com-ubuntu-server-focal"
+    sku     = "20_04-lts-gen2"
+    version = "latest"
   }
 
   computer_name  = var.prefix_short
-  admin_username = "someone"
+  admin_username = var.user
   # admin_password                  = "secret"
   disable_password_authentication = true
 
   admin_ssh_key {
-    username   = "azureuser"
+    username   = var.user
     public_key = tls_private_key.this.public_key_openssh
   }
 
   boot_diagnostics {
     storage_account_uri = data.azurerm_storage_account.bootdiag.primary_blob_endpoint
   }
+
+  custom_data = data.cloudinit_config.this.rendered
 
   tags = azurerm_resource_group.this.tags
 
@@ -171,4 +175,10 @@ resource "azurerm_linux_virtual_machine" "this" {
       tags["StartDate"],
     ]
   }
+}
+
+resource "local_file" "bootstrap_priv_key" {
+  filename        = "${path.module}/bootstrap.pem"
+  file_permission = "0600"
+  content         = tls_private_key.this.private_key_pem
 }

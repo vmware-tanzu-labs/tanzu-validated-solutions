@@ -1,5 +1,3 @@
-data "azurerm_client_config" "current" {}
-
 variable "prefix" {}
 variable "prefix_short" {}
 variable "location" {}
@@ -8,6 +6,7 @@ variable "tenant_id" {}
 variable "random_hex" {}
 variable "tags" {}
 variable "acl_ip" {}
+variable "acl_obj_id" {}
 
 resource "azurerm_key_vault" "this" {
   name                        = "kv-${var.prefix}-${var.random_hex}"
@@ -30,7 +29,7 @@ resource "azurerm_key_vault" "this" {
 
   access_policy {
     tenant_id = var.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+    object_id = var.acl_obj_id
 
     key_permissions = [
       "Get",
@@ -47,7 +46,7 @@ resource "azurerm_key_vault" "this" {
 
   network_acls {
     bypass         = "AzureServices"
-    default_action = "Deny"
+    default_action = "Allow" # Currently "allowed" to support access from the VNET later which does not get added here at this early stage
     ip_rules       = [var.acl_ip]
   }
 }

@@ -2,6 +2,32 @@
 
 Based on the Reference Architecture, [TKO on Azure Hybrid-Cloud](../../src/reference-designs/tko-on-azure-hybrid.md)
 
+## !!! UPDATES [03/11/2022]
+
+Without refactoring this guide, let the following playbook inform this deployment kit's usage (**validation testing**):
+
+1. Apply Terraform code in 0_keepers
+    - `terraform apply -var="sub_id=..." -var="tenant_id=..."`
+    - _where ... above represent your respective values_
+
+1. Execute the run_cmd output instructions from 0_keepers
+    - OS requirements will vary
+    - e.g. `$env:ARM_ACCESS_KEY=(terraform output -raw access_key)`
+
+1. Apply Terraform code in 1_netsec
+    - `terraform apply -var="sub_id=..."`
+    - _where ... above represent your respective values_
+
+1. Apply Terraform code in 2_dns (as-needed)
+    - This option only applies if you need an non-Azure source to resolve Azure Private DNS
+    - `terraform apply -var="sub_id=..."`
+    - _where ... above represent your respective values_
+
+1. Apply Terraform code in 3_bootstrap
+    - `terraform apply -var="sub_id=..."`
+    - _where ... above represent your respective values_
+    - ssh_cmd output will vary by OS, so mind your rules (if you're on Windows, you'll probably have to fix the ACLs on this file)
+
 ## TLDR
 
 Modify provider.tf and/or terraform.tfvars as necessary for each TF config directory. Carry values from outputs or Key Vault into resultant config.yaml to then execute a command line deployment of the management cluster and others.

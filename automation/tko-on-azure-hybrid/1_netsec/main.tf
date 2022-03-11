@@ -18,10 +18,12 @@ resource "azurerm_resource_group" "rg" {
 #  RESOURCES
 #---------------------------------------------
 module "vnet_base" {
-  source            = "../modules/vnet"
-  local_data        = local.base_inputs
-  dns_list          = []
-  boot_diag_sa_name = var.boot_diag_sa_name
+  source                 = "../modules/vnet"
+  local_data             = local.base_inputs
+  dns_list               = var.dns_list
+  boot_diag_sa_name      = var.boot_diag_sa_name
+  CreateNetworkWatcher   = var.CreateNetworkWatcher
+  CreateNetworkWatcherRG = var.CreateNetworkWatcherRG
 }
 
 module "myip" {

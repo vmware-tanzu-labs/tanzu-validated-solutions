@@ -3,17 +3,17 @@
 #---------------------------------------------
 
 output "AZURE_CONTROL_PLANE_SUBNET_CIDR" {
-  value = local.tkgm_mgmtctrl_net
+  value = local.tkgm_mgmtctrl_net[0]
 }
 
 output "AZURE_CONTROL_PLANE_SUBNET_NAME" {
   # This value is regex matched with 1_netsec/user-subnets.tf to find the target cluster's 'controller' subnet.
-  value = element([for subnet in keys(module.general_tier.subnets) : subnet if length(regexall("mgmt", lower(subnet))) > 0], 0)
+  value = element([for subnet in keys(module.controlplane_sub.subnets) : subnet if length(regexall("mgmt", lower(subnet))) > 0], 0)
 }
 
 output "AZURE_NODE_SUBNET_NAME" {
   # This value is regex matched with 1_netsec/user-subnets.tf to find the target cluster's 'node' subnet.
-  value = element([for subnet in keys(module.tkgm_node.subnets) : subnet if length(regexall("mgmt", lower(subnet))) > 0], 0)
+  value = element([for subnet in keys(module.node_sub.subnets) : subnet if length(regexall("mgmt", lower(subnet))) > 0], 0)
 }
 
 output "AZURE_LOCATION" {
@@ -22,11 +22,11 @@ output "AZURE_LOCATION" {
 }
 
 output "AZURE_FRONTEND_PRIVATE_IP" {
-  value = cidrhost(local.tkgm_mgmtctrl_net, 4)
+  value = cidrhost(local.tkgm_mgmtctrl_net[0], 4)
 }
 
 output "AZURE_NODE_SUBNET_CIDR" {
-  value = local.tkgm_mgmtnode_net
+  value = local.tkgm_mgmtnode_net[0]
 }
 
 output "AZURE_SUBSCRIPTION_ID" {
@@ -51,4 +51,8 @@ output "AZURE_VNET_RESOURCE_GROUP" {
 
 output "CLUSTER_NAME" {
   value = var.tkg_cluster_name
+}
+
+output "boot_diag_sa_name" {
+  value = var.boot_diag_sa_name
 }
