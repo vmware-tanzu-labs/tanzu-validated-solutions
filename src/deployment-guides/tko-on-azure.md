@@ -27,7 +27,7 @@ Ensure that you have:
     - Contributor role in Microsoft Azure.
     - Resource group in Microsoft Azure.
 - An SSH key and the Base 64 encoded value of the public key. You will configure the Base 64 encoded value for the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file for deploying Tanzu Kubernetes Grid. How you generate the SSH key and how you encode the entire Public key is up to you. However, you will need to encode the public key before storing it within configuration file for deploying Tanzu Kubernetes Grid.
-* Access to Customer Connect and the available downloads for Tanzu Kubernetes Grid. To verify, go to [VMware Tanzu Kubernetes Grid Download Product](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652).
+* Access to Customer Connect and the available downloads for Tanzu Kubernetes Grid. To verify, go to [VMware Tanzu Kubernetes Grid Download Product](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-150&productId=988&rPId=73652).
 
 ## Overview of the Deployment steps
 1. [Set up your Microsoft Azure environment](#azure-environment)
@@ -257,16 +257,16 @@ sudo usermod -aG docker $USER
 
 # Downloading and Installing Tanzu CLI
 git clone https://github.com/z4ce/vmw-cli
-curl -o tmc 'https://tmc-cli.s3-us-west-2.amazonaws.com/tmc/0.4.0-fdabbe74/linux/x64/tmc'
+curl -o tmc 'https://tmc-cli.s3-us-west-2.amazonaws.com/tmc/0.4.3-fcb03104/linux/x64/tmcs'
 ./vmw-cli/vmw-cli ls vmware_tanzu_kubernetes_grid
-./vmw-cli/vmw-cli cp tanzu-cli-bundle-linux-amd64.tar
-./vmw-cli/vmw-cli cp kubectl-linux-v1.21.2+vmware.1.gz
+./vmw-cli/vmw-cli cp tanzu-cli-bundle-linux-amd64.tar.gz
+./vmw-cli/vmw-cli cp kubectl-linux-v1.22.5+vmware.1.gz
 
-tar -xvf tanzu-cli-bundle-linux-amd64.tar
+tar -xzvf tanzu-cli-bundle-linux-amd64.tar
 gzip -d kubectl-linux-v1.21.2+vmware.1.gz
 
-sudo install cli/core/v1.4.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
-tanzu plugin install --local cli all
+sudo install cli/core/v1.5.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+tanzu plugin sync
 sudo install kubectl-linux-v1.21.2+vmware.1 /usr/local/bin/kubectl
 
 # Azure CLI Install and VM Acceptance
@@ -301,7 +301,7 @@ You will use Tanzu CLI to deploy a management cluster and workload cluster.
     ```
     <!-- cSpell:enable -->   
 
-For additional product documentation on how to create the YAML configuration file and what each value corresponds to in Azure, see [Management Cluster Configuration for Microsoft Azure](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
+For additional product documentation on how to create the YAML configuration file and what each value corresponds to in Azure, see [Management Cluster Configuration for Microsoft Azure](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-config-azure.html).
 
 ## <a id=config-saas> </a> Configure SaaS Services
 The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features.
@@ -321,28 +321,28 @@ Tanzu Kubernetes Grid includes two types of packages, core packages and user-man
 
 #### Core Packages
 
-Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-core-index.html).
+Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-core-index.html).
 
 #### User-Managed Packages
 
 A user-managed package is an optional component of a Kubernetes cluster that you can install and manage with the Tanzu CLI. These packages are installed after cluster creation. User-managed packages are grouped into package repositories in the Tanzu CLI. If a package repository that contains user-managed packages is available in the target cluster, you can use the Tanzu CLI to install and manage any of the packages from that repository.
 
-Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cli-reference-packages.html).
+Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cli-reference-packages.html).
 
 We recommend installing the following packages:
 
-* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html)
+* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cert-manager.html)
 
-* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html)
+* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html)
 
-* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html)
+* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html)
 
-* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html)
+* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html)
 
-* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cni-multus.html)
+* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html)
 
-* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)
+* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html)
 
-* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html)
+* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html)
 
 If Harbor is required to take on a heavy load and store large images into the registry, you can install Harbor into a separate workload cluster.

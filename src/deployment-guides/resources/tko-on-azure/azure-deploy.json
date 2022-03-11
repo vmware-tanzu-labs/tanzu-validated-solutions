@@ -89,23 +89,88 @@
         },
         "vm_admin_pwd": {
             "type": "string"
+        },
+        "publicipname": {
+            "defaultValue": "tkg-public-ip",
+            "type": "String",
+            "metadata": {
+              "description": "Name of the NAT gateway public IP"
+            }
+          },
+        "publicipprefixname": {
+            "defaultValue": "tkg-public-ip-prefix",
+            "type": "String",
+            "metadata": {
+            "description": "Name of the NAT gateway public IP"
+            }
+      },
+      "natgatewayname": {
+        "defaultValue": "tkg-nat-gw",
+        "type": "String",
+        "metadata": {
+          "description": "Name of the NAT gateway"
         }
+      }
     },
+
     "variables": {
         "nsg_name_mgmt_worker": "[concat(parameters('mgmt-cluster-name'), '-node-nsg')]",
-        "nsg_name_workload_worker": "[concat(parameters('workload-cluster-name'), '-node-nsg')]"
+        "nsg_name_workload_worker": "[concat(parameters('workload-cluster-name'), '-node-nsg')]",
+        "nsg_name_mgmt_control_plane": "[concat(parameters('mgmt-cluster-name'), '-controlplane-nsg')]",
+        "nsg_name_workload_control_plane": "[concat(parameters('workload-cluster-name'), '-controlplane-nsg')]"
     },
     "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('publicipname')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+              "name": "Standard"
+            },
+            "properties": {
+              "publicIPAddressVersion": "IPv4",
+              "publicIPAllocationMethod": "Static",
+              "idleTimeoutInMinutes": 4
+            }
+          },
+        {
+            "type": "Microsoft.Network/natGateways",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('natgatewayname')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+              "name": "Standard"
+            },
+            "dependsOn": [
+              "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipname'))]",
+              "[resourceId('Microsoft.Network/publicIPPrefixes', parameters('publicipprefixname'))]"
+            ],
+            "properties": {
+              "idleTimeoutInMinutes": 4,
+              "publicIpAddresses": [
+                {
+                  "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicipname'))]"
+                }
+              ],
+              "publicIpPrefixes": [
+                {
+                  "id": "[resourceId('Microsoft.Network/publicIPPrefixes', parameters('publicipprefixname'))]"
+                }
+              ]
+            }
+        },      
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-11-01",
             "name": "[parameters('vnet_name_TKG')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_mgmt_control_plane'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_mgmt_control_plane'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_mgmt_worker'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_workload_control_plane'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_worker'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_control_plane'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_worker'))]",
+                "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
             ],
             "properties": {
                 "addressSpace": {
@@ -116,6 +181,9 @@
                         "name": "[parameters('subnet_name_Bootstrap')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_Bootstrap')]",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                              },
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
@@ -125,8 +193,11 @@
                         "name": "[parameters('subnet_name_MgmtControl')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_MgmtControl')]",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                              },
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_mgmt_control_plane'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_mgmt_control_plane'))]"
                             },
                             "serviceEndpoints": [],
                             "delegations": [],
@@ -138,6 +209,9 @@
                         "name": "[parameters('subnet_name_MgmtWorker')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_MgmtWorker')]",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                              },
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_mgmt_worker'))]"
                             },
@@ -151,8 +225,11 @@
                         "name": "[parameters('subnet_name_WorkloadControl')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_WorkloadControl')]",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                              },
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsg_name_workload_control_plane'))]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_control_plane'))]"
                             },
                             "serviceEndpoints": [],
                             "delegations": [],
@@ -164,6 +241,9 @@
                         "name": "[parameters('subnet_name_WorkloadWorker')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnet_cidr_WorkloadWorker')]",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways', parameters('natgatewayname'))]"
+                              },
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsg_name_workload_worker'))]"
                             },

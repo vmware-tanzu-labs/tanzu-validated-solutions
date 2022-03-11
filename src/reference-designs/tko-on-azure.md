@@ -7,7 +7,7 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
 The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
-> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.4 on Microsoft Azure.
+> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.5 on Microsoft Azure.
 
 ![Tanzu Standard component set](img/tko-on-azure/tkg-overview-azure.png)
 
@@ -73,14 +73,15 @@ We recommend using one of the following production-level network designs for you
 ### Same Virtual Network
 
 You can set up your networking such that the Tanzu Kubernetes Grid management cluster and workload clusters are in the same VNet as the bootstrap machine. Each cluster is in a separate subnet. The control plane and worker nodes are also placed in separate subnets.
-![TKG on Azure (Single VNet)](img/tko-on-azure/image005.png)
+![TKG on Azure (Single VNet)](img/tko-on-azure/one-vnet.png)
+<!-- https://lucid.app/lucidchart/7577d7c8-dcf4-4534-a277-5a5ef1f104ce/edit?invitationId=inv_bb0ed584-d577-4953-be4f-93b490403ec8 -->
 
 ### Separate Virtual Networks
 
 The following design uses a hub and spoke model. The Tanzu Kubernetes clusters are separated into different VNets. This network design requires that the corresponding VNets are peered with one another so that the management cluster can correctly communicate with the workload clusters. This approach is recommended by Microsoft.
 
-![TKG on Azure (Two VNets Peered)](img/tko-on-azure/image006.png)
-
+![TKG on Azure (Two VNets Peered)](img/tko-on-azure/two-vnets.png)
+<!-- https://lucid.app/lucidchart/7577d7c8-dcf4-4534-a277-5a5ef1f104ce/edit?invitationId=inv_bb0ed584-d577-4953-be4f-93b490403ec8 -->
 ### Considerations
 
 The network designs are based on a default Tanzu CLI deployment for a production-level installation. The designs use the default configuration values when running the Tanzu CLI. However, you have complete control over how many nodes are deployed within the workload clusters for both the control plane and worker nodes. You also determine the Azure components with which the clusters will integrate.
@@ -139,8 +140,8 @@ Before you create clusters, create a Network Security Group and apply it to the 
 Before you begin your deployment, it is important to ensure that the necessary pathways are open to all pieces of the clusters and that they are able to talk to one another. The following are the primary requirements:
 
 - **Bootstrap Machine/Subnet –** SSH and HTTPS Inbound/Outbound Internet, Secure Kubectl within VNet (6443)
-- **Control Plane VMs/Subnet –** HTTPS Inbound/Outbound to Internet and SSH and Secure Kubectl (22, 443, and 6443) Inbound/Outbound within the VNet
-- **Worker Node VMs/Subnet –** Secure Kubectl (6443) Inbound/Outbound within the VNet
+- **Control Plane VMs/Subnet –** HTTPS Inbound/Outbound to Internet and SSH and Secure Kubectl (22, 443, and 6443) Inbound/Outbound within the VNet. This NSG assigned to the subnet control plane must be [named exactly](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-azure.html#create-azure-nsgs-for-existing-vnet-3) `<CLUSTER-NAME>-controlplane-nsg` so that the cloud controller can find it to provision load balancers. 
+- **Worker Node VMs/Subnet –** Secure Kubectl (6443) Inbound/Outbound within the VNet. This NSG assigned to the node subnet must be named exactly `<CLUSTER-NAME>-node-nsg`so that the cloud controller can find it to provision load balancers.
 
 > **Note:** HTTPS traffic to the bootstrap machine and the control plane nodes is required so that they can download the necessary container images for the clusters to function properly.
 
@@ -177,12 +178,15 @@ This reference design uses a bootstrap machine that does cluster deployments usi
 
 Use of a public IP address for the Kubernetes API server is optional. You can host your Kubernetes API server on a private IP address. In fact, this reference design uses a private IP address. Access is provided through a public endpoint in a DMZ with a Web Application Firewall (WAF) or through some kind of VPN level connectivity, such as Express Route or Site-to-Site VPN with connectivity back to your on-premises network.
 
+When using a private cluster, if you do not have a corporate internet proxy, you will also need to define a NAT gateway for each subnet associated with your TKG clusters.
+
 > **Note**: Please keep in mind that the default deployment of Tanzu Kubernetes Grid creates public facing clusters. Make sure to set `AZURE_ENABLE_PRIVATE_CLUSTER` to `true` if you want to deploy your Kubernetes clusters on a private IP address.
+
 
 ## Container Registries
 There are numerous container registry options available, and you may already have one in place. Tanzu comes pre-packaged with its own registry, called Harbor, which can be made available directly within a Tanzu Kubernetes Grid workload cluster. If you are hosting your Kubernetes clusters on a private IP address as described in this reference design, the Harbor registry sits in a workload cluster in the same network architecture as all other clusters. This design allows only private traffic access to the container images.
 
-For more information, see [Deploy Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html).
+For more information, see [Deploy Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html).
 
 ### Azure Container Registry
 Microsoft Azure also provides a container registry as a service, called Azure Container Registry (ACR). This service can be deployed within your Azure subscription. It is deployed by default as a public service with a public endpoint. However, using Software Defined Networking (SDN) configurations, the Azure Container Registry can be linked directly into the Virtual Network where your Tanzu Kubernetes Grid clusters reside through a service called Private Endpoint. This limits your ACR to only be available to traffic originating from your Virtual Network, thereby creating a completely private deployment.
@@ -233,9 +237,9 @@ To attach your cluster for management through Tanzu Mission Control, navigate to
 
 Tanzu Kubernetes Grid requires load balancing for both the control plane and the workloads. Tanzu Kubernetes Grid on Azure uses Azure Load Balancers for control plane and workload clusters.
 
-For workloads, Tanzu Kubernetes Grid [Contour ingress controller package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html) can be used for layer 7 load balancing.
+For workloads, Tanzu Kubernetes Grid [Contour ingress controller package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html) can be used for layer 7 load balancing.
 
-In Tanzu Kubernetes Grid  you can optionally [deploy the external-dns package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html), which automates updating DNS records in Azure DNS associated with Ingress resources or LoadBalancer services. This can automate away toil associated with DNS record management for externally exposed services.
+In Tanzu Kubernetes Grid  you can optionally [deploy the external-dns package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html), which automates updating DNS records in Azure DNS associated with Ingress resources or LoadBalancer services. This can automate away toil associated with DNS record management for externally exposed services.
 
 ## Authentication with Pinniped
 
@@ -282,7 +286,7 @@ You can configure Tanzu Observability with an array of capabilities. The followi
 
 ### Metrics Monitoring with Prometheus and Grafana (Alternative Solution)
 
-Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-grafana.html) as an alternative on premise solution that can be used for monitoring kubernetes clusters.
+Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html) as an alternative on premise solution that can be used for monitoring kubernetes clusters.
 
 Prometheus operates by exposing scrapable metrics endpoints for various monitoring targets throughout your cluster. Metrics are ingested by polling the endpoints on a set interval which are then stored in a time-series database. Metrics data can be explored via the [Prometheus Query Language interface](https://prometheus.io/docs/prometheus/latest/querying/basics/).  
 
@@ -294,11 +298,11 @@ The Tanzu Kubernetes Grid extensions bundles contain instructions & manifests fo
 
 ![Tanzu Observability availability dashboard](img/tko-on-azure/tanzu-observability-availability-dashboard.png)
 
-Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-index.html). For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-user-managed-index.html)
+Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-index.html). For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-user-managed-index.html)
 
 ### Log Forwarding
 
-Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize LogInsight , elastic search and other logging aggregators. For information on configuring Fluent Bit to your logging provider, see [Implement Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html).  
+Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize LogInsight, elastic search and other logging aggregators. Details on configuring Fluent Bit to your logging provider can be found in the documentation [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html).  
 
 ## Summary
 
