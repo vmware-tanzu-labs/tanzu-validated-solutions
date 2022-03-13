@@ -497,7 +497,22 @@ To configure the Controller cluster,
   ![](./img/tko-on-vsphere-with-tanzu/image35.jpg)
 
   > ✅ You might not see the image above while the cluster initializes. This is
-  > okay.
+  > okay. You can use this terminal command to wait for the controller to become
+  > available:
+  >
+  > ```sh
+  > # Replace with your actual cluster IP
+  > controller_cluster_ip=172.16.80.10 
+  >
+  > while ! nc -z "$controller_cluster_ip";
+  > do
+  >   idx=$((idx+1));
+  >   printf "INFO: Waiting for Avi cluster to become available \
+  > (%s secs)\r" "$idx";
+  >   sleep 1;
+  > done
+  > printf "\n"
+  > ```
 
   Once the controller cluster has been deployed, visit **Administration** >
   **Controller** > **Nodes** to ensure that all nodes are green.
@@ -690,6 +705,10 @@ To deploy the Supervisor Cluster,
 1. Log in to the vSphere client and navigate to **Menu > Workload Management** and click **Get Started**.
 
   ![](./img/tko-on-vsphere-with-tanzu/image60.jpg)
+
+  > ✅ Add the license key for your vSphere with Tanzu installation above the
+  > Get Started box if prompted, or provide your information below if you do not
+  > have one yet to enable a trial license.
 
 1. Select the vCenter Server and Network.
 
