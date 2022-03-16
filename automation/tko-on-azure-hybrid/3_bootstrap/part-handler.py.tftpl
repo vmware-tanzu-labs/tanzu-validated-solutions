@@ -1,0 +1,18 @@
+#part-handler
+
+def list_types():
+  # return a list of mime-types that are handled by this module
+  return(["text/tanzu"])
+
+def handle_part(data,ctype,filename,payload):
+  import os
+  if ctype == "text/tanzu":
+    basedir = "/home/${user}"
+
+    try:
+      os.mkdir(basedir, 0o775)
+    except OSError:
+      pass
+
+    with open(os.path.join(basedir, filename), "w") as f:
+      f.write(payload)
