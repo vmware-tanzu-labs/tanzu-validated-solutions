@@ -1,9 +1,30 @@
 # Contributing to tanzu-validated-solutions
 
-The tanzu-validated-solutions project team welcomes contributions from the community. Before you start working with tanzu-validated-solutions, please
-read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be
-signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on
-as an open-source patch.
+The tanzu-validated-solutions project team welcomes contributions from the
+community. Before you start working with tanzu-validated-solutions, please read
+our [Developer Certificate of Origin](https://cla.vmware.com/dco). All
+contributions to this repository must be signed as described on that page using
+the `Signed-Off-By` commit header. Your signature certifies that you wrote the
+patch or have the right to pass it on as an open-source patch.
+
+Use `git commit --signoff` to sign your commits. We recommend adding an alias
+to your Git configuration file at `$HOME/.gitconfig` to make this easier. To
+create an alias (like `git cs` instead of `git commit --signoff`), add this
+block of code to your `$HOME/.gitconfig` file:
+
+```gitconfig
+[alias]
+  cs = commit --signoff
+```
+
+> ✅ GitHub will not allow you to sign off commits with a personal email
+> if you have chosen to [keep your commits
+> private](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-email-preferences/setting-your-commit-email-address).
+> To work-around this without disabling this feature, add a working email address
+> that you are okay to use for signing off to commit but
+> **do not add it to your profile.**
+>
+> If you wish to sign off com
 
 ## Contribution Flow
 
@@ -12,6 +33,7 @@ This is a rough outline of what a contributor's workflow looks like:
 - Create a topic branch from where you want to base your work
 - Make commits of logical units
 - Make sure your commit messages are in the proper format (see below)
+- Test locally
 - Push your changes to a topic branch in your fork of the repository
 - Submit a pull request
 
@@ -21,6 +43,7 @@ Example:
 git remote add upstream https://github.com/vmware/@(project).git
 git checkout -b my-new-feature main
 git commit -a
+docker-compose run --rm tests
 git push origin my-new-feature
 ```
 
