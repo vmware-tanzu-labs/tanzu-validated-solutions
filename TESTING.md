@@ -59,3 +59,13 @@ Alternatively, you may execute specific parts of the test suite with:
 ```bash
 $ act -j <spell-check|link-check|orphaned-content-check>
 ```
+
+You can also use Docker Compose to run these tests if you wish to not install `act`.
+Run this command to do so after installing Docker Compose:
+
+```sh
+docker-compose run --rm tests
+```
+
+This will execute all of the tests that are executed by GitHub Actions.
+
