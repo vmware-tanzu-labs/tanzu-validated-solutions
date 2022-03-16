@@ -1,0 +1,40 @@
+#---------------------------------------------
+#  TERRAFORM SETUP
+#---------------------------------------------
+
+terraform {
+  required_version = "~> 1.1"
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "= 2.98"
+    }
+    random = {
+      source = "hashicorp/random"
+      version = "~> 3.1.0"
+    }
+    null = {
+      source = "hashicorp/null"
+    }
+  }
+
+  backend "azurerm" {
+    storage_account_name = "${name}" # Azure Storage Account name created in 0_keepers (or otherwise provided) - must be in the subscription 
+    container_name       = "terraform-state"
+    key                  = "vmw/tkg/${location}-poc-dns.tfstate" # e.g. aesir/tkgm/use2-midgard-net.tfstate
+
+    # access_key = "" Pass via cmd line or environment vars (ARM_ACCESS_KEY)
+  }
+}
+
+provider "azurerm" {
+  subscription_id = var.sub_id
+
+  features {}
+}
+
+# provider "azuread" {
+#   version         = "= 0.10"
+#   subscription_id = var.sub_id
+# }
