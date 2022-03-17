@@ -2,9 +2,9 @@
 
 VMware Tanzu simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes operations on a vSphere environment backed by NSX-T.
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on a vSphere environment backed by NSX-T.
 
-The following reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
+The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
 ![Figure 1 - Tanzu for Kubernetes Operations](img/tko-on-vsphere-nsx/image26.png)
 
@@ -33,9 +33,9 @@ You can create three types of clusters in a Tanzu Kubernetes Grid environment
 
 The management cluster is a Kubernetes cluster that runs Cluster API operations on a specific cloud provider to create and manage workload clusters on that provider. The management cluster is also where you configure the shared and in-cluster services that the workload clusters use.
 
-You can deploy the Management cluster in two ways:
+You can deploy the management cluster in two ways:
 
-- Run the Tanzu Kubernetes Grid installer, a wizard interface that guides you through the process of deploying a management cluster. This is the recommended method if you are installing a Tanzu Kubernetes Grid Management cluster for the first time. The Tanzu Kubernetes Grid installer is tailored to a vSphere environment.
+- Run the Tanzu Kubernetes Grid installer, a wizard interface that guides you through the process of deploying a management cluster. This is the recommended method if you are installing a Tanzu Kubernetes Grid management cluster for the first time. The Tanzu Kubernetes Grid installer is tailored to a vSphere environment.
 - Create and edit YAML configuration files to deploy a management cluster with the CLI commands.
 
 ![TKG installer user interface for vSphere](img/tko-on-vsphere-nsx/image19.png)
@@ -47,7 +47,7 @@ Each Tanzu Kubernetes Grid instance can only have one shared services cluster. Y
 
 The Harbor service runs on a shared services cluster, to serve all the other clusters in an installation. The Harbor service requires the Contour service to also run on the shared services cluster.
 
-To deploy a shared services cluster, you create a configuration file that specifies the different options with which to deploy the cluster. You then run the `tanzu cluster create` command, specifying the configuration file in the `--file` option. 
+To deploy a shared services cluster, you create a configuration file that specifies the different options with which to deploy the cluster. You then run the `tanzu cluster create` command, specifying the configuration file in the `--file` option.
 
 After the cluster is created, add the `tanzu-services` label to the shared services cluster as its cluster role. This label identifies the shared services cluster to the management cluster and workload clusters. For example:
 
@@ -73,7 +73,7 @@ After the cluster is created, add the `tanzu-services` label to the shared servi
   - Tanzu Kubernetes Grid clusters control plane nodes
   - Pinniped
   - User managed packages, such as Harbor, deployed in shared services clusters
-  
+
 - For production based deployments, make use of **Prod** plan for both Tanzu Kubernetes Grid Management and shared services cluster. This deploys multiple control plane nodes and provides HA.
 - Set the control plane and worker nodes size for the management cluster to **Large**. This allows for the deployment of Cert Manager, Contour, and Harbor extensions and integrating the shared service cluster with Tanzu Mission Control and Tanzu Observability. See [Appendix A - Configure Node Sizes](#appendix-a) for more details.
 - If you are deploying Harbor in the shared services cluster without a publicly signed certificate, create the required overlays such that the Tanzu Kubernetes Grid cluster nodes trust the Harbor endpoint.
@@ -81,7 +81,7 @@ After the cluster is created, add the `tanzu-services` label to the shared servi
 ### Workload Cluster
 
 Your applications run on Tanzu Kubernetes workload clusters. These clusters can be attached to SaaS solutions such as Tanzu Mission Control, Tanzu Observability, and  Tanzu Service Mesh, which are part of the Tanzu for Kubernetes Operations stack.
- 
+
 When you deploy Tanzu Kubernetes (workload) clusters to vSphere, you must specify options in the cluster configuration file to connect to vCenter Server and identify the vSphere resources that the cluster will use. You can also specify standard sizes for the control plane and worker node VMs and configure the CPU, memory, and disk sizes for control plane and worker nodes explicitly. If you use custom image templates, you can identify which template to use to create node VMs.
 
 
@@ -91,9 +91,9 @@ When you deploy Tanzu Kubernetes (workload) clusters to vSphere, you must specif
   - Each Tanzu Kubernetes Grid workload cluster
   - VIP network for applications hosted on workload clusters
 - For Service Engine Group and VIP network for workload clusters:
-  * Create a separate Service Engine Group in NSX Advanced Load Balancer. Service engines part of this Service Engine Group provides load balancing service for applications hosted on workload clusters. 
-  * For setups with a small number of Tanzu Kubernetes workload clusters that each have a large number of nodes, it is recommended to use one dedicated Service Engine Group per cluster. 
-  * A Service Engine Group can be shared by any number of workload clusters as long as the sum of the number of distinct cluster node networks and the number of distinct cluster VIP networks is no bigger than 8. 
+  * Create a separate Service Engine Group in NSX Advanced Load Balancer. Service engines part of this Service Engine Group provides load balancing service for applications hosted on workload clusters.
+  * For setups with a small number of Tanzu Kubernetes workload clusters that each have a large number of nodes, it is recommended to use one dedicated Service Engine Group per cluster.
+  * A Service Engine Group can be shared by any number of workload clusters as long as the sum of the number of distinct cluster node networks and the number of distinct cluster VIP networks is no bigger than 8.
 	* All clusters can share a single VIP network or each cluster can have a dedicated VIP network.
 
 ## Network Overview
@@ -101,7 +101,7 @@ When you deploy Tanzu Kubernetes (workload) clusters to vSphere, you must specif
 ### General Topology
 
  For deployment of Tanzu Kubernetes Grid in the vSphere environment, we build separate logical segments for the Tanzu Kubernetes Grid management cluster, Tanzu Kubernetes Grid shared services cluster, Tanzu Kubernetes Grid workload clusters, NSX ALB management, Cluster-VIP segment for Control plane HA, Tanzu Kubernetes Grid management VIP/Data segment, and Tanzu Kubernetes Grid workload Data/VIP segment. The network reference design can be mapped into this general framework.
- 
+
 ![TKG General Network Layout](img/tko-on-vsphere-nsx/image21.png)
 
 ### Network Recommendations
@@ -122,7 +122,7 @@ This topology enables the following benefits:
  This reference design only allows the minimum connectivity between the Tanzu Kubernetes Grid clusters and NSX ALB to the vCenter Server.
 - Isolate and separate NSX ALB management network from the Tanzu Kubernetes Grid management segment and the Tanzu Kubernetes Grid workload segments.
 - Depending on the workload cluster type and use case, multiple workload clusters may leverage the same logical segments or new segments can be used for each workload cluster.
- 
+
  To isolate and separate Tanzu Kubernetes Grid workload cluster networking from each other, we recommend using separate logical segments for each workload cluster and configuring the required firewall between these networks. For more information, see [Firewall Recommendations](#firewall-reco).
 - Separate provider and tenant access to the Tanzu Kubernetes Grid environment.
   - Only provide administrators access to the Tanzu Kubernetes Grid management cluster. This prevents tenants from attempting to connect to the Tanzu Kubernetes Grid management cluster.
@@ -288,7 +288,7 @@ Using **other types of vSphere Datastores is also possible**. Tanzu Kubernetes G
 Starting with a single vSphere cluster, management and workload Kubernetes clusters can be **separated into different vSphere resource pools**. Using a resource pool lets you manage each Kubernetes cluster's CPU and memory limitations and reservations. However, it does not separate elements on the physical layer.
 
 This approach is ideal for functional trials, proofs-of-concepts, or production application deployments that do not require hardware separation.
- 
+
 ![TKG Management and Workload clusters on the same vSphere cluster](img/tko-on-vsphere-nsx/image8.png)
 
 ### Multi-clusters
@@ -338,15 +338,15 @@ Tanzu Mission Control is a centralized management platform for consistently oper
 
 It is recommended to attach the shared services and workload clusters into Tanzu Mission Control (TMC) as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters.
  If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to TMC and then attach the cluster using TMC UI/CLI
-**Note:** Registering Tanzu Kubernetes Grid 1.4 Management cluster to TMC is not supported in the current release.
+**Note:** Registering a Tanzu Kubernetes Grid 1.4 management cluster to Tanzu Mission Control is not supported.
 
- TMC can assist you with:
+ Tanzu Mission Control can assist you with the following:
 
 - **Centralized Lifecycle Management** - Managing the creation and deletion of workload clusters using registered management clusters.
 - **Centralized Monitoring** - Viewing the inventory of clusters and the health of clusters and their components.
 - **Authorization** - Centralizing authentication and authorization with federated identity from multiple sources such as AD, LDAP, or SAML. And, an easy-to-use **policy engine** for granting the right access to the right users across teams.
 - **Compliance** - Enforcing all clusters to apply the same set of policies.
-- **Data protection** - Using [Velero](https://velero.io/) through TMC to verify that your workloads and persistent volumes are being backed up.
+- **Data Protection** - Using [Velero](https://velero.io/) through TMC to verify that your workloads and persistent volumes are being backed up.
 
 ### Policy-Driven Cluster Management
 
@@ -384,11 +384,11 @@ Tanzu Kubernetes Grid includes observability with the **Prometheus** and **Grafa
 
 ### Metrics in Tanzu Observability
 
-You can significantly enhance observability by using VMware Tanzu Observability by Wavefront. Tanzu Observability is a VMware SaaS system which is used to collect and display metrics and trace data from the full stack platform as well as from applications. The service provides the ability to create alerts tuned by advanced analytics, assist in the troubleshooting of systems, and to understand the impact of running production code.
+Using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability) significantly enhances observability. Tanzu Observability is a VMware SaaS application that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned by advanced analytics, assist in the troubleshooting of systems, and to understand the impact of running production code.
 
-In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability is used to collect data from components in vSphere, from Kubernetes, and from applications running on top of Kubernetes.
+In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability collects data from components in vSphere, Kubernetes, and applications running on top of Kubernetes.
 
-You can configure Tanzu Observability with an array of capabilities. Here are the recommended plugins for this design:
+You can configure Tanzu Observability with an array of capabilities. The following table describes the plugins that we recommend for this design:
 
 | **Plugin** | **Purpose** | **Key Metrics** | **Example Metrics** |
 | --- | --- | --- | --- |
@@ -449,7 +449,7 @@ There are over 200 [integrations](https://vmware.wavefront.com/integrations) wit
 
 ## Logging
 
-The Tanzu Editions also include [Fluent Bit](https://fluentbit.io/) for integration with logging platforms such as vRealize LogInsight, Elasticsearch, Splunk. 
+The Tanzu Editions also include [Fluent Bit](https://fluentbit.io/) for integration with logging platforms such as vRealize LogInsight, Elasticsearch, Splunk.
 
 Details on configuring Fluent Bit to your logging provider can be found in the documentation [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.3/vmware-tanzu-kubernetes-grid-13/GUID-extensions-logging-fluentbit.html).
 
@@ -463,7 +463,7 @@ The vRealize Log Insight appliance is available as a separate on-premises deploy
 
 Tanzu Kubernetes Grid on vSphere on hyper-converged hardware offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating on-premises Kubernetes platforms in a consolidated production environment. This validated approach will result in a near-production quality installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.
 
-This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, firewalling, load balancing, workload compute alignment and other capabilities.
+This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload compute, to the full stack infrastructure.
 
 ## <a id=appendix-a></a> Appendix A - Configure Node Sizes
 

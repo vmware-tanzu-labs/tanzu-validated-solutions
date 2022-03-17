@@ -1,9 +1,9 @@
 # Deploy Tanzu for Kubernetes Operations on AWS
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 
 ## Prerequisites
-Before deploying VMware Tanzu for Kubernetes operations on AWS, ensure that the following are set up.
+Before deploying VMware Tanzu for Kubernetes Operations on AWS, ensure that the following are set up.
 
 * **AWS Account**: An IAM user account with **administrative privileges**.
 Choose an AWS region where the Tanzu Kubernetes Grid (TKG) AMIs exist. See [Supported AWS and Azure Regions](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/rn/VMware-Tanzu-Kubernetes-Grid-14-Release-Notes.html#aws-regions) for AWS regions.
@@ -19,7 +19,7 @@ For additional information about preparing to deploy Tanzu Kubernetes Grid on AW
 
 ## Overview of the Deployment Steps
 
-The following provides an overview of the major steps necessary to deploy Tanzu for Kubernetes operations on AWS EC2. Each steps links to the section for detailed information.
+The following provides an overview of the major steps necessary to deploy Tanzu for Kubernetes Operations on AWS EC2. Each steps links to the section for detailed information.
 
 1. [Set up AWS Infrastructure](#aws-infra).
 2. [Create and Set Up a Jumpbox](#jumpbox).
@@ -51,7 +51,7 @@ The following describes the steps to create your AWS environment and configure y
 	<!-- /* cSpell:disable */ -->
 
 	```bash
-	WORKING_DIR=`pwd`/tkg-vpc
+	WORKING_DIR="$(pwd)"/tkg-vpc
 	mkdir -p $WORKING_DIR
 	```
 	<!-- /* cSpell:enable */ -->
@@ -197,7 +197,7 @@ After doing the network configuration, complete the steps described in this sect
 	chmod 400 tkgkp.pem
 
 	# Find an AMI for your region https://cloud-images.ubuntu.com/locator/ec2/ (20.04)
-	aws ec2 run-instances --image-id ami-036d46416a34a611c --count 1 --instance-type t2.medium --key-name tkg-kp --security-group-ids  $(jq -r .GroupId $WORKING_DIR/sg_jumpbox_ssh)   --subnet-id $(jq -r .Subnet SubnetId $WORKING_DIR/subnet-pub-a)  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=tkg-jumpbox}]' --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=64}' > $WORKING_DIR/instance_jb_starting
+	aws ec2 run-instances --image-id ami-036d46416a34a611c --count 1 --instance-type t2.medium --key-name tkg-kp --security-group-ids  $(jq -r .GroupId $WORKING_DIR/sg_jumpbox_ssh)   --subnet-id $(jq -r .Subnet.SubnetId $WORKING_DIR/subnet-pub-a)  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=tkg-jumpbox}]' --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=64}' > $WORKING_DIR/instance_jb_starting
 	```
 	<!-- /* cSpell:enable */ -->
 
@@ -276,9 +276,9 @@ After doing the network configuration, complete the steps described in this sect
 	kind: AWSCluster
 	spec:
 	#@overlay/match missing_ok=True
-    controlPlaneLoadBalancer:
+        controlPlaneLoadBalancer:
 	#@overlay/match missing_ok=True
-       scheme: "internal"
+           scheme: "internal"
 
 	EOF
 	```

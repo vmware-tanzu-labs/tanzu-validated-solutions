@@ -1,10 +1,12 @@
-# VMware Tanzu Reference Architecture
+# VMware Tanzu for Kubernetes Operations Reference Architecture
 
-Kubernetes is great at providing development teams with a single API to deploy, manage, and run applications. However, running, maintaining, and securing Kubernetes itself is a complex task. All the way from determining what base OS instances to use, which Kubernetes CNI & CSI to use, how to secure the Kubernetes API itself to monitoring, upgrading, and backing up of clusters, Tanzu for Kubernetes operations helps teams provision, manage, secure and maintain Kubernetes clusters on a day-to-day basis.
+Kubernetes is great platform that provides development teams with a single API to deploy, manage, and run applications. However, running, maintaining, and securing Kubernetes is a complex task. VMware Tanzu for Kubernetes Operations simplifies Kubernetes operations. It determines what base OS instances to use, which Kubernetes Container Network Interface (CNI) and Container Storage Interfaces (CSI) to use, how to secure the Kubernetes API, and much more.  It monitors, upgrades, and backs up clusters and helps teams provision, manage, secure, and maintain Kubernetes clusters on a day-to-day basis.
 
-The following Tanzu for Kubernetes operation reference architecture shows you how to best use Tanzu components together as a solution for Kubernetes operations on your IaaS of choice. This reference architecture is tested and supported by VMware.
+This document provides a reference architecture for deploying Tanzu for Kubernetes Operations. The reference architecture uses the Tanzu components that make up Tanzu for Kubernetes Operations and provides a high-level architecture for deploying the components together as a solution. The reference architecture is tested and supported by VMware. The following diagram shows the reference architecture.
 
 ![Tanzu Edition reference architecture diagram](./img/index/tkgm-diagram.png)
+
+In addition to the reference architecture, several reference designs and the instructions for deploying the reference designs are available. The reference designs are tailored for deploying Tanzu for Kubernetes Operations on your IaaS or infrastructure of choice. The reference designs are based on the high-level architecture.
 
 ## Components
 The following components are used in the reference architecture:
@@ -33,7 +35,7 @@ The following components are used in the reference architecture:
 * **[Multus CNI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cni-multus.html)** - Enables attaching multiple network interfaces to pods. Multus CNI is a container network interface (CNI) plugin for Kubernetes that lets you attach multiple network interfaces to a single pod and associate each with a different address range.  
 
 
-## Reference Design Documentation
+## Reference Designs
 The following documents provide reference designs for specific infrastructure providers. The reference designs are based on the high-level architecture.
 
 - [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](tko-on-vmc-aws.md)

@@ -1,0 +1,20 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages: 
+  - bind9
+  - bind9utils
+  - bind9-doc
+  - dnsutils
+runcmd:
+  - "echo y | apt autoremove"
+  - "echo \"options {\n
+  directory \"/var/cache/bind\";\n
+  dnssec-validation auto;\n
+  auth-nxdomain no;\n
+  listen-on-v6 { any; };\n\n
+  forward only;\n
+  forwarders {\n
+    168.63.129.16;\n
+  };\n
+};\" > /etc/bind/named.conf.options"

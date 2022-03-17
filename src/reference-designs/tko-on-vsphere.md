@@ -1,13 +1,12 @@
 # VMware Tanzu for Kubernetes Operations on vSphere Reference Design
 
-Tanzu for Kubernetes operations simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
+Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
-This document describes a reference design for deploying VMware Tanzu for Kubernetes operations on vSphere.
+This document describes a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere.
 
-The following reference design is based on the architecture and components described in [Tanzu Solutions Reference Architecture Overview](index.md).
+The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
 ![Figure 1 - Tanzu for Kubernetes Operations](img/tko-on-vsphere/figure-1.png)
-
 
 ## Supported Component Matrix
 
@@ -341,7 +340,7 @@ Regardless of Avi Controller configuration, each Avi Controller cluster can achi
   </tr>
 </table>
 
-**Service Engine Sizing Guidelines** 
+**Service Engine Sizing Guidelines**
 
 For guidance on sizing your SEs, see the [Avi documentation](https://avinetworks.com/docs/20.1/sizing-service-engines/). In summary, for Intel v4 CPUs, for example Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz:
 
@@ -528,9 +527,9 @@ You can install Prometheus and Grafana by using Tanzu packages. For more informa
 
 ### Metrics in Tanzu Observability
 
-Using VMware Tanzu Observability by Wavefront significantly enhances observability. Tanzu Observability is a multi-tenant SaaS application, which collects and displays metrics and trace data from the full stack platform as well as from applications. The service can create alerts tuned by advanced analytics and assist in the troubleshooting of systems to understand the impact of running production code.
+Using VMware Tanzu Observability by Wavefront significantly enhances observability. Tanzu Observability is a multi-tenant SaaS application that collects and displays metrics and trace data from the full stack platform as well as from applications. The service can create alerts tuned by advanced analytics and assist in the troubleshooting of systems to understand the impact of running production code.
 
-In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability is used to collect data from components in vSphere, from Kubernetes, and from applications running on top of Kubernetes.
+In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability collects data from components in vSphere, from Kubernetes, and from applications running on top of Kubernetes.
 
 You can configure Tanzu Observability with an array of capabilities. The following table describes the plugins that VMware recommends for this design:
 
@@ -625,11 +624,9 @@ vRealize Log Insight appliance is available as a separate on-premises deployable
 
 ## Summary
 
-Tanzu Kubernetes Grid on vSphere on hyperconverged hardware offers high-performance potential and convenience, and addresses the challenges of creating, testing, and updating on-premise Kubernetes platforms in a consolidated production environment. This validated approach results in a near-production quality installation with all the application services needed to serve combined or uniquely separated workload types through a combined infrastructure solution.
+Tanzu Kubernetes Grid on vSphere on hyperconverged hardware offers high-performance potential and convenience. It addresses the challenges of creating, testing, and updating on-premises Kubernetes platforms in a consolidated production environment. This validated approach results in a near-production quality installation with all the application services needed to serve combined or uniquely separated workload types through a combined infrastructure solution.
 
-This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, firewalling, load balancing, workload compute alignment, and other capabilities.
-
-Observability is quickly established and easily consumed with Tanzu Observability.
+This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload compute, to the full stack infrastructure.
 
 <!-- Deployment Instructions -->
 <!-- For information on how to deploy this reference design, see. -->

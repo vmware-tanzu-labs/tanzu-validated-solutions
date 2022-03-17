@@ -1,16 +1,15 @@
 # VMware Tanzu for Kubernetes Operations on AWS Reference Design
 
 
-VMware Tanzu for Kubernetes operations simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
+VMware Tanzu for Kubernetes Operations simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes operations with Tanzu components on AWS.
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations with Tanzu components on AWS.
 
-The following reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
+The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
 > **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.4 on AWS.
 
 ![Tanzu Edition reference design diagram](./img/tko-on-aws/tkg-aws-overview.png)
-
 
 ## Network Overview
 
@@ -97,7 +96,7 @@ This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous
 
 ![Tanzu Kubernetes Grid Kickstart Install Screen](./img/tko-on-aws/tkg-kickstart-install.png)  
 
-Tanzu Editions includes components for observability, as well as container registry.  We recommended installing the necessary components into a centralized shared services cluster.
+Tanzu Editions include components for observability, as well as container registry. We recommended installing the necessary components into a centralized shared services cluster.
 
 ## Global Cluster Lifecycle Management
 
@@ -163,13 +162,13 @@ We recommend the following best practices for managing identities in Tanzu Kuber
 
 ### Metrics Monitoring with Tanzu Observability by Wavefront (Recommended Solution)
 
-Observability can be significantly enhanced by using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability). Wavefront is a VMware SaaS service  that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned with advanced analytics, assist in the troubleshooting of systems, and to understand the impact of running production code.
+Using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability) significantly enhances observability. Tanzu Observability is a VMware SaaS application that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned with advanced analytics, assist in the troubleshooting of systems, and to understand the impact of running production code.
 
-Wavefront is used to collect data from Kubernetes and from applications running within Kubernetes.
+Tanzu Observability collects data from Kubernetes and from applications running within Kubernetes.
 
-You can configure Wavefront with an array of capabilities. There are over 200 [integrations](https://vmware.wavefront.com/integrations) with prebuilt dashboards available in Wavefront.
+You can configure Tanzu Observability with an array of capabilities. There are over 200 [integrations](https://vmware.wavefront.com/integrations) with prebuilt dashboards available in Wavefront.
 
-We recommend the following plugins for this design:
+The following table describes the plugins we recommend for this design:
 
 | Plugin | Purpose | Key Metrics | Example Metrics |
 | --- | --- | --- | --- |
@@ -203,7 +202,7 @@ Tanzu also includes Fluent Bit for integration with logging platforms such as vR
 
 Tanzu Kubernetes Grid on AWS  offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating cloud based Kubernetes platforms in a consolidated production environment. This validated approach will result in a production quality installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.  
 
-This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, configuring your firewall, load balancing, workload compute alignment and other capabilities. Observability is quickly established and easily consumed with Wavefront.
+This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload compute, to the full stack infrastructure.
 
 ## Deployment Instructions
 For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on AWS](../deployment-guides/tko-aws.md).

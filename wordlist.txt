@@ -54,3 +54,7 @@ routable
 milliCPU
 overcommitted
 TKGS
+bursty
+allottable
+VNET
+TKG
