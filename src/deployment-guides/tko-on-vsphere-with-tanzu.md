@@ -581,7 +581,7 @@ To add a VM class to a namespace,
 
 1. From the list of the VM Classes, select the classes that you want to include in your namespace.
 
-   ![](./img/tko-on-vsphere-with-tanzu/image47.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image47.jpg) 
 
 1. Click **Ok**.  
 
