@@ -1,9 +1,9 @@
 # Deploy Tanzu for Kubernetes Operations on AWS
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 
 ## Prerequisites
-Before deploying VMware Tanzu for Kubernetes operations on AWS, ensure that the following are set up.
+Before deploying VMware Tanzu for Kubernetes Operations on AWS, ensure that the following are set up.
 
 * **AWS Account**: An IAM user account with **administrative privileges**.
 Choose an AWS region where the Tanzu Kubernetes Grid (TKG) AMIs exist. See [Supported AWS and Azure Regions](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/rn/VMware-Tanzu-Kubernetes-Grid-14-Release-Notes.html#aws-regions) for AWS regions.
@@ -19,7 +19,7 @@ For additional information about preparing to deploy Tanzu Kubernetes Grid on AW
 
 ## Overview of the Deployment Steps
 
-The following provides an overview of the major steps necessary to deploy Tanzu for Kubernetes operations on AWS EC2. Each steps links to the section for detailed information.
+The following provides an overview of the major steps necessary to deploy Tanzu for Kubernetes Operations on AWS EC2. Each steps links to the section for detailed information.
 
 1. [Set up AWS Infrastructure](#aws-infra).
 2. [Create and Set Up a Jumpbox](#jumpbox).

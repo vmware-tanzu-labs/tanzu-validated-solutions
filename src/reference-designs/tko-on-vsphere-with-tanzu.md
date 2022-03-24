@@ -2,7 +2,7 @@
 
 vSphere with Tanzu transforms vSphere into a platform for running Kubernetes workloads natively on the hypervisor layer. When vSphere with Tanzu is enabled on a vSphere cluster, you can run Kubernetes workloads directly on ESXi hosts and create upstream Kubernetes clusters within dedicated resource pools.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes operations on vSphere with vSphere with Tanzu enabled. The reference design is based on the architecture and components described in [Tanzu Solutions Reference Architecture Overview](index.md).
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere with vSphere with Tanzu enabled. The reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
 ## vSphere with Tanzu Components
 
@@ -16,7 +16,7 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
 	Tanzu Kubernetes Grid Service also provides self-service lifecycle management of Tanzu Kubernetes clusters.
 
-- **Tanzu Kubernetes Cluster (Workload Cluster):** Tanzu Kubernetes clusters are Kubernetes workload clusters in which your application workloads run. These clusters can be attached to SaaS solutions such as Tanzu Mission Control, Tanzu Observability, and Tanzu Service Mesh, which are part of Tanzu for Kubernetes operations.
+- **Tanzu Kubernetes Cluster (Workload Cluster):** Tanzu Kubernetes clusters are Kubernetes workload clusters in which your application workloads run. These clusters can be attached to SaaS solutions such as Tanzu Mission Control, Tanzu Observability, and Tanzu Service Mesh, which are part of Tanzu for Kubernetes Operations.
 
 - **VM Class in vSphere with Tanzu:** A VM class is a template that defines CPU, memory, and reservations for VMs. VM classes are used for VM deployment in a Supervisor Namespace. VM classes can be used by stand-alone VMs that run in a Supervisor Namespace and by VMs hosting a Tanzu Kubernetes cluster.
 
@@ -304,7 +304,7 @@ NSX Advanced Load Balancer Service Engines may be configured with as little as 1
 
 ## Container Registry
 
-VMware Tanzu for Kubernetes operations using vSphere with Tanzu includes Harbor as a container registry. Harbor provides a location for pushing, pulling, storing, and scanning container images used in your Kubernetes clusters.
+VMware Tanzu for Kubernetes Operations using vSphere with Tanzu includes Harbor as a container registry. Harbor provides a location for pushing, pulling, storing, and scanning container images used in your Kubernetes clusters.
 
 The initial configuration and setup of the platform does not require any external registry as all the required images are delivered through vCenter itself. Harbor registry is used for day 2 operations of the Tanzu Kubernetes workload clusters. Typical day-2 operations include tasks such as pulling images from Harbor for application deployment and pushing custom images to Harbor.
 
@@ -372,11 +372,11 @@ vSphere with Tanzu Standard Edition and above includes observability with the Pr
 
 ### Metrics in Tanzu Observability
 
-You can significantly enhance observability by using VMware Tanzu Observability by Wavefront. Tanzu Observability is a VMware SaaS offering that collects and displays metrics and trace data from the full-stack platform as well as from applications. The service provides the ability to create alerts tuned by advanced analytics, assist in the troubleshooting of systems, and understand the impact of running production code.
+Using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability) significantly enhances observability. Tanzu Observability is a VMware SaaS application that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned by advanced analytics, assist in the troubleshooting of systems, and understand the impact of running production code.
 
 In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability collects data from components in vSphere, from Kubernetes, and from applications running on top of Kubernetes.
 
-You can configure Tanzu Observability with an array of capabilities. Here are the recommended plugins for this design:
+You can configure Tanzu Observability with an array of capabilities. The following table describes the plugins that we recommend for this design:
 
 | Plugin                           | Purpose                                                  | Key Metrics                                                          | Example Metrics                                   |
 | -------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
@@ -422,11 +422,11 @@ The following sections show sample dashboards available on Tanzu Observability. 
 
 There are over 200 [integrations](https://vmware.wavefront.com/integrations) with prebuilt dashboards available in Wavefront.
 
-## Tanzu Service Mesh (TSM)
+## Tanzu Service Mesh
 
-VMware Tanzu Service Mesh is an enterprise-class service mesh solution that provides consistent control and security for microservices, end-users, and data across all your clusters and clouds in the most demanding multi-cluster and multi-cloud environments.
+VMware Tanzu Service Mesh (TSM) is an enterprise-class service mesh solution that provides consistent control and security for microservices, end-users, and data across all your clusters and clouds in the most demanding multi-cluster and multi-cloud environments.
 
-### Key Benefits of Tanzu Service Mesh:
+### Key Benefits of Tanzu Service Mesh
 
 *   Extends the service mesh capability (discovery, connectivity, control, security, and observability) to users and data.
 *   Facilitates the development and management of distributed applications across multiple clusters, multiple clouds, and in hybrid-cloud environments with Global Namespaces, supporting federation across organizational boundaries, technologies, and service meshes.
@@ -452,7 +452,7 @@ Tanzu Service Mesh generates a topology graph view dynamically by observing the 
 
 vSphere with Tanzu on hyper-converged hardware offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating on-premises Kubernetes platforms in a consolidated production environment. This validated approach will result in a production installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.
 
-This plan meets many Day 0 needs for quickly aligning product capabilities to full-stack infrastructure, including networking, configuring firewall rules, load balancing, workload compute alignment and other capabilities.
+This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload compute, to the full stack infrastructure.
 
 ## Deployment Instructions
 For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](../deployment-guides/tko-on-vsphere-with-tanzu.md).

@@ -1,6 +1,6 @@
 # Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu
 
-This document outlines the steps for deploying Tanzu for Kubernetes operations using vSphere with Tanzu in a vSphere environment backed by a Virtual Distributed Switch (VDS) and leveraging NSX Advanced Load Balancer (ALB) for L4/L7 load balancing & ingress.
+This document outlines the steps for deploying Tanzu for Kubernetes Operations using vSphere with Tanzu in a vSphere environment backed by a Virtual Distributed Switch (VDS) and leveraging NSX Advanced Load Balancer (ALB) for L4/L7 load balancing & ingress.
 
 The scope of the document is limited to providing deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](../reference-designs/tko-on-vsphere-with-tanzu.md). This document does not cover any deployment procedures for the underlying SDDC components.
 
@@ -20,7 +20,7 @@ Ensure that your environment has the following general requirements:
 *   A vSphere 7.0 u3 or greater instance with an Enterprise Plus license.
 *   Your vSphere environment has the following objects in place:
   - A vSphere cluster with at least 3 hosts, on which vSphere HA and DRS is enabled.
-  - A distributed switch with port groups for Tanzu for Kubernetes operations components. See [Network Requirements](#network-requirements) for the required port groups.
+  - A distributed switch with port groups for Tanzu for Kubernetes Operations components. See [Network Requirements](#network-requirements) for the required port groups.
   - All ESXi hosts of the cluster on which vSphere with Tanzu will be enabled are part of the distributed switch.
   - Dedicated resource pools and VM folder for collecting NSX Advanced Load Balancer VMs.
   - A datastore with sufficient capacity for the control plane and worker node VM files.
@@ -181,7 +181,7 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
 
 1. Configure Licensing.
 
-  Tanzu for Kubernetes operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
+  Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
 
   ![](./img/tko-on-vsphere-with-tanzu/image2.jpg)
 
