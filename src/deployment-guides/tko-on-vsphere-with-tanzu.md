@@ -882,6 +882,9 @@ To add a VM class to a namespace,
 
 1. From the list of the VM Classes, select the classes that you want to include in your namespace.
 
+   > ⚠️  Do not select the `small` or `xsmall` classes, as these are not large
+   > enough to run Tanzu Service Mesh components.
+
    ![](./img/tko-on-vsphere-with-tanzu/image47.jpg) 
 
 1. Click **Ok**.  
@@ -955,16 +958,16 @@ You can gather this information by running the following commands:
     topology:
       controlPlane:
         replicas: 3
-        vmClass: best-effort-large
-        storageClass: vsan-default-storage-policy
+        vmClass: best-effort-large # or the VM class binding you'd like to use.
+        storageClass: vsan-default-storage-policy # or the storage class you'd like to use.
         tkr:
           reference:
           name: v1.21.2---vmware.1-tkg.1.ee25d55
       nodePools:
        - name: worker-pool01
-         replicas: 3
-         vmClass: best-effort-large
-         storageClass: vsan-default-storage-policy
+         replicas: 6
+         vmClass: best-effort-large # or the VM class binding you'd like to use.
+         storageClass: vsan-default-storage-policy # or the storage class you'd like to use.
          tkr:
            reference:
              name: v1.21.2---vmware.1-tkg.1.ee25d55
