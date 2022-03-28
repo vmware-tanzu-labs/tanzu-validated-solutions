@@ -233,14 +233,27 @@ After doing the network configuration, complete the steps described in this sect
 	<!-- /* cSpell:disable */ -->
 	```bash
 	scp -i tkgkp.pem tanzu-cli-bundle-linux-amd64.tar  kubectl-linux-v1.21.2+vmware.1.gz ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started):/home/ubuntu
+	```
+	<!-- /* cSpell:enable */ -->
+
+7. Connect to the jumpbox and start port forwarding
+
+	Note that the command shown below assumes that no process is currently
+	listening on local port 8080. If it is in use then you should identify and
+	end any listening process before running this command.
+
+	<!-- /* cSpell:disable */ -->
+	```bash
 	ssh -L 8080:localhost:8080 ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started) -i tkgkp.pem
 
 	```
 	<!-- /* cSpell:enable */ -->
 
-7. Install the Tanzu CLI.
+8. Install the Tanzu CLI.
 
-	Run the session in `screen` in case your SSH session is terminated. If your session is terminated, you can restart the session with `screen -r`.
+	Run the session in `screen` in case your SSH connection is terminated.
+	If your connection is terminated, you can reattach to the screen session
+	with `screen -r` once you have reconnected.
 
 	<!-- /* cSpell:disable */ -->		
 	```bash
@@ -261,7 +274,7 @@ After doing the network configuration, complete the steps described in this sect
 	```
 	<!-- /* cSpell:enable */ -->
 
-8. Create a custom file to place the Tanzu Kubernetes Grid management APIs on private load balancers:
+9. Create a custom file to place the Tanzu Kubernetes Grid management APIs on private load balancers:
 
 	<!-- /* cSpell:disable */ -->
 	```bash
