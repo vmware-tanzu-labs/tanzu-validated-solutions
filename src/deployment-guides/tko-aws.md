@@ -166,7 +166,7 @@ The following describes the steps to create your AWS environment and configure y
 
 	# Route any corporate IPs through your transit gw
 	aws ec2 create-route \
- 	--route-table-id "$PRIV_RT_TABLE_ID" \
+ 	--route-table-id "$PUB_RT_TABLE_ID" \
  	--destination-cidr-block "172.16.0.0/12" \
  	--transit-gateway-id $(jq -r .TransitGateway.TransitGatewayId $WORKING_DIR/transit-gw)
 
