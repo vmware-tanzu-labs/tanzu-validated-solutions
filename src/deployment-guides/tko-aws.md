@@ -224,11 +224,9 @@ After doing the network configuration, complete the steps described in this sect
    ```
 	<!-- /* cSpell:enable */ -->
 
-4. Install Docker Engine on Ubuntu.  For installation instructions, see [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/).
+4. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652) site.
 
-5. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652) site.
-
-6. Copy the files and binaries to the jumpbox.
+5. Copy the files and binaries to the jumpbox.
 
 	<!-- /* cSpell:disable */ -->
 	```bash
@@ -238,7 +236,7 @@ After doing the network configuration, complete the steps described in this sect
 	```
 	<!-- /* cSpell:enable */ -->
 
-7. Install the Tanzu CLI.
+6. Install the Tanzu CLI.
 
 	Run the session in `screen` in case your SSH session is terminated. If your session is terminated, you can restart the session with `screen -r`.
 
@@ -261,7 +259,7 @@ After doing the network configuration, complete the steps described in this sect
 	```
 	<!-- /* cSpell:enable */ -->
 
-8. Create a custom file to place the Tanzu Kubernetes Grid management APIs on private load balancers:
+7. Create a custom file to place the Tanzu Kubernetes Grid management APIs on private load balancers:
 
 	<!-- /* cSpell:disable */ -->
 	```bash
