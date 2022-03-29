@@ -123,7 +123,7 @@ excluded_packages:
 ```
 ### View Cluster Requirements
 The View Cluster is designed to run the web applications for TAP. specifically, Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
-The View Cluster's requirements are driven prinmarily by the respective applications that it will be running.
+The View Cluster's requirements are driven primarily by the respective applications that it will be running.
 #### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires 3 external IP addresses)
 * Default storage class
