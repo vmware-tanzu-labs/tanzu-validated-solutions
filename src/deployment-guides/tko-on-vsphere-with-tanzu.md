@@ -974,6 +974,10 @@ You can gather this information by running the following commands:
   ```
   <!-- /* cSpell:enable */ -->
 
+  > ⚠️  If you receive `this request is invalid` after applying this YAML with
+  > `kubectl apply`, ensure that your TKr release, virtual machine class, and
+  > storage class are valid.
+
 ## <a id=deploy-workload-cluster> </a>Deploy Tanzu Kubernetes Clusters (Workload Cluster)
 1. Customize the cluster as needed by referring to the full list of [cluster configuration parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-31BF8166-5FC8-4D43-933D-5797F3BE4A36.html)
 
