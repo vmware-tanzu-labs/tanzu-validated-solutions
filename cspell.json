@@ -69,5 +69,8 @@
     "cloudadmin",
     "Akodeployment",
     "Daemonset",
+    "DHCP",
+    "deloynsxalb",
+    "createmgmt"
   ]
 }
