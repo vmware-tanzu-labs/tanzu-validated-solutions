@@ -24,7 +24,7 @@ On the package detail page, click Install Package.
 
 On the Install page, provide a name for the installed instance of the package, select the version to install. You can customize the package installation by editing the configuration parameters using the pencil icon under the option Table View. 
 
-After the custom paramaters have been supplied, click on the Install package button to initiate the installation.
+After the custom parameters have been supplied, click on the Install package button to initiate the installation.
 
 ![](img/tanzu-pkgs/tanzu-pkgs03.png)
 
@@ -42,7 +42,7 @@ Click on the install package button to initiate the installation.
 
 ![](img/tanzu-pkgs/tanzu-pkgs05.png)
 
-Provide a name for the installed package and select the version that you want to install. Package installation can be customized by entering the user-configurable values in yaml format under the optin Overlay YAML. 
+Provide a name for the installed package and select the version that you want to install. Package installation can be customized by entering the user-configurable values in yaml format under the option Overlay YAML. 
 
 An example yaml for customizing contour installation is shown below.
 

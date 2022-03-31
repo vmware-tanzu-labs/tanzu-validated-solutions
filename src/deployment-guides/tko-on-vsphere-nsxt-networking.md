@@ -215,7 +215,7 @@ Below procedure provides required details to create one such network which is re
 
    1. Click on **Options**
 
-   1. Under “**Select DHCP Optio**n” choose “**GENERIC OPTIONS**”
+   1. Under “**Select DHCP Option**n” choose “**GENERIC OPTIONS**”
 
    1. Click on “**ADD GENERIC OPTION**” and choose “**NTP servers (42)**”, provide the details of NTP server and click on **ADD**
 
@@ -281,7 +281,7 @@ Once the NSX ALB is successfully deployed and boots up, navigate to NSX ALB on y
 
   ![](img\tko-on-vsphere-nsxt-networking/14-ALB-3.png)
 
-  - Under Emal/SMTP: Provide **Email** or **SMTP** information
+  - Under Email/SMTP: Provide **Email** or **SMTP** information
 
   ![](img\tko-on-vsphere-nsxt-networking/15-ALB-4.png)
 
