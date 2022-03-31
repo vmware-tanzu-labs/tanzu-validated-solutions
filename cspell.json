@@ -25,5 +25,22 @@
         "/^\\s*```[\\s\\S]*?^\\s*```/gm"
       ]
     }
+  ],
+  "words": [
+    "Clusterrolbinding",
+    "Clusterrole",
+    "Configmap",
+    "CONTROLPLANE",
+    "CRD's",
+    "DPDK",
+    "fwreq",
+    "Geneve",
+    "LDAPS",
+    "netreq",
+    "NSXT",
+    "SCTP",
+    "SRIOV",
+    "statefulset",
+    "VXLAN"
   ]
 }
