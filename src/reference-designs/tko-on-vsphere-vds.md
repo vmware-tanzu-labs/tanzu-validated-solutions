@@ -5,7 +5,6 @@ VMware Tanzu for Kubernetes Operations simplifies operation of Kubernetes for mu
 It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
 
 This document lays out a reference architecture related for VMware Tanzu for Kubernetes Operations** when deployed on a vSphere environment backed by vSphere Networking(VDS) and offers a high-level overview of the different components.
-
 ## **Tanzu for Kubernetes Operations:** 
 
 The following is a list of the components that comprise Tanzu for Kubernetes Operations:

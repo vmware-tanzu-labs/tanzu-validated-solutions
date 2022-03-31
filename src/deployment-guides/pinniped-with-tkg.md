@@ -1,4 +1,4 @@
-﻿# Prepare External Identity Management
+# Prepare External Identity Management
 
 Tanzu Kubernetes Grid implements user authentication with Pinniped. Pinniped allows you to plug external OpenID Connect (OIDC) or LDAP identity providers (IDP) into Tanzu Kubernetes clusters, so that you can control user access to those clusters.
 
@@ -86,7 +86,6 @@ When you are deploying your management cluster using the installer interface, co
 
 ##
 # **Enable and Configure Identity Management in an Existing Deployment**
-
 If you did not configure identity management when you deployed your management cluster, you can enable it as a post-deployment step by following the instructions below:
 
 1. [Obtain your identity provider details](#obtain-your-identity-provider-details).

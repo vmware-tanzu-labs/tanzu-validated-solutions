@@ -24,11 +24,19 @@ The Interoperability Matrix can be verified at all times [here](https://interopm
 
 Before deploying Tanzu Kubernetes Operations in vSphere environment, ensure that your environment is set up as described in the following:
 
+<<<<<<< HEAD
 - [General Requirements](#general-requirements)
 - [Network Requirements](#network-requirements)
 - [Firewall Requirements](#firewall-requirements)
 
 ## General Requirements
+=======
+- [General Requirements](#genreq)
+- [Network Requirements](#netreq)
+- [Firewall Requirements](#fwreq)
+
+## <a id=genreq> </a> **General Requirements**
+>>>>>>> 1849cd4545ced46e73f0269a4564fa0470259238
 - vSphere 7.0 U2 or greater instance with an Enterprise Plus license
 - Your SDDC environment has the following objects in place: 
   - A vSphere cluster with at least 3 hosts, on which vSphere DRS is enabled 

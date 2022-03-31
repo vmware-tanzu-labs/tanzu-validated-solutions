@@ -32,7 +32,7 @@ The following are general requirements that your environment should have:
 - vSphere 7.0 u3 instance with an Enterprise Plus license.
 - Your vSphere environment has the following objects in place:
   - A vSphere cluster with at least 3 hosts, on which vSphere HA & DRS is enabled. If you are using vSAN for shared storage, it is recommended that you use 4 ESXi hosts.
-  - A distributed switch with port groups for TKO components. Please refer to the [Network Requirements](#_heading=h.2et92p0) section for the required port groups. 
+  - A distributed switch with port groups for TKO components. Please refer to the [Network Requirements](#network-requirements) section for the required port groups. 
   - All ESXi hosts of the cluster on which vSphere with Tanzu will be enabled should be part of the distributed switch. 
   - Dedicated resource pools and VM folder for collecting NSX Advanced Load Balancer VMs.
   - A shared datastore with sufficient capacity for the control plane and worker node VM files.
