@@ -38,9 +38,9 @@ The following components are used in the reference architecture:
 ## Reference Designs
 The following documents provide reference designs for specific infrastructure providers. The reference designs are based on the high-level architecture.
 
-- [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](tko-on-vmc-aws.md)
-- [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](tko-on-vsphere.md)
-- [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Reference Design](tko-on-vsphere-nsx.md)
+- [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](tko-on-vmc-aws-2.0.md)
+- [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](tko-on-vsphere-vds.md)
+- [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Reference Design](tko-on-vsphere-nsxt.md)
 - [VMware Tanzu for Kubernetes Operations on AWS Reference Design](tko-on-aws.md)
 - [VMware Tanzu for Kubernetes Operations on Azure Reference Design](tko-on-azure.md)
-- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](tko-on-vsphere-with-tanzu.md)
+- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](tko-on-vwt.md)
