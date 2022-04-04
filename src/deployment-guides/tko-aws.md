@@ -166,7 +166,7 @@ The following describes the steps to create your AWS environment and configure y
 
 	# Route any corporate IPs through your transit gw
 	aws ec2 create-route \
- 	--route-table-id "$PRIV_RT_TABLE_ID" \
+ 	--route-table-id "$PUB_RT_TABLE_ID" \
  	--destination-cidr-block "172.16.0.0/12" \
  	--transit-gateway-id $(jq -r .TransitGateway.TransitGatewayId $WORKING_DIR/transit-gw)
 
@@ -224,11 +224,9 @@ After doing the network configuration, complete the steps described in this sect
    ```
 	<!-- /* cSpell:enable */ -->
 
-4. Install Docker Engine on Ubuntu.  For installation instructions, see [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/).
+4. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652) site.
 
-5. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652) site.
-
-6. Copy the files and binaries to the jumpbox.
+5. Copy the files and binaries to the jumpbox.
 
 	<!-- /* cSpell:disable */ -->
 	```bash
