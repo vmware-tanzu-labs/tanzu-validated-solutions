@@ -237,8 +237,8 @@ After doing the network configuration, complete the steps described in this sect
 7. Connect to the jumpbox and start port forwarding
 
 	Note that the command shown below assumes that no process is currently
-	listening on local port 8080. If it is in use then you should identify and
-	end any listening process before running this command.
+	listening on local port 8080. If it is in use then choose a different
+	port and adjust the SSH command line accordingly.
 
 	<!-- /* cSpell:disable */ -->
 	```bash
@@ -333,6 +333,9 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 2. Open a web browser and launch <!-- /* cSpell:disable */ --> ```localhost:8080 ```<!-- /* cSpell:enable */ --> on the machine running the SSH session.
 
 	The Tanzu Kubernetes Grid installer interface displays.
+	Note that if you chose a different listening port when connecting
+	to the jumpbox then the interface will be available on that port instead
+	of port 8080.
 
 	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup.
 
