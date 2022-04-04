@@ -337,8 +337,8 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 	to the jumpbox then the interface will be available on that port instead
 	of port 8080.
 
-	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup. The screens shown were taken from a
-	TKG version 1.4.2 installation and may differ from other versions.
+	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup. The screens shown were taken from the current
+	version at the time of writing and may differ slightly from other versions.
 
 3. Click **Deploy** on the **Amazon EC2** tile to start the management cluster setup on Amazon EC2.
 
