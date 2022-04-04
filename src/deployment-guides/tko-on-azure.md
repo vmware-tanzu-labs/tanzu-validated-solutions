@@ -43,7 +43,7 @@ Before deploying Tanzu for Kubernetes operations and the actual Kubernetes clust
 The deployment detailed in this document uses the following resources:
 <!-- cSpell:disable -->
 - [ARM Template](./resources/tko-on-azure/azure-deploy.json)
-- [Parameters](./resources/tko-on-azure/azure-deploy.parameters.json)
+- [Parameters](./resources/tko-on-azure/azure-deploy-parameters.json)
 <!-- cSpell:enable -->
 
 The ARM template contains a number of parameters that you can populate or customize so that your Azure environment uses your naming standards and networking requirements.
@@ -102,7 +102,7 @@ Run the following example Azure CLI command locally or in Azure Cloud Shell  to 
 
 <!-- cSpell:disable -->
 ```bash
-az deployment create –template-file azure-deploy.json –parameters azure-deploy.parameters.json –resource-group <Resource Group Name>
+az deployment create –template-file azure-deploy.json –parameters azure-deploy-parameters.json –resource-group <Resource Group Name>
 ```
 <!-- cSpell:enable -->
 
@@ -111,7 +111,7 @@ Alternatively, run the following example command in Azure PowerShell to deploy t
 
 <!-- cSpell:disable -->
 ```bash
-New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateFile azure-deploy.json -TemplateParameterFile azure-deploy.parameters.json
+New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateFile azure-deploy.json -TemplateParameterFile azure-deploy-parameters.json
 ```
 <!-- cSpell:enable -->
 
