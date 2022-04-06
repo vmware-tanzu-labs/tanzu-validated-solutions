@@ -48,18 +48,18 @@ Provide following user inputs into commands and execute them to install Tanzu Cl
 
 * `TAP_TAP_WORKLOAD_CONTEXT` - the `kubeconfig` context of the workload cluster
 * `TANZU_NET_API_TOKEN` - an API token obtained from https://network.tanzu.vmware.com
-* `TANZU_NET_USER` - the Tanzu username
-* `TANZU_NET_PASSWORD` - the Tanzu user's password
+* `INSTALL_REGISTRY_USERNAME` - the Tanzu username
+* `INSTALL_REGISTRY_PASSWORD` - the Tanzu user's password
   
 ```bash
 set -e
 
 export TAP_WORKLOAD_CONTEXT=<workload cluster context>
-export TANZU_NET_REGISTRY_ENDPOINT="registry.tanzu.vmware.com"
 export TANZU_NET_API_TOKEN=<tanzu refresh token>
-export TANZU_NET_USER=<tanzu username>
-export TANZU_NET_PASSWORD=<tanzu password>
-export TAP_INSTALL_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle@sha256:82dfaf70656b54dcba0d4def85ccae1578ff27054e7533d08320244af7fb0343
+export INSTALL_REGISTRY_HOSTNAME="registry.tanzu.vmware.com"
+export INSTALL_REGISTRY_USERNAME=<tanzu username>
+export INSTALL_REGISTRY_PASSWORD=<tanzu password>
+export INSTALL_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle@sha256:82dfaf70656b54dcba0d4def85ccae1578ff27054e7533d08320244af7fb0343
 
 # login to kubernetes workload cluster using cluster config
 kubectl config use-context "${TAP_WORKLOAD_CONTEXT}"
@@ -121,8 +121,8 @@ kubectl create ns "${TAP_NAMESPACE}"
 
 # tanzu registry secret creation
 tanzu secret registry add tap-registry \
-  --username "${TANZU_NET_USER}" --password "${TANZU_NET_PASSWORD}" \
-  --server "${TANZU_NET_REGISTRY_ENDPOINT}" \
+  --username "${INSTALL_REGISTRY_USERNAME}" --password "${INSTALL_REGISTRY_PASSWORD}" \
+  --server "${INSTALL_REGISTRY_HOSTNAME}" \
   --export-to-all-namespaces --yes --namespace "${TAP_NAMESPACE}"
 
 # tanzu repo add
@@ -159,8 +159,8 @@ buildservice:
   kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
   kp_default_repository_username: "${TAP_REGISTRY_USER}"
   kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
-  tanzunet_username: "${TANZU_NET_USER}"
-  tanzunet_password: "${TANZU_NET_PASSWORD}"
+  tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
+  tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
 supply_chain: basic
 ootb_supply_chain_basic:
   registry:
@@ -338,8 +338,8 @@ buildservice:
   kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
   kp_default_repository_username: "${TAP_REGISTRY_USER}"
   kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
-  tanzunet_username: "${TANZU_NET_USER}"
-  tanzunet_password: "${TANZU_NET_PASSWORD}"
+  tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
+  tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
 supply_chain: basic
 ootb_supply_chain_basic:
   registry:
@@ -470,8 +470,8 @@ buildservice:
   kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
   kp_default_repository_username: "${TAP_REGISTRY_USER}"
   kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
-  tanzunet_username: "${TANZU_NET_USER}"
-  tanzunet_password: "${TANZU_NET_PASSWORD}"
+  tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
+  tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
 supply_chain: basic
 ootb_supply_chain_basic:
   registry:
@@ -622,8 +622,8 @@ buildservice:
   kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
   kp_default_repository_username: "${TAP_REGISTRY_USER}"
   kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
-  tanzunet_username: "${TANZU_NET_USER}"
-  tanzunet_password: "${TANZU_NET_PASSWORD}"
+  tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
+  tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
 supply_chain: basic
 ootb_supply_chain_basic:
   registry:
