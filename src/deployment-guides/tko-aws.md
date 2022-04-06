@@ -224,13 +224,13 @@ After doing the network configuration, complete the steps described in this sect
    ```
 	<!-- /* cSpell:enable */ -->
 
-4. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652) site.
+4. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-142&productId=988&rPId=73652) site.
 
 5. Copy the files and binaries to the jumpbox.
 
 	<!-- /* cSpell:disable */ -->
 	```bash
-	scp -i tkgkp.pem tanzu-cli-bundle-linux-amd64.tar  kubectl-linux-v1.21.2+vmware.1.gz ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started):/home/ubuntu
+	scp -i tkgkp.pem tanzu-cli-bundle-linux-amd64.tar kubectl-linux-v1.21.8+vmware.1-142.gz ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started):/home/ubuntu
 	```
 	<!-- /* cSpell:enable */ -->
 
@@ -257,10 +257,10 @@ After doing the network configuration, complete the steps described in this sect
 	```bash
 	screen
 	tar -xvf tanzu-cli-bundle-linux-amd64.tar
-	gunzip kubectl-linux-v1.21.2+vmware.1.gz
-	sudo install kubectl-linux-v1.21.2+vmware.1 /usr/local/bin/kubectl
+	gunzip kubectl-linux-v1.21.8+vmware.1-142.gz
+	sudo install kubectl-linux-v1.21.8+vmware.1-142 /usr/local/bin/kubectl
 	cd cli/
-	sudo install core/v1.4.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+	sudo install core/v1.4.2/tanzu-core-linux_amd64 /usr/local/bin/tanzu
 	gunzip *.gz
 	sudo install imgpkg-linux-amd64-v0.10.0+vmware.1 /usr/local/bin/imgpkg
 	sudo install kapp-linux-amd64-v0.37.0+vmware.1 /usr/local/bin/kapp
@@ -337,13 +337,14 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 	to the jumpbox then the interface will be available on that port instead
 	of port 8080.
 
-	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup.
+	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup. The screens shown were taken from the current
+	version at the time of writing and may differ slightly from other versions.
 
 3. Click **Deploy** on the **Amazon EC2** tile to start the management cluster setup on Amazon EC2.
 
 	![Amazon EC2 select](./img/tko-aws/aws-ui-1.png)
 
-4. For **IaaS Provider** settings, enter your **AWS Access Key ID**, **Secret Access Key**, **Session Token**, **Region**, and **SSH Key Name** and click **Next**.
+4. For **IaaS Provider** settings, enter your **AWS Access Key ID**, **Secret Access Key**, **Session Token**, and **Region**, then click **Connect** followed by **Next**.
 	Select the region you selected in [Set up AWS infrastructure](#aws-infra).
 
 	![aws credential](./img/tko-aws/aws-ui-2.png)
@@ -352,14 +353,21 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 
 	![aws vpc](./img/tko-aws/select-existing-vpc.png)
 
-6. For **Management Cluster Settings**, select **Production**.
+6. For **Management Cluster Settings**, select **Production** and the
+   instance type for the control plane nodes.
 
 7. Enter the following specifications for the management cluster and click **Next**.
 
-	- **Worker Node Instance Type**: Select the configuration for the worker node VM.
+	- **EC2 Key Pair**: The name of an existing key pair, which you may have created
+	  in [Create and Set Up a Jumpbox](#jumpbox).
 	- **Bastion Host**: Select Enable.
 	- **Machine Health Checks**: Select Enable.
+	- **AWS CloudFormation Stack**: Select this if this is the first time that you are
+	  deploying a management cluster to this AWS account, see
+		[Permissions Set by Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-aws.html#iam-permissions) for more details.
 	- **Availability Zone**: Select the three availability zones for your region.
+	- **VPC Public and Private Subnets**: Select the existing subnets on the VPC for each AZ.
+	- **Worker Node Instance Type**: Select the configuration for the worker node VMs.
 
 	![management cluster spec](./img/tko-aws/aws-ui-4.png)
 
