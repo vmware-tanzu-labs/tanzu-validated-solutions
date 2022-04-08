@@ -788,7 +788,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 **Important**: If you are deploying Tanzu Kubernetes Grid clusters in an Internet-restricted environment ensure that the local image repository is accessible from the bootstrap machine and Tanzu Kubernetes Grid management and workload Networks.  
 
-1. To allow the bootstrap machine to pull images from the private image repository, set the following environment variable `TKG_CUSTOM_IMAGE_REPOSITORY`
+1. To allow the bootstrap machine to pull images from the private image repository, set the following environment variable `TKG_CUSTOM_IMAGE_REPOSITORY`.
 
   After the variable is set, Tanzu Kubernetes Grid pulls images from your local private registry rather than from the external public registry. To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, add “TKG_CUSTOM_IMAGE_REPOSITORY” to the global cluster configuration file, `~/.config/tanzu/tkg/config.yaml`.
 
@@ -873,20 +873,23 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. Configure the following parameters:
 
-   - **Cloud Name**: Name of the cloud created while configuring NSX Advanced Load Balancer `tanzu-vcenter-01`
+   - **Cloud Name**: Name of the cloud created while configuring NSX Advanced Load Balancer: `tanzu-vcenter-01`.
 
-   - **Service Engine Group Name**: Name of the Service Engine Group created for Tanzu Kubernetes Grid management clusters created while configuring NSX Advanced Load Balancer `tanzu-mgmt-segroup-01`
+   - **Service Engine Group Name**: Name of the Service Engine Group created for Tanzu Kubernetes Grid management clusters created while configuring NSX Advanced Load Balancer: `tanzu-mgmt-segroup-01`.
 
-   - **Workload VIP Network Name**: Select Tanzu Kubernetes Grid Management VIP/Data Network network `tkg-mgmt-vip-segment` and select the discovered subnet
+   - **Workload VIP Network Name**:
 
-   - **Workload VIP Network CIDR**: Select the discovered subnet, in our case `172.16.50.0/24`​
+        - Select Tanzu Kubernetes Grid Management VIP/Data Network network: `tkg-mgmt-vip-segment`
+        - Select the discovered subnet.
 
-   - **Management VIP Network Name**: Select Tanzu Kubernetes Grid Cluster VIP/Data Network network `tkg-cluster-vip-segment`
+   - **Workload VIP Network CIDR**: Select the discovered subnet, in our case: `172.16.50.0/24`​.
+
+   - **Management VIP Network Name**: Select Tanzu Kubernetes Grid Cluster VIP/Data Network network: `tkg-cluster-vip-segment`.
 
    - **Cluster Labels**: Enter required labels.
 
       Example:
-      **type**:**management  
+      **type**:**management**  
 
       **Note:** Based on your requirements you can specify multiple labels.
 
@@ -910,7 +913,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. In the **Kubernetes Network** section, select the TKG Management Network, **tkg-mgmt-segment**. The control plane and worker nodes will be placed in the TKG Management Network during management cluster deployment.  
 
-  Optionally, change the **Pod** and **Service CIDR** if the default provided network is already in use in your environment
+  Optionally, change the **Pod** and **Service CIDR** if the default provided network is already in use in your environment.
 
   ![](./img/tko-on-vsphere-nsxt/image81.png)
 
@@ -958,6 +961,7 @@ Before you proceed with the management cluster creation, ensure that the base im
    Alternatively, you can copy and execute the provided command to deploy the management cluster.   
 
 While the Tanzu Kubernetes Grid management Cluster deploys:
+
 - A virtual service is created in NSX Advanced Load Balancer.
 
 - New service engines are deployed in vCenter. The following picture shows the SEs.

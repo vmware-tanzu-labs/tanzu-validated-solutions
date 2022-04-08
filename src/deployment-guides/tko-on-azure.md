@@ -280,12 +280,8 @@ az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot
 
 If you prefer not to copy paste code, you can use the following sample script files:
 
-<!-- cSpell:disable -->
-
-  - [bootstrapsetup.sh](./resources/tko-on-azure/bootstrapsetup.sh)
-  - [bootstraptanzu.sh](./resources/tko-on-azure/bootstraptanzu.sh)
-
-<!-- cSpell:enable -->
+  - [`bootstrapsetup.sh`](./resources/tko-on-azure/bootstrapsetup.sh)
+  - [`bootstraptanzu.sh`](./resources/tko-on-azure/bootstraptanzu.sh)
 
 ## <a id=deploy-TKG> </a> Deploy Tanzu Kubernetes Grid
 Deploy Tanzu Kubernetes Grid after you set up your Azure environment and bootstrap VM.
