@@ -9,6 +9,7 @@ Tanzu Mission Control is a centralized management platform for consistently oper
 ### Attaching Tanzu Kubernetes Clusters to Tanzu Mission Control
 
 VMware recommends that you attach the shared services and workload clusters into Tanzu Mission Control as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control UI or CLI.
+
 **Note:** Registering Tanzu Kubernetes Grid 1.4 management cluster to Tanzu Mission Control is not supported.
 
 Tanzu Mission Control can assist you with:
@@ -58,7 +59,7 @@ In addition to the direct policy defined for a given object, each object also ha
 
 ## Observability
 
-### Metrics On-premises
+### Metrics On-Premises
 
 Tanzu Kubernetes Grid includes packages/extensions for Prometheus and Grafana to allow you to monitor Tanzu Kubernetes Grid cluster metrics. The following images show examples of cluster metrics as visualized data in Grafana:
 
@@ -158,7 +159,7 @@ To view and download integrations with prebuilt dashboards that are available in
 
 Tanzu Service Mesh is VMware’s enterprise-class service mesh solution that provides consistent control and security for microservices, end-users, and data across all your clusters and clouds in the most demanding multi-cluster and multi-cloud environments.
 
-Key Benefits of TSM:
+Key Benefits of Tanzu Service Mesh:
 
 * Extends the service mesh capability (discovery, connectivity, control, security, and observability) to users and data.
 * Facilitates the development and management of distributed applications across multiple clusters, multiple clouds, and in hybrid-cloud environments with Global Namespaces, supporting federation across organizational boundaries, technologies, and service meshes.
@@ -188,7 +189,7 @@ The key concepts that distinguish Tanzu Service Mesh as an enterprise-class serv
 * Public Services
 
 To learn more about the key components, please refer to the [Tanzu Service Mesh product documentation](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/concepts-guide/GUID-CCD4EDBD-4DBA-449A-B8F9-4128B4F4B473.html)
- 
+
 ## Global Namespace
 
 With global namespaces in Tanzu Service Mesh, you can easily connect and secure the services in your application across clusters. You can add the services in your application to a global namespace to have them automatically discovered and connected across the clusters.
@@ -203,24 +204,26 @@ A Global Namespace connects resources and workloads that form the application in
 * **Security:** The global namespace manages security for its resources by enforcing that all traffic between the resources is encrypted using Mutual Transport Layer Security authentication (mTLS).
 * **Observability:** Tanzu Service Mesh aggregates telemetry data, such as metrics for services, clusters, and nodes, inside the global namespace.
 
-# TSM Key Use Cases
+# Tanzu Service Mesh Key Use Cases
 
-1: Identify Service Dependencies 
+- Identify Service Dependencies
 
-The global namespace enables users to view the topology of the services or a cluster as a chart. The topology graph can be used to understand service dependencies and determine the health of the services and the performance metrics related to each service. The topology graph view is generated dynamically by observing the traffic that is flowing between the services in a global namespace or a cluster. 
+  The global namespace enables users to view the topology of the services or a cluster as a chart. The topology graph can be used to understand service dependencies and determine the health of the services and the performance metrics related to each service. The topology graph view is generated dynamically by observing the traffic that is flowing between the services in a global namespace or a cluster.
 
-![Tanzu Service Mesh Service Dependency](img/tko-saas/TSM-App-Connectivity.png)
+  ![Tanzu Service Mesh Service Dependency](img/tko-saas/TSM-App-Connectivity.png)
 
-2: Intelligent, graph-aware application resiliency and scalability
+- Intelligent, graph-aware application resiliency and scalability
 
-As application usage and traffic increase, Tanzu Service Mesh can automatically scale application instances up and down to ensure that applications perform within the bounds of their SLO policies and meet performance objectives for SLA compliance.
+  As application usage and traffic increase, Tanzu Service Mesh can automatically scale application instances up and down to ensure that applications perform within the bounds of their SLO policies and meet performance objectives for SLA compliance.
 
-![Tanzu Service Mesh Resiliency](img/tko-saas/TSM-Resiliency.png)
+  ![Tanzu Service Mesh Resiliency](img/tko-saas/TSM-Resiliency.png)
 
-3: Deep application visibility and actionable insights
+- Deep application visibility and actionable insights
 
-Tanzu Service Mesh help teams overcome the performance and security visibility gaps resulting from distributed microservices architectures and adoption of multiple platforms and clouds. Operations teams have access to rich troubleshooting tools, including multi-cloud topology maps and traffic flows, performance and health metrics, and application-to-infrastructure correlation. 
+  Tanzu Service Mesh help teams overcome the performance and security visibility gaps resulting from distributed microservices architectures and adoption of multiple platforms and clouds. Operations teams have access to rich troubleshooting tools, including multi-cloud topology maps and traffic flows, performance and health metrics, and application-to-infrastructure correlation.
 
-![Tanzu Service Mesh Observability](img/tko-saas/TSM-Observability.png)
+  ![Tanzu Service Mesh Observability](img/tko-saas/TSM-Observability.png)
 
+## Deployment Instructions
 
+For instructions on how to SaaS services, see [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](../deployment-guides/tko-saas-services.md).

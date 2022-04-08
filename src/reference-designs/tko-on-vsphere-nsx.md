@@ -330,6 +330,9 @@ If you are deploying Harbor without a publicly signed certificate, create the re
 
 ![Harbor Container Registry](img/tko-on-vsphere-nsx/image32.png)
 
+## Deployment Instructions
+For instructions on how to deploy this reference design, see [Deploy VMware Tanzu for Kubernetes Operations on VMware vSphere with VMware NSX-T](../deployment-guides/tko-on-vsphere-nsxt.md).
+
 ## <a id=appendix-a></a> Appendix A - Configure Node Sizes
 
 The Tanzu CLI creates the individual nodes of management clusters and Tanzu Kubernetes clusters according to settings that you provide in the configuration file. On vSphere, you can configure all node VMs to have the same predefined configurations, set different predefined configurations for control plane and worker nodes, or customize the configurations of the nodes. By using these settings, you can create clusters that have nodes with different configurations to the management cluster nodes. You can also create clusters in which the control plane nodes and worker nodes have different configurations.
