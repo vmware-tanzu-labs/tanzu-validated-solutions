@@ -1,13 +1,11 @@
-# Tanzu Application Platform Deployment Guide
+# Tanzu Application Platform Deployment
 
-## Executive Summary
+This deployment outlines the deployment steps for VMware Tanzu Application Platform 1.0 on a Kubernetes workload cluster. In accordance with the [Tanzu Application Platform Reference Design](../reference-designs/tap-architecture-planning.md), four clusters will be created:
 
-This deployment guide outlines the deployment steps for VMware Tanzu Application Platform on a Kubernetes workload cluster. In accordance with the [Tanzu Application Platform Reference Design](../reference-designs/tap-architecture-planning.md), four clusters will be created:
-
-* Tanzu Application Platform Build Cluster 
-* Tanzu Application Platform Run Cluster 
-* Tanzu Application Platform View Cluster 
-* Tanzu Application Platform Iterate Cluster 
+* Tanzu Application Platform Build Cluster
+* Tanzu Application Platform Run Cluster
+* Tanzu Application Platform View Cluster
+* Tanzu Application Platform Iterate Cluster
 
 ## Prerequisites
 
@@ -35,7 +33,7 @@ The following provides an overview of the steps necessary to deploy Tanzu Applic
 1. [Setup Tanzu Application Platform Run cluster](#tap-run)
 1. [Setup Tanzu Application Platform View cluster](#tap-ui)
 1. [Setup Tanzu Application Platform Iterate cluster](#tap-full)
-1. [App Deployment](#tap-sample-app)
+1. [Deploy Sample Application](#tap-sample-app)
 
 
 ## <a id="tap-build"> </a>Setup Tanzu Application Platform Build Cluster
@@ -44,13 +42,13 @@ The Build Cluster is responsible for taking a developer's source code commits an
 
 ### <a id="tanzu-essential"> </a> Step 1: Install Tanzu Cluster Essentials and Tanzu CLI
 
-Provide following user inputs into commands and execute them to install Tanzu Cluster Essentials and Tanzu CLI on your bootstrap/jumpbox machine. 
+Provide following user inputs into commands and execute them to install Tanzu Cluster Essentials and Tanzu CLI on your bootstrap/jumpbox machine.
 
 * `TAP_TAP_WORKLOAD_CONTEXT` - the `kubeconfig` context of the workload cluster
 * `TANZU_NET_API_TOKEN` - an API token obtained from https://network.tanzu.vmware.com
 * `INSTALL_REGISTRY_USERNAME` - the Tanzu username
 * `INSTALL_REGISTRY_PASSWORD` - the Tanzu user's password
-  
+
 ```bash
 set -e
 
@@ -103,15 +101,15 @@ chmod +x /usr/local/bin/demo-magic.sh
 
 sudo apt install pv #required for demo-magic
 
-# install yq package 
+# install yq package
 sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
 sudo chmod a+x /usr/local/bin/yq
 yq --version
 ```
 
-### <a id=tap-package-repo> </a>Step 2: Add the Tanzu Application Platform package repository
+### <a id=tap-package-repo> </a>Step 2: Add the Tanzu Application Platform Package Repository
 
-Execute following commands to add TAP package. 
+Execute following commands to add TAP package.
 
 ```bash
 set -e
@@ -136,9 +134,9 @@ tanzu package repository get tanzu-tap-repository --namespace "${TAP_NAMESPACE}"
 tanzu package available list --namespace "${TAP_NAMESPACE}"
 ```
 
-### <a id=tap-profile-build> </a>Step 3: Install Tanzu Application Platform build profile
+### <a id=tap-profile-build> </a>Step 3: Install Tanzu Application Platform Build Profile
 
-Provide following user inputs to set environments variables into commands and execute them to install build profile
+Provide following user inputs to set environment variables into commands and execute them to install the build profile.
 
 * `TAP_REGISTRY_SERVER` - uri of registry server
 * `TAP_REGISTRY_USER` - registry user
@@ -172,7 +170,7 @@ ootb_supply_chain_basic:
   service_account: default
 tap_gui:
   service_type: LoadBalancer
-  
+
 metadata_store:
   app_service_type: LoadBalancer
 
@@ -301,19 +299,19 @@ EOF
 ```
 
 
-## <a id=tap-run> </a> Setup Tanzu Application Platform Run cluster
+## <a id=tap-run> </a> Set Up Tanzu Application Platform Run Cluster
 
-The Run cluster will utilize the container image and Kubernetes resources created by the Build cluster and run them as defined in the Deliverable object for each application.
+The Run Cluster utilizes the container image and Kubernetes resources created by the Build Cluster and runs them as defined in the Deliverable object for each application.
 
-### Step 1: Install Tanzu Cluster Essentials and Tanzu CLI 
-Please ensure you login into your Kubernetes Run cluster and perform steps outlined in [Install Tanzu Cluster Essentials and Tanzu CLI](#tanzu-essential). 
+### Step 1: Install Tanzu Cluster Essentials and Tanzu CLI
+Log in to your Kubernetes Run Cluster and perform steps outlined in [Install Tanzu Cluster Essentials and Tanzu CLI](#tanzu-essential).
 
-### Step 2: Add the Tanzu Application Platform package repository
-Perform steps outlined in [Add the Tanzu Application Platform package repository](#tap-package-repo)
+### Step 2: Add the Tanzu Application Platform Package Repository
+Perform the steps outlined in [Add the Tanzu Application Platform package repository](#tap-package-repo).
 
-### <a id=tap-profile-run> </a>Step 3: Install Tanzu Application Platform run profile
+### <a id=tap-profile-run> </a>Step 3: Install Tanzu Application Platform Run Profile
 
-Provide following user inputs to set environments variables into commands and execute them to install run profile
+Provide the following user inputs to set environments variables into commands and execute them to install run profile
 <!-- /* cSpell:disable */ -->
 * `TAP_REGISTRY_SERVER` - uri of the image registry
 * `TAP_REGISTRY_USER` - registry user
@@ -351,7 +349,7 @@ ootb_supply_chain_basic:
   service_account: default
 tap_gui:
   service_type: LoadBalancer
-  
+
 metadata_store:
   app_service_type: LoadBalancer
 
@@ -393,28 +391,28 @@ tanzu package installed list -A
 # check ingress external ip
 kubectl get svc -n tanzu-system-ingress
 
-# pick external ip from service output  and configure DNS wild card(*) into your DNS server like aws route 53 etc. 
+# pick external ip from service output  and configure DNS wild card(*) into your DNS server like aws route 53 etc.
 # example - *.run.customer0.io ==> <ingress external ip/cname>
 ```
 
-### Step 4: Configure developer namespaces to use installed packages
+### Step 4: Configure Developer Namespaces to Use Installed Packages
 
 Perform the steps outlined in [Configure developer namespaces to use installed packages](#tap-dev-namespace)
 
-Execute the steps 1-4 outlined in [Setup Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters. 
+Execute the steps 1-4 outlined in [Setup Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters.
 
 
-## <a id=tap-ui> </a> Setup Tanzu Application Platform View cluster
+## <a id=tap-ui> </a> Setup Tanzu Application Platform View Cluster
 
 The View cluster is designed to run the web applications for TAP; specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
 
-### Step 1: Install Tanzu Cluster Essentials and Tanzu CLI 
-Please ensure you login into your Kubernetes Run cluster and perform steps outlined in [Install Tanzu Cluster Essentials and Tanzu CLI](#tanzu-essential). 
+### Step 1: Install Tanzu Cluster Essentials and Tanzu CLI
+Please ensure you login into your Kubernetes Run cluster and perform steps outlined in [Install Tanzu Cluster Essentials and Tanzu CLI](#tanzu-essential).
 
-### Step 2: Add the Tanzu Application Platform package repository 
+### Step 2: Add the Tanzu Application Platform Package Repository
 Perform steps outlined in [Add the Tanzu Application Platform package repository](#tap-package-repo)
 
-### <a id=tap-profile-ui> </a>Step 3: Install Tanzu Application Platform view profile
+### <a id=tap-profile-ui> </a>Step 3: Install Tanzu Application Platform View Profile
 
 Provide following user inputs to set environments variables into commands and execute them to install view profile
 
@@ -423,16 +421,14 @@ Provide following user inputs to set environments variables into commands and ex
 * `TAP_REGISTRY_PASSWORD` - registry password
 * `TAP_GITHUB_TOKEN` - GitHub personal access token
 * `TAP_APP_DOMAIN`  - app domain you want to use for tap-gui
-* `TAP_GIT_CATALOG_URL` - git catalog url. Refer this as an [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml) 
+* `TAP_GIT_CATALOG_URL` - git catalog url. Refer this as an [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
 * `TAP_RUN_CLUSTER_NAME` - Run cluster name
 * `TAP_RUN_CLUSTER_API` - Run cluster Kubernetes API endpoint. AWS eks Example `https://xxxxxxxxxxxxxxx.gr7.us-east-2.eks.amazonaws.com`
 * `TAP_RUN_CLUSTER_TOKEN` - Run cluster Kubernetes service account token. Use below kubectl command to get `TAP_RUN_CLUSTER_TOKEN`
 
- See the [full profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) documentation for further details. 
+ See [Full Profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) for further details.
 
- **Notes** - 
-  1. `TAP_APP_DOMAIN` could be a top-level domain or subdomain.
-  1. `TAP_RUN_CLUSTER_TOKEN` can be obtained by executing the following command on you Run cluster:
+ **Note:** `TAP_APP_DOMAIN` can be a top-level domain or subdomain. `TAP_RUN_CLUSTER_TOKEN` can be obtained by executing the following command on you Run Cluster:
 
   ```bash
   set -e
@@ -440,12 +436,12 @@ Provide following user inputs to set environments variables into commands and ex
   export TAP_SERVICE_ACCOUNT_NAME="default"
 
   kubectl -n "${TAP_NAMESPACE}" get secret $(kubectl -n "${TAP_NAMESPACE}" get sa "${TAP_SERVICE_ACCOUNT_NAME}" -o=json \
-| jq -r '.secrets[0].name') -o=json \
-| jq -r '.data["token"]' \
-| base64 --decode
+  | jq -r '.secrets[0].name') -o=json \
+  | jq -r '.data["token"]' \
+  | base64 --decode
   ```
-  
-  See [Backstage docs](https://backstage.io/docs/features/kubernetes/configuration#label-selector-query-annotation) for multi-cluster/multi-tenant details. 
+
+  See [Backstage](https://backstage.io/docs/features/kubernetes/configuration#label-selector-query-annotation) documentation for multi-cluster/multi-tenant details.
 
 
 ```bash
@@ -518,7 +514,7 @@ tap_gui:
               skipTLSVerify: true
               skipMetricsLookup: true
               serviceAccountToken: "${TAP_RUN_CLUSTER_TOKEN}"
-      
+
 contour:
   envoy:
     service:
@@ -568,31 +564,33 @@ tanzu package installed list -A
 
 kubectl get svc -n tanzu-system-ingress
 
-# pick an external ip from service output and configure DNS wildcard records 
+# pick an external ip from service output and configure DNS wildcard records
 # example - *.ui.customer0.io ==> <ingress external ip/cname>
 ```
 
-### Step 4: Set up developer namespaces to use installed packages 
+### Step 4: Set Up Developer Namespaces to Use Installed Packages
 Perform the steps outlined in [Configure developer namespaces to use installed packages](#tap-dev-namespace)
 
-### Deploy Sample application 
-See the steps to deploy and test the [sample application](#tap-sample-app). You can refer to [Deploy Application documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-getting-started.html) for further details.
+### Deploy Sample Application
+See the steps to deploy and test the [sample application](#tap-sample-app).
+
+For more information, also see [Getting started with the Tanzu Application Platform](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-getting-started.html).
 
 
-## <a id=tap-full> </a> Setup Tanzu Application Platform Iterate cluster
+## <a id=tap-full> </a> Setup Tanzu Application Platform Iterate Cluster
 
-The Iterate cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features
+The Iterate Cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features
 
-### Step 1: Install tanzu cluster essentials and tanzu cli - 
-Please ensure you login into Kubernetes View cluster and perform steps of [Install tanzu cluster essentials and tanzu cli](#tanzu-essential). 
+### Step 1: Install Tanzu Cluster Essentials and Tanzu CLI
+Log in to the Kubernetes View Cluster and perform steps outlined in [Install Tanzu Cluster Essentials and Tanzu CLI](#tanzu-essential).
 
-### Step 2: Add the Tanzu Application Platform package repository - 
-Perform steps of [Add the Tanzu Application Platform package repository](#tap-package-repo)
+### Step 2: Add the Tanzu Application Platform Package Repository
+Perform steps outlined in [Add the Tanzu Application Platform package repository](#tap-package-repo)
 
 
-### <a id=tap-profile-full> </a>Step 3: Install Tanzu Application Platform Iterate profile
+### <a id=tap-profile-full> </a>Step 3: Install Tanzu Application Platform Iterate Profile
 
-Provide following user inputs to set environments variables into commands and execute them to install Iterate profile
+Provide the following user inputs to set environment variables into commands and execute them to install Iterate profile
 
 * `TAP_REGISTRY_SERVER` - uri of image registry
 * `TAP_REGISTRY_USER` - registry user
@@ -601,10 +599,10 @@ Provide following user inputs to set environments variables into commands and ex
 * `TAP_APP_DOMAIN` - app domain you want to use for tap-gui
 * `TAP_GIT_CATALOG_URL` - git catalog url. if you don't have one , use this [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
 
- Refer to the [full profile documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) for further details. 
+ Refer to the [full profile documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) for further details.
 
 ```bash
-set -e 
+set -e
 
 # set following variables
 export TAP_NAMESPACE="tap-install"
@@ -683,21 +681,21 @@ tanzu package installed list -A
 
 kubectl get svc -n tanzu-system-ingress
 
-#pick external ip from output and configure DNS wild card into your DNS server like aws route 53 etc. 
+#pick external ip from output and configure DNS wild card into your DNS server like aws route 53 etc.
 ```
 
-### Step 4: Set up developer namespaces to use installed packages 
-Perform steps of [Set up developer namespaces to use installed packages](#tap-dev-namespace)
+### Step 4: Set Up Developer Namespaces to Use Installed Packages
+Perform the steps outlined in [Set up developer namespaces to use installed packages](#tap-dev-namespace)
 
 
-## <a id=tap-sample-app> Deploy Sample application
+## <a id=tap-sample-app> Deploy Sample Application
 
-Execute following command to see the demo of sample app deployment into Tanzu Application Platform
+Execute following command to see the demo of sample app deployment into Tanzu Application Platform.
 
 ```bash
 set -e
 
-# login to kubernetes workload build cluster 
+# login to kubernetes workload build cluster
 kubectl config get-contexts
 kubectl config use-context <cluster config name>
 
@@ -729,7 +727,7 @@ tanzu apps workload list
 # get app details
 tanzu apps workload get "${TAP_APP_NAME}"
 
-# saved deliverables yaml configuration into local directory. check below sample file below 
+# saved deliverables yaml configuration into local directory. check below sample file below
 kubectl get deliverables "${TAP_APP_NAME}" -o yaml |  yq 'del(.status)'  | yq 'del(.metadata.ownerReferences)' | yq 'del(.metadata.resourceVersion)' | yq 'del(.metadata.uid)' >  "${TAP_APP_NAME}-delivery.yaml"
 
 # sample deliverable
@@ -757,43 +755,44 @@ spec:
 
 ##################################################################
 
- # login to kubernetes workload run cluster 
+ # login to kubernetes workload run cluster
 kubectl config get-contexts
 kubectl config use-context <cluster config name>  
 
-# apply app-delivery into run cluster 
+# apply app-delivery into run cluster
 
 kubectl apply -f app-delivery.yaml
 
 # check app status
 kubectl get deliverables "${TAP_APP_NAME}"
 
-# get app url 
+# get app url
 kubectl get all -A | grep route.serving.knative
 
 # copy app url and paste into browser to see the sample app
 
 ```
 
-### Register Entity into tap-gui 
-* open tap-gui url and click on **Register Entity** button and provide catalog-info.yaml file url of your app. See [Example](https://github.com/sample-accelerators/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml)
+### Register Entity into tap-gui
 
-* Make sure you have setup 'app.kubernetes.io/part-of=**app name** correctly into your app catalog-info.yaml. and it should match with your app name. 
-**Example `'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=tap-demo2'`**
+* Open tap-gui URL and click the **Register Entity** button and provide the `catalog-info.yaml` file URL of your app. See [Example](https://github.com/sample-accelerators/tanzu-java-web-app/blob/main/catalog/catalog-info.yaml).
+
+* Make sure you have set up `app.kubernetes.io/part-of=app name` correctly into your app catalog-info.yaml. and it should match with your app name.
+**Example: `'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=tap-demo2'`**
 
 ### Troubleshooting Tanzu Application Platform
 
-In the event of failure, you may utilize the following command to obtain failure details:
-`kubectl get packageinstall/<package> -n tap-install -o yaml`. 
+In the event of failure, use the following command to obtain failure details:
+`kubectl get packageinstall/<package> -n tap-install -o yaml`.
 
-Refer to [Troubleshooting Tanzu Application Platform Tips](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-troubleshooting.html) for additional details.
+See [Troubleshooting Tanzu Application Platform Tips](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-troubleshooting.html) for additional details.
 
 
 ### Service Bindings for Kubernetes
 
-You may reference [Service Bindings for Kubernetes](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-service-bindings-about.html) for additional details.
+See [Service Bindings for Kubernetes](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-service-bindings-about.html) for additional details.
 
 
-### Tanzu Application Platform GUI auth provider
+### Tanzu Application Platform GUI Auth Provider
 
-You may reference the [auth provider documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-tap-gui-auth.html) for additional details.
+See [Setting up a Tanzu Application Platform GUI authentication provider](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-tap-gui-auth.html) for additional details.
