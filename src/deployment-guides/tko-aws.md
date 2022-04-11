@@ -207,7 +207,7 @@ After doing the network configuration, complete the steps described in this sect
 	```bash
 	aws ec2 describe-instances --instance-id $(jq -r '.Instances[0].InstanceId' $WORKING_DIR/instance_jb_starting) > $WORKING_DIR/instance_jb_started
 
-	echo Public IP: $(jq -r '.Reservations.Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started')
+	echo Public IP: $(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started)
 
 	ssh ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started) -i tkgkp.pem
 	```
