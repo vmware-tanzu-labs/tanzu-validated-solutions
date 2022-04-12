@@ -1,8 +1,8 @@
-# VMware Tanzu for Kubernetes Operations Reference Architecture
+# VMware Tanzu for Kubernetes Operations Reference Architecture 1.4
 
 This is the table of contents from which the Tanzu for Kubernetes Operations Reference Architecture Documentation site on docs.vmware.com is built.
 
-- [VMware Tanzu for Kubernetes Operations Reference Architecture](./reference-designs/index.md)
+- [VMware Tanzu for Kubernetes Operations Reference Architecture 1.4](./reference-designs/index.md)
 - [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](./reference-designs/tko-on-vmc-aws.md)
 - [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](./reference-designs/tko-on-vsphere.md)
     - [Deploy Tanzu for Kubernetes Operations on vSphere with VMware VDS](./deployment-guides/tko-on-vsphere-vds.md)
