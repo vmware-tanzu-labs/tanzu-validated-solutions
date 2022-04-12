@@ -90,7 +90,7 @@ The following describes the steps to create your AWS environment and configure y
 	```
 	<!-- /* cSpell:enable */ -->
 
-5. For each of public subnet, set `map-public-ip-on-launch`.
+5. For each public subnet, set `map-public-ip-on-launch`.
 
 	<!-- /* cSpell:disable */ -->
 	```
