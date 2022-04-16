@@ -117,7 +117,7 @@ Here are some recommendations on how namespaces can be used in a vSphere with Ta
 |**Software Components**|**Version**|
 | :- | :- |
 |Tanzu Kubernetes Release|1.21.2|
-|VMware vSphere ESXi|ESXi - 7.0 U3|
+|VMware vSphere ESXi|7.0 U3|
 |VMware vCenter (VCSA)|7.0 U3|
 |NSX Advanced Load Balancer|20.1.7|
 
@@ -219,7 +219,7 @@ For deployment of vSphere with Tanzu, build separate networks for the TKG manage
 
 The network reference design can be mapped into this general framework.
 
-![](img/tko-vwt/tko-vwt08.jpg)
+![](./img/tko-on-vsphere-with-tanzu/tko-vwt08.jpg)
 
 **Note:** Based on your requirements, you can create additional networks for your workload cluster. These networks are also referred to as vSphere with Tanzu workload secondary network.
 
