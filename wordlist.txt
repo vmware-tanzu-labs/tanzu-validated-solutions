@@ -67,3 +67,4 @@ CRD's
 SRIOV
 DPDK
 Daemonset
+airgap
