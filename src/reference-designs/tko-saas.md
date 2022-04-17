@@ -6,9 +6,11 @@ The SaaS products in the VMware Tanzu portfolio are critical components for secu
 
 Tanzu Mission Control is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds. It provides operators with a single control point to give developers the independence they need to drive business forward, while enabling consistent management and operations across environments for increased security and governance.
 
-### Registering Tanzu Kubernetes Clusters to Tanzu Mission Control
+### Attaching Tanzu Kubernetes Clusters to Tanzu Mission Control
 
-VMware recommends that you register the management, shared services and workload clusters into Tanzu Mission Control as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control UI or CLI.
+VMware recommends that you attach the shared services and workload clusters into Tanzu Mission Control as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control UI or CLI.
+
+**Note:** Registering Tanzu Kubernetes Grid 1.4 management cluster to Tanzu Mission Control is not supported.
 
 Tanzu Mission Control can assist you with:
 
@@ -54,17 +56,18 @@ In the Tanzu Mission Control resource hierarchy, you can specify policies at the
 
 In addition to the direct policy defined for a given object, each object also has inherited policies that are defined in the parent objects. For example, a cluster has a direct policy and also has inherited policies from the cluster group and organization to which it is attached.
 
+
 ## Observability
 
 ### Metrics On-Premises
 
 Tanzu Kubernetes Grid includes packages/extensions for Prometheus and Grafana to allow you to monitor Tanzu Kubernetes Grid cluster metrics. The following images show examples of cluster metrics as visualized data in Grafana:
 
-![TKG Cluster metrics in Grafana](img/tko-on-vsphere/figure-13.png)
+![Figure 13 - TKG Cluster metrics in Grafana](img/tko-on-vsphere/figure-13.png)
 
-![TKG Cluster API Server Uptime metrics](img/tko-on-vsphere/figure-14.png)
+![Figure 14 - TKG Cluster API Server Uptime metrics](img/tko-on-vsphere/figure-14.png)
 
-You can install Prometheus and Grafana by using Tanzu packages. For more information, see [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html)
+You can install Prometheus and Grafana by using Tanzu packages. For more information, see [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html).
 
 ### Metrics in Tanzu Observability
 
@@ -74,18 +77,34 @@ In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability is used to
 
 You can configure Tanzu Observability with an array of capabilities. The following table describes the plugins that VMware recommends for this design:
 
-|**Plugin**|**Purpose**|**Key Metrics**|**Example Metrics**|
-| :- | :- | :- | :- |
-|Telegraf for vSphere|Collect metrics from vSphere|ESXi Server and VM performance & resource utilization|vSphere VM, Memory and Disk usage and performance|
-|Wavefront Kubernetes Integration|Collect metrics from Kubernetes clusters and pods|Kubernetes container and POD statistics|<p>POD CPU usage rate</p><p>Daemonset ready stats</p>|
-|Wavefront by VMware for Istio|Adapts Istio collected metrics and forwards to Wavefront|Istio metrics including request rates, trace rates, throughput, etc.|Request rate (Transactions per Second)|
-
-The below table provides recommendations for configuring Observability in your Tanzu Kubernetes clusters.
-
-|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
-| :- | :- | :- | :- |
-|TKO-MON-001|Use Tanzu Observability|Tanzu Kubernetes clusters have outbound connectivity to the internet.|VMware Tanzu Observability by Wavefront is an enterprise observability solution for multi-cloud environments.|
-|TKO-MON-002|Use Prometheus/Grafana|TKG is deployed in an air gap environment.|You have to use an internal registry solution where you have pushed the required tanzu packages for installing Prometheus/Grafana.|
+<table>
+  <tr>
+   <th>Plugin</th>
+   <th>Purpose</th>
+   <th>Key Metrics</th>
+   <th>Example Metrics</th>
+  </tr>
+  <tr>
+   <td>Telegraf for vSphere</td>
+   <td>Collects metrics from vSphere</td>
+   <td>ESXi Server and VM performance and resource utilization</td>
+   <td>vSphere VM, memory, and disk usage and performance</td>
+  </tr>
+  <tr>
+   <td>Wavefront Kubernetes Integration</td>
+   <td>Collects metrics from Kubernetes clusters and pods</td>
+   <td>Kubernetes container and POD statistics</td>
+   <td>POD CPU usage rate
+   <br>
+   `DaemonSet` ready statistics</td>
+  </tr>
+  <tr>
+   <td>Wavefront by VMware for Istio</td>
+   <td>Adapts Istio collected metrics and forwards to Wavefront</td>
+   <td>Istio metrics including request rates, trace rates, throughput, etc.</td>
+   <td>Request rate (transactions per second)</td>
+  </tr>
+</table>
 
 Some sample dashboards are shown below. Tanzu Observability can display metric data from the full stack of application elements from the platform (VMware ESXi servers), to the virtual environment, to the application environment (Kubernetes), and down to the various components of an application (APM).
 
