@@ -2,15 +2,19 @@
 
 The SaaS products in the VMware Tanzu portfolio are critical components for securing your IT infrastructure. VMware Tanzu Mission Control provides a centralized control plane for Kubernetes, and Tanzu Service Mesh provides a global control plane for service mesh networks. VMware Tanzu Observability by Wavefront offers observability and analytics for multi-cloud Kubernetes environments.
 
+The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the VMware SaaS services for Tanzu for Kubernetes operations.
+
+- Tanzu Mission Control (TMC)
+- Tanzu Observability (TO)
+- Tanzu Service Mesh (TSM)
+
 ## Tanzu Mission Control
 
 Tanzu Mission Control is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds. It provides operators with a single control point to give developers the independence they need to drive business forward, while enabling consistent management and operations across environments for increased security and governance.
 
-### Attaching Tanzu Kubernetes Clusters to Tanzu Mission Control
+### Registering Tanzu Kubernetes Clusters to Tanzu Mission Control
 
-VMware recommends that you attach the shared services and workload clusters into Tanzu Mission Control as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control UI or CLI.
-
-**Note:** Registering Tanzu Kubernetes Grid 1.4 management cluster to Tanzu Mission Control is not supported.
+VMware recommends that you register TKG management, shared services and workload clusters into Tanzu Mission Control as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. If the Tanzu Kubernetes Grid clusters are behind a proxy, import the proxy configuration to Tanzu Mission Control and then attach the cluster using Tanzu Mission Control UI or CLI.
 
 Tanzu Mission Control can assist you with:
 
@@ -56,18 +60,17 @@ In the Tanzu Mission Control resource hierarchy, you can specify policies at the
 
 In addition to the direct policy defined for a given object, each object also has inherited policies that are defined in the parent objects. For example, a cluster has a direct policy and also has inherited policies from the cluster group and organization to which it is attached.
 
-
 ## Observability
 
 ### Metrics On-Premises
 
-Tanzu Kubernetes Grid includes packages/extensions for Prometheus and Grafana to allow you to monitor Tanzu Kubernetes Grid cluster metrics. The following images show examples of cluster metrics as visualized data in Grafana:
+Tanzu Kubernetes Grid includes packages for Prometheus and Grafana to allow you to monitor Tanzu Kubernetes Grid cluster metrics. The following images show examples of cluster metrics as visualized data in Grafana:
 
-![Figure 13 - TKG Cluster metrics in Grafana](img/tko-on-vsphere/figure-13.png)
+![TKG Cluster metrics in Grafana](./img/tko-saas/tko-observability01.png)
 
-![Figure 14 - TKG Cluster API Server Uptime metrics](img/tko-on-vsphere/figure-14.png)
+![TKG Cluster API Server Uptime metrics](./img/tko-saas/tko-observability02.png)
 
-You can install Prometheus and Grafana by using Tanzu packages. For more information, see [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html).
+You can install Prometheus and Grafana by using Tanzu packages through TMC Catalog. For more information, see [Installing Tanzu Packages through TMC](../deployment-guides/tko-package-install.md)
 
 ### Metrics in Tanzu Observability
 
@@ -77,83 +80,59 @@ In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability is used to
 
 You can configure Tanzu Observability with an array of capabilities. The following table describes the plugins that VMware recommends for this design:
 
-<table>
-  <tr>
-   <th>Plugin</th>
-   <th>Purpose</th>
-   <th>Key Metrics</th>
-   <th>Example Metrics</th>
-  </tr>
-  <tr>
-   <td>Telegraf for vSphere</td>
-   <td>Collects metrics from vSphere</td>
-   <td>ESXi Server and VM performance and resource utilization</td>
-   <td>vSphere VM, memory, and disk usage and performance</td>
-  </tr>
-  <tr>
-   <td>Wavefront Kubernetes Integration</td>
-   <td>Collects metrics from Kubernetes clusters and pods</td>
-   <td>Kubernetes container and POD statistics</td>
-   <td>POD CPU usage rate
-   <br>
-   `DaemonSet` ready statistics</td>
-  </tr>
-  <tr>
-   <td>Wavefront by VMware for Istio</td>
-   <td>Adapts Istio collected metrics and forwards to Wavefront</td>
-   <td>Istio metrics including request rates, trace rates, throughput, etc.</td>
-   <td>Request rate (transactions per second)</td>
-  </tr>
-</table>
+|**Plugin**|**Purpose**|**Key Metrics**|**Example Metrics**|
+| :- | :- | :- | :- |
+|Telegraf for vSphere|Collect metrics from vSphere|ESXi Server and VM performance & resource utilization|vSphere VM, Memory and Disk usage and performance|
+|Wavefront Kubernetes Integration|Collect metrics from Kubernetes clusters and pods|Kubernetes container and POD statistics|<p>POD CPU usage rate</p><p>Daemonset ready stats</p>|
+|Wavefront by VMware for Istio|Adapts Istio collected metrics and forwards to Wavefront|Istio metrics including request rates, trace rates, throughput, etc.|Request rate (Transactions per Second)|
 
 Some sample dashboards are shown below. Tanzu Observability can display metric data from the full stack of application elements from the platform (VMware ESXi servers), to the virtual environment, to the application environment (Kubernetes), and down to the various components of an application (APM).
 
 #### ESXi Dashboards
 
-![Figure 15 - ESXi Host summary](img/tko-on-vsphere/figure-15.png)
+![ESXi Host summary](img/tko-saas/tko-observability03.png)
 
-![Figure 16 - ESXi CPU usage](img/tko-on-vsphere/figure-16.png)
+![ESXi CPU usage](img/tko-saas/tko-observability04.png)
 
-![Figure 17 - ESXi Memory usage](img/tko-on-vsphere/figure-17.png)
+![ESXi Memory usage](img/tko-saas/tko-observability05.png)
 
-![Figure 18 - ESXi Storage performance](img/tko-on-vsphere/figure-18.png)
+![ESXi Storage performance](img/tko-saas/tko-observability06.png)
 
-![Figure 19 - ESXi Network performance](img/tko-on-vsphere/figure-19.png)
+![ESXi Network performance](img/tko-saas/tko-observability07.png)
 
 #### VM Dashboards
 
-![Figure 20 - VM CPU usage](img/tko-on-vsphere/figure-20.png)
+![VM CPU usage](img/tko-saas/tko-observability08.png)
 
-![Figure 21 - VM Memory usage](img/tko-on-vsphere/figure-21.png)
+![VM Memory usage](img/tko-saas/tko-observability09.png)
 
-![Figure 22 - VM Disk performance](img/tko-on-vsphere/figure-22.png)
+![VM Disk performance](img/tko-saas/tko-observability10.png)
 
-![Figure 23 - VM Network performance](img/tko-on-vsphere/figure-23.png)
+![VM Network performance](img/tko-saas/tko-observability11.png)
 
 #### Storage Dashboards
 
-![Figure 24 - Datastore performance](img/tko-on-vsphere/figure-24.png)
+![Datastore performance](img/tko-saas/tko-observability12.png)
 
 #### Kubernetes Dashboards
 
-![Figure 25 - Summary for one or more Kubernetes clusters](img/tko-on-vsphere/figure-25.png)
+![Summary for one or more Kubernetes clusters](img/tko-saas/tko-observability13.png)
 
-![Figure 26 - Cluster level metrics of a specific cluster](img/tko-on-vsphere/figure-26.png)
+![Cluster level metrics of a specific cluster](img/tko-saas/tko-observability14.png)
 
 #### Application Dashboards
 
-![Figure 27 - Istio Service Mesh summary (example)](img/tko-on-vsphere/figure-27.png)
+![Istio Service Mesh summary (example)](img/tko-saas/tko-observability15.png)
 
-![Figure 28 - Istio Service Mesh details (example)](img/tko-on-vsphere/figure-28.png)
+![Istio Service Mesh details (example)](img/tko-saas/tko-observability16.png)
 
-![Figure 29 - Application Overview - microservices aware out of the box.](img/tko-on-vsphere/figure-29.png)
+![Application Overview - microservices aware out of the box.](img/tko-saas/tko-observability17.png)
 
-![Figure 30 - Detailed Application Dashboards - out of the box.](img/tko-on-vsphere/figure-30.png)
+![Detailed App Dashboards - out of the box.](img/tko-saas/tko-observability18.png)
 
-![Figure 31 - Automatic Distributed Tracing information between (micro)services.](img/tko-on-vsphere/figure-31.png)
+![Automatic Distributed Tracing information between (micro)services.](img/tko-saas/tko-observability19.png)
 
 To view and download integrations with prebuilt dashboards that are available in Wavefront, see [Integrations](https://vmware.wavefront.com/integrations) on the VMware Tanzu Observability site.
-
 
 ## Tanzu Service Mesh (TSM)
 
@@ -162,8 +141,11 @@ Tanzu Service Mesh is VMware’s enterprise-class service mesh solution that pro
 Key Benefits of Tanzu Service Mesh:
 
 * Extends the service mesh capability (discovery, connectivity, control, security, and observability) to users and data.
+
 * Facilitates the development and management of distributed applications across multiple clusters, multiple clouds, and in hybrid-cloud environments with Global Namespaces, supporting federation across organizational boundaries, technologies, and service meshes.
+
 * Implement consistent application-layer traffic management and security policies across all your clusters and clouds.
+
 * Integrate with VMware Tanzu Mission Control, VMware Enterprise PKS, and VMware Tanzu Kubernetes Grid to provide a seamless user experience.
 
 ## Tanzu Service Mesh Architecture
@@ -171,8 +153,11 @@ Key Benefits of Tanzu Service Mesh:
 Tanzu Service Mesh has the following architecture at a high level:
 
 * **Global Controller and Observer:** A collection of microservices that run in VMware SaaS and deliver differentiated control, security, visibility, and autoscaling capabilities.
+
 * **Local Controller:** Local control-plane components operating in each Kubernetes cluster to provide fault tolerance if a cluster loses connection to the Global Controller.
+
 * **Sidecars:** Data-plane components that run in each Kubernetes cluster and handle east-west traffic inside the service mesh.
+
 * **Ingress and Egress Gateways:** Data-plane components that run in each Kubernetes cluster and handle north-south traffic going in and out of the service mesh.
 
    ![Tanzu Service Mesh Architecture](img/tko-saas/TSM-Architecture.png)
@@ -226,4 +211,4 @@ A Global Namespace connects resources and workloads that form the application in
 
 ## Deployment Instructions
 
-For instructions on how to SaaS services, see [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](../deployment-guides/tko-saas-services.md).
+For instructions on how to SaaS services, see [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](../deployment-guides/tko-saas-services.md)
