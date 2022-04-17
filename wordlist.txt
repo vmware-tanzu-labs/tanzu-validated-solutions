@@ -60,3 +60,9 @@ VNET
 TKG
 NSXT
 autoscaler
+VXLAN
+Geneve
+SCTP
+CRD's
+SRIOV
+DPDK
