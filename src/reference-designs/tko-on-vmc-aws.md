@@ -254,7 +254,7 @@ You can deploy the Management cluster in two ways:
 
 The TKG Installation user interface shows that, in the current version, it is possible to install TKG on vSphere (including VMware Cloud on AWS), AWS EC2, and Microsoft Azure. The UI provides a guided experience tailored to the IaaS, in this case on VMware Cloud on AWS.
 
-![TKG installer user interface](img/tko-on-vmc-aws/tko-vmc-aws03.png)
+![TKG installer user interface](./img/tko-on-vmc-aws/tko-vmc-aws03.JPG)
 
 The installation of TKG on VMware Cloud on AWS is done through the same UI as mentioned above but tailored to a vSphere environment.
 
