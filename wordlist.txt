@@ -68,3 +68,10 @@ SRIOV
 DPDK
 Daemonset
 airgap
+cloudadmin
+Clusterrolbinding
+statefulset
+Clusterrole
+Configmap
+LDAPS
+Gbps
