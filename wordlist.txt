@@ -75,3 +75,4 @@ Clusterrole
 Configmap
 LDAPS
 Gbps
+Akodeployment
