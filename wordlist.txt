@@ -66,3 +66,5 @@ SCTP
 CRD's
 SRIOV
 DPDK
+Alertmanager
+datasource
