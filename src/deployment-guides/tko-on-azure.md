@@ -213,7 +213,8 @@ You will set up the bootstrap VM with the following:
 - Tanzu Kubectl
 
 To set up the bootstrap VM:
-1. Verify that the VM is up and running. <_how do you verify?_>
+
+1. Verify that the VM is up and running.
 1. Connect to the VM through a standard SSH connection.
 1. Run the following Shell commands to set up the bootstrap VM.
     Replace the variables with the VMware account information needed to access VMware Customer Connect and Azure IDs for the Azure subscription on which you created resources using the ARM template and Application Registration/Service Principal.
