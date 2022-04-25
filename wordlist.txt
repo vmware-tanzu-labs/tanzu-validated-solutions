@@ -66,3 +66,4 @@ SCTP
 CRD's
 SRIOV
 DPDK
+Daemonset
