@@ -4,6 +4,7 @@ This is the table of contents from which the Tanzu for Kubernetes Operations Ref
 
 - [VMware Tanzu for Kubernetes Operations Reference Architecture 1.4](./reference-designs/index.md)
 - [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](./reference-designs/tko-on-vmc-aws.md)
+    - [Deploy Tanzu for Kubernetes Operations on VMware Cloud on AWS](./deployment-guides/tanzu-standard-on-vmc-aws.md)
 - [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](./reference-designs/tko-on-vsphere.md)
     - [Deploy Tanzu for Kubernetes Operations on vSphere with VMware VDS](./deployment-guides/tko-on-vsphere-vds.md)
 - [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Reference Design](./reference-designs/tko-on-vsphere-nsx.md)
