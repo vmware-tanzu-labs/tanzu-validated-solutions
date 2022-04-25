@@ -1,6 +1,6 @@
 # Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations
 
-The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the VMware SaaS services for Tanzu for Kubernetes operations.
+The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the VMware SaaS services for Tanzu for Kubernetes Operations.
 
 * [Tanzu Mission Control](#tmc) (TMC)
 * [Tanzu Observability](#to) (TO)
