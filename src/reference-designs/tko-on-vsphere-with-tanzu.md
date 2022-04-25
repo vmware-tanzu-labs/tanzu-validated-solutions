@@ -38,7 +38,7 @@ The following is a list of the components that comprise VMware Tanzu for Kuberne
 
 Tanzu for Kubernetes Operations puts all these components together into a coherent solution as shown below.
 
-![TKO using vSphere with Tanzu Reference Architecture](./img/tko-on-vsphere-with-tanzu/TKO-VWT-Reference-Design.jpg)
+![TKO using vSphere with Tanzu Reference Architecture](img/tko-on-vsphere-with-tanzu/TKO-VWT-Reference-Design.jpg)
 
 ## vSphere with Tanzu Components
 
@@ -63,9 +63,9 @@ Tanzu for Kubernetes Operations puts all these components together into a cohere
 
 	vSphere with Tanzu offers several default VM classes. You can use them as is or you can create new VM classes. The default VM classes that are available in vSphere with Tanzu are shown in the following screenshot.
 
-	![VM Classes in vSphere with Tanzu](./img/tko-on-vsphere-with-tanzu/tko-vwt01.jpg)
+	![VM Classes in vSphere with Tanzu](img/tko-on-vsphere-with-tanzu/tko-vwt01.jpg)
 
-	![VM Classes in vSphere with Tanzu](./img/tko-on-vsphere-with-tanzu/tko-vwt02.jpg)
+	![VM Classes in vSphere with Tanzu](img/tko-on-vsphere-with-tanzu/tko-vwt02.jpg)
 
 - **Storage Classes in vSphere with Tanzu:** A StorageClass provides a way for administrators to describe the classes of storage they offer. Different classes can map to quality-of-service levels, or to backup policies, or arbitrary policies determined by the cluster administrators.
 
@@ -82,7 +82,7 @@ The below tables provide recommendations on how VM Classes/Storage Classes can b
 
 The following diagram shows the high-level architecture of vSphere with Tanzu.
 
-![Figure 2 vSphere with Tanzu Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt03.png)
+![vSphere with Tanzu Architecture](img/tko-on-vsphere-with-tanzu/tko-vwt03.png)
 
 The Supervisor Cluster consists of the following:
 
@@ -92,13 +92,13 @@ The Supervisor Cluster consists of the following:
 
 The following diagram shows the general architecture of the Supervisor Cluster.
 
-![Figure 3 - Supervisor Cluster Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt04.jpg)
+![Supervisor Cluster Architecture](img/tko-on-vsphere-with-tanzu/tko-vwt04.jpg)
 
 After a Supervisor Cluster is created, the vSphere administrator creates vSphere Namespaces. When initially created, the namespace has unlimited resources within the Supervisor Cluster. vSphere administrator defines the limits for CPU, memory, storage, as well as the number of Kubernetes objects such as deployments, replica sets, persistent volumes, etc that can run within the namespace. These limits are configured per vSphere Namespace. 
 
 Please refer to the vSphere with Tanzu [configuration maximum](https://configmax.esp.vmware.com/guest?vmwareproduct=vSphere&release=vSphere%207.0&categories=70-58,71-0) guide to see the supported number. 
 
-![Figure 4 - vSphere Namespace](./img/tko-on-vsphere-with-tanzu/tko-vwt05.png)
+![vSphere Namespace](img/tko-on-vsphere-with-tanzu/tko-vwt05.png)
 
 To provide tenants access to namespaces, the vSphere administrator assigns permission to users or groups available within an identity source that is associated with vCenter Single Sign-On.
 
@@ -144,7 +144,7 @@ vSphere with Tanzu is agnostic about which option you choose. For Kubernetes sta
 
 While the default vSAN storage policy can be used, administrators should evaluate the needs of their applications and craft a specific [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html). vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters.
 
-![Figure 5 - vSphere with Tanzu on vSAN Storage](./img/tko-on-vsphere-with-tanzu/tko-vwt06.png)
+![Figure 5 - vSphere with Tanzu on vSAN Storage](img/tko-on-vsphere-with-tanzu/tko-vwt06.png)
 
 Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kubernetes also supports the creation of NFS File Volumes, which support ReadWriteMany access modes. This allows for provisioning volumes, which can be read and written from multiple pods simultaneously. To support this, you must enable vSAN File Service.
 
@@ -175,9 +175,9 @@ Each CNI is suitable for a different use case. The below table lists some common
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for Network Policies</p><p>- High network performance</p><p>- SCTP Support</p><p>Cons</p><p>- No multicast support</p><p></p>|
 |Multus|Multus CNI can give us multiple interfaces per each Kubernetes pod. Using Multus CRD's you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SRIOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
 
-## Networking for vSphere with Tanzu
+## Infrastructure Networking for vSphere with Tanzu
 
-vSphere with Tanzu can be deployed on various networking stacks, including,
+vSphere with Tanzu can be deployed on the following networking stacks
 
 - VMware NSX-T Data Center Networking.
 
@@ -195,9 +195,9 @@ The Supervisor Cluster leverages NSX Advanced Load Balancer (NSX ALB) to provide
 
 The following diagram shows a general overview for vSphere with Tanzu on vSphere Networking.
 
-![](./img/tko-on-vsphere-with-tanzu/tko-vwt07.jpeg)
+![](img/tko-on-vsphere-with-tanzu/tko-vwt07.jpeg)
 
-### NSX Advanced Load Balancer Components
+## NSX Advanced Load Balancer Components
 
 NSX Advanced Load Balancer is deployed in write access mode in a vSphere environment. This mode grants NSX Advanced Load Balancer Controllers full write access to the vCenter, which helps in automatically creating, modify and removing SEs and other resources as needed to adapt to changing traffic needs. The following are the core components of NSX Advanced Load Balancer:
 
@@ -235,7 +235,7 @@ This topology enables the following benefits:
 
 - Depending on the workload cluster type and use case, multiple workload clusters may leverage the same workload network or new networks can be used for each workload cluster.
 
-**Network Requirements**
+## Network Requirements
 
 As per the defined architecture below is the list of required networks:
 
@@ -246,7 +246,7 @@ As per the defined architecture below is the list of required networks:
 |TKG Workload Network (Primary)|Yes. |<p>Control plane and worker nodes of TKG workload clusters will be attached to this network.</p><p>The second interface of the Supervisor nodes is also attached to this network.</p>|
 |TKG Cluster VIP/Data Network|No|<p>Virtual Services (L4) for Control plane HA of all TKG clusters (Supervisor and Workload).</p><p>Reserve sufficient IPs depending on the number of TKG clusters planned to be deployed in the environment.</p>|
 
-## **Subnet and CIDR Examples**
+## Subnet and CIDR Examples
 
 For the purpose of demonstration, this document makes use of the following Subnet CIDR for TKO deployment.
 
@@ -256,12 +256,12 @@ For the purpose of demonstration, this document makes use of the following Subne
 |Supervisor Cluster Network|TKG-Management|192.168.12.1/28|192.168.12.2 - 192.168.12.14|NA|
 |TKG Workload Primary Network|TKG-Workload-PG01|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
 |TKG Cluster VIP/Data Network|TKG-Cluster-VIP|192.168.14.1/26|NA|<p>SE Pool: </p><p></p><p>192.168.14.2 - 192.168.14.20</p><p></p><p>TKG Cluster VIP Range: </p><p>192.168.14.21 - 192.168.14.60</p>|
-##
-## **Firewall Requirements**
+
+## Firewall Requirements
 To prepare the firewall, you need to gather the following:
 
-1. NSX Advanced Load Balancer Controller node and VIP address.
-1. NSX Advanced Load Balancer Service Engine management IP address.
+1. NSX Advanced Load Balancer Controller nodes and VIP address.
+1. NSX Advanced Load Balancer Service Engines management IP address.
 1. Supervisor Cluster network (TKG Management) CIDR.
 1. TKG Workload Cluster CIDR.
 1. TKG Cluster VIP Range.
@@ -299,13 +299,13 @@ The below table provides a list of firewall rules based on the assumption that t
 
 vSphere with Tanzu deployment starts with deploying the Supervisor cluster (Enabling Workload Management). The deployment is directly done from the vCenter UI. The Get Started page lists the pre-requisites that must be met before starting the deployment.
 
-![vCenter integrated Workload Management UI](./img/tko-on-vsphere-with-tanzu/tko-vwt09.jpg)
+![vCenter integrated Workload Management UI](img/tko-on-vsphere-with-tanzu/tko-vwt09.jpg)
 
 The vCenter user interface shows that, in the current version, it is possible to install vSphere with Tanzu on the VDS networking stack as well as NSX-T Data Center as the networking solution.
 
-![Workload Management on vSphere VDS Networking](./img/tko-on-vsphere-with-tanzu/tko-vwt10.jpg)
+![Workload Management on vSphere VDS Networking](img/tko-on-vsphere-with-tanzu/tko-vwt10.jpg)
 
-This installation process will take you through the steps of deploying **Supervisor Cluster** in your vSphere environment. Once the Supervisor cluster is deployed you can make use of [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) or Kubectl utility to deploy Tanzu Kubernetes Shared Service and workload clusters.
+This installation process will take you through the steps of deploying **Supervisor Cluster** in your vSphere environment. Once the Supervisor cluster is deployed you can make use of [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) or Kubectl utility to deploy Tanzu Kubernetes clusters.
 
 # **Design Recommendations**
 
@@ -321,10 +321,10 @@ The below table provides the recommendations for configuring NSX Advanced Load B
 |TKO-Advanced Load Balancer-004|Use static IPs for the NSX Advanced Load Balancer controllers if DHCP cannot guarantee a permanent lease.|NSX Advanced Load Balancer Controller cluster uses management IPs to form and maintain quorum for the control plane cluster. Any changes would be disruptive.|NSX Advanced Load Balancer Controller control plane might go down if the management IPs of the controller node changes.|
 |TKO-Advanced Load Balancer-005|<p>Use NSX Advanced Load Balancer IPAM for Service Engine data network and virtual services IP assignment. </p><p></p>|Guarantees IP address assignment for Service Engine Data NICs and Virtual Services.|Removes the corner case scenario when the DHCP server runs out of the lease or is down.|
 |TKO-Advanced Load Balancer-006|Reserve an IP in the NSX Advanced Load Balancer management subnet to be used as the Cluster IP for the Controller Cluster.|NSX Advanced Load Balancer portal is always accessible over Cluster IP regardless of a specific individual controller node failure.|NSX Advanced Load Balancer administration is not affected by an individual controller node failure.|
-|TKO-Advanced Load Balancer-007|Use separate VIP networks for L7 services in TKG clusters|Separate dev/test and prod workloads L7 load balancer traffic from each other.|Install AKO in TKG clusters manually using helm charts. Reference the VIP network to use in the AKO configuration. Please see this doc for more [information](https://github.com/avinetworks/avi-helm-charts/tree/master/docs/AKO) on this.|
+|TKO-Advanced Load Balancer-007|Use separate VIP networks for L7 services in TKG clusters|Separate dev/test and prod workloads L7 load balancer traffic from each other.|Install AKO in TKG clusters manually using helm charts. Reference the VIP network to use in the AKO configuration. Please see this [doc](https://github.com/avinetworks/avi-helm-charts/tree/master/docs/AKO) for more information on this.|
 |TKO-Advanced Load Balancer-008|Use default Service Engine Group for load balancing of TKG clusters control plane.|Using a non-default Service Engine Group for hosting L4 virtual service created for TKG control plane HA is not supported.|Using a non-default Service Engine Group can lead to Service Engine VM deployment failure.|
-|TKO-Advanced Load Balancer-009|Use dedicated Service Engine Groups for hosting L7 virtual services.|Using a dedicated Service Engine allows isolating L4 load balancing traffic from the L7 traffic.|Create dedicated Service Engine Groups under default-Cloud only.|
-|TKO-Advanced Load Balancer-010|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing Service Engines can help reduce the licensing cost. </p>|
+|TKO-Advanced Load Balancer-009|Use dedicated Service Engine Groups for hosting L7 virtual services.|Using a dedicated Service Engine allows isolating L4 load balancing traffic from the L7 traffic.|Service Engine Groups can be created in the non default-Cloud.|
+|TKO-Advanced Load Balancer-010|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost|<p>Each Service Engine contributes to the CPU core capacity associated with a license. Sharing Service Engines can help reduce the licensing cost. </p>|
 
 ## Network Recommendations
 
@@ -337,7 +337,7 @@ The following are the key network recommendations for a production-grade vSphere
 |TKO-NET-003|Configure DHCP for TKG clusters.|vSphere with Tanzu does not support static IP assignments for Kubernetes VM components|<p>An IP Block of 5 continuous IP Addresses can be used for the Supervisor cluster if DHCP is not available. </p><p></p><p>IP Pool can be used for the Workload cluster in absence of the DHCP.</p>|
 |TKO-NET-004|Use routable networks for Tanzu Kubernetes clusters.|Allow connectivity between the TKG clusters and infrastructure components.|Networks that are used for Tanzu Kubernetes cluster traffic must be routable between each other and the Supervisor Cluster Management Network.|
 
-## Recommendations for Supervisor Cluster
+## Supervisor Cluster Recommendations
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
@@ -345,7 +345,7 @@ The following are the key network recommendations for a production-grade vSphere
 |TKO-TKGS-004|Deploy Supervisor cluster control plane nodes in large form factor|Allow Supervisor cluster integration with Tanzu Mission Control.|When TKG is integrated with SaaS endpoints, new pods/services, etc are created in the target cluster and the pods have specific CPU requirements which can’t be fulfilled with medium and small-sized control plane/worker nodes|
 |TKO-TKGS-005|Register Supervisor cluster with Tanzu Mission Control|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Tanzu Mission Control also automates the deployment of Tanzu Packages in all Tanzu Kubernetes clusters associated with TMC.|
 
-## Recommendations for Tanzu Kubernetes Cluster
+## Tanzu Kubernetes Cluster Recommendations
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
@@ -373,13 +373,60 @@ Each ingress controller has pros and cons of its own. The below table provides g
 
 |**Ingress Controller**|**Use Cases**|
 | :- | :-: |
-|Contour|<p>Use contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for the north-south traffic by defining the policies in the applications manifest file.</p><p></p><p>It's a reliable solution for simple Kubernetes workloads. </p>|
+|Contour|Use contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for the north-south traffic by defining the policies in the applications manifest file.It's a reliable solution for simple Kubernetes workloads.|
 |Istio|use Istio ingress controller when you intended to provide security, traffic direction, and insight within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic)|
 |NSX Advanced Load Balancer Ingress controller|Use NSX Advanced Load Balancer ingress controller when a containerized application requires features like local and global server load balancing (GSLB), web application firewall (WAF), performance monitoring, etc. |
 
-# **NSX Advanced Load Balancer Sizing Guidelines**
+#
+# **Tanzu Kubernetes Grid Logging**
 
-### NSX Advanced Load Balancer Controller Configuration
+[Fluent Bit](https://fluentbit.io/) is a lightweight log processor and forwarder that allows you to collect data and logs from different sources, unify them, and send them to multiple destinations. Tanzu Kubernetes Grid includes signed binaries for Fluent Bit, that you can deploy on management clusters and on Tanzu Kubernetes clusters to provide a log-forwarding service.
+
+Fluent Bit is installed in Tanzu Kubernetes clusters as a user-managed package for the integration with logging platforms such as vRealize LogInsight, Elasticsearch, Splunk, or other logging solutions. Details on configuring Fluent Bit to your logging provider can be found in the documentation [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html)
+
+You can deploy Fluent Bit on any management cluster or Tanzu Kubernetes clusters from which you want to collect logs. First, you configure an output plugin on the cluster from which you want to gather logs, depending on the endpoint that you use. Then, you deploy Fluent Bit on the cluster as a package. 
+
+vRealize Log Insight (vRLI) provides real-time log management and log analysis with machine learning-based intelligent grouping, high-performance searching, and troubleshooting across physical, virtual, and cloud environments. vRLI already has a deep integration with the vSphere platform where you can get key actionable insights.
+
+#
+# **Tanzu Kubernetes Grid Monitoring**
+
+Tanzu Kubernetes Grid provides cluster monitoring services by implementing the open source [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/) projects.
+
+Tanzu Kubernetes Grid includes signed binaries for Prometheus/Grafana that you can deploy on Tanzu Kubernetes clusters to monitor cluster health and services.
+
+- Prometheus is an open source systems monitoring and alerting toolkit. It can collect metrics from target clusters at specified intervals, evaluate rule expressions, display the results, and trigger alerts if certain conditions arise. The Tanzu Kubernetes Grid implementation of Prometheus includes Alert Manager, which you can configure to notify you when certain events occur.
+
+- Grafana is open source visualization and analytics software. It allows you to query, visualize, alert on, and explore your metrics no matter where they are stored. In other words, Grafana is responsible for visualizing Prometheus metrics without the need to manually write the PromQL queries. You can create custom charts and graphs in addition to the pre-packaged options.
+
+Both Prometheus and Grafana are installed via user-managed Tanzu packages by creating the deployment manifests and invoking the kubectl command to deploy the packages in the Tanzu Kubernetes clusters.
+
+The following diagram shows how the monitoring components on a cluster interact.
+
+![Kubernetes Monitoring](img/tko-on-vsphere-with-tanzu/Kubernetes-Monitoring.png)
+
+You can use out-of-the-box Kubernetes dashboards or can create new dashboards to monitor compute/network/storage utilization of Kubernetes objects such as Clusters, Namespaces, Pods, etc. Please see the sample dashboards shown below:
+
+1: Namespace (Pods) Compute Resources Utilization Dashboard
+
+   ![](img/tko-on-vsphere-with-tanzu/Namepsace-Pods-Compute-Utilization.png)
+
+2: Namespace (Pods) Networking Utilization Dashboard
+
+   ![](img/tko-on-vsphere-with-tanzu/Namepsace-Pods-Network-Utilization.png)
+
+3: API Server Availability Dashboard
+
+   ![](img/tko-on-vsphere-with-tanzu/K8-API-Server.png)
+
+4: Cluster Compute Resources Utilization Dashboard
+
+   ![](img/tko-on-vsphere-with-tanzu/Cluster-Compute-Utilization.png)
+
+#
+# NSX Advanced Load Balancer Sizing Guidelines
+
+## NSX Advanced Load Balancer Controller Configuration
 
 Regardless of NSX Advanced Load Balancer Controller configuration, each Controller cluster can achieve up to 5,000 virtual services, this is a hard limit. For further details, please refer to this [Avi Controller Sizing](https://avinetworks.com/docs/20.1/avi-controller-sizing/).
 
@@ -390,7 +437,7 @@ Regardless of NSX Advanced Load Balancer Controller configuration, each Controll
 | Large           | 16 vCPUS, 32 GB RAM | 200-1000         | 100-200      |
 | Extra Large     | 24 vCPUS, 48 GB RAM | 1000-5000        | 200-400      |
 
-### Service Engine Sizing Guidelines
+## Service Engine Sizing Guidelines
 
 See [Sizing Service Engines](https://avinetworks.com/docs/20.1/sizing-service-engines/) for guidance on sizing your SEs.
 
@@ -402,10 +449,11 @@ See [Sizing Service Engines](https://avinetworks.com/docs/20.1/sizing-service-en
 | SSL TPS (RSA2K)    | ~600        |
 | SSL TPS (ECC)      | 2500        |
 
-Multiple performance vectors or features may have an impact on performance.  For example, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX Advanced Load Balancer recommends two cores.
+Multiple performance vectors or features may have an impact on performance.  For example, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX Advanced Load Balancer recommends two cores.
 
 NSX Advanced Load Balancer Service Engines may be configured with as little as 1 vCPU core and 1 GB RAM, or up to 36 vCPU cores and 128 GB RAM.
 
+#
 ## Container Registry
 
 VMware Tanzu for Kubernetes Operations using vSphere with Tanzu includes Harbor as a container registry. Harbor provides a location for pushing, pulling, storing, and scanning container images used in your Kubernetes clusters.
@@ -422,7 +470,7 @@ There are two main supported installation methods for Harbor:
 
   - For VM-based deployments, another option is to use [VMOperator](https://github.com/vmware-tanzu/vm-operator) for deploying a VM in workload cluster and harbor on top of that.
 
-![Harbor Registry UI](./img/tko-on-vsphere-with-tanzu/tko-vwt12.png)
+![Harbor Registry UI](img/tko-on-vsphere-with-tanzu/tko-vwt12.png)
 
 # **vSphere with Tanzu SaaS Integration**
 
@@ -438,4 +486,4 @@ This plan meets many Day 0 needs for quickly aligning product capabilities to fu
 
 # **Deployment Instructions**
 
-For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](deployment-guides/tko-on-vsphere-with-tanzu.md)
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](../deployment-guides/tko-on-vsphere-with-tanzu.md) <!-- markdown-link-check-disable-line -->
