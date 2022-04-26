@@ -7,27 +7,27 @@ The scope of this document is limited to providing the deployment steps based on
 
 ![TKG on Azure (Single VNet)](img/tko-on-azure/image005.png)
 
- This design shows both the Tanzu Kubernetes Grid management cluster and workload clusters in the same virtual network along with the bootstrap machine. However, each cluster is placed in their own subnets. In addition, the control plane and worker nodes of each cluster are also separated by a subnet.
+ This design shows both the Tanzu Kubernetes Grid management cluster and workload clusters in the same virtual network along with the bootstrap machine. However, each cluster is placed in its own subnet. In addition, the control plane and worker nodes of each cluster are also separated by a subnet.
 
-1. The reference design only shows the deployment of the base components within Tanzu Kubernetes Grid.
+1. The reference design shows the deployment of only the base components within Tanzu Kubernetes Grid.
 
 2. The reference design fits in with any production-level design that a customer may have in place, such as a Hub and Spoke, Global WAN Peering, or just a simple DMZ based implementation.
 
-3. We did not make any assumptions about your chosen tooling for security or DevOps,  other than what is available with a default Azure subscription.
+3. This guide does not make any assumptions about your chosen tooling for security or DevOps, other than what is available with a default Azure subscription.
 
-**Note:** Additional workload clusters and different size workload clusters can be deployed using this guide. However, additional configuration changes are needed to deploy the additional or different sized workload clusters. You can make the configuration changes after you have gone through the deployment steps provided in this document.
+**Note:** You can use this guide to deploy additional workload clusters and workload clusters of a different size. However, you'll need to make additional configuration changes. You can make these configuration changes after you have gone through the deployment steps provided in this document.
 
 ## Prerequisites
 Ensure that you have:
 
 * Read [VMware Tanzu for Kubernetes Operations on Azure Reference Design](../reference-designs/tko-on-azure.md).
 * A Microsoft Azure subscription.
-* Owner level access to the subscription.
-* The following to deploy the ARM template in Microsoft Azure,
+* Owner-level access to the subscription.
+* To deploy the ARM template in Microsoft Azure, you'll need:
     - Contributor role in Microsoft Azure.
     - Resource group in Microsoft Azure.
-- An SSH key and the Base 64 encoded value of the public key. You will configure the Base 64 encoded value for the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file for deploying Tanzu Kubernetes Grid. How you generate the SSH key and how you encode the entire Public key is up to you. However, you will need to encode the public key before storing it within configuration file for deploying Tanzu Kubernetes Grid.
-* Access to Customer Connect and the available downloads for Tanzu Kubernetes Grid. To verify, go to [VMware Tanzu Kubernetes Grid Download Product](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-150&productId=988&rPId=73652).
+- An SSH key and the Base 64 encoded value of the public key. You will configure the Base 64 encoded value for the AZURE_SSH_PUBLIC_KEY_B64 parameter of the configuration file for deploying Tanzu Kubernetes Grid. How you generate the SSH key and how you encode the entire public key is up to you. However, you will need to encode the public key before storing it in the Tanzu Kubernetes Grid deployment configuration file.
+* Access to Customer Connect and the available downloads for Tanzu Kubernetes Grid. To verify that you have access, go to [VMware Tanzu Kubernetes Grid Download Product](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652).
 
 ## Overview of the Deployment steps
 1. [Set up your Microsoft Azure environment](#azure-environment)
@@ -41,12 +41,11 @@ Before deploying Tanzu for Kubernetes operations and the actual Kubernetes clust
 
 ### Azure ARM Template
 The deployment detailed in this document uses the following resources:
-<!-- cSpell:disable -->
+
 - [ARM Template](./resources/tko-on-azure/azure-deploy.json)
 - [Parameters](./resources/tko-on-azure/azure-deploy-parameters.json)
-<!-- cSpell:enable -->
 
-The ARM template contains a number of parameters that you can populate or customize so that your Azure environment uses your naming standards and networking requirements.
+The ARM template contains parameters that you can populate or customize so that your Azure environment uses your naming standards and networking requirements.
 
 The ARM template deploys the following items:
 
@@ -65,7 +64,7 @@ The ARM template deploys the following items:
 In addition, the ARM template,
 
 * Uses the Region where the Resource Group is located to specify where the resources should be deployed.
-* Contains security rules for each of the Network Security Groups attached to the Control Plane clusters. These rules allow for SSH and secure kubectl access from the public Internet. Access from the public Internet allows for easier troubleshooting during the management and workload cluster deployments. You can remove these rules once your deployment is complete.
+* Contains security rules for each of the Network Security Groups attached to the Control Plane clusters. These rules allow for SSH and secure kubectl access from the public Internet. Access from the public Internet makes troubleshooting easier while you deploy your management and workload clusters. You can remove these rules after you complete your deployment.
 
 ### Quotas
 To successfully deploy Tanzu Kubernetes Grid to Azure, ensure that the quotas are sufficient to support both the management cluster and workload cluster deployments. Otherwise, the deployments will fail.
@@ -73,47 +72,43 @@ To successfully deploy Tanzu Kubernetes Grid to Azure, ensure that the quotas ar
 Review the quotas for the following resources, which are included in the ARM template, and increase their values as needed. Increase the quotas for every region to which you plan to deploy Tanzu Kubernetes Grid.
 
 * Total Regional vCPUs
-* Family vCPUs based on your chosen family of VM (D, E, F, etc.)
+* Family vCPUs based on your chosen virtual machine family (D, E, F, etc.)
 * Static Public IP Addresses
 * Public IP Addresses - Standard
 
-Based on the recommended minimum VM size of D2s_v3, the following minimum quotas are required per cluster:
+Based on the recommended minimum virtual machine size of D2s_v3, the following minimum quotas are required per cluster:
 
 * Total Regional vCPUs = 24
 * Family vCPUs for D Family = 24
-* Public IP Addresses - Standard = 6
 * Static Public IP Addresses = 6
+* Public IP Addresses - Standard = 6
 
 Ensure that you increase the quotas if you make changes to the basic configuration of the clusters.
 
 ### ARM Template Deployment
-Deploy ARM Template
+####Deploy ARM Template
 There are multiple methods to deploy an ARM template on Azure. If you are experienced with Azure, you can deploy the ARM template in a method that is comfortable to you.
 
 Otherwise, you can use the example Azure CLI commands locally or in Azure Cloud Shell. If you prefer to use Azure PowerShell, use the example command for Azure PowerShell.
 
-Ensure that you have the following to deploy the ARM template in Microsoft Azure,
+Ensure that you have the following to deploy the ARM template in Microsoft Azure:
 
 - Contributor role in Microsoft Azure.
 - Resource group in Microsoft Azure.
 
 #### Azure CLI
-Run the following example Azure CLI command locally or in Azure Cloud Shell  to deploy the ARM template.
+Run the following example Azure CLI command locally or in Azure Cloud Shell to deploy the ARM template.
 
-<!-- cSpell:disable -->
 ```bash
 az deployment create –template-file azure-deploy.json –parameters azure-deploy-parameters.json –resource-group <Resource Group Name>
 ```
-<!-- cSpell:enable -->
 
 #### Azure PowerShell
 Alternatively, run the following example command in Azure PowerShell to deploy the ARM template.
 
-<!-- cSpell:disable -->
 ```bash
 New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateFile azure-deploy.json -TemplateParameterFile azure-deploy-parameters.json
 ```
-<!-- cSpell:enable -->
 
 #### Azure Portal
 If you prefer to use the Azure Portal, do the following to process an ARM template directly on the Azure Portal.
@@ -130,12 +125,12 @@ If you prefer to use the Azure Portal, do the following to process an ARM templa
 ### Azure Service Principal/Application Registration Creation
 The Tanzu CLI requires access to an Azure Service Principal (SP) or Application Registration to programmatically configure the Tanzu cluster’s infrastructure during deployment and during auto-scale events.
 
-We recommended that you create the SP on the Azure Portal. However, if you prefer to use either the Azure CLI or Azure PowerShell, see the following Microsoft product documentation:
+VMware recommends that you create the SP on the Azure Portal. However, if you prefer to use either the Azure CLI or Azure PowerShell, see the following Microsoft product documentation:
 
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
 * [Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azps-6.6.0)
 
-**Important:** To create an Azure Service Principal or Application Registration you must be an **Administrator** in your Azure Active Directory tenant. Alternatively, all Users must have **App Registrations** set to **Yes**, which allows all Users to create an Azure Service Principal.
+**Important:** To create an Azure Service Principal or Application Registration, you must be an **Administrator** in your Azure Active Directory tenant. Alternatively, all Users must have **App Registrations** set to **Yes**, which allows all Users to create an Azure Service Principal.
 
 Do the following on the Azure portal to create an Azure Service Principal:
 
@@ -147,7 +142,7 @@ Do the following on the Azure portal to create an Azure Service Principal:
 
 1. Enter the following:
 
-   - **Name**: Enter a name that reflects for what the App Registration is being used. <br>
+   - **Name**: Enter a name that reflects what the App Registration is being used for. <br>
         Example: `tanzucli`
    - **URL**: Enter any URL. <br>
         In this deployment, the App Registration is used for programmatic purposes only. In such cases, the URL can be anything. However, the field is required.
@@ -219,7 +214,6 @@ To set up the bootstrap VM:
 1. Run the following Shell commands to set up the bootstrap VM.
     Replace the variables with the VMware account information needed to access VMware Customer Connect and Azure IDs for the Azure subscription on which you created resources using the ARM template and Application Registration/Service Principal.
 
-<!-- cSpell:disable -->
 ```bash
 # Variables
 export VMWUSER = "<CUSTOMER_CONNECT_USERID>"
@@ -257,16 +251,16 @@ sudo usermod -aG docker $USER
 
 # Downloading and Installing Tanzu CLI
 git clone https://github.com/z4ce/vmw-cli
-curl -o tmc 'https://tmc-cli.s3-us-west-2.amazonaws.com/tmc/0.4.3-fcb03104/linux/x64/tmcs'
+curl -o tmc 'https://tmc-cli.s3-us-west-2.amazonaws.com/tmc/0.4.0-fdabbe74/linux/x64/tmc'
 ./vmw-cli/vmw-cli ls vmware_tanzu_kubernetes_grid
-./vmw-cli/vmw-cli cp tanzu-cli-bundle-linux-amd64.tar.gz
-./vmw-cli/vmw-cli cp kubectl-linux-v1.22.5+vmware.1.gz
+./vmw-cli/vmw-cli cp tanzu-cli-bundle-linux-amd64.tar
+./vmw-cli/vmw-cli cp kubectl-linux-v1.21.2+vmware.1.gz
 
-tar -xzvf tanzu-cli-bundle-linux-amd64.tar
+tar -xvf tanzu-cli-bundle-linux-amd64.tar
 gzip -d kubectl-linux-v1.21.2+vmware.1.gz
 
-sudo install cli/core/v1.5.1/tanzu-core-linux_amd64 /usr/local/bin/tanzu
-tanzu plugin sync
+sudo install cli/core/v1.4.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+tanzu plugin install --local cli all
 sudo install kubectl-linux-v1.21.2+vmware.1 /usr/local/bin/kubectl
 
 # Azure CLI Install and VM Acceptance
@@ -275,7 +269,6 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az login --service-principal --username $AZURECLIENTID --password $AZURECLIENTSECRET --tenant $AZURETENANTID
 az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot21dot2-ubuntu-2004 --subscription $AZURESUBSCRIPTION
 ```
-<!-- cSpell:enable -->
 
 **Note:** Because of permission issues, you will have to log out and log in to the bootstrap VM after installing Docker and before you download and install the Tanzu components.
 
@@ -290,18 +283,17 @@ You will use Tanzu CLI to deploy a management cluster and workload cluster.
 
 1. Create a YAML file that contains the required configuration details.
 
-   The [ex-config.yaml](./resources/tko-on-azure/ex-config.yaml) sample YAML file contains the minimum configuration needed to deploy a management and workload clusters. The configuration contains the default values used in the ARM template. Update the values in the YAML to be relevant to your deployment. For example, replace the values for the Azure IDs, Application Registration/Service Principal, cluster name, and the Base 64 encoded value of the public key.
+   The [ex-config.yaml](./resources/tko-on-azure/ex-config.yaml) sample YAML file contains the minimum configuration needed to deploy a management cluster and workload clusters. <_Added the word 'cluster' after 'management' because the syntax was awkward, as though a word is missing_> The configuration contains the default values used in the ARM template. Change the values in the YAML as needed for your deployment. For example, replace the values for the Azure IDs, Application Registration/Service Principal, cluster name, and the Base 64 encoded value of the public key.
 
 2. Run the following commands from your bootstrap VM to create the management and workload clusters.
-    <!-- cSpell:disable -->
+
     ```bash
     tanzu management-cluster create --file config.yaml -v 0-9
 
     tanzu cluster create –file config.yaml -v 0-9
     ```
-    <!-- cSpell:enable -->   
 
-For additional product documentation on how to create the YAML configuration file and what each value corresponds to in Azure, see [Management Cluster Configuration for Microsoft Azure](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-config-azure.html).
+For additional product documentation on how to create the YAML configuration file and what each value corresponds to in Azure, see [Management Cluster Configuration for Microsoft Azure](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-config-azure.html).
 
 ## <a id=config-saas> </a> Configure SaaS Services
 The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features.
@@ -315,34 +307,34 @@ For configuration information, see [Configure SaaS Services](./tko-saas-services
 ## <a id=deploy-user-managed-packages> (Optional) Deploy Tanzu Kubernetes Grid Packages
 A package in Tanzu Kubernetes Grid is a collection of related software that supports or extends the core functionality of the Kubernetes cluster in which the package is installed.
 
-These packages are available for deployment in each workload cluster that you deploy, but they are not automatically installed and working as pods.
+These packages are available for deployment in each workload cluster that you deploy, but they are not automatically installed and working as pods.<_Is this syntax correct? Not sure what it means._>
 
 Tanzu Kubernetes Grid includes two types of packages, core packages and user-managed packages.
 
 #### Core Packages
 
-Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-core-index.html).
+Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-core-index.html).
 
 #### User-Managed Packages
 
 A user-managed package is an optional component of a Kubernetes cluster that you can install and manage with the Tanzu CLI. These packages are installed after cluster creation. User-managed packages are grouped into package repositories in the Tanzu CLI. If a package repository that contains user-managed packages is available in the target cluster, you can use the Tanzu CLI to install and manage any of the packages from that repository.
 
-Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cli-reference-packages.html).
+Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cli-reference-packages.html).
 
-We recommend installing the following packages:
+VMware recommends: <_Changed because the syntax of the bullet points didn't work with the lead-in phrase_>
 
-* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cert-manager.html)
+* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html)
 
-* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html)
+* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html)
 
-* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html)
+* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html)
 
-* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html)
+* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html)
 
-* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html)
+* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cni-multus.html)
 
-* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html)
+* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)
 
-* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html)
+* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html)
 
-If Harbor is required to take on a heavy load and store large images into the registry, you can install Harbor into a separate workload cluster.
+If you need Harbor to take on a heavy load and store large images in the registry, you can install Harbor into a separate workload cluster.
