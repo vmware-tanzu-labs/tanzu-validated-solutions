@@ -60,3 +60,17 @@ VNET
 TKG
 NSXT
 autoscaler
+Mbps
+Gbps
+VSAN
+etcd
+Bitfusion
+grafana
+tmc
+AKOO
+TZEDG
+HUBSPOK
+ECMP
+deduplication
+GSLB
+drawio
