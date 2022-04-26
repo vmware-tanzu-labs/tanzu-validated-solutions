@@ -867,7 +867,7 @@ Tanzu Kubernetes Grid on top of the VMware Edge Compute stack provides an effici
 [201]: https://avinetworks.com/docs/latest/avi-controller-sizing/
 [204]: https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vcenter.install.doc/GUID-88571D8A-46E1-464D-A349-4DC43DCAF320.html
 [210]: https://core.vmware.com/resource/vsan-2-node-cluster-guide
-[211]: https://todo
+[211]: https://docs.vmware.com/en/VMware-Tanzu/services/tanzu-reference-architecture/GUID-reference-designs-index.html
 [212]: https://core.vmware.com/resource/vsan-2-node-cluster-guide
 
 [410]: https://avinetworks.com/docs/20.1/sizing-service-engines/
