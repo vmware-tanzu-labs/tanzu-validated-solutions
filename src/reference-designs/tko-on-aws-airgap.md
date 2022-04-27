@@ -1,11 +1,11 @@
-# VMware Tanzu for Kubernetes Operations on AWS Reference Design
+# VMware Tanzu Kubernetes Grid on AWS Air-gap Reference Design
 
 
-VMware Tanzu for Kubernetes operations simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, internet restricted environments and edge. Tanzu for Kubernetes operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
+VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes grid on AWS Networking in an air-gap environment with Tanzu components on AWS.
 
-An air-gapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. 
+An air-gapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network.This Design supports air-gap environments without internet connectivity. 
 
 The following reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
 
@@ -13,32 +13,27 @@ The following reference design is based on the architecture and components descr
 ![Tanzu Edition reference design diagram](./img/tko-on-aws-airgap/tkg-aws-airgap-overview.png)
 
 
-## Network Overview
+## Tanzu Kubernetes Grid Infrastructure Network Overview
 
 The following network diagram shows the network layout used with this reference design. It shows the layout for a single virtual private cloud (VPC). The network layout uses the following -
 
-* One private subnet for each AWS availability zone (AZ). These subnets are allocated a private IP address. 
-
-* Internet-connected bootstrap machine with access on IP addresses within this internet restricted VPCs.
-
-* A bootstrap VM running within your internet restricted VPC, provisioned similarly to the internet-connected machine to install Tanzu Kubernetes Grid.
+* One private subnet for each AWS availability zone (AZ). These subnets are allocated a private IP address.
+ 
+* A bootstrap VM running within your internet-restricted(offline) VPC to install Tanzu Kubernetes Grid.
 
 * A private Docker-compatible container registry such as Harbor, Docker, or Artifactory installed and configured . This registry runs outside of Tanzu Kubernetes Grid and is separate from any registry deployed as a shared service for clusters.
+
 
 ![TKGm AWS network overview diagram](./img/tko-on-aws-airgap/tkg-aws-airgap-network.png)
 
 ### Network Recommendations
 
-This reference design uses Tanzu Kubernetes Grid to manage the lifecycle of multiple Kubernetes workload clusters by bootstrapping a Kubernetes management cluster with the Tanzu command line tool. Consider the following when configuring the network for Tanzu Kubernetes Grid:
-
-* Create internet restricted VPCs with no internet gateway (“offline VPCs”) for Tanzu Kubernetes Grid management and workload clusters.
- Internet-connected bootstrap machine must be able to access IP addresses within this internet restricted VPCs. 
+This reference design uses the Tanzu Kubernetes Grid to manage the lifecycle of multiple Kubernetes workload clusters by bootstrapping a Kubernetes management cluster with the Tanzu command line tool. Consider the following when configuring the network for Tanzu Kubernetes Grid:
+* Create internet restricted VPCs with no internet gateway (“offline VPCs”) for Tanzu Kubernetes Grid management and workload clusters. Admin/Operator should be able to access/ssh into internet-restricted(Offline) VPC's.
 
 * Create AWS Transit Gateway for Multiple VPC with Multiple Availability Zones network architecture. AWS Transit Gateway connects all your VPCs and on-premises networks through a central hub. This simplifies your network and puts an end to complex peering relationships. It acts as a cloud router – each new connection is only made once.
 
-* Use an internal load balancer scheme. A best practice is to create an internal load balancer as a best practice to avoid exposing the Kubernetes API to the public Internet. To avoid creating a public-facing load balancer, you can set AWS_LOAD_BALANCER_SCHEME_INTERNAL to true in the cluster configuration file `AWS_LOAD_BALANCER_SCHEME_INTERNAL: true`
-This setting customizes the management cluster’s load balancer to use an internal scheme, which means that its Kubernetes API server will not be accessible and routed over the Internet. If you use an internal load balancer, run Tanzu Kubernetes Grid from a machine with access to the target VPC private IP space.
-
+* Use an internal load balancer scheme. A best practice is to create an internal load balancer as a best practice to avoid exposing the Kubernetes API to the public Internet. To avoid creating a public-facing load balancer, you can set AWS_LOAD_BALANCER_SCHEME_INTERNAL to true in the cluster configuration file AWS_LOAD_BALANCER_SCHEME_INTERNAL: true This setting customizes the management cluster’s load balancer to use an internal scheme, which means that its Kubernetes API server will not be accessible and routed over the Internet. If you use an internal load balancer, run Tanzu Kubernetes Grid from a machine with access to the target VPC private IP space.
 
 * Beware that 172.17.0.0/16 is the default docker subnet. If you are going to use that for a VPC deployment, you must change your docker container subnet.
 
@@ -63,8 +58,6 @@ aws ec2 create-subnet --vpc-id $vpcId --cidr-block <ip_address>  --availability-
 
 ```
 
-Alternatively if you use an internal load balancer scheme and enable AWS_LOAD_BALANCER_SCHEME_INTERNAL to true Tanzu Kubernetes Grid can create internet restricted infra (vpc etc) for you. 
-
 All internet restricted VPCs must add following endpoints to it (VPC endpoint enables private connections between your VPC and supported AWS services):
 
 * Service endpoints:
@@ -75,28 +68,35 @@ All internet restricted VPCs must add following endpoints to it (VPC endpoint en
 * elasticloadbalancing
 * secretsmanager
 * ssmmessages
+* s3 (optional; recommended)
 
 Based on your application needs and desired outcomes, you can organize your workloads using one of the following VPC architectures.
 
 ### Single VPC with Multiple Availability Zones
 
-Most use cases require only a single VPC spread across multiple AZs. If more separation is needed within one VPC, more subnets can be used to provide better IP based visibility to corporate firewalls.
+Most use cases require only a single VPC spread across multiple AZs. If more separation is needed within one VPC, more subnets can be used to provide better IP based visibility to corporate firewalls. Can refer above depicted network diagram for Single VPC. 
 
 
 ### Multiple VPC with Multiple Availability Zones
 
-For more separation of application workloads on AWS, you can deploy separate Kubernetes clusters to independent private VPCs. This separation might be desirable for workloads with different compliance requirements, across different business units, or with different levels of Internet ingress and egress. By default, Tanzu Kubernetes Grid creates a VPC per cluster.
+For more separation of application workloads on AWS, you can deploy separate Kubernetes clusters to independent private VPCs. This separation might be desirable for workloads with different compliance requirements, across different business units. By default, Tanzu Kubernetes Grid creates a VPC per cluster.
 
-The following diagram shows an example architecture with multiple VPCs. The control plane load balancers in the example architecture are configured as internal load balancers.
+The following diagram shows an example architecture with **multiple offline VPCs**. The control plane load balancers in the example architecture are configured as internal load balancers.
 
 
 ![TKGm on AWS with Multiple VPCs and Multiple Availability Zones diagram](./img/tko-on-aws-airgap/tkg-aws-multi-vpc-multi-az.png)
 
-Another variant of multiple VPC and multiple AZ design is to have one VPC for the control plane and another for just workload clusters. The following diagram shows such a design.
+Another variant of multiple VPC and multiple AZ design is to have one VPC for the management cluster and another for just workload clusters. The following diagram shows such a design.
 
 
-![TKGm on AWS with Segregated VPCs for control plane and workloads diagram](./img/tko-on-aws-airgap/tkg-aws-multi-vpc-multi-az-separated-control-plane-and-workloads.jpeg)
+![TKGm on AWS with Segregated VPCs for control plane and workloads diagram](./img/tko-on-aws-airgap/tkg-aws-multi-vpc-multi-az-separated-control-plane-and-workloads.png)
 
+You can refer following design decisions for your network architecture  
+
+ **Decision ID** | **Design Decision**  | **Design Justification**  | **Design Implications** 
+-----|-----|-----|-----
+ TKG-AG-001 | Use separate networks/vpc’s for Management cluster and workload clusters  | Better isolation and security policies between environments isolate production Kubernetes clusters from dev/test clusters | Sharing the same network for multiple clusters can cause shortage of IP’s
+TKG-AG-002 | Use separate networks for workload clusters based on their usage | Isolate production Kubernetes clusters from dev/test clusters | A separate set of Service Engines can be used for separating dev/test workload clusters from prod clusters
 
 
 ## Availability
@@ -108,32 +108,42 @@ The Tanzu Kubernetes Grid management cluster performs [Machine Health Checks](ht
   * Worker VM is accidentally deleted or corrupted.
   * Kubelet process on worker VM is accidentally stopped or corrupted.
 
-This health check ensures that your worker capacity remains stable and can be  scheduled for workloads.  This health check, however, does not apply to the control plane or the load balancer VMs. The health check does not recreate VMs due to physical host failure.
-
+This health check ensures that your worker capacity remains stable and can be scheduled for workloads. This health check, however, does not apply to the control plane or the load balancer VMs.
 
 ### Quotas
 
-Provide sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you will deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you plan to deploy Tanzu Kubernetes Grid.
+Provide sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you will deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you plan to deploy the Tanzu Kubernetes Grid.
 
-See [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-aws.html#aws-resources) for more details.
+The number of VPCs will depend on the VPC architecture the user has selected.Based on the above depicted network diagrams you can refer to the table below.
 
-**Note** : The number of VPCs will depend on the VPC architecture you have selected.
+**VPC architecture** | **Number of VPC**
+-----|-----
+Single VPC | 1
+Multiple vpc - one for each kubernetes cluster | 3
+Multiple vpc - one for management cluster and one for workload cluster | 2
 
-See [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) for more information on AWS services default quotas.
 
-## [FIPS](https://www.nist.gov/standardsgov/compliance-faqs-federal-information-processing-standards-fips)-Capable Version
-You can install and run a FIPS(Federal Information Processing Standards)-capable version of Tanzu Kubernetes Grid, in which core components use cryptographic primitives provided by a FIPS-compliant library based on the [BoringCrypto](https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/2964) / Boring SSL module. These core components include components of Kubernetes, [Containerd and CRI](https://github.com/containerd/containerd), [CNI plugins](https://www.cni.dev/docs/), [CoreDNS](https://coredns.io/), and [etcd](https://etcd.io/).
+Refer [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-aws.html#aws-resources) for all AWS resources consumed for the Tanzu Kubernetes Grid. You can refer [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) for more information on AWS services default quotas.
 
-## Private Registry for Tanzu kubernetes grid installation into air-gapped environment 
+## Private Registry for Tanzu kubernetes Grid
 
 Before installing Tanzu kubernetes grid into air-gapped environment a private Docker-compatible container registry such as [Harbor](https://goharbor.io/), [Docker](https://www.docker.com/), or [Artifactory](https://jfrog.com/artifactory/) installed and configured as follows - 
 
  * This registry should runs outside of Tanzu Kubernetes Grid and is separate from any registry deployed as a shared service for clusters:
- * Should Install the registry within your firewall.
+ * Should use an RFC 1918 (private) address and remain routable to the Tanzu kubernetes Grid clusters.
  * Should configure the container registry with SSL certificates signed by a trusted CA.
  * The registry must not implement user authentication. For example, if you use a Harbor registry, the project must be public, and not private.
  * Private registry must have all the Tanzu kubernetes grid images uploaded before you start installing Tanzu kubernetes grid.See [Copy installing Tanzu kubernetes grid Images into an Air-gapped Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-image-copy-airgapped.html) for more details.
 
+
+## Compliance and Security
+<!-- /* cSpell:disable */ -->
+VMware published Tanzu Kubernetes releases (TKrs), along with compatible versions of Kubernetes and supporting components, use the latest stable and generally-available update of the OS version that it packages, containing all current CVE and USN fixes as of the 
+day that the image is built. The image files are signed by VMware and have filenames that contain a unique hashcode identifier.
+
+VMware provides FIPS(Federal Information Processing Standards)-capable version of Tanzu Kubernetes Grid.You can install and run a FIPS-capable version of Tanzu Kubernetes Grid, in which core components use cryptographic primitives provided by a FIPS-compliant library that provides [FIPS 140-2](https://www.nist.gov/standardsgov/compliance-faqs-federal-information-processing-standards-fips) approved based on the [BoringCrypto](https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/2964) / Boring SSL module. These core components include components of Kubernetes, [Containerd and CRI](https://github.com/containerd/containerd), [CNI plugins](https://www.cni.dev/docs/), [CoreDNS](https://coredns.io/), and [etcd](https://etcd.io/).
+
+<!-- /* cSpell:enable */ -->
 
 ## Cluster Creation and Management
 
@@ -143,16 +153,68 @@ This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous
 
 Tanzu Editions includes components for observability, as well as container registry.  We recommended installing the necessary components into a centralized shared services cluster.
 
+You can refer following design decisions for your Tanzu Kubernetes Grid clusters 
 
+ **Decision ID** | **Design Decision**  | **Design Justification**  | **Design Implications** 
+-----|-----|-----|-----
+TKG-CLS-001 | Deploy TKG Management cluster from CLI | UI doesn’t provide an option of specifying an internal registry to use for TKG installation | Additional parameters are required to be passed in the cluster deployment file. Using UI, you can’t pass these additional parameters
+TKG-CLS-002 | Use AWS internal Load Balancer scheme for your Control Plane Endpoints | Don’t expose kubernetes api endpoints to internet in Tanzu Kubernetes Grid clusters | Create additional AWS load balancers in your aws account which may increase aws infra cost
+TKG-CLS-003 | Deploy Tanzu Kubernetes clusters in large and above sizes ec2 instances(example t2.large or ++) | Allow TKG clusters to have enough resources for all tanzu packages | Create bigger AWS ec2 instances  into your aws account which may increase aws infra cost 
+TKG-CLS-004 | Deploy Tanzu Kubernetes clusters with Prod plan | This deploys multiple control plane nodes and provides High Availability for the control plane | TKG infrastructure is not impacted by single node failure <!-- /* cSpell:disable */ —>
+TKG-CLS-005 | Deploy Tanzu Kubernetes clusters with an odd number of AWS AZs for HA | This deploys multiple control plane nodes and provides High Availability for the control plane | TKG infrastructure is not impacted by single zone failure <!-- /* cSpell:enable */ -->
+TKG-CLS-006 | Enable identity management for Tanzu Kubernetes Grid clusters | To avoid usage of administrator credentials and ensure that required users with the right roles have access to Tanzu Kubernetes Grid clusters | Pinniped package helps with integrating the TKG Management cluster with <!-- /* cSpell:disable */ --> LDAPS  <!-- /* cSpell:enable */ --> Authentication and Workload cluster inherits the authentication configuration from the management cluster
+TKG-CLS-007 | Enable Machine Health Checks for TKG clusters | The Tanzu Kubernetes Grid management cluster performs Machine Health Checks on all Kubernetes worker VMs and HA,Machine Health Checks interoperably work together to enhance workload resiliency | A MachineHealthCheck is a resource within the Cluster API that allows users to define conditions under which Machines within a Cluster should be considered unhealthy. Remediation actions can be taken when MachineHealthCheck has identified a node as unhealthy.
+
+## Bring Your Own Images for the Tanzu Kubernetes Grid Deployment
+
+You can build custom machine images for Tanzu Kubernetes Grid to use as a VM template for the management and Tanzu Kubernetes (workload) cluster nodes that it creates. Each custom machine image packages a base operating system (OS) version and a Kubernetes version, along with any additional customizations, into an image that runs on vSphere, Microsoft Azure infrastructure and AWS (EC2) environments.
+
+A custom image must be based on the OS versions that are supported by Tanzu Kubernetes Grid. The table below provides a list of OS’es that are supported for building custom images for the Tanzu Kubernetes Grid.
+
+ **vSphere** | **AWS**  | **Azure**
+ -----|-----|-----
+</br>- Ubuntu 20.04</br>- Ubuntu 18.04</br>- RHEL 7</br>- Photon OS 3|</br>- Ubuntu 20.04</br> - Ubuntu 18.04</br>- Amazon Linux 2|</br>- Ubuntu 20.04</br>- Ubuntu 18.04
+
+For additional information on building custom images for TKG, please see the Tanzu Kubernetes Grid [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-build-images-index.html) documentation for following OS.
+
+* [Linux Custom Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-build-images-linux.html)
+* [Windows Custom Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-build-images-windows.html)
+
+## Tanzu Kubernetes Clusters Networking
+<!-- /* cSpell:disable */ —>
+A Tanzu Kubernetes cluster provisioned by the Tanzu Kubernetes Grid supports two Container Network Interface (CNI) options: 
+* [Antrea](https://antrea.io/) 
+* [Calico](https://www.tigera.io/project-calico/)
+Both are open-source software that provides networking for cluster pods, services, and ingress.
+When you deploy a Tanzu Kubernetes cluster using Tanzu CLI using the default configuration, Antrea CNI is automatically enabled in the cluster. While Kubernetes does have in-built network policies, Antrea builds on those native network policies to provide more fine-grained network policies of its own. It has a ClusterNetworkPolicy which operates at the Kubernetes cluster level. It also has a NetworkPolicy which limits the scope of a policy to a Kubernetes namespace. The ClusterNetworkPolicy can be thought of as a means for a Kubernetes Cluster Admin to create a security policy for the cluster as a whole. The NetworkPolicy can be thought of as a means for a developer to secure applications in a particular namespace.Please refer Tanzu Kubernetes Grid [Security and Compliance](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-security-compliance.html) for more details.
+<!-- /* cSpell:enable */ -->
+
+To provision a Tanzu Kubernetes cluster using a non-default CNI, please see Deploy [Tanzu Kubernetes clusters with calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-k8s-clusters-networking.html#calico)
+
+Each CNI is suitable for a different use case. The  table below lists some common use cases for the two CNI’s that Tanzu Kubernetes Grid supports. This table will help you with information on selecting the right CNI in your Tanzu Kubernetes Grid implementation.
+<!-- /* cSpell:disable */ —>
+ **CNI** | **Use Case**  | **Pros and Cons**
+ -----|-----|-----
+Antrea | Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.Antrea supports advanced network use cases like kernel bypass and network service mesh | **Pros**:</br>Provide an option to Configure Egress IP Pool or Static Egress IP for the Kubernetes Workloads. </br> **Cons**:</br>More complicated for network troubleshooting because of the additional overlay network
+Calico | Calico is used in environments where factors like network performance, flexibility, and power are essential.</br>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.|**Pros**:</br>- Support for Network Policies</br>- High network performance</br>- SCTP Support<br>**Cons**:</br>- No multicast support.
+<!-- /* cSpell:enable */ -->
 ## Ingress and Load Balancing
 
 Tanzu Kubernetes Grid requires load balancing for both the control plane and the workload clusters. Tanzu Kubernetes Grid for AWS uses elastic load balancers for the control plane and workload clusters.
 
-Default installation of Tanzu Kubernetes Grid does not have any default ingress controller deployed. Users can use Contour (available for installation through Tanzu Packages) or any Third-party ingress controller of their choice.
-Contour is an open-source controller for Kubernetes Ingress routing and can be used for layer 7 load balancing. Contour can be installed in the Shared Services cluster on any Tanzu Kubernetes Cluster. Deploying Contour is a prerequisite if you want to deploy the Prometheus, Grafana, and Harbor Packages on a workload cluster.
-For more information about [Contour](https://projectcontour.io/), see the Contour site and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
+A Default installation of Tanzu Kubernetes Grid does not have any default ingress controller deployed. Users can use Contour (available for installation through Tanzu Packages) or any Third-party ingress controller of their choice. Contour is an open-source controller for Kubernetes Ingress routing and can be used for layer 7 load balancing. Contour can be installed in the Shared Services cluster on any Tanzu Kubernetes Cluster. Deploying Contour is a prerequisite if you want to deploy the Prometheus, Grafana, or Harbor Packages on a workload cluster. For more information about [Contour](https://projectcontour.io/), see the [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
 
 For private load balancer, you can specifically request one by setting `service.beta.kubernetes.io/aws-load-balancer-internal: "true"` in the annotations of the service. This setting also applies to the Contour ingress and controls.
+**Example** : 
+```
+annotations:
+   service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+```
+The table below provides general recommendations on when you should use the Contour ingress controller for your Kubernetes environment.
+
+ **Ingress Controller** | **Use Case**
+ -----|-----
+Contour | Use contour when north-south traffic is needed in a Kubernetes cluster.You can apply security policies for north-south traffic by defining the policies in the applications manifest file.It's a reliable solution for simple Kubernetes workloads. 
 
 ## Authentication with Pinniped
 
@@ -180,22 +242,42 @@ We recommend the following best practices for managing identities in Tanzu Kuber
 
 ## Observability
 
-### Metrics Monitoring with Prometheus and Grafana 
+### Tanzu Kubernetes Grid Monitoring
 
-Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html) as an alternative on-premises solution for monitoring Kubernetes clusters.
+In an air gap environment, monitoring for the Tanzu Kubernetes clusters is provided via [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/). 
+* **Prometheus** is an open-source system monitoring and alerting toolkit. It can collect metrics from target clusters at specified intervals, evaluate rule expressions, display the results, and trigger alerts if certain conditions arise. The Tanzu Kubernetes Grid implementation of Prometheus includes Alert Manager, which you can configure to notify you when certain events occur.Prometheus exposes scrapable metrics endpoints for various monitoring targets throughout your cluster. Metrics are ingested by polling the endpoints at a set interval. The metrics are then stored in a time-series database. You use the [Prometheus Query Language](https://prometheus.io/docs/prometheus/latest/querying/basics/) interface to explore the metrics.
+* **Grafana** is an open-source visualization and analytics software. It allows you to query, visualize, alert on, and explore your metrics no matter where they are stored. Grafana is responsible for visualizing Prometheus metrics without the need to manually write the PromQL queries. You can create custom charts and graphs in addition to the pre-packaged options.
+Both Prometheus and Grafana are installed via user-managed Tanzu packages by creating the deployment manifests and invoking the kubectl command to deploy the packages in the Tanzu Kubernetes clusters.
 
-Prometheus exposes scrapable metrics endpoints for various monitoring targets throughout your cluster. Metrics are ingested by polling the endpoints at a set interval. The metrics are then stored in a time-series database. You use the [Prometheus Query Language interface](https://prometheus.io/docs/prometheus/latest/querying/basics/) to explore the metrics.  
+The following diagram shows how the monitoring components on a cluster interact.
 
-Grafana is responsible for visualizing Prometheus metrics without the need to manually write the `PromQL` queries. You can create custom charts and graphs in addition to the pre-packaged options.
+![Monitoring Workflow](./img/tko-on-aws-airgap/monitor-workflow.png)
+
+You can use out-of-the-box Kubernetes dashboards or can create new dashboards to monitor compute/network/storage utilization of Kubernetes objects such as Clusters, Namespaces, Pods, etc. Please see the sample dashboards shown below:
+
+Namespace (Pods) Compute Resources Utilization Dashboard
+
+![Resources Utilization Dashboard](./img/tko-on-aws-airgap/gra-resource-utli.png)
 
 
-Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-index.html). For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-user-managed-index.html)
+Namespace (Pods) Networking Utilization Dashboard
+![Networking Utilization Dashboard](./img/tko-on-aws-airgap/gra-network-util.png)
 
+API Server Availability Dashboard
 
-### Log Forwarding
+![API Server Availability Dashboard](./img/tko-on-aws-airgap/gra-api-server-avail.png)
 
-Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize, Log Insight Cloud, and Elasticsearch. See [Fluent Bit Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html) for various logging providers.  
+Cluster Compute Resources Utilization Dashboard
+![Cluster Compute Resources Utilization Dashboard](./img/tko-on-aws-airgap/gra-cluster-comp-util.png)
 
+## Log Forwarding
+
+Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize, Log Insight Cloud, and Elasticsearch. See [Fluent Bit Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html) for various logging providers. 
+
+You can deploy Fluent Bit on any management cluster or Tanzu Kubernetes clusters from which you want to collect logs. First, you configure an output plugin on the cluster from which you want to gather logs, depending on the endpoint that you use. Then, you deploy Fluent Bit on the cluster as a package. 
+
+## Tanzu Kubernetes Grid Upgrade
+To upgrade the previous version of Tanzu Kubernetes Grid into your environment you can refer [Tanzu Kubernetes Grid Upgrade](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-upgrade-tkg-index.html) instructions.
 ## Summary
 
 Tanzu Kubernetes Grid on AWS  offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating cloud based Kubernetes platforms in a consolidated production environment. This validated approach will result in a production quality installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.  
