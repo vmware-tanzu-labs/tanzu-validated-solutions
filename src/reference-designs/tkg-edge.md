@@ -92,7 +92,7 @@ It is assumed that they do not require access to components outside of the edge 
 | Upgrade the cluster | Not available | Not available | available only if a local registry is configured |
 | Scale the cluster | Not available | Not available | Available only if a local registry is configured |
 | Single Node failure (assuming there are more than one node) | Unpredictable | Application might have a short disruption but will be able to recover | No impact |
-| Authentication with pinniped | not available<br>(pinniped needs access to the TKG management cluster) | not available<br>(pinniped needs access to the TKG management cluster) | Possible |
+| Authentication with pinniped | not available<br />(pinniped needs access to the TKG management cluster) | not available<br />(pinniped needs access to the TKG management cluster) | Possible |
 
 #### Local Hardware failure
 
@@ -113,8 +113,7 @@ If the site is irremediably lost (from an IT standpoint), once the hardware and 
 
 ### Performance
 
-The application should performed as good as it was running in the main datacenter.
-Real Time?
+- The application should perform as good as if it was running in the main datacenter.
 
 ### Manageability
 
@@ -154,9 +153,9 @@ Figure: Networking at the Edge
 
 | Network | Usage | IP addresses | Accessibility | Proposed Subnet size | Network Feature |
 | --- | --- | --- | --- | --- | --- |
-| Application | Where the business application is accessible | Minimum 3 IP addresses:<br>\- 1 per LB (can be down to 1 if Ingress controller is used)<br>\- 1 for each NSX ALB SE | By end user. Do not need to be routed/accessible from the main datacenter | /27 (32 IPs) | No  |
-| Tanzu Kubernetes Grid | Where the TKG Nodes are connected. CNI is built on top of this network to provide connectivity between pods. | Minimum 4 IP addresses:<br>\- 1 per TKG nodes<br>\- 1 for each NSX ALB SE | \- Outbound internet access. (to pull containers)<br>\- Routed to/from main datacenter (to connect to management components) | /26 (64 IPs) | DHCP enabled with the following configuration:<br>\- provide DNS Servers<br>\- provide NTP Servers (Option)<br>\- Leases time greater than the maximum time the site can be down |
-| Management | Where the local management components are connected to | Minimum 2 IP addresses:<br>\- 1 for each NSX ALB SE | Routed to/from main datacenter | /26 (64 IPs) | .   |
+| Application | Where the business application is accessible | Minimum 3 IP addresses:<br />\- 1 per LB (can be down to 1 if Ingress controller is used)<br />\- 1 for each NSX ALB SE | By end user. Do not need to be routed/accessible from the main datacenter | /27 (32 IPs) | No  |
+| Tanzu Kubernetes Grid | Where the TKG Nodes are connected. CNI is built on top of this network to provide connectivity between pods. | Minimum 4 IP addresses:<br />\- 1 per TKG nodes<br />\- 1 for each NSX ALB SE | \- Outbound internet access. (to pull containers)<br />\- Routed to/from main datacenter (to connect to management components) | /26 (64 IPs) | DHCP enabled with the following configuration:<br />\- provide DNS Servers<br />\- provide NTP Servers (Option)<br />\- Leases time greater than the maximum time the site can be down |
+| Management | Where the local management components are connected to | Minimum 2 IP addresses:<br />\- 1 for each NSX ALB SE | Routed to/from main datacenter | /26 (64 IPs) | .   |
 
 Table: List of networks at the edge
 
@@ -270,7 +269,7 @@ Additionally if resources permit it, it is encouraged to deploy 2 workload clust
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-ALL-EDGE-TKG-01 | Use a single node control plane (dev plan) for TKG Workload cluster. | Applications at the Edge being mostly static, the impact of the unavailability of the control plane is low. vSphere HA can bring back up the control plane reasonably quickly to not be noticed.<br>It reduces the resource overhead.<br>It is safer when there are less than 3 physical hosts (with multiple control plane nodes, the loss of 2 nodes, hosted on one physical host, would result in the loss of the cluster due to etcd quorum loss) | A physical host failure could result in the temporary unavailability of the Kubernetes control plane until the control plane node is restarted by vSphere HA. Data corruption of the control plane node will result in the loss of the Kubernetes cluster. |
+| TZEDG-ALL-EDGE-TKG-01 | Use a single node control plane (dev plan) for TKG Workload cluster. | Applications at the Edge being mostly static, the impact of the unavailability of the control plane is low. vSphere HA can bring back up the control plane reasonably quickly to not be noticed.<br />It reduces the resource overhead.<br />It is safer when there are less than 3 physical hosts (with multiple control plane nodes, the loss of 2 nodes, hosted on one physical host, would result in the loss of the cluster due to etcd quorum loss) | A physical host failure could result in the temporary unavailability of the Kubernetes control plane until the control plane node is restarted by vSphere HA. Data corruption of the control plane node will result in the loss of the Kubernetes cluster. |
 | TZEDG-ALL-EDGE-LB-01 | Use a pair of NSX-ALB Service Engine in Active/Passive mode | This is the only configuration supported with [NSX-ALB Essentials for Tanzu license][200] | No Active/Active deployments, BGP and ECMP support or automatic scaling of load balancers. Consider [NSX-ALB Enterprise license][200] for these features |
 
 Table: Design Decisions
@@ -286,8 +285,8 @@ The minimum footprint consists of the following:
 
 | Amount | Machine usage | vCPU | Memory (GB) | Disk (GB) |
 | --- | --- | --- | --- | --- |
-| 1   | TKG Workload Cluster<br>Control Plane Node (small) | 2   | 4   | 40  |
-| 1 * host num | TKG Workload Cluster<br>Worker Node (small) | 2   | 4   | 40  |
+| 1   | TKG Workload Cluster<br />Control Plane Node (small) | 2   | 4   | 40  |
+| 1 * host num | TKG Workload Cluster<br />Worker Node (small) | 2   | 4   | 40  |
 | 2   | NSX ALB Service Engine | 1   | 1   | 15  |
 | 1 * host num | VSAN File services | 4   | 8   | 12  |
 
@@ -312,8 +311,8 @@ The minimum footprint consists of the following:
 
 | Amount | Machine usage | vCPU | Memory (GB) | Disk (GB) |
 | --- | --- | --- | --- | --- |
-| 1   | TKG Workload Cluster<br>Control Plane Node (small) | 2   | 4   | 40  |
-| 1 * host num | TKG Workload Cluster<br>Worker Node (small) | 2   | 4   | 40  |
+| 1   | TKG Workload Cluster<br />Control Plane Node (small) | 2   | 4   | 40  |
+| 1 * host num | TKG Workload Cluster<br />Worker Node (small) | 2   | 4   | 40  |
 | 2   | NSX ALB Service Engine | 1   | 1   | 15  |
 | 1 * host num | VSAN File services | 4   | 8   | 12  |
 | 1   | vCenter Server 7 ([tiny][204]) | 2   | 12  | 579 |
@@ -542,6 +541,7 @@ Table: Design Decision
 Table: Design Decision
 
 <!-- /* cSpell:disable */ -->
+
 ```yaml
 #! ---------------------------------------------------------------------
 #! Basic cluster creation configuration
@@ -622,6 +622,7 @@ ENABLE_AUTOSCALER: false
 Label the cluster to enable AKO
 
 <!-- /* cSpell:disable */ -->
+
 ```bash
 kubectl -n edge27 label cluster tkg-edge27-wld01 edge-location=edge27
 ```
@@ -630,6 +631,7 @@ kubectl -n edge27 label cluster tkg-edge27-wld01 edge-location=edge27
 Install Cert Manager
 
 <!-- /* cSpell:disable */ -->
+
 ```bash
 tanzu package install cert-manager --namespace cert-manager --create-namespace --package-name cert-manager.tanzu.vmware.com --version 1.5.3+vmware.2-tkg.1
 ```
@@ -638,6 +640,7 @@ tanzu package install cert-manager --namespace cert-manager --create-namespace -
 Install Contour
 
 <!-- /* cSpell:disable */ -->
+
 ```bash
 tanzu package install contour --namespace tanzu-system-contour --create-namespace --package-name contour.tanzu.vmware.com --version 1.18.2+vmware.1-tkg.1 --values-file contour-data-values.yaml
 ```
@@ -646,6 +649,7 @@ tanzu package install contour --namespace tanzu-system-contour --create-namespac
 Install Harbor
 
 <!-- /* cSpell:disable */ -->
+
 ```bash
 tanzu package install harbor --namespace tanzu-system-registry --create-namespace --package-name harbor.tanzu.vmware.com --version 2.3.3+vmware.1-tkg.1 --values-file harbor-data-values.yaml 
 ```
@@ -673,6 +677,7 @@ When the workloads on the TKG Workloads cluster will get added, it might be need
 TKG Workload Cluster can be [scaled horizontally][701] using the Tanzu CLI.
 
 <!-- /* cSpell:disable */ -->
+
 ```bash
 tanzu cluster scale tkg-edge33-wld01 --worker-machine-count 4 --namespace edge33
 ```
@@ -686,6 +691,7 @@ First, the TKG Management has to be upgraded to the new version, the TKG OVA tem
 When the time is right, each TKG Workload Cluster at each edge location can be independently [upgraded][704]
 
 <!-- /* cSpell:disable */ -->
+
 ```bash
 tanzu cluster upgrade tkg-edge33-wld01 --namespace edge33
 ```
@@ -801,7 +807,7 @@ As of time of writing [Tanzu Mission Control][701] requires,  at least, ~1.5GB o
 | manager (policy-webhook) | 128Mi | 256Mi | 100m | 100m |
 | sync-agent | 128Mi | 2Gi | 100m | 2 |
 | tmc-observer | 100Mi | 150Mi | 50m | 100m |
-| Total | **1446Mi** | 2546Mi | **870m** | 1803m |
+| Total | 1446Mi | 2546Mi | 870m | 1803m |
 <!-- /* cSpell:enable */ -->
 
 Table: Resources used by TMC components
@@ -870,7 +876,7 @@ Tanzu Kubernetes Grid on top of the VMware Edge Compute stack provides an effici
 [211]: https://docs.vmware.com/en/VMware-Tanzu/services/tanzu-reference-architecture/GUID-reference-designs-index.html
 [212]: https://core.vmware.com/resource/vsan-2-node-cluster-guide
 
-[410]: https://avinetworks.com/docs/20.1/sizing-service-engines/
+[410]: https://avinetworks.com/docs/20.1/sizing-service-engines
 
 [610]: https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-k8s-clusters-multi-az-vsphere.html#single-cluster
 [611]: https://docs.vmware.com/en/VMware-Tanzu/services/tanzu-reference-architecture/GUID-reference-designs-tko-on-vsphere.html
