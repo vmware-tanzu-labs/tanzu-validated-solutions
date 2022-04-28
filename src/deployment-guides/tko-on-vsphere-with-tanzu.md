@@ -73,8 +73,8 @@ The following are the high-level steps for deploying Tanzu Kubernetes operations
 2.  [Deploy Tanzu Kubernetes Grid Supervisor Cluster](#deployTKGS)
 3.  [Create and Configure vSphere Namespaces](#create-namespace)
 4.  [Deploy Tanzu Kubernetes Clusters (Workload Clusters)](#deploy-workload-cluster)
-5.  [Integrate Tanzu Kubernetes Clusters with SaaS Endpoints](#integrate-saas)
-6.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
+5.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
+6.  [Integrate Tanzu Kubernetes Clusters with SaaS Endpoints](#integrate-saas)
 
 ## <a id="config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
 
@@ -699,6 +699,125 @@ You can gather this information by running the following commands:
 
 For additional product documentation, see [Configuring and Managing vSphere Namespaces](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-1544C9FE-0B23-434E-B823-C59EFC2F7309.html).   
 
+## <a id=deploy-user-managed-packages> </a> Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters
+
+This section provides the steps for installing user-managed packages in a Tanzu Kubernetes (workload) cluster created by the Tanzu Kubernetes Grid Service.
+
+Before you install user-managed packages on a workload cluster, ensure the following:
+
+*   A vSphere 7.0 U2 (or later) workload cluster created by using Tanzu Kubernetes Grid Service.
+*   A bootstrap machine with the following installed:
+
+  - [Kubernetes CLI Tools for vSphere](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-0F6E45C4-3CB1-4562-9370-686668519FCA.html)
+  - [Tanzu CLI v1.4 or later](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-install-cli.html)
+
+The following steps describe the workflow for installing the user-managed packages:
+
+1. Add the Supervisor Cluster as a management cluster to Tanzu CLI by running the following commands:
+
+  `kubectl vsphere login --server=<Supervisor Cluster VIP> --vsphere-username USERNAME --insecure-skip-tls-verify`
+
+  `kubectl config use-context <Supervisor VIP>`
+
+  `tanzu login --kubeconfig ~/.kube/config --context <SUPERVISOR-VIP>`
+
+1. Prepare the workload cluster for installing the user-managed packages.
+
+   1. Change context to the workload cluster by running commands similar to the following:
+
+      `kubectl vsphere login --vsphere-username=administrator@vsphere.local --server=<Supervisor Cluster VIP> --insecure-skip-tls-verify --tanzu-kubernetes-cluster-name=WORKLOAD-CLUSTER-NAME --tanzu-kubernetes-cluster-namespace WORKLOAD-CLUSTER-NAMESPACE`
+
+      `kubectl config use-context WORKLOAD-CLUSTER-NAME`
+
+   1. Check if a default storage class is defined.
+
+      `kubectl get storageclass`
+
+   1. If no default storage class is listed, edit the Tanzu Kubernetes Cluster and specify the same.
+
+      `kubectl config use-context <Supervisor VIP>`
+
+      `kubectl edit tkc <workload-cluster>`
+
+      Locate the lines that read `topology: controlPlane` and add the storage policy above that as shown in the following sample screen capture.
+
+      ![](./img/tko-on-vsphere-with-tanzu/image58.png)
+
+1. Create cluster role bindings for installing the user-managed packages.
+
+  By default, the newly created workload cluster does not have a cluster role binding that grants access to authenticated users to install packages using the default PSP `vmware-system-privileged`.
+
+   1. Create a role binding deployment YAML as follows:
+      <!-- /* cSpell:disable */ -->
+      ``` yaml
+      kind: ClusterRoleBinding
+
+      apiVersion: rbac.authorization.k8s.io/v1
+
+      metadata:
+
+          name: tkgs-rbac
+
+      roleRef:
+
+          kind: ClusterRole
+
+          name: psp:vmware-system-privileged
+
+          apiGroup: rbac.authorization.k8s.io
+
+      subjects:
+
+        - kind: Group
+
+          apiGroup: rbac.authorization.k8s.io
+
+          name: system:authenticated    
+      ```
+      <!-- /* cSpell:enable */ -->
+
+  1. Apply role binding.
+
+      `kubectl apply -f rbac.yaml`
+
+      You will see the following output, which indicates that the command is successfully executed.
+
+      `clusterrolebinding.rbac.authorization.k8s.io/tkgs-rbac created`
+
+      The value `tkgs-rbac` is just a name. It can be replaced with a name of your choice.
+
+1. Install [kapp-controller](https://carvel.dev/kapp-controller/).
+
+   1. Create a file kapp-controller.yaml containing the [Kapp Controller Manifest](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prep-tkgs-kapp.html) code.
+
+   1. Apply the kapp-controller.yaml file to the workload cluster
+
+      `kubectl apply -f kapp-controller.yaml`
+
+   1. Verify that kapp-controller pods are created in the tkg-system namespace and are in a running state.
+
+      `kubectl get pods -n tkg-system | grep kapp-controller`
+
+1. Add the standard packages repository to the Tanzu CLI.
+
+   1. Add tanzu package repository
+
+      `tanzu package repository add tkgs-repo --url projects.registry.vmware.com/tkg/packages/standard/repo:v1.4.0 -n tanzu-package-repo-global`
+
+   1. Verify that the package repository has been added and Reconciliation is successful.
+
+      `tanzu package repository list -A`
+
+      If the repository is successfully added, the status reads as `Reconcile succeeded`.
+
+1. [Install Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html).
+
+1. [Install Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html).
+
+1. [Install Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html).
+
+1. [Install Harbor Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html).
+
 ## <a id=integrate-saas> </a> Integrate Tanzu Kubernetes Clusters with SaaS Endpoints
 
 By integrating Supervisor Cluster and Tanzu Kubernetes Clusters with Tanzu Mission Control (TMC) you are provided a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters.
@@ -887,11 +1006,14 @@ Do the following to enable Tanzu Service Mesh and add Tanzu Kubernetes Grid clus
 
   ![](./img/tko-on-vsphere-with-tanzu/image24.jpg)
 
-1. Select **Enable Tanzu Service Mesh on all namespaces**.
+1. There are specific namespaces that you will want to exclude, select the **Exclude namespaces...** and choose namespaces to add to the exclusion list.
+   Exclude the following namespaces:
+   1. `tanzu-system-ingress` Tanzu Service Mesh injects sidecar proxy pods that conflict with contour ingress.
+   2. `tanzu-system-monitoring` Prometheus is for cluster specific monitoring and does not need Tanzu Service Mesh injected sidecar proxy pods added.
+   3. `tanzu-system-dashboards` Grafana is for cluster specific dashboards and does not need Tanzu Service Mesh injected sidecar proxy pods added.
+   4. `cert-manager` Each cluster requires cert-manager for contour ingress and with Tanzu Service Mesh injected sidecar proxy pods, reaching the local cert-manager application can become cumbersome.
 
-1. If there are specific namespaces that you want to exclude, select the **Exclude namespaces...** and choose namespaces to add to the exclusion list.
-
-  ![](./img/tko-on-vsphere-with-tanzu/image71.jpg)
+  ![](./img/tko-on-vsphere-with-tanzu/image79.png)
 
 1. Click **Confirm**.
 
@@ -902,122 +1024,3 @@ Do the following to enable Tanzu Service Mesh and add Tanzu Kubernetes Grid clus
 1. After the Tanzu Service Mesh extension is installed, you can access the Tanzu Service Mesh console through the **Integrations** tile on **the Overview** tab of the cluster in the Tanzu Mission Control console.
 
   ![](./img/tko-on-vsphere-with-tanzu/image74.jpg)
-
-## <a id=deploy-user-managed-packages> </a> Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters
-
-This section provides the steps for installing user-managed packages in a Tanzu Kubernetes (workload) cluster created by the Tanzu Kubernetes Grid Service.
-
-Before you install user-managed packages on a workload cluster, ensure the following:
-
-*   A vSphere 7.0 U2 (or later) workload cluster created by using Tanzu Kubernetes Grid Service.
-*   A bootstrap machine with the following installed:
-
-  - [Kubernetes CLI Tools for vSphere](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-0F6E45C4-3CB1-4562-9370-686668519FCA.html)
-  - [Tanzu CLI v1.4 or later](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-install-cli.html)
-
-The following steps describe the workflow for installing the user-managed packages:
-
-1. Add the Supervisor Cluster as a management cluster to Tanzu CLI by running the following commands:
-
-  `kubectl vsphere login --server=<Supervisor Cluster VIP> --vsphere-username USERNAME --insecure-skip-tls-verify`
-
-  `kubectl config use-context <Supervisor VIP>`
-
-  `tanzu login --kubeconfig ~/.kube/config --context <SUPERVISOR-VIP>`
-
-1. Prepare the workload cluster for installing the user-managed packages.
-
-   1. Change context to the workload cluster by running commands similar to the following:
-
-      `kubectl vsphere login --vsphere-username=administrator@vsphere.local --server=<Supervisor Cluster VIP> --insecure-skip-tls-verify --tanzu-kubernetes-cluster-name=WORKLOAD-CLUSTER-NAME --tanzu-kubernetes-cluster-namespace WORKLOAD-CLUSTER-NAMESPACE`
-
-      `kubectl config use-context WORKLOAD-CLUSTER-NAME`
-
-   1. Check if a default storage class is defined.
-
-      `kubectl get storageclass`
-
-   1. If no default storage class is listed, edit the Tanzu Kubernetes Cluster and specify the same.
-
-      `kubectl config use-context <Supervisor VIP>`
-
-      `kubectl edit tkc <workload-cluster>`
-
-      Locate the lines that read `topology: controlPlane` and add the storage policy above that as shown in the following sample screen capture.
-
-      ![](./img/tko-on-vsphere-with-tanzu/image58.png)
-
-1. Create cluster role bindings for installing the user-managed packages.
-
-  By default, the newly created workload cluster does not have a cluster role binding that grants access to authenticated users to install packages using the default PSP `vmware-system-privileged`.
-
-   1. Create a role binding deployment YAML as follows:
-      <!-- /* cSpell:disable */ -->
-      ``` yaml
-      kind: ClusterRoleBinding
-
-      apiVersion: rbac.authorization.k8s.io/v1
-
-      metadata:
-
-          name: tkgs-rbac
-
-      roleRef:
-
-          kind: ClusterRole
-
-          name: psp:vmware-system-privileged
-
-          apiGroup: rbac.authorization.k8s.io
-
-      subjects:
-
-        - kind: Group
-
-          apiGroup: rbac.authorization.k8s.io
-
-          name: system:authenticated    
-      ```
-      <!-- /* cSpell:enable */ -->
-
-  1. Apply role binding.
-
-      `kubectl apply -f rbac.yaml`
-
-      You will see the following output, which indicates that the command is successfully executed.
-
-      `clusterrolebinding.rbac.authorization.k8s.io/tkgs-rbac created`
-
-      The value `tkgs-rbac` is just a name. It can be replaced with a name of your choice.
-
-1. Install [kapp-controller](https://carvel.dev/kapp-controller/).
-
-   1. Create a file kapp-controller.yaml containing the [Kapp Controller Manifest](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prep-tkgs-kapp.html) code.
-
-   1. Apply the kapp-controller.yaml file to the workload cluster
-
-      `kubectl apply -f kapp-controller.yaml`
-
-   1. Verify that kapp-controller pods are created in the tkg-system namespace and are in a running state.
-
-      `kubectl get pods -n tkg-system | grep kapp-controller`
-
-1. Add the standard packages repository to the Tanzu CLI.
-
-   1. Add tanzu package repository
-
-      `tanzu package repository add tkgs-repo --url projects.registry.vmware.com/tkg/packages/standard/repo:v1.4.0 -n tanzu-package-repo-global`
-
-   1. Verify that the package repository has been added and Reconciliation is successful.
-
-      `tanzu package repository list -A`
-
-      If the repository is successfully added, the status reads as `Reconcile succeeded`.
-
-1. [Install Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html).
-
-1. [Install Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html).
-
-1. [Install Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html).
-
-1. [Install Harbor Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html).
