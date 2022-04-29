@@ -43,7 +43,7 @@ Before deploying Tanzu for Kubernetes operations and the actual Kubernetes clust
 The deployment detailed in this document uses the following resources:
 <!-- cSpell:disable -->
 - [ARM Template](./resources/tko-on-azure/azure-deploy.json)
-- [Parameters](./resources/tko-on-azure/azure-deploy.parameters.json)
+- [Parameters](./resources/tko-on-azure/azure-deploy-parameters.json)
 <!-- cSpell:enable -->
 
 The ARM template contains a number of parameters that you can populate or customize so that your Azure environment uses your naming standards and networking requirements.
@@ -102,7 +102,7 @@ Run the following example Azure CLI command locally or in Azure Cloud Shell  to 
 
 <!-- cSpell:disable -->
 ```bash
-az deployment create –template-file azure-deploy.json –parameters azure-deploy.parameters.json –resource-group <Resource Group Name>
+az deployment create –template-file azure-deploy.json –parameters azure-deploy-parameters.json –resource-group <Resource Group Name>
 ```
 <!-- cSpell:enable -->
 
@@ -111,7 +111,7 @@ Alternatively, run the following example command in Azure PowerShell to deploy t
 
 <!-- cSpell:disable -->
 ```bash
-New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateFile azure-deploy.json -TemplateParameterFile azure-deploy.parameters.json
+New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateFile azure-deploy.json -TemplateParameterFile azure-deploy-parameters.json
 ```
 <!-- cSpell:enable -->
 
@@ -213,7 +213,8 @@ You will set up the bootstrap VM with the following:
 - Tanzu Kubectl
 
 To set up the bootstrap VM:
-1. Verify that the VM is up and running. <_how do you verify?_>
+
+1. Verify that the VM is up and running.
 1. Connect to the VM through a standard SSH connection.
 1. Run the following Shell commands to set up the bootstrap VM.
     Replace the variables with the VMware account information needed to access VMware Customer Connect and Azure IDs for the Azure subscription on which you created resources using the ARM template and Application Registration/Service Principal.
@@ -280,12 +281,8 @@ az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot
 
 If you prefer not to copy paste code, you can use the following sample script files:
 
-<!-- cSpell:disable -->
-
-  - [bootstrapsetup.sh](./resources/tko-on-azure/bootstrapsetup.sh)
-  - [bootstraptanzu.sh](./resources/tko-on-azure/bootstraptanzu.sh)
-
-<!-- cSpell:enable -->
+  - [`bootstrapsetup.sh`](./resources/tko-on-azure/bootstrapsetup.sh)
+  - [`bootstraptanzu.sh`](./resources/tko-on-azure/bootstraptanzu.sh)
 
 ## <a id=deploy-TKG> </a> Deploy Tanzu Kubernetes Grid
 Deploy Tanzu Kubernetes Grid after you set up your Azure environment and bootstrap VM.

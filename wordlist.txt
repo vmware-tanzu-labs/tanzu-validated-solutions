@@ -60,3 +60,5 @@ VNET
 TKG
 finalizer
 kubeconfig
+NSXT
+autoscaler
