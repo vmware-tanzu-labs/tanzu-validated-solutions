@@ -42,7 +42,7 @@ Click the Install Package button to initiate the installation.
 
 ![Screenshot of Contour installation screen](img/tanzu-pkgs/tanzu-pkgs05.png)
 
-Provide a name for the installed package and select the version that you want to install. Package installation can be customized by entering the user-configurable values in yaml format under the option Overlay YAML. 
+Provide a name for the installed package and select the version that you want to install. You can customize your installation by entering the user-configurable values in YAML format under the Overlay YAML option. 
 
 An example yaml for customizing contour installation is shown below.
 
