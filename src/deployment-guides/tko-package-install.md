@@ -147,7 +147,7 @@ An example screenshot of a customized Prometheus installation follows.
 
 After installing the Prometheus package, ensure that the installation status has changed to Succeeded.
 
-![](img/tanzu-pkgs/tanzu-pkgs11.png)
+![Screenshot of the Installed Packages screen showing that Prometheus was installed successfully](img/tanzu-pkgs/tanzu-pkgs11.png)
 
 ### **Install Grafana**
 
