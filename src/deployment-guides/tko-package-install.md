@@ -24,7 +24,7 @@ On the package details page, click Install Package.
 
 On the Install page, provide a name for the installed instance of the package and select the version to install. You can customize the package installation by using the pencil icon under the Table View option to edit the configuration parameters. 
 
-After the custom parameters have been supplied, click on the Install package button to initiate the installation.
+After supplying any custom parameters, click the Install Package button to initiate the installation.
 
 ![](img/tanzu-pkgs/tanzu-pkgs03.png)
 
