@@ -175,7 +175,7 @@ After installing Grafana, ensure that the installation status for the Grafana pa
 
 ![Screenshot showing that Grafana was installed successfully.](img/tanzu-pkgs/tanzu-pkgs13.png)
 
-### **Install Fluent-Bit**
+### Install Fluent Bit
 
 [Fluent Bit](https://fluentbit.io/) is a lightweight log processor and forwarder that allows you to collect data and logs from different sources, unify them, and send them to multiple destinations.
 
