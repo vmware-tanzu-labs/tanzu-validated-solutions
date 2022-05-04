@@ -70,7 +70,7 @@ For a full list of user-configurable values, see the official Contour [documenta
 
 ![Screenshot of the Contour installation screen showing a YAML overlay file](img/tanzu-pkgs/tanzu-pkgs06.png)
 
-Please ensure that the reconcile status for the contour package reflects succeed after installing the package.
+After installing Contour, ensure that the status for the Contour package one the Installed Packages screen has changed to Succeeded.
 
 ![](img/tanzu-pkgs/tanzu-pkgs07.png)
 
