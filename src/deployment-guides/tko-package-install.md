@@ -217,7 +217,6 @@ fluent_bit:
         Name tail
         Path /var/log/containers/*.log
 ```
-<!-- /* cSpell:enable */ -->
 
 An example screenshot is shown below for fluent-bit installation. 
 
