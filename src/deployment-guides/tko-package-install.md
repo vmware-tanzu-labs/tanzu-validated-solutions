@@ -80,7 +80,6 @@ After installing Contour, ensure that the status for the Contour package one the
 
 To install the Harbor package, repeat the steps for package installation. An example YAML file for customizing Harbor deployment follows.
 
-<!-- /* cSpell:disable */ -->
 ```yaml
 hostname: registry.tanzu.lab
 enableContourHttpProxy: true
