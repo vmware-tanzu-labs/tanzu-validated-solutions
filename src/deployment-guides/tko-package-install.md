@@ -10,7 +10,7 @@ The recommended method for installing packages in Tanzu Kubernetes clusters is t
 
 Log in to the Tanzu Mission Control portal and go to the Catalog page to install user-managed packages on a Tanzu Kubernetes cluster. Select the cluster on which packages will be installed from the Available category.
 
-![](img/tanzu-pkgs/tanzu-pkgs01.png)
+![Tanzu Mission Control Catalog page showing available packages](img/tanzu-pkgs/tanzu-pkgs01.png)
 
 ### **Install cert-manager**
 
