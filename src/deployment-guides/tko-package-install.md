@@ -32,7 +32,7 @@ Installing the package takes roughly 5-10 minutes to complete. After a successfu
 
 ![Screenshot of page showing list of installed packages](img/tanzu-pkgs/tanzu-pkgs04.png)
 
-### **Install Contour**
+### Install Contour
 
 [Contour](https://projectcontour.io/) is an open-source Kubernetes ingress controller providing the control plane for the Envoy edge and service proxy.​ Tanzu Mission Control catalog includes signed binaries for Contour and Envoy, which you can deploy into Tanzu Kubernetes (workload) clusters to provide ingress control services in those clusters.
 
