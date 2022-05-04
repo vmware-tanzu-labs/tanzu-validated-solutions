@@ -44,7 +44,7 @@ Click the Install Package button to initiate the installation.
 
 Provide a name for the installed package and select the version that you want to install. You can customize your installation by entering the user-configurable values in YAML format under the Overlay YAML option. 
 
-An example yaml for customizing contour installation is shown below.
+An example YAML file for customizing the installation of Contour follows.
 
 <!-- /* cSpell:disable */ -->
 ```yaml
