@@ -6,7 +6,7 @@ For example, you can install the Contour package to implement ingress control, t
 
 You can install Tanzu packages via the CLI by invoking the `tanzu package install` command or directly from Tanzu Mission Control by utilizing the [**TMC Catalog**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
 
-Installing user-managed packages from Tanzu Mission Control is the recommended method of package installation in Tanzu Kubernetes clusters. 
+The recommended method for installing packages in Tanzu Kubernetes clusters is through Tanzu Mission Control.
 
 Log in to the Tanzu Mission Control portal and go to the Catalog page to install user-managed packages on a Tanzu Kubernetes cluster. Select the cluster on which packages will be installed from the Available category.
 
