@@ -187,7 +187,6 @@ A sample YAML file for configuring an http endpoint with Fluent Bit is provided 
 
 Before you add the following YAML code in TMC for installing Fluent Bit, you must [create an API key](https://vmc.techzone.vmware.com/resource/implement-centralized-logging-tanzu-kubernetes-grid-fluent-bit).
 
-<!-- /* cSpell:disable */ -->
 ```yaml
 namespace: "tanzu-system-logging"
 fluent_bit:
