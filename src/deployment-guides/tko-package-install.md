@@ -20,7 +20,7 @@ Click the cert-manager package tile on the Catalog page to navigate to the insta
 
 On the package details page, click Install Package.
 
-![](img/tanzu-pkgs/tanzu-pkgs02.png)
+![Screenshot of package details page for cert-manager](img/tanzu-pkgs/tanzu-pkgs02.png)
 
 On the Install page, provide a name for the installed instance of the package, select the version to install. You can customize the package installation by editing the configuration parameters using the pencil icon under the option Table View. 
 
