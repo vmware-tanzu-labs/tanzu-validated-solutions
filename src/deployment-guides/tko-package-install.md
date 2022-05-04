@@ -221,7 +221,7 @@ An example screenshot for fluent-bit installation follows.
 
 ![](img/tanzu-pkgs/tanzu-pkgs14.png)
 
-Please ensure that the reconcile status for the fluent-bit package reflects succeed after installing the package.
+After installing Fluent Bit, ensure that the installation status for the Fluent Bit package on the Installed Packages screen has changed to Successful.
 
 ![](img/tanzu-pkgs/tanzu-pkgs15.png)
 
