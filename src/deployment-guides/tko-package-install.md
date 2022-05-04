@@ -1,6 +1,6 @@
 ## Deploy User-Managed Packages in Workload Clusters
 
-User-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
+After creating workload clusters, you can install user-managed packages. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid.
 
 For example, you can install the Contour package to implement ingress control, the Harbor package to configure a private container registry, or the Fluent Bit, Grafana, and Prometheus packages to collect logs and metrics from your clusters.
 
