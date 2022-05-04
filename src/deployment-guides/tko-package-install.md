@@ -105,7 +105,7 @@ metrics:
 
 For a full list of user-configurable values, see the official [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html#harbordatavalues-file-for-vsphere-7-11)
 
-An example screenshot is shown below for customized harbor installation. 
+A screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation follows. 
 
 ![](img/tanzu-pkgs/tanzu-pkgs08.png)
 
