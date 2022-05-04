@@ -38,7 +38,7 @@ Installing the package takes roughly 5-10 minutes to complete. After a successfu
 
 To install the Contour package, click the Browse Packages button and select the Contour package.
 
-Click on the install package button to initiate the installation.
+Click the Install Package button to initiate the installation.
 
 ![](img/tanzu-pkgs/tanzu-pkgs05.png)
 
