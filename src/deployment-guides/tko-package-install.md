@@ -64,7 +64,7 @@ envoy:
 ```
 <!-- /* cSpell:enable */ -->
 
-For a full list of user-configurable values, please see official [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html#optional-configuration-6)
+For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html#optional-configuration-6)
 
 **Note:** You can leave the default settings if don’t intend to customize package installation. 
 
