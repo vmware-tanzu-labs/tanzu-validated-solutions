@@ -149,7 +149,7 @@ After installing the Prometheus package, ensure that the installation status has
 
 ![Screenshot of the Installed Packages screen showing that Prometheus was installed successfully](img/tanzu-pkgs/tanzu-pkgs11.png)
 
-### **Install Grafana**
+### Install Grafana
 
 [Grafana](https://grafana.com/) allows you to query, visualize, alert on, and explore metrics no matter where they are stored. Grafana provides tools to form graphs and visualizations from application data. 
 
