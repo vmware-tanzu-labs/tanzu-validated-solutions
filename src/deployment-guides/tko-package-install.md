@@ -155,7 +155,7 @@ After installing the Prometheus package, ensure that the installation status has
 
 To install the Grafana package, repeat the steps for the package installation. An example YAML file for customizing Grafana deployment follows.
 
-**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, **tanzu-system-monitoring**, you need to change the Grafana datasource configuration in the code shown below.
+**Note:** By default, Grafana is configured to use Prometheus as its data source. If you have customized the Prometheus deployment namespace and Prometheus is not deployed in the default namespace, **tanzu-system-monitoring**, you must change the Grafana datasource configuration as shown in the YAML code that follows.
 
 <!-- /* cSpell:disable */ -->
 ```yaml
