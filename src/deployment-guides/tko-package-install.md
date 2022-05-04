@@ -218,7 +218,7 @@ fluent_bit:
         Path /var/log/containers/*.log
 ```
 
-An example screenshot is shown below for fluent-bit installation. 
+An example screenshot for fluent-bit installation follows.
 
 ![](img/tanzu-pkgs/tanzu-pkgs14.png)
 
