@@ -30,7 +30,7 @@ After supplying any custom parameters, click the Install Package button to initi
 
 Installing the package takes roughly 5-10 minutes to complete. After a successful installation, the status of the package reconciliation reads Succeeded.
 
-![](img/tanzu-pkgs/tanzu-pkgs04.png)
+![Screenshot of page showing list of installed packages](img/tanzu-pkgs/tanzu-pkgs04.png)
 
 ### **Install Contour**
 
