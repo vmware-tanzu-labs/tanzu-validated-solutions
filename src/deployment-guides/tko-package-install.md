@@ -141,7 +141,7 @@ alertmanager:
 
 For a full list of user-configurable values, see the official [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html#review-configuration-parameters-9)
 
-An example screenshot is shown below for customized Prometheus installation. 
+An example screenshot of a customized Prometheus installation follows. 
 
 ![](img/tanzu-pkgs/tanzu-pkgs10.png)
 
