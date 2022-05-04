@@ -111,7 +111,7 @@ A screenshot of the Harbor installation page showing a YAML file for customizing
 
 After installing Harbor, ensure that the status of the installation has changed to Succeeded on the Installed Packages page.
 
-![](img/tanzu-pkgs/tanzu-pkgs09.png)
+![Screenshot of the Installed Packages screen showing that Harbor installation was successful](img/tanzu-pkgs/tanzu-pkgs09.png)
 
 ### **Install Prometheus**
 
