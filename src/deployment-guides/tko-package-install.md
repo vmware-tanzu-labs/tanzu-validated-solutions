@@ -169,7 +169,7 @@ For a full list of user-configurable values, see the official [Grafana documenta
 
 An example screenshot for customizing your Grafana installation follows.
 
-![](img/tanzu-pkgs/tanzu-pkgs12.png)
+![Screenshot of Install Grafana screen showing custom YAML file](img/tanzu-pkgs/tanzu-pkgs12.png)
 
 Please ensure that the reconcile status for the Grafana package reflects succeed after installing the package.
 
