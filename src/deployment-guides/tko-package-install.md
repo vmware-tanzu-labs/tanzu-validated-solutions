@@ -145,7 +145,7 @@ An example screenshot of a customized Prometheus installation follows.
 
 ![Screenshot showing customized Prometheus installation](img/tanzu-pkgs/tanzu-pkgs10.png)
 
-Please ensure that the reconcile status for the Prometheus package reflects succeed after installing the package.
+After installing the Prometheus package, ensure that the installation status has changed to Succeeded.
 
 ![](img/tanzu-pkgs/tanzu-pkgs11.png)
 
