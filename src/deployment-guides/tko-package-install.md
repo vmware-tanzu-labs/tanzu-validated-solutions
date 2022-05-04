@@ -233,6 +233,6 @@ To install the Multus package, repeat the steps for the package installation.  A
 
 ![Screenshot showing installation of Multus CNI](img/tanzu-pkgs/tanzu-pkgs16.png)
 
-Please ensure that the reconcile status for the multus-cni package reflects succeed after installing the package.
+After installing Multus CNI, ensure that the installation status for the Multus CNI package on the Installed Packages screen has changed to Succeeded.
 
 ![](img/tanzu-pkgs/tanzu-pkgs17.png)
