@@ -26,7 +26,7 @@ On the Install page, provide a name for the installed instance of the package an
 
 After supplying any custom parameters, click the Install Package button to initiate the installation.
 
-![](img/tanzu-pkgs/tanzu-pkgs03.png)
+![Screenshot of the Install cert-manager screen](img/tanzu-pkgs/tanzu-pkgs03.png)
 
 The installation of the package roughly takes 5-10 minutes to complete and after successful installation, the status of the package reconciliation reads Succeeded.
 
