@@ -74,7 +74,7 @@ After installing Contour, ensure that the status for the Contour package one the
 
 ![Screenshot of the Installed Packages screen showing that installation was successful](img/tanzu-pkgs/tanzu-pkgs07.png)
 
-### **Install Harbor**
+### Install Harbor
 
 [Harbor](https://goharbor.io/) is an open-source container registry. Harbor Registry may be used as a private registry for container images that you want to deploy to Tanzu Kubernetes clusters.
 
