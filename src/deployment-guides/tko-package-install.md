@@ -78,7 +78,7 @@ After installing Contour, ensure that the status for the Contour package one the
 
 [Harbor](https://goharbor.io/) is an open-source container registry. The Harbor registry may be used as a private registry for container images that you want to deploy to Tanzu Kubernetes clusters.
 
-To install the harbor package, repeat the steps for package installation. An example yaml for customizing harbor deployment is shown below.
+To install the Harbor package, repeat the steps for package installation. An example YAML file for customizing Harbor deployment follows.
 
 <!-- /* cSpell:disable */ -->
 ```yaml
