@@ -109,7 +109,7 @@ A screenshot of the Harbor installation page showing a YAML file for customizing
 
 ![Screenshot of Harbor installation page showing a sample YAML customization file](img/tanzu-pkgs/tanzu-pkgs08.png)
 
-Please ensure that the reconcile status for the harbor package reflects succeed after installing the package.
+After installing Harbor, ensure that the status of the installation has changed to Succeeded on the Installed Packages page.
 
 ![](img/tanzu-pkgs/tanzu-pkgs09.png)
 
