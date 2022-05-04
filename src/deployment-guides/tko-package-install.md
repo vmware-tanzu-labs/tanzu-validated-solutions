@@ -22,7 +22,7 @@ On the package details page, click Install Package.
 
 ![Screenshot of package details page for cert-manager](img/tanzu-pkgs/tanzu-pkgs02.png)
 
-On the Install page, provide a name for the installed instance of the package, select the version to install. You can customize the package installation by editing the configuration parameters using the pencil icon under the option Table View. 
+On the Install page, provide a name for the installed instance of the package and select the version to install. You can customize the package installation by using the pencil icon under the Table View option to edit the configuration parameters. 
 
 After the custom parameters have been supplied, click on the Install package button to initiate the installation.
 
