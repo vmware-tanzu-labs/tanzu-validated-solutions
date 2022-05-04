@@ -4,7 +4,7 @@ After creating workload clusters, you can install user-managed packages. These p
 
 For example, you can install the Contour package to implement ingress control, the Harbor package to configure a private container registry, or the Fluent Bit, Grafana, and Prometheus packages to collect logs and metrics from your clusters.
 
-Tanzu packages can be installed via CLI by invoking the **tanzu package install** command or directly from the Tanzu Mission Control utilizing the [**TMC Catalog**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
+You can install Tanzu packages via the CLI by invoking the `tanzu package install` command or directly from Tanzu Mission Control by utilizing the [**TMC Catalog**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
 
 Installing user-managed packages from Tanzu Mission Control is the recommended method of package installation in Tanzu Kubernetes clusters. 
 
