@@ -231,7 +231,7 @@ After installing Fluent Bit, ensure that the installation status for the Fluent 
 
 To install the Multus package, repeat the steps for the package installation.  An example screenshot for Multus CNI installation follows. 
 
-![](img/tanzu-pkgs/tanzu-pkgs16.png)
+![Screenshot showing installation of Multus CNI](img/tanzu-pkgs/tanzu-pkgs16.png)
 
 Please ensure that the reconcile status for the multus-cni package reflects succeed after installing the package.
 
