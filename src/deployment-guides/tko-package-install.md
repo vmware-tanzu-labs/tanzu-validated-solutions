@@ -68,7 +68,7 @@ For a full list of user-configurable values, see the official Contour [documenta
 
 **Note:** You can leave the default settings if you don’t need to customize the package installation. 
 
-![](img/tanzu-pkgs/tanzu-pkgs06.png)
+![Screenshot of the Contour installation screen showing a YAML overlay file](img/tanzu-pkgs/tanzu-pkgs06.png)
 
 Please ensure that the reconcile status for the contour package reflects succeed after installing the package.
 
