@@ -40,7 +40,7 @@ To install the Contour package, click the Browse Packages button and select the 
 
 Click the Install Package button to initiate the installation.
 
-![](img/tanzu-pkgs/tanzu-pkgs05.png)
+![Screenshot of Contour installation screen](img/tanzu-pkgs/tanzu-pkgs05.png)
 
 Provide a name for the installed package and select the version that you want to install. Package installation can be customized by entering the user-configurable values in yaml format under the option Overlay YAML. 
 
