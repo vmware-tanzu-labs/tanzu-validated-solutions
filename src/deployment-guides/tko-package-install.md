@@ -173,7 +173,7 @@ An example screenshot for customizing your Grafana installation follows.
 
 After installing Grafana, ensure that the installation status for the Grafana package on the Installed Packages screen has changed to Succeeded.
 
-![](img/tanzu-pkgs/tanzu-pkgs13.png)
+![Screenshot showing that Grafana was installed successfully.](img/tanzu-pkgs/tanzu-pkgs13.png)
 
 ### **Install Fluent-Bit**
 
