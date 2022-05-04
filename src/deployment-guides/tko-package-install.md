@@ -223,7 +223,7 @@ An example screenshot for fluent-bit installation follows.
 
 After installing Fluent Bit, ensure that the installation status for the Fluent Bit package on the Installed Packages screen has changed to Successful.
 
-![](img/tanzu-pkgs/tanzu-pkgs15.png)
+![Screenshot showing that Fluent Bit was installed successfully](img/tanzu-pkgs/tanzu-pkgs15.png)
 
 ### **Install Multus CNI**
 
