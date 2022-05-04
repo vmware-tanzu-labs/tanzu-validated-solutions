@@ -16,7 +16,7 @@ Log in to the Tanzu Mission Control portal and go to the Catalog page to install
 
 The first package that you should install on your cluster is the [**cert-manager**](https://github.com/cert-manager/cert-manager) package which adds certificates and certificate issuers as resource types in Kubernetes clusters and simplifies the process of obtaining, renewing, and using those certificates.
 
-Click on the cert-manager package to navigate to the install package page. Click on the Install package button to navigate to the package details page. The package detail page shows the metadata provided by the package author.
+Click the cert-manager package tile on the Catalog page to navigate to the install package page. Click the Install Package button to navigate to the package details page. The package details page shows the metadata provided by the package author.
 
 On the package detail page, click Install Package.
 
