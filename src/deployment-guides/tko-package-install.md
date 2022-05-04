@@ -72,7 +72,7 @@ For a full list of user-configurable values, see the official Contour [documenta
 
 After installing Contour, ensure that the status for the Contour package one the Installed Packages screen has changed to Succeeded.
 
-![](img/tanzu-pkgs/tanzu-pkgs07.png)
+![Screenshot of the Installed Packages screen showing that installation was successful](img/tanzu-pkgs/tanzu-pkgs07.png)
 
 ### **Install Harbor**
 
