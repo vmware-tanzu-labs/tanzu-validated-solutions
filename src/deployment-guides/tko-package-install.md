@@ -225,7 +225,7 @@ After installing Fluent Bit, ensure that the installation status for the Fluent 
 
 ![Screenshot showing that Fluent Bit was installed successfully](img/tanzu-pkgs/tanzu-pkgs15.png)
 
-### **Install Multus CNI**
+### Install Multus CNI
 
 [Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. With Multus you can create a multi-homed pod that has multiple interfaces. 
 
