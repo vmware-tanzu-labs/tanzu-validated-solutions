@@ -107,7 +107,7 @@ For a full list of user-configurable values, see the official [Harbor documentat
 
 A screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation follows. 
 
-![](img/tanzu-pkgs/tanzu-pkgs08.png)
+![Screenshot of Harbor installation page showing a sample YAML customization file](img/tanzu-pkgs/tanzu-pkgs08.png)
 
 Please ensure that the reconcile status for the harbor package reflects succeed after installing the package.
 
