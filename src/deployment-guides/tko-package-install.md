@@ -153,7 +153,7 @@ After installing the Prometheus package, ensure that the installation status has
 
 [Grafana](https://grafana.com/) allows you to query, visualize, alert on, and explore metrics no matter where they are stored. Grafana provides tools to form graphs and visualizations from application data. 
 
-To install the Grafana package, repeat the steps for the package installation. An example yaml for customizing Grafana deployment is shown below.
+To install the Grafana package, repeat the steps for the package installation. An example YAML file for customizing Grafana deployment follows.
 
 **Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, **tanzu-system-monitoring**, you need to change the Grafana datasource configuration in the code shown below.
 
