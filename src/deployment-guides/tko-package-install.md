@@ -185,7 +185,7 @@ The example shown in this document uses an HTTP endpoint [vRealize Log Insight C
 
 A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the official [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html#fluent-bit-package-configuration-parameters-4).
 
-Please note that before you add the below yaml in TMC for installing fluent-bit, you have to create an API key as described [here](https://vmc.techzone.vmware.com/resource/implement-centralized-logging-tanzu-kubernetes-grid-fluent-bit)
+Before you add the following YAML code in TMC for installing Fluent Bit, you must [create an API key](https://vmc.techzone.vmware.com/resource/implement-centralized-logging-tanzu-kubernetes-grid-fluent-bit).
 
 <!-- /* cSpell:disable */ -->
 ```yaml
