@@ -219,7 +219,7 @@ fluent_bit:
 
 An example screenshot for fluent-bit installation follows.
 
-![](img/tanzu-pkgs/tanzu-pkgs14.png)
+![Screenshot showing Fluent Bit installation](img/tanzu-pkgs/tanzu-pkgs14.png)
 
 After installing Fluent Bit, ensure that the installation status for the Fluent Bit package on the Installed Packages screen has changed to Successful.
 
