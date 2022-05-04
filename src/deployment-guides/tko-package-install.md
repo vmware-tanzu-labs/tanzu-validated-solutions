@@ -165,7 +165,7 @@ namespace: tanzu-system-dashboards
 ```
 <!-- /* cSpell:enable */ -->
 
-For a full of user-configurable values, please see official [documentation]https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html#grafana-package-configuration-parameters-5)
+For a full list of user-configurable values, see the official [Grafana documentation]https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html#grafana-package-configuration-parameters-5)
 
 An example screenshot is shown below for customized Grafana installation. 
 
