@@ -143,7 +143,7 @@ For a full list of user-configurable values, see the official [Prometheus docume
 
 An example screenshot of a customized Prometheus installation follows. 
 
-![](img/tanzu-pkgs/tanzu-pkgs10.png)
+![Screenshot showing customized Prometheus installation](img/tanzu-pkgs/tanzu-pkgs10.png)
 
 Please ensure that the reconcile status for the Prometheus package reflects succeed after installing the package.
 
