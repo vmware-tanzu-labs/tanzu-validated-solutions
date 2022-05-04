@@ -18,7 +18,7 @@ The first package that you should install on your cluster is the [**cert-manager
 
 Click the cert-manager package tile on the Catalog page to navigate to the install package page. Click the Install Package button to navigate to the package details page. The package details page shows the metadata provided by the package author.
 
-On the package detail page, click Install Package.
+On the package details page, click Install Package.
 
 ![](img/tanzu-pkgs/tanzu-pkgs02.png)
 
