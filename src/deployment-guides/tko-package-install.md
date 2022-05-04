@@ -171,7 +171,7 @@ An example screenshot for customizing your Grafana installation follows.
 
 ![Screenshot of Install Grafana screen showing custom YAML file](img/tanzu-pkgs/tanzu-pkgs12.png)
 
-Please ensure that the reconcile status for the Grafana package reflects succeed after installing the package.
+After installing Grafana, ensure that the installation status for the Grafana package on the Installed Packages screen has changed to Succeeded.
 
 ![](img/tanzu-pkgs/tanzu-pkgs13.png)
 
