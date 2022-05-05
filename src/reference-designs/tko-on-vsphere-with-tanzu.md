@@ -108,7 +108,7 @@ Here are some recommendations for using namespaces  in a vSphere with Tanzu envi
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
-|TKO-TKGS-003|Create namespaces for logical separation of k8 workloads.|Created dedicated namespaces for the type of workloads (prod/dev/test) that you intend to run. |All Kubernetes clusters created under a namespace share the same access policy/quotas/network resources. |
+|TKO-TKGS-003|Create namespaces to logically separate K8s workloads.|Create dedicated namespaces for the type of workloads (prod/dev/test) that you intend to run. |All Kubernetes clusters created under a namespace share the same access policy/quotas/network resources. |
 |TKO-TKGS-004|Enable Self-Service namespace service.|Enable DevOps/Cluster admin users to provision namespaces in a self-service manner.|vSphere administrator has to publish a namespace template to the LDAP users/groups in order to enable them for creating namespaces.|
 |TKO-TKGS-005|Register external identity source (AD/LDAP) with vCenter.|Limit access to a namespace to authorized users/groups.|A prod namespace can be accessed by a handful of users, whereas a dev/test namespace can be exposed to a wider audience.|
 
