@@ -305,7 +305,7 @@ The vCenter UI shows that, in the current version, it is possible to install vSp
 
 ![Screenshot of the vCenter UI for configuring vSphere with Tanzu](./img/tko-on-vsphere-with-tanzu/tko-vwt10.jpg)
 
-This installation process will take you through the steps of deploying **Supervisor Cluster** in your vSphere environment. Once the Supervisor cluster is deployed you can make use of [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) or Kubectl utility to deploy Tanzu Kubernetes Shared Service and workload clusters.
+This installation process takes you through the steps of deploying **Supervisor Cluster** in your vSphere environment. Once the Supervisor cluster is deployed, you can use either [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) or Kubectl utility to deploy the Tanzu Kubernetes Shared Service and workload clusters.
 
 # **Design Recommendations**
 
