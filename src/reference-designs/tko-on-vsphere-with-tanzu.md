@@ -157,7 +157,7 @@ A Tanzu Kubernetes cluster provisioned by the Tanzu Kubernetes Grid supports two
 - [Antrea](https://antrea.io/)
 - [Calico](https://www.tigera.io/project-calico/)
 
-Both are open-source software that provides networking for cluster pods, services, and ingress.
+Both CNIs are open-source software that provides networking for cluster pods, services, and ingress.
 
 When you deploy a Tanzu Kubernetes cluster using Tanzu CLI using the default configuration, Antrea CNI is automatically enabled in the cluster. 
 
