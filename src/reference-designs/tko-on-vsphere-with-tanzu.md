@@ -361,7 +361,7 @@ One example of an ingress controller is Contour which is an open-source controll
 
 For more information about Contour, see [Contour](https://projectcontour.io/) site and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html)
 
-Another option is to use the NSX Advanced Load Balancer Kubernetes ingress controller that offers an advanced L7 ingress for containerized applications that are deployed in the Tanzu Kubernetes workload cluster.
+Another option is to use the NSX Advanced Load Balancer Kubernetes ingress controller, which offers an advanced L7 ingress for containerized applications deployed in the Tanzu Kubernetes workload cluster.
 
 ![NSX Advanced Load Balancing capabilities for VMware Tanzu](./img/tko-on-vsphere-with-tanzu/tko-vwt11.png)
 
