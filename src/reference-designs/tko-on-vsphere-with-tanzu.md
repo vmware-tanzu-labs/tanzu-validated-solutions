@@ -337,7 +337,7 @@ The following are the key network recommendations for a production-grade vSphere
 |TKO-NET-003|Configure DHCP for TKG clusters.|vSphere with Tanzu does not support static IP assignments for Kubernetes VM components.|<p>An IP Block of 5 continuous IP Addresses can be used for the Supervisor cluster if DHCP is not available. </p><p></p><p>IP Pool can be used for the Workload cluster in absence of the DHCP.</p>|
 |TKO-NET-004|Use routable networks for Tanzu Kubernetes clusters.|Allow connectivity between the TKG clusters and infrastructure components.|Networks that are used for Tanzu Kubernetes cluster traffic must be routable between each other and the Supervisor Cluster Management Network.|
 
-## Recommendations for Supervisor Cluster
+## Recommendations for Supervisor Clusters
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
