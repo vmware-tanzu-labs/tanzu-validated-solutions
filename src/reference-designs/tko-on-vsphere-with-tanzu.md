@@ -341,7 +341,7 @@ The following are the key network recommendations for a production-grade vSphere
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
-|TKO-TKGS-003|Create a Subscribed Content Library |The Content Library sources the OVA used by the Tanzu Kubernetes Grid Service to build cluster nodes.|<p>VMware updates the repo with the latest versions of the Kubernetes templates when a new version of vSphere with Tanzu is released.</p><p></p><p>Using a subscribed content library eases the template management as new versions can be pulled by initiating the library sync.</p>|
+|TKO-TKGS-003|Create a Subscribed Content Library. |The Content Library sources the OVA used by the Tanzu Kubernetes Grid Service to build cluster nodes.|<p>VMware updates the repo with the latest versions of the Kubernetes templates when a new version of vSphere with Tanzu is released.</p><p></p><p>Using a subscribed content library facilitates template management as new versions can be pulled by initiating the library sync.</p>|
 |TKO-TKGS-004|Deploy Supervisor cluster control plane nodes in large form factor.|Allow Supervisor cluster integration with Tanzu Mission Control.|When TKG is integrated with SaaS endpoints, new pods/services, etc are created in the target cluster and the pods have specific CPU requirements which can’t be fulfilled with medium and small-sized control plane/worker nodes|
 |TKO-TKGS-005|Register Supervisor cluster with Tanzu Mission Control|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Tanzu Mission Control also automates the deployment of Tanzu Packages in all Tanzu Kubernetes clusters associated with TMC.|
 
