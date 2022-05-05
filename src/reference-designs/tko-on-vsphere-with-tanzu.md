@@ -357,7 +357,7 @@ The following are the key network recommendations for a production-grade vSphere
 # **Kubernetes Ingress Routing**
 vSphere with Tanzu does not ship with any default ingress controller and users can use any Tanzu supported ingress controller of their choice.
 
-One example of an ingress controller is Contour which is an open-source controller for Kubernetes Ingress routing. Contour is part of a Tanzu package and can be installed on any Tanzu Kubernetes Cluster. Deploying Contour is a prerequisite if you want to deploy the Prometheus, Grafana, and Harbor on a workload cluster.
+One example of an ingress controller is Contour, an open-source controller for Kubernetes ingress routing. Contour is part of a Tanzu package and can be installed on any Tanzu Kubernetes cluster. Deploying Contour is a prerequisite for deploying Prometheus, Grafana, and Harbor on a workload cluster.
 
 For more information about Contour, see the [Contour](https://projectcontour.io/) site and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
 
