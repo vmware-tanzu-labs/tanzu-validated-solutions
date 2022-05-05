@@ -246,7 +246,7 @@ As per the reference architecture, the list of required networks is as follows:
 |TKG Workload Network (Primary)|Yes. |<p>Control plane and worker nodes of TKG workload clusters will be attached to this network.</p><p>The second interface of the Supervisor nodes is also attached to this network.</p>|
 |TKG Cluster VIP/Data Network|No|<p>Virtual Services (L4) for Control plane HA of all TKG clusters (Supervisor and Workload).</p><p>Reserve sufficient IPs depending on the number of TKG clusters planned to be deployed in the environment.</p>|
 
-## **Subnet and CIDR Examples**
+## Subnet and CIDR Examples
 
 For the purpose of demonstration, this document makes use of the following Subnet CIDR for TKO deployment.
 
