@@ -265,7 +265,7 @@ To prepare the firewall, you need to gather the following information:
 1. Supervisor Cluster network (TKG Management) CIDR
 1. TKG workload cluster CIDR
 1. TKG cluster VIP address range
-1. Client Machine IP Address
+1. Client machine IP address
 1. vCenter Server IP address.
 1. VMware Harbor registry IP.
 1. DNS server IP(s).
