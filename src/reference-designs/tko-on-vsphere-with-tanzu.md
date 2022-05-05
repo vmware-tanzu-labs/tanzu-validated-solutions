@@ -297,7 +297,7 @@ The following table provides a list of firewall rules based on the assumption th
 
 # Installation Experience
 
-vSphere with Tanzu deployment starts with deploying the Supervisor cluster (Enabling Workload Management). The deployment is directly done from the vCenter UI. The Get Started page lists the pre-requisites that must be met before starting the deployment.
+vSphere with Tanzu deployment starts with deploying the Supervisor cluster (Enabling Workload Management). The deployment is directly done from the vCenter user interface (UI). The Get Started page lists the pre-requisites for the deployment.
 
 ![Screenshot of the vCenter integrated Workload Management page](./img/tko-on-vsphere-with-tanzu/tko-vwt09.jpg)
 
