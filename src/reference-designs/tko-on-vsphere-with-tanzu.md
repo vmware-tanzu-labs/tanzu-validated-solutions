@@ -177,7 +177,7 @@ Each CNI is suitable for a different use case. The following table lists common 
 
 ## Networking for vSphere with Tanzu
 
-vSphere with Tanzu can be deployed on various networking stacks, including,
+vSphere with Tanzu can be deployed on various networking stacks, including:
 
 - VMware NSX-T Data Center Networking.
 
