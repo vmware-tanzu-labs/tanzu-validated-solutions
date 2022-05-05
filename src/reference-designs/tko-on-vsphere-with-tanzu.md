@@ -92,7 +92,7 @@ The Supervisor Cluster consists of the following:
 
 The following diagram shows the general architecture of the Supervisor Cluster.
 
-![Figure 3 - Supervisor Cluster Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt04.jpg)
+![Supervisor Cluster Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt04.jpg)
 
 After a Supervisor Cluster is created, the vSphere administrator creates vSphere Namespaces. When initially created, the namespace has unlimited resources within the Supervisor Cluster. vSphere administrator defines the limits for CPU, memory, storage, as well as the number of Kubernetes objects such as deployments, replica sets, persistent volumes, etc that can run within the namespace. These limits are configured per vSphere Namespace. 
 
