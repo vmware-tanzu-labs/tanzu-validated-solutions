@@ -257,7 +257,7 @@ For the purpose of demonstration, this document makes use of the following Subne
 |TKG Workload Primary Network|TKG-Workload-PG01|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
 |TKG Cluster VIP/Data Network|TKG-Cluster-VIP|192.168.14.1/26|NA|<p>SE Pool: </p><p></p><p>192.168.14.2 - 192.168.14.20</p><p></p><p>TKG Cluster VIP Range: </p><p>192.168.14.21 - 192.168.14.60</p>|
 ##
-## **Firewall Requirements**
+## Firewall Requirements
 To prepare the firewall, you need to gather the following:
 
 1. NSX Advanced Load Balancer Controller node and VIP address.
