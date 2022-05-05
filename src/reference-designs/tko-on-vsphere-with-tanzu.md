@@ -267,7 +267,7 @@ To prepare the firewall, you need to gather the following information:
 1. TKG cluster VIP address range
 1. Client machine IP address
 1. vCenter server IP address
-1. VMware Harbor registry IP.
+1. VMware Harbor registry IP address
 1. DNS server IP(s).
 1. NTP Server(s).
 
