@@ -268,7 +268,7 @@ To prepare the firewall, you need to gather the following information:
 1. Client machine IP address
 1. vCenter server IP address
 1. VMware Harbor registry IP address
-1. DNS server IP(s).
+1. DNS server IP address(es)
 1. NTP Server(s).
 
 The below table provides a list of firewall rules based on the assumption that there is no firewall within a subnet/VLAN.
