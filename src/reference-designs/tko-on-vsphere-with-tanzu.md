@@ -381,7 +381,7 @@ Each ingress controller has pros and cons of its own. The below table provides g
 
 ### NSX Advanced Load Balancer Controller Configuration
 
-Regardless of NSX Advanced Load Balancer Controller configuration, each Controller cluster can achieve up to 5,000 virtual services, this is a hard limit. For further details, please refer to this [Avi Controller Sizing](https://avinetworks.com/docs/20.1/avi-controller-sizing/).
+Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5,000 virtual services; 5,000 is a hard limit. For further details, see [Avi Controller Sizing](https://avinetworks.com/docs/20.1/avi-controller-sizing/).
 
 | Controller Size | VM Configuration    | Virtual Services | Avi SE Scale |
 | --------------- | ------------------- | ---------------- | ------------ |
