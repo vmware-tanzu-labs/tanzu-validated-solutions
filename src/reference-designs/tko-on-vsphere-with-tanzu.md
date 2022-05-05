@@ -311,7 +311,7 @@ This installation process takes you through the steps of deploying **Supervisor 
 
 ## NSX Advanced Load Balancer Recommendations
 
-The below table provides the recommendations for configuring NSX Advanced Load Balancer in a vSphere with Tanzu environment.
+The following table provides recommendations for configuring NSX Advanced Load Balancer in a vSphere with Tanzu environment.
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
