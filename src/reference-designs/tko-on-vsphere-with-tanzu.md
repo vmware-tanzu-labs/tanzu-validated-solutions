@@ -299,7 +299,7 @@ The below table provides a list of firewall rules based on the assumption that t
 
 vSphere with Tanzu deployment starts with deploying the Supervisor cluster (Enabling Workload Management). The deployment is directly done from the vCenter UI. The Get Started page lists the pre-requisites that must be met before starting the deployment.
 
-![vCenter integrated Workload Management UI](./img/tko-on-vsphere-with-tanzu/tko-vwt09.jpg)
+![Screenshot of the vCenter integrated Workload Management page](./img/tko-on-vsphere-with-tanzu/tko-vwt09.jpg)
 
 The vCenter user interface shows that, in the current version, it is possible to install vSphere with Tanzu on the VDS networking stack as well as NSX-T Data Center as the networking solution.
 
