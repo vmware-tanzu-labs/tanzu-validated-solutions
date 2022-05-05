@@ -82,7 +82,7 @@ The below tables provide recommendations on how VM Classes/Storage Classes can b
 
 The following diagram shows the high-level architecture of vSphere with Tanzu.
 
-![Figure 2 vSphere with Tanzu Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt03.png)
+![vSphere with Tanzu Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt03.png)
 
 The Supervisor Cluster consists of the following:
 
