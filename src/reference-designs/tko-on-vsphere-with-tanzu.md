@@ -183,7 +183,7 @@ vSphere with Tanzu can be deployed on various networking stacks, including:
 
 - vSphere Virtual Distributed Switch (VDS) Networking with NSX Advanced Load Balancer.
 
-**Note:** The scope of this document is limited to vSphere Networking (VDS) with NSX Advanced Load Balancer.
+**Note:** The scope of this discussion is limited to vSphere Networking (VDS) with NSX Advanced Load Balancer.
 
 ### vSphere with Tanzu on vSphere Networking with NSX Advanced Load Balancer
 
