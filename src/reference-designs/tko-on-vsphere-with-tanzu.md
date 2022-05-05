@@ -94,7 +94,7 @@ The following diagram shows the general architecture of the Supervisor Cluster.
 
 ![Supervisor Cluster Architecture](./img/tko-on-vsphere-with-tanzu/tko-vwt04.jpg)
 
-After a Supervisor Cluster is created, the vSphere administrator creates vSphere Namespaces. When initially created, the namespace has unlimited resources within the Supervisor Cluster. vSphere administrator defines the limits for CPU, memory, storage, as well as the number of Kubernetes objects such as deployments, replica sets, persistent volumes, etc that can run within the namespace. These limits are configured per vSphere Namespace. 
+After a Supervisor Cluster is created, the vSphere administrator creates vSphere namespaces. When initially created, vSphere namespaces have unlimited resources within the Supervisor Cluster. The vSphere administrator defines the limits for CPU, memory, and storage, as well as the number of Kubernetes objects such as deployments, replica sets, persistent volumes, etc. that can run within the namespace. These limits are configured for each vSphere namespace. 
 
 Please refer to the vSphere with Tanzu [configuration maximum](https://configmax.esp.vmware.com/guest?vmwareproduct=vSphere&release=vSphere%207.0&categories=70-58,71-0) guide to see the supported number. 
 
