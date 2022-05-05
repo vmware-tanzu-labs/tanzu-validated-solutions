@@ -112,7 +112,7 @@ Here are some recommendations for using namespaces  in a vSphere with Tanzu envi
 |TKO-TKGS-004|Enable self-service namespaces.|Enable DevOps/Cluster admin users to provision namespaces in a self-service manner.|The vSphere administrator must publish a namespace template to the LDAP users/groups to enable them to create namespaces.|
 |TKO-TKGS-005|Register external identity source (AD/LDAP) with vCenter.|Limit access to a namespace to authorized users/groups.|A prod namespace can be accessed by a handful of users, whereas a dev/test namespace can be exposed to a wider audience.|
 
-## Supported Component Matrix
+## Matrix of Supported Components
 
 |**Software Components**|**Version**|
 | :- | :- |
