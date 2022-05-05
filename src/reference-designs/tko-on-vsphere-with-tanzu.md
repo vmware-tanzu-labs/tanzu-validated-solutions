@@ -420,7 +420,7 @@ There are two main supported installation methods for Harbor:
 
 * [VM-based deployment](https://goharbor.io/docs/2.3.0/install-config/installation-prereqs) using `docker-compose`: This installation method is recommended in cases where Tanzu Kubernetes Grid is installed in an air-gapped environment and no pre-existing Kubernetes clusters exist on which to install Harbor.
 
-  - For VM-based deployments, another option is to use [VMOperator](https://github.com/vmware-tanzu/vm-operator) for deploying a VM in workload cluster and harbor on top of that.
+  - For VM-based deployments, another option is to use [VMOperator](https://github.com/vmware-tanzu/vm-operator) for deploying a VM in workload cluster and Harbor on top of that.
 
 ![Harbor Registry UI](./img/tko-on-vsphere-with-tanzu/tko-vwt12.png)
 
