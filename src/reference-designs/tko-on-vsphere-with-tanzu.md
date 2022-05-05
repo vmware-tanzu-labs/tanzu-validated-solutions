@@ -295,7 +295,7 @@ The following table provides a list of firewall rules based on the assumption th
 
 **Note:** For TMC, if the firewall does not support wildcards, whitelist all IP addresses of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com.
 
-# **Installation Experience**
+# Installation Experience
 
 vSphere with Tanzu deployment starts with deploying the Supervisor cluster (Enabling Workload Management). The deployment is directly done from the vCenter UI. The Get Started page lists the pre-requisites that must be met before starting the deployment.
 
