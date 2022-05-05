@@ -237,7 +237,7 @@ This topology enables the following benefits:
 
 **Network Requirements**
 
-As per the defined architecture below is the list of required networks:
+As per the reference architecture, the list of required networks is as follows:
 
 |**Network Type**|**DHCP Service**|**Description**|
 | :- | :- | :- |
