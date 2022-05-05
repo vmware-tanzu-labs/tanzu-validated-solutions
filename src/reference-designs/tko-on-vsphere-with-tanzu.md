@@ -225,7 +225,7 @@ The network reference design can be mapped into this general framework.
 
 This topology enables the following benefits:
 
-- Isolate and separate SDDC management components (vCenter, ESX) from the vSphere with Tanzu components. This reference design only allows the minimum connectivity between the TKG clusters and NSX Advanced Load Balancer to the vCenter Server.
+- Isolate and separate SDDC management components (vCenter, ESX) from the vSphere with Tanzu components. This reference design allows only the minimum connectivity between the TKG clusters and NSX Advanced Load Balancer to the vCenter Server.
 
 - Isolate and separate the NSX Advanced Load Balancer management network from the supervisor cluster network and the TKG workload networks.
 
