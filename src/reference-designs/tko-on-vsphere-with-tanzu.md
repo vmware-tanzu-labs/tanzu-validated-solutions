@@ -438,4 +438,4 @@ This plan meets many Day 0 needs for quickly aligning product capabilities to fu
 
 # **Deployment Instructions**
 
-For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](deployment-guides/tko-on-vsphere-with-tanzu.md)
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](deployment-guides/tko-on-vsphere-with-tanzu.md).
