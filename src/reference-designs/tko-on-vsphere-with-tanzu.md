@@ -260,7 +260,7 @@ For the purpose of demonstration, this document makes use of the following Subne
 ## Firewall Requirements
 To prepare the firewall, you need to gather the following information:
 
-1. NSX Advanced Load Balancer Controller node and VIP address.
+1. NSX Advanced Load Balancer Controller node and VIP addresses
 1. NSX Advanced Load Balancer Service Engine management IP address.
 1. Supervisor Cluster network (TKG Management) CIDR.
 1. TKG Workload Cluster CIDR.
