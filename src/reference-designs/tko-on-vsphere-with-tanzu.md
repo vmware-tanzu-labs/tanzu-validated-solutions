@@ -76,7 +76,7 @@ The below tables provide recommendations on how VM Classes/Storage Classes can b
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
 |TKO-TKGS-001|Create custom Storage Classes/Profiles/Policies|<p>To provide different levels of QoS and SLA for prod and dev/test K8s workloads. </p><p></p><p>To isolate Supervisor clusters from workload clusters. </p>|When a storage policy is applied to a VM, vSphere determines how the VM storage objects are provisioned and allocated within the storage resource to guarantee the required level of service.|
-|TKO-TKGS-002|Create custom VM Classes|To facilitate deployment of K8 workloads with specific compute/storage requirements.|Default VM Classes in vSphere with Tanzu are not adequate to run a wide variety of k8 workloads.|
+|TKO-TKGS-002|Create custom VM Classes|To facilitate deployment of K8s workloads with specific compute/storage requirements.|Default VM Classes in vSphere with Tanzu are not adequate to run a wide variety of K8s workloads.|
 
 ## vSphere with Tanzu Architecture
 
