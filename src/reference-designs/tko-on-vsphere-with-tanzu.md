@@ -324,7 +324,7 @@ The below table provides the recommendations for configuring NSX Advanced Load B
 |TKO-Advanced Load Balancer-007|Use separate VIP networks for L7 services in TKG clusters|Separate dev/test and prod workloads L7 load balancer traffic from each other.|Install AKO in TKG clusters manually using helm charts. Reference the VIP network to use in the AKO configuration. Please see this doc for more [information](https://github.com/avinetworks/avi-helm-charts/tree/master/docs/AKO) on this.|
 |TKO-Advanced Load Balancer-008|Use default Service Engine Group for load balancing of TKG clusters control plane.|Using a non-default Service Engine Group for hosting L4 virtual service created for TKG control plane HA is not supported.|Using a non-default Service Engine Group can lead to Service Engine VM deployment failure.|
 |TKO-Advanced Load Balancer-009|Use dedicated Service Engine Groups for hosting L7 virtual services.|Using a dedicated Service Engine allows isolating L4 load balancing traffic from the L7 traffic.|Create dedicated Service Engine Groups under default-Cloud only.|
-|TKO-Advanced Load Balancer-010|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing Service Engines can help reduce the licensing cost. </p>|
+|TKO-Advanced Load Balancer-010|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost.|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing Service Engines can help reduce the licensing cost. </p>|
 
 ## Network Recommendations
 
