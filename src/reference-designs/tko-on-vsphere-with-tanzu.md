@@ -215,7 +215,7 @@ IP address allocation for virtual services can be over DHCP or via NSX Advanced 
 
 # Network Architecture
 
-For deployment of vSphere with Tanzu, build separate networks for the TKG management (Supervisor) cluster, TKG workload clusters, NSX Advanced Load Balancer components, and for the TKG control plane HA.
+To deploy vSphere with Tanzu, build separate networks for the TKG management (Supervisor) cluster, TKG workload clusters, NSX Advanced Load Balancer components, and the TKG control plane HA.
 
 The network reference design can be mapped into this general framework.
 
