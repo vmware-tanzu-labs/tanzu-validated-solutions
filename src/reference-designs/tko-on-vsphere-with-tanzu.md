@@ -264,7 +264,7 @@ To prepare the firewall, you need to gather the following information:
 1. NSX Advanced Load Balancer Service Engine management IP address
 1. Supervisor Cluster network (TKG Management) CIDR
 1. TKG workload cluster CIDR
-1. TKG Cluster VIP Range.
+1. TKG cluster VIP address range
 1. Client Machine IP Address
 1. vCenter Server IP address.
 1. VMware Harbor registry IP.
