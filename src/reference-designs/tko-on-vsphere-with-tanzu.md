@@ -213,7 +213,7 @@ The virtual services can be spanned across multiple Service Engines if the assoc
 
 IP address allocation for virtual services can be over DHCP or via NSX Advanced Load Balancer in-built IPAM functionality. The VIP networks created/configured in NSX Advanced Load Balancer are associated with the IPAM profile.
 
-# **Network Architecture**
+# Network Architecture
 
 For deployment of vSphere with Tanzu, build separate networks for the TKG management (Supervisor) cluster, TKG workload clusters, NSX Advanced Load Balancer components, and for the TKG control plane HA.
 
