@@ -219,7 +219,7 @@ To deploy vSphere with Tanzu, build separate networks for the TKG management (Su
 
 The network reference design can be mapped into this general framework.
 
-![](./img/tko-on-vsphere-with-tanzu/tko-vwt08.jpg)
+![Diagram of network reference design](./img/tko-on-vsphere-with-tanzu/tko-vwt08.jpg)
 
 **Note:** Based on your requirements, you can create additional networks for your workload cluster. These networks are also referred to as vSphere with Tanzu workload secondary network.
 
