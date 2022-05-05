@@ -365,7 +365,7 @@ Another option is to use the NSX Advanced Load Balancer Kubernetes ingress contr
 
 ![NSX Advanced Load Balancing capabilities for VMware Tanzu](./img/tko-on-vsphere-with-tanzu/tko-vwt11.png)
 
-For more information about the NSX Advanced Load Balancer ingress controller, please see the [official documentation](https://avinetworks.com/docs/ako/1.5/avi-kubernetes-operator/).
+For more information about the NSX Advanced Load Balancer ingress controller, see the [Avi Kubernetes Operator documentation](https://avinetworks.com/docs/ako/1.5/avi-kubernetes-operator/).
 
 [Tanzu Service Mesh](https://tanzu.vmware.com/service-mesh), which is a SaaS offering for modern applications running across multi-cluster, multi-clouds, also offers an Ingress controller based on [Istio](https://istio.io/).
 
