@@ -104,7 +104,7 @@ To provide tenants access to namespaces, the vSphere administrator assigns permi
 
 Once the permissions are assigned, the tenants can then access the namespace to create Tanzu Kubernetes Clusters using the YAML file and Cluster API.
 
-Here are some recommendations on how namespaces can be used in a vSphere with Tanzu environment.
+Here are some recommendations for using namespaces  in a vSphere with Tanzu environment.
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
