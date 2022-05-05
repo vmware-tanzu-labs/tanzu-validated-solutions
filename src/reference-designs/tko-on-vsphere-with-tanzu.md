@@ -144,7 +144,7 @@ vSphere with Tanzu is agnostic about which option you choose. For Kubernetes sta
 
 While you can use the default vSAN storage policy, it is often preferable to craft a custom [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html) based on the requirements of your applications. vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters.
 
-![Figure 5 - vSphere with Tanzu on vSAN Storage](./img/tko-on-vsphere-with-tanzu/tko-vwt06.png)
+![vSphere with Tanzu on vSAN Storage](./img/tko-on-vsphere-with-tanzu/tko-vwt06.png)
 
 Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kubernetes also supports the creation of NFS File Volumes, which support ReadWriteMany access modes. This allows for provisioning volumes, which can be read and written from multiple pods simultaneously. To support this, you must enable vSAN File Service.
 
