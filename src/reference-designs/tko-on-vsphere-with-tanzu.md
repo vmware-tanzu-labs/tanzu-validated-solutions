@@ -159,7 +159,7 @@ A Tanzu Kubernetes cluster provisioned by the Tanzu Kubernetes Grid supports two
 
 Both CNIs are open-source software that provides networking for cluster pods, services, and ingress.
 
-When you deploy a Tanzu Kubernetes cluster using Tanzu CLI using the default configuration, Antrea CNI is automatically enabled in the cluster. 
+When you deploy a Tanzu Kubernetes cluster using the default configuration of Tanzu CLI, Antrea CNI is automatically enabled in the cluster.
 
 To provision a Tanzu Kubernetes cluster using a non-default CNI, please see the below instructions:
 
