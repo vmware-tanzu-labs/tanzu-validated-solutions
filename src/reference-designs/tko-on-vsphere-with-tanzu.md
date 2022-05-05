@@ -98,7 +98,7 @@ After a Supervisor Cluster is created, the vSphere administrator creates vSphere
 
 For the maximum supported number, see the **vSphere with Tanzu [Configuration Maximums](https://configmax.esp.vmware.com/guest?vmwareproduct=vSphere&release=vSphere%207.0&categories=70-58,71-0)** guide.
 
-![Figure 4 - vSphere Namespace](./img/tko-on-vsphere-with-tanzu/tko-vwt05.png)
+![vSphere Namespace](./img/tko-on-vsphere-with-tanzu/tko-vwt05.png)
 
 To provide tenants access to namespaces, the vSphere administrator assigns permission to users or groups available within an identity source that is associated with vCenter Single Sign-On.
 
