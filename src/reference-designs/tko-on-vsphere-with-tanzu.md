@@ -307,7 +307,7 @@ The vCenter UI shows that, in the current version, it is possible to install vSp
 
 This installation process takes you through the steps of deploying **Supervisor Cluster** in your vSphere environment. Once the Supervisor cluster is deployed, you can use either [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) or Kubectl utility to deploy the Tanzu Kubernetes Shared Service and workload clusters.
 
-# **Design Recommendations**
+# Design Recommendations
 
 ## NSX Advanced Load Balancer Recommendations
 
