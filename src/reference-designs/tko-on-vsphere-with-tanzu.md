@@ -372,7 +372,7 @@ For more information about the NSX Advanced Load Balancer ingress controller, se
 Each ingress controller has pros and cons of its own. The below table provides general recommendations on when you should use a specific ingress controller for your Kubernetes environment.
 
 |**Ingress Controller**|**Use Cases**|
-| :- | :-: |
+| :- | :- |
 |Contour|<p>Use Contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for the north-south traffic by defining the policies in the manifest file for the application.</p><p></p><p>Contour is a reliable solution for simple Kubernetes workloads. </p>|
 |Istio|Use Istio ingress controller when you need to provide security, traffic direction, and insight within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic).|
 |NSX Advanced Load Balancer Ingress controller|Use NSX Advanced Load Balancer ingress controller when a containerized application requires features like local and global server load balancing (GSLB), web application firewall (WAF), performance monitoring, etc. |
