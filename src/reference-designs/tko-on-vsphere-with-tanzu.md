@@ -354,7 +354,7 @@ The following are the key network recommendations for a production-grade vSphere
 |TKO-TKC-003|Implement RBAC for Tanzu Kubernetes clusters.|To avoid the usage of administrator credentials for managing the clusters.|vSphere SSO can be leveraged to implement RBAC.|
 |TKO-TKC-04|Deploy Tanzu Kubernetes clusters from Tanzu Mission Control|Tanzu Mission Control provides life-cycle management for the Tanzu Kubernetes clusters and automatic integration with Tanzu Service Mesh and Tanzu Observability.|Create a cluster group for Tanzu Kubernetes clusters and enable Tanzu Service Mesh and Tanzu Observability integration on the cluster group.|
 
-# **Kubernetes Ingress Routing**
+# Kubernetes Ingress Routing
 vSphere with Tanzu does not ship with a default ingress controller. Any Tanzu-supported ingress controller can be used.
 
 One example of an ingress controller is Contour, an open-source controller for Kubernetes ingress routing. Contour is part of a Tanzu package and can be installed on any Tanzu Kubernetes cluster. Deploying Contour is a prerequisite for deploying Prometheus, Grafana, and Harbor on a workload cluster.
