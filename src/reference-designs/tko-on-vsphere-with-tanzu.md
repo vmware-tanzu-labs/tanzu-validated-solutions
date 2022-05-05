@@ -333,7 +333,7 @@ The following are the key network recommendations for a production-grade vSphere
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
 |TKO-NET-001|Use separate networks for Supervisor cluster and workload clusters.|To have a flexible firewall and security policies|Sharing the same network for multiple clusters can complicate firewall rules creation. |
-|TKO-NET-002|Use distinct port groups for network separation of k8 workloads.|Isolate production Kubernetes clusters from dev/test clusters by placing them on distinct port groups.|Network mapping is done at the namespace level.  All Kubernetes clusters created in a namespace connect to the same port group. |
+|TKO-NET-002|Use distinct port groups for network separation of K8s workloads.|Isolate production Kubernetes clusters from dev/test clusters by placing them on distinct port groups.|Network mapping is done at the namespace level.  All Kubernetes clusters created in a namespace connect to the same port group. |
 |TKO-NET-003|Configure DHCP for TKG clusters.|vSphere with Tanzu does not support static IP assignments for Kubernetes VM components|<p>An IP Block of 5 continuous IP Addresses can be used for the Supervisor cluster if DHCP is not available. </p><p></p><p>IP Pool can be used for the Workload cluster in absence of the DHCP.</p>|
 |TKO-NET-004|Use routable networks for Tanzu Kubernetes clusters.|Allow connectivity between the TKG clusters and infrastructure components.|Networks that are used for Tanzu Kubernetes cluster traffic must be routable between each other and the Supervisor Cluster Management Network.|
 
