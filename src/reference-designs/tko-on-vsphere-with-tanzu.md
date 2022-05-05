@@ -195,7 +195,7 @@ The Supervisor Cluster leverages NSX Advanced Load Balancer (NSX ALB) to provide
 
 The following diagram shows a general overview for vSphere with Tanzu on vSphere Networking.
 
-![](./img/tko-on-vsphere-with-tanzu/tko-vwt07.jpeg)
+![Overview diagram of vSphere with Tanzu on vSphere Networking](./img/tko-on-vsphere-with-tanzu/tko-vwt07.jpeg)
 
 ### NSX Advanced Load Balancer Components
 
