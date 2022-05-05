@@ -350,7 +350,7 @@ The following are the key network recommendations for a production-grade vSphere
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | :- | :- | :- | :- |
 |TKO-TKC-001|Deploy Tanzu Kubernetes clusters with prod plan and multiple worker nodes.|The prod plan provides high availability for the control plane. |The prod plan deploys 3 control plane nodes and is load-balanced via Cluster VIP created in NSX-Advanced Load Balancer|
-|TKO-TKC-002|Use guaranteed vm class for Tanzu Kubernetes clusters|Guarantees compute resources are always available for containerized workloads.|Guaranteed VM class reserves CPU/memory on the backend IaaS.|
+|TKO-TKC-002|Use guaranteed VM class for Tanzu Kubernetes clusters.|Guarantees compute resources are always available for containerized workloads.|Guaranteed VM class reserves CPU/memory on the backend IaaS.|
 |TKO-TKC-003|Implement RBAC for Tanzu Kubernetes clusters.|To avoid the usage of administrator credentials for managing the clusters.|vSphere SSO can be leveraged to implement RBAC.|
 |TKO-TKC-04|Deploy Tanzu Kubernetes clusters from Tanzu Mission Control|Tanzu Mission Control provides life-cycle management for the Tanzu Kubernetes clusters and automatic integration with Tanzu Service Mesh and Tanzu Observability.|Create a cluster group for Tanzu Kubernetes clusters and enable Tanzu Service Mesh and Tanzu Observability integration on the cluster group.|
 
