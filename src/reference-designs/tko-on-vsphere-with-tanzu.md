@@ -422,7 +422,7 @@ There are two main supported installation methods for Harbor:
 
   - For VM-based deployments, another option is to use [VMOperator](https://github.com/vmware-tanzu/vm-operator) for deploying a VM in workload cluster and Harbor on top of that.
 
-![Harbor Registry UI](./img/tko-on-vsphere-with-tanzu/tko-vwt12.png)
+![Screenshot of Harbor Registry UI](./img/tko-on-vsphere-with-tanzu/tko-vwt12.png)
 
 # vSphere with Tanzu SaaS Integration
 
