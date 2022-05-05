@@ -301,7 +301,7 @@ vSphere with Tanzu deployment starts with deploying the Supervisor cluster (Enab
 
 ![Screenshot of the vCenter integrated Workload Management page](./img/tko-on-vsphere-with-tanzu/tko-vwt09.jpg)
 
-The vCenter user interface shows that, in the current version, it is possible to install vSphere with Tanzu on the VDS networking stack as well as NSX-T Data Center as the networking solution.
+The vCenter UI shows that, in the current version, it is possible to install vSphere with Tanzu on the VDS networking stack as well as NSX-T Data Center as the networking solution.
 
 ![Workload Management on vSphere VDS Networking](./img/tko-on-vsphere-with-tanzu/tko-vwt10.jpg)
 
