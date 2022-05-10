@@ -189,8 +189,8 @@ Perform the below steps to configure AVI ALB HA:
 * Set the Cluster IP for the NSX ALB controllerLog in to the primary NSX ALB controller > Navigate to Administrator > Controller > Nodes, and click Edit. The Edit Controller Configuration popup appears.
 * In the Controller Cluster IP field, enter the Controller Cluster IP for the Controller and click on save.
     ![](img/tko-on-vsphere/image56.png)
-* Now deploy 2nd and 3rd NSX ALB Node, using steps provided [here](#h.hj0v6pbwmsx2)
-* Log into the Primary NSX ALB controller using the Controller Cluster IP/FQDN, navigate to Administrator > Controller  > Nodes, and click Edit. The Edit Controller Configuration popup appears.
+* Now deploy 2nd and 3rd NSX ALB Node, using steps provided [here](#dep-nsx-alb)
+* Log into the Primary NSX ALB controller using the Controller Cluster IP/FQDN, navigate to Administrator > Controller  > Nodes, and click Edit. The Edit Controller Configuration popup appears.
 * In the Cluster Nodes field, enter the IP address for the 2nd and 3rd controller and click on Save  
     Optional - Provide a friendly name for all 3 Nodes  
     ![](img/tko-on-vsphere/image86.png)      
@@ -645,6 +645,8 @@ To get the status of TKG Management cluster execute the following command:
     ![](img/tko-on-vsphere/image51.png)
 
 The TKG management cluster is successfully deployed and now you can created Shared Service and workload clusters  
+	
+> **_NOTE:_**  In version 1.4.x, you can receive a warning prompt for AKODeploymentConfig while deploying the management cluster. You can ignore the warning, for now, it will not create any issue.
 
 ## Deploy Tanzu Shared Service Cluster  
 
@@ -884,37 +886,40 @@ A separate SE group (Service Engine Group 2) and VIP Network (TKG Workload VIP/
 
 Below is the format of the AKODeploymentConfig yaml file.  
 
-```yaml
+
+	     
+```yaml	    
 apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1
-kind: AKODeploymentConfig  
-metadata:  
- finalizers:  
-     -ako-operator.networking.tkg.tanzu.vmware.comgeneration: 2  
- name: <Unique name of AKODeploymentConfig>
-spec:  
- adminCredentialRef:  
-   name: avi-controller-credentials
-   namespace: tkg-system-networking
- certificateAuthorityRef:  
-   name: avi-controller-ca
-   namespace: tkg-system-networking
- cloudName: <NAME OF THE CLOUD>
- clusterSelector:  
-   matchLabels:  
-     <KEY>: <VALUE>
-     controller: <NSX ALB CONTROLLER IP/FQDN>
-  dataNetwork:  
-    cidr: <VIP NETWORK CIDR>
+kind: AKODeploymentConfig
+metadata:
+  finalizers:
+    - ako-operator.networking.tkg.tanzu.vmware.com
+  generation: 2
+  name: <Unique name of AKODeploymentConfig>
+spec:
+  adminCredentialRef:
+    name: avi-controller-credentials
+    namespace: tkg-system-networking
+  certificateAuthorityRef:
+    name: avi-controller-ca
+    namespace: tkg-system-networking
+  cloudName: <NAME OF THE CLOUD>
+  clusterSelector:
+    matchLabels:
+      <KEY>: <VALUE>
+  controller: <NSX ALB CONTROLLER IP/FQDN>
+  dataNetwork:
+    cidr: <VIP NETWORK CIDR>
     name: <VIP NETWORK NAME>
-  extraConfigs:  
-   image:  
-     pullPolicy: IfNotPresent
-     repository: projects.registry.vmware.com/tkg/
-     akoversion: v1.3.2_vmware.1
-  ingress:  
-     defaultIngressController: false
-  disableIngressClass: true
-  serviceEngineGroup: <SERVICE ENGINE NAME>
+  extraConfigs:
+    image:
+      pullPolicy: IfNotPresent
+      repository: projects.registry.vmware.com/tkg/ako
+      version: v1.3.2_vmware.1
+    ingress:
+      defaultIngressController: false
+      disableIngressClass: true
+  serviceEngineGroup: <SERVICE ENGINE NAME>	 
 ```
 
 Below is the sample AKODeploymentConfig with sample values in place, as per the below configuration, TKG management cluster will deploy AKO pod on any workload cluster that matches the label `type=workloadset01` and the AKO configuration will be as below
@@ -924,21 +929,37 @@ Below is the sample AKODeploymentConfig with sample values in place, as per the 
 * VIP/data network: tkg_workload_vip_pg
 
 ```yaml
-apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1kind: AKODeploymentConfig  
-metadata:  
- finalizers:  
-     -ako-operator.networking.tkg.tanzu.vmware.comgeneration: 2  
- name: tanzu-ako-workload-set01spec:  
- adminCredentialRef:  
-   name: avi-controller-credentialsnamespace: tkg-system-networkingcertificateAuthorityRef:  
-   name: avi-controller-canamespace: tkg-system-networkingcloudName: tanzu-vcenter-01clusterSelector:  
-   matchLabels:  
-     type: workloadset01controller: avi-ha.lab.vmwdataNetwork:  
-   cidr: tkg_workload_vip_pg   
-   name: 172.16.70.0/24extraConfigs:  
-   image:  
-     pullPolicy: IfNotPresentrepository: projects.registry.vmware.com/tkg/akoversion: v1.3.2_vmware.1ingress:  
-     defaultIngressController: falsedisableIngressClass: trueserviceEngineGroup: tanzu-wkld-segroup-01
+apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1
+kind: AKODeploymentConfig
+metadata:
+  finalizers:
+    - ako-operator.networking.tkg.tanzu.vmware.com
+  generation: 2
+  name: tanzu-ako-workload-set01
+spec:
+  adminCredentialRef:
+    name: avi-controller-credentials
+    namespace: tkg-system-networking
+  certificateAuthorityRef:
+    name: avi-controller-ca
+    namespace: tkg-system-networking
+  cloudName: tanzu-vcenter-01
+  clusterSelector:
+    matchLabels:
+      type: workloadset01
+  controller: avi-ha.lab.vmw
+  dataNetwork:
+    cidr: tkg-workload-vip-segment
+    name: 172.16.70.0/24
+  extraConfigs:
+    image:
+      pullPolicy: IfNotPresent
+      repository: projects.registry.vmware.com/tkg/ako
+      version: v1.3.2_vmware.1
+    ingress:
+      defaultIngressController: false
+      disableIngressClass: true
+  serviceEngineGroup: tanzu-wkld-segroup-01
 ```
 
 
@@ -1023,35 +1044,34 @@ Contour is required for the harbor, and Prometheus and Grafana packages
 2.  Create below configuration file named `contour-data-values.yaml`  
 
 ```yaml
----
-infrastructure_provider: vsphere
-namespace: tanzu-system-ingress
-contour:
- configFileContents: {}
- useProxyProtocol: false
- replicas: 2
- pspNames: "vmware-system-restricted"
- logLevel: info
-envoy:
- service:
-   type: LoadBalancer
-   annotations: {}
-   nodePorts:
-     http: null
-     https: null
-   externalTrafficPolicy: Cluster
-   disableWait: false
- hostPorts:
-   enable: true
-   http: 80
-   https: 443
- hostNetwork: false
- terminationGracePeriodSeconds: 300
- logLevel: info
- pspNames: null
-certificates:
- duration: 8760h
- renewBefore: 360h
+  infrastructure_provider: vsphere
+  namespace: tanzu-system-ingress
+  contour:
+    configFileContents: {}
+    useProxyProtocol: false
+    replicas: 2
+    pspNames: "vmware-system-restricted"
+    logLevel: info
+  envoy:
+    service:
+      type: LoadBalancer
+      annotations: {}
+      nodePorts:
+        http: null
+        https: null
+      externalTrafficPolicy: Cluster
+      disableWait: false
+    hostPorts:
+      enable: true
+      http: 80
+      https: 443
+    hostNetwork: false
+    terminationGracePeriodSeconds: 300
+    logLevel: info
+    pspNames: null
+  certificates:
+    duration: 8760h
+    renewBefore: 360h 
 ```
 
 3.  Using below command to capture the available Contour version  
