@@ -60,3 +60,9 @@ VNET
 TKG
 NSXT
 autoscaler
+Antrea
+VXLAN
+Geneve
+SRIOV
+DPDK
+addressess
