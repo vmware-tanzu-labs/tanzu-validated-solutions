@@ -58,3 +58,5 @@ bursty
 allottable
 VNET
 TKG
+NSXT
+autoscaler

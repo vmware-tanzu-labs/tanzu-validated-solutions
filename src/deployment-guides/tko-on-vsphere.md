@@ -1024,19 +1024,34 @@ Contour is required for the harbor, and Prometheus and Grafana packages
 
 ```yaml
 ---
-infrastructure_provider: vspherenamespace: tanzu-system-ingresscontour:  
-configFileContents: {}useProxyProtocol: falsereplicas: 2  
-pspNames: "vmware-system-restricted"logLevel: infoenvoy:  
-service:  
-  type: LoadBalancerannotations: {}nodePorts:  
-    http: nullhttps: nullexternalTrafficPolicy: ClusterdisableWait: falsehostPorts:  
-  enable: truehttp: 80  
-  https: 443  
-hostNetwork: falseterminationGracePeriodSeconds: 300  
-logLevel: infopspNames: null  
-certificates:  
-duration: 8760h  
-renewBefore: 360h  
+infrastructure_provider: vsphere
+namespace: tanzu-system-ingress
+contour:
+ configFileContents: {}
+ useProxyProtocol: false
+ replicas: 2
+ pspNames: "vmware-system-restricted"
+ logLevel: info
+envoy:
+ service:
+   type: LoadBalancer
+   annotations: {}
+   nodePorts:
+     http: null
+     https: null
+   externalTrafficPolicy: Cluster
+   disableWait: false
+ hostPorts:
+   enable: true
+   http: 80
+   https: 443
+ hostNetwork: false
+ terminationGracePeriodSeconds: 300
+ logLevel: info
+ pspNames: null
+certificates:
+ duration: 8760h
+ renewBefore: 360h
 ```
 
 3.  Using below command to capture the available Contour version  
