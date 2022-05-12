@@ -19,16 +19,16 @@ Ensure that your environment meets the following general requirements:
 
 - vSphere 7.0 u3 instance with an Enterprise Plus license.
 - Your vSphere environment has the following objects in place:
-  - A vSphere cluster with at least 3 hosts on which vSphere HA & DRS is enabled. If you are using vSAN for shared storage, it is recommended that you use 4 ESXi hosts.
-  - A distributed switch with port groups for TKO components. See [Network Requirements](#network-requirements) for the required port groups.
+  - A vSphere cluster with at least 3 hosts, on which vSphere HA & DRS is enabled. If you are using vSAN for shared storage, it is recommended that you use 4 ESXi hosts.
+  - A distributed switch with port groups for TKO components. Please refer to the [Network Requirements](#network-requirements) section for the required port groups.
   - All ESXi hosts of the cluster on which vSphere with Tanzu will be enabled should be part of the distributed switch.
   - Dedicated resource pools and VM folder for collecting NSX Advanced Load Balancer VMs.
   - A shared datastore with sufficient capacity for the control plane and worker node VM files.
 - Network Time Protocol (NTP) service running on all hosts and vCenter.
 - A user account with **Modify cluster-wide configuration** permissions.
-- NSX Advanced Load Balancer 20.1.7 OVA downloaded from [customer connect](unlock) portal and readily available for deployment.
+- NSX Advanced Load Balancer 20.1.7 ova downloaded from [customer connect](https://customerconnect.vmware.com/home?bmctx=89E60DF848C641FD518EB9F6B9A6E5334F602FA3A762B409625CD531863AC847&contextType=external&username=string&password=secure_string&challenge_url=https:%2F%2Fcustomerconnect.vmware.com%2Fhome&request_id=-7975651889850440054&authn_try_count=0&locale=en_GB&resource_url=https%253A%252F%252Fcustomerconnect.vmware.com%252Fweb%252Fvmware%252Fchecksession) portal and readily available for deployment. <!-- markdown-link-check-disable-line -->
 
-For additional information on general prerequisites, see [vSphere with Tanzu product documentation](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-EE236215-DA4D-4579-8BEB-A693D1882C77.html).
+For additional information on general prerequisites, please refer to vSphere with Tanzu product [documentation](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-EE236215-DA4D-4579-8BEB-A693D1882C77.html)
 
 ### <a id=network-requirements> </a> Network Requirements
 
@@ -74,6 +74,7 @@ Here are the high-level steps for deploying Tanzu Kubernetes operations on vSphe
 6.  [Integrate Tanzu Kubernetes Clusters with Tanzu Observability](#integrate-to)
 7.  [Integrate Tanzu Kubernetes Clusters with Tanzu Service Mesh](#integrate-tsm)
 8.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
+9.  [Back Up and Restore Workload Clusters](#backup-restore)
 
 ## <a id="config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
 
@@ -85,12 +86,16 @@ For a production-grade deployment, VMware recommends deploying three instances o
 
 The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:
 
-| Controller Node    | IP Address   | FQDN                   |
-| ------------------ | ------------ | ---------------------- |
+<!-- /* cSpell:disable */ -->
+
+| Controller Node    | IP Address  | FQDN            |
+| ------------------ | ------------| ----------------|
 | Node01 (Primary)   | 172.16.80.3 | alb01.tanzu.lab |
 | Node02 (Secondary) | 172.16.80.4 | alb02.tanzu.lab |
 | Node03 (Secondary) | 172.16.80.5 | alb03.tanzu.lab |
 | Controller Cluster | 172.16.80.2 | alb.tanzu.lab   |
+
+<!-- /* cSpell:enable */ -->
 
 ### Deploy NSX Advance Load Balancer Controller Node
 
@@ -119,7 +124,7 @@ After the controller VM is deployed and powered-on, configure the controller VM 
 
 On a browser, go to https://<https://<alb-ctlr01.tanzu.lab>/.
 
-1. Configure an **Administrator Account** by setting up a password and optionally, an email address.
+2. Configure an **Administrator Account** by setting up a password and optionally, an email address.
 
   ![Screenshot of Create Account screen](img/tko-on-vsphere-with-tanzu/TKO-VWT02.png)
 
@@ -140,7 +145,7 @@ On a browser, go to https://<https://<alb-ctlr01.tanzu.lab>/.
 
 5. Click on **Save** to finish the post-deployment configuration wizard.
 
-   If you did not select the **Setup Cloud After** option <_I don't see this option_> before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a Dashboard view on the controller.
+If you did not select the **Setup Cloud After** option before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a Dashboard view on the controller.
 
 ### Configure Default-Cloud
 
@@ -172,7 +177,7 @@ On a browser, go to https://<https://<alb-ctlr01.tanzu.lab>/.
 
     ![Screenshot of Data Center tab on Edit Cloud screen](img/tko-on-vsphere-with-tanzu/TKO-VWT09.png)
 
-1. Configure the **Network** settings as follows:
+11. Configure the **Network** settings as follows:
 
    - Select the NSX ALB **Management Network**. This network interface is used by the Service Engines to connect with the controller.
    - Leave the **Template Service Engine Group** empty.
@@ -187,7 +192,7 @@ On a browser, go to https://<https://<alb-ctlr01.tanzu.lab>/.
 
 ## Configure Licensing.
 
-  Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
+Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
 
   ![Screenshot of Licensing tab](img/tko-on-vsphere-with-tanzu/TKO-VWT12.png)
 
@@ -242,13 +247,12 @@ You are automatically logged out of the controller node you are currently logged
    ![Screenshot of Controller Initializing screen](img/tko-on-vsphere-with-tanzu/TKO-VWT18.png)
 
 The first controller of the cluster receives the "Leader" role. The second and third controllers will work as "Follower".
-<_The following image file is missing in the repo._>
 
-   ![](img/tko-on-vsphere-with-tanzu/TKO-VWT19.png)
+   ![Controller Role](img/tko-on-vsphere-with-tanzu/TKO-VWT19.png)
 
 After the controller cluster is deployed, use the controller cluster IP address for doing any additional configuration. Do not use the individual controller node IP address.
 
-For additional product documentation, see [Deploy a Controller Cluster](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-A51FAF35-D604-4883-A93D-58463B404C4E.html).
+  For additional product documentation, see [Deploy a Controller Cluster](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-A51FAF35-D604-4883-A93D-58463B404C4E.html).
 
 ### Change NSX Advanced Load Balancer Portal Default Certificate
 
@@ -280,7 +284,7 @@ To add a self-signed certificate:
 
 2. Click **Save**.
 
-    ![](img/tko-on-vsphere-with-tanzu/TKO-VWT21.png)
+    ![Controller New Certificate](img/tko-on-vsphere-with-tanzu/TKO-VWT21.png)
 
 3. Change the NSX Advanced Load Balancer portal certificate.
 
@@ -340,7 +344,7 @@ To configure the VIP network:
 
    ![Screenshot of Edit Network Settings screen](img/tko-on-vsphere-with-tanzu/TKO-VWT23.png)
 
-1. Click **Save** to close the VIP network configuration wizard.
+6. Click **Save** to close the VIP network configuration wizard.
 
 For more information, see the product documentation [Configure a Virtual IP Network](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-29ACB562-2E80-4C28-AE63-8EB9DAF1A67F.html).
 
@@ -366,35 +370,44 @@ To configure the default gateway:
 
 For additional product documentation, see [Configure Default Gateway](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-AB96BE48-D5B3-4B88-A92E-5A083472C56D.html)
 
-### Configure IPAM
+### Configure IPAM and DNS Profile
 
 IPAM is required to allocate virtual IP addresses when virtual services get created. Configure IPAM for the NSX Advanced Load Balancer controller and assign it to the Default-Cloud.
 
 1. Navigate to the **Templates > Profiles > IPAM/DNS Profiles**.
 
-1. Click **Create** and select **IPAM Profile** from the dropdown menu.
+2. Click **Create** and select **IPAM Profile** from the dropdown menu.
 
   ![Screenshot of the IPAM/DNS Profiles tab](img/tko-on-vsphere-with-tanzu/TKO-VWT26.png)
 
-1. Enter the following to configure the IPAM profile:  
+3. Enter the following to configure the IPAM profile:  
 
    - A name for the IPAM Profile.
    - Select type as **AVI Vantage IPAM**.
    - Deselect the **Allocate IP in VRF** option.
 
-1. Click **Add Usable Network**.
+4. Click **Add Usable Network**.
 
    - Select **Default-Cloud**.
    - Choose the VIP network that you have created in [Configure a Virtual IP Subnet for the Data Network](#config-vip).
 
    ![Screenshot of New IPAM/DNS Profile screen](img/tko-on-vsphere-with-tanzu/TKO-VWT27.png)
 
-1. Click **Save**.
+5. Click **Save**.
+ 
+6. Click on the Create button again and select DNS Profile
 
-1. Assign the IPAM profile to the Default-Cloud configuration.
+   - Provide a name for the profile.
+   - Add your domain name under **Domain Name**
+   - (Optionally) set the TTL for the domain.
+
+   ![DNS Profile](img/tko-on-vsphere-with-tanzu/TKO-VWT27-1.jpg)
+
+1. Assign the IPAM and DNS profile to the Default-Cloud configuration.
     - Navigate to the **Infrastructure > Cloud**
     - Edit the **Default-Cloud** configuration as follows:
        -  **IPAM Profile**: Select the newly created profile.
+       -  **DNS Profile**: Select the newly created profile.
     - Click **Save**
 
    ![Screenshot of Edit Cloud window](img/tko-on-vsphere-with-tanzu/TKO-VWT28.png)
@@ -464,11 +477,11 @@ To deploy the Supervisor Cluster:
 
 7. Click **Next**.   
 
-8. On the **Workload Network** screen, select the network <_I don't see this option on the screenshot_> that will handle the networking traffic for Kubernetes workloads running on the Supervisor cluster.
+8. On the **Workload Network** screen, select the network that will handle the networking traffic for Kubernetes workloads running on the Supervisor cluster.
 
     - Set the **Network Mode**  to **DHCP** if the port group is configured for DHCP.
 
-     ![Screenshot of the Workload Network screen](img/tko-on-vsphere-with-tanzu/TKO-VWT35.png)
+   ![Screenshot of the Workload Network screen](img/tko-on-vsphere-with-tanzu/TKO-VWT35.png)
 
 9. Click **Next**.   
 
@@ -486,7 +499,7 @@ The Workload Management task takes approximately 30 minutes to complete. After t
 
 The Supervisor Cluster gets an IP address from the VIP network that you configured in the NSX Advanced Load Balancer. This IP address is also called the Control Plane HA IP address.
 
-![Screenshot of the Workload Clusters screen](img/tko-on-vsphere-with-tanzu/TKO-VWT38.png)
+   ![Screenshot of the Workload Clusters screen](img/tko-on-vsphere-with-tanzu/TKO-VWT38.png)
 
 In the backend, three supervisor Control Plane VMs are deployed in the vSphere namespace. A Virtual Service is created in the NSX Advanced Load Balancer with three Supervisor Control Plane nodes that are deployed in the process.
 
@@ -544,9 +557,7 @@ To create a new Supervisor namespace:
 
    **Note:** The **Name** field accepts only lower case letters and hyphens.
 
-1. Click **Create**.
-
-	The namespace is created on the Supervisor Cluster.
+6. Click **Create**. The namespace is created on the Supervisor Cluster.
 
    ![Screenshot of the Create Namespace screen](img/tko-on-vsphere-with-tanzu/TKO-VWT40.png)
 
@@ -608,128 +619,7 @@ To add a VM class to a namespace,
 
 The namespace is fully configured now. You are ready to register your supervisor cluster with Tanzu Mission Control and deploy your first Tanzu Kubernetes Cluster.
 
-## <a id=prepare-deploy-workload-cluster> </a> Prepare to Deploy Tanzu Kubernetes Clusters (Workload Cluster)
-
-Tanzu Kubernetes Clusters are created by invoking the Tanzu Kubernetes Grid Service declarative API using kubectl and a cluster specification defined using YAML. After you provision a cluster, you operate it and deploy workloads to it using kubectl.
-
-Before you construct a YAML file for Tanzu Kubernetes Cluster deployment, gather information such as virtual machine class bindings, storage class, and the available Tanzu Kubernetes release that can be used.
-
-You can gather this information by running the following commands:
-
-1. Connect to the Supervisor Cluster using vSphere Plugin for kubectl.
-
-   `kubectl vsphere login --server=<Supervisor Cluster Control Plane VIP> --vsphere-username USERNAME`
-
-1. Switch context to the vSphere Namespace where you plan to provision the Tanzu Kubernetes cluster.
-
-   `kubectl config get-contexts`
-
-   `kubectl config use-context <vSphere-Namespace>`
-
-   Example: **kubectl config use-context prod**
-
-1. List the available virtual machine class bindings
-
-   `kubectl get virtualmachineclassbindings`
-
-   The output of the command list all VM class bindings that are available in the vSphere Namespace where you are deploying the Tanzu Kubernetes Cluster.
-
-   ![](./img/tko-on-vsphere-with-tanzu/image20.jpg)
-
-1. List the available storage class in the namespace.
-
-   `kubectl get storageclass`
-
-   The output of the command list all storage classes that are available in the vSphere Namespace.
-
-   ![](./img/tko-on-vsphere-with-tanzu/image50.jpg)
-
-1. List the available Tanzu Kubernetes releases (TKR)
-
-   `kubectl get tanzukubernetesreleases`
-
-   The command's output lists the TKR versions that are available in the vSphere Namespace. You can only deploy Tanzu Kubernetes Cluster with TKR versions that have compatible=true.
-
-   ![](./img/tko-on-vsphere-with-tanzu/image52.jpg)
-
-1. Construct the YAML file for provisioning a Tanzu Kubernetes cluster.
-
-  Tanzu Kubernetes Clusters can be deployed using Tanzu Kubernetes Grid Service API. There are 2 versions of the API that you can use:
-
-   - [Tanzu Kubernetes Grid Service v1alpha2 API](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-0CA8BF39-0D7E-4335-9D5B-7C80ED90D4D8.html)
-   - [Tanzu Kubernetes Grid Service v1alpha1 API](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-BD132505-263E-40CF-82D4-B759C491AD23.html)
-
-   This documentation makes use of v1alpha2 API to provision the Tanzu Kubernetes Clusters.
-
-   The following example YAML is the minimal configuration required to provision a Tanzu Kubernetes cluster.
-
-   ```yaml
-  apiVersion: run.tanzu.vmware.com/v1alpha2
-  kind: TanzuKubernetesCluster
-  metadata:
-    name: prod-1
-    namespace: prod
-  spec:
-    topology:
-      controlPlane:
-        replicas: 3
-        vmClass: best-effort-large # or the VM class binding you'd like to use.
-        storageClass: vsan-default-storage-policy # or the storage class you'd like to use.
-        tkr:
-          reference:
-          name: v1.21.2---vmware.1-tkg.1.ee25d55
-      nodePools:
-       - name: worker-pool01
-         replicas: 6
-         vmClass: best-effort-large # or the VM class binding you'd like to use.
-         storageClass: vsan-default-storage-policy # or the storage class you'd like to use.
-         tkr:
-           reference:
-             name: v1.21.2---vmware.1-tkg.1.ee25d55
-  ```
-
-  > ⚠️  If you receive `this request is invalid` after applying this YAML with
-  > `kubectl apply`, ensure that your TKr release, virtual machine class, and
-  > storage class are valid.
-
-  > ⚠️  If you receive `this request is invalid` after applying this YAML with
-  > `kubectl apply`, ensure that your TKr release, virtual machine class, and
-  > storage class are valid.
-
-## <a id=deploy-workload-cluster> </a>Deploy Tanzu Kubernetes Clusters (Workload Cluster)
-1. Customize the cluster as needed by referring to the full list of [cluster configuration parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-31BF8166-5FC8-4D43-933D-5797F3BE4A36.html)
-
-1. To deploy the cluster, run the command:
-
-   `kubectl apply -f <name>.yaml`
-
-1. Monitor the deployment of cluster using the command:
-
-   `kubectl get tanzukubernetesclusters`
-
-   Sample result:
-
-   ![](./img/tko-on-vsphere-with-tanzu/image73.jpg)
-
-   You can also review the status of the cluster from vSphere Client by clicking on the namespace where the cluster is deployed and navigating to **Compute > VMware Resources > Tanzu Kubernetes Clusters**.
-
-   ![](./img/tko-on-vsphere-with-tanzu/image26.jpg)
-
-   The **Virtual Machines** tab displays the list of the control plane and worker nodes that are deployed during the cluster creation.
-
-   ![](./img/tko-on-vsphere-with-tanzu/image10.jpg)
-
-   For the Control-Plane HA, a virtual service is created in NSX Advanced Load Balancer with the pool members as the three control plane nodes that got deployed during the cluster creation.
-
-   ![](./img/tko-on-vsphere-with-tanzu/image33.jpg)
-
-For additional product documentation, see [Configuring and Managing vSphere Namespaces](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-1544C9FE-0B23-434E-B823-C59EFC2F7309.html).   
-
-## <a id=integrate-saas> </a> Integrate Tanzu Kubernetes Clusters with SaaS Endpoints
-
-By integrating Supervisor Cluster and Tanzu Kubernetes Clusters with Tanzu Mission Control (TMC) you are provided a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters.
-
-### Tanzu Mission Control
+## <a id=integrate-supervisor-tmc> </a> **Register Supervisor Cluster with Tanzu Mission Control**
 
 Tanzu Mission Control is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds.
 
@@ -797,6 +687,14 @@ For additional product documentation, see [Integrate the Tanzu Kubernetes Grid S
 
 After Supervisor Cluster is registered with Tanzu Mission Control, deployment of the Tanzu Kubernetes clusters can be done in just a few clicks. The procedure for creating Tanzu Kubernetes clusters is shown below.
 
+Tanzu Kubernetes Clusters come with a `vmware-system-privileged`
+`PodSecurityPolicy` (PSP) that prevents `Pod`s from being scheduled except by service
+accounts that are bound to this PSP by way of a namespaced `RoleBinding` or a
+cluster-wide `ClusterRoleBinding`. Tanzu Mission Control allows you to create
+service accounts for packages installed through it. However, because these
+accounts are not bound to this PSP, `Pod`s provisioned by these packages never
+get scheduled, causing TMC to time out during the installation.
+
 Step 1: Navigate to the **Clusters** tab and click **Create Cluster**.
 
 ![Screenshot of Step 1: Creating a cluster](img/tko-on-vsphere-with-tanzu/TKO-VWT56.png)
@@ -804,7 +702,6 @@ Step 1: Navigate to the **Clusters** tab and click **Create Cluster**.
   1. Under the **Create cluster** page, select the Supervisor cluster that you registered in the previous step and click on Continue to create cluster.
 
 ![Screenshot of Create cluster screen](img/tko-on-vsphere-with-tanzu/TKO-VWT57.png)
-<_I changed the following because the steps in the document should correspond to the screenshots_>
 
 2. Select the provisioner for creating the workload cluster. Provisioner reflects the vSphere namespaces that you have created and associated with the Supervisor cluster.
 
@@ -853,29 +750,23 @@ Step 5: Edit and add node pools.
 
 ![Step 5: Edit and add node pools](img/tko-on-vsphere-with-tanzu/TKO-VWT62.png)
 
-Tanzu Kubernetes Clusters come with a `vmware-system-privileged`
-`PodSecurityPolicy` (PSP) that prevents `Pod`s from being scheduled except by service
-accounts that are bound to this PSP by way of a namespaced `RoleBinding` or a
-cluster-wide `ClusterRoleBinding`. Tanzu Mission Control allows you to create
-service accounts for packages installed through it. However, because these
-accounts are not bound to this PSP, `Pod`s provisioned by these packages never
-get scheduled, causing TMC to time out during the installation.
+Cluster creation roughly takes 15-20 minutes to complete. After the cluster deployment completes, ensure that Agent and extensions health shows green.
 
 ![Health screen for agent and extensions](img/tko-on-vsphere-with-tanzu/TKO-VWT63.png)
-
-## <a id=integrate-to> </a> Integrate Tanzu Kubernetes clusters with Tanzu Observability
-
-For instructions on enabling Tanzu Observability on your workload cluster, please see [Set up Tanzu Observability to Monitor a Tanzu Kubernetes Clusters](./tko-saas-services.md#set-up-tanzu-observability-to-monitor-a-tanzu-kubernetes-clusters)
 
 ## <a id=integrate-tsm> </a> Integrate Tanzu Kubernetes clusters with Tanzu Service Mesh
 
 For instructions on installing Tanzu Service Mesh on your workload cluster, please see [Onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh](./tko-saas-services.md#onboard-a-tanzu-kubernetes-cluster-to-tanzu-service-mesh)
 
+## <a id=integrate-to> </a> Integrate Tanzu Kubernetes clusters with Tanzu Observability
+
+For instructions on enabling Tanzu Observability on your workload cluster, please see [Set up Tanzu Observability to Monitor a Tanzu Kubernetes Clusters](./tko-saas-services.md#set-up-tanzu-observability-to-monitor-a-tanzu-kubernetes-clusters)
+
 ## <a id=deploy-user-managed-packages> </a> Deploy User-Managed Packages on Tanzu Kubernetes clusters
 
 <!--- For instructions on installing user-Managed packages on the Tanzu Kubernetes clusters, please see []() -->
 
-## **Self-Service Namespace in vSphere with Tanzu**
+## Self-Service Namespace in vSphere with Tanzu
 
 Typically creating and configuring vSphere namespaces (permissions, limits, etc.) is a task performed by a vSphere Administrator. But this model doesn’t allow flexibility in a DevOps model. Every time a developer/cluster-admin needs a new namespace for deploying Kubernetes clusters, the task of creating a namespace has to be completed by the vSphere Administrator. Only after permissions, authentication, etc. are configured for the namespace can be consumed.
 
