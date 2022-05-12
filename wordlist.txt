@@ -60,6 +60,7 @@ VNET
 TKG
 NSXT
 autoscaler
+<<<<<<< HEAD
 Alertmanager
 datasource
 Antrea
@@ -68,3 +69,10 @@ Geneve
 SR-IOV
 DPDK
 SCTP
+=======
+genreq
+netreq
+fwreq
+subfolders
+templating
+>>>>>>> f6ef050 (Adding tko-in-vmc-aws deploy huide 2.0)
