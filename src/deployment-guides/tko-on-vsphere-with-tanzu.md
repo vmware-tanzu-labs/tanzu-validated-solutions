@@ -946,8 +946,6 @@ You can gather this information by running the following commands:
 
    The following example YAML is the minimal configuration required to provision a Tanzu Kubernetes cluster.
 
-  <!-- /* cSpell:disable */ -->
-
    ```yaml
   apiVersion: run.tanzu.vmware.com/v1alpha2
   kind: TanzuKubernetesCluster
@@ -972,7 +970,10 @@ You can gather this information by running the following commands:
            reference:
              name: v1.21.2---vmware.1-tkg.1.ee25d55
   ```
-  <!-- /* cSpell:enable */ -->
+
+  > ⚠️  If you receive `this request is invalid` after applying this YAML with
+  > `kubectl apply`, ensure that your TKr release, virtual machine class, and
+  > storage class are valid.
 
   > ⚠️  If you receive `this request is invalid` after applying this YAML with
   > `kubectl apply`, ensure that your TKr release, virtual machine class, and
@@ -1065,27 +1066,18 @@ Do the following to register the Supervisor Cluster with Tanzu Mission Control:
   ![](./img/tko-on-vsphere-with-tanzu/image57.jpg)
 
 1. Prepare a YAML file with the following content to install the Tanzu Mission Control agent on the management cluster.
-  <!-- /* cSpell:disable */ -->
   ```yaml
   # vi tmc-registration.yaml
-
   apiVersion: installers.tmc.cloud.vmware.com/v1alpha1
-
   kind: AgentInstall
-
   metadata:
-
       name: tmc-agent-installer-config
-
       namespace: <tmc namespace>
-
   spec:
-
       operation: INSTALL
-
       registrationLink: <TMC-REGISTRATION-URL>
   ```
-  <!-- /* cSpell:enable */ -->
+
 1. Install the Tanzu Mission Control agent using kubectl.
 
   `kubectl create -f tmc-registration.yaml`
@@ -1324,33 +1316,20 @@ The following steps describe the workflow for installing the user-managed packag
   By default, the newly created workload cluster does not have a cluster role binding that grants access to authenticated users to install packages using the default PSP `vmware-system-privileged`.
 
    1. Create a role binding deployment YAML as follows:
-      <!-- /* cSpell:disable */ -->
       ``` yaml
       kind: ClusterRoleBinding
-
       apiVersion: rbac.authorization.k8s.io/v1
-
       metadata:
-
           name: tkgs-rbac
-
       roleRef:
-
           kind: ClusterRole
-
           name: psp:vmware-system-privileged
-
           apiGroup: rbac.authorization.k8s.io
-
       subjects:
-
         - kind: Group
-
           apiGroup: rbac.authorization.k8s.io
-
           name: system:authenticated    
       ```
-      <!-- /* cSpell:enable */ -->
 
   1. Apply role binding.
 
