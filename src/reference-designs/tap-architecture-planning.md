@@ -30,7 +30,7 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 #### Recommendations
 * Spread across three Availability Zones (AZs) for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
 
 The Build Cluster includes the following packages:
 ```
@@ -84,7 +84,7 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Run Cluster includes the following packages:
 ```
@@ -139,7 +139,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
 * Utilize a PostgreSQL database for storing user preferences and manually created entities
 
 The View Cluster includes the following packages:
@@ -201,7 +201,7 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Iterate Cluster includes the following packages:
 ```
