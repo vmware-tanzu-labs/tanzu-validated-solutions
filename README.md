@@ -8,6 +8,9 @@ This repository provides Reference Designs and Deployment Guides for Tanzu produ
 
 The current collection of published Reference Designs may be found in our [Table of Contents](./src/toc.md)
 
+> **NOTE**: An appendix containing additional helpful documents such as
+> troubleshooting guides and recommended labs can be found [here](src/partials)
+
 ## Contributing
 
 The tanzu-validated-solutions project team welcomes contributions from the community. Before you start working with tanzu-validated-solutions, please
