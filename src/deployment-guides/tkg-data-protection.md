@@ -1,6 +1,6 @@
 # Data Protection
 
-Through Tanzu Mission Control, you can run backup and restore operations to protect your Kubernetes data. 
+Through Tanzu Mission Control, you can run backup and restore operations to protect your Kubernetes data.
 
 Before you enable Data Protection on a Workload cluster, please ensure you have met the following prerequisites
 
@@ -60,7 +60,7 @@ TMC Data Protection allows you to create backups of the following types:
 
 ![](img/tko-data-protection/tko-dp04.png)
 
-Select the target location where the backup will be stored. 
+Select the target location where the backup will be stored.
 
 ![](img/tko-data-protection/tko-dp05.png)
 
@@ -72,7 +72,7 @@ Specify the backup retention period and hit Next.
 
 ![](img/tko-data-protection/tko-dp07.png)
 
-Specify a name for the backup schedule and click on Create button. 
+Specify a name for the backup schedule and click on Create button.
 
 ![](img/tko-data-protection/tko-dp08.png)
 
@@ -82,7 +82,7 @@ Backup configuration might take some time depending on the Kubernetes objects th
 
 **Restore Backup**
 
-To restore the Kubernetes data from the backup, select the backup image and click on the Restore button. 
+To restore the Kubernetes data from the backup, select the backup image and click on the Restore button.
 
 ![](img/tko-data-protection/tko-dp10.png)
 
