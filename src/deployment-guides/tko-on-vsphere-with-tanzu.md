@@ -49,259 +49,6 @@ This document uses the following port groups, subnet CIDRs, and VLANs. Replace t
 | TKG Management Network     | TKG-Management  | 1681 | 172.16.81.1/27 | Yes          | No                                  |
 | TKG Workload Network01     | TKG-Workload    | 1682 | 172.16.82.1/24 | Yes          | No                                  |
 | TKG VIP Network            | TKG-Cluster-VIP | 1683 | 172.16.83.1/26 | No           | 172.16.83.2 - 172.16.83.62|
-<<<<<<< HEAD
-=======
-
-
-#### EXTRA: Simulating This Reference Architecture Network Diagram with Vyatta
-
-> ✅ You can skip this section if the port groups created above are already
-> routable in your vSphere cluster.
-
-vSphere distributed switches operate at Layer 2. Therefore, you might need to
-provision a router that can create the network above.
-
-[Vyatta VyOS](https://vyos.io) is a lightweight network OS that provides packet
-forwarding and DHCP services. This section will guide you through setting up a
-simple Vyatta router in your lab that can simulate the reference architecture
-network diagram.
-
-Out-of-scope alternatives:
-
-* VMware NSX-T
-* [Enable IP packet forwarding](https://linuxhint.com/enable_ip_forwarding_ipv4_debian_linux/)
-
-[Download](https://vyos.net/get/nightly-builds/) the ISO for the latest rolling
-release and [follow the
-instructions](https://docs.vyos.io/en/latest/installation/install.html#live-installation)
-to install it onto an ESXi VM.
-
-Ensure that this VM:
-
-* Has at least two vCPUs,
-* Has one NIC per port group created above (there should be six total), and
-* That all NICs are para-virtual VMXNET NICs
-
-Next, go into the vCenter portal and connect to the VM's console. Log in with
-the username `vyos` and the password `vyos`.
-
-Next, install VyOS onto the machine's disk. Type `install image`, follow the
-instructions, then shut the machine down, disconnect its CD-ROM drive, then
-power it on and log in again.
-
-Next, configure your WAN interface. We'll assume that the externally-accessible
-network is on subnet `10.213.234.0/24`
-
-Next, run `ifconfig eth0`. Take note of the MAC address for this interface. In vCenter,
-ensure that the NIC created for this VM with this MAC address is connected to
-your external network.
-
-We'll assume that your externally-accessible NIC is `eth0`.
-
-Once confirmed, assign this interface with a static IP address in its subnet:
-
-```text
-configure
-set interface loopback lo # Might already exist
-set interface ethernet eth0 address 10.213.234.4/24
-set interfaces ethernet eth0 description WAN
-set protocols static route 0.0.0.0/0 next-hop 10.213.234.1
-```
-
-Next, turn on SSH:
-
-```text
-set service ssh
-```
-
-Finally, commit and save your changes:
-
-```text
-commit
-save
-```
-
-Run `ifconfig eth0` again. Verify that its `inet` address matches the IP address
-you provided earlier (`10.213.234.4` in this case).
-
-Next, verify that your router can communicate with the Internet by using
-`traceroute` to a known IP address, like 1.1.1.1:
-
-```text
-traceroute to 1.1.1.1 (1.1.1.1), 30 hops max, 60 byte packets
- 1  10.213.234.1 (10.213.234.1)  0.257 ms  0.248 ms  0.224 ms
-...more hops
-15  1.1.1.1 (1.1.1.1)  5.170 ms 172.68.188.20 (172.68.188.20)  5.717 ms 1.1.1.1 (1.1.1.1)  5.179 ms
-```
-
-Next, SSH into the router from your machine:
-
-```sh
-# password is vyos
-ssh vyos@10.213.234.4
-```
-
-Once connected, configure the rest of the interfaces. First, run `ifconfig` to
-see which device corresponds to each MAC address. Take note of this.
-
-Next, enter configuration mode:
-
-```text
-configure
-```
-
-then repeat the block below for each interface.
-
-```text
-set interface eth1 address 172.16.10.1/24
-# Name this after the port group for each subnet
-set interface eth1 description "nsx_alb_management_pg"
-```
-
-Run `show interface ethernet` once done. Confirm that your result looks something like
-the below:
-
-```text
- ethernet eth0 {
-     address 10.213.234.4/24
-     description WAN
-     hw-id 00:50:56:be:3c:b9
- }
- ethernet eth1 {
-+    address 172.16.80.1/27
-+    description "NSX ALB Management Network"
-     hw-id 00:50:56:be:9a:f9
- }
- ethernet eth2 {
-+    address 172.16.81.1/27
-+    description "TKG Management Network"
-     hw-id 00:50:56:be:85:fc
- }
- ethernet eth3 {
-+    address 172.16.82.1/27
-+    description "TKG VIP Network"
-     hw-id 00:50:56:be:b5:fc
- }
- ethernet eth4 {
-+    address 172.16.83.1/27
-     hw-id 00:50:56:be:6b:c9
- }
-[edit]
-```
-
-Next, enable the DHCP service and create two DHCP pools:
-
-<!-- markdownlint-disable-->
-```text
-set service dhcp-server dynamic-dns-update
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 default-router 172.16.80.1
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 range 0 start 172.16.80.200
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 range 0 stop 172.16.80.252
-set service dhcp-server shared-network-name nsx-alb-mgmt-network name-server 8.8.8.8
-set service dhcp-server shared-network-name nsx-alb-mgmt-network name-server 4.4.4.4
-
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 default-router 172.16.81.1
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 range 0 start 172.16.81.200
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 range 0 stop 172.16.81.252
-set service dhcp-server shared-network-name tkg-mgmt-network name-server 8.8.8.8
-set service dhcp-server shared-network-name tkg-mgmt-network name-server 4.4.4.4
-
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 default-router 172.16.82.1
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 range 0 start 172.16.82.200
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 range 0 stop 172.16.82.252
-set service dhcp-server shared-network-name tkg-workload-network name-server 8.8.8.8
-set service dhcp-server shared-network-name tkg-workload-network name-server 4.4.4.4
-```
-<!-- markdownlint-enable-->
-
-Confirm that this is correct with `show service dhcp-server`. Your output should
-look like the below:
-
-```
- shared-network-name nsx-alb-mgmt-network {
-     authoritative
-     name-server 10.213.234.252
-     subnet 172.16.80.0/24 {
-         default-router 172.16.80.1
-         domain-name tkg.local
-         domain-search tkg.local,pez.vmware.com
-         name-server 10.213.234.252
-         range 0 {
-             start 172.16.80.200
-             stop 172.16.80.252
-         }
-     }
- }
- shared-network-name tkg-mgmt-network {
-     authoritative
-     domain-name tkg.local
-     domain-search tkg.local,pez.vmware.com
-     name-server 10.213.234.252
-     name-server 10.192.2.10
-     name-server 10.192.2.11
-     subnet 172.16.81.0/24 {
-         default-router 172.16.81.1
-         range 0 {
-             start 172.16.81.200
-             stop 172.16.81.252
-         }
-     }
- }
- shared-network-name tkg-workload-network {
-     authoritative
-     subnet 172.16.82.0/24 {
-         default-router 172.16.82.1
-         domain-name tkg.local
-         domain-search tkg.local,pez.vmware.com
-         name-server 10.213.234.252
-         name-server 10.192.2.10
-         name-server 10.192.2.11
-         range 0 {
-             start 172.16.82.200
-             stop 172.16.82.252
-         }
-     }
- }
-```
-
-Next, enable NAT so that machines connected to these networks can access the
-Internet through the externally-accessible interface:
-
-```text
-set nat source rule 1 description "allow nat outbound"
-set nat source rule 1 outbound-interface eth0
-set nat source rule 1 translation address masquerade
-```
-
-Confirm that this is correct with `show nat`. Your output should look like the
-below:
-
-```text
-+source {
-+    rule 1 {
-+        description "allow nat outbound"
-+        outbound-interface eth0
-+        translation {
-+            address masquerade
-+        }
-+    }
-+}
-[edit]
-```
-
-Finally, commit and save your changes.
-
-```sh
-commit
-save
-```
-
-You can terminate your SSH session once finished.
-
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
 ### <a id=firewall-requirements> </a> Firewall Requirements
 
@@ -338,24 +85,16 @@ For a production-grade deployment, VMware recommends deploying three instances o
 
 The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:
 
-<<<<<<< HEAD
 <!-- /* cSpell:disable */ -->
 
 | Controller Node    | IP Address  | FQDN            |
 | ------------------ | ------------| ----------------|
-=======
-| Controller Node    | IP Address   | FQDN                   |
-| ------------------ | ------------ | ---------------------- |
->>>>>>> 6fc08ca (Incorporated IX Team review)
 | Node01 (Primary)   | 172.16.80.3 | alb01.tanzu.lab |
 | Node02 (Secondary) | 172.16.80.4 | alb02.tanzu.lab |
 | Node03 (Secondary) | 172.16.80.5 | alb03.tanzu.lab |
 | Controller Cluster | 172.16.80.2 | alb.tanzu.lab   |
-<<<<<<< HEAD
 
 <!-- /* cSpell:enable */ -->
-=======
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
 ### Deploy NSX Advance Load Balancer Controller Node
 
@@ -405,11 +144,7 @@ On a browser, go to https://<https://<alb-ctlr01.tanzu.lab>/.
 
 5. Click on **Save** to finish the post-deployment configuration wizard.
 
-<<<<<<< HEAD
 If you did not select the **Setup Cloud After** option before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a Dashboard view on the controller.
-=======
-   If you did not select the **Setup Cloud After** option <_I don't see this option_> before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a Dashboard view on the controller.
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
 ### Configure Default-Cloud
 
@@ -440,15 +175,9 @@ If you did not select the **Setup Cloud After** option before saving, the initia
    - For Virtual Service Placement, unselect **Prefer Static Routes vs Directly Connected Network***
 
     ![Screenshot of Data Center tab on Edit Cloud screen](img/tko-on-vsphere-with-tanzu/TKO-VWT09.png)
-<<<<<<< HEAD
 
 11. Configure the **Network** settings as follows:
 
-=======
-
-1. Configure the **Network** settings as follows:
-
->>>>>>> 6fc08ca (Incorporated IX Team review)
    - Select the NSX ALB **Management Network**. This network interface is used by the Service Engines to connect with the controller.
    - Leave the **Template Service Engine Group** empty.
    - **Management Network IP Address Management**: Select **DHCP Enabled** if DHCP is available on the vSphere port groups.
@@ -462,11 +191,7 @@ If you did not select the **Setup Cloud After** option before saving, the initia
 
 ## Configure Licensing.
 
-<<<<<<< HEAD
 Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
-=======
-  Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
   ![Screenshot of Licensing tab](img/tko-on-vsphere-with-tanzu/TKO-VWT12.png)
 
@@ -511,7 +236,6 @@ To configure the Controller cluster:
    Leave the name and password fields empty.
 
    ![Screenshot of Edit Controller Configuration dialog](img/tko-on-vsphere-with-tanzu/TKO-VWT17.png)
-<<<<<<< HEAD
 
 3. Click **Save**.
 
@@ -554,12 +278,9 @@ To add a self-signed certificate:
    - **Subject Alternate Name (SAN):** Enter the cluster IP address or FQDN of the controller cluster and all controller nodes.
 
    - **Algorithm:** Select either EC or RSA.
-=======
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
    - **Key Size**
 
-<<<<<<< HEAD
 2. Click **Save**.
 
     ![Controller New Certificate](img/tko-on-vsphere-with-tanzu/TKO-VWT21.png)
@@ -574,65 +295,6 @@ To add a self-signed certificate:
 
    - From **SSL/TLS Certificate**, remove the existing default portal certificates
 
-=======
-The controller cluster setup starts. The controller nodes are rebooted in the process. It takes approximately 10-15 minutes for cluster formation to complete.
-
-You are automatically logged out of the controller node you are currently logged in. Enter the cluster IP address in a browser to see the cluster formation task details.
-
-   ![Screenshot of Controller Initializing screen](img/tko-on-vsphere-with-tanzu/TKO-VWT18.png)
-
-The first controller of the cluster receives the "Leader" role. The second and third controllers will work as "Follower".
-<_The following image file is missing in the repo._>
-
-   ![](img/tko-on-vsphere-with-tanzu/TKO-VWT19.png)
-
-After the controller cluster is deployed, use the controller cluster IP address for doing any additional configuration. Do not use the individual controller node IP address.
-
-For additional product documentation, see [Deploy a Controller Cluster](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-A51FAF35-D604-4883-A93D-58463B404C4E.html).
-
-### Change NSX Advanced Load Balancer Portal Default Certificate
-
-The controller must send a certificate to clients to establish secure communication. This certificate must have a Subject Alternative Name (SAN) that matches the NSX Advanced Load Balancer controller cluster hostname or IP address.
-
-The controller has a default self-signed certificate. But this certificate does not have the correct SAN. You must replace it with a valid or self-signed certificate that has the correct SAN. You can create a self-signed certificate or upload a CA-signed certificate.
-
-**Note -** This document makes use of a self-signed certificate.
-
-To replace the default certificate:
-
-1. Navigate to the **Templates > Security > SSL/TLS Certificate >** and click **Create** and select **Controller Certificate**.
-
-   ![Screenshot of the SSL/TSL Certificates tab](img/tko-on-vsphere-with-tanzu/TKO-VWT20.png)
-
-1. The **New Certificate (SSL/TLS)** window appears. Enter a name for the certificate.
-
-To add a self-signed certificate:
-
-1. For **Type** select **Self Signed** and enter the following details:
-
-   - **Common Name:** Specify the fully-qualified name of the site. For the site to be considered trusted, this entry must match the hostname that the client entered in the browser.
-
-   - **Subject Alternate Name (SAN):** Enter the cluster IP address or FQDN of the controller cluster and all controller nodes.
-
-   - **Algorithm:** Select either EC or RSA.
-
-   - **Key Size**
-
-2. Click **Save**.
-
-    ![](img/tko-on-vsphere-with-tanzu/TKO-VWT21.png)
-
-3. Change the NSX Advanced Load Balancer portal certificate.
-
-   - Navigate to the **Administration > Settings > Access Settings**.
-
-   - Clicking the pencil icon to edit the access settings.
-
-   - Verify that **Allow Basic Authentication** is enabled.
-
-   - From **SSL/TLS Certificate**, remove the existing default portal certificates
-
->>>>>>> 6fc08ca (Incorporated IX Team review)
    - From the drop-down list, select the newly created certificate
 
    - Click **Save**.
@@ -681,11 +343,7 @@ To configure the VIP network:
 
    ![Screenshot of Edit Network Settings screen](img/tko-on-vsphere-with-tanzu/TKO-VWT23.png)
 
-<<<<<<< HEAD
 6. Click **Save** to close the VIP network configuration wizard.
-=======
-1. Click **Save** to close the VIP network configuration wizard.
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
 For more information, see the product documentation [Configure a Virtual IP Network](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-29ACB562-2E80-4C28-AE63-8EB9DAF1A67F.html).
 
@@ -717,11 +375,7 @@ IPAM is required to allocate virtual IP addresses when virtual services get crea
 
 1. Navigate to the **Templates > Profiles > IPAM/DNS Profiles**.
 
-<<<<<<< HEAD
 2. Click **Create** and select **IPAM Profile** from the dropdown menu.
-=======
-1. Click **Create** and select **IPAM Profile** from the dropdown menu.
->>>>>>> 6fc08ca (Incorporated IX Team review)
 
   ![Screenshot of the IPAM/DNS Profiles tab](img/tko-on-vsphere-with-tanzu/TKO-VWT26.png)
 
@@ -738,7 +392,6 @@ IPAM is required to allocate virtual IP addresses when virtual services get crea
 
    ![Screenshot of New IPAM/DNS Profile screen](img/tko-on-vsphere-with-tanzu/TKO-VWT27.png)
 
-<<<<<<< HEAD
 5. Click **Save**.
  
 6. Click on the Create button again and select DNS Profile
@@ -749,7 +402,7 @@ IPAM is required to allocate virtual IP addresses when virtual services get crea
 
    ![DNS Profile](img/tko-on-vsphere-with-tanzu/TKO-VWT27-1.jpg)
 
-1. Assign the IPAM and DNS profile to the Default-Cloud configuration.
+7. Assign the IPAM and DNS profile to the Default-Cloud configuration.
     - Navigate to the **Infrastructure > Cloud**
     - Edit the **Default-Cloud** configuration as follows:
        -  **IPAM Profile**: Select the newly created profile.
@@ -758,19 +411,7 @@ IPAM is required to allocate virtual IP addresses when virtual services get crea
 
    ![Screenshot of Edit Cloud window](img/tko-on-vsphere-with-tanzu/TKO-VWT28.png)
 
-=======
-1. Click **Save**.
-
-1. Assign the IPAM profile to the Default-Cloud configuration.
-    - Navigate to the **Infrastructure > Cloud**
-    - Edit the **Default-Cloud** configuration as follows:
-       -  **IPAM Profile**: Select the newly created profile.
-    - Click **Save**
-
-   ![Screenshot of Edit Cloud window](img/tko-on-vsphere-with-tanzu/TKO-VWT28.png)
-
->>>>>>> 6fc08ca (Incorporated IX Team review)
-2. Verify that the status of the Default-Cloud configuration is green.
+8. Verify that the status of the Default-Cloud configuration is green.
 
 For additional product documentation, see [Configure IPAM](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-6ECC7035-BC0C-4197-A3DF-E92365A95A9F.html).
 
