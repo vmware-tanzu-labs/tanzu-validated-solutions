@@ -55,13 +55,11 @@ After you have created the required networks, the network section in your vSpher
 
 ![](./img/tko-on-vsphere-with-tanzu/image54.jpg)
 
-#### EXTRA: Simulating This Reference Architecture Network Diagram with Vyatta
+### - - - - - OPTIONAL: Provision and configure a VyOS router host - - - - -
 
-> ✅ You can skip this section if the port groups created above are already
-> routable in your vSphere cluster.
+> Skip this section if the port groups created above are already routable in your vSphere cluster.
 
-vSphere distributed switches operate at Layer 2. Therefore, you might need to
-provision a router that can create the network above.
+vSphere distributed switches operate at Layer 2. This reference architecture requires use of multiple routable subnets. This section describes how to deploy a virtual machine that runs a VyOS router for managing IP traffic flow across the different port groups. 
 
 [Vyatta VyOS](https://vyos.io) is a lightweight network OS that provides packet
 forwarding and DHCP services. This section will guide you through setting up a
@@ -302,6 +300,8 @@ save
 ```
 
 You can terminate your SSH session once finished.
+
+**- - - - - END OF OPTIONAL ROUTER CONFIGURATION SECTION - - - - -**
 
 
 ### <a id=firewall-requirements> </a> Firewall Requirements
