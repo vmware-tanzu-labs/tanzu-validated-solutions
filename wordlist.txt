@@ -56,3 +56,5 @@ overcommitted
 TKGS
 bursty
 allottable
+SNAT
+Spherelet
