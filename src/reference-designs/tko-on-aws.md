@@ -1,16 +1,15 @@
 # VMware Tanzu for Kubernetes Operations on AWS Reference Design
 
 
-VMware Tanzu for Kubernetes operations simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
+VMware Tanzu for Kubernetes Operations simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes operations with Tanzu components on AWS.
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations with Tanzu components on AWS.
 
-The following reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
+The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
-> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.4 on AWS.
+> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.5.x on AWS.
 
 ![Tanzu Edition reference design diagram](./img/tko-on-aws/tkg-aws-overview.png)
-
 
 ## Network Overview
 
@@ -25,7 +24,8 @@ The following network diagram shows the network layout used with this reference 
 
 This reference design uses Tanzu Kubernetes Grid to manage the lifecycle of multiple Kubernetes workload clusters by bootstrapping a Kubernetes management cluster with the Tanzu command line tool. Consider the following when configuring the network for Tanzu Kubernetes Grid:
 
-* Use an internal load balancer scheme. We recommend creating an internal load balancer as a best practice to avoid exposing the Kubernetes API to the public Internet. To use an internal load balancer, customize the Tanzu Kubernetes Grid templates with a `kustomize` override. If you use an internal load balancer, run Tanzu Kubernetes Grid from a machine with access to the target VPC private IP space.
+* Use an internal load balancer scheme. A best practice is to create an internal load balancer as a best practice to avoid exposing the Kubernetes API to the public Internet. To avoid creating a public-facing load balancer, you can set AWS_LOAD_BALANCER_SCHEME_INTERNAL to true in the cluster configuration file `AWS_LOAD_BALANCER_SCHEME_INTERNAL: true`
+This setting customizes the management cluster’s load balancer to use an internal scheme, which means that its Kubernetes API server will not be accessible and routed over the Internet. If you use an internal load balancer, run Tanzu Kubernetes Grid from a machine with access to the target VPC private IP space.
 
 * If you don't want an outbound Internet or inbound connection from AWS, you can eliminate the public subnet.
 
@@ -89,6 +89,10 @@ This health check ensures that your worker capacity remains stable and can be  s
 
 Provide sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you will deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you plan to deploy Tanzu Kubernetes Grid.
 
+See [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-aws.html#aws-resources) for more details.
+
+**Note** : The number of VPCs will depend on the VPC architecture you have selected.
+
 See [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) for more information on AWS services default quotas.
 
 ## Cluster Creation and Management
@@ -97,11 +101,11 @@ This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous
 
 ![Tanzu Kubernetes Grid Kickstart Install Screen](./img/tko-on-aws/tkg-kickstart-install.png)  
 
-Tanzu Editions includes components for observability, as well as container registry.  We recommended installing the necessary components into a centralized shared services cluster.
+Tanzu Editions include components for observability, as well as container registry. We recommended installing the necessary components into a centralized shared services cluster.
 
 ## Global Cluster Lifecycle Management
 
-Attaching clusters to Tanzu Mission Control allows you to manage your global portfolio of Kubernetes clusters. You can do the following with Tanzu Mission Control:
+Registering Management cluster and attaching workload clusters to Tanzu Mission Control allows you to manage your global portfolio of Kubernetes clusters. You can do the following with Tanzu Mission Control:
 
   * Centralized lifecycle management: managing the creation and deletion of workload clusters using registered management or supervisor clusters
   * Centralized management: viewing the inventory of clusters and the health of clusters and their components
@@ -113,26 +117,30 @@ Attaching clusters to Tanzu Mission Control allows you to manage your global por
 ![VMware Tanzu Mission Control - global policy control plane diagram](./img/tko-on-aws/tmc-global-policy-control-plane.png)
 
 
-For a complete list of features that Tanzu Mission Control includes with Tanzu see [VMware Tanzu Mission
+For a complete list of Tanzu Mission Control features, see [VMware Tanzu Mission
 Control Feature Comparison](https://content.cdntwrk.com/files/aT0xMjk5NjY3JnY9OSZpc3N1ZU5hbWU9dG1jLWNvbXBhcmlzb24tY2hhcnQmY21kPWQmc2lnPTc2YTA2N2E4MWRjMmVkNjE0ZDcwMTlmNjc4NjhmMjI4).  
+
+To Register your management or supervisor cluster for management through Tanzu Mission Control, navigate to **Administration > Management Cluster** on the Tanzu Mission Control console and follow the prompts.
+
+![Tanzu Mission Control Register Management cluster](./img/tko-on-aws/tmc-register-management-cluster.jpg)
 
 To attach your cluster for management through Tanzu Mission Control, navigate to **Clusters > Attach Cluster** on the Tanzu Mission Control console and follow the prompts.
 
 > **Note:** If a workload cluster under management requires a proxy to access the Internet, you can use the Tanzu Mission Control CLI to [generate the YAML](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-97672F56-2AD4-46E6-94E1-805ED38D06C7.html) necessary to install Tanzu Mission Control components on it.
 
-![Tanzu Mission Control attach cluster screen](./img/tko-on-aws/tmc-attach-cluster-screen.png)
+![Tanzu Mission Control attach cluster](./img/tko-on-aws/tmc-attach-cluster-screen.png)
 
 ## Ingress and Load Balancing
 
-Tanzu Kubernetes Grid requires load balancing for both the control plane and the workload clusters. Tanzu Kubernetes Grid for AWS uses Elastic load balancers for the control plane and workload clusters.
+Tanzu Kubernetes Grid requires load balancing for both the control plane and the workload clusters. Tanzu Kubernetes Grid for AWS uses elastic load balancers for the control plane and workload clusters.
 
-For workload clusters, the Tanzu Kubernetes Grid [Contour ingress controller package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html) can be used for layer 7 load balancing.
+For workload clusters, the Tanzu Kubernetes Grid [Contour ingress controller package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html) can be used for layer 7 load balancing.
 
-If you have deployed with both public and private subnets, by default you will get an Internet facing load balancer. If you want a private load balancer you can specifically request one by setting `service.beta.kubernetes.io/aws-load-balancer-internal: "true"` in the annotations of the service. This setting also applies to the Contour ingress and controls whether Contour is internal facing or external facing.  
+If you have deployed with both public and private subnets, by default you will get an Internet-facing load balancer. If you want a private load balancer, you can specifically request one by setting `service.beta.kubernetes.io/aws-load-balancer-internal: "true"` in the annotations of the service. This setting also applies to the Contour ingress and controls whether Contour is internal-facing or external-facing.  
 
 ![TKGm on AWS ingress with Contour diagram](./img/tko-on-aws/tkg-aws-ingress-contour.jpg)
 
-In Tanzu Kubernetes Grid, you can optionally deploy the [external-dns package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html), which automates the updates to DNS records in AWS (Route53) associated with ingress resources or LoadBalancer services. This can automate away toil associated with DNS record management for externally exposed services.
+In Tanzu Kubernetes Grid, you can optionally deploy the [external-dns package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html), which automates the updates to DNS records in AWS (Route53) associated with ingress resources or LoadBalancer services. This can automate away toil associated with DNS record management for externally exposed services.
 
 
 ## Authentication with Pinniped
@@ -163,13 +171,13 @@ We recommend the following best practices for managing identities in Tanzu Kuber
 
 ### Metrics Monitoring with Tanzu Observability by Wavefront (Recommended Solution)
 
-Observability can be significantly enhanced by using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability). Wavefront is a VMware SaaS service  that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned with advanced analytics, assist in the troubleshooting of systems, and to understand the impact of running production code.
+Using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability) significantly enhances observability. Tanzu Observability is a VMware SaaS application that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned with advanced analytics, assist in the troubleshooting of systems, and to understand the impact of running production code.
 
-Wavefront is used to collect data from Kubernetes and from applications running within Kubernetes.
+Tanzu Observability collects data from Kubernetes and from applications running within Kubernetes.
 
-You can configure Wavefront with an array of capabilities. There are over 200 [integrations](https://vmware.wavefront.com/integrations) with prebuilt dashboards available in Wavefront.
+You can configure Tanzu Observability with an array of capabilities. There are over 200 [integrations](https://vmware.wavefront.com/integrations) with prebuilt dashboards available in Wavefront.
 
-We recommend the following plugins for this design:
+The following table describes the plugins we recommend for this design:
 
 | Plugin | Purpose | Key Metrics | Example Metrics |
 | --- | --- | --- | --- |
@@ -182,7 +190,7 @@ We recommend the following plugins for this design:
 
 ### Metrics Monitoring with Prometheus and Grafana (Alternative Solution)
 
-Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-grafana.html) as an alternative on-premises solution for monitoring Kubernetes clusters.
+Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html) as an alternative on-premises solution for monitoring Kubernetes clusters.
 
 Prometheus exposes scrapable metrics endpoints for various monitoring targets throughout your cluster. Metrics are ingested by polling the endpoints at a set interval. The metrics are then stored in a time-series database. You use the [Prometheus Query Language interface](https://prometheus.io/docs/prometheus/latest/querying/basics/) to explore the metrics.  
 
@@ -192,18 +200,18 @@ Grafana is responsible for visualizing Prometheus metrics without the need to ma
 
 ![Tanzu Observability availability dashboard](./img/tko-on-aws/tanzu-observability-availability-dashboard.png)
 
-Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-index.html). For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-user-managed-index.html)
+Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-index.html). For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-user-managed-index.html)
 
 
 ### Log Forwarding
 
-Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize, Log Insight Cloud, and Elasticsearch. Details on configuring Fluent Bit to your logging provider can be found in the documentation [here](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html).  
+Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize, Log Insight Cloud, and Elasticsearch. See [Fluent Bit Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html) for various logging providers.  
 
 ## Summary
 
 Tanzu Kubernetes Grid on AWS  offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating cloud based Kubernetes platforms in a consolidated production environment. This validated approach will result in a production quality installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.  
 
-This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, configuring your firewall, load balancing, workload compute alignment and other capabilities. Observability is quickly established and easily consumed with Wavefront.
+This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload compute, to the full stack infrastructure.
 
 ## Deployment Instructions
 For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on AWS](../deployment-guides/tko-aws.md).

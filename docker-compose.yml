@@ -1,0 +1,10 @@
+version: '2.2'
+services:
+  tests:
+    build:
+      context: .
+    privileged: true
+    volumes:
+      - $PWD:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /app

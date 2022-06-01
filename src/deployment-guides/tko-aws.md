@@ -1,25 +1,29 @@
 # Deploy Tanzu for Kubernetes Operations on AWS
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 
 ## Prerequisites
-Before deploying VMware Tanzu for Kubernetes operations on AWS, ensure that the following are set up.
+Before deploying VMware Tanzu for Kubernetes Operations on AWS, ensure that the following are set up.
 
 * **AWS Account**: An IAM user account with **administrative privileges**.
-Choose an AWS region where the Tanzu Kubernetes Grid (TKG) AMIs exist. See [Supported AWS and Azure Regions](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/rn/VMware-Tanzu-Kubernetes-Grid-14-Release-Notes.html#aws-regions) for AWS regions.
+Choose an AWS region where the Tanzu Kubernetes Grid (TKG) AMIs exist.
 
 * **AWS Resource Quotas**: Sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you plan to deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you deploy Tanzu Kubernetes Grid.
-For more information on AWS services default quotas see [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) in the AWS documentation.
+For more information on AWS default service quotas, see [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) in the AWS documentation.
+
+See [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-aws.html#aws-resources) for more details.
+
+**Note** : The number of VPCs will depend on the VPC architecture you have selected.
 
 * **Bootstrap Machine with AWS CLI Installed**: The bootstrap machine can be a local device such as a laptop, or a virtual machine running in, for example, VMware Workstation or Fusion. Install the AWS CLI on the bootstrap machine. You can get the AWS CLI through a package manager such as Homebrew, apt-get, or by downloading the CLI from [AWS CLI](https://aws.amazon.com/cli/). You will use the bootstrap machine to create the AWS VPC and jumpbox.
 
 * **VMware Cloud**: Access to [VMware Cloud]( https://customerconnect.vmware.com/login ) to download Tanzu CLI.
 
-For additional information about preparing to deploy Tanzu Kubernetes Grid on AWS, see [Prepare to Deploy Management Clusters to Amazon EC2](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-aws.html).
+For additional information about preparing to deploy Tanzu Kubernetes Grid on AWS, see [Prepare to Deploy Management Clusters to Amazon EC2](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-aws.html).
 
 ## Overview of the Deployment Steps
 
-The following provides an overview of the major steps necessary to deploy Tanzu for Kubernetes operations on AWS EC2. Each steps links to the section for detailed information.
+The following provides an overview of the major steps necessary to deploy Tanzu for Kubernetes Operations on AWS EC2. Each steps links to the section for detailed information.
 
 1. [Set up AWS Infrastructure](#aws-infra).
 2. [Create and Set Up a Jumpbox](#jumpbox).
@@ -42,8 +46,14 @@ The following describes the steps to create your AWS environment and configure y
 	export AWS_ACCESS_KEY_ID=xx
 	export AWS_SECRET_ACCESS_KEY=xx
 	# Should be a region with at least 3 available AZs
-	export AWS_REGION=us-west-2
+	export AWS_REGION=us-east-1
 	export AWS_PAGER=""
+
+    #Set up AWS profile
+
+    aws ec2 describe-instances --profile <profile name>
+	export AWS_PROFILE=<profile name>
+
 	```
 	<!-- /* cSpell:enable */ -->
 
@@ -90,7 +100,7 @@ The following describes the steps to create your AWS environment and configure y
 	```
 	<!-- /* cSpell:enable */ -->
 
-5. For each of the public subnets, set `map-public-ip-on-launch`.
+5. For each public subnet, set `map-public-ip-on-launch`.
 
 	<!-- /* cSpell:disable */ -->
 	```
@@ -166,7 +176,7 @@ The following describes the steps to create your AWS environment and configure y
 
 	# Route any corporate IPs through your transit gw
 	aws ec2 create-route \
- 	--route-table-id "$PRIV_RT_TABLE_ID" \
+ 	--route-table-id "$PUB_RT_TABLE_ID" \
  	--destination-cidr-block "172.16.0.0/12" \
  	--transit-gateway-id $(jq -r .TransitGateway.TransitGatewayId $WORKING_DIR/transit-gw)
 
@@ -207,7 +217,7 @@ After doing the network configuration, complete the steps described in this sect
 	```bash
 	aws ec2 describe-instances --instance-id $(jq -r '.Instances[0].InstanceId' $WORKING_DIR/instance_jb_starting) > $WORKING_DIR/instance_jb_started
 
-	echo Public IP: $(jq -r '.Reservations.Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started')
+	echo Public IP: $(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started)
 
 	ssh ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started) -i tkgkp.pem
 	```
@@ -224,70 +234,61 @@ After doing the network configuration, complete the steps described in this sect
    ```
 	<!-- /* cSpell:enable */ -->
 
-4. Install Docker Engine on Ubuntu.  For installation instructions, see [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/).
+4. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-142&productId=988&rPId=73652) site.
 
-5. Download the Tanzu CLI and other utilities for Linux from the Tanzu Kubernetes Grid [Download Product](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-140&productId=988&rPId=73652) site.
-
-6. Copy the files and binaries to the jumpbox.
+5. Copy the files and binaries to the jumpbox.
 
 	<!-- /* cSpell:disable */ -->
 	```bash
-	scp -i tkgkp.pem tanzu-cli-bundle-linux-amd64.tar  kubectl-linux-v1.21.2+vmware.1.gz ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started):/home/ubuntu
+	scp -i tkgkp.pem tanzu-cli-bundle-linux-amd64.tar kubectl-linux-v1.21.8+vmware.1-142.gz ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started):/home/ubuntu
+	```
+	<!-- /* cSpell:enable */ -->
+
+7. Connect to the jumpbox and start port forwarding
+
+	Note that the command shown below assumes that no process is currently
+	listening on local port 8080. If it is in use then choose a different
+	port and adjust the SSH command line accordingly.
+
+	<!-- /* cSpell:disable */ -->
+	```bash
 	ssh -L 8080:localhost:8080 ubuntu@$(jq -r '.Reservations[0].Instances[0].PublicIpAddress' $WORKING_DIR/instance_jb_started) -i tkgkp.pem
 
 	```
 	<!-- /* cSpell:enable */ -->
 
-7. Install the Tanzu CLI.
+8. Install the Tanzu CLI.
 
-	Run the session in `screen` in case your SSH session is terminated. If your session is terminated, you can restart the session with `screen -r`.
+	Run the session in `screen` in case your SSH connection is terminated.
+	If your connection is terminated, you can reattach to the screen session
+	with `screen -r` once you have reconnected.
 
 	<!-- /* cSpell:disable */ -->		
 	```bash
 	screen
-	tar -xvf tanzu-cli-bundle-linux-amd64.tar
-	gunzip kubectl-linux-v1.21.2+vmware.1.gz
-	sudo install kubectl-linux-v1.21.2+vmware.1 /usr/local/bin/kubectl
+	tar -xzvf tanzu-cli-bundle-linux-amd64.tar.gz
+	gunzip kubectl-*.gz
+	sudo install kubectl-linux-* /usr/local/bin/kubectl
 	cd cli/
-	sudo install core/v1.4.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+	sudo install core/*/tanzu-core-linux_amd64 /usr/local/bin/tanzu
 	gunzip *.gz
-	sudo install imgpkg-linux-amd64-v0.10.0+vmware.1 /usr/local/bin/imgpkg
-	sudo install kapp-linux-amd64-v0.37.0+vmware.1 /usr/local/bin/kapp
-	sudo install kbld-linux-amd64-v0.30.0+vmware.1 /usr/local/bin/kbld
-	sudo install vendir-linux-amd64-v0.21.1+vmware.1 /usr/local/bin/vendir
-	sudo install ytt-linux-amd64-v0.34.0+vmware.1 /usr/local/bin/ytt
+	sudo install imgpkg-linux-amd64-* /usr/local/bin/imgpkg
+	sudo install kapp-linux-amd64-* /usr/local/bin/kapp
+	sudo install kbld-linux-amd64-* /usr/local/bin/kbld
+	sudo install vendir-linux-amd64-* /usr/local/bin/vendir
+	sudo install ytt-linux-amd64-* /usr/local/bin/ytt
 	cd ..
-	tanzu plugin install --local cli all
+	tanzu plugin sync
+	tanzu config init
 	```
 	<!-- /* cSpell:enable */ -->
 
-8. Create a custom file to place the Tanzu Kubernetes Grid management APIs on private load balancers:
-
-	<!-- /* cSpell:disable */ -->
-	```bash
-	tanzu config init
-	cat <<EOF > ~/.config/tanzu/tkg/providers/ytt/03_customizations/internal_lb.yaml
-	#@ load("@ytt:overlay", "overlay")
-	#@ load("@ytt:data", "data")
-
-	#@overlay/match by=overlay.subset({"kind":"AWSCluster"})
-	---
-	apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
-	kind: AWSCluster
-	spec:
-	#@overlay/match missing_ok=True
-        controlPlaneLoadBalancer:
-	#@overlay/match missing_ok=True
-           scheme: "internal"
-
-	EOF
-	```
 
 	Running the `tanzu config init` command for the first time creates the `~/.config/tanzu/tkg` subdirectory, which contains the Tanzu Kubernetes Grid configuration files.
 
 	<!-- /* cSpell:enable */ -->
 
-	For more information about ytt cluster overlays, see [ytt Overlays](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-tanzu-k8s-clusters-config-plans.html#ytt-overlays-4).
+	For more information about ytt cluster overlays, see [ytt Overlays](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-k8s-clusters-config-plans.html).
 
 ## <a id=idp></a> Prepare an External Identity Management
 Tanzu Kubernetes Grid implements user authentication with Pinniped. Pinniped allows you to plug external OpenID Connect (OIDC) or LDAP identity providers (IDP) into Tanzu Kubernetes clusters, so that you can control user access to those clusters.
@@ -296,7 +297,7 @@ Pinniped is an open-source authentication service for Kubernetes clusters. If yo
 
 You enable identity management during management cluster deployment. Therefore, ensure that you have an IDP/LDAP server setup before you do the Tanzu Kubernetes Grid management cluster installation.
 
-If you don't have identity management configured, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-deploy-ui.html) for a sample IDP setup. Also see [Pinniped Docs](https://pinniped.dev/docs/) for information on Pinniped integration into Tanzu Kubernetes Grid with various OIDC providers and LDAPs.
+If you don't have identity management configured, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-deploy-ui.html) for a sample IDP setup. Also see [Pinniped Docs](https://pinniped.dev/docs/) for information on Pinniped integration into Tanzu Kubernetes Grid with various OIDC providers and LDAPs.
 
 ## <a id=install-tkg></a> Deploy a Tanzu Kubernetes Grid Management Cluster
 
@@ -322,49 +323,63 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 2. Open a web browser and launch <!-- /* cSpell:disable */ --> ```localhost:8080 ```<!-- /* cSpell:enable */ --> on the machine running the SSH session.
 
 	The Tanzu Kubernetes Grid installer interface displays.
+	Note that if you chose a different listening port when connecting
+	to the jumpbox then the interface will be available on that port instead
+	of port 8080.
 
-	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup.
+	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup. The screens shown were taken from the current
+	version at the time of writing and may differ slightly from other versions.
 
 3. Click **Deploy** on the **Amazon EC2** tile to start the management cluster setup on Amazon EC2.
 
 	![Amazon EC2 select](./img/tko-aws/aws-ui-1.png)
 
-4. For **IaaS Provider** settings, enter your **AWS Access Key ID**, **Secret Access Key**, **Session Token**, **Region**, and **SSH Key Name** and click **Next**.
+4. For **IaaS Provider** settings, enter your **AWS Access Key ID**, **Secret Access Key**, **Session Token**, and **Region**, then click **Connect** followed by **Next**.
 	Select the region you selected in [Set up AWS infrastructure](#aws-infra).
 
 	![aws credential](./img/tko-aws/aws-ui-2.png)
 
-5. For **VPC for AWS** settings, select the VPC ID you created in [Set up AWS infrastructure](#aws-infra) and click **Next**.
+5. For **VPC for AWS** settings, select the VPC ID you created in [Set up AWS infrastructure](#aws-infra), select the check box next to **This is not internet facing vpc** and click **Next**.
 
 	![aws vpc](./img/tko-aws/select-existing-vpc.png)
 
-6. For **Management Cluster Settings**, select **Production**.
+6. For **Management Cluster Settings**, select **Production** and the
+   instance type for the control plane nodes.
 
 7. Enter the following specifications for the management cluster and click **Next**.
 
-	- **Worker Node Instance Type**: Select the configuration for the worker node VM.
+	- **EC2 Key Pair**: The name of an existing key pair, which you may have created
+	  in [Create and Set Up a Jumpbox](#jumpbox).
 	- **Bastion Host**: Select Enable.
 	- **Machine Health Checks**: Select Enable.
+	- **AWS CloudFormation Stack**: Select this if this is the first time that you are
+	  deploying a management cluster to this AWS account, see
+		[Permissions Set by Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-aws.html#iam-permissions) for more details.
 	- **Availability Zone**: Select the three availability zones for your region.
+	- **VPC Public and Private Subnets**: Select the existing subnets on the VPC for each AZ.
+	- **Worker Node Instance Type**: Select the configuration for the worker node VMs.
 
 	![management cluster spec](./img/tko-aws/aws-ui-4.png)
 
 8. For **Kubernetes Network**, enter the Network CNI settings and click **Next**.
 
-	Optionally, if you already have a proxy server setup and want to send outgoing HTTP(S) traffic from the management cluster to a proxy, toggle **Enable Proxy Settings**. For more information on how to configure proxy settings, see [Configure the Kubernetes Network and Proxies](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-deploy-ui.html#configure-the-kubernetes-network-and-proxies-15).
+	Optionally, if you already have a proxy server set up and want to send outgoing HTTP(S) traffic from the management cluster to a proxy, toggle **Enable Proxy Settings**. For more information on how to configure proxy settings, see [Configure the Kubernetes Network and Proxies](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-deploy-ui.html#configure-the-kubernetes-network-and-proxies-15).
 
 	![management cluster spec](./img/tko-aws/aws-ui-5.png)
 
 9. For **Identity Management**, toggle **Enable Identity Management Settings** to configure your IDP and click **Next**.
 
-	For more information about configuring the identity management settings, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-deploy-ui.html).
+	For more information about configuring the identity management settings, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html).
 
 	![identity management](./img/tko-aws/aws-ui-6.png)
 
 10. For **OS Image**, use the drop-down menu to select the OS and Kubernetes version image template to use for deploying Tanzu Kubernetes Grid VM. Select Ubuntu OS image (amd64) and click **Next**.
 
 
-11. For **Register with Tanzu Mission Control**, you can skip to enter Tanzu Mission Control url since Tanzu Kubernetes Grid 1.4 management cluster is currently not supported to be registered with Tanzu Mission Control. See [Supported Environments for Registering Tanzu Kubernetes Clusters](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-3AE5F733-7FA7-4B34-8935-C25D41D15EF9.html#supported-environments-for-registering-tanzu-kubernetes-clusters-1).
+111. For **Register with Tanzu Mission Control**, you can follow these steps to register your Tanzu Kubernetes Grid Management cluster with Tanzu Mission Control and generate the Tanzu Mission Control url to enter into the url section.
+
+* [Register a Management Cluster with Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-register_tmc.html)
+
 
 12. For **CEIP Agreement**, select the check box to opt in to the VMware Customer Experience Improvement Program (CEIP), and click **Next**.
 
@@ -378,9 +393,14 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 
 ### <a id=config-cli> </a>Deploy Management Clusters from a Configuration File
 
-This section describes how to deploy a Tanzu Kubernetes Grid management cluster from a configuration file using Tanzu CLI. Skip this section if have already deployed a management cluster from the Tanzu Kubernetes Grid Installer UI.
+This section describes how to deploy a Tanzu Kubernetes Grid management cluster from a configuration file using the Tanzu CLI. Skip this section if you have already deployed a management cluster from the Tanzu Kubernetes Grid Installer UI.
 
 Before creating a management cluster using the Tanzu CLI, define the base configuration for the cluster in a YAML file. You specify this file by using the `--file` option of the `tanzu management-cluster create` command.
+
+**Note** - To avoid creating a public-facing load balancer you can set AWS_LOAD_BALANCER_SCHEME_INTERNAL to true in the cluster configuration file `AWS_LOAD_BALANCER_SCHEME_INTERNAL: true`
+This setting customizes the management cluster’s load balancer to use an internal scheme, which means that its Kubernetes API server will not be accessible and routed over the Internet.
+
+For **Register with Tanzu Mission Control**, you can [Register a Management Cluster with Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-register_tmc.html) to generate Tanzu Mission Control url and set into `TMC_REGISTRATION_URL: <Tanzu Mission Control url>`
 
 To create a new Tanzu Kubernetes Grid management cluster, run the following command:
 
@@ -392,15 +412,15 @@ tanzu management-cluster create --file path/to/cluster-config-file.yaml
 
 If you had previously deployed a management cluster, the `~/.config/tanzu/tkg/clusterconfigs` directory contains the management cluster configuration file.
 
-To use the configuration file from a previous deployment, make a copy of the configuration file with a new name, open it in a text editor, and update the configuration. We recommend using a dedicated configuration file for each management cluster, with the configuration settings specific to a single infrastructure.
+To use the configuration file from a previous deployment, make a copy of the configuration file with a new name, open it in a text editor, and update the configuration. VMware recommends using a dedicated configuration file for each management cluster, with the configuration settings specific to a single infrastructure.
 
-For more information about deploying a management cluster from a configuration file, see [Deploy Management Clusters from a Configuration File](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-deploy-cli.html).  
+For more information about deploying a management cluster from a configuration file, see [Deploy Management Clusters from a Configuration File](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-deploy-cli.html).  
 
 ## <a id=examine-cluster></a> Examine the Management Cluster Deployment
 
 During the deployment of the management cluster, either from the installer interface or from a configuration file using Tanzu CLI, Tanzu Kubernetes Grid creates a temporary management cluster using a Kubernetes in Docker, `kind`, cluster on the jumpbox.
 
-Tanzu Kubernetes Grid uses the temporary management cluster to provision the final management cluster on AWS. For information about how to examine and verify your Tanzu Kubernetes Grid management cluster deployment, see [Examine the Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-verify-deployment.html).
+Tanzu Kubernetes Grid uses the temporary management cluster to provision the final management cluster on AWS. For information about how to examine and verify your Tanzu Kubernetes Grid management cluster deployment, see [Examine the Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-verify-deployment.html).
 
 ## <a id=deploy-workload-cluster></a> Deploy Workload Clusters
 
@@ -427,44 +447,44 @@ tanzu cluster create <workload_cluster> --plan=prod --worker-machine-count 3 --d
 
 After the workload cluster is created, the current context changes to the new workload cluster.
 
-For more information on cluster lifecycle and management, see [Manage Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-cluster-lifecycle-index.html).
+For more information on cluster lifecycle and management, see [Manage Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-cluster-lifecycle-index.html).
 
 ### Troubleshooting Tips for Tanzu Kubernetes Grid
 
-For tips to help you to troubleshoot common problems that you might encounter when installing Tanzu Kubernetes Grid and deploying Tanzu Kubernetes clusters, see [Troubleshooting Tips for Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-troubleshooting-tkg-tips.html?hWord=N4IghgNiBcIC4CcD2BXARhApgZwBZKThAF8g).
+For tips to help you to troubleshoot common problems that you might encounter when installing Tanzu Kubernetes Grid and deploying Tanzu Kubernetes clusters, see [Troubleshooting Tips for Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-troubleshooting-tkg-tips.html).
 
 ## <a id=install-packages></a> Install and Configure Packages into Workload Clusters
 
-A package in Tanzu Kubernetes Grid is a collection of related software that supports or extends the core functionality of the Kubernetes cluster in which the package is installed. Tanzu Kubernetes Grid includes two types of packages, core packages and user-managed packages. For more information about packages in Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-index.html).
+A package in Tanzu Kubernetes Grid is a collection of related software that supports or extends the core functionality of the Kubernetes cluster in which the package is installed. Tanzu Kubernetes Grid includes two types of packages, core packages and user-managed packages. For more information about packages in Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-index.html).
 
 ### Core Packages
 
-Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-core-index.html).
+Tanzu Kubernetes Grid automatically installs the core packages during cluster creation. For more information about core packages, see [Core Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-core-index.html).
 
 ### User-Managed Packages
 
 A user-managed package is an optional component of a Kubernetes cluster that you can install and manage with the Tanzu CLI. These packages are installed after cluster creation. User-managed packages are grouped into package repositories in the Tanzu CLI. If a package repository that contains user-managed packages is available in the target cluster, you can use the Tanzu CLI to install and manage any of the packages from that repository.   
 
-Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cli-reference-packages.html).
+Using the Tanzu CLI, you can install user-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, External DNS, Fluent Bit, Grafana, Harbor, Multus CNI, and Prometheus packages. For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cli-reference-packages.html).
 
-We recommend installing the following packages:
+VMware recommends installing the following packages:
 
-* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cert-manager.html)
+* [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cert-manager.html)
 
-* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html)
+* [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html)
 
-* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html)
+* [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html)
 
-* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html)
+* [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html)
 
-* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-cni-multus.html)
+* [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html)
 
-* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-external-dns.html)
+* [Implementing Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html)
 
-* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html)
+* [Deploying Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html)
 
-	If Harbor is required to take on a heavy load and store large images into the registry, you can install Harbor into a separate workload cluster.  
-
+If you want to deploy Harbor into a shared services cluster, create a shared services cluster if it is not already created. For instructions, see [Create a Shared Services Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-user-managed-index.html#shared). Also, make sure you add `INFRASTRUCTURE_PROVIDER: aws`
+into shared service workload cluster config file.
 ## <a id=config-saas></a> Configure SaaS Services
 
 The following VMware SaaS services provide additional Kubernetes lifecycle management, observability, and service mesh features.
@@ -513,6 +533,6 @@ tanzu cluster delete <management-cluster-name>
 
 
 ## <a id=logs></a> Logs and Troubleshooting
-For information about how to find the Tanzu Kubernetes Grid logs, how to troubleshoot frequently encountered Tanzu Kubernetes Grid issues, and how to use the Crash Recovery and Diagnostics tool, see [Logs and Troubleshooting](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-troubleshooting-tkg-index.html).
+For information about how to find the Tanzu Kubernetes Grid logs, how to troubleshoot frequently encountered Tanzu Kubernetes Grid issues, and how to use the Crash Recovery and Diagnostics tool, see [Logs and Troubleshooting](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-troubleshooting-tkg-index.html).
 
  

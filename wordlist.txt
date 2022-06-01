@@ -58,3 +58,7 @@ bursty
 allottable
 SNAT
 Spherelet
+VNET
+TKG
+NSXT
+autoscaler

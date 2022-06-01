@@ -1,6 +1,6 @@
 # Deploy Tanzu for Kubernetes Operations
 
-The following provide deployment instructions for the Tanzu for Kubernetes operations reference designs. The deployments use example configuration values. Therefore, make sure to use configuration values that are appropriate for your environment.
+The following provide deployment instructions for the Tanzu for Kubernetes Operations reference designs. The deployments use example configuration values. Therefore, make sure to use configuration values that are appropriate for your environment.
 
 - [Deploy Tanzu for Kubernetes Operations on AWS](tko-aws.md): Outlines the steps for deploying VMware Tanzu for Kubernetes operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 - [Deploy Tanzu for Kubernetes Operations on Microsoft Azure](tko-on-azure.md): Outlines the steps for deploying VMware Tanzu for Kubernetes operations on Microsoft Azure. The deployment is based on the reference design provided in [[VMware Tanzu for Kubernetes Operations on Azure Reference Design](../reference-designs/tko-on-azure.md).
