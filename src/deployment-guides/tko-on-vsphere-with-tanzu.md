@@ -32,10 +32,6 @@ Ensure that your environment has the following general requirements:
 
 The following table provides example entries for the required port groups. Create network entries with the port group name, VLAN ID, and CIDRs that are specific to your environment.
 
-> ✅ If you are following this guide in a lab environment and do not have any
-> Layer 3 networking appliances that can create this networking schema, consider
-> emulating it with Vyatta! Learn more [here](./src/partials/vyatta.md)
-
 
 | Network Type                 | DHCP Service              | Description & Recommendations            |
 | ---------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
