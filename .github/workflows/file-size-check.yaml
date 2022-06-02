@@ -15,15 +15,15 @@ jobs:
           #!/bin/bash
 
           MAX_FILE_SIZE=5000
-          FILES=$1
           FAILED=0
 
-          for F in $FILES; do 
+          for F in ${{ steps.files.outputs.all }}; do 
+            echo "Checking file size: $F"
             size=$(du -k $F | cut -f1)
-                if [ $size -ge $MAX_FILE_SIZE ]; then
-                FAILED=1
-                echo "$F exceeds maximum file size."
-                fi
+            if [ $size -ge $MAX_FILE_SIZE ]; then
+              FAILED=1
+              echo "ERROR: $F exceeds maximum file size."
+            fi
           done
 
           if [ $FAILED -ne 0 ]; then
