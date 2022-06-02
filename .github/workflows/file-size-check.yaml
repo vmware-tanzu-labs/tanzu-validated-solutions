@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     name: check file sizes
     steps:
-      - uses: actions/checkout@v3
       - id: files
         uses: jitterbit/get-changed-files@v1
       - run: |
