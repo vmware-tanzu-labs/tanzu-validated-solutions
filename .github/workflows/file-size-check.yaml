@@ -1,7 +1,6 @@
 name: file-size-check
 
 on:
-  push:
   pull_request:
 
 jobs:
@@ -9,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: check file sizes
     steps:
+      - uses: actions/checkout@master
       - id: files
         uses: jitterbit/get-changed-files@v1
       - run: |
@@ -17,7 +17,7 @@ jobs:
           MAX_FILE_SIZE=5000
           FAILED=0
 
-          for F in ${{ steps.files.outputs.all }}; do 
+          for F in ${{ steps.files.outputs.added_modified }}; do 
             echo "Checking file size: $F"
             size=$(du -k $F | cut -f1)
             if [ $size -ge $MAX_FILE_SIZE ]; then
