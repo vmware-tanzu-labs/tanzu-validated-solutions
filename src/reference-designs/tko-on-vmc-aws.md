@@ -2,7 +2,9 @@
 
 Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS.
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS. 
+
+Please note that the scope of this documentation is limited to Tanzu Kubernetes Grid (multi-cloud) and that it is a customer managed solution. 
 
 The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md)
 
