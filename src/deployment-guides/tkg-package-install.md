@@ -164,7 +164,7 @@ To install the Grafana package, repeat the steps for the package installation. A
 ```yaml
 ingress:
   virtual_host_fqdn: grafana.tanzu.lab
-namespace: tanzu-system-dashboards
+namespace: tanzu-system-monitoring
 ```
 
 For a full list of user-configurable values, see the official [Grafana documentation]https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html#grafana-package-configuration-parameters-5)
