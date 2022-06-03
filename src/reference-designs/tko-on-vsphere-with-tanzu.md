@@ -207,7 +207,7 @@ NSX Advanced Load Balancer is deployed in write access mode in a vSphere environ
 
 -  **Avi Kubernetes Operator (AKO):** Avi Kubernetes Operator is a Kubernetes operator that runs as a pod in the Supervisor Cluster and Tanzu Kubernetes clusters. It provides ingress and load balancing functionality. Avi Kubernetes Operator translates the required Kubernetes objects to NSX Advanced Load Balancer objects and automates the implementation of ingresses/routes/services on the Service Engines (SE) via the NSX Advanced Load Balancer Controller.
 
-Each environment configured in NSX Advanced Load Balancer is referred to as a cloud. Each cloud in NSX Advanced Load Balancer maintains networking and NSX Advanced Load Balancer Service Engine settings. Each cloud is configured with one or more VIP networks to provide IP addresses to load balancing (L4/L7) virtual services created under that cloud.
+Each environment configured in NSX Advanced Load Balancer is referred to as a cloud. Each cloud in NSX Advanced Load Balancer maintains networking and NSX Advanced Load Balancer Service Engine settings. Each cloud is configured with one or more VIP networks to provide IP addresses to L4 load balancing virtual services created under that cloud.
 
 The virtual services can be spanned across multiple Service Engines if the associated Service Engine Group is configured in Active/Active HA mode. A Service Engine can belong to only one Service Engine group at a time.
 
@@ -252,7 +252,7 @@ For the purpose of demonstration, this document makes use of the following Subne
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool**|**NSX Advanced Load Balancer IP Pool**|
 | :- | :- | :- | :- | :- |
-|NSX Advanced Load Balancer Mgmt Network|NSX-Advanced Load Balancer-Mgmt|192.168.11.1/27|NA|192.168.11.14 - 192.168.11.30|
+|NSX Advanced Load Balancer Mgmt Network|NSX-ALB-Mgmt|192.168.11.1/27|NA|192.168.11.14 - 192.168.11.30|
 |Supervisor Cluster Network|TKG-Management|192.168.12.1/28|192.168.12.2 - 192.168.12.14|NA|
 |TKG Workload Primary Network|TKG-Workload-PG01|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
 |TKG Cluster VIP/Data Network|TKG-Cluster-VIP|192.168.14.1/26|NA|<p>SE Pool: </p><p></p><p>192.168.14.2 - 192.168.14.20</p><p></p><p>TKG Cluster VIP Range: </p><p>192.168.14.21 - 192.168.14.60</p>|
@@ -321,10 +321,8 @@ The following table provides recommendations for configuring NSX Advanced Load B
 |TKO-Advanced Load Balancer-004|Use static IPs for the NSX Advanced Load Balancer controllers if DHCP cannot guarantee a permanent lease.|NSX Advanced Load Balancer Controller cluster uses management IPs to form and maintain quorum for the control plane cluster. Any changes would be disruptive.|NSX Advanced Load Balancer Controller control plane might go down if the management IPs of the controller node changes.|
 |TKO-Advanced Load Balancer-005|<p>Use NSX Advanced Load Balancer IPAM for Service Engine data network and virtual services IP assignment. </p><p></p>|Guarantees IP address assignment for Service Engine Data NICs and Virtual Services.|Removes the corner case scenario when the DHCP server runs out of the lease or is down.|
 |TKO-Advanced Load Balancer-006|Reserve an IP in the NSX Advanced Load Balancer management subnet to be used as the Cluster IP for the Controller Cluster.|NSX Advanced Load Balancer portal is always accessible over Cluster IP regardless of a specific individual controller node failure.|NSX Advanced Load Balancer administration is not affected by an individual controller node failure.|
-|TKO-Advanced Load Balancer-007|Use separate VIP networks for L7 services in TKG clusters.|Separate the L7 load balancer traffic of the dev/test and prod workloads.|Install AKO in TKG clusters manually using helm charts. Reference the VIP network to use in the AKO configuration. See [this doc](https://github.com/avinetworks/avi-helm-charts/tree/master/docs/AKO) for more information.|
-|TKO-Advanced Load Balancer-008|Use default Service Engine Group for load balancing of TKG clusters control plane.|Using a non-default Service Engine Group for hosting L4 virtual service created for TKG control plane HA is not supported.|Using a non-default Service Engine Group can lead to Service Engine VM deployment failure.|
-|TKO-Advanced Load Balancer-009|Use dedicated Service Engine Groups for hosting L7 virtual services.|Using a dedicated Service Engine allows isolating L4 load balancing traffic from the L7 traffic.|Create dedicated Service Engine Groups under default-Cloud only.|
-|TKO-Advanced Load Balancer-010|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost.|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing Service Engines can help reduce the licensing cost. </p>|
+|TKO-Advanced Load Balancer-007|Use default Service Engine Group for load balancing of TKG clusters control plane.|Using a non-default Service Engine Group for hosting L4 virtual service created for TKG control plane HA is not supported.|Using a non-default Service Engine Group can lead to Service Engine VM deployment failure.|
+|TKO-Advanced Load Balancer-008|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost.|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing Service Engines can help reduce the licensing cost. </p>|
 
 ## Network Recommendations
 
@@ -345,6 +343,8 @@ The following are the key network recommendations for a production-grade vSphere
 |TKO-TKGS-004|Deploy Supervisor cluster control plane nodes in large form factor.|Allow Supervisor cluster integration with Tanzu Mission Control.|When TKG is integrated with SaaS endpoints, new pods/services, etc are created in the target cluster and the pods have specific CPU requirements which can’t be fulfilled with medium and small-sized control plane/worker nodes|
 |TKO-TKGS-005|Register Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Tanzu Mission Control also automates the deployment of Tanzu Packages in all Tanzu Kubernetes clusters associated with TMC.|
 
+**Note:** SaaS endpoints here refers to Tanzu Mission Control, Tanzu Service Mesh and Tanzu Observability. 
+
 ## Recommendations for Tanzu Kubernetes Clusters
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
@@ -361,13 +361,7 @@ One example of an ingress controller is Contour, an open-source controller for K
 
 For more information about Contour, see the [Contour](https://projectcontour.io/) site and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
 
-Another option is to use the NSX Advanced Load Balancer Kubernetes ingress controller, which offers an advanced L7 ingress for containerized applications deployed in the Tanzu Kubernetes workload cluster.
-
-![NSX Advanced Load Balancing capabilities for VMware Tanzu](img/tko-on-vsphere-with-tanzu/tko-vwt11.png)
-
-For more information about the NSX Advanced Load Balancer ingress controller, see the [Avi Kubernetes Operator documentation](https://avinetworks.com/docs/ako/1.5/avi-kubernetes-operator/).
-
-[Tanzu Service Mesh](https://tanzu.vmware.com/service-mesh), which is a SaaS offering for modern applications running across multi-cluster, multi-clouds, also offers an Ingress controller based on [Istio](https://istio.io/).
+[Tanzu Service Mesh](https://tanzu.vmware.com/service-mesh) also offers an Ingress controller based on [Istio](https://istio.io/).
 
 Each ingress controller has pros and cons of its own. The below table provides general recommendations on when you should use a specific ingress controller for your Kubernetes environment.
 
@@ -375,7 +369,6 @@ Each ingress controller has pros and cons of its own. The below table provides g
 | :- | :- |
 |Contour|<p>Use Contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for the north-south traffic by defining the policies in the manifest file for the application.</p><p></p><p>Contour is a reliable solution for simple Kubernetes workloads. </p>|
 |Istio|Use Istio ingress controller when you need to provide security, traffic direction, and insight within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic).|
-|NSX Advanced Load Balancer Ingress controller|Use NSX Advanced Load Balancer ingress controller when a containerized application requires features like local and global server load balancing (GSLB), web application firewall (WAF), performance monitoring, etc. |
 
 # NSX Advanced Load Balancer Sizing Guidelines
 
