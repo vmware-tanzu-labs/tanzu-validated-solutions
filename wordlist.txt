@@ -60,3 +60,5 @@ VNET
 TKG
 NSXT
 autoscaler
+Alertmanager
+datasource
