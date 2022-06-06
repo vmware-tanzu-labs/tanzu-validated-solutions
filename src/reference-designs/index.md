@@ -39,6 +39,4 @@ The following documents provide reference designs for specific infrastructure pr
 
 - [VMware Tanzu for Kubernetes Operations on AWS Reference Design](tko-on-aws.md)
 - [VMware Tanzu for Kubernetes Operations on Azure Reference Design](tko-on-azure.md)
-<!--
-- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](tko-on-vsphere-with-tanzu.md)
--->
+[//]: # (- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](tko-on-vsphere-with-tanzu.md))
