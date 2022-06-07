@@ -233,28 +233,33 @@ the below:
 Next, enable the DHCP service and create two DHCP pools:
 
 <!-- markdownlint-disable-->
-```text
+```sh
+NSX_ALB_MGMT_NETWORK_PREFIX="172.16.10"
+TKG_MGMT_NETWORK_PREFIX="172.16.40"
+TKG_WORKLOAD_NETWORK_PREFIX="172.160.70"
+NAMESERVERS="8.8.8.8,4.4.4.4" # Replace these with your actual nameservers
 set service dhcp-server dynamic-dns-update
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 default-router 172.16.80.1
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 range 0 start 172.16.80.200
-set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet 172.16.80.0/24 range 0 stop 172.16.80.252
-set service dhcp-server shared-network-name nsx-alb-mgmt-network name-server 8.8.8.8
-set service dhcp-server shared-network-name nsx-alb-mgmt-network name-server 4.4.4.4
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet $NSX_ALB_MGMT_NETWORK_PREFIX.0/24
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet $NSX_ALB_MGMT_NETWORK_PREFIX.0/24 default-router $NSX_ALB_MGMT_NETWORK_PREFIX.1
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet $NSX_ALB_MGMT_NETWORK_PREFIX.0/24 range 0 start $NSX_ALB_MGMT_NETWORK_PREFIX.200
+set service dhcp-server shared-network-name nsx-alb-mgmt-network subnet $NSX_ALB_MGMT_NETWORK_PREFIX.0/24 range 0 stop $NSX_ALB_MGMT_NETWORK_PREFIX.252
 
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 default-router 172.16.81.1
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 range 0 start 172.16.81.200
-set service dhcp-server shared-network-name tkg-mgmt-network subnet 172.16.81.0/24 range 0 stop 172.16.81.252
-set service dhcp-server shared-network-name tkg-mgmt-network name-server 8.8.8.8
-set service dhcp-server shared-network-name tkg-mgmt-network name-server 4.4.4.4
+set service dhcp-server shared-network-name tkg-mgmt-network subnet $TKG_MGMT_NETWORK_PREFIX.0/24
+set service dhcp-server shared-network-name tkg-mgmt-network subnet $TKG_MGMT_NETWORK_PREFIX.0/24 default-router $TKG_MGMT_NETWORK_PREFIX.1
+set service dhcp-server shared-network-name tkg-mgmt-network subnet $TKG_MGMT_NETWORK_PREFIX.0/24 range 0 start $TKG_MGMT_NETWORK_PREFIX.200
+set service dhcp-server shared-network-name tkg-mgmt-network subnet $TKG_MGMT_NETWORK_PREFIX.0/24 range 0 stop $TKG_MGMT_NETWORK_PREFIX.252
 
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 default-router 172.16.82.1
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 range 0 start 172.16.82.200
-set service dhcp-server shared-network-name tkg-workload-network subnet 172.16.82.0/24 range 0 stop 172.16.82.252
-set service dhcp-server shared-network-name tkg-workload-network name-server 8.8.8.8
-set service dhcp-server shared-network-name tkg-workload-network name-server 4.4.4.4
+set service dhcp-server shared-network-name tkg-workload-network subnet $TKG_WORKLOAD_NETWORK_PREFIX.0/24
+set service dhcp-server shared-network-name tkg-workload-network subnet $TKG_WORKLOAD_NETWORK_PREFIX.0/24 default-router $TKG_WORKLOAD_NETWORK_PREFIX.1
+set service dhcp-server shared-network-name tkg-workload-network subnet $TKG_WORKLOAD_NETWORK_PREFIX.0/24 range 0 start $TKG_WORKLOAD_NETWORK_PREFIX.200
+set service dhcp-server shared-network-name tkg-workload-network subnet $TKG_WORKLOAD_NETWORK_PREFIX.0/24 range 0 stop $TKG_WORKLOAD_NETWORK_PREFIX.252
+
+echo "$NAMESERVERS" | tr ',' '\n' | while read -r nameserver
+do
+  for net in nsx-alb-mgmt-network tkg-mgmt-network tkg-workload-network
+  do set service dhcp-server shared-network-name "$net" name-server "$nameserver"
+  done
+done
 ```
 <!-- markdownlint-enable-->
 
