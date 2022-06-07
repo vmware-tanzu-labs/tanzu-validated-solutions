@@ -459,4 +459,4 @@ If you are deploying Harbor without a publicly signed certificate, you must incl
 ![Figure 12 - Harbor Container Registry](img/tko-on-vsphere/figure-12.png)
 
 ## Deployment Instructions
-For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on AWS](../deployment-guides/tko-on-vsphere-vds.md).
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on vSphere with VMware VDS](../deployment-guides/tko-on-vsphere-vds.md).
