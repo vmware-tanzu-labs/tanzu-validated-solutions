@@ -1,6 +1,6 @@
 # VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design
 
-vSphere with Tanzu transforms vSphere into a platform for running Kubernetes workloads on the vSphere. When vSphere with Tanzu is enabled on a vSphere cluster, you can run Kubernetes workloads directly on ESXi hosts and create upstream Kubernetes clusters within dedicated resource pools.
+vSphere with Tanzu transforms the vSphere cluster into a platform for running Kubernetes workloads in dedicated resource pools. When vSphere with Tanzu is enabled on a vSphere cluster, vSphere with Tanzu creates a Kubernetes control plane directly in the hypervisor layer. You can then run Kubernetes containers by creating upstream Kubernetes clusters through the VMware Tanzu™ Kubernetes Grid™ Service and run your applications inside these clusters.
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu.
 
