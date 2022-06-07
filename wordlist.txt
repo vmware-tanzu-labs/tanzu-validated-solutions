@@ -60,3 +60,12 @@ VNET
 TKG
 NSXT
 autoscaler
+VYOS
+execdir
+govc
+ifaces
+isos
+maxdepth
+mindepth
+sshpass
+vyos
