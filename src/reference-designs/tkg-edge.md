@@ -6,7 +6,7 @@ For those companies that already have remote offices and branch offices with a f
 
 The VMware Edge Compute Stack helps companies manage their edge locations with little or no local IT staff and enables them to run VM workloads at these sites. Now with the addition of VMware Tanzu, you can simplify how you architect and deploy a cloud native stack at hundreds or thousands of edge locations so that you can run cloud native applications at the edge.
 
-The Tanzu Design for VMware Edge Compute Stack described in this paper offers a best practice for running Tanzu at edge locations where the VMware Edge Compute Stack is already deployed. In this paper, we’ll specifically address these challenges at the edge:
+The Tanzu Design for VMware Edge Compute Stack described here offers a best practice for running Tanzu at edge locations where the VMware Edge Compute Stack is already deployed. We’ll specifically address these challenges at the edge:
 
 - Running and managing Kubernetes infrastructure
 - Providing a consistent development and deployment environment for applications across the cloud, datacenter, and edge
@@ -30,14 +30,14 @@ An Edge location can be a storefront (point of sale), manufacturing facility, me
 
 ### Hub and Spoke
 
-In this topology, the management plane is entirely residing in the main datacenter. The centralized management plane composed of vCenter, NSX Advance Load Balancer controller and TKG Management cluster are all in the same central location.
+In this topology, the management plane is entirely residing in the main datacenter. The centralized management plane composed of vCenter, NSX Advanced Load Balancer controller and TKG Management cluster are all in the same central location.
 Only the TKG Workload clusters are created at the edge along with Load Balancing components (Service Engines). This design provides a minimal footprint at the edge.
 Once the Edge site is deployed, Tanzu Mission Control is used for fleet management, allowing an easy way to manage and lifecycle TKG workload clusters at the edge.
 Additional components for monitoring, backup and log management can also be present in the main datacenter.
 
-![tkg-edge-hub-spoke.drawio.png](./img/tkg-edge/tkg-edge-hub-spoke.drawio.png)
+![](./img/tkg-edge/tkg-edge-hub-spoke.drawio.png)
 
-#### Key Points
+#### Key Features
 
 - Minimal footprint.
 - Limited recoverability when site is disconnected
@@ -46,27 +46,27 @@ Additional components for monitoring, backup and log management can also be pres
 ### Hybrid
 
 In this topology, only the TKG Management cluster is located in a central location.
-Each Edge site has the infrastructure management plane (vCenter, and NSX Advance Load Balancer controllers, DNS servers and NTP server). This design provides a better availability when the edge location gets disconnected from the main datacenter.
+Each Edge site has the infrastructure management plane (vCenter, and NSX Advanced Load Balancer controllers, DNS servers and NTP server). This design provides a better availability when the edge location gets disconnected from the main datacenter.
 Some additional components for monitoring, backup and log management could be also installed at the Edge location to provide these functions locally.
 
-![tkg-edge-hybrid.drawio.png](./img/tkg-edge/tkg-edge-hybrid.drawio.png)
+![](./img/tkg-edge/tkg-edge-hybrid.drawio.png)
 
-#### Key Points
+#### Key Features
 
 - Better availability during edge disconnection
-- Provide more management control at the edge site allowing the edge location to be managed by a 3rd party provider while keeping the control of the TKG management
+- Provides more management control at the edge site allowing the edge location to be managed by a 3rd party provider while keeping the control of the TKG management
 - Management overhead
 
 ### Datacenter Fleet
 
-In this topology, each Edge location has a full-stack management plane (vCenter, NSX Advance Load Balancer and TKG Management cluster). Each Edge location can be considered as separate datacenter and can operate independently.
+In this topology, each Edge location has a full-stack management plane (vCenter, NSX Advanced Load Balancer and TKG Management cluster). Each Edge location can be considered as separate datacenter and can operate independently.
 Tanzu Mission Control is used for fleet management, allowing an easy way to create, manage and lifecycle TKG workload clusters at the edge.
 
-![tkg-edge-dc-fleet.drawio.png](./img/tkg-edge/tkg-edge-dc-fleet.drawio.png)
+![](./img/tkg-edge/tkg-edge-dc-fleet.drawio.png)
 
-#### Key Points
+#### Key Features
 
-- Edge location can be considered as an independent datacenter.
+- Edge location can be considered an independent datacenter.
 - TMC use used for fleet management
 
 This topology is not covered in this design as it is covered by the [TKO Reference Architecture on vSphere][611].
@@ -147,7 +147,7 @@ Table: Impact of the number of physical server on the availability
 Tanzu Kubernetes Grid can work on a flat Layer-2 network, however it is recommended for security reasons to use multiple networks (can be VLANs). Having multiple networks will help segregate traffic and isolate components that are publicly exposed as opposed to management components. NSX Distributed Load Balancing not being considered at the Edge, using different networks is the simplest option to ensure security for the management components (most of the routers are providing VLANs).
 A /24 network could be split in smaller networks if needed.
 
-![tko-edge-networking.drawio.png](./img/tkg-edge/tko-edge-networking.drawio.png)
+![](./img/tkg-edge/tko-edge-networking.drawio.png)
 
 Figure: Networking at the Edge
 
@@ -159,18 +159,18 @@ Figure: Networking at the Edge
 
 Table: List of networks at the edge
 
-The management cluster is separated from the TKG network to accommodate the fact that many company doesn’t allow DHCP on a network where management components are connected to, hence the need of a dedicated network for TKG nodes.
+The management cluster is separated from the TKG network to accommodate the fact that many organizations will not allow DHCP on a network where management components are connected, hence the need of a dedicated network for TKG nodes.
 The DHCP lease time is quite important if the edge location can be down for few days. If the Control Plane node doesn’t get the same IP address when it restarts, the cluster won’t restart properly and a manual action will be required. With Tanzu Kubernetes Grid, the etcd component is bound to the first IP address the control plane node gets and doesn’t support any change dynamically.
 
 #### Connectivity to the main datacenter (Hub)
 
 It is assumed there is a routed connectivity from edge site to main datacenter without any NAT. In this design it is considered that a bandwidth of at least 10 Mbps will be available with maximum latency of 50ms (with minimal packet loss <1%).
 This connection is heavily used during deployment and upgrade (TKG ova templates copy, containers pulled from global registry).
-If the connectivity doesn’t meet the bandwidth or latency requirement, the Tanzu Edge topology is still possible, however the edge location should be considered as a Air-Gap location (see [air-gap design][211]) for everything related to deployment and lifecycle.
+If the connectivity doesn’t meet the bandwidth or latency requirement, the Tanzu Edge topology is still possible, however the edge location should be considered an air-gapped location (see [air-gap design][211]) in terms of deployment and lifecycle.
 
 #### Connectivity and Infrastructure Services at the edge site
 
-The hosts are connected with at least a 1 Gbps connection to each other with latency <1ms. 10Gbps is recommended if VSAN is used.
+The hosts are connected with at least a 1 Gbps connection to each other with latency <1ms. 10Gbps is recommended if vSAN is used.
 It is also required to run the following infrastructure services at the edge site
 
 - DHCP server, as part of the Tanzu requirements, a DHCP service is mandatory on the Tanzu Kubernetes Grid cluster networks.
@@ -183,13 +183,13 @@ It is also required to run the following infrastructure services at the edge sit
 
 #### Proxy
 
-It can be configured individually on a per cluster basis at deployment time.
+It may be configured individually on a per-cluster basis at deployment time.
 
 - Pull package from internet
 - Connection to TMC
 - Connection to TO
 
-![e091590baba38bf13203c4166893699c.png](./img/tkg-edge/e091590baba38bf13203c4166893699c.png)
+![](./img/tkg-edge/e091590baba38bf13203c4166893699c.png)
 
 #### Network Security
 
@@ -211,14 +211,13 @@ The VMware Edge Compute Stack doesn’t provide network security, hence if any h
 ### Storage
 
 Storage is required at the edge location in order to store TKG nodes (VMs), other VMs required at the site as well as all the persistent data (stored in Kubernetes Persistent Volumes) necessary for the applications to run.
-If more than one host is used, shared storage is required to ensure high-availability of the VM as well as load-balancing of the resources.
-In order to support Kubernetes persistent volumes of ReadWriteMany (RWM) type, the shared storage must be file-based (most likely NFS).
+If more than one host is used, shared storage is required to ensure high-availability of the VM as well as load-balancing of the resources. In order to support Kubernetes persistent volumes of ReadWriteMany (RWM) type, the shared storage must be file-based (most likely NFS).
 
-VSAN is the preferred option as it will simplify the overall management (configured and managed from vCenter) as well as the onsite deployment (only servers and networking). It also provide vSAN file service that can be consumed by persistent volumes of ReadWriteMany (RWM) type.
+vSAN is the preferred option as it will simplify the overall management (configured and managed from vCenter) as well as the onsite deployment (only servers and networking). It also provide vSAN file service that can be consumed by persistent volumes of ReadWriteMany (RWM) type.
 
 #### vSAN general considerations
 
-- A 2-nodes and 3-nodes configuration can only tolerate 1 host failure.
+- A 2-node and 3-node configurations can only tolerate 1 host failure.
 - VMware recommends deploying ESXi hosts with similar or identical configurations across all cluster members, including similar or identical storage configurations. This will ensure an even balance of virtual machine storage components across the disks and hosts cluster.
 - In vSAN hybrid configurations, VMware supports 1Gb but the 1 Gb NIC must be dedicated for vSAN. If a 10Gb or higher bandwidth NICs are used, these can be shared with other network traffic types. vSAN all-flash configurations are only supported with a 10Gb or higher connections.
 - vSAN file service offers vSAN file shares that are consumed by persistent volumes of the ReadWriteMany (RWM) type. A single RWM volume can be mounted by multiple nodes. The volume can be shared between multiple pods or applications running across Kubernetes nodes or across Kubernetes clusters.
@@ -229,9 +228,9 @@ vSAN 2-node is particularly appealing for Edge Location as it provides high-avai
 
 - a vSAN 2-nodes requires a witness host (virtual machine) to be set up at the main datacenter in the same vCenter as the vSAN cluster.
 - Bandwidth between vSAN Nodes hosting VM objects and the Witness Host are dependent on the number of objects residing on vSAN. It is important to size data site to witness bandwidth appropriately for both availability and growth. A standard rule is 2 Mbps for every 1000 components on vSAN. Because vSAN nodes have a maximum number of 9000 components per host, the maximum bandwidth requirement is 9Mbps per host.
-- In a vSAN 2 Node Clusters, 100% of reads, occur in the site the VM resides on. This aligns with the behavior of vSAN Stretched Clusters. Read locality overrides the NumberOfFailuresToTolerate=1 policy’s behavior to distribute reads across the components. The vSAN “DOMOwnerForceWarmCache” setting can be configured to force reads on both Node 1 and Node 2 in a 2 Node configuration.
-- The ability to connect 2 Nodes directly removes the requirement for a high speed switch. This design can be significantly more cost effective when deploying tens or hundreds locations.
-- In typical 2 Node configurations, such as Edge deployments, the latency or RTT between the main datacenter and the edge location is supported up to 500ms (250ms one-way).
+- In a vSAN 2-node cluster, all read operations occur in the site the VM resides on. This aligns with the behavior of vSAN Stretched Clusters. Read locality overrides the `NumberOfFailuresToTolerate=1` policy’s behavior to distribute reads across the components. The vSAN `DOMOwnerForceWarmCache` setting can be configured to force reads on both Node 1 and Node 2 in a 2-node configuration.
+- The ability to connect 2 nodes directly removes the requirement for a high speed switch. This design can be significantly more cost effective when deploying tens or hundreds locations.
+- In typical 2-node configurations, such as Edge deployments, the latency or RTT between the main datacenter and the edge location is supported up to 500ms (250ms one-way).
 
 ### Other considerations
 
@@ -245,32 +244,36 @@ All the redundant components should be evenly spread across the available ESX ho
 
 #### GPU consideration
 
-One of the interest of having computing power at the Edge is the ability to process data before sending it back to the main datacenter. Nowadays, GPU plays a key role in data processing and being able to leverage this compute capacity at the Edge helps improving performance, latency and save on network bandwidth. While it is not going to be explored in this design, the Edge Compute Stack has already the ability to provide GPU compute power to workloads at the Edge. There are mainly three ways of consuming GPU that could be used at the Edge.
+A common reason for having computing power at the Edge is the ability to process data before sending it back to the main datacenter. GPU capabilities often play a key role in data processing and being able to leverage this compute capacity at the Edge helps improving performance, latency and save on network bandwidth. While it is not going to be explored in this design, the Edge Compute Stack has the ability to provide GPU compute power to workloads at the Edge. There are three ways of consuming GPU that could be used at the Edge.
+While all these solutions are working with TKG, they require VMware Professionnal Services to be engaged.
 
 ##### GPU Passthrough
 
-![f3a9b5e3df9d8c442b112da8fd660613.png](./img/tkg-edge/f3a9b5e3df9d8c442b112da8fd660613.png)
-The entire GPU card is being passed to the VM. It requires the GPU card to be present in the server where the VM runs. Virtual Machines are no longer able to move between servers.
+![](./img/tkg-edge/f3a9b5e3df9d8c442b112da8fd660613.png)
+
+The entire GPU card is being passed to the VM. It requires the GPU card to be present in the server where the VM runs. With this configuration, virtual machines will not be able to migrate between servers.
 
 ##### BitFusion
 
-![91aa78cae6af4261e49171516d5cecb9.png](./img/tkg-edge/91aa78cae6af4261e49171516d5cecb9.png)
+![](./img/tkg-edge/91aa78cae6af4261e49171516d5cecb9.png)
+
 One or multiple servers servers with GPU are present at the Edge location. Through Bitfusion technology, the GPU can be remotely consumed through the network by workloads located on other servers at the Edge.
 
 ##### NVIDIA GRID
 
-![b7fb5735e266dfaca19d1c5c45e64a3e.png](./img/tkg-edge/b7fb5735e266dfaca19d1c5c45e64a3e.png)
-One or multiple GPU cards are shared by VMs running on the same server. It leverages the NVIDIA GRID Virtual GPU Manager to share GRID-supported GPU amongst multiple virtual machines. Virtual Machines can move between servers as long as the hardware supports it.
+![](./img/tkg-edge/b7fb5735e266dfaca19d1c5c45e64a3e.png)
+
+One or multiple GPU cards are shared by VMs running on the same server. This configuration leverages the NVIDIA GRID Virtual GPU Manager to share GRID-supported GPU amongst multiple virtual machines. Virtual Machines may be migrated between servers as long as the hardware supports it.
 
 ## Components at the edge
 
-The main component at the edge is the Tanzu Kubernetes Grid Workload cluster that will support all the containerized workloads. Along with this Kubernetes cluster, depending of the topology and the capabilities required at the edge, other components are installed.
+The primary component at the edge is the Tanzu Kubernetes Grid Workload cluster that will support all of the containerized workloads. Along with this Kubernetes cluster, depending of the topology and the capabilities required at the edge, other components are installed.
 Additionally if resources permit it, it is encouraged to deploy 2 workload clusters. This will allow to use the Blue/Green change management strategy and help reduce the risk during upgrade and application deployment.
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-ALL-EDGE-TKG-01 | Use a single node control plane (dev plan) for TKG Workload cluster. | Applications at the Edge being mostly static, the impact of the unavailability of the control plane is low. vSphere HA can bring back up the control plane reasonably quickly to not be noticed.<br />It reduces the resource overhead.<br />It is safer when there are less than 3 physical hosts (with multiple control plane nodes, the loss of 2 nodes, hosted on one physical host, would result in the loss of the cluster due to etcd quorum loss) | A physical host failure could result in the temporary unavailability of the Kubernetes control plane until the control plane node is restarted by vSphere HA. Data corruption of the control plane node will result in the loss of the Kubernetes cluster. |
-| TZEDG-ALL-EDGE-LB-01 | Use a pair of NSX-ALB Service Engine in Active/Passive mode | This is the only configuration supported with [NSX-ALB Essentials for Tanzu license][200] | No Active/Active deployments, BGP and ECMP support or automatic scaling of load balancers. Consider [NSX-ALB Enterprise license][200] for these features |
+| `TZEDG-ALL-EDGE-TKG-01` | Use a single node control plane (dev plan) for TKG Workload cluster. | Applications at the Edge being mostly static, the impact of the unavailability of the control plane is low. vSphere HA can bring back up the control plane reasonably quickly to not be noticed.<br />It reduces the resource overhead.<br />It is safer when there are less than 3 physical hosts (with multiple control plane nodes, the loss of 2 nodes, hosted on one physical host, would result in the loss of the cluster due to etcd quorum loss) | A physical host failure could result in the temporary unavailability of the Kubernetes control plane until the control plane node is restarted by vSphere HA. Data corruption of the control plane node will result in the loss of the Kubernetes cluster. |
+| `TZEDG-ALL-EDGE-LB-01` | Use a pair of NSX-ALB Service Engine in Active/Passive mode | This is the only configuration supported with [NSX-ALB Essentials for Tanzu license][200] | No Active/Active deployments, BGP and ECMP support or automatic scaling of load balancers. Consider [NSX-ALB Enterprise license][200] for these features |
 
 Table: Design Decisions
 
@@ -288,11 +291,11 @@ The minimum footprint consists of the following:
 | 1   | TKG Workload Cluster<br />Control Plane Node (small) | 2   | 4   | 40  |
 | 1 * host num | TKG Workload Cluster<br />Worker Node (small) | 2   | 4   | 40  |
 | 2   | NSX ALB Service Engine | 1   | 1   | 15  |
-| 1 * host num | VSAN File services | 4   | 8   | 12  |
+| 1 * host num | vSAN File services | 4   | 8   | 12  |
 
 Table: Edge Components sizing for Hub and Spoke topology
 
-As an example for an edge site with 2 hosts and VSAN, the minimal footprint would be:
+As an example for an edge site with 2 hosts and vSAN, the minimal footprint would be:
 
 - 16 vCPU
 - 30 GB of memory
@@ -314,13 +317,13 @@ The minimum footprint consists of the following:
 | 1   | TKG Workload Cluster<br />Control Plane Node (small) | 2   | 4   | 40  |
 | 1 * host num | TKG Workload Cluster<br />Worker Node (small) | 2   | 4   | 40  |
 | 2   | NSX ALB Service Engine | 1   | 1   | 15  |
-| 1 * host num | VSAN File services | 4   | 8   | 12  |
+| 1 * host num | vSAN File services | 4   | 8   | 12  |
 | 1   | vCenter Server 7 ([tiny][204]) | 2   | 12  | 579 |
 | 1   | NSX ALB Controller (tiny) | 4   | 12  | 128 |
 
 Table: Edge Components sizing for Hybrid topology
 
-As an example for an edge site with 3 hosts and VSAN, the minimal footprint would be:
+As an example for an edge site with 3 hosts and vSAN, the minimal footprint would be:
 
 - 28 vCPU
 - 66 GB of memory
@@ -330,9 +333,9 @@ As an example for an edge site with 3 hosts and VSAN, the minimal footprint woul
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-HYBRID-EDGE-LB-01 | Use a dedicated NSX-ALB controller per Edge site | Provide management capabilities at the edge when the edge site is disconnected. Without the controller at the edge, AKO cannot perform any changes. | Management & Resource overhead. Can be mitigated through automation |
-| TZEDG-HYBRID-EDGE-LB-02 | Use 1x NSX-ALB controller in the [smallest form factor][201] | Deploying and managing a 3-node NSX-ALB controller cluster represent a huge overhead in term of resources and management. Having one node with vSphere HA provides the right level of availability for an Edge location. The | 1x node with vSphere HA doesn’t protect against data corruption. In this case, it will requires to redeploy and reconfigure the AVI controller. This can be mitigated by regularly backing up the controller configuration on the main datacenter |
-| TZEDG-HYBRID-EDGE-INFRA-01 | Deploy vCenter at the Edge site | Provide management capabilities at the edge when the edge site is disconnected. CSI requires access to vCenter to work. | Management & Resource overhead. Can be mitigated through automation |
+| `TZEDG-HYBRID-EDGE-LB-01` | Use a dedicated NSX-ALB controller per Edge site | Provide management capabilities at the edge when the edge site is disconnected. Without the controller at the edge, AKO cannot perform any changes. | Management & Resource overhead. Can be mitigated through automation |
+| `TZEDG-HYBRID-EDGE-LB-02` | Use 1x NSX-ALB controller in the [smallest form factor][201] | Deploying and managing a 3-node NSX-ALB controller cluster represent a huge overhead in term of resources and management. Having one node with vSphere HA provides the right level of availability for an Edge location. The | 1x node with vSphere HA doesn’t protect against data corruption. In this case, it will requires to redeploy and reconfigure the AVI controller. This can be mitigated by regularly backing up the controller configuration on the main datacenter |
+| `TZEDG-HYBRID-EDGE-INFRA-01` | Deploy vCenter at the Edge site | Provide management capabilities at the edge when the edge site is disconnected. CSI requires access to vCenter to work. | Management & Resource overhead. Can be mitigated through automation |
 
 Table: Design Decisions
 
@@ -345,17 +348,6 @@ Additional containerized applications can be deployed at the edge through Tanzu 
 - **Pinniped** for authentication
 - **Prometheus / Grafana** for metric collections and monitoring
 
-| Extension | Memory Reservation | Memory Limit | CPU Reservation | CPU Limit |
-| --- | --- | --- | --- | --- |
-| contour | .   | .   | .   | .   |
-| harbor | .   | .   | .   | .   |
-| pinniped | .   | .   | .   | .   |
-| metric-server | .   | .   | .   | .   |
-| prometheus | .   | .   | .   | .   |
-| grafana | .   | .   | .   | .   |
-| tmc agents | 1446Mi | 2546Mi | 870m | 1803m |
-
-Table: Resources required for containerized tools
 
 ## Ingress and Load-Balancing at the edge
 
@@ -377,7 +369,7 @@ NSX Advanced Load Balancer can be used to provide HA for control plane endpoints
 
 As time of writing the only supported solution to provide Load-Balancing with TKG deployed on vSphere is NSX Advanced Load Balancer. Through the AKO architecture it easy and efficient to create and manage load balancer services across Workload Clusters.
 
-![464ec91366a4b9ec9273ddb6b0c87804.png](./img/tkg-edge/464ec91366a4b9ec9273ddb6b0c87804.png)
+![](./img/tkg-edge/464ec91366a4b9ec9273ddb6b0c87804.png)
 
 #### Considerations for Avi Service Engines
 
@@ -421,7 +413,7 @@ Tanzu Editions also includes [Contour](https://projectcontour.io/) for Kubernete
 
 [Harbor Container Registry](https://goharbor.io/) can be deployed to both the centralized datacenter as well as to each edge location.  Using Harbor, replications can be configured such that all container images which get pushed into the centralized harbor are automatically replicated to each edge. Each edge deployment can reference its local harbor for efficient network resource utilization.
 
-![tkg-edge-harbor.drawio.png](./img/tkg-edge/tkg-edge-harbor.drawio.png)
+![](./img/tkg-edge/tkg-edge-harbor.drawio.png)
 
 Figure: Harbor registry federated topology
 
@@ -429,18 +421,18 @@ Figure: Harbor registry federated topology
 
 Schedule replication during low activity (outside of working hours)
 
-![f312de8ea37cad334af63d608a37f3d6.png](./img/tkg-edge/f312de8ea37cad334af63d608a37f3d6.png)
+![](./img/tkg-edge/f312de8ea37cad334af63d608a37f3d6.png)
 
 Figure: Harbor edge site replications
 
-![0547aae877598d9975f066451cb5b268.png](./img/tkg-edge/0547aae877598d9975f066451cb5b268.png)
+![](./img/tkg-edge/0547aae877598d9975f066451cb5b268.png)
 Figure: Harbor registry webhooks for edge site continuous delivery
 
 ### At the Edge
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-EDGE-REG-01 | Use Pull | more resilient, since the edge Harbors can pull in their own time, and it keeps configuration simple | configuration needs to be done at the edge site which might implies |
+| `TZEDG-EDGE-REG-01` | Use Pull | more resilient, since the edge Harbors can pull in their own time, and it keeps configuration simple | configuration needs to be done at the edge site which might implies |
 
 Table: Design Decisions
 
@@ -463,7 +455,7 @@ The initial deployment is meant to performed through a GitOps process. Leveragin
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-ALL-EDGE-INFRA-02 | Separate each edge site in a different vSphere Datacenter | A vSphere Datacenter provides a clear boundary in vCenter at the folder level (host, vm, datastore, network). This boundary avoid name collision and ensure resources stay local to the site like templates. It is also easier to segregate access if needed. | NSX-ALB considers a vSphere Datacenter as a hard boundary that requires the creation of an endpoint for each one. |
+| `TZEDG-ALL-EDGE-INFRA-02` | Separate each edge site in a different vSphere Datacenter | A vSphere Datacenter provides a clear boundary in vCenter at the folder level (host, vm, datastore, network). This boundary avoid name collision and ensure resources stay local to the site like templates. It is also easier to segregate access if needed. | NSX-ALB considers a vSphere Datacenter as a hard boundary that requires the creation of an endpoint for each one. |
 
 Table: Design Decision
 
@@ -519,7 +511,7 @@ These newly created NSX ALB configuration elements should be used to deploy the 
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-HUBSPOK-EDGE-LB-01 | Create a no-orchestrator cloud endpoint in central NSX-ALB controller for each edge location | Scalability with vCenter cloud endpoint is limited to 10 endpoints while no-orchestrator endpoint scale up to 100. <br />No-orchestrator cloud endpoint is less impacted by latency, unreliable network nor disconnection. | NSX-ALB Service Engines have to be managed outside of NSX-ALB. |
+| `TZEDG-HUBSPOK-EDGE-LB-01` | Create a no-orchestrator cloud endpoint in central NSX-ALB controller for each edge location | Scalability with vCenter cloud endpoint is limited to 10 endpoints while no-orchestrator endpoint scale up to 100. <br />No-orchestrator cloud endpoint is less impacted by latency, unreliable network nor disconnection. | NSX-ALB Service Engines have to be managed outside of NSX-ALB. |
 
 Table: Design Decision
 
@@ -527,7 +519,7 @@ Table: Design Decision
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-HYB-EDGE-LB-01 | Create a vCenter-orchestrated cloud endpoint in NSX-ALB | vCenter-orchestrated cloud endpoint will simplify the deployment and the lifecycle of Service Engine. Since each Edge location has its own NSX-ALB controller, there are no concerns regarding scalability and availability during network disconnection | N/A |
+| `TZEDG-HYB-EDGE-LB-01` | Create a vCenter-orchestrated cloud endpoint in NSX-ALB | vCenter-orchestrated cloud endpoint will simplify the deployment and the lifecycle of Service Engine. Since each Edge location has its own NSX-ALB controller, there are no concerns regarding scalability and availability during network disconnection | N/A |
 
 Table: Design Decision
 
@@ -535,14 +527,14 @@ Table: Design Decision
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| TZEDG-ALL-EDGE-TKG-02 | Disable MHC | After the Edge location is network isolated from the main datacenter, the TKG Management cluster might recreate the whole cluster causing an outage at the edge | Kubernetes node that are stopped or unresponsive won't be automatically replaced |
-| TZEDG-ALL-EDGE-TKG-03 | Use Kube-VIP for the control plane API endpoint | Avoid unnecessary complexity since we have only one control-plane node. <br />Eliminate the network dependency to the main site (AKO needs connectivity to the main site) | N/A |
+| `TZEDG-ALL-EDGE-TKG-02` | Disable MHC | After the Edge location is network isolated from the main datacenter, the TKG Management cluster might recreate the whole cluster causing an outage at the edge | Kubernetes node that are stopped or unresponsive won't be automatically replaced |
+| `TZEDG-ALL-EDGE-TKG-03` | Use Kube-VIP for the control plane API endpoint | Avoid unnecessary complexity since we have only one control-plane node. <br />Eliminate the network dependency to the main site (AKO needs connectivity to the main site) | N/A |
 
 Table: Design Decision
 
 <!-- /* cSpell:disable */ -->
 
-```yaml
+```bash
 #! ---------------------------------------------------------------------
 #! Basic cluster creation configuration
 #! ---------------------------------------------------------------------
@@ -613,7 +605,6 @@ OS_ARCH: amd64
 #! ---------------------------------------------------------------------
 
 ENABLE_AUTOSCALER: false
-
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -764,7 +755,7 @@ In the Tanzu Mission Control resource hierarchy, you can specify policies at the
 
 With TMC you can group clusters based on different types of locations and manage fleets of clusters instead of managing them individually. When we are dealing with large scale edge deployments this becomes very critical as customers might have two or three different types of locations. Being able to group them with cluster groups, looking at individual fleet health, performing collective operations is key for edge deployments. Figure X shows an overview of the cluster group.
 
-![ce29c1e20bf0ecc1ffe2dfdc658cb585.png](./img/tkg-edge/ce29c1e20bf0ecc1ffe2dfdc658cb585.png)
+![](./img/tkg-edge/ce29c1e20bf0ecc1ffe2dfdc658cb585.png)
 
 Figure: Managing the edge cluster fleet using TMC
 
@@ -780,11 +771,11 @@ Policies allow you to provide a set of rules that govern your organization and a
 
 Figure X and Figure X below showcase how customers can create policies and use the policy insights page to review if any of the policies are violated across all the edge deployments.
 
-![a93e92ad27bee927a258c5447a3ed78d.png](./img/tkg-edge/a93e92ad27bee927a258c5447a3ed78d.png)
+![](./img/tkg-edge/a93e92ad27bee927a258c5447a3ed78d.png)
 
 Figure: Using TMC to manage edge cluster policies
 
-![559bfe3fa044f89dab66d033ee2168cf.png](./img/tkg-edge/559bfe3fa044f89dab66d033ee2168cf.png)
+![](./img/tkg-edge/559bfe3fa044f89dab66d033ee2168cf.png)
 
 Figure: Policy reporting across all edge locations
 
@@ -848,7 +839,7 @@ The metrics can originate from your infrastructure or application. Kubernetes cl
 
 Tanzu Observability is operated following a SaaS model, so outbound internet connectivity is required at edge sites.
 
-![b24ac18e57b053174782c87492b3644d.png](./img/tkg-edge/b24ac18e57b053174782c87492b3644d.png)
+![](./img/tkg-edge/b24ac18e57b053174782c87492b3644d.png)
 
 Figure: Edge Kubernetes Cluster fleet observability
 
