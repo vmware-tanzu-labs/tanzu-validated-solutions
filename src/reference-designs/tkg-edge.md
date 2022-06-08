@@ -245,7 +245,7 @@ All the redundant components should be evenly spread across the available ESX ho
 #### GPU consideration
 
 A common reason for having computing power at the Edge is the ability to process data before sending it back to the main datacenter. GPU capabilities often play a key role in data processing and being able to leverage this compute capacity at the Edge helps improving performance, latency and save on network bandwidth. While it is not going to be explored in this design, the Edge Compute Stack has the ability to provide GPU compute power to workloads at the Edge. There are three ways of consuming GPU that could be used at the Edge.
-While all these solutions are working with TKG, they require VMware Professionnal Services to be engaged.
+While all these solutions are working with TKG, they require VMware Professional Services to be engaged.
 
 ##### GPU Passthrough
 
