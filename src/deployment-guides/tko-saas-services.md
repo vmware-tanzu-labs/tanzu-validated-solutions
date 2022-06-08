@@ -64,15 +64,13 @@ After deploying your management cluster through the Tanzu Kubernetes Grid instal
 
 	     Example:
 
-	     <!-- /* cSpell:disable */ -->
-         ```
-         tanzu cluster kubeconfig get tkg-mgmt -n tkg-system --admin
+        ```
+        tanzu cluster kubeconfig get tkg-mgmt -n tkg-system --admin
 
         Credentials of cluster 'tkg-mgmt' have been saved
 
         You can now access the cluster by running 'kubectl config use-context tkg-mgmt-admin@tkg-mgmt'
 	    ```
-	    <!-- /* cSpell:enable */ -->
 
 	- Switch to the management cluster context
 
@@ -153,7 +151,7 @@ You can register Tanzu Kubernetes Grid workload clusters for lifecycle managemen
 
 ___
 
-  ### <a id=configproxy> </a>Supplemental Information: Create a Proxy Configuration Object in Tanzu Mission Control
+  ### <a id="configproxy"> </a>Supplemental Information: Create a Proxy Configuration Object in Tanzu Mission Control
 
   If your Kubernetes clusters are behind a proxy server, you'll need a proxy configuration object to communicate with them. To create a proxy configuration object in Tanzu Mission Control, follow these steps:
 
