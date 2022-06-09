@@ -1,4 +1,4 @@
-# VMware Tanzu for Kubernetes Operations Reference Architecture 1.4
+# VMware Tanzu for Kubernetes Operations Reference Architecture 1.5
 
 Kubernetes is great platform that provides development teams with a single API to deploy, manage, and run applications. However, running, maintaining, and securing Kubernetes is a complex task. VMware Tanzu for Kubernetes Operations simplifies Kubernetes operations. It determines what base OS instances to use, which Kubernetes Container Network Interface (CNI) and Container Storage Interfaces (CSI) to use, how to secure the Kubernetes API, and much more.  It monitors, upgrades, and backs up clusters and helps teams provision, manage, secure, and maintain Kubernetes clusters on a day-to-day basis.
 
@@ -34,13 +34,8 @@ The following components are used in the reference architecture:
 * **[Harbor Image Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html)** - Provides a centralized location to push, pull, store, and scan container images used in Kubernetes workloads. It supports storing artifacts such as Helm Charts and includes enterprise-grade features such as RBAC, retention policies, automated garbage cleanup, and docker hub proxying.
 * **[Multus CNI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html)** - Enables attaching multiple network interfaces to pods. Multus CNI is a container network interface (CNI) plugin for Kubernetes that lets you attach multiple network interfaces to a single pod and associate each with a different address range.  
 
-
 ## Reference Designs
 The following documents provide reference designs for specific infrastructure providers. The reference designs are based on the high-level architecture.
 
-- [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](tko-on-vmc-aws.md)
-- [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](tko-on-vsphere.md)
-- [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Reference Design](tko-on-vsphere-nsx.md)
 - [VMware Tanzu for Kubernetes Operations on AWS Reference Design](tko-on-aws.md)
 - [VMware Tanzu for Kubernetes Operations on Azure Reference Design](tko-on-azure.md)
-- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](tko-on-vsphere-with-tanzu.md)
