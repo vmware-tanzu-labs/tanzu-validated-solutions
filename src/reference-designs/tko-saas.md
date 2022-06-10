@@ -83,7 +83,7 @@ You can configure Tanzu Observability with an array of capabilities. The followi
 |**Plugin**|**Purpose**|**Key Metrics**|**Example Metrics**|
 | :- | :- | :- | :- |
 |Telegraf for vSphere|Collect metrics from vSphere|ESXi Server and VM performance & resource utilization|vSphere VM, Memory and Disk usage and performance|
-|Wavefront Kubernetes Integration|Collect metrics from Kubernetes clusters and pods|Kubernetes container and POD statistics|<p>POD CPU usage rate</p><p>Daemonset ready stats</p>|
+|Wavefront Kubernetes Integration|Collect metrics from Kubernetes clusters and pods|Kubernetes container and POD statistics|<p>POD CPU usage rate</p><p>`DaemonSet` ready stats</p>|
 |Wavefront by VMware for Istio|Adapts Istio collected metrics and forwards to Wavefront|Istio metrics including request rates, trace rates, throughput, etc.|Request rate (Transactions per Second)|
 
 Some sample dashboards are shown below. Tanzu Observability can display metric data from the full stack of application elements from the platform (VMware ESXi servers), to the virtual environment, to the application environment (Kubernetes), and down to the various components of an application (APM).
