@@ -32,6 +32,7 @@ Ensure that your environment has the following general requirements:
 
 The following table provides example entries for the required port groups. Create network entries with the port group name, VLAN ID, and CIDRs that are specific to your environment.
 
+
 | Network Type                 | DHCP Service              | Description & Recommendations            |
 | ---------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | NSX ALB Management Network   | Optional                  | NSX ALB controllers and SEs will be attached to this network. <br> Use static IPs for the NSX ALB controllers. <br> The Service Engine’s management network can obtain IP from DHCP.                                                                                  |
@@ -47,6 +48,7 @@ This document uses the following port groups, subnet CIDR’s and VLANs. Replace
 | TKG Management Network     | TKG-Management  | 1681 | 172.16.81.1/27 | Yes          | No                                  |
 | TKG Workload Network01     | TKG-Workload    | 1682 | 172.16.82.1/24 | Yes          | No                                  |
 | TKG VIP Network            | TKG-Cluster-VIP | 1683 | 172.16.83.1/24 | No           | 172.16.83.101 - 172.16.83.250|
+
 
 After you have created the required networks, the network section in your vSphere environment must have the port groups as shown in the following screen capture:
 
@@ -146,13 +148,17 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
 1. Click **Save** to exit the post-deployment configuration wizard.
    You are directed to a Dashboard view on the controller.
 
-1. Navigate to **Infrastructure > Clouds** and edit **Default-Cloud**.
+1. Navigate to **Infrastructure > Clouds** and click on the gear to convert the Cloud Type **Default-Cloud**.
+   Select **VMware vCenter/vSphere ESX** as the infrastructure type and click **Yes, Continue**.
 
-  ![](./img/tko-on-vsphere-with-tanzu/image7.jpg)
+  ![](./img/tko-on-vsphere-with-tanzu/image100.png)
 
-1. Select **VMware vCenter/vSphere ESX** as the infrastructure type and click **Next**.
+1. Configure the Infrastructure settings.
+   1. Provide the Username, Password, and DNS or IP address for your vCenter
+      instance.
+   2. Leave everything else as is, then click "Next"
 
-  ![](./img/tko-on-vsphere-with-tanzu/image13.jpg)
+   ![](./img/tko-on-vsphere-with-tanzu/image101.png)
 
 1. Configure the Data Center settings.
 
@@ -162,7 +168,7 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
       - Select **DHCP Enabled** if DHCP is available on the vSphere port groups.
       - Leave the option unselected if you want the Service Engine interfaces to use only static IP addresses. You can configure them individually for each network.
 
-   1. For Virtual Service Placement, select **Prefer Static Routes vs Directly Connected Network**
+   1. For Virtual Service Placement, select **Prefer Static Routes vs Directly Connected Network**, then click **Next**.
 
     ![](./img/tko-on-vsphere-with-tanzu/image77.jpg)
 
@@ -171,7 +177,7 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
    - Select the **Management Network**. This network interface is used by the Service Engines to connect with the Controller.
    - Leave the **Template Service Engine Group** empty.
    - **Management Network IP Address Management**: Select **DHCP Enabled** if DHCP is available on the vSphere port groups.
-   - If DHCP is not available, enter the **IP Subnet**, IP address range (**Add Static IP Address Pool**), **Default Gateway** for the Management Network.
+   - If DHCP is not available, enter the **IP Subnet**, IP address range (**Add Static IP Address Pool**), **Default Gateway** for the Management Network, then click **Next**.
 
    ![](./img/tko-on-vsphere-with-tanzu/image16.jpg)
 
@@ -184,6 +190,12 @@ After the Controller VM is deployed and powered-on, configure the Controller VM 
   Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. To configure licensing, navigate to the **Administration > Settings > Licensing** and apply the license key. If you have a license file instead of a license key, click the **Upload from Computer** link.
 
   ![](./img/tko-on-vsphere-with-tanzu/image2.jpg)
+
+
+  > If you are running through this guide in a test environment and do not have
+  > a license to apply, select "Enterprise Tier" to use a 60-day trial license.
+  >
+  > ![](./img/tko-on-vsphere-with-tanzu/image104.png)
 
 1. Configure NTP settings if you want to use an internal NTP server.
 
@@ -230,9 +242,32 @@ To configure the Controller cluster,
 
   The Controller cluster setup starts. The Controller nodes are rebooted in the process. It takes approximately 10-15 minutes for cluster formation to complete.
 
-  You are automatically logged out of the controller node you are currently logged in. Enter the cluster IP in a browser to see the cluster formation task details.
+  You are automatically logged out of the controller node you are currently logged into. Enter the cluster IP in a browser to see the cluster formation task details.
 
   ![](./img/tko-on-vsphere-with-tanzu/image35.jpg)
+
+  > ✅ You might not see the image above while the cluster initializes. This is
+  > okay. You can use this terminal command to wait for the controller to become
+  > available:
+  >
+  > ```sh
+  > # Replace with your actual cluster IP
+  > controller_cluster_ip=172.16.80.10 
+  >
+  > while ! nc -z "$controller_cluster_ip";
+  > do
+  >   idx=$((idx+1));
+  >   printf "INFO: Waiting for Avi cluster to become available \
+  > (%s secs)\r" "$idx";
+  >   sleep 1;
+  > done
+  > printf "\n"
+  > ```
+
+  Once the controller cluster has been deployed, visit **Administration** >
+  **Controller** > **Nodes** to ensure that all nodes are green.
+
+  ![](./img/tko-on-vsphere-with-tanzu/image105.png)
 
   After the Controller cluster is deployed, use the Controller cluster IP for doing any additional configuration. Do not use the individual Controller node IP.
 
@@ -318,6 +353,10 @@ This document uses an IP pool for the VIP network.
 To configure the VIP network,
 
 1. Navigate to **Infrastructure > Networks** and locate the network that provides the virtual IP addresses.
+
+> Navigate to **Infrastructure** > **Cloud Resources** > **Networks** if you do
+> not see **Networks** in the top-level left nav.
+
 1. Click the edit icon to edit the network settings.
 
   ![](./img/tko-on-vsphere-with-tanzu/image22.jpg)
@@ -325,6 +364,14 @@ To configure the VIP network,
 1. Click **Add Subnet**.
 
 1. In **IP Subnet**, specify the VIP network subnet CIDR.
+
+> ✅ The Avi controller will attempt to find a subnet corresponding to the
+> network selected. There is a chance that its CIDR range or netmask
+> might be incorrect.
+>
+> If that's the case, check the
+> "Exclude Discovered Subnets for Virtual Service Placement" checkbox
+> to remove this discovered subnet from the list of available subnets.
 
 1. Click **Add Static IP Address Pool** to specify the IP address pool for the VIPs and Service Engine. The range must be a subset of the network CIDR configured in **IP Subnet**.
   ![](./img/tko-on-vsphere-with-tanzu/image21.jpg)
@@ -408,6 +455,10 @@ To deploy the Supervisor Cluster,
 1. Log in to the vSphere client and navigate to **Menu > Workload Management** and click **Get Started**.
 
   ![](./img/tko-on-vsphere-with-tanzu/image60.jpg)
+
+  > ✅ Add the license key for your vSphere with Tanzu installation above the
+  > Get Started box if prompted, or provide your information below if you do not
+  > have one yet to enable a trial license.
 
 1. Select the vCenter Server and Network.
 
@@ -581,6 +632,9 @@ To add a VM class to a namespace,
 
 1. From the list of the VM Classes, select the classes that you want to include in your namespace.
 
+   > ⚠️  Do not select the `small` or `xsmall` classes, as these are not large
+   > enough to run Tanzu Service Mesh components.
+
    ![](./img/tko-on-vsphere-with-tanzu/image47.jpg) 
 
 1. Click **Ok**.  
@@ -642,8 +696,6 @@ You can gather this information by running the following commands:
 
    The following example YAML is the minimal configuration required to provision a Tanzu Kubernetes cluster.
 
-  <!-- /* cSpell:disable */ -->
-
    ```yaml
   apiVersion: run.tanzu.vmware.com/v1alpha2
   kind: TanzuKubernetesCluster
@@ -654,21 +706,28 @@ You can gather this information by running the following commands:
     topology:
       controlPlane:
         replicas: 3
-        vmClass: best-effort-large
-        storageClass: vsan-default-storage-policy
+        vmClass: best-effort-large # or the VM class binding you'd like to use.
+        storageClass: vsan-default-storage-policy # or the storage class you'd like to use.
         tkr:
           reference:
           name: v1.21.2---vmware.1-tkg.1.ee25d55
       nodePools:
        - name: worker-pool01
-         replicas: 3
-         vmClass: best-effort-large
-         storageClass: vsan-default-storage-policy
+         replicas: 6
+         vmClass: best-effort-large # or the VM class binding you'd like to use.
+         storageClass: vsan-default-storage-policy # or the storage class you'd like to use.
          tkr:
            reference:
              name: v1.21.2---vmware.1-tkg.1.ee25d55
   ```
-  <!-- /* cSpell:enable */ -->
+
+  > ⚠️  If you receive `this request is invalid` after applying this YAML with
+  > `kubectl apply`, ensure that your TKr release, virtual machine class, and
+  > storage class are valid.
+
+  > ⚠️  If you receive `this request is invalid` after applying this YAML with
+  > `kubectl apply`, ensure that your TKr release, virtual machine class, and
+  > storage class are valid.
 
 ## <a id=deploy-workload-cluster> </a>Deploy Tanzu Kubernetes Clusters (Workload Cluster)
 1. Customize the cluster as needed by referring to the full list of [cluster configuration parameters](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-31BF8166-5FC8-4D43-933D-5797F3BE4A36.html)
@@ -757,27 +816,18 @@ Do the following to register the Supervisor Cluster with Tanzu Mission Control:
   ![](./img/tko-on-vsphere-with-tanzu/image57.jpg)
 
 1. Prepare a YAML file with the following content to install the Tanzu Mission Control agent on the management cluster.
-  <!-- /* cSpell:disable */ -->
   ```yaml
   # vi tmc-registration.yaml
-
   apiVersion: installers.tmc.cloud.vmware.com/v1alpha1
-
   kind: AgentInstall
-
   metadata:
-
       name: tmc-agent-installer-config
-
       namespace: <tmc namespace>
-
   spec:
-
       operation: INSTALL
-
       registrationLink: <TMC-REGISTRATION-URL>
   ```
-  <!-- /* cSpell:enable */ -->
+
 1. Install the Tanzu Mission Control agent using kubectl.
 
   `kubectl create -f tmc-registration.yaml`
@@ -821,6 +871,70 @@ You can view the workload clusters associated with a Supervisor Cluster under th
 1. Verify that the workload cluster is in a ready state and showing as a managed cluster.
 
   ![](./img/tko-on-vsphere-with-tanzu/image78.jpg)
+
+#### Allow TMC-created service accounts to create `Pod`s
+
+> [Source](https://www.unknownfault.com/posts/podsecuritypolicy-unable-to-admit-pod/)
+
+Tanzu Kubernetes Clusters come with a `vmware-system-privileged`
+`PodSecurityPolicy` (PSP) that prevents `Pod`s from being scheduled except by service
+accounts that are bound to this PSP by way of a namespaced `RoleBinding` or a
+cluster-wide `ClusterRoleBinding`. Tanzu Mission Control allows you to create
+service accounts for packages installed through it. However, because these
+accounts are not bound to this PSP, `Pod`s provisioned by these packages never
+get scheduled, causing TMC to time out during the installation.
+
+As a workaround, create a `ClusterRoleBinding` allowing any authenticated
+service accounts to access the `vmware-system-privileged` PodSecurityPolicy:
+
+```sh
+kubectl apply -f <<-EOF
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: administrator-cluster-role-binding
+roleRef:
+  kind: ClusterRole
+  name: psp:vmware-system-privileged
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: Group
+  name: system:authenticated
+  apiGroup: rbac.authorization.k8s.io
+EOF
+```
+
+If this is too permissive, you can also create a namespace into which your
+package will be installed, then use a `RoleBinding` to bind the namespace's
+`default` service account to this PSP:
+
+```sh
+kubectl create ns package-namespace &&
+  kubectl apply -f <<-EOF
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rolebinding-cluster-user-administrator
+  namespace: package-namespace
+roleRef:
+  kind: ClusterRole
+  name: edit
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: default
+EOF
+```
+
+Note that you'll need to provide the namespace and service account when
+installing the package. This is demonstrated in the image below.
+
+![](./img/tko-on-vsphere-with-tanzu/image110.png)
+
+If you are not able to provide the name of a service account in advance,
+list the service accounts in the namespace with `kubectl get sa -n $NAMESPACE`,
+select the most recently created service account, then run the commands above,
+replacing `default` with the service account you selected.
 
 ### Tanzu Observability
 
@@ -952,33 +1066,20 @@ The following steps describe the workflow for installing the user-managed packag
   By default, the newly created workload cluster does not have a cluster role binding that grants access to authenticated users to install packages using the default PSP `vmware-system-privileged`.
 
    1. Create a role binding deployment YAML as follows:
-      <!-- /* cSpell:disable */ -->
       ``` yaml
       kind: ClusterRoleBinding
-
       apiVersion: rbac.authorization.k8s.io/v1
-
       metadata:
-
           name: tkgs-rbac
-
       roleRef:
-
           kind: ClusterRole
-
           name: psp:vmware-system-privileged
-
           apiGroup: rbac.authorization.k8s.io
-
       subjects:
-
         - kind: Group
-
           apiGroup: rbac.authorization.k8s.io
-
           name: system:authenticated    
       ```
-      <!-- /* cSpell:enable */ -->
 
   1. Apply role binding.
 
@@ -1021,3 +1122,34 @@ The following steps describe the workflow for installing the user-managed packag
 1. [Install Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html).
 
 1. [Install Harbor Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html).
+
+## Troubleshooting
+
+### The Supervisor Cluster does not come online
+
+The Supervisor Cluster (SV) provisioning process is orchestrated by vCenter itself.
+When one creates a new SV from the Workload Management pane, the `wcp` service
+in the vCenter appliance initiates a workflow that confirms credentials, uses
+the ESX Agent Manager to provision the control plane VMs, and monitors the
+configuration of Kubernetes components within the control plane as well as the
+creation of any load balancer VIPs assigned to the cluster.
+
+Unfortunately, the UI does not provide a view into this process. To see and
+troubleshoot this process for yourself, you will need to SSH into the vCenter
+appliance and watch the following logs:
+
+- `/var/log/vmware/wcp/wcpsvc.log`
+- `/var/log/vmware/vpxd/vpxd.log`.
+
+If you are using Avi as your load balancer, you can also view the log files
+within `/opt/avi/log` to view information about Service Engine provisioning and
+VIP assignment.
+
+Common causes for the SV not coming up are:
+
+- Lack of resources within the vSphere cluster into which SV control plane VMs
+  are getting placed
+- Incorrect Avi credentials or certificate
+- An invalid IPAM profile was provided to the Avi Service Engine group
+- Firewall preventing TCP/6443 within the management cluster network from being
+  reachable within the Cluster VIP or Avi networks.

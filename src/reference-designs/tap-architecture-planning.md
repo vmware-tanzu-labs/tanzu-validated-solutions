@@ -3,7 +3,7 @@ This architecture gives you a path to creating a production deployment of Tanzu 
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
-![](img/tap-architecture-planning/overview.png)
+![](img/tap-architecture-planning/overview.jpg)
 <!-- https://lucid.app/lucidchart/313468a7-da40-4872-9075-cd37224c5e2f/ -->
 
 ### Cluster Layout
@@ -30,7 +30,7 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 #### Recommendations
 * Spread across three Availability Zones (AZs) for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
 
 The Build Cluster includes the following packages:
 ```
@@ -63,7 +63,6 @@ excluded_packages:
  - cnrs.tanzu.vmware.com
  - ootb-delivery-basic.tanzu.vmware.com
  - developer-conventions.tanzu.vmware.com
- - image-policy-webhook.signing.apps.tanzu.vmware.com
  - learningcenter.tanzu.vmware.com
  - workshops.learningcenter.tanzu.vmware.com
  - services-toolkit.tanzu.vmware.com
@@ -85,7 +84,7 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Run Cluster includes the following packages:
 ```
@@ -140,7 +139,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
 * Utilize a PostgreSQL database for storing user preferences and manually created entities
 
 The View Cluster includes the following packages:
@@ -190,7 +189,7 @@ excluded_packages:
 ### Iterate Cluster Requirements
 The Iterate Cluster is for "inner loop" development iteration. Developers connect to the Iterate Cluster via their IDE to rapidly iterate on new software features. The Iterate Cluster operates distinctly from the outer loop infrastructure. Each developer should be given their own namespace within the Iterate Cluster during their platform onboarding.
 
-![](img/tap-architecture-planning/iterate-cluster.png)
+![](img/tap-architecture-planning/iterate-cluster.jpg)
 <!-- https://lucid.app/lucidchart/40663cc1-55aa-4892-ae23-1f462d39f262 -->
 
 #### Kubernetes Requirements
@@ -202,7 +201,7 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Iterate Cluster includes the following packages:
 ```
@@ -288,18 +287,18 @@ Services can be deployed directly into the same cluster running Tanzu Applicatio
 
 The following diagram shows In-Cluster services with different namespaces.
 
-![](img/tap-architecture-planning/in-cluster.png)
+![](img/tap-architecture-planning/in-cluster.jpg)
 <!-- slides 80-82 https://onevmw-my.sharepoint.com/:p:/g/personal/mijames_vmware_com/EYK5tKWk83RFia7QHHkaAj0BUnnhenCjlto4qpYDY_ZyFw?e=NhmLnZ -->
 
 ### External Cluster
 External clusters allow services to have different infrastructure, security, and scaling requirements. External services clusters are the recommended way to provide rapid service provisioning to platform users.
 
-![](img/tap-architecture-planning/external-cluster.png)
+![](img/tap-architecture-planning/external-cluster.jpg)
 
 ### External Injected
 Applications that consume services that do not adhere to the Kubernetes service binding specification require the usage of a K8s secret, implemented in the same app deployment containing the necessary connection details. This method provides the most flexibility and makes it possible to consume legacy services.
 
-![](img/tap-architecture-planning/external-injected.png)
+![](img/tap-architecture-planning/external-injected.jpg)
 
 ## Monitoring
 The following metrics should be observed. If the values exceed service level objectives, the clusters should be scaled or other actions taken.

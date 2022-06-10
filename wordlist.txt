@@ -60,4 +60,9 @@ VNET
 TKG
 NSXT
 autoscaler
-Daemonset
+Antrea
+VXLAN
+Geneve
+SR-IOV
+DPDK
+SCTP
