@@ -26,8 +26,7 @@ Click on the Enable button in the confirmation dialog page.
 
 It takes roughly 5-10 minutes to enable data protection on a Kubernetes cluster. Tanzu Mission Control creates a namespace named Velero and installs Velero related Kubernetes objects in the workload cluster.
 
-<!-- /* cSpell:disable */ -->
-```
+```bash
 root@arcas [ ~ ]# kubectl get all -n velero
 NAME                          READY   STATUS    RESTARTS   AGE
 pod/restic-nfbpl              1/1     Running   0          44s
@@ -44,7 +43,6 @@ deployment.apps/velero   1/1     1            1           71s
 NAME                                DESIRED   CURRENT   READY   AGE
 replicaset.apps/velero-57cdf5f99f   1         1         1       72s
 ```
-<!-- /* cSpell:enable */ -->
 
 **Configure Backup**
 
