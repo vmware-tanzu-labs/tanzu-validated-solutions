@@ -86,20 +86,22 @@ After installing Contour, ensure that the installation status for the Contour pa
 
 To install the Harbor package, repeat the steps for package installation. An example YAML file for customizing Harbor deployment follows.
 
+**Note**: you will need to provide credentials where indicated.
+
 ```yaml
 hostname: registry.tanzu.lab
 enableContourHttpProxy: true
-harborAdminPassword: VMware1!
-secretKey: aLx51NYPCe32WTbP
+harborAdminPassword: <insert harborAdminPassword>
+secretKey: <insert secretKey>
 database:
-  password: Vk13YXJlMSE=
+  password: <insert database.password>
 core:
-  secret: 37hn3B18aHiK7B9y
-  xsrfKey: yJMf2aPfuBlbA80
+  secret: <insert core.secret>
+  xsrfKey: <insert core.xsrfKey>
 jobservice:
-  secret: xIPQNFnz4PZbAmQ1
+  secret: <insert jobservice.secret>
 registry:
-  secret: 4ajswnj9eSBCMny8
+  secret: <insert registry.secret>
 notary:
   enabled: true
 trivy:
@@ -209,7 +211,7 @@ fluent_bit:
         Host            data.mgmt.cloud.vmware.com
         Port            443
         URI             /le-mans/v1/streams/ingestion-pipeline-stream
-        Header          Authorization Bearer Sl0dzovlCKArhgyGdbvC8M9C7tfvT9Y5
+        Header          Authorization Bearer <insert bearer token>
         Format          json
         tls             On
         tls.verify      off
