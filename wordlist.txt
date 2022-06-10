@@ -63,7 +63,6 @@ autoscaler
 Antrea
 VXLAN
 Geneve
-SRIOV
+SR-IOV
 DPDK
-addressess
 SCTP

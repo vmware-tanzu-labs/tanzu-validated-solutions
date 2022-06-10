@@ -173,7 +173,7 @@ Each CNI is suitable for a different use case. The following table lists some co
 | :- | :- | :- |
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p></p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>Pros</p><p>- Antrea leverages Open vSwitch as the networking data plane. Open vSwitch supports both Linux and Windows.</p><p>- VMware supports the latest conformant Kubernetes and stable releases of Antrea.</p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for Network Policies</p><p>- High network performance</p><p>- SCTP Support</p><p>Cons</p><p>- No multicast support</p><p></p>|
-|Multus|Multus CNI can give us multiple interfaces for each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces according to the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Each interface can have its own security policy.</p><p>- Supports SRIOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud-native and NFV-based applications in Kubernetes.</p>|
+|Multus|Multus CNI can give us multiple interfaces for each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces according to the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Each interface can have its own security policy.</p><p>- Supports SR-IOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud-native and NFV-based applications in Kubernetes.</p>|
 
 ## Networking for vSphere with Tanzu
 
@@ -293,7 +293,7 @@ The following table provides a list of firewall rules based on the assumption th
 |TKG Cluster VIP Range|TKG Workload Cluster CIDR|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|To interact with workload cluster and K8s applications|
 |vCenter Server|TKG Management Cluster CIDR|<p>TCP:443</p><p>TCP:6443</p><p>TCP:22 (optional)</p>||
 
-**Note:** For TMC, if the firewall does not allow wildcards, all IP addressess of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com need to be whitelisted.
+**Note:** For TMC, if the firewall does not allow wildcards, all IP addresses of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com need to be whitelisted.
 
 # Installation Experience
 
