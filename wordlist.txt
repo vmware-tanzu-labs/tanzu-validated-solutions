@@ -60,3 +60,11 @@ VNET
 TKG
 NSXT
 autoscaler
+Alertmanager
+datasource
+Antrea
+VXLAN
+Geneve
+SR-IOV
+DPDK
+SCTP
