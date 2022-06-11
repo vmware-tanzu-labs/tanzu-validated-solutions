@@ -1,0 +1,2055 @@
+{
+  "name": "TKO K8S Resource Utilization Dashboard",
+  "url": "TKO-Resource-Utilization-Dashboard",
+  "description": "Dashboard to view Resource Utilization for Kubernetes Cluster",
+  "eventFilterType": "BYCHART",
+  "displayDescription": false,
+  "displaySectionTableOfContents": true,
+  "displayQueryParameters": true,
+  "sections": [
+    {
+      "name": "Kubernetes Resource Utilization Overview",
+      "id": "yYPem",
+      "rows": [
+        {
+          "charts": [
+            {
+              "anomalySeverity": "medium",
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "NONE",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1
+                ],
+                "y1Units": "",
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 0,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "displayConfidenceBounds": false,
+              "includeObsoleteMetrics": false,
+              "filterOutNonAnomalies": false,
+              "name": "",
+              "anomalySampleSize": "8",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Active Nodes",
+                  "commaDelimited": false
+                },
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 2,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "active_nodes",
+                  "query": "lag(10m, align(1m, count(ts(\"kubernetes.node.memory.working_set\", cluster=\"${cluster_name}\"))))",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection.",
+              "anomalyType": "both"
+            },
+            {
+              "anomalySeverity": "medium",
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(245,79,71,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "NONE",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1
+                ],
+                "y1Units": "",
+                "sparklineValueTextMapThresholds": [],
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 0,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "displayConfidenceBounds": false,
+              "includeObsoleteMetrics": false,
+              "filterOutNonAnomalies": false,
+              "name": "",
+              "anomalySampleSize": "8",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Inactive Nodes",
+                  "commaDelimited": false
+                },
+                "dashboardLayout": {
+                  "x": 2,
+                  "y": 0,
+                  "w": 2,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "inactive_nodes",
+                  "query": "lag(10m, default(0, align(1m, count(lowpass(1, ts(\"kubernetes.node.status.condition\", cluster=\"${cluster_name}\" and condition=\"Ready\"))))))",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection.",
+              "anomalyType": "both"
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": true,
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "groupBySource": false,
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "NONE",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1
+                ],
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "showLabels": true,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 0,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Namespaces",
+                  "commaDelimited": false
+                },
+                "dashboardLayout": {
+                  "x": 4,
+                  "y": 0,
+                  "w": 2,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "namespaces",
+                  "query": "lag(10m, count(align(60s, mean, count(ts(\"kubernetes.ns.memory.usage\" and cluster=\"${cluster_name}\"), cluster, namespace_name))))",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": true,
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "groupBySource": false,
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "NONE",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1
+                ],
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "showLabels": true,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 0,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Pods",
+                  "commaDelimited": false
+                },
+                "dashboardLayout": {
+                  "x": 6,
+                  "y": 0,
+                  "w": 3,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "pod_count",
+                  "query": "lag(10m, sum(align(60s, mean, ts(\"kubernetes.cluster.pod.count\" and cluster=\"${cluster_name}\"))))",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "NONE",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1
+                ],
+                "y1Units": "",
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 0,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Pod Containers",
+                  "commaDelimited": false
+                },
+                "dashboardLayout": {
+                  "x": 9,
+                  "y": 0,
+                  "w": 3,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "container_count",
+                  "query": "lag(10m, sum(align(60s, ts(\"kubernetes.cluster.pod_container.count\" and cluster=\"${cluster_name}\"))))",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            }
+          ],
+          "heightFactor": 80
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineDisplayPostfix": "%",
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)",
+                  "rgba(245,118,0,1)",
+                  "rgba(245,79,71,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "BACKGROUND",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1,
+                  80,
+                  90
+                ],
+                "y1Units": "",
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 1,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Node Memory Utilization Avg"
+                },
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 4,
+                  "w": 3,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "utilization",
+                  "query": "ts(\"kubernetes.node.memory.working_set\", cluster=\"${cluster_name}\")/ts(\"kubernetes.node.memory.node_allocatable\", cluster=\"${cluster_name}\")",
+                  "disabled": true,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                },
+                {
+                  "name": "avg_util",
+                  "query": "lag(10m, avg(${utilization}) * 100)",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "BACKGROUND",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1
+                ],
+                "y1Units": "",
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 0,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": "B",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Cluster Memory Usage"
+                },
+                "dashboardLayout": {
+                  "x": 3,
+                  "y": 4,
+                  "w": 3,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "memory_usage",
+                  "query": "lag(10m, sum(ts(\"kubernetes.cluster.memory.usage\", cluster=\"${cluster_name}\")))",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineDisplayPostfix": "%",
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)",
+                  "rgba(245,118,0,1)",
+                  "rgba(245,79,71,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "BACKGROUND",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1,
+                  80,
+                  90
+                ],
+                "y1Units": "",
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 1,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Node CPU Utilization Avg"
+                },
+                "dashboardLayout": {
+                  "x": 6,
+                  "y": 4,
+                  "w": 3,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "node_cpu",
+                  "query": "lag(10m, avg(align(60s, mean, ts(\"kubernetes.node.cpu.node_utilization\", cluster=\"${cluster_name}\"))) * 100)",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "sparklineDisplayFontSize": "150",
+                "fixedLegendFilterLimit": 5,
+                "sparklineDisplayPostfix": "%",
+                "sparklineValueColorMapColors": [
+                  "rgba(73,175,217,1)",
+                  "rgba(73,175,217,1)",
+                  "rgba(245,118,0,1)",
+                  "rgba(245,79,71,1)"
+                ],
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "sparklineFillColor": "rgba(0,0,0,0.2)",
+                "sparklineValueColorMapApplyTo": "BACKGROUND",
+                "windowing": "full",
+                "sparklineDisplayColor": "rgba(250,250,250,1)",
+                "sparklineSize": "BACKGROUND",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [
+                  1,
+                  80,
+                  90
+                ],
+                "y1Units": "",
+                "sparklineDisplayValueType": "VALUE",
+                "type": "sparkline",
+                "y1UnitAutoscaling": false,
+                "sparklineValueTextMapText": [
+                  "new highest"
+                ],
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "sparklineDisplayHorizontalPosition": "MIDDLE",
+                "sparklineLineColor": "rgba(0,0,0,0.3)",
+                "sparklineDecimalPrecision": 1,
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "",
+              "units": " ",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "singleStat": {
+                  "sparklineDisplayLabel": "A",
+                  "sparklineDisplaySubLabel": "Node Storage Utilization Avg"
+                },
+                "dashboardLayout": {
+                  "x": 9,
+                  "y": 4,
+                  "w": 3,
+                  "h": 4
+                },
+                "y0ScaleDecimal": false
+              },
+              "sources": [
+                {
+                  "name": "node_storage",
+                  "query": "ts(\"kubernetes.node.filesystem.usage\", cluster=\"${cluster_name}\") / ts(\"kubernetes.node.filesystem.limit\", cluster=\"${cluster_name}\")",
+                  "disabled": true,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                },
+                {
+                  "name": "avg_node_storage",
+                  "query": "lag(10m, avg(align(60s, mean, ${node_storage})) * 100)",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": "This metric has a 10 minute delay for cluster collection."
+            }
+          ],
+          "heightFactor": 80
+        }
+      ]
+    },
+    {
+      "name": "Nodes Resource Utilization",
+      "id": "SQk1b",
+      "rows": [
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "expectedDataSpacing": 120,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "nodename"
+                ],
+                "lineType": "linear",
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "type": "line",
+                "y1UnitAutoscaling": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "CPU Utilization by Node",
+              "units": "%",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 6,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.node.cpu.node_utilization\", cluster=\"${cluster_name}\") * 100)",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "querybuilderEnabled": false,
+                  "sourceDescription": ""
+                }
+              ],
+              "noDefaultEvents": false
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "expectedDataSpacing": 120,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "nodename"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "CPU Usage Rate by Node",
+              "units": "millicores",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 6,
+                  "y": 0,
+                  "w": 6,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "New Query",
+                  "query": "limit(250, ts(\"kubernetes.node.cpu.usage_rate\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "nodename"
+                ],
+                "lineType": "linear",
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "type": "line",
+                "y1UnitAutoscaling": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Memory Utilization by Node",
+              "units": "%",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 5,
+                  "w": 6,
+                  "h": 4
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.node.memory.working_set\", cluster=\"${cluster_name}\") / ts(\"kubernetes.node.memory.node_allocatable\", cluster=\"${cluster_name}\") * 100)",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "nodename"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Memory Usage by Node",
+              "units": "Bytes",
+              "summarization": "LAST",
+              "base": 0,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 6,
+                  "y": 5,
+                  "w": 6,
+                  "h": 4
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.node.memory.working_set\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 80
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "nodename",
+                  "resource_id"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "File System Usage By Node",
+              "units": "Bytes",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 9,
+                  "w": 4,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.node.filesystem.usage\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "nodename",
+                  "resource_id"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "File System - Available Storage by Node",
+              "units": "Bytes",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 4,
+                  "y": 9,
+                  "w": 4,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.node.filesystem.limit\", cluster=\"${cluster_name}\") - ts(\"kubernetes.node.filesystem.usage\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "nodename",
+                  "resource_id"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "File System - Usage %",
+              "units": "%",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 8,
+                  "y": 9,
+                  "w": 4,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.node.filesystem.usage\", cluster=\"${cluster_name}\")  / ts(\"kubernetes.node.filesystem.limit\", cluster=\"${cluster_name}\") * 100)",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 100
+        }
+      ]
+    },
+    {
+      "name": "Namespace Resource Utilization",
+      "id": "sLbOl",
+      "rows": [
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "namespace_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Pod Count By Namespace",
+              "units": "running pods",
+              "summarization": "MEAN",
+              "base": 1,
+              "chartAttributes": {
+                "decimalPrecision": 0,
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 3,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "sum(align(60s, mean, ts(\"kubernetes.ns.pod.count\", cluster=\"${cluster_name}\")), namespace_name)",
+                  "disabled": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "namespace_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Pod Container Count By Namespace",
+              "units": "running containers",
+              "summarization": "MEAN",
+              "base": 1,
+              "chartAttributes": {
+                "decimalPrecision": 0,
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 3,
+                  "y": 0,
+                  "w": 3,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "sum(align(60s, mean, ts(\"kubernetes.ns.pod_container.count\", cluster=\"${cluster_name}\")), namespace_name)",
+                  "disabled": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "sparklineValueColorMapColors": [],
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "namespace_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": true,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "sparklineValueColorMapValuesV2": [],
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": true,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "CPU Usage by Namespace",
+              "units": "millicores",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 6,
+                  "y": 0,
+                  "w": 3,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "sum(ts(\"kubernetes.ns.cpu.usage_rate\", cluster=\"${cluster_name}\"), namespace_name, cluster)",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            },
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "namespace_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Memory Usage by Namespace",
+              "units": "Bytes",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 9,
+                  "y": 0,
+                  "w": 3,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "sum(ts(\"kubernetes.ns.memory.usage\", cluster=\"${cluster_name}\"), namespace_name, cluster)",
+                  "disabled": false,
+                  "secondaryAxis": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 100
+        }
+      ]
+    },
+    {
+      "name": "Pods Resource Utilization",
+      "id": "65IOk",
+      "rows": [
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "pod_name",
+                  "namespace_name",
+                  "nodename"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "CPU Usage Rate By POD",
+              "units": "millicores",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod.cpu.usage_rate\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "pod_name",
+                  "namespace_name",
+                  "nodename"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Memory Usage by Pod",
+              "units": "B",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 5,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod.memory.working_set\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "pod_name",
+                  "namespace_name",
+                  "nodename",
+                  "resource_id"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "File System Usage By Pod",
+              "units": "Bytes",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 10,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod.filesystem.usage\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 100
+        }
+      ]
+    },
+    {
+      "name": "Containers Resource Utilization",
+      "id": "6hOvp",
+      "rows": [
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendShowSourceName": true,
+                "showValueColumn": true,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "namespace_name",
+                  "pod_name",
+                  "nodename",
+                  "container_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "fixedLegendShowMetricName": false,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "CPU Usage Rate By Pod Container",
+              "units": "millicores",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "lineFill": 1,
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod_container.cpu.usage_rate\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "queryType": "WQL",
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "stackType": "zero",
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "namespace_name",
+                  "pod_name",
+                  "nodename",
+                  "container_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "last",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Memory Usage by Pod Container",
+              "units": "Bytes",
+              "summarization": "LAST",
+              "base": 0,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 5,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod_container.memory.working_set\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "pod_name",
+                  "namespace_name",
+                  "nodename",
+                  "resource_id",
+                  "container_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "last",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "File System Usage By Pod Container",
+              "units": "Bytes",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 10,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod_container.filesystem.usage\", cluster=\"${cluster_name}\"))",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [
+                  "cluster",
+                  "namespace_name",
+                  "nodename",
+                  "pod_name",
+                  "container_name"
+                ],
+                "showRawValues": false,
+                "lineType": "linear",
+                "showHosts": false,
+                "windowSize": 5,
+                "groupBySource": false,
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "sortValuesDescending": true,
+                "type": "table",
+                "y1UnitAutoscaling": false,
+                "showLabels": false,
+                "tagMode": "custom",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Uptime By Pod Container",
+              "units": "min",
+              "summarization": "LAST",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 15,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, ts(\"kubernetes.pod_container.uptime\", cluster=\"${cluster_name}\") / 60000)",
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 100
+        }
+      ]
+    }
+  ],
+  "parameterDetails": {
+    "cluster_name": {
+      "parameterType": "DYNAMIC",
+      "tagKey": "cluster",
+      "queryValue": "collect(max(ts(\"kubernetes.cluster.cpu.limit\"), cluster), taggify(1, cluster, \"*\"))",
+      "order": 1,
+      "defaultValue": "Label_533",
+      "hideFromView": false,
+      "value": "tkc4.tmc.psavcf-wd01-cl01.tmc",
+      "label": "cluster",
+      "dynamicFieldType": "TAG_KEY",
+      "valuesToReadableStrings": {
+        "Label": "*",
+      },
+      "allowAll": false,
+      "selectedLabel": "Label_533"
+    },
+    "containers_metric": {
+      "parameterType": "SIMPLE",
+      "order": 4,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "label": "containers_metric",
+      "valuesToReadableStrings": {
+        "Label": "CPU Usage"
+      },
+      "allowAll": false
+    },
+    "nodes_metric": {
+      "parameterType": "SIMPLE",
+      "order": 7,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "label": "nodes_metric",
+      "valuesToReadableStrings": {
+        "Label": "CPU Usage"
+      },
+      "allowAll": false
+    },
+    "nodes_group_by": {
+      "parameterType": "SIMPLE",
+      "order": 6,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "label": "nodes_group_by",
+      "valuesToReadableStrings": {
+        "Label": "none"
+      },
+      "allowAll": false
+    },
+    "namespaces_metric": {
+      "parameterType": "SIMPLE",
+      "order": 5,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "label": "namespaces_metric",
+      "valuesToReadableStrings": {
+        "Label": "CPU Usage"
+      },
+      "allowAll": false
+    },
+    "clusters_group_by": {
+      "parameterType": "SIMPLE",
+      "order": 2,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "label": "clusters_group_by",
+      "valuesToReadableStrings": {
+        "Label": "none"
+      },
+      "allowAll": false
+    },
+    "clusters_metric": {
+      "parameterType": "SIMPLE",
+      "order": 3,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "label": "clusters_metric",
+      "valuesToReadableStrings": {
+        "Label": "CPU Usage"
+      },
+      "allowAll": false
+    }
+  },
+  "disableRefreshInLiveMode": false
+}
