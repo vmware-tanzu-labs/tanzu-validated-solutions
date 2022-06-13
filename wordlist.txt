@@ -67,7 +67,6 @@ scrapeable
 SCTP
 SDDC
 SNAT
-SNAT
 Sonobouy
 Spherelet
 SR-IOV
@@ -87,3 +86,18 @@ VNET
 vsphere
 VXLAN
 Xeon
+Airgap
+airgap
+untar
+templating
+statefulset
+Clusterrole
+Clusterrolbinding
+Configmap
+LDAPS
+hashcode
+FIPS
+apiserver
+Coredns
+FIPS
+CONTROLPLANE
