@@ -68,7 +68,6 @@ scrapeable
 SCTP
 SDDC
 SNAT
-SNAT
 Sonobouy
 Spherelet
 SR-IOV
@@ -88,4 +87,22 @@ VNET
 vsphere
 VXLAN
 Xeon
+<<<<<<< HEAD
 
+=======
+Airgap
+airgap
+untar
+templating
+statefulset
+Clusterrole
+Clusterrolbinding
+Configmap
+LDAPS
+hashcode
+FIPS
+apiserver
+Coredns
+FIPS
+CONTROLPLANE
+>>>>>>> 6fbcddd (tkg on nsx-t in airgap RA)
