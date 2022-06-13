@@ -72,6 +72,17 @@ Antrea
 VXLAN
 Geneve
 SCTP
+<<<<<<< HEAD
 CRD's
 SRIOV
 DPDK
+Alertmanager
+datasource
+genreq
+netreq
+fwreq
+Licence
+subfolders
+templating
+airgapped
+
