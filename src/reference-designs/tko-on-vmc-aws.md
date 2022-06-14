@@ -302,7 +302,7 @@ The following are the key network recommendations for a production-grade Tanzu K
 |TKO-TKG-006|Enable Identity Management for TKG clusters.|This avoids usage of admin credentials and ensures required users with the right roles have access to TKG clusters.|The pinniped package helps with integrating TKG with LDAPS/OIDC Authentication.|
 |TKO-TKG-007|Enable Machine Health Checks for TKG clusters|vSphere HA and Machine Health Checks interoperably work together to enhance workload resiliency|A MachineHealthCheck is a resource within the Cluster API that allows users to define conditions under which Machines within a Cluster should be considered unhealthy. Remediation actions can be taken when MachineHealthCheck has identified a node as unhealthy.|
 
-# **Kubernetes Ingress Routing**
+# Kubernetes Ingress Routing
 
 Default installation of Tanzu Kubernetes Grid does not have any ingress controller installed. Users can use Contour (available for installation through Tanzu Packages) or any Third-party ingress controller of their choice. 
 
