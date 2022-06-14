@@ -373,7 +373,6 @@ There are three main supported installation methods for Harbor:
 
 ![Harbor Container Registry](img/tko-on-vmc-aws/tko-vmc-aws06.png)
 
-#
 # vSphere with Tanzu SaaS Integration
 
 The SaaS products in the VMware Tanzu portfolio are in the critical path for securing systems at the heart of your IT infrastructure. VMware Tanzu Mission Control provides a centralized control plane for Kubernetes, and Tanzu Service Mesh provides a global control plane for service mesh networks. Tanzu Observability provides features like Kubernetes monitoring, Application observability and Service insights.
