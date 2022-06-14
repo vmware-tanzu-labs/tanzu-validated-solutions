@@ -172,7 +172,6 @@ This topology enables the following benefits:
   To isolate and separate TKG workload cluster networking from each other it’s recommended to make use of separate logical segments for each workload cluster and configure the required firewall between these networks. Refer to [Firewall Requirements](#firewall) for more details.
 - Separate provider and tenant access to the TKG environment.
      - Only provider administrators need access to the TKG management cluster. This prevents tenants from attempting to connect to the TKG management cluster.
-#
 ### Network Requirements
 
 As per the defined architecture below is the list of required networks:
