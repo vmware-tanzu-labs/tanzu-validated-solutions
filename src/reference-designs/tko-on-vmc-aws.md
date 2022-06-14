@@ -130,7 +130,7 @@ Tanzu Kubernetes Grid, when deployed on the VMware NSX-T Networking, uses the NS
 
 Tanzu Kubernetes Grid leverages NSX Advanced Load Balancer to provide L4 load balancing for the Tanzu Kubernetes Clusters Control-Plane HA and L7 ingress to the applications deployed in the Tanzu Kubernetes Clusters. Users access the applications by connecting to the Virtual IP address (VIP) of the applications provisioned by NSX ALB. 
 
-# **NSX Advanced Load Balancer Components**
+# NSX Advanced Load Balancer Components
 
 NSX ALB is deployed in **No-Orchestrator** mode in VMC on AWS environment because the `cloudadmin` user does not have all required permissions to perform write operations to the vCenter API, which is a key requirement. Therefore, the NSX ALB controller cannot orchestrate the deployment of service engines. 
 
