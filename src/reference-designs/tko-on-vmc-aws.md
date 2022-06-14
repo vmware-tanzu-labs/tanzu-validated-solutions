@@ -262,7 +262,6 @@ The installation of TKG on VMware Cloud on AWS is done through the same UI as me
 
 This installation process will take you through the setup **TKG Management Cluster** on your vSphere environment. Once the management cluster is deployed, you can register the management cluster with Tanzu Mission Control and deploy Tanzu Kubernetes shared service and workload clusters directly from the  [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) UI or Tanzu CLI to deploy Tanzu Kubernetes Shared Service and workload clusters.
 
-#
 # **Design Recommendations**
 
 ## **NSX ALB Recommendations**
