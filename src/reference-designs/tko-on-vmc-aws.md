@@ -20,7 +20,7 @@ The validated Bill of Materials for installing TKG on your vSphere environment i
 |VMC on AWS SDDC Version|1.16 and later|
 |NSX Advanced Load Balancer|20.1.7|
 
-The Interoperability Matrix can be verified at all times [here](https://interopmatrix.vmware.com/Interoperability?col=551,&row=648,%26789,)
+For up-to-date information about which software versions can be used together, check the Interoperability Matrix [here](https://interopmatrix.vmware.com/Interoperability?col=551,&row=648,%26789,).
 
 ## Benefits of running VMware Tanzu on VMware Cloud on AWS
 
