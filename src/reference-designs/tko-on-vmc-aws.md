@@ -264,7 +264,7 @@ This installation process will take you through the setup **TKG Management Clust
 
 # Design Recommendations
 
-## **NSX ALB Recommendations**
+## NSX ALB Recommendations
 
 The below table provides the recommendations for configuring NSX ALB for TKG deployment in a VMC on AWS environment.
 
