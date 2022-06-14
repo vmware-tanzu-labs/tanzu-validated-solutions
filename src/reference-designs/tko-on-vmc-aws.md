@@ -4,7 +4,7 @@ Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud 
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS. 
 
-Please note that the scope of this documentation is limited to Tanzu Kubernetes Grid (multi-cloud) and that it is a customer managed solution. 
+Note that the scope of this documentation is limited to Tanzu Kubernetes Grid (multi-cloud) and that it is a customer-managed solution. 
 
 The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md)
 
