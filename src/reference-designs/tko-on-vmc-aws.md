@@ -241,7 +241,6 @@ The following table provides a list of firewall rules based on the assumption th
 |<p>Client Machine</p><p></p>|<p>console.cloud.vmware.com</p><p>\*.tmc.cloud.vmware.com</p><p></p><p>projects.registry.vmware.com</p>|TCP:443|<p>To access Cloud Services portal to configure networks in VMC SDDC.</p><p>To access the TMC portal for TKG clusters registration and other SaaS integration.</p><p>To pull binaries from VMware public repo for TKG installation.</p>|
 |Client Machine|<p>TKG Management VIP Range.</p><p>TKG Workload VIP Range.</p>|<p>TCP:80</p><p>TCP:443</p>|To http/https workloads in shared services and workload cluster. |
 
-#
 # Installation Experience
 
 TKG management cluster is the first component that you deploy to get started with Tanzu Kubernetes Grid.
