@@ -173,7 +173,7 @@ This topology enables the following benefits:
      - Only provider administrators need access to the TKG management cluster. This prevents tenants from attempting to connect to the TKG management cluster.
 ### Network Requirements
 
-As per the defined architecture below is the list of required networks:
+As per the defined architecture, the list of required networks includes:
 
 |**Network Type**|**DHCP Service**|<p>**Description & Recommendations**</p><p></p>|
 | :- | :- | :- |
