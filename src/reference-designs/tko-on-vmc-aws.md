@@ -67,7 +67,6 @@ Tanzu Kubernetes Grid comprises the following components:
 
 - **Tanzu Kubernetes Grid Installer -** The Tanzu Kubernetes Grid installer is a graphical wizard that you launch by running the `tanzu management-cluster create --ui` command. The installer wizard runs locally on the bootstrap machine and provides a user interface to guide you through the process of deploying a management cluster.
 
-#
 ## **vSphere with Tanzu Storage**
 Tanzu Kubernetes Grid integrates with shared datastores available in the vSphere infrastructure. The following types of shared datastores are supported:
 
