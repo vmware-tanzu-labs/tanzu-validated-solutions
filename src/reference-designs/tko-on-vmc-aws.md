@@ -156,7 +156,7 @@ The virtual services can be spanned across multiple Service Engines if the assoc
 
 IP address allocation for virtual services can be over DHCP or via NSX ALB in-built IPAM functionality. The VIP networks created/configured in NSX ALB are associated with the IPAM profile.
 
-# **Network Architecture**
+# Network Architecture
 
 For deployment of TKG in VMware Cloud on AWS SDDCs, we build separate segments for the TKG management cluster, TKG Shared Services cluster, TKG workload clusters, NSX ALB management, Cluster-VIP segment for control plane HA, TKG Mgmt VIP/Data segment, and TKG workload Data/VIP segment.
 
