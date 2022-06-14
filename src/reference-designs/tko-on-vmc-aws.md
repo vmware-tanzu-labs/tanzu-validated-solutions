@@ -11,7 +11,7 @@ This reference design is based on the architecture and components described in [
 ![Tanzu Edition reference architecture diagram](img/index/tkgm-diagram.png)
 
 #
-## **TKG Bill Of Materials**
+## TKG Bill of Materials
 Below is the validated Bill of Materials that can be used to install TKG on your vSphere environment today:
 
 |**Software Components**|**Version**|
