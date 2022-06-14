@@ -388,7 +388,6 @@ Tanzu on VMware Cloud on AWS offers high-performance potential, convenience, and
 
 This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload compute, to the full stack infrastructure.
 
-<!-- Deployment Instructions -->
 
 
 
