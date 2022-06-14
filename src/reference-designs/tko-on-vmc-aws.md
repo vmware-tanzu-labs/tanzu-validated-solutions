@@ -51,7 +51,7 @@ Tanzu Kubernetes Grid comprises the following components:
 
 - **Tanzu Kubernetes Cluster -** Tanzu Kubernetes clusters are the Kubernetes clusters in which your application workloads run. These clusters are also referred to as workload clusters. Tanzu Kubernetes clusters can run different versions of Kubernetes, depending on the needs of the applications they run.
 
-- **Shared Service Cluster -**  Each Tanzu Kubernetes Grid instance can only have one shared services cluster. You will deploy this cluster only if you intend to deploy shared services such as Contour and Harbor. 
+- **Shared Services Cluster -**  Each Tanzu Kubernetes Grid instance can have only one shared services cluster. You will deploy this cluster only if you intend to deploy shared services such as Contour and Harbor. 
 
 - **Cluster API -** TKG functions through the creation of a Management Kubernetes cluster that houses [Cluster API](https://cluster-api.sigs.k8s.io/). The Cluster API then interacts with the infrastructure provider to service workload Kubernetes cluster lifecycle requests.
 
