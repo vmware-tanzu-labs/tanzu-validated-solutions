@@ -6,7 +6,7 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
 Note that the scope of this documentation is limited to Tanzu Kubernetes Grid (multi-cloud) and that it is a customer-managed solution. 
 
-The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md)
+This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md)
 
 ![Tanzu Edition reference architecture diagram](img/index/tkgm-diagram.png)
 
