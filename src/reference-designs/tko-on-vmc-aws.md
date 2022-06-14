@@ -92,7 +92,7 @@ While the default vSAN storage policy can be used, administrators should evaluat
 
 Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kubernetes also supports the creation of NFS File Volumes, which support ReadWriteMany access modes. This allows for provisioning volumes, which can be read and written from multiple pods simultaneously. To support this, you must enable vSAN File Service.
 
-**Note**: vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions.
+**Note:** vSAN File Service is available only in the vSAN Enterprise and Enterprise Plus editions.
 
 #
 ## **Tanzu Kubernetes Clusters Networking**
