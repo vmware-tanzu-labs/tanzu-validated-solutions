@@ -280,7 +280,7 @@ The below table provides the recommendations for configuring NSX ALB for TKG dep
 |TKO-ALB-018|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>An SE group can be shared by any number of workload clusters as long as the sum of the number of distinct cluster node networks and the number of distinct cluster VIP networks is not more than 8.</p>|
 |TKO-ALB-009|Enable DHCP in the No-Orchestrator cloud.|Reduce the administrative overhead of manually configuring IP pools for the networks where DHCP is available.||
 
-## **Network Recommendations**
+## Network Recommendations
 
 The following are the key network recommendations for a production-grade Tanzu Kubernetes Grid on VMC deployment:
 
