@@ -61,3 +61,16 @@ TKG
 NSXT
 autoscaler
 airgap
+Antrea
+VXLAN
+Geneve
+SCTP
+DPDK
+Alertmanager
+datasource
+genreq
+netreq
+fwreq
+Licence
+subfolders
+templating
