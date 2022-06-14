@@ -41,7 +41,6 @@ The following additional benefits are enabled by the Elastic Network Interface t
 -	Enable developers to modernize existing enterprise apps with AWS cloud capabilities and services.
 -	Integrate modern application tools and frameworks to develop next generation applications.
 -	Remove egress charges as all traffic is internal of the Amazon availability zone.
-#
 ## **Tanzu Kubernetes Grid components**
 
 VMware Tanzu Kubernetes Grid (TKG) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations. You can deploy Tanzu Kubernetes Grid across software-defined datacenters (SDDC) and public cloud environments, including vSphere, Microsoft Azure, and Amazon EC2. 
