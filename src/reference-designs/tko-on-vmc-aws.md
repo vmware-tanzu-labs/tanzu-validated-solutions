@@ -95,7 +95,7 @@ Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kub
 **Note:** vSAN File Service is available only in the vSAN Enterprise and Enterprise Plus editions.
 
 #
-## **Tanzu Kubernetes Clusters Networking**
+## Tanzu Kubernetes Clusters Networking
 A Tanzu Kubernetes cluster provisioned by the Tanzu Kubernetes Grid supports two Container Network Interface (CNI) options: 
 
 - [Antrea](https://antrea.io/) 
