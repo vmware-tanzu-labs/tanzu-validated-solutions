@@ -12,7 +12,7 @@ This reference design is based on the architecture and components described in [
 
 #
 ## TKG Bill of Materials
-Below is the validated Bill of Materials that can be used to install TKG on your vSphere environment today:
+The validated Bill of Materials for installing TKG on your vSphere environment is as follows:
 
 |**Software Components**|**Version**|
 | :- | :- |
