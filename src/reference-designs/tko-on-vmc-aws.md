@@ -390,7 +390,6 @@ This plan meets many Day 0 needs for aligning product capabilities, such as conf
 
 <!-- Deployment Instructions -->
 
-<!-- For information on how to deploy this reference design, see . -->
 
 ## <a id=appendix-a></a> Appendix A
 
