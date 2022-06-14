@@ -122,7 +122,7 @@ Tanzu Kubernetes Grid can be deployed on various networking stacks including
 
 **Note:** The scope of this document is limited to VMware NSX-T Data Center Networking with NSX Advanced Load Balancer.
 
-## **TKG on NSX-T Networking with NSX Advanced Load Balancer**
+## TKG on NSX-T Networking with NSX Advanced Load Balancer
 
 Tanzu Kubernetes Grid, when deployed on the VMware NSX-T Networking, uses the NSX-T logical segments & Gateways to provide connectivity to Kubernetes control plane VMs, worker nodes, services, and applications. All hosts from the cluster where Tanzu Kubernetes clusters are deployed are configured as NSX-T Transport nodes that provide network connectivity to the Kubernetes environment.  
 
