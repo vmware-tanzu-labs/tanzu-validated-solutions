@@ -326,7 +326,7 @@ Each ingress controller has pros and cons of its own. The below table provides g
 |Istio|use Istio ingress controller when you intended to provide security, traffic direction, and insight within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic)|
 |NSX ALB Ingress controller|<p>Use NSX ALB ingress controller when a containerized application requires features like local and global server load balancing (GSLB), web application firewall (WAF), performance monitoring, etc. </p><p></p>|
 
-# **NSX ALB Sizing Guidelines**
+# NSX ALB Sizing Guidelines
 
 ## Controller Sizing Guidelines
 
