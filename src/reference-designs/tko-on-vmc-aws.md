@@ -57,7 +57,7 @@ Tanzu Kubernetes Grid comprises the following components:
 
 - **Tanzu Kubernetes Cluster Plans -** A cluster plan is a blueprint that describes the configuration with which to deploy a Tanzu Kubernetes cluster. It provides a set of configurable values that describe settings like the number of control plane machines, worker machines, VM types, and so on.
 
-   The current release of Tanzu Kubernetes Grid provides two default templates, dev and prod.
+   The current release of Tanzu Kubernetes Grid provides two default templates, `dev` and `prod`.
 
 - **Tanzu Kubernetes Grid Instance -** A Tanzu Kubernetes Grid instance is the full deployment of Tanzu Kubernetes Grid, including the management cluster, the workload clusters, and the shared services cluster that you configure.
 
