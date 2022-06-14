@@ -85,16 +85,12 @@ For a production-grade deployment, VMware recommends deploying three instances o
 
 The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:
 
-<!-- /* cSpell:disable */ -->
-
 | Controller Node    | IP Address  | FQDN            |
 | ------------------ | ------------| ----------------|
 | Node01 (Primary)   | 172.16.80.3 | alb01.tanzu.lab |
 | Node02 (Secondary) | 172.16.80.4 | alb02.tanzu.lab |
 | Node03 (Secondary) | 172.16.80.5 | alb03.tanzu.lab |
 | Controller Cluster | 172.16.80.2 | alb.tanzu.lab   |
-
-<!-- /* cSpell:enable */ -->
 
 ### Deploy NSX Advance Load Balancer Controller Node
 
