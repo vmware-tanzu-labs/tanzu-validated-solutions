@@ -219,7 +219,7 @@ To prepare the firewall, you need to gather the following:
 1. DNS server IP(s).
 1. NTP Server(s).
 
-The below table provides a list of firewall rules based on the assumption that there is no firewall within a subnet/VLAN. 
+The following table provides a list of firewall rules based on the assumption that there is no firewall within a subnet/VLAN. 
 
 |**Source**|**Destination**|**Protocol:Port**|**Description**|
 | :- | :- | :- | :- |
