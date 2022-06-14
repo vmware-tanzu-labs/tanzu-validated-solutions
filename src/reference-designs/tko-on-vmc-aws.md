@@ -358,7 +358,6 @@ Service Engines can be deployed in Active/Active or Active/Standby mode dependin
 | :- | :- | :- | :- |
 |TKO-ALB-SE-001|Configure the High Availability mode for SEs|To mitigate a single point of failure for the NSX ALB data plane.|High Availability for Service Engines is configured via setting the Elastic HA mode to Active/Active or N+M in the Service Engine Group.|
 
-#
 # **Container Registry**
 VMware Tanzu for Kubernetes Operations using Tanzu Kubernetes Grid include Harbor as a container registry. Harbor provides a location for pushing, pulling, storing, and scanning container images used in your Kubernetes clusters. 
 
