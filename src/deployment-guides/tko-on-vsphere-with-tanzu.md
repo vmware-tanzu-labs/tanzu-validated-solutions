@@ -195,6 +195,7 @@ Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterpris
   ![Screenshot of Licensing tab](img/tko-on-vsphere-with-tanzu/TKO-VWT12.png)
 
 1. Click **Apply Key**.
+
   ![Screenshot of Apply License Key section of Licensing tab](img/tko-on-vsphere-with-tanzu/TKO-VWT13.png)
 
 ### Configure NTP Settings
