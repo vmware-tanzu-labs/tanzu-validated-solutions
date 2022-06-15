@@ -19,58 +19,58 @@ Ensure that this VM:
 * Has one NIC per port group created in the guide that you are following, and
 * That all NICs are para-virtual VMXNET NICs
 
-> If you have `govc` installed, you can use the command below to generate this
-> VM for your specific guide. For example, if you are using the
-> 'tko-with-vsphere' deployment guide, the command below will generate a VM
-> appropriate for this lab:
+If you have `govc` installed, you can use the command below to generate this
+VM for your specific guide. For example, if you are using the
+'tko-with-vsphere' deployment guide, the command below will generate a VM
+appropriate for this lab:
+
+```sh
+DEPLOYMENT_GUIDE="tko-on-sphere.md" # <-- change this
+VM_NAME="tkg-router"
+govc vm.create -annotation="TKG Networking Fabric" \
+  -c=2 -iso=isos/vyos.iso \
+  -m=2048 \
+  -disk=20GB \
+  -net="VM Network" \
+  -net.adapter=vmxnet3 "$VM_NAME";
+while read -r net; \
+do \
+  name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
+  if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
+  vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
+  cidr="$(awk -F '|' '{print $5}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
+  cmd="govc host.portgroup.add -vswitch vSwitch0 ${name}-${cidr}-${vlan}"; \
+  echo "--> $cmd"; \
+  $cmd; \
+  govc host.portgroup.change -allow-promiscuous=true -forged-transmits=true -mac-changes=true "${name}-${cidr}-${vlan}"; \
+  govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}-${vlan}" -net.adapter=vmxnet3; \
+done < <(grep --color -E 'Network +\|.*_pg +\| [0-9]{4} +\| 172.*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
+```
 >
-> ```sh
-> DEPLOYMENT_GUIDE="tko-on-sphere.md" # <-- change this
-> VM_NAME="tkg-router"
-> govc vm.create -annotation="TKG Networking Fabric" \
->   -c=2 -iso=isos/vyos.iso \
->   -m=2048 \
->   -disk=20GB \
->   -net="VM Network" \
->   -net.adapter=vmxnet3 "$VM_NAME";
-> while read -r net; \
-> do \
->   name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
->   if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
->   vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
->   cidr="$(awk -F '|' '{print $5}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
->   cmd="govc host.portgroup.add -vswitch vSwitch0 ${name}-${cidr}-${vlan}"; \
->   echo "--> $cmd"; \
->   $cmd; \
->   govc host.portgroup.change -allow-promiscuous=true -forged-transmits=true -mac-changes=true "${name}-${cidr}-${vlan}"; \
->   govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}-${vlan}" -net.adapter=vmxnet3; \
-> done < <(grep --color -E 'Network +\|.*_pg +\| [0-9]{4} +\| 172.*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
-> ```
+If your VM's NICs are connected to a port group on a distributed virtual
+switch, use this instead:
 >
-> If your VM's NICs are connected to a port group on a distributed virtual
-> switch, use this instead:
->
-> ```sh
-> DEPLOYMENT_GUIDE="tko-on-sphere.md" # <-- change this
-> VM_NAME="tkg-router"
-> govc vm.create -annotation="TKG Networking Fabric" \
->   -c=2 -iso=isos/vyos.iso \
->   -m=2048 \
->   -disk=20GB \
->   -net="VM Network" \
->   -net.adapter=vmxnet3 "$VM_NAME";
-> while read -r net; \
-> do \
->   name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
->   if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
->   vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
->   cidr="$(awk -F '|' '{print $5}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
->   cmd="govc dvs.portgroup.add -dvs vSwitch0 ${name}-${cidr}-${vlan}"; \
->   echo "--> $cmd"; \
->   $cmd; \
->   govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}-${vlan}" -net.adapter=vmxnet3; \
-> done < <(grep --color -E 'Network +\|.*_pg +\| [0-9]{4} +\| 172.*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
-> ```
+```sh
+DEPLOYMENT_GUIDE="tko-on-sphere.md" # <-- change this
+VM_NAME="tkg-router"
+govc vm.create -annotation="TKG Networking Fabric" \
+  -c=2 -iso=isos/vyos.iso \
+  -m=2048 \
+  -disk=20GB \
+  -net="VM Network" \
+  -net.adapter=vmxnet3 "$VM_NAME";
+while read -r net; \
+do \
+  name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
+  if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
+  vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
+  cidr="$(awk -F '|' '{print $5}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
+  cmd="govc dvs.portgroup.add -dvs vSwitch0 ${name}-${cidr}-${vlan}"; \
+  echo "--> $cmd"; \
+  $cmd; \
+  govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}-${vlan}" -net.adapter=vmxnet3; \
+done < <(grep --color -E 'Network +\|.*_pg +\| [0-9]{4} +\| 172.*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
+```
 
 Next, go into the vCenter portal and connect to the VM's console. Log in with the username `vyos` and the password `vyos`.
 
@@ -142,62 +142,62 @@ set interface eth1 address 172.16.10.1/24
 set interface eth1 description "nsx_alb_management_pg"
 ```
 
-> ✅ If you have `govc`, `jq` and `sshpass` installed, you can do this easily with
-> this block of code. This code assumes that your port groups were created using
-> the block of code above.
+If you have `govc`, `jq` and `sshpass` installed, you can do this easily with
+this block of code. This code assumes that your port groups were created using
+the block of code above.
 >
-> ```sh
-> VYOS_IP=10.220.3.252
-> ifaces=$(sshpass -p vyos ssh vyos@$VYOS_IP
->   find /sys/class/net -mindepth 1 -maxdepth 1
->   -not -name lo -printf "%P: " -execdir 'cat {}/address \;')
-> govc vm.info -json=true $VM_NAME |
->   jq -r '.VirtualMachines[0].Config.Hardware.Device[] | \
-> select(.MacAddress != null and .DeviceInfo.Summary != "VM Network") | \
-> .MacAddress + ";" + .DeviceInfo.Summary' |
->   while read -r line;
->   do
->     mac=$(echo "$line" | cut -f1 -d ';');
->     pg=$(echo "$line" | cut -f2 -d ';');
->     gw=$(echo "$pg" | cut -f2 -d '-' | cut -f1 -d '_');
->     eth=$(grep "$mac" <<< "$ifaces" | cut -f1 -d ':');
->     echo "set interface ethernet $eth ${gw}/27";
->     echo "set interface ethernet description $pg";
->   done
-> ```
+```sh
+VYOS_IP=10.220.3.252
+ifaces=$(sshpass -p vyos ssh vyos@$VYOS_IP
+  find /sys/class/net -mindepth 1 -maxdepth 1
+  -not -name lo -printf "%P: " -execdir 'cat {}/address \;')
+govc vm.info -json=true $VM_NAME |
+  jq -r '.VirtualMachines[0].Config.Hardware.Device[] | \
+select(.MacAddress != null and .DeviceInfo.Summary != "VM Network") | \
+.MacAddress + ";" + .DeviceInfo.Summary' |
+  while read -r line;
+  do
+    mac=$(echo "$line" | cut -f1 -d ';');
+    pg=$(echo "$line" | cut -f2 -d ';');
+    gw=$(echo "$pg" | cut -f2 -d '-' | cut -f1 -d '_');
+    eth=$(grep "$mac" <<< "$ifaces" | cut -f1 -d ':');
+    echo "set interface ethernet $eth ${gw}/27";
+    echo "set interface ethernet description $pg";
+  done
+```
 >
-> If your NICs are connected to a distributed vSwitch, use this instead:
+If your NICs are connected to a distributed vSwitch, use this instead:
 >
-> ```sh
-> VYOS_IP=10.220.8.189
-> >&2 echo '---> Grabbing portgroup names';
-> portgroupNamesToKeys=$(h2o_govc find / -type DistributedVirtualPortgroup | \
->   while read -r pg; \
->   do \
->     h2o_govc object.collect -json=true "$pg" | jq -r '.[] |
-> select(.Name == "config") | .Val.Key + ":" + .Val.Name'; \
->   done
-> );
-> >&2 echo '---> Grabbing interfaces';
-> ifaces=$(sshpass -p vyos ssh vyos@$VYOS_IP find /sys/class/net -mindepth 1 -maxdepth 1 \
->   -not -name lo -printf "%P: " -execdir 'cat {}/address \;');
-> >&2 echo '---> Forming vyos interface commands';
-> h2o_govc vm.info -json=true $VM_NAME |
->   jq -r '.VirtualMachines[0].Config.Hardware.Device[] |
-> select(.MacAddress != null) |
-> .MacAddress + ";" + .Backing.Port.PortgroupKey' |
->   while read -r line;
->   do
->     mac=$(echo "$line" | cut -f1 -d ';');
->     pgKey=$(echo "$line" | cut -f2 -d ';');
->     pg=$(grep -E "^$pgKey" <<< "$portgroupNamesToKeys" | cut -f2 -d ':');
->     gw=$(echo "$pg" | cut -f2 -d '-' | cut -f1 -d '_');
->     eth=$(grep "$mac" <<< "$ifaces" | cut -f1 -d ':');
->     test "$eth" == "eth0" && continue;
->     echo "set interface ethernet $eth ${gw}/27";
->     echo "set interface ethernet description $pg";
->   done
-> ```
+```sh
+VYOS_IP=10.220.8.189
+>&2 echo '---> Grabbing portgroup names';
+portgroupNamesToKeys=$(h2o_govc find / -type DistributedVirtualPortgroup | \
+  while read -r pg; \
+  do \
+    h2o_govc object.collect -json=true "$pg" | jq -r '.[] |
+select(.Name == "config") | .Val.Key + ":" + .Val.Name'; \
+  done
+);
+>&2 echo '---> Grabbing interfaces';
+ifaces=$(sshpass -p vyos ssh vyos@$VYOS_IP find /sys/class/net -mindepth 1 -maxdepth 1 \
+  -not -name lo -printf "%P: " -execdir 'cat {}/address \;');
+>&2 echo '---> Forming vyos interface commands';
+h2o_govc vm.info -json=true $VM_NAME |
+  jq -r '.VirtualMachines[0].Config.Hardware.Device[] |
+select(.MacAddress != null) |
+.MacAddress + ";" + .Backing.Port.PortgroupKey' |
+  while read -r line;
+  do
+    mac=$(echo "$line" | cut -f1 -d ';');
+    pgKey=$(echo "$line" | cut -f2 -d ';');
+    pg=$(grep -E "^$pgKey" <<< "$portgroupNamesToKeys" | cut -f2 -d ':');
+    gw=$(echo "$pg" | cut -f2 -d '-' | cut -f1 -d '_');
+    eth=$(grep "$mac" <<< "$ifaces" | cut -f1 -d ':');
+    test "$eth" == "eth0" && continue;
+    echo "set interface ethernet $eth ${gw}/27";
+    echo "set interface ethernet description $pg";
+  done
+```
 
 Run `show interface ethernet` once done. Confirm that your result looks something like
 the below:
