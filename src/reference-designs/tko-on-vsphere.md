@@ -430,4 +430,4 @@ Tanzu Kubernetes Grid on vSphere on hyper-converged hardware offers high-perform
 This plan meets many Day 0 needs for quickly aligning product capabilities to full stack infrastructure, including networking, firewalling, load balancing, workload compute alignment, and other capabilities.
 
 ## Deployment Instructions
-For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on vSphere](../deployment-guides/tko-on-vsphere-vds.md).
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on vSphere with VMware VDS](../deployment-guides/tko-on-vsphere-vds.md).
