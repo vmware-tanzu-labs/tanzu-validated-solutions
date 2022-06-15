@@ -11,3 +11,4 @@ This is the table of contents from which the Tanzu for Kubernetes Operations Ref
     - [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](./deployment-guides/tko-on-vsphere-with-tanzu.md)
 - [Tanzu for Kubernetes Operations SaaS Integration](./reference-designs/tko-saas.md)
     - [Tanzu for Kubernetes Operations SaaS Integration](./deployment-guides/tko-saas-services.md)
+- [Deploy User-Managed Packages in Workload Clusters](./deployment-guides/tkg-package-install.md)
