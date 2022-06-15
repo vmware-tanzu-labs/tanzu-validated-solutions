@@ -1086,7 +1086,7 @@ Contour is required for the Harbor, Prometheus, and Grafana packages.
 
 4.  Install the Contour Package
 
-    `tanzu package install contour --package-name contour.tanzu.vmware.com --version <avaiable package version> --values-file <path_to_contour-data-values.yaml_file> --namespace tanzu-system-contour --create-namespace`
+    `tanzu package install contour --package-name contour.tanzu.vmware.com --version <AVAILABLE-PACKAGE-VERSION> --values-file <path_to_contour-data-values.yaml_file> --namespace tanzu-system-contour --create-namespace`
 
 5.  Validate the Contour package installation. The status must change to “Reconcile succeeded”.
     `tanzu package installed list -A | grep contour`
@@ -1109,7 +1109,7 @@ In order to install Harbor, ensure that Cert-Manager and Contour user packages a
 
     ```bash
     image_url=$(kubectl -n tanzu-package-repo-global get packages harbor.tanzu.vmware.com.<package version> -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
-    imgpkg pull -b</strong$image_url -o /tmp/harbor-package
+    imgpkg pull -b $image_url -o /tmp/harbor-package
     cp /tmp/harbor-package/config/values.yaml <path to save harbor-data-values.yaml>
     ```
 
