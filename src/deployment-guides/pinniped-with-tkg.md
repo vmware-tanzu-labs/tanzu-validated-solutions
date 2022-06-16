@@ -17,11 +17,11 @@ You can enable identity management during or after management cluster deployment
    - Confirm that the authentication service is running correctly and complete its configuration.
    - If the management cluster manages any workload clusters, generate the Pinniped add-on secret for each workload cluster that was created before you enabled identity management.
 
-# **Enable and Configure Identity Management During Management Cluster Deployment:** 
+## Enable and Configure Identity Management During Management Cluster Deployment
 
 This section explains how to enable and configure identity management during management cluster deployment.
 
-## **Obtain Your Identity Provider Details**
+### Obtain Your Identity Provider Details
 
 Before you can enable identity management, you must have an identity provider. Tanzu Kubernetes Grid supports LDAPS and OIDC identity providers.
 
@@ -31,17 +31,17 @@ To use OIDC as the identity provider, you must have an account with an identity 
 
 For more information on using Okta as your OIDC provider, see [Register a Tanzu Kubernetes Grid Application in Okta](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#obtain-your-identity-provider-details-3).
 
-## **Configure LDAPS or OIDC Settings in Tanzu Kubernetes Grid**
+### Configure LDAPS or OIDC Settings in Tanzu Kubernetes Grid
 
 When you are deploying your management cluster using the installer interface, configure LDAPS or OIDC in the Identity Management section. For instructions, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-deploy-ui.html#id-mgmt) in Deploy Management Clusters with the Installer Interface.
 
-1. In the **Identity Management section** of Management cluster deployment UI, enable the “Enable Identity Management Settings” option.
+1. In the **Identity Management** section of the management cluster deployment UI, 
+   1. Enable **Enable Identity Management Settings**.
+   2. Select the provider as **OIDC** or **LDAPS**.
 
    ![](img/pinniped-with-tkg/01-pinniped-1.png)
 
-1. Once you enable the identity management, select the provider as OIDC or LDAPS.
-
-1. If you choose to use **OIDC**, provide details of your OIDC provider account, for example, Okta
+2. If you choose to use **OIDC**, provide details of your OIDC provider account, for example, Okta.
 
    - **Issuer URL**: The IP or DNS address of your OIDC server.
 
@@ -57,7 +57,7 @@ When you are deploying your management cluster using the installer interface, co
 
       ![](img/pinniped-with-tkg/01-pinniped-2.png)
 
-1. If you choose to use **LDAPS**, provide details of your company’s LDAPS server. All settings except for LDAPS Endpoint are optional.
+3. If you choose to use **LDAPS**, provide details of your company’s LDAPS server. All settings except for LDAPS Endpoint are optional.
 
    -  **LDAPS Endpoint**: The IP or DNS address of your LDAPS server. Provide the address and port of the LDAP server, in the form host:port.
    - **Bind DN**: The DN for an application service account. The connector uses these credentials to search for users and groups. Not required if the LDAP server provides access for anonymous authentication.
@@ -75,32 +75,30 @@ When you are deploying your management cluster using the installer interface, co
       ![](img/pinniped-with-tkg/01-pinniped-3.png)
    
    - (Optional) Verify the LDAP settings.
-      - Click the Verify LDAP Configuration option.
+      - Click **Verify LDAP Configuration**.
       - Enter a user name and group name.
-      - Click **Start**. After completion of verification, if you see any failures, you must examine them closely in the subsequent steps.
+      - Click **Start**. After verification completes, if you see any failures, examine them closely.
 
-1. Click on **Next** and proceed with Management cluster creation procedure. 
+4. Click **Next** and proceed with management cluster creation. 
 
-1. Once you deploy the Management cluster, proceed with [Complete the configuration of Identity Management in the Management Cluster](#complete-the-identity-management-configuration-on-management-cluster)
+5. After you deploy the management cluster, proceed with [Complete the configuration of Identity Management in the Management Cluster](#complete-the-identity-management-configuration-on-management-cluster)
 
-
-##
-# **Enable and Configure Identity Management in an Existing Deployment**
-If you did not configure identity management when you deployed your management cluster, you can enable it as a post-deployment step by following the instructions below:
+## Enable and Configure Identity Management in an Existing Deployment
+If you did not configure identity management when you deployed your management cluster, you can enable it as a post-deployment step by doing the following:
 
 1. [Obtain your identity provider details](#obtain-your-identity-provider-details).
 
-1. [Generate a Kubernetes secret for the Pinniped add-on and deploy Pinniped package.](#generate-the-pinniped-add-on-secret-for-the-management-cluster-and-deploy-pinniped-package) 
+2. [Generate a Kubernetes secret for the Pinniped add-on and deploy Pinniped package.](#generate-the-pinniped-add-on-secret-for-the-management-cluster-and-deploy-pinniped-package) 
 
-1. [Complete the identity management configuration on Management Cluster](#complete-the-identity-management-configuration-on-management-cluster). 
+3. [Complete the identity management configuration on the management cluster](#complete-the-identity-management-configuration-on-management-cluster). 
 
-1. [Create role bindings for your management cluster users.](#configure-rbac)
+4. [Create role bindings for your management cluster users.](#configure-rbac)
 
-1. [Enable identity management in workload clusters.](#enable-identity-management-on-workload-clusters)
+5. [Enable identity management in workload clusters.](#enable-identity-management-on-workload-clusters)
 
-### [**Obtain your identity provider details**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-cluster-lifecycle-enable-identity-management.html#idp)
+### Obtain your identity provider details
 
-Before you can enable identity management, you must have an identity provider. Tanzu Kubernetes Grid supports LDAPS and OIDC identity providers.
+Before you can identity management, you must have an identity provider. Tanzu Kubernetes Grid supports LDAPS and OIDC identity providers.
 
 To use your company’s internal LDAPS server as the identity provider, obtain LDAPS information from your LDAP administrator.
 
@@ -108,7 +106,9 @@ To use OIDC as the identity provider, you must have an account with an identity 
 
 For more information on using Okta as your OIDC provider, see [Register a Tanzu Kubernetes Grid Application in Okta](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#obtain-your-identity-provider-details-3).
 
-## **Generate the Pinniped Add-on Secret for the Management Cluster and deploy Pinniped package**
+For more information on obtaining your identity provider details, see [Obtain Your Identity Provider Details](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#idp).
+
+### Generate the Pinniped Add-on Secret for the Management Cluster and deploy Pinniped package
 
 This procedure configures the Pinniped add-on and deploys the authentication components in your management cluster. To generate a Kubernetes secret for the Pinniped add-on:
 
@@ -158,7 +158,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
    LDAP_USER_SEARCH_USERNAME: userPrincipalName
    ```
 
-3. Providing a sample Management cluster configuration file below after updating the ldap configuration. 
+3. Providing a sample management cluster configuration file below after updating the ldap configuration. 
 
    ```yaml
    #! ---------------------------------------------------------------------
@@ -224,7 +224,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
 
    ```
 
-4. Make sure your local environment has IDENTITY\_MANAGEMENT\_TYPE set to either oidc or ldap, and not none:
+4. Make sure your local environment has IDENTITY\_MANAGEMENT\_TYPE set to either `oidc` or `ldap`, and not `none`:
 
    ```
    # export IDENTITY_MANAGEMENT_TYPE=ldap
@@ -233,7 +233,6 @@ This procedure configures the Pinniped add-on and deploys the authentication com
    ldap
 
    ```
-<!-- /* cSpell:enable */ -->
 
 5. Set the \_TKG\_CLUSTER\_FORCE\_ROLE environment variable to management:
 
@@ -288,20 +287,20 @@ This procedure configures the Pinniped add-on and deploys the authentication com
    ```
    <!-- /* cSpell:enable */ -->
 
-   **Note**: In case if the pinniped app reconcile failed, see [Troubleshooting Core Add-on Configuration](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-update-addons.html#troubleshooting). 
+   **Note**: If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-update-addons.html#troubleshooting). 
 
-## **Complete the Identity Management Configuration on Management Cluster**
+## Complete the Identity Management Configuration on Management Cluster
 
-After the management cluster has been deployed, you must perform the following steps to complete the configuration of identity management:
+After deploying the management cluster, do the following to complete the identity management configuration:
 
-- Connect kubectl to the management cluster.
-- Confirm that the authentication service is running correctly by checking its status:
-  - **OIDC**: Check the Status of an OIDC Identity Management Service.
-  - **LDAP**: Check the Status of an LDAP Identity Management Service.
-- **OIDC**: Provide the Callback URI to the OIDC Provider.
-- If you want to use regular, non-administrator kubeconfig files for access to the management cluster, after completing the configuration of identity management, configure RBAC by following the instructions in [Configure RBAC for a Management Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-rbac.html#rbac-mgmt).
+1. Connect kubectl to the management cluster.
+2. Confirm that the authentication service is running correctly by checking its status:
+   - **OIDC**: Check the Status of an OIDC Identity Management Service.
+   - **LDAP**: Check the Status of an LDAP Identity Management Service.
+   - **OIDC**: Provide the Callback URI to the OIDC Provider.
+3. If you want to use regular, non-administrator kubeconfig files for access to the management cluster, after completing the configuration of identity management, configure RBAC by following the instructions in [Configure RBAC for a Management Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-rbac.html#rbac-mgmt).
 
-## **Connect kubectl to the Management Cluster**
+## Connect kubectl to the Management Cluster
 
 To configure identity management, you must obtain and use the admin context of the management cluster:
 
@@ -325,7 +324,7 @@ To configure identity management, you must obtain and use the admin context of t
    ```
    <!-- /* cSpell:enable */ -->
 
-## **Check the Status of an LDAP Identity Management Service**
+## Check the Status of an LDAP Identity Management Service
 
 Tanzu Kubernetes Grid uses Pinniped to integrate clusters with an LDAP identity service, along with Dex to expose the service endpoint. When you enable LDAP, Tanzu Kubernetes Grid creates the pinniped-supervisor service in the pinniped-supervisor namespace, pinniped-concierge in the pinniped-concierge namespace, and dexsvc in the tanzu-system-auth namespace. 
 
@@ -357,7 +356,7 @@ Follow the steps below to check the status of an LDAP service and note the EXTER
 
 3. Proceed with generating the kubeconfig and creating the role based access control. For more information, see [Configure RBAC](#configure-rbac). 
 
-## **Check the Status of an OIDC Identity Management Service**
+## Check the Status of an OIDC Identity Management Service
 
 Tanzu Kubernetes Grid uses Pinniped to integrate clusters with an OIDC identity service. When you enable OIDC, Tanzu Kubernetes Grid creates the pinniped-supervisor service in the pinniped-supervisor namespace and pinniped-concierge in the pinniped-concierge namespace. 
 
@@ -390,7 +389,7 @@ Follow the steps below to check the status of the Pinniped service and note the 
 
 5. Once you update the redirect URI, proceed with generating the kubeconfig and creating the role based access control. For more information, see [Configure RBAC](#configure-rbac). 
 
-## **Provide the Callback URI to the OIDC Provider (OIDC Only)**
+## Provide the Callback URI to the OIDC Provider (OIDC Only)
 
 If you configured the management cluster to use OIDC authentication, you must provide the callback URI for that management cluster to your OIDC identity provider.
 
@@ -405,7 +404,7 @@ If you configured the management cluster to use OIDC authentication, you must pr
 
    ![](img/pinniped-with-tkg/01-pinniped-4.png)
 
-# **Enable Identity Management on Workload Clusters**
+## Enable Identity Management on Workload Clusters
 
 Any workload clusters that you create after you enable identity management in the management cluster are automatically configured to use the same identity management service.  You can proceed with generating a kubeconfig file and share it with users for connecting to the cluster. For more information on generating kubeconfig and creating the role based access, see [Configure RBAC](#configure-rbac). 
 
@@ -527,7 +526,7 @@ If a workload cluster was created before you enabled identity management for you
    ```
    <!-- /* cSpell:enable */ -->
 
-The environment variable settings cause tanzu cluster create --dry-run to generate a Kubernetes secret, not a full cluster manifest.
+   The environment variable settings cause tanzu cluster create --dry-run to generate a Kubernetes secret, not a full cluster manifest.
 
 8. Review the secret and apply it to the management cluster. The Pinniped add-on secret is always created or applied to the management cluster, even if you are configuring a workload cluster. 
    -  Set the context of kubectl to the management cluster. For example, with a management cluster named tkg-mgmt:
@@ -569,13 +568,13 @@ The environment variable settings cause tanzu cluster create --dry-run to genera
 
 11. If you plan to use regular, non-administrator kubeconfig files for cluster access, proceed with generating the kubeconfig and creating the role based access control. For more information, see [Configure RBAC](#configure-rbac). 
 
-# **Configure RBAC**
+## Configure RBAC
 
 To give users access to a management or a workload cluster, you generate a kubeconfig file and then share the file with those users. If you provide them with the administrator kubeconfig for the cluster, they have full access to the cluster and do not need to be authenticated. However, if you provide users with the regular kubeconfig, they must have a user account in your OIDC or LDAP identity provider and you must configure RBAC on the cluster to grant access permissions to the designated user.
 
-For more information on how to configure role-based access control (RBAC) in Tanzu Kubernetes Grid, see [Configure RBAC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-rbac.html#rbac-mgmt) section in VMware Documentation.
+For more information on how to configure role-based access control (RBAC) in Tanzu Kubernetes Grid, see [Configure RBAC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-rbac.html#rbac-mgmt).
 
-## **Generate and Test a Non-Administrator kubeconfig File for the Tanzu Clusters**
+### Generate and Test a Non-Administrator kubeconfig File for the Tanzu Clusters
 
 This procedure allows you to test the login step of the authentication process if a browser is present on the machine on which you are running tanzu and kubectl commands. If the machine does not have a browser, see [Authenticate Users on a Machine Without a Browser](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#no-browser).
 
@@ -610,7 +609,7 @@ This procedure allows you to test the login step of the authentication process i
    ![](img/pinniped-with-tkg/01-pinniped-7.png)
 
 3. Go back to the terminal in which you run tanzu and kubectl commands:
-   - If you already configured a role binding on the cluster for the authenticated user, the output of kubectl get pods -A appears, displaying the pod information.
+   - If you already configured a role binding on the cluster for the authenticated user, the output of `kubectl get pods -A` appears, displaying the pod information.
    - If you have not configured a role binding on the cluster, you see a message denying the user account access to the pods:
 
       <!-- /* cSpell:disable */ -->
@@ -619,20 +618,20 @@ This procedure allows you to test the login step of the authentication process i
       ```
       <!-- /* cSpell:enable */ -->
      
-This happens because the user has been successfully authenticated, but they are not yet authorized to access any resources on the cluster. To authorize the user to access the cluster resources, you must Create a Role Binding on the Management Cluster as described below.
+   This happens because the user has been successfully authenticated, but they are not yet authorized to access any resources on the cluster. To authorize the user to access the cluster resources, you must Create a Role Binding on the Management Cluster as described in [Create a Role Binding on the Management Cluster](#create-a-role-binding-on-the-management-cluster).
 
-## **Create a Role Binding on the Management Cluster**
+### Create a Role Binding on the Management Cluster
 
-To give non-admin users access to a management cluster, you generate and distribute a kubeconfig file as described in Generate and Test a Non-Administrator kubeconfig File for the Management Cluster above. 
+To give non-admin users access to a management cluster, you generate and distribute a kubeconfig file as described in [Generate and Test a Non-Administrator kubeconfig File for the Management Cluster](#generate-and-test-a-non-administrator-kubeconfig-file-for-the-management-cluster). 
 
-To make this kubeconfig work, you must first set up RBAC by creating a role binding on the management cluster. This role binding assigns role-based permissions to individual authenticated users or user groups. There are many roles with which you can associate users, but the most useful roles are the following:
-
-You can assign any of these roles to users. For more information about custom roles and role bindings, see [Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) in the Kubernetes documentation.
+To make the kubeconfig work, you must first set up RBAC by creating a role binding on the management cluster. This role binding assigns role-based permissions to individual authenticated users or user groups. There are many roles with which you can associate users, but the most useful roles are the following:
 
 *  **cluster-admin**: Can perform any operation on the cluster.
 *  **admin**: Permission to view most resources but can only modify resources like roles and bindings. Cannot modify pods or deployments.
 * **edit**: The opposite of admin. Can create, update, and delete resources like deployments, services, and pods. Cannot change roles or permissions.
 * **view**: Read-only.
+
+You can assign any of the roles to users. For more information about custom roles and role bindings, see [Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) in the Kubernetes documentation.
 
 1. Make sure that you are using the admin context of the management cluster:
 
@@ -643,14 +642,14 @@ You can assign any of these roles to users. For more information about custom ro
    <!-- /* cSpell:enable */ -->
 
 
-1. If the context is not the management cluster admin context, set kubectl to use that context. For example:
+2. If the context is not the management cluster admin context, set kubectl to use that context. For example:
    <!-- /* cSpell:disable */ -->
    ```
    kubectl config use-context tkg-mgmt-admin@tkg-mgmt
    ```
    <!-- /* cSpell:enable */ -->
 
-6. List your existing roles:
+3. List your existing roles:
    - To see the full list of namespace-scoped roles, run:
       <!-- /* cSpell:disable */ -->
       ```
@@ -665,11 +664,11 @@ You can assign any of these roles to users. For more information about custom ro
       ```
       <!-- /* cSpell:enable */ -->
 
-7. To associate a given user with a role, create a role binding.
+4. To associate a given user with a role, create a role binding.
    - A RoleBinding can reference a Role or ClusterRole.
    - A ClusterRoleBinding can reference only a ClusterRole.
 
-8. The following example creates a cluster role binding named id-mgmt-test-rb that binds the cluster role cluster-admin to the user <user@example.com>:
+5. The following example creates a cluster role binding named id-mgmt-test-rb that binds the cluster role cluster-admin to the user <user@example.com>:
 
    <!-- /* cSpell:disable */ -->
    ```
@@ -680,11 +679,11 @@ You can assign any of these roles to users. For more information about custom ro
    For --user, specify the OIDC or LDAP username of the user. You configured the username attribute and other identity provider details in the Identity Management section of the Tanzu Kubernetes Grid installer interface or by setting the **LDAP\_\*** or **OIDC\_\*** variables:
 
       1. **OIDC**: The username attribute is set in the **Username Claim** field under **OIDC Identity Management Source** in the installer interface or the OIDC\_IDENTITY\_PROVIDER\_USERNAME\_CLAIM configuration variable.
-      1. **LDAPS**: The username attribute is set in the **Username** field under **LDAPS Identity Management Source –> User Search Attributes** in the installer interface or the LDAP\_USER\_SEARCH\_USERNAME configuration variable.
+      2. **LDAPS**: The username attribute is set in the **Username** field under **LDAPS Identity Management Source –> User Search Attributes** in the installer interface or the LDAP\_USER\_SEARCH\_USERNAME configuration variable.
 
          For example, for OIDC, the username is often the email address of the user. For LDAPS, it is the LDAP username, not the email address.
 
-      1. Attempt to connect to the management cluster again by using the kubeconfig file that you created in the previous procedure:
+      3. Attempt to connect to the management cluster again by using the kubeconfig file that you created in the previous procedure:
          <!-- /* cSpell:disable */ -->
          ```
          kubectl get pods -A --kubeconfig /tmp/id_mgmt_test_kubeconfig
@@ -694,17 +693,17 @@ You can assign any of these roles to users. For more information about custom ro
 This time, because the user is bound to the cluster-admin role on this management cluster, the list of pods should be displayed. You can share the generated kubeconfig file with any users for whom you configure role bindings on the management cluster.
 
 
-# **Authenticate Users on a Machine Without a Browser**
+## Authenticate Users on a Machine Without a Browser
 
-If your bootstrap machine is a jumpbox or other machine with no display, you can authenticate to a cluster from a browser running on your local machine. How you do this depends on the cluster’s Pinniped version, which comes from the Tanzu Kubernetes release that the cluster is based on:
+If your bootstrap machine is a jumpbox or other machine with no display, you can authenticate to a cluster from a browser running on your local machine. How you do this depends on the cluster’s Pinniped version, which comes from the Tanzu Kubernetes release that the cluster is based on.
 
-- TKr v1.22.5 (default for Tanzu Kubernetes Grid v1.5) or later : Follow the below instructions.
+For clusters based on older TKrs or created by older versions of Tanzu Kubernetes Grid : Follow the [Authenticate Users on a Machine Without a Browser](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-cluster-lifecycle-connect.html#no-browser) procedure in the Tanzu Kubernetes Grid v1.4 documentation.
 
-- Clusters based on older TKrs or created by older versions of Tanzu Kubernetes Grid : Follow the [Authenticate Users on a Machine Without a Browser](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-cluster-lifecycle-connect.html#no-browser) procedure in the Tanzu Kubernetes Grid v1.4 documentation
+For clusters based on TKr v1.22.5 (default for Tanzu Kubernetes Grid v1.5) or later, do the following:
 
 1. From a terminal window on your local machine, run ssh to remotely log in to your bootstrap machine.
 
-1. Set the TANZU\_CLI\_PINNIPED\_AUTH\_LOGIN\_SKIP\_BROWSER=true environment variable. This adds the --skip-browser option to the kubeconfig for the cluster.
+2. Set the TANZU\_CLI\_PINNIPED\_AUTH\_LOGIN\_SKIP\_BROWSER=true environment variable. This adds the --skip-browser option to the kubeconfig for the cluster.
 
    <!-- /* cSpell:disable */ -->
    ```
@@ -764,4 +763,4 @@ If your bootstrap machine is a jumpbox or other machine with no display, you can
 
 10. If you have not configured a role binding on the cluster, you will see a message denying the user account access to the pods: Error from server (Forbidden): pods is forbidden: User "user@example.com" cannot list resource "pods" in API group "" at the cluster scope. This happens because the user has been successfully authenticated, but they are not yet authorized to access any resources on the cluster. 
 
-11. To authorize the user to access the cluster resources, you must configure RBAC on the cluster by creating a cluster role binding. For more information, see [Configure RBAC](#configure-rbac) section.
+11. To authorize the user to access the cluster resources, you must configure RBAC on the cluster by creating a cluster role binding. For more information, see [Configure RBAC](#configure-rbac).
