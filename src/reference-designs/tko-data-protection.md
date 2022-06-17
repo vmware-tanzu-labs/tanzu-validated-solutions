@@ -23,7 +23,7 @@ You can also configure backup scheduling. You can specify how often to back up t
 
 When it's time to destroy a cluster, Tanzu Mission Control gives you the choice of deleting your backup storage for that cluster or saving it for future data recoveries to a new cluster.
 
-When you enable data protection for a cluster, Tanzu Mission Control installs Velero with restic (an open-source backup tool), configured to use the opt-in approach. With this approach, you must annotate the pods whose volumes you want to include in backups. <_Is this info correct for the current version of Valero? Is it still necessary to annotate pods?_>
+When you enable data protection for a cluster, Tanzu Mission Control installs Velero with restic (an open-source backup tool), configured to use the opt-in approach. With this approach, you must annotate the pods whose volumes you want to include in backups. 
 
 - If a given pod is annotated to be backed up, persistent volume snapshots are included in the backup.
 - If a pod is not annotated to be backed up, restic does not include the persistent volume snapshots in the backup. However, Velero still creates snapshots if the specified target location for the backup is in the same cloud provider account as the cluster.
