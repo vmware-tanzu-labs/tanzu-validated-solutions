@@ -22,7 +22,7 @@ The Tanzu Kubernetes Grid user interface (UI) provides a guided deployment exper
 
 > **Note:** When using a bootstrap machine or a jump box, you may not be able to use the Tanzu Kubernetes Grid UI to build your configuration of the management and workload clusters. In such cases, use the following sample YAML file to help kickstart the installation process.
 
-```yaml <_Changed 'bash' to yaml because it looks like yaml_>
+```yaml
 AZURE_ENVIRONMENT: "AzurePublicCloud"
 AZURE_CLIENT_ID: <AZURE_CLIENT_ID>
 AZURE_CLIENT_SECRET: <AZURE_CLIENT_SECRET>
