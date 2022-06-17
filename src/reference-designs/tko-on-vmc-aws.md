@@ -114,7 +114,7 @@ Each CNI is suitable for a different use case. The following table lists some co
 | :- | :- | :- |
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p></p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>Pros</p><p>- Antrea leverages Open vSwitch as the networking data plane. Open vSwitch supports both Linux and Windows.</p><p>- VMware supports the latest conformant Kubernetes and stable releases of Antrea.</p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer, resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for Network Policies</p><p>- High network performance</p><p>- SCTP Support</p><p>Cons</p><p>- No multicast support</p><p></p>|
-|Multus|Multus CNI can give multiple interfaces per each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SRIOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud-native and NFV-based applications in Kubernetes.</p>|
+|Multus|Multus CNI can give multiple interfaces per each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SR-IOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud-native and NFV-based applications in Kubernetes.</p>|
 
 ## Tanzu Kubernetes Grid Infrastructure Networking
 
@@ -146,9 +146,9 @@ The following are the core components of NSX ALB:
 - **Avi Kubernetes Operator (AKO)** - An Avi Kubernetes operator runs as a pod in the management cluster and Tanzu Kubernetes clusters and provides ingress and load balancing functionality. AKO translates the required Kubernetes objects to NSX ALB objects and automates the implementation of ingresses/routes/services on the Service Engines (SE) via the NSX ALB Controller.
 
 - **AKO Operator (AKOO)** - The AKO operator takes care of deploying, managing, and removing AKO from Kubernetes clusters. When deployed, this operator creates an instance of the AKO controller and installs all the relevant objects, including:
-    - **AKO statefulset**
-    - **ClusterRole** and **ClusterRoleBinding**
-    - **ConfigMap** (required for the AKO controller and other artifacts)
+    - AKO `StatefulSet`
+    - `ClusterRole` and `ClusterRoleBinding
+    - `ConfigMap` (required for the AKO controller and other artifacts)
 
 TKG management clusters have an AKO operator installed out-of-the-box during cluster deployment. By default, a TKG management cluster has a couple of `AkoDeploymentConfig` objects created, which dictate when and how AKO pods are created in the workload clusters. For more information on the AKO operator, see the [VMware documentation](https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/tree/master/ako-operator).
 
@@ -277,7 +277,7 @@ The following table provides the recommendations for configuring NSX ALB for TKG
 |TKO-ALB-003|Use static IPs for the NSX ALB controllers if DHCP cannot guarantee a permanent lease.|NSX ALB Controller cluster uses management IPs to form and maintain the quorum for the control plane cluster. Any changes would be disruptive.|NSX ALB Controller control plane might go down if the management IPs of the controller node changes.|
 |TKO-ALB-004|Connect Service Engines to VIP networks and Server networks manually. |NSX ALB Service Engine deployment is manual in VMC on AWS. |The controllers can’t reconfigure Service Engines for network connectivity when virtual services are created.|
 |TKO-ALB-005|Reserve an IP in the NSX ALB management subnet to be used as the cluster IP for the controller cluster.|The NSX ALB portal is always accessible over the cluster IP even if a specific individual controller node fails.|NSX ALB administration is not affected by the failure of an individual controller node.|
-|TKO-ALB-006|Use separate VIP networks per TKC for application load balancing.|Separate dev/test and prod workloads L7 load balancing traffic.|Install AKO in TKG clusters manually by creating AkodeploymentConfig.|
+|TKO-ALB-006|Use separate VIP networks per TKC for application load balancing.|Separate dev/test and prod workloads L7 load balancing traffic.|Install AKO in TKG clusters manually by creating `AkodeploymentConfig`.|
 |TKO-ALB-007|Create separate SE Groups for TKG management and workload clusters.|This allows isolating load balancing traffic of the management and shared services cluster from workload clusters.|<p>Create dedicated Service Engine Groups under the no-orchestrator cloud configured manually.</p><p></p><p></p><p></p>|
 |TKO-ALB-018|Share Service Engines for the same type of workload (dev/test/prod)clusters.|Minimize the licensing cost|<p>Each Service Engine contributes to the CPU core capacity associated with a license.</p><p></p><p>An SE group can be shared by any number of workload clusters as long as the sum of the number of distinct cluster node networks and the number of distinct cluster VIP networks is not more than 8.</p>|
 |TKO-ALB-009|Enable DHCP in the No-Orchestrator cloud.|Reduce the administrative overhead of manually configuring IP pools for the networks where DHCP is available.||
