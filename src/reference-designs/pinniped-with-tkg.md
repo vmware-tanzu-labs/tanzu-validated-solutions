@@ -15,8 +15,8 @@ The authentication flow between the management and workload clusters includes th
 - Authentication service components are deployed into the management cluster, using the LDAP or OIDC IdP details specified by the administrator.
 - The administrator creates a Tanzu Kubernetes (workload) cluster. The workload cluster inherits the authentication configuration from the management cluster.
 - The administrator creates a role binding to associate a given user with a given role on the workload cluster.
-- The administrator provides the kubeconfig for the workload cluster to the user.
-- A user uses the kubeconfig to connect to the workload cluster, for example, by running kubectl get pods --kubeconfig.
+- The administrator provides the `kubeconfig` for the workload cluster to the user.
+- A user uses the `kubeconfig` to connect to the workload cluster, for example, by running kubectl get pods `--kubeconfig`.
 - The management cluster authenticates the user with the IdP.
 - The workload cluster either allows or denies the kubectl get pods request, depending on the permissions of the user’s role.
 
@@ -29,4 +29,4 @@ We recommend the following best practices for managing identities in Tanzu Kuber
 - Configure Pinniped services during management cluster creation.
 - Limit access to management clusters to the appropriate set of users. For example, provide access only to users who are responsible for managing infrastructure and cloud resources but not to application developers. This is especially important because access to the management cluster inherently provides access to all workload clusters.
 - Limit cluster administrator access for workload clusters to the appropriate set of users. For example, provide access to users who are responsible for managing infrastructure and platform resources in your organization, but not to application developers.
-- Connect to an [identity provider](https://csrc.nist.gov/glossary/term/identity_provider) to manage the user identities allowed to access cluster resources instead of relying on administrator-generated kubeconfig files.
+- Connect to an [identity provider](https://csrc.nist.gov/glossary/term/identity_provider) to manage the user identities allowed to access cluster resources instead of relying on administrator-generated `kubeconfig` files.
