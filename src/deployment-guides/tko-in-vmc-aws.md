@@ -32,7 +32,7 @@ Before deploying Tanzu Kubernetes Operations on VMC on AWS, ensure that your env
 - [Network Requirements](#netreq)
 - [Firewall Requirements](#fwreq)
 
-### <a id=genreq> </a> General Requirements
+### <a id="genreq"> </a> General Requirements
 
 Your environment should meet the following general requirements:
 
@@ -43,11 +43,11 @@ Your environment should meet the following general requirements:
 
   - A content library to store NSX Advanced Load Balancer Controller and service engine OVA templates.  
 
-### <a id=netreq> </a> Network Requirements
+### <a id="netreq"> </a> Network Requirements
 
 Create NSX-T logical segments for deploying TKO components as per [Network Recommendations](../reference-designs/tko-on-vmc-aws.md#network-recommendations) defined in the reference architecture.
 
-### <a id=fwreq> </a> Firewall Requirements
+### <a id="fwreq"> </a> Firewall Requirements
 
 Ensure that the firewall is set up as described in [Firewall Recommendations](../reference-designs/tko-on-vmc-aws.md#a-idfirewallafirewall-recommendations)
 
@@ -172,7 +172,7 @@ Tanzu for Kubernetes Operations is bundled with a license for NSX Advanced Load 
 
 **Note:** If you have a license file instead of a license key, assign the license by clicking on the **Upload from Computer** option.
 
-![Apply Licence Key](img/tko-in-vmc-aws/deploy-tko-vmc-10.JPG)
+![Apply License Key](img/tko-in-vmc-aws/deploy-tko-vmc-10.JPG)
 
 ### Configure NTP Settings
 

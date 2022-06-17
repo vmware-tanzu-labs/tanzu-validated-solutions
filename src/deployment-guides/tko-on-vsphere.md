@@ -58,10 +58,10 @@ The sample entries of the resource pools and folders that need to be created are
 
 |**Resource Type**|**Sample Resource Pool Name**|**Sample Folder Name**|
 | :- | :- | :- |
-|NSX ALB Components|nsx-alb-components|nsx-alb-components|
-|TKG Management components|tkg-management-components|tkg-management-components|
-|TKG Shared Service Components|tkg-sharedsvc-components|tkg-sharedsvc-components|
-|TKG Workload components|tkg-workload01-components|tkg-workload01-components|
+|NSX ALB Components|`nsx-alb-components`|`nsx-alb-components`|
+|TKG Management components|`tkg-management-components`|`tkg-management-components`|
+|TKG Shared Service Components|`tkg-sharedsvc-components`|`tkg-sharedsvc-components`|
+|TKG Workload components|`tkg-workload01-components`|`tkg-workload01-components`|
 
 ### <a id="network-req"> </a>Network Requirements
 
@@ -108,10 +108,10 @@ The following table provides a sample IP address and FQDN set for the NSX ALB co
 
 |**Controller Node**|**IP Address**|**FQDN**|
 | :- | :- | :- |
-|Node 1 Primary|172.16.10.11|alb-ctlr01.lab.vmw|
-|Node 2 Secondary|172.16.10.12|alb-ctlr02.lab.vmw|
-|Node 3 Secondary |172.16.10.13|alb-ctlr03.lab.vmw|
-|HA Address|172.16.10.10|alb-ha.lab.vmw|
+|Node 1 Primary|172.16.10.11|`alb-ctlr01.lab.vmw`|
+|Node 2 Secondary|172.16.10.12|`alb-ctlr02.lab.vmw`|
+|Node 3 Secondary |172.16.10.13|`alb-ctlr03.lab.vmw`|
+|HA Address|172.16.10.10|`alb-ha.lab.vmw`|
 
 
 Follow these steps to deploy and configure NSX Advanced Load Balancer:
