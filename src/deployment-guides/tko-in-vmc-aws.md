@@ -578,7 +578,7 @@ An SSH key pair is required for Tanzu CLI to connect to vSphere from the bootstr
 
 If the `ssh-add` command fails, execute `eval $(ssh-agent)` and then re-run the `ssh-add` command.
 
-5. Make a note of the public key from the file $home/.ssh/id\_rsa.pub. You need this while creating a config file for deploying the TKG management cluster.
+5. Make a note of the public key from the file $home/.ssh/id_rsa.pub. You need this while creating a config file for deploying the TKG management cluster.
 
 ### Install Carvel Tools
 

@@ -180,12 +180,12 @@ For the purpose of this demonstration, this document makes use of the following 
 
 |**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
 | :- | :- | :- | :- | :- |
-|NSX ALB Mgmt Network|nsx\_alb\_management\_pg|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
-|TKG Management Network|tkg\_mgmt\_pg|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
-|TKG Mgmt VIP Network|tkg\_mgmt\_vip\_pg|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
-|TKG Cluster VIP Network|tkg\_cluster\_vip\_pg|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
-|TKG Workload VIP Network|tkg\_workload\_vip\_pg|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
-|TKG Workload Segment|tkg\_workload\_pg|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
+|NSX ALB Mgmt Network|`nsx_alb_management_pg`|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
+|TKG Management Network|`tkg_mgmt_pg`|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
+|TKG Mgmt VIP Network|`tkg_mgmt_vip_pg`|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
+|TKG Cluster VIP Network|`tkg_cluster_vip_pg`|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
+|TKG Workload VIP Network|`tkg_workload_vip_pg`|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
+|TKG Workload Segment|`tkg_workload_pg`|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
 
 ## Firewall Requirements
 To prepare the firewall, you need to gather the following information:
