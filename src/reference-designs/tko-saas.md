@@ -64,13 +64,9 @@ In addition to the direct policy defined for a given object, each object also ha
 
 ### Metrics On-Premises
 
-Tanzu Kubernetes Grid includes the Prometheus and Grafana packages for monitoring Tanzu Kubernetes Grid cluster metrics. The following images show examples of cluster metrics as visualized data in Grafana:
+Tanzu Kubernetes Grid includes the Prometheus and Grafana packages for monitoring Tanzu Kubernetes Grid cluster metrics.
 
-![TKG Cluster metrics in Grafana](./img/tko-saas/tko-observability01.png)
-
-![TKG Cluster API Server Uptime metrics](./img/tko-saas/tko-observability02.png)
-
-You can install Prometheus and Grafana by using Tanzu packages through the TMC Catalog. <!--- For more information, see [Installing Tanzu Packages through TMC](../deployment-guides/tko-package-install.md). -->
+You can install Prometheus and Grafana by using Tanzu packages through the Tanzu Mission Control Catalog. For more information, see [Installing Tanzu Packages through TMC](../deployment-guides/tkg-package-install.md).
 
 ### Metrics in Tanzu Observability
 
@@ -81,56 +77,10 @@ In the case of vSphere and Tanzu Kubernetes Grid, Tanzu Observability collects d
 You can configure Tanzu Observability with an array of capabilities. The following table describes the plugins that VMware recommends for this design:
 
 |**Plugin**|**Purpose**|**Key Metrics**|**Example Metrics**|
-| :- | :- | :- | :- |
+| --- | --- | --- | --- |
 |Telegraf for vSphere|Collect metrics from vSphere|ESXi Server and VM performance & resource utilization|vSphere VM, Memory and Disk usage and performance|
 |Wavefront Kubernetes Integration|Collect metrics from Kubernetes clusters and pods|Kubernetes container and POD statistics|<p>POD CPU usage rate</p><p>`DaemonSet` ready stats</p>|
 |Wavefront by VMware for Istio|Adapts Istio collected metrics and forwards to Wavefront|Istio metrics including request rates, trace rates, throughput, etc.|Request rate (Transactions per Second)|
-
-Some sample dashboards are shown below. Tanzu Observability can display metric data from the full stack of application elements from the platform (VMware ESXi servers), to the virtual environment, to the application environment (Kubernetes), and down to the various components of an application (APM).
-
-#### ESXi Dashboards
-
-![ESXi Host Summary Dashboard](img/tko-saas/tko-observability03.png)<br>
-
-![ESXi CPU Usage Dashboard](img/tko-saas/tko-observability04.png)<br>
-
-![ESXi Memory Usage Dashboard](img/tko-saas/tko-observability05.png)<br>
-
-![ESXi Storage Performance Dashboard](img/tko-saas/tko-observability06.png)<br>
-
-![ESXi Network Performance Dashboard](img/tko-saas/tko-observability07.png)<br>
-
-#### VM Dashboards
-
-![VM CPU Usage Dashboard](img/tko-saas/tko-observability08.png)<br>
-
-![VM Memory Usage Dashboard](img/tko-saas/tko-observability09.png)<br>
-
-![VM Disk Performance Dashboard](img/tko-saas/tko-observability10.png)<br>
-
-![VM Network Performance Dashboard](img/tko-saas/tko-observability11.png)<br>
-
-#### Storage Dashboards
-
-![Datastore Performance Dashboard](img/tko-saas/tko-observability12.png)<br>
-
-#### Kubernetes Dashboards
-
-![Summary dashboard for one or more Kubernetes clusters](img/tko-saas/tko-observability13.png)<br>
-
-![Dashboard showing cluster-level metrics of a specific cluster](img/tko-saas/tko-observability14.png)<br>
-
-#### Application Dashboards
-
-![Summary dashboard for Istio Service Mesh (example)](img/tko-saas/tko-observability15.png)<br>
-
-![Istio Service Mesh details dashboard (example)](img/tko-saas/tko-observability16.png)<br>
-
-![Application Overview dashboard - microservices-aware out-of-the-box.](img/tko-saas/tko-observability17.png)<br>
-
-![Detailed App Dashboards - out-of-the-box](img/tko-saas/tko-observability18.png)<br>
-
-![Automatic Distributed Tracing information between (micro)services](img/tko-saas/tko-observability19.png)<br>
 
 To view and download integrations with prebuilt dashboards that are available in Wavefront, see [Integrations](https://vmware.wavefront.com/integrations) on the VMware Tanzu Observability site.
 

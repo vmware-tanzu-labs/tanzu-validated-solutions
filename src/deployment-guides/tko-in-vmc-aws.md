@@ -29,6 +29,8 @@ Before deploying Tanzu Kubernetes Operations on VMC on AWS, ensure that your env
 - [General Requirements](#genreq)
 - [Network Requirements](#netreq)
 - [Firewall Requirements](#fwreq)
+- [Resource Pools and VM Folders](#resource-pools-and-vm-folders)
+- [Subnet and CIDR Examples](#subnet-and-cidr-examples)
 
 ### <a id="genreq"> </a> General Requirements
 
@@ -47,9 +49,9 @@ Create NSX-T logical segments for deploying Tanzu for Kubernetes Operations comp
 
 ### <a id="fwreq"> </a> Firewall Requirements
 
-Ensure that the firewall is set up as described in [Firewall Recommendations](../reference-designs/tko-on-vmc-aws.md#a-idfirewallafirewall-recommendations)
+Ensure that the firewall is set up as described in [Firewall Recommendations](../reference-designs/tko-on-vmc-aws.md#a-idfirewallafirewall-recommendations).
 
-### Resource Pools and VM Folders
+### <a id="resource-pools-and-vm-folders"> </a> Resource Pools and VM Folders
 
 The following table shows sample entries of the resource pools and folders that you should create in your SDDC.
 
@@ -79,16 +81,16 @@ For the purpose of demonstration, this document uses the following subnet CIDRs 
 The high-level steps for deploying Tanzu for Kubernetes Operation on VMware Cloud on AWS are as follows:
 
 1. [Deploy and Configure NSX Advanced Load Balancer](#dep-config-nsxalb)
-2. [Configure Bootstrap Environment](#config-bootstrap)
-3. [Deploy Management Cluster](#deploy-mgmt-cluster)
+2. [Deploy and Configure Tanzu Kubernetes Grid](#deploy-config-tkg)
+3. [Deploy Tanxu Kubernetes Grid Management Cluster](#deploy-mgmt-cluster)
 4. [Register Management Cluster with Tanzu Mission Control](#tmc-integration)
 5. [Deploy and Configure Shared Services Workload Cluster](#set-up-shared-cluster)
 6. [Deploy Tanzu Kubernetes Clusters (Workload Cluster)](#deploy-workload-cluster)
 7. [Integrate Tanzu Kubernetes Clusters with Tanzu Observability](#integrate-to)
 8. [Integrate Tanzu Kubernetes Clusters with Tanzu Service Mesh](#integrate-tsm)
-9.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
+9. [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
 
-## <a id="dep-config-nsxalb"></a> Deploy and Configure NSX Advanced Load Balancer
+## <a id="dep-config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
 
 For the purpose of demonstration, this document describes how to deploy NSX Advanced Load Balancer as a cluster of three nodes. After the first node is deployed and configured, two more nodes are deployed to form the cluster.
 
@@ -188,7 +190,7 @@ In a production environment, VMware recommends that you deploy additional contro
 
 To run a 3-node controller cluster, you deploy the first node,  perform the initial configuration, and set the cluster IP address. After that, you deploy and power on two more Controller VMs, but you must not run the initial configuration wizard or change the admin password for these controller VMs. The configuration of the first controller VM is assigned to the two new controller VMs.
 
-Repeat the steps provided in the [Deploy NSX Advanced Load Balancer Controller](dep-config-nsxalb) section to deploy additional controllers.
+Repeat the steps provided in the [Deploy NSX Advanced Load Balancer Controller](#dep-config-nsxalb) section to deploy additional controllers.
 
 1. To configure the controller cluster, navigate to the **Administration > Controller > Nodes** page and click **Edit**.
 
@@ -481,11 +483,11 @@ After deploying the service engines, edit the service engine VMs and associate t
 
 The NSX Advanced Load Balancer configuration is complete.
 
-## Deploy and Configure Tanzu Kubernetes Grid Bootstrapper
+## <a id="deploy-config-tkg"> </a> Deploy and Configure Tanzu Kubernetes Grid
 
-The deployment of the Tanzu Kubernetes Grid management & workload cluster is facilitated by setting up a bootstrap machine where you install the Tanzu CLI and Kubectl utilities which are used to create and manage the Tanzu Kubernetes Grid instance. This machine also keeps the Tanzu Kubernetes Grid and Kubernetes configuration files for your deployments.
+The deployment of the Tanzu Kubernetes Grid management and workload cluster is facilitated by setting up a bootstrap machine where you install the Tanzu CLI and Kubectl utilities which are used to create and manage the Tanzu Kubernetes Grid instance. This machine also keeps the Tanzu Kubernetes Grid and Kubernetes configuration files for your deployments.
 
-The bootstrapper runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed via the Tanzu CLI.
+The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed via the Tanzu CLI.
 
 ### Download Kubernetes Templates and Tanzu Kubernetes Grid Tools
 
@@ -664,7 +666,7 @@ yq (https://github.com/mikefarah/yq/) version 4.13.4
 
 You are now ready to deploy the Tanzu Kubernetes Grid management cluster.
 
-## Deploy Tanzu Kubernetes Grid Management Cluster
+## <a id="deploy-mgmt-cluster"></a>Deploy Tanzu Kubernetes Grid Management Cluster
 
 The management cluster is a Kubernetes cluster that runs cluster API operations on a specific cloud provider to create and manage workload clusters on that provider. The management cluster is also where you configure the shared and in-cluster services that the workload clusters use.
 
@@ -821,7 +823,7 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
 
 After the management cluster is deployed, you must register the management cluster with Tanzu Mission Control and other SaaS products. You can deploy the Tanzu Kubernetes clusters and Tanzu packages directly from the Tanzu Mission Control portal. Refer to the [Integrate Tanzu Kubernetes Clusters with SaaS Endpoints](tko-saas-services.md#a-idtmc-tkg-mgmt-a-register-a-tanzu-kubernetes-grid-management-cluster-with-tanzu-mission-control) page for instructions.
 
-## Deploy Tanzu Kubernetes Grid Shared Services Cluster
+## <a id="set-up-shared-cluster"> </a>Deploy Tanzu Kubernetes Grid Shared Services Cluster
 
 A shared services cluster is just a Tanzu Kubernetes Grid workload cluster used for shared services. It can be provisioned using the standard CLI command tanzu cluster create, or through Tanzu Mission Control. Each Tanzu Kubernetes Grid instance can have only one shared services cluster.
 

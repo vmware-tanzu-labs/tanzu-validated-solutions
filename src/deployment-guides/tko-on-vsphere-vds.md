@@ -27,7 +27,7 @@ The following is an overview of the main steps for deploying Tanzu Kubernetes Op
 
 1. [Deploy and Configure NSX Advanced Load Balancer](#deploy-and-configure-nsx-advanced-load-balancer)
 
-1. [Configure Bootstrap Virtual machine](#deploy-and-configure-bootstrap-machine)
+1. [Deploy and Configure Bootstrap Machine](#deploy-and-configure-bootstrap-machine)
 
 1. [Deploy Tanzu Kubernetes Grid Management Cluster](#deploy-tanzu-kubernetes-grid-tkg-management-cluster)
 
@@ -35,10 +35,10 @@ The following is an overview of the main steps for deploying Tanzu Kubernetes Op
 
 1. [Deploy Tanzu Kubernetes Grid Workload Cluster](#deploy-tanzu-workload-clusters)
 
-1. [Deploy User-Managed packages on Tanzu Kubernetes Grid clusters](#deploy-user-managed-packages-on-tkg-clusters)
+1. [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages-on-tkg-clusters)
 
 
-## Deploy and Configure NSX Advanced Load Balancer
+## <a id=deploy-and-configure-nsx-advanced-load-balancer> </a> Deploy and Configure NSX Advanced Load Balancer
 
 NSX Advanced Load Balancer is an enterprise-grade integrated load balancer that provides L4-L7 Load Balancer support. NSX Advanced Load Balancer is recommended for vSphere deployments without NSX-T, or when there are unique scaling requirements.
 
@@ -53,7 +53,7 @@ The following is the sample IP address and FQDN set for the NSX Advanced Load Ba
 | Node 3 Secondary | 172.16.10.29 | avi03.lab.vmw  |
 | HA Address       | 172.16.10.30 | avi-ha.lab.vmw |
 
-### Deploy NSX Advanced Load Balancer
+### <a id=deploy-nsx-advanced-load-balancer> </a> Deploy NSX Advanced Load Balancer
 
 As one of the prerequisites, you must have downloaded the NSX Advanced Load Balancer 20.1.6 Open Virtual Appliance (OVA) and imported it to the content library. Deploy the NSX Advanced Load Balancer under the **resource pool “nsx-alb-components”** and place it in the **“nsx-alb-components”** **folder**.
 
@@ -318,7 +318,7 @@ The following procedure creates an IPAM profile and attaches it to the vCenter c
 
 This completes the NSX Advanced Load Balancer configuration. Next is to deploy and configure the bootstrap machine that will be used to deploy and manage Tanzu Kubernetes clusters.
 
-## Deploy and Configure Bootstrap Machine
+## <a id=deploy-and-configure-bootstrap-machine></a>Deploy and Configure Bootstrap Machine
 
 The bootstrap machine can be a laptop, host, or server (running on a Linux/MAC/Windows platform) that you deploy management and workload clusters from, and that keeps the Tanzu and Kubernetes configuration files for your deployments. The bootstrap machine is typically local.
 
@@ -428,7 +428,7 @@ For the purpose of this document, the bootstrap server is a Photon-based virtual
 
 Now all the required packages are installed and the required configurations are in place in the bootstrap virtual machines. Proceed to the next section to deploy the Tanzu Kubernetes Grid management cluster.
 
-## Deploy Tanzu Kubernetes Grid (TKG) Management Cluster
+## <a id=deploy-tanzu-kubernetes-grid-tkg-management-cluster> </a> Deploy Tanzu Kubernetes Grid Management Cluster
 
 After you have performed the steps described in [deploy and configure bootstrap machine](#deploy-and-configure-bootstrap-machine), you can deploy the Tanzu Kubernetes Grid management cluster.
 
@@ -446,7 +446,7 @@ You may deploy and manage Tanzu Kubernetes Grid management clusters on:
 
   - vSphere 7, if vSphere with Tanzu is not enabled.
 
-### Import Base Image template for Tanzu Kubernetes Grid Cluster Deployment
+### <a id=import-base-image-template-for-tkg-cluster-deployment> </a> Import Base Image template for Tanzu Kubernetes Grid Cluster Deployment
 
 Before create the management cluster, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
@@ -614,7 +614,7 @@ Do the following to deploy the Tanzu Kubernetes Grid management cluster using th
     ![](./img/tko-on-vsphere-vds/image35.png)
 
 1. Select the **OS image** that will be used for the management cluster deployment.
-  **Note**: This list will appear empty if you don’t have a compatible template present in your environment. See the steps provided in [Import Base Image template for TKG Cluster deployment](#import-base-image-template-for-tkg-cluster-deployment)t
+  **Note**: This list will appear empty if you don’t have a compatible template present in your environment. See the steps provided in [Import Base Image template for TKG Cluster deployment](#import-base-image-template-for-tkg-cluster-deployment).
   
     ![](./img/tko-on-vsphere-vds/image44.png)
 
@@ -666,7 +666,7 @@ Behind the scenes when the Tanzu Kubernetes Grid management cluster is being dep
 
 The Tanzu Kubernetes Grid management cluster is successfully deployed. Now you can create shared service and workload clusters.
 
-## Deploy Tanzu Shared Service Cluster
+## <a id=deploy-tanzu-shared-service-cluster> </a> Deploy Tanzu Kubernetes Grid Shared Service Cluster
 
 Each Tanzu Kubernetes Grid instance can have only one shared services cluster. Create a shared services cluster if you intend to deploy Harbor.
 
@@ -781,22 +781,23 @@ kubectl config use-context tkg-shared-svc-admin@tkg-shared-svc
 
 ![](./img/tko-on-vsphere-vds/image14.png)
 
-Now that the shared service cluster is successfully created, you are ready to deploy the Harbor package. See [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages-on-tkg-clusters).
+After the shared service cluster is successfully created, you are ready to deploy the Harbor package. See [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages-on-tkg-clusters).
 
-You must ensure that the “cert-manager” and “contour” user packages are installed before deploying Harbor. The deployment order will be as shown:
+You must ensure that the “cert-manager” and “contour” user packages are installed before deploying Harbor. Deploy in the following order:
 
-1.  [Install Cert-manager User package](#install-cert-manager-user-package)
+1.  [Install Cert-Manager User Package](#install-cert-manager-user-package)
 
-2.  [Install Contour User package](#install-contour-user-package)
+2.  [Install Contour User Package](#install-contour-user-package)
 
-3.  [Install Harbor User package](#install-harbor-user-package)
+3.  [Install Harbor User Package](#install-harbor-user-package)
 
-## Deploy Tanzu Workload Clusters
+## <a id=deploy-tanzu-workload-clusters> </a> Deploy Tanzu Kubernetes Grid Workload Clusters
 
-In order to deploy a Workload cluster, you need to create a cluster config file in which you specify options for connecting to vCenter Server and for identifying the vSphere resources that the cluster will use.
+In order to deploy a workload cluster, you need to create a cluster config file in which you specify options for connecting to vCenter Server and for identifying the vSphere resources that the cluster will use.
+
 You can also specify standard sizes for the control plane and worker node VMs, or you can configure the CPU, memory, and disk sizes for control plane and worker nodes explicitly. If you use custom image templates, you can identify which template to use to create node VMs.
 
-As per the architecture, workload clusters make use of a separate SE group (**Service Engine Group 2)** and VIP Network (**TKG Workload VIP/Data Network**) for application load balancing. You can control the SE group by **creating a new AKODeploymentConfig**. For more details, see [Create and deploy AKO Deployment Config for Tanzu Kubernetes Grid Workload Cluster](#configure-nsx-advanced-load-balancer-in-tkg-workload-cluster)
+As per the architecture, workload clusters make use of a separate SE group (**Service Engine Group 2)** and VIP Network (**TKG Workload VIP/Data Network**) for application load balancing. You can control the SE group by creating a new AKODeploymentConfig. For more details, see [Create and deploy AKO Deployment Config for Tanzu Kubernetes Grid Workload Cluster](#configure-nsx-advanced-load-balancer-in-tkg-workload-cluster)
 
 The following sample cluster config file includes the minimum required configuration parameters to create a Tanzu Kubernetes Grid workload cluster. To learn about all configuration file parameters, see the [Tanzu CLI Configuration File Variable Reference](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-config-reference.html).
 Modify the config file according to your requirements.
@@ -883,7 +884,7 @@ After preparing the cluster configuration file, execute the following command to
 Once the cluster is successfully deployed, you will see the following results:
 ![](./img/tko-on-vsphere-vds/image16.png)
 
-### Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster
+### <a id=configure-nsx-advanced-load-balancer-in-tkg-workload-cluster> </a> Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster
 
 Tanzu Kubernetes Grid v1.4.x management clusters with NSX Advanced Load Balancer have a default AKODeploymentConfig that is deployed during installation. It is called install-ako-for-all.
 
@@ -1016,9 +1017,9 @@ kubectl get pods -A # Lists all pods and its status
 
 ![](./img/tko-on-vsphere-vds/image32.png)
 
-You can see that the workload cluster is successfully deployed and AKO pod is deployed on the cluster. You can now [configure SaaS services](#configure-saas-service) for the cluster and/or [deploy user managed packages](#deploy-user-managed-packages-on-tkg-clusters) on this cluster.
+You can see that the workload cluster is successfully deployed and AKO pod is deployed on the cluster. You can now [configure SaaS services](#config-saas-services) for the cluster and/or [deploy user managed packages](#deploy-user-managed-packages-on-tkg-clusters) on this cluster.
 
-## Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters
+## <a id=deploy-user-managed-packages-on-tkg-clusters></a> Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters
 
 Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.
 
@@ -1033,7 +1034,7 @@ Tanzu Kubernetes Grid includes the following user-managed packages. These packag
 | Monitoring             | grafana</br>prometheus | Workload cluster                    |
 | Service discovery      | external-dns           | Workload or shared services cluster |
 
-### Install Cert-Manager User Package
+### <a id=install-cert-manager-user-package> </a> Install Cert-Manager User Package
 
 Cert-Manager is required for the Contour, Harbor, Prometheus, and Grafana packages.
 
@@ -1048,7 +1049,7 @@ Cert-Manager is required for the Contour, Harbor, Prometheus, and Grafana packag
 3.  Validate the Cert-Manager package installation. The status must change to “**Reconcile succeeded**”
     `tanzu package installed list -A | grep cert-manager`
 
-### Install the Contour User Package
+### <a id=install-contour-user-package> </a> Install the Contour User Package
 
 Contour is required for the Harbor, Prometheus, and Grafana packages.
 
@@ -1100,7 +1101,7 @@ Contour is required for the Harbor, Prometheus, and Grafana packages.
 5.  Validate the Contour package installation. The status must change to “Reconcile succeeded”.
     `tanzu package installed list -A | grep contour`
 
-### Install Harbor User Package
+### <a id=install-harbor-user-package> </a> Install Harbor User Package
 
 In order to install Harbor, ensure that Cert-Manager and Contour user packages are installed on the cluster.
 

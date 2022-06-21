@@ -185,7 +185,7 @@ If you did not select the **Setup Cloud After** option before saving, the initia
 
    ![Screenshot of Clouds tab on Infrastructure screen](img/tko-on-vsphere-with-tanzu/TKO-VWT11.png)
 
-## Configure Licensing
+### Configure Licensing
 
 Tanzu for Kubernetes Operations requires an NSX Advanced Load Balancer Enterprise license. 
 
