@@ -112,7 +112,7 @@ Each CNI is suitable for a different use case. The below table lists some common
 | :- | :- | :- |
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p></p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>Pros</p><p>- Provide an option to Configure Egress IP Pool or Static Egress IP for the Kubernetes Workloads.</p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for Network Policies</p><p>- High network performance</p><p>- SCTP Support</p><p>Cons</p><p>- No multicast support</p><p></p>|
-|Multus|Multus CNI can give us multiple interfaces per each Kubernetes pod. Using Multus CRD's you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SRIOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
+|Multus|Multus CNI can give us multiple interfaces per each Kubernetes pod. Using Multus CRD's you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SR-IOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
 
 ## **Tanzu Kubernetes Grid Infrastructure Networking**
 Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks including
@@ -132,9 +132,9 @@ NSX ALB is deployed in Write Access Mode mode in vSphere Environment. This mode 
 - **NSX ALB Service Engine** - The Service Engines (SEs) are lightweight VMs that handle all data plane operations by receiving and executing instructions from the controller. The SEs perform load balancing and all client and server-facing network interactions.
 - **Avi Kubernetes Operator (AKO)** - It is a Kubernetes operator that runs as a pod in the Management Cluster and Tanzu Kubernetes clusters and provides ingress and load balancing functionality. AKO translates the required Kubernetes objects to NSX ALB objects and automates the implementation of ingresses/routes/services on the Service Engines (SE) via the NSX ALB Controller.
 - **AKO Operator (AKOO)** - This is an operator which is used to deploy, manage and remove AKO Pod in Kubernetes clusters. This operator when deployed creates an instance of the AKO controller and installs all the relevant objects like
-- AKO statefulset
-- Clusterrole and Clusterrolebinding
-- Configmap required for the AKO controller and other artifacts.
+- AKO `StatefulSet`
+- `ClusterRole` and `ClusterRoleBinding`
+- `ConfigMap` required for the AKO controller and other artifacts.
 
 TKG management clusters have an ako-operator installed out of the box during cluster deployment. By default, a TKG management cluster has a couple of AkoDeploymentConfig created which dictates when and how ako pods are created in the workload clusters. For more information please see the official [documentation](https://github.com/vmware/load-balancer-and-ingress-services-for-kubernetes/tree/master/ako-operator).
 
@@ -162,7 +162,7 @@ This topology enables the following benefits:
   To isolate and separate TKG workload cluster networking from each other it’s recommended to make use of separate logical segments for each workload cluster and configure the required firewall between these networks. Refer to [Firewall Recommendations](#fwreq) for more details
 - Separate provider and tenant access to the TKG environment.
   - Only provider administrators need access to the TKG management cluster. This prevents tenants from attempting to connect to the TKG management cluster.
-## <a id=netreq> </a> **Network Requirements**
+## <a id="netreq"> </a> **Network Requirements**
 As per the defined architecture, below are the list of required networks:
 
 |**Network Type**|**DHCP Service**|<p>**Description & Recommendations**</p><p></p>|
@@ -174,7 +174,7 @@ As per the defined architecture, below are the list of required networks:
 |TKG Cluster VIP/Data Logical Segment|No|Virtual services for Control plane HA of all TKG clusters (Management, Shared service, and Workload)<br>Reserve sufficient IPs depending on the number of TKG clusters planned to be deployed in the environment, NSX ALB takes care of IPAM on this network.|
 |TKG Management VIP/Data Logical Segment|No|Virtual services for all user-managed packages (such as Contour, Harbor, Contour, Prometheus, Grafana) hosted on the Shared service cluster. Refer [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-user-managed-index.html) for mode details|
 |TKG Workload VIP/Data Logical Segment|No|Virtual services for all applications hosted on the Workload clusters<br>Reserve sufficient IPs depending on the number of applications that are planned to be hosted on the Workload clusters along with scalability considerations.|
-### <a id=cidr> </a>**Subnet and CIDR Examples**
+### <a id="cidr"> </a>**Subnet and CIDR Examples**
 
 ----------------------------
 For the purpose of demonstration, this document makes use of the following Subnet CIDR for TKO deployment.
@@ -189,7 +189,7 @@ For the purpose of demonstration, this document makes use of the following Subne
 |TKG Workload VIP Network|tkg-workload-vip-segment|172.19.70.1/24|N/A|172.19.70.100- 172.19.70.200|
 |TKG Workload Network|tkg-workload-segment|172.19.60.1/24|172.19.60.100- 172.19.60.200|N/A|
 
-## <a id=fwreq> </a> **Firewall Requirements**
+## <a id="fwreq"> </a> **Firewall Requirements**
 To prepare the firewall, you need to gather the following:
 
 1. NSX Advanced Load Balancer Management Network CIDR.
@@ -401,39 +401,49 @@ The Tanzu CLI provides the following predefined configurations for cluster nodes
 |Medium|2|8|40|
 |Large|4|16|40|
 |Extra-large|8|32|80|
-To create a cluster in which all of the control plane and worker node VMs are the same size, specify the SIZE variable. If you set the SIZE variable, all nodes will be created with the configuration that you set.
+To create a cluster in which all of the control plane and worker node VMs are the same size, specify the `SIZE` variable. If you set the `SIZE` variable, all nodes will be created with the configuration that you set.
 
-- SIZE: "large"
+  ```yaml
+  SIZE: "large"
+  ```
 
-To create a cluster in which the control plane and worker node VMs are different sizes, specify the CONTROLPLANE\_SIZE and WORKER\_SIZE options.
+To create a cluster in which the control plane and worker node VMs are different sizes, specify the `CONTROLPLANE_SIZE` and `WORKER_SIZE` options.
 
-- CONTROLPLANE\_SIZE: "medium"
-- WORKER\_SIZE: "large"
+  ```yaml
+  CONTROLPLANE_SIZE: "medium" 
+  WORKER_SIZE: "large"
+  ```
 
-You can combine the CONTROLPLANE\_SIZE and WORKER\_SIZE options with the SIZE option. For example, if you specify SIZE: "large" with WORKER\_SIZE: "extra-large", the control plane nodes will be set to large and worker nodes will be set to extra-large.
+You can combine the `CONTROLPLANE_SIZE` and `WORKER_SIZE` options with the `SIZE` option. For example, if you specify `SIZE: "large"` with `WORKER_SIZE: "extra-large"`, the control plane nodes will be set to large and worker nodes will be set to extra-large.
 
-- SIZE: "large"
-- WORKER\_SIZE: "extra-large"
+  ```yaml
+  SIZE: "large"
+  WORKER_SIZE: "extra-large"
+  ```
 
 **Define Custom Node Configurations**
 
 You can customize the configuration of the nodes rather than using the predefined configurations. 
 
-To use the same custom configuration for all nodes, specify the VSPHERE\_NUM\_CPUS, VSPHERE\_DISK\_GIB, and VSPHERE\_MEM\_MIB options.
+To use the same custom configuration for all nodes, specify the `VSPHERE_NUM_CPUS`, `VSPHERE_DISK_GIB`, and `VSPHERE_MEM_MIB` options.
 
-- VSPHERE\_NUM\_CPUS: 2
-- ` `VSPHERE\_DISK\_GIB: 40
-- ` `VSPHERE\_MEM\_MIB: 4096
+```yaml
+VSPHERE_NUM_CPUS: 2
+VSPHERE_DISK_GIB: 40
+VSPHERE_MEM_MIB: 4096
+```
 
-To define different custom configurations for control plane nodes and worker nodes, specify the VSPHERE\_CONTROL\_PLANE\_\* and VSPHERE\_WORKER\_\* 
+To define different custom configurations for control plane nodes and worker nodes, specify the `VSPHERE_CONTROL_PLANE_*` and `VSPHERE_WORKER_*` 
 
-- VSPHERE\_CONTROL\_PLANE\_NUM\_CPUS: 2
-- ` `VSPHERE\_CONTROL\_PLANE\_DISK\_GIB: 20
-- ` `VSPHERE\_CONTROL\_PLANE\_MEM\_MIB: 8192
-- ` `VSPHERE\_WORKER\_NUM\_CPUS: 4
-- ` `VSPHERE\_WORKER\_DISK\_GIB: 40
+```yaml
+VSPHERE_CONTROL_PLANE_NUM_CPUS: 2
+VSPHERE_CONTROL_PLANE_DISK_GIB: 20
+VSPHERE_CONTROL_PLANE_MEM_MIB: 8192
+VSPHERE_WORKER_NUM_CPUS: 4
+VSPHERE_WORKER_DISK_GIB: 40
+VSPHERE_WORKER_MEM_MIB: 4096
+```
 
-` `VSPHERE\_WORKER\_MEM\_MIB: 4096
 # **Summary**
 Tanzu Kubernetes Grid on vSphere offers high-performance potential, convenience, and addresses the challenges of **creating, testing, and updating on-premise Kubernetes platforms** in a consolidated production environment. This validated approach will result in a near-production quality installation with all the application services needed to **serve combined or uniquely separated workload types** via a combined infrastructure solution.
 
