@@ -16,13 +16,13 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
 This reference design uses Tanzu Kubernetes Grid to create and manage ubiquitous Kubernetes clusters on Microsoft Azure using Kubernetes [Cluster API](https://cluster-api.sigs.k8s.io/). Tanzu Kubernetes Grid functions through the creation of a management cluster which houses the Cluster API.  The Cluster API then interacts with the infrastructure provider to service workload Kubernetes cluster lifecycle requests.
 
-The Tanzu Kubernetes Grid user interface (UI) provides a guided deployment experience tailored Microsoft Azure. <_Not sure what "a guided deployment experience tailored Microsoft Azure" means but wording is awkward_> The Tanzu Kubernetes Grid installer runs either on an operator's own machine (it uses Docker) or through a bootstrap machine or a jump box.
+The Tanzu Kubernetes Grid user interface (UI) provides a guided deployment experience that is tailored for Microsoft Azure. The Tanzu Kubernetes Grid installer runs either on an operator's own machine (it uses Docker) or through a bootstrap machine or a jump box.
 
 ![TKG installer user interface](img/tko-on-azure/image004.png)
 
 > **Note:** When using a bootstrap machine or a jump box, you may not be able to use the Tanzu Kubernetes Grid UI to build your configuration of the management and workload clusters. In such cases, use the following sample YAML file to help kickstart the installation process.
 
-```yaml <_Changed 'bash' to yaml because it looks like yaml_>
+```yaml
 AZURE_ENVIRONMENT: "AzurePublicCloud"
 AZURE_CLIENT_ID: <AZURE_CLIENT_ID>
 AZURE_CLIENT_SECRET: <AZURE_CLIENT_SECRET>
@@ -105,7 +105,7 @@ The following Microsoft Azure components are required for deploying the referenc
 
 ### Quotas
 
-Provide sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you will deploy, you may need to increase the following quotas from their default values. You will need to increase these quotas <_Changed to plural - correct?_> in every region in which you plan to deploy Tanzu Kubernetes Grid.
+Provide sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you will deploy, you may need to increase the following quotas from their default values. You will need to increase these quotas in every region in which you plan to deploy Tanzu Kubernetes Grid.
 
 - Total Regional vCPUs
 - Family vCPUs based on your chosen family of VM (D, E, F, etc.)
