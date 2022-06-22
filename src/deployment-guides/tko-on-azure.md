@@ -86,7 +86,7 @@ Based on the recommended minimum virtual machine size of D2s_v3, the following m
 Ensure that you increase the quotas if you make changes to the basic configuration of the clusters.
 
 ### ARM Template Deployment
-####Deploy ARM Template
+#### Deploy ARM Template
 There are multiple methods to deploy an ARM template on Azure. If you are experienced with Azure, you can deploy the ARM template in a method that is comfortable to you.
 
 Otherwise, you can use the example Azure CLI commands locally or in Azure Cloud Shell. If you prefer to use Azure PowerShell, use the example command for Azure PowerShell.
