@@ -82,7 +82,7 @@ The high-level steps for deploying Tanzu for Kubernetes Operation on VMware Clou
 
 1. [Deploy and Configure NSX Advanced Load Balancer](#dep-config-nsxalb)
 2. [Deploy and Configure Tanzu Kubernetes Grid](#deploy-config-tkg)
-3. [Deploy Tanxu Kubernetes Grid Management Cluster](#deploy-mgmt-cluster)
+3. [Deploy Tanzu Kubernetes Grid Management Cluster](#deploy-mgmt-cluster)
 4. [Register Management Cluster with Tanzu Mission Control](#tmc-integration)
 5. [Deploy and Configure Shared Services Workload Cluster](#set-up-shared-cluster)
 6. [Deploy Tanzu Kubernetes Clusters (Workload Cluster)](#deploy-workload-cluster)
