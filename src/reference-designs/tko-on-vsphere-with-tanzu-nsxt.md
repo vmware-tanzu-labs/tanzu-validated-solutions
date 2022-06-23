@@ -20,7 +20,7 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
 - **VM Class in vSphere with Tanzu:** A VM class is a template that defines CPU, memory, and reservations for VMs. VM classes are used for VM deployment in a Supervisor Namespace. VM classes can be used by stand-alone VMs that run in a Supervisor Namespace and by VMs hosting a Tanzu Kubernetes Cluster.
 
-	vSphere with Tanzu offers several default VM classes. You can use them as is or you can create new VM classes. The default VM classes that are available in vSphere with Tanzu are shown in the following screenshot.
+	vSphere with Tanzu offers several default VM classes. You can use them as is or you can create new VM classes. The default VM classes that are available in vSphere with Tanzu are shown in the following image.
 
 	![VM Classes in vSphere with Tanzu](img/tko-on-vsphere-with-tanzu-nsxt/image2.png)
 
@@ -229,8 +229,8 @@ Should there be the need to isolate traffic between separate namespaces, there a
 
 The key recommendations for a production-grade vSphere with Tanzu deployment are as follows:
 
-- The NSX-T T0 Gateways should be deployed to a dedicated Edge Cluster. A separate Edge Cluster should be defined for T1 routers, as this is where load balancer services will run. This is for both performance and scalability reasons.
-- [NSX-T Config Maximums](https://configmax.esp.vmware.com/guest?vmwareproduct=VMware%20NSX&release=NSX-T%20Data%20Center%203.1.3&categories=20-0) must be considered when sizing the Edge Cluster that hosts the T1 routers, as the Edge Node size will determine the supported number of objects. Edge nodes can be added to Edge clusters in pairs, with up to 10 Edge nodes per Edge cluster.
+- The NSX-T T0 Gateways should be deployed to a dedicated Edge cluster. A separate Edge cluster should be defined for T1 routers, as this is where load balancer services will run. This is for both performance and scalability reasons.
+- [NSX-T Config Maximums](https://configmax.esp.vmware.com/guest?vmwareproduct=VMware%20NSX&release=NSX-T%20Data%20Center%203.1.3&categories=20-0) must be considered when sizing the Edge cluster that hosts the T1 routers, as the Edge Node size will determine the supported number of objects. Edge nodes can be added to Edge clusters in pairs, with up to 10 Edge nodes per Edge cluster.
 - Workload Clusters should be assigned to separate vSphere namespaces if they are considered separate security zones.
 - To fully isolate the cluster between 2 different vSphere namespaces, per namespace networking (requires vCenter update 3+) should be used to define dedicated ingress networks per vSphere namespace. NSX-T distributed firewall rules can be added to deny or drop traffic towards the ingress networks from un-trusted sources.
 - An IP block of 5 continuous IP addresses is required for the Supervisor Cluster.
