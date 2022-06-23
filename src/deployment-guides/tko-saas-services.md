@@ -257,8 +257,8 @@ You can onboard Tanzu Service Mesh with or without Tanzu Mission Control.
 * (Conditionally required) An active Tanzu Mission Control subscription.  Required only if you intend to onboard a cluster to Tanzu Service Mesh via Tanzu Mission Control.
 	* Ensure that the cluster to be onboarded to Tanzu Service Mesh is attached to Tanzu Mission Control.
 * An active Tanzu Service Mesh subscription.
-* Workload cluster resource requirements:
-    - **Nodes**: At least 3 worker nodes, each with at least 3,000 milliCPU (3 CPUs) of allocatable CPU and 6 GB of allocatable memory.
+* For workload cluster resource requirements, see [TSM requirements](https://docs.vmware.com/en/VMware-Tanzu-Service-Mesh/services/tanzu-service-mesh-environment-requirements-and-supported-platforms/GUID-D0B939BE-474E-4075-9A65-3D72B5B9F237.html)*
+    - **Nodes**: At least 3 worker nodes, each with at least 4,000 milliCPU (4 CPUs) of allocatable CPU and 6 GB of allocatable memory. 
     - **DaemonSets**: The DaemonSets instantiate a pod on every node on the cluster. To run the DaemonSets, Tanzu Service Mesh requires that every node in the cluster have at least 250 milliCPU and 650 MB of memory available.
     - **Ephemeral storage**: 24 GB for the whole cluster and additionally 1 GB for each node.
     - **Pods**: Tanzu Service Mesh requires a quota of at least 3 pods for each node on the cluster and additionally at least 30 pods for the whole cluster.
@@ -287,9 +287,17 @@ Note:
 
    ![Namespace Exclusion](img/tko-saas-services/tko-deploy-saas20.jpg)
 
-5. Click Confirm. The Tanzu Mission Control adapter for Tanzu Observability appears in an unhealthy state for a few minutes because the required objects are being created on the cluster.
+   - If you install user-managed packages such as Cert Manager, Contour, Prometheus, and Grafana, exclude the related namespaces for the user-managed packages:
+     - cert-manager
+     - tanzu-system-monitoring
+     - tanzu-system-dashboards
+     - tanzu-system-ingress
 
-6. On the target cluster, you will see a new namespace vmware-system-tsm and required objects being created. When all the required Kubernetes objects are created and are in a running state, status of the Tanzu Mission Control adapter changes to OK.
+   ![Namespace Exclusion](img/tko-saas-services/tko-deploy-saas23.png)
+
+5. Click Confirm. 
+  - The Tanzu Mission Control adapter for Tanzu Observability appears in an unhealthy state for a few minutes because the required objects are being created on the cluster.
+  - On the target cluster, you will see a new namespace vmware-system-tsm and required objects being created. When all the required Kubernetes objects are created and are in a running state, status of the Tanzu Mission Control adapter changes to OK.
 
 ![TSM Adapter Status](img/tko-saas-services/tko-deploy-saas21.jpg)
 
