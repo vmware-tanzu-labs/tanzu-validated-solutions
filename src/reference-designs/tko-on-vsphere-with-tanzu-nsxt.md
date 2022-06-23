@@ -97,7 +97,7 @@ vSphere with Tanzu is agnostic about which option you choose. [VMware vSAN](http
 
 For Kubernetes stateful workloads, vSphere with Tanzu installs the [vSphere Container Storage interface (vSphere CSI)](https://docs.vmware.com/en/VMware-vSphere-Container-Storage-Plug-in/index.html) to automatically provision Kubernetes persistent volumes for pods.
 
-While the default vSAN storage policy can be used, administrators should evaluate the needs of their applications and configure a specific [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html). vSAN storage policies describe classes of storage, such as SSD and NVME, as well as quota definitions for the VSAN cluster.
+While the default vSAN storage policy can be used, administrators should evaluate the needs of their applications and configure a specific [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html). vSAN storage policies describe classes of storage, such as SSD and NVME, as well as quota definitions for the vSAN cluster.
 
 ![vSphere with Tanzu on vSAN Storage](img/tko-on-vsphere-with-tanzu-nsxt/image9.png)
 
@@ -218,12 +218,12 @@ To prepare the firewall, gather the following information:
 
 By default, when vSphere namespaces are created, distributed firewall rules are added to block all access to VMs from sources outside the namespace, other than the Supervisor Cluster. This ensure that VMs and vSphere Pods by default are not able to communicate directly with VMs or pods in another namespace. 
 
-The NSX-T distributed firewall applies only to ports on switches known to the ESXi host and do not apply to router ports. This distinction is important as NSX-T load balancer Virtual Server interfaces are considered router ports, as they only exist as service within a Tier 1 Gateway, meaning the ports are not known to the ESXi host. The router ports also do not include any metadata or tags, meaning that the distributed firewall has no way to learn which namespace owns the Virtual Server.
+The NSX-T distributed firewall applies only to ports on switches known to the ESXi host and do not apply to router ports. This distinction is important as NSX-T load balancer virtual server interfaces are considered router ports, as they only exist as service within a Tier 1 Gateway, meaning the ports are not known to the ESXi host. The router ports also do not include any metadata or tags, meaning that the distributed firewall has no way to learn which namespace owns the virtual server.
 
 Should there be the need to isolate traffic between separate namespaces, there are 2 available options:
 
 1. When creating the namespace, override the network settings to define dedicated IP blocks. This enables distributed firewall rules to be added to drop/deny traffic from VMs in other namespaces towards the ingress IP pool. Using this pattern will require that separate IP ranges are used for ingress, egress and namespace networks. The networks are expandable at any time, but monitoring and managing IP capacity has an additional overhead.
-2. Use gateway girewalls to restrict traffic coming in to each load balancer. The benefit is that no additional IP management is required. The down side is that each namespace has its own gateway, with its own firewall rule table, which means that automation is significantly more challenging to implement and manual management will be very difficult. Also the gateway girewall has not had performance testing conducted against groups with dynamic membership. This is an issue at scale, as a workload cluster can only be identified by the tags applied to the segment it is attached to. This means in large environments there is potential for a lot of firewall rebuilds during activities such as upgrades, which could lead to performance issues.
+2. Use gateway firewalls to restrict traffic coming in to each load balancer. The benefit is that no additional IP management is required. The down side is that each namespace has its own gateway, with its own firewall rule table, which means that automation is significantly more challenging to implement and manual management will be very difficult. Also the gateway firewall has not had performance testing conducted against groups with dynamic membership. This is an issue at scale, as a workload cluster can only be identified by the tags applied to the segment it is attached to. This means in large environments there is potential for a lot of firewall rebuilds during activities such as upgrades, which could lead to performance issues.
 
 ### <a id=network-recommendations> </a> Networking Recommendations
 
@@ -232,55 +232,55 @@ The key recommendations for a production-grade vSphere with Tanzu deployment are
 - The NSX-T T0 Gateways should be deployed to a dedicated Edge Cluster. A separate Edge Cluster should be defined for T1 routers, as this is where load balancer services will run. This is for both performance and scalability reasons.
 - [NSX-T Config Maximums](https://configmax.esp.vmware.com/guest?vmwareproduct=VMware%20NSX&release=NSX-T%20Data%20Center%203.1.3&categories=20-0) must be considered when sizing the Edge Cluster that hosts the T1 routers, as the Edge Node size will determine the supported number of objects. Edge nodes can be added to Edge clusters in pairs, with up to 10 Edge nodes per Edge cluster.
 - Workload Clusters should be assigned to separate vSphere namespaces if they are considered separate security zones.
-- To fully isolate the cluster between 2 different vSphere namespaces, per namespace networking (requires vCenter update 3+) should be used to define dedicated ingress networks per vSphere namespace. NSX-T distributed firewall rules can be added to deny/drop traffic towards the ingress networks from un-trusted sources.
-- An IP Block of 5 continuous IP Addresses is required for the Supervisor Cluster.
+- To fully isolate the cluster between 2 different vSphere namespaces, per namespace networking (requires vCenter update 3+) should be used to define dedicated ingress networks per vSphere namespace. NSX-T distributed firewall rules can be added to deny or drop traffic towards the ingress networks from un-trusted sources.
+- An IP block of 5 continuous IP addresses is required for the Supervisor Cluster.
 
 ### Ingress Controllers for Tanzu Kubernetes Clusters
 
-When entitled VMware recommends installing the Contour Tanzu package and it can be installed on any Tanzu Kubernetes Cluster. Contour is exposed by the default Layer 4 load balancer and provides Layer 7 based routing to Kubernetes services. For more information about Contour, see [Contour](https://projectcontour.io) and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-ingress-contour.html).
+VMware recommends installing the Contour Tanzu package on Tanzu Kubernetes Clusters when entitled to do so. Contour is exposed by the default Layer 4 load balancer and provides Layer 7 based routing to Kubernetes services. For more information about Contour, see [Contour](https://projectcontour.io) and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
 
 Users can also use any third-party ingress controller of their choice.
 
 ### Ingress Controller for vSphere Pods
 
-The NSX-T load balancer functions as the default ingress controller for all vSphere pod based workloads. When an ingress object is created within a vSphere Namespace, it results in an NSX-T load balancer Virtual Server being created under the same Tier 1 router to host all ingress routes.
+The NSX-T load balancer functions as the default ingress controller for all vSphere Pod based workloads. When an ingress object is created within a vSphere Namespace, it results in an NSX-T load balancer virtual server being created under the same tier 1 router to host all ingress routes.
 
 ## Design Recommendations
 
 ### Design Recommendations for Supervisor Cluster
 
-- Provide a block of 5 continuous IP addresses for the Supervisor Cluster. DHCP mode is possible, but not recommended, due to known issues if a nodes IP is ever changed.
+- Provide a block of 5 continuous IP addresses for the Supervisor Cluster. DHCP mode is possible, but not recommended, due to known issues if a node's IP address is ever changed.
 - For each Supervisor Cluster where you intend to deploy a Tanzu Kubernetes Cluster, you must define a Subscribed Content Library object that sources the OVA used by the Tanzu Kubernetes Grid Service to build cluster nodes. The same Subscribed Content Library can be configured for multiple Supervisor Clusters.
-- To facilitate different storage tiers for Supervisor and Tanzu Kubernetes Clusters, it is recommended to have different storage policies and tag appropriate datastores. If the underlying storage is vSAN, Storage Policies with distinct capabilities (Availability & Storage Rules) can be created and leveraged in namespaces.
-- For a production-grade deployment, to allow Tanzu Mission Control integration, we recommend a Supervisor Cluster with a large size form factor for control plane nodes.
+- To facilitate different storage tiers for Supervisor and Tanzu Kubernetes Clusters, it is recommended to have different storage policies and tag appropriate datastores. If the underlying storage is vSAN, storage policies with distinct capabilities (availability & storage rules) can be created and leveraged in namespaces.
+- For a production-grade deployment, to allow Tanzu Mission Control integration, VMware recommends a Supervisor Cluster with a large size form factor for control plane nodes.
 - Register the Supervisor Cluster with Tanzu Mission Control to automate workload cluster creation and centralized life cycle management of all workload clusters.
 
 ### Design Recommendations for Tanzu Kubernetes Cluster
 
 - Deploy workload clusters (based on type prod/dev/test) in separate namespaces under the Supervisor namespace. This allows for setting limits for CPU, memory, storage, and the number of Kubernetes objects per namespace.
-- For deploying Tanzu Kubernetes Clusters in a production deployment, we recommend deploying at least 3 control plane and worker nodes for achieving high availability.
-- Consider using vSphere Namespaces to correspond with security zones (e.g development and production), then use per Namespace network overrides to allow traffic to be managed using the distributed firewall.
-- Configure Role Based Access Control for the Tanzu Kubernetes Clusters. Avoid the use of administrator credentials for managing the clusters. You can use the inbuilt user role or create new roles as per your requirements. vSphere SSO can be leveraged to implement RBAC.
-- Ensure that the private network ranges used by workload clusters do not overlap with any ranges that are currently or could ever be used in routable address space. Should the IP range used by pods for example be used elsewhere, then the the pods will never be able to route to the network outside the cluster.
+- For deploying Tanzu Kubernetes Clusters in a production deployment, VMware recommends deploying at least 3 control plane and worker nodes for achieving high availability.
+- Consider using vSphere Namespaces to correspond with security zones (for exmample development and production), then use per Namespace network overrides to allow traffic to be managed using the distributed firewall.
+- Configure role-based access control (RBAC) for the Tanzu Kubernetes Clusters. Avoid the use of administrator credentials for managing the clusters. You can use the inbuilt user role or create new roles as per your requirements. vSphere SSO can be leveraged to implement RBAC.
+- Ensure that the private network ranges used by workload clusters do not overlap with any ranges that are currently or could ever be used in routable address space. Should the IP range used by pods be used elsewhere, then the the pods will never be able to route to the network outside the cluster.
 
 
 ## Container Registry
 
 The Tanzu Editions include [Harbor](https://goharbor.io/) as a container registry. Harbor provides a location for pushing, pulling, storing, and scanning container images to be used in your Kubernetes clusters. There are three main supported installation methods for Harbor:
 
-* **[Tanzu Kubernetes Grid Package deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-harbor-registry.html)** to a Tanzu Kubernetes Grid cluster - this installation method is recommended for general use cases.
+* **[Tanzu Kubernetes Grid Package deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html)** to a Tanzu Kubernetes Grid cluster - this installation method is recommended for general use cases.
 
-* **[Embedded Harbor](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-5B0373CA-5379-47AF-9284-ED725FC79D89.html)** as a Supervisor Service, running in vSphere Pods - this is the simplest install path, as it come bundled with vCenter, but is also very feature limited. Harbor projects can only be created and manged via vSphere namespace integration from the vCenter UI. Harbor features such as image scanning, user management and image retention polices cannot be carried out.
+* **[Embedded Harbor](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-5B0373CA-5379-47AF-9284-ED725FC79D89.html)** as a Supervisor Service running in vSphere Pods - this is the simplest installation path, as it comes bundled with vCenter, but it is also very feature limited. Harbor projects can only be created and managed through vSphere namespace integration from the vCenter UI. Harbor features such as image scanning, user management, and image retention polices cannot be carried out.
 
 * **[Helm-based deployment](https://goharbor.io/docs/latest/install-config/harbor-ha-helm/)** to a Kubernetes cluster - this installation method may be preferred for customers already invested in Helm.
 
 * **[VM-based deployment](https://goharbor.io/docs/latest/install-config/installation-prereqs/)** using docker-compose - VMware recommends using this installation method in cases where Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-less environment and no pre-existing Kubernetes clusters exist on which to install Harbor. When Kubernetes is already available, the Helm based deployment also works for air-gapped environments.
 
-If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To do so, follow the procedure in [Trust Custom CA Certificates on Cluster Nodes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-cluster-lifecycle-secrets.html#trust-custom-ca-certificates-on-cluster-nodes-3).
+If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To do so, follow the procedure in [Trust Custom CA Certificates on Cluster Nodes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-cluster-lifecycle-secrets.html#trust-custom-ca-certificates-in-new-clusters-6).
 
 ## Logging
 
-The Tanzu Editions also include Fluent Bit for integration with logging platforms such as vRealize LogInsight, Elasticsearch, Splunk, or other logging solutions. For more information about Fluent Bit, see [Fluent Bit site](https://fluentbit.io/). To configure Fluent Bit for your logging provider, see [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-logging-fluentbit.html).
+The Tanzu Editions also include Fluent Bit for integration with logging platforms such as vRealize Log Insight, Elasticsearch, Splunk, or other logging solutions. For more information about Fluent Bit, see [Fluent Bit site](https://fluentbit.io/). To configure Fluent Bit for your logging provider, see [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html).
 
 The Fluent Bit `DaemonSet` extension installs automatically on all TKG clusters, but you can configure each Tanzu Kubernetes Grid cluster differently.
 
@@ -290,13 +290,13 @@ vRealize Log Insight appliance is available as a separate on-premises deployable
 
 ## vSphere with Tanzu SaaS Integration
 
-To integrate with VMware Tanzu SaaS products, it is necessary for both supervisor and workload clusters to have access to the VMware cloud portals. When access to the internet is routed or via a transparent proxy no additional action is needed. When access is via a Web proxy, both the Supervisor Cluster and the workload clusters must be deployed with the appropriate proxy configuration. Supervisor web proxy support requires a minimum of vCenter 7.0 update 3a.
+To integrate with VMware Tanzu SaaS products, it is necessary for both supervisor and workload clusters to have access to the VMware cloud portals. When access to the internet is routed or through a transparent proxy no additional action is needed. When access is through a Web proxy, both the Supervisor Cluster and the workload clusters must be deployed with the appropriate proxy configuration. Supervisor web proxy support requires a minimum of vCenter 7.0 update 3a.
 
 ## Tanzu Mission Control
 
 Tanzu Mission Control is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds. It provides operators with a single control point to give developers the independence they need to drive the business forward while enabling consistent management and operations across environments for increased security and governance.
 
-#### Attaching Tanzu Kubernetes Clusters to Tanzu Mission Control
+### Attaching Tanzu Kubernetes Clusters to Tanzu Mission Control
 
 It is recommended to attach the Supervisor Cluster and workload clusters into Tanzu Mission Control (TMC) as it provides a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters.
 
@@ -308,12 +308,12 @@ Tanzu Mission Control can assist you with the following:
 - **Compliance**: Enforcing all clusters to apply the same set of policies.
 - **Data protection**: Using [Velero](https://velero.io/) through Tanzu Mission Control to verify that your workloads and persistent volumes are being backed up.
 
-#### Policy-Driven Cluster Management
+### Policy-Driven Cluster Management
 
 Tanzu Mission Control allows the creation of policies of various types to manage the operation and security posture of your Kubernetes clusters and other organizational objects. Policies provide a set of rules that govern your organization and all the objects it contains. The policy types available in Tanzu Mission Control include the following:
 
 - Access Policy: Access policies allow the use of predefined roles to specify which identities (individuals and groups) have what level of access to a given resource. For more information, see [Access Control](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-EB9C6D83-1132-444F-8218-F264E43F25BD.html).
-- Image Registry Policy: Image registry policies allow to specify the source registries from which an image can be pulled.
+- Image Registry Policy: Image registry policies allow you to specify the source registries from which an image can be pulled.
 - Network Policy: Network policies allow you to use preconfigured templates to define how pods communicate with each other and other network endpoints.
 - Quota Policy: Quota policies allow you to constrain the resources used in your clusters, as aggregate quantities across specified namespaces, using pre-configured and custom templates. For more information, see [Managing Resource Consumption in Your Clusters](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-1905352C-856F-4D06-BB86-426F90486C32.html).
 - Security Policy: Security policies allow you to manage the security context in which deployed pods operate in your clusters by imposing constraints on your clusters that define what pods can do and which resources they have access to. For more information, see [Pod Security Management](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-6C65B33B-C1EA-465D-B909-3C4F51704C1A.html).
@@ -321,7 +321,7 @@ Tanzu Mission Control allows the creation of policies of various types to manage
 
 Not all policies described here are available in the Tanzu Mission Control Standard edition. For a comparison, see [VMware Tanzu Mission Control Feature Comparison Chart.](https://tanzu.vmware.com/content/tanzu-mission-control/tmc-comparison-chart)
 
-#### Policy Inheritance
+### Policy Inheritance
 
 In the Tanzu Mission Control resource hierarchy, you can specify policies at the following levels:
 
@@ -345,7 +345,7 @@ Figure 8 - TKG Cluster metrics in Grafana
 
 Figure 9 - TKG Cluster API Server Uptime metrics
 
-You can install Prometheus and Grafana by using Tanzu packages. For more information, see [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-monitoring.html).
+You can install Prometheus and Grafana by using Tanzu packages. For more information, see [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html).
 
 ### Metrics in Tanzu Observability
 
@@ -384,7 +384,7 @@ You can configure Tanzu Observability with an array of capabilities. The followi
   </tr>
 </table>
 
-Some sample dashboards are shown below. Tanzu Observability can display metric data from the full stack of application elements from the platform (VMware ESXi servers), to the virtual environment, to the application environment (Kubernetes), and down to the various components of an application (APM).
+Some sample dashboards are as follows. Tanzu Observability can display metric data from the full stack of application elements from the platform (VMware ESXi servers), to the virtual environment, to the application environment (Kubernetes), and down to the various components of an application (APM).
 
 #### ESXi Dashboards
 
@@ -473,7 +473,7 @@ VMware Tanzu Service Mesh is an enterprise-class service mesh solution that prov
 ### Key Benefits of Tanzu Service Mesh:
 
 - Extends the service mesh capability (discovery, connectivity, control, security, and observability) to users and data.
-- Facilitates the development and management of distributed applications across multiple clusters, multiple clouds, and in hybrid-cloud environments with Global Namespaces, supporting federation across organizational boundaries, technologies, and service meshes.
+- Facilitates the development and management of distributed applications across multiple clusters, multiple clouds, and in hybrid-cloud environments with global namespaces, supporting federation across organizational boundaries, technologies, and service meshes.
 - Implements consistent application-layer traffic management and security policies across all your clusters and clouds.
 - Integrates with VMware Tanzu Mission Control, VMware Enterprise PKS, and VMware Tanzu Kubernetes Grid to provide a seamless user experience.
 
@@ -487,13 +487,13 @@ Tanzu Service Mesh generates a topology graph view dynamically by observing the 
 
 ### Recommendation for using Tanzu Service Mesh
 
-- Use Tanzu Service Mesh when containerized applications are deployed in multi-cluster/multi-cloud environments. Using Tanzu Service Mesh, you can apply policies such as security and traffic management at the Global Namespace level.
-- For multi-cluster/multi-cloud applications, that have load balancer requirements, use Tanzu Service Mesh in-built integration with AWS Route 53 or NSX Advanced Load Balancer to leverage global load-balancing for containerized applications.
+- Use Tanzu Service Mesh when containerized applications are deployed in multi-cluster and multi-cloud environments. Using Tanzu Service Mesh, you can apply policies such as security and traffic management at the global namespace level.
+- For multi-cluster and multi-cloud applications that have load balancer requirements, use Tanzu Service Mesh in-built integration with AWS Route 53 or NSX Advanced Load Balancer to leverage global load-balancing for containerized applications.
 - For applications that require end-to-end encryption for in-flight traffic, Tanzu Service Mesh (using Istio) can set up end-to-end mutual transport layer security (mTLS) encryption utilizing the in-built CA function called Citadel.
 - Tanzu Service Mesh is really helpful when planning rolling upgrades of microservices to a newer version at scale. Using Tanzu Service Mesh, you can easily manage multiple rolling upgrades by defining the policies at the GNS level and monitoring the same from the Tanzu Service Mesh dashboard.
 
 ## Summary
 
-vSphere with Tanzu on hyper-converged hardware offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating on-premises Kubernetes platforms in a consolidated production environment. This validated approach will result in a production installation with all the application services needed to serve combined or uniquely separated workload types via a combined infrastructure solution.
+vSphere with Tanzu on hyper-converged hardware offers high-performance potential, convenience, and addresses the challenges of creating, testing, and updating on-premises Kubernetes platforms in a consolidated production environment. This validated approach will result in a production installation with all the application services needed to serve combined or uniquely separated workload types through a combined infrastructure solution.
 
 This plan meets many Day 0 needs for quickly aligning product capabilities to full-stack infrastructure, including networking, configuring firewall rules, load balancing, workload compute alignment and other capabilities.
