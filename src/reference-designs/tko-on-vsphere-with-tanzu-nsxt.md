@@ -10,15 +10,15 @@ This document lays out a reference design for deploying VMware Tanzu for Kuberne
 
   The Supervisor Cluster runs on top of an SDDC layer that consists of ESXi for compute, NSX-T Data Center or vSphere networking, and vSAN or another shared storage solution.
 
-- **vSphere Namespaces:** A vSphere Namespace is a tenancy boundary within vSphere with Tanzu. A vSphere Namespace allows the sharing of vSphere resources (computer, networking, storage) and enforcing of resource limits with the underlying objects such as Tanzu Kubernetes Clusters. It also allows you to attach policies and permissions.
+- **vSphere Namespaces:** A vSphere Namespace is a tenancy boundary within vSphere with Tanzu. A vSphere Namespace allows the sharing of vSphere resources (computer, networking, storage) and enforcing of resource limits with the underlying objects such as Tanzu Kubernetes clusters. It also allows you to attach policies and permissions.
 
-- **Tanzu Kubernetes Grid Service:** Tanzu Kubernetes Grid Service allows you to create and manage ubiquitous Kubernetes clusters on a VMware vSphere infrastructure using the Kubernetes Cluster API. The Cluster API provides declarative, Kubernetes-style APIs to enable the creation, configuration, and management of the Tanzu Kubernetes Cluster.
+- **Tanzu Kubernetes Grid Service:** Tanzu Kubernetes Grid Service allows you to create and manage ubiquitous Kubernetes clusters on a VMware vSphere infrastructure using the Kubernetes Cluster API. The Cluster API provides declarative, Kubernetes-style APIs to enable the creation, configuration, and management of the Tanzu Kubernetes cluster.
 
-	Tanzu Kubernetes Grid Service also provides self-service lifecycle management of Tanzu Kubernetes Clusters.
+	Tanzu Kubernetes Grid Service also provides self-service lifecycle management of Tanzu Kubernetes clusters.
 
-- **Tanzu Kubernetes Cluster (Workload Cluster):** Tanzu Kubernetes Clusters are Kubernetes workload clusters in which your application workloads run. These clusters can be attached to SaaS solutions such as Tanzu Mission Control, Tanzu Observability, and Tanzu Service Mesh, which are part of Tanzu for Kubernetes Operations.
+- **Tanzu Kubernetes Cluster (Workload Cluster):** Tanzu Kubernetes clusters are Kubernetes workload clusters in which your application workloads run. These clusters can be attached to SaaS solutions such as Tanzu Mission Control, Tanzu Observability, and Tanzu Service Mesh, which are part of Tanzu for Kubernetes Operations.
 
-- **VM Class in vSphere with Tanzu:** A VM class is a template that defines CPU, memory, and reservations for VMs. VM classes are used for VM deployment in a Supervisor Namespace. VM classes can be used by stand-alone VMs that run in a Supervisor Namespace and by VMs hosting a Tanzu Kubernetes Cluster.
+- **VM Class in vSphere with Tanzu:** A VM class is a template that defines CPU, memory, and reservations for VMs. VM classes are used for VM deployment in a Supervisor Namespace. VM classes can be used by stand-alone VMs that run in a Supervisor Namespace and by VMs hosting a Tanzu Kubernetes cluster.
 
 	vSphere with Tanzu offers several default VM classes. You can use them as is or you can create new VM classes. The default VM classes that are available in vSphere with Tanzu are shown in the following image.
 
@@ -51,7 +51,7 @@ The Supervisor Cluster consists of the following components:
 
 - **Kubernetes control plane VM:** Three Kubernetes control plane VMs in total are created on the hosts that are part of the Supervisor Cluster. The three control plane VMs are load balanced as each one of them has its own IP address.
 
-- **Cluster API and Tanzu Kubernetes Grid Service:** These are modules that run on the Supervisor Cluster and enable the provisioning and management of Tanzu Kubernetes Clusters.
+- **Cluster API and Tanzu Kubernetes Grid Service:** These are modules that run on the Supervisor Cluster and enable the provisioning and management of Tanzu Kubernetes clusters.
 
 The following diagram shows the general architecture of the Supervisor Cluster.
 
@@ -67,7 +67,7 @@ Figure 5 - vSphere Namespaces
 
 To provide tenants access to namespaces, the vSphere administrator assigns permission to users or groups available within an identity source that is associated with vCenter Single Sign-On.
 
-Once the permissions are assigned, the tenants can access the namespace to create Tanzu Kubernetes Clusters using the YAML file and Cluster API.
+Once the permissions are assigned, the tenants can access the namespace to create Tanzu Kubernetes clusters using the YAML file and Cluster API.
 
 ## Supported Component Matrix
 
@@ -139,11 +139,11 @@ vSphere with Tanzu can be deployed using the following:
 
 ### vSphere with Tanzu on VMware NSX-T Data Center Networking
 
-In a vSphere with Tanzu environment, a Supervisor Cluster configured with NSX-T networking uses either a distributed port group or NSX-T segment to provide connectivity to Kubernetes control plane VMs. Tanzu Kubernetes Clusters and vSphere Pods have their networking provided by NSX-T segments. All hosts from the cluster, which is enabled for vSphere with Tanzu, are connected to the distributed switch that provides connectivity to Kubernetes workloads and control plane VMs.
+In a vSphere with Tanzu environment, a Supervisor Cluster configured with NSX-T networking uses either a distributed port group or NSX-T segment to provide connectivity to Kubernetes control plane VMs. Tanzu Kubernetes clusters and vSphere Pods have their networking provided by NSX-T segments. All hosts from the cluster, which is enabled for vSphere with Tanzu, are connected to the distributed switch that provides connectivity to Kubernetes workloads and control plane VMs.
 
-You can use one or more distributed port groups as Workload Networks. The network that provides connectivity to the Kubernetes Control Plane VMs is called Primary Workload Network. You can assign this network to all the namespaces on the Supervisor Cluster, or you can use different networks for each namespace. The Tanzu Kubernetes Clusters connect to the Workload Network that is assigned to the namespace.
+You can use one or more distributed port groups as Workload Networks. The network that provides connectivity to the Kubernetes Control Plane VMs is called Primary Workload Network. You can assign this network to all the namespaces on the Supervisor Cluster, or you can use different networks for each namespace. The Tanzu Kubernetes clusters connect to the Workload Network that is assigned to the namespace.
 
-The Supervisor Cluster leverages the NSX-T load balancer to provide L4 load balancing for the Tanzu Kubernetes Clusters and vSphere Pods. It also provides L7 ingress to vSphere Pods, but not for Tanzu Kubernetes Clusters. Tanzu Kubernetes Clusters require an in-cluster ingress controller, such as Contour. Users access the applications by connecting to the Virtual IP address (VIP) of the applications provisioned by the NSX-T load balancer.
+The Supervisor Cluster leverages the NSX-T load balancer to provide L4 load balancing for the Tanzu Kubernetes clusters and vSphere Pods. It also provides L7 ingress to vSphere Pods, but not for Tanzu Kubernetes clusters. Tanzu Kubernetes clusters require an in-cluster ingress controller, such as Contour. Users access the applications by connecting to the Virtual IP address (VIP) of the applications provisioned by the NSX-T load balancer.
 
 The following diagram shows a general overview for vSphere with Tanzu on vSphere Networking. 
 
@@ -158,11 +158,11 @@ System namespaces are namespaces that are used by the core components that are i
 - NSX Edge provides connectivity from external networks to Supervisor Cluster objects. An NSX Edge cluster normally includes at least two Edge nodes and has a load balancer that provides a redundancy to the Kubernetes API servers residing on the control plane VMs and any application that must be published and be accessible from outside the Supervisor Cluster. There are different topologies possible in terms of shared and dedicated Edge clusters.
 - A Tier-0 gateway is associated with an NSX Edge cluster to provide routing to the external network. The uplink interface uses either the dynamic routing protocol, BGP, or static routing.
 - Each vSphere Namespace has a separate network and a set of networking resources shared by applications inside the namespace such as, tier-1 gateway, load balancer service, and SNAT IP address.
-- Workloads running in vSphere Pods, regular VMs, or Tanzu Kubernetes Clusters, that are in the same namespace, share a same SNAT IP for North-South connectivity.
-- Workloads running in vSphere Pods or Tanzu Kubernetes Clusters will have the same isolation rule that is implemented by the default firewall.
+- Workloads running in vSphere Pods, regular VMs, or Tanzu Kubernetes clusters, that are in the same namespace, share a same SNAT IP for North-South connectivity.
+- Workloads running in vSphere Pods or Tanzu Kubernetes clusters will have the same isolation rule that is implemented by the default firewall.
 - A separate SNAT IP is not required for each Kubernetes namespace. East west connectivity between namespaces does not require SNAT.
 - The segments for each namespace reside on the vSphere Distributed Switch (VDS) functioning in Standard mode that is associated with the NSX Edge cluster. The segment provides an overlay network to the Supervisor Cluster.
-- Supervisor Clusters can have separate segments per Tanzu Kubernetes Cluster within the shared tier-1 gateway for a particular namespace. 
+- Supervisor Clusters can have separate segments per Tanzu Kubernetes cluster within the shared tier-1 gateway for a particular namespace. 
 
 ### Network Sizing
 
@@ -187,7 +187,7 @@ To prepare the firewall, gather the following information:
 - Supervisor Cluster network (vSphere with Tanzu Management) CIDR.
 - Supervisor Cluster VIP address.
 - Tanzu Kubernetes Grid Workload Cluster VIP address.
-- Tanzu Kubernetes Cluster (Workload Cluster) CIDR.
+- Tanzu Kubernetes cluster (Workload Cluster) CIDR.
 - VMware Harbor registry IP address.
 - DNS server IP addresses.
 - NTP server IP addresses.
@@ -237,7 +237,7 @@ The key recommendations for a production-grade vSphere with Tanzu deployment are
 
 ### Ingress Controllers for Tanzu Kubernetes Clusters
 
-VMware recommends installing the Contour Tanzu package on Tanzu Kubernetes Clusters when entitled to do so. Contour is exposed by the default Layer 4 load balancer and provides Layer 7 based routing to Kubernetes services. For more information about Contour, see [Contour](https://projectcontour.io) and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
+VMware recommends installing the Contour Tanzu package on Tanzu Kubernetes clusters when entitled to do so. Contour is exposed by the default Layer 4 load balancer and provides Layer 7 based routing to Kubernetes services. For more information about Contour, see [Contour](https://projectcontour.io) and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html).
 
 Users can also use any third-party ingress controller of their choice.
 
@@ -250,17 +250,17 @@ The NSX-T load balancer functions as the default ingress controller for all vSph
 ### Design Recommendations for Supervisor Cluster
 
 - Provide a block of 5 continuous IP addresses for the Supervisor Cluster. DHCP mode is possible, but not recommended, due to known issues if a node's IP address is ever changed.
-- For each Supervisor Cluster where you intend to deploy a Tanzu Kubernetes Cluster, you must define a Subscribed Content Library object that sources the OVA used by the Tanzu Kubernetes Grid Service to build cluster nodes. The same Subscribed Content Library can be configured for multiple Supervisor Clusters.
-- To facilitate different storage tiers for Supervisor and Tanzu Kubernetes Clusters, it is recommended to have different storage policies and tag appropriate datastores. If the underlying storage is vSAN, storage policies with distinct capabilities (availability & storage rules) can be created and leveraged in namespaces.
+- For each Supervisor Cluster where you intend to deploy a Tanzu Kubernetes cluster, you must define a Subscribed Content Library object that sources the OVA used by the Tanzu Kubernetes Grid Service to build cluster nodes. The same Subscribed Content Library can be configured for multiple Supervisor Clusters.
+- To facilitate different storage tiers for Supervisor and Tanzu Kubernetes clusters, it is recommended to have different storage policies and tag appropriate datastores. If the underlying storage is vSAN, storage policies with distinct capabilities (availability & storage rules) can be created and leveraged in namespaces.
 - For a production-grade deployment, to allow Tanzu Mission Control integration, VMware recommends a Supervisor Cluster with a large size form factor for control plane nodes.
 - Register the Supervisor Cluster with Tanzu Mission Control to automate workload cluster creation and centralized life cycle management of all workload clusters.
 
 ### Design Recommendations for Tanzu Kubernetes Cluster
 
 - Deploy workload clusters (based on type prod/dev/test) in separate namespaces under the Supervisor namespace. This allows for setting limits for CPU, memory, storage, and the number of Kubernetes objects per namespace.
-- For deploying Tanzu Kubernetes Clusters in a production deployment, VMware recommends deploying at least 3 control plane and worker nodes for achieving high availability.
+- For deploying Tanzu Kubernetes clusters in a production deployment, VMware recommends deploying at least 3 control plane and worker nodes for achieving high availability.
 - Consider using vSphere Namespaces to correspond with security zones (for exmample development and production), then use per Namespace network overrides to allow traffic to be managed using the distributed firewall.
-- Configure role-based access control (RBAC) for the Tanzu Kubernetes Clusters. Avoid the use of administrator credentials for managing the clusters. You can use the inbuilt user role or create new roles as per your requirements. vSphere SSO can be leveraged to implement RBAC.
+- Configure role-based access control (RBAC) for the Tanzu Kubernetes clusters. Avoid the use of administrator credentials for managing the clusters. You can use the inbuilt user role or create new roles as per your requirements. vSphere SSO can be leveraged to implement RBAC.
 - Ensure that the private network ranges used by workload clusters do not overlap with any ranges that are currently or could ever be used in routable address space. Should the IP range used by pods be used elsewhere, then the the pods will never be able to route to the network outside the cluster.
 
 
