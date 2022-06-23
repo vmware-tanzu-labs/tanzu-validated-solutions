@@ -1,4 +1,4 @@
-## Deploy User-Managed Packages in Workload Clusters
+# Deploy User-Managed Packages in Workload Clusters
 
 After creating workload clusters, you can install user-managed packages. These packages extend the core functionality of the Kubernetes clusters created by Tanzu Kubernetes Grid.
 
@@ -6,7 +6,7 @@ For example, you can install the Contour package to implement ingress control, t
 
 You can install Tanzu packages via the CLI by invoking the `tanzu package install` command or directly from Tanzu Mission Control by utilizing the [**TMC Catalog**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
 
-### General Instructions for Installing a Package from Tanzu Mission Control
+## General Instructions for Installing a Package from Tanzu Mission Control
 
 VMware recommends installing packages on Tanzu Kubernetes clusters through Tanzu Mission Control. The general procedure for using Tanzu Mission Control to install a single package on a particular cluster is as follows:
 
@@ -20,7 +20,7 @@ VMware recommends installing packages on Tanzu Kubernetes clusters through Tanzu
 1. Configure the package. (Details for configuring common packages follow.)
 1. Verify that the package is shown in the list of installed packages for that cluster and that the package **Status** is **Succeeded**.
 
-### **Install cert-manager**
+### Install Cert-Manager
 
 The first package that you should install on your cluster is [**cert-manager**](https://github.com/cert-manager/cert-manager). This package adds certificates and certificate issuers as resource types in Kubernetes clusters and simplifies the process of obtaining, renewing, and using those certificates.
 
