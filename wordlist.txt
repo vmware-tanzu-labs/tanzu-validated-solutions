@@ -92,3 +92,13 @@ netreq
 fwreq
 LDAPS
 CONTROLPLANE
+cidrex
+configurensxt
+SNAT
+deploynsxalb
+configurebootstrap
+importbaseimage
+createmgmt
+createsharedsvc
+createworkload
+workloadako
