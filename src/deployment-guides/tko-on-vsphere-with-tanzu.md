@@ -759,7 +759,11 @@ For instructions on enabling Tanzu Observability on your workload cluster, pleas
 
 ## <a id=deploy-user-managed-packages> </a> Deploy User-Managed Packages on Tanzu Kubernetes clusters
 
-<!--- For instructions on installing user-Managed packages on the Tanzu Kubernetes clusters, please see []() -->
+For instructions on installing user-Managed packages on the Tanzu Kubernetes clusters, please see [Install User-Managed Packages through Tanzu Mission Control](./tkg-package-install.md#deploy-user-managed-packages-in-workload-clusters)
+
+## Backup Tanzu Kubernetes Clusters
+
+For instructions on enabling Data Protection on a workload cluster and performing backup and restore of workloads, please see [Tanzu Mission Control Data Protection](./tkg-data-protection.md#data-protection)
 
 ## Self-Service Namespace in vSphere with Tanzu
 
