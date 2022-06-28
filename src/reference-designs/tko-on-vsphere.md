@@ -2,28 +2,9 @@
 
 Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
 
-This document lays out a reference architecture for VMware Tanzu for Kubernetes Operations when deployed on a vSphere environment backed by vSphere Networking (VDS) and offers a high-level overview of the different components.
+This document describes a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere backed by vSphere Networking (VDS).
 
-## Tanzu for Kubernetes Operations Components
-
-Tanzu for Kubernetes Operations comprises the following components:
-
-- **Tanzu Kubernetes Grid (TKG)** - Enables creation and lifecycle management of Kubernetes clusters.
-- **Tanzu Mission Control (TMC)** - A centralized management platform for consistently operating and securing Kubernetes infrastructure and modern applications across multiple teams and clouds, and allows for centralized policy management across all deployed and attached clusters.
-- **Tanzu Observability (TO)** - Provides enterprise-grade observability and analytics at scale with granular controls, which allows you to achieve higher levels of application health and availability for an overall improved end-user experience
-- **Tanzu Service Mesh (TSM)** - Provides end-to-end connectivity, continuity, resiliency, security, compliance, and observability for modern applications running in single and multi-cloud environments. Global Namespace can be used to leverage the power of the hybrid cloud.
-- **NSX Advanced Load Balancer** - An enterprise grade integrated load balancer, which provides layer 4 load balancer support, recommended for vSphere deployments without NSX-T, or when there are unique scaling requirements.
-- **Tanzu User-Managed Packages:**
-  - [**Cert Manager**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cert-manager.html) - Provides automated certificate management. It runs by default in management clusters.
-  - [**Contour**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html) - Provides layer 7 ingress control to deployed HTTP or HTTPS applications. Tanzu Kubernetes Grid includes signed binaries for Contour. Deploying Contour is a prerequisite for deploying the Prometheus, Grafana, and Harbor extensions.
-  - [**ExternalDNS**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html) - Publishes DNS records for applications to DNS servers. It uses a declarative Kubernetes-native interface.
-  - [**Fluent Bit**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html) - Collects data and logs from different sources, unifies them, and sends them to multiple destinations. Tanzu Kubernetes Grid includes signed binaries for Fluent Bit.
-  - [**Prometheus**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html) - Provides out-of-the-box health monitoring of Kubernetes clusters. The Tanzu Kubernetes Grid implementation of Prometheus includes an Alert Manager. You can configure Alert Manager to notify you when certain events occur.
-  - [**Grafana**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-monitoring.html) - Provides monitoring dashboards for displaying key health metrics of Kubernetes clusters. Tanzu Kubernetes Grid includes an implementation of Grafana.
-  - [**Harbor Image Registry**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html) - Provides a centralized location to push, pull, store, and scan container images used in Kubernetes workloads. It supports storing artifacts such as Helm Charts and includes enterprise-grade features such as RBAC, retention policies, automated garbage clean up, and docker hub proxying.
-  - [**Multus CNI**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html) - Enables attaching multiple network interfaces to pods. Multus CNI is a container network interface (CNI) plugin for Kubernetes that lets you attach multiple network interfaces to a single pod and associate each with a different address range.
-
-Tanzu for Kubernetes Operations puts all these components together into a coherent solution:
+This following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md)
 
 ![Tanzu for Kubernetes Operations components](img/tko-on-vsphere/TKO-Ref-Arch.jpg)
 

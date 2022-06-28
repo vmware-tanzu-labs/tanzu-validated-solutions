@@ -2,7 +2,7 @@
 
 This document provides step-by-step instructions for deploying Tanzu Kubernetes Operations on VMware Cloud on AWS.
 
-The scope of the document is limited to providing the deployment steps based on the reference design in [VMware Tanzu Standard on VMware Cloud on AWS Reference Design](../reference-designs/tko-on-vmc-aws.md).
+The scope of the document is limited to providing the deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Reference Design](../reference-designs/tko-on-vmc-aws.md).
 
 ## Prerequisites
 These instructions assume that you have the following set up:
@@ -119,26 +119,26 @@ To deploy NSX Advanced Load Balancer controller nodes:
     - Select the **NSX-Advanced Load Balancer-Mgmt** port group for the Management Network.
     - Customize the configuration by providing the **Management Interface IP Address**, **Subnet Mask**, and **Default Gateway**. The remaining fields are optional and can be left blank.
 
-Once the controller VM is deployed and powered on, connect to the URL for the node and configure the node for your Tanzu Kubernetes Grid environment as follows:
+After the controller VM is deployed and powered on, connect to the URL for the node and configure the node for your Tanzu Kubernetes Grid environment as follows:
 
 1. Create the administrator account by setting the password and optional email address.
 
-![Configure admin window](img/tko-in-vmc-aws/deploy-tko-vmc-01.jpg)
+    ![Configure admin window](img/tko-in-vmc-aws/deploy-tko-vmc-01.jpg)
 
 2. Configure System Settings by specifying the backup passphrase and DNS information.
 
-![Configure System settings](img/tko-in-vmc-aws/deploy-tko-vmc-02.jpg)
+    ![Configure System settings](img/tko-in-vmc-aws/deploy-tko-vmc-02.jpg)
 
 3. (Optional) Configure **Email/SMTP**
 
-![Configure Email/SMTP](img/tko-in-vmc-aws/deploy-tko-vmc-03.jpg)
+    ![Configure Email/SMTP](img/tko-in-vmc-aws/deploy-tko-vmc-03.jpg)
 
 4. Configure **Multi-Tenant** settings as follows:
 
-   - **IP Route Domain:** Per tenant IP route domain.
-   - **Service Engine Context:** Tenant context, (not shared across tenants).
+      - **IP Route Domain:** Per tenant IP route domain.
+      - **Service Engine Context:** Tenant context, (not shared across tenants).
 
-![Multi-Tenant settings](img/tko-in-vmc-aws/deploy-tko-vmc-04.jpg)
+    ![Multi-Tenant settings](img/tko-in-vmc-aws/deploy-tko-vmc-04.jpg)
 
 5. Click **Save** to complete the post-deployment configuration wizard.
 
@@ -455,11 +455,13 @@ By default, service engine VMs are created in the default Service Engine Group.
 
 ![Service Engine Group](img/tko-in-vmc-aws/deploy-tko-vmc-40.JPG)
 
-1. To map the service engine VMs to the correct Service Engine Group, go to the **Infrastructure > Service Engine** tab, select your cloud, and click the pencil icon to update the settings and link the service engine to the correct SEG.
+To map the service engine VMs to the correct Service Engine Group, 
+
+1. Go to the **Infrastructure > Service Engine** tab, select your cloud, and click the pencil icon to update the settings and link the service engine to the correct SEG.
 
     ![Edit Service Engine](img/tko-in-vmc-aws/deploy-tko-vmc-41.JPG)
 
-1. Repeat the same steps for the other service engine VMs and correct the Service Engine Group association.
+2. Repeat the step for all service engine VMs.
 
 On the **Service Engine Group** page, you can confirm the association of service engines with Service Engine Groups.
 

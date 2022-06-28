@@ -1,42 +1,10 @@
 # VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design
 
-vSphere with Tanzu transforms the vSphere cluster into a platform for running Kubernetes workloads in dedicated resource pools. When vSphere with Tanzu is enabled on a vSphere cluster, vSphere with Tanzu creates a Kubernetes control plane directly in the hypervisor layer. You can then run Kubernetes containers by creating upstream Kubernetes clusters through the VMware Tanzu™ Kubernetes Grid™ Service and run your applications inside these clusters.
+vSphere with Tanzu transforms the vSphere cluster into a platform for running Kubernetes workloads in dedicated resource pools. When vSphere with Tanzu is enabled on a vSphere cluster, vSphere with Tanzu creates a Kubernetes control plane directly in the hypervisor layer. You can then run Kubernetes containers by creating upstream Kubernetes clusters through the VMware Tanzu Kubernetes Grid Service and run your applications inside these clusters.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu.
+This document provides a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu.
 
-## Tanzu for Kubernetes Operations using vSphere with Tanzu Key Components
-
-The following components comprise VMware Tanzu for Kubernetes Operations:
-
-- [**vSphere with Tanzu**](https://www.vmware.com/in/products/vsphere/vsphere-with-tanzu.html) - It is the new generation of vSphere for containerized applications. Using vSphere with Tanzu you can transform vSphere to a platform for running Kubernetes workloads natively on the hypervisor layer. When enabled on a vSphere cluster, vSphere with Tanzu provides the capability to run Kubernetes workloads directly on ESXi hosts and to create upstream Kubernetes clusters within dedicated resource pools.
-
-- [**Tanzu Mission Control (TMC)**](https://tanzu.vmware.com/mission-control) - A centralized management platform for consistently operating and securing Kubernetes infrastructure and modern applications across multiple teams and clouds, and allows for centralized policy management across all deployed and attached clusters.
-
-- [**Tanzu Observability (TO)**](https://tanzu.vmware.com/observability) - Provides enterprise-grade observability and analytics at scale with granular controls, which allows achieving higher levels of application health and availability for an overall improved end-user experience
-
-- [**Tanzu Service Mesh (TSM)**](https://tanzu.vmware.com/service-mesh) - Provides end-to-end connectivity, continuity, resiliency, security, compliance, and observability for modern applications running in single and multi-cloud environments. Global Namespace can be used to leverage the power of the hybrid cloud.
-
-- [**NSX Advanced Load Balancer**](https://www.vmware.com/in/products/nsx-advanced-load-balancer.html) - An enterprise-grade integrated Load balancer, provides Layer 4 Load Balancer support, recommended for vSphere deployments without NSX-T, or when there are unique scaling requirements.
-
-- [**User-managed Packages**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-user-managed-index.html) - Provides in-cluster and shared services to the Kubernetes clusters that are running in your vSphere with Tanzu environment.
-
-  - [**Cert Manager**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cert-manager.html) - Provides automated certificate management. It runs by default in management clusters.
-
-  - [**Contour**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html) - Provides layer 7 ingress control to deployed HTTP(S) applications. Tanzu Kubernetes Grid includes signed binaries for Contour. Deploying Contour is a prerequisite for deploying the Prometheus, Grafana, and Harbor extensions.
-
-  - [**ExternalDNS**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html) - Publishes DNS records for applications to DNS servers. It uses a declarative Kubernetes-native interface.
-
-  - [**Fluent Bit**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html) - Collects data and logs from different sources, unify them, and sends them to multiple destinations. Tanzu Kubernetes Grid includes signed binaries for Fluent Bit.
-
-  - [**Prometheus**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html) - Provides out-of-the-box health monitoring of Kubernetes clusters. The Tanzu Kubernetes Grid implementation of Prometheus includes an Alert Manager. You can configure Alert Manager to notify you when certain events occur.
-
-  - [**Grafana**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html) - Provides monitoring dashboards for displaying key health metrics of Kubernetes clusters. Tanzu Kubernetes Grid includes an implementation of Grafana.
-
-  - [**Harbor Image Registry**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html) - Provides a centralized location to push, pull, store, and scan container images used in Kubernetes workloads. It supports storing artifacts such as Helm Charts and includes enterprise-grade features such as RBAC, retention policies, automated garbage clean up, and docker hub proxying.
-
-  - [**Multus CNI**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html) - Enables attaching multiple network interfaces to pods. Multus CNI is a container network interface (CNI) plugin for Kubernetes that lets you attach multiple network interfaces to a single pod and associate each with a different address range.
-
-Tanzu for Kubernetes Operations puts all these components together into a coherent solution as shown in the following diagram:
+This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
 ![Diagram of TKO using vSphere with Tanzu Reference Architecture](./img/tko-on-vsphere-with-tanzu/TKO-VWT-Reference-Design.jpg)
 
@@ -112,7 +80,7 @@ Here are some recommendations for using namespaces in a vSphere with Tanzu envir
 |TKO-TKGS-004|Enable self-service namespaces.|Enable DevOps/Cluster admin users to provision namespaces in a self-service manner.|The vSphere administrator must publish a namespace template to the LDAP users/groups to enable them to create namespaces.|
 |TKO-TKGS-005|Register external identity source (AD/LDAP) with vCenter.|Limit access to a namespace to authorized users/groups.|A prod namespace can be accessed by a handful of users, whereas a dev/test namespace can be exposed to a wider audience.|
 
-## Matrix of Supported Components
+## Supported Component Matrix
 
 |**Software Components**|**Version**|
 | --- | --- | --- | --- |
@@ -139,7 +107,7 @@ vSphere with Tanzu is agnostic about which storage option you choose. For Kubern
 [VMware vSAN](https://docs.vmware.com/en/VMware-vSAN/index.html) is a recommended storage solution for both Supervisor and workload cluster VMs.
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
-| :- | :- | :- | :- |
+| --- | --- | --- | --- |
 |TKO-STG-001|Use vSAN storage for TKO|By using vSAN as the shared storage solution, you can take advantage of local storage, which is more cost-effective.|vSAN File Services need to be configured to leverage this. vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions|
 
 While you can use the default vSAN storage policy, it is often preferable to craft a custom [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html) based on the requirements of your applications. vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters.
