@@ -267,7 +267,7 @@ To deploy NSX Advanced Load Balancer, complete the following steps.
 A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX Advanced Load Balancer virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, navigate to NSX Advanced Load Balancer on your browser.  
 **Note**: While the system is booting up, a blank web page or a 503 status code may appear.  
 
-#### <a id=""nsx-alb-init""> </a>NSX Advanced Load Balancer: Initial Setup
+#### <a id="nsx-alb-init"> </a>NSX Advanced Load Balancer: Initial Setup
 
 Once NSX Advanced Load Balancer is successfully deployed and running, navigate to NSX Advanced Load Balancer on your browser using the URL https://<em><IP/FQDN></em> and configure the basic system settings:
 
@@ -392,6 +392,7 @@ For information about mapping a specific service engine group to Tanzu Kubernete
 The following components are created in NSX Advanced Load Balancer.
 
 <!-- /* cSpell:disable */ -->
+
 | Object | Sample Name |
 | --- | --- |
 | vCenter Cloud | tanzu-vcenter01 |
@@ -493,7 +494,7 @@ As part of the cloud creation, only ALB management network has been configured i
 
  ![Routes in network configuration](img/tko-on-vsphere-nsxt/37-ALB-26.png)
 
-##### Create IPAM Profile in NSX Advanced Load Balancer and Attach it to Cloud
+##### Create IPAM Profile in NSX Advanced Load Balancer and Attach to Cloud
 
 At this point, all the required networks related to Tanzu functionality are configured in NSX Advanced Load Balancer, except for Tanzu Kubernetes Grid management and workload network which uses DHCP. NSX Advanced Load Balancer provides IPAM service for Tanzu Kubernetes Grid cluster VIP network, management VIP network, and workload VIP network.  
 
