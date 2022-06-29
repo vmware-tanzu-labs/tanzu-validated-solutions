@@ -1,6 +1,6 @@
 #  Deploy Tanzu for Kubernetes Operations on vSphere with VMware VDS
 
-This document provides step-by-step instructions for installing and configuring Tanzu for Kubernetes Operations on a vSphere environment backed by a Virtual Distributed Switch (VDS). The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on vSphere with VDS Reference Design](../reference-designs/tko-on-vsphere.md). This document does not provide instructions for deploying the underlying SDDC components.
+This document provides step-by-step instructions for installing and configuring Tanzu for Kubernetes Operations on a vSphere environment backed by a Virtual Distributed Switch (VDS). The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](../reference-designs/tko-on-vsphere.md). This document does not provide instructions for deploying the underlying SDDC components.
 
 ## Prepare Your Environment for Deploying Tanzu Kubernetes Operations
 
@@ -110,8 +110,10 @@ Once the NSX Advanced Load Balancer is successfully deployed and boots up, navig
     **Tenant Access to Service Engine**: Read Access
     ![](./img/tko-on-vsphere-vds/image23.png)
 
-  1. To Configure NTP, navigate to **Administration** **Settings** **DNS/NTP Edit** and add your NTP server details and **Save**.
+1. Go to **Administration** **Settings** **DNS/NTP Edit** to add your NTP server details and **Save**.
+    
     **Note:** You may also delete the default NTP servers.
+
     ![](./img/tko-on-vsphere-vds/image82.png)
 
 ### NSX Advanced Load Balancer: Licensing
@@ -176,12 +178,14 @@ The default system-generated controller certificate generated for SSL/TSL connec
   ![](./img/tko-on-vsphere-vds/image66.png)
 
 1. Once the certificate is created, capture the certificate contents. You will need this when you deploy the Tanzu Kubernetes Grid management cluster.
+  
   To capture the certificate content, click the “Download” icon next to the certificate, and then click “Copy to clipboard” under the **Certificate** section.
   ![](./img/tko-on-vsphere-vds/image29.png)
 
 1. To replace the certificate, navigate to **Administration** **Settings** **Access** **Settings**, and click the pencil icon at the top right to **edit** the System Access Settings, replace the SSL/TSL certificate, and click **Save**.
   ![](./img/tko-on-vsphere-vds/image72.png)
-  Now, log out and log back in to the NSX Advanced Load Balancer.
+
+1. To complete the certificate configuration, log out and log back in to the NSX Advanced Load Balancer.
 
 ### NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups
 
@@ -618,7 +622,7 @@ Do the following to deploy the Tanzu Kubernetes Grid management cluster using th
   
     ![](./img/tko-on-vsphere-vds/image44.png)
 
-1. **Register Tanzu Mission Control**: Tanzu 1.4 does not support registering a management cluster in Tanzu Mission Control and only supports attaching Workload clusters. Skip this section for this version.
+1. **Register Tanzu Mission Control**: Registering Tanzu Kubernetes Grid management clusters with Tanzu Mission Control allows you to provision and manage Tanzu Kubernetes clusters by using the Tanzu Mission Control dashboard interface..
 
 1. Check the **Participate in the Customer Experience Improvement Program**, if you so desire and click **Review Configuration**
 
@@ -633,6 +637,7 @@ While the cluster is being deployed, you will find that a virtual service will b
 Behind the scenes when the Tanzu Kubernetes Grid management cluster is being deployed:
 
 - NSX Advanced Load Balancer service engines are deployed in vCenter. This task is orchestrated by the NSX Advanced Load Balancer controller.
+  
   ![](./img/tko-on-vsphere-vds/image81.png)
 
 - Service engine status in NSX Advanced Load Balancer: The following snippet shows that the first service engine has been initialized successfully and the second service engine is initializing.
@@ -886,7 +891,7 @@ Once the cluster is successfully deployed, you will see the following results:
 
 ### <a id=configure-nsx-advanced-load-balancer-in-tkg-workload-cluster> </a> Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster
 
-Tanzu Kubernetes Grid v1.4.x management clusters with NSX Advanced Load Balancer have a default AKODeploymentConfig that is deployed during installation. It is called install-ako-for-all.
+Tanzu Kubernetes Grid management clusters with NSX Advanced Load Balancer have a default AKODeploymentConfig that is deployed during installation. It is called install-ako-for-all.
 
 By default, any clusters that match the cluster labels defined in install-ako-for-all will reference this file for their virtual IP networks, service engine (SE) groups, and L7 ingress. As part of our architecture, only shared service cluster makes use of the configuration defined in the default AKODeploymentConfig install-ako-for-all.
 
