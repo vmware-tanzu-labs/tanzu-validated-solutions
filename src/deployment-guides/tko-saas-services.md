@@ -246,6 +246,10 @@ To integrate Tanzu Observability on a cluster attached to Tanzu Mission Control,
 
     ![TO Dashboard 02](img/tko-saas-services/tko-deploy-saas18.jpg)
 
+### Customize Tanzu Observability Dashboards
+
+For information on how to customize Tanzu Observability dashboards for Tanzu for Kubernetes Operations, please refer [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](tko-to-customized-dashboard.md).
+
 ## <a id=tsm> </a>Tanzu Service Mesh
 VMware Tanzu Service Mesh (TSM) is an enterprise-class service mesh solution that provides consistent control and security for microservices, end-users, and data across all your clusters and clouds in multi-cluster and multi-cloud environments.
 

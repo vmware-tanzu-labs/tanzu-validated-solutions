@@ -1,0 +1,255 @@
+{
+  "name": "TKO-Kubernetes-Node-Network-Dashboard",
+  "url": "TKO-Kubernetes-Node-Network-Dashboard",
+  "eventFilterType": "BYCHART",
+  "displayDescription": false,
+  "displaySectionTableOfContents": true,
+  "displayQueryParameters": true,
+  "sections": [
+    {
+      "name": "Kubernetes Nodes Network Metrics",
+      "id": "Anhis",
+      "rows": [
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "type": "line",
+                "y1UnitAutoscaling": false,
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Bytes Received Rate By Node",
+              "units": "Bytes",
+              "summarization": "MEAN",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 12,
+                  "h": 5
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, rate(ts(\"kubernetes.node.network.rx\", cluster=\"${cluster_name}\" and nodename=\"${node_name}\")))",
+                  "secondaryAxis": false,
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 100
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": false,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "type": "line",
+                "y1UnitAutoscaling": false,
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": false,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Networking Errors By Node",
+              "units": "error rate",
+              "summarization": "MEAN",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 5,
+                  "w": 12,
+                  "h": 4
+                }
+              },
+              "sources": [
+                {
+                  "name": "rx_errors",
+                  "query": "limit(250, rate(ts(\"kubernetes.node.network.rx_errors\", cluster=\"${cluster_name}\" and nodename=\"${node_name}\")))",
+                  "secondaryAxis": false,
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                },
+                {
+                  "name": "tx_errors",
+                  "query": "limit(250, rate(ts(\"kubernetes.node.network.tx_errors\", cluster=\"${cluster_name}\" and nodename=\"${node_name}\")))",
+                  "secondaryAxis": false,
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 80
+        },
+        {
+          "charts": [
+            {
+              "chartSettings": {
+                "y1ScaleSIBy1024": false,
+                "fixedLegendEnabled": false,
+                "fixedLegendFilterField": "CURRENT",
+                "y0ScaleSIBy1024": true,
+                "fixedLegendFilterLimit": 5,
+                "fixedLegendPosition": "RIGHT",
+                "customTags": [],
+                "lineType": "linear",
+                "windowing": "full",
+                "fixedLegendFilterSort": "TOP",
+                "y1Units": "",
+                "type": "line",
+                "y1UnitAutoscaling": false,
+                "tagMode": "all",
+                "fixedLegendUseRawStats": false,
+                "y0UnitAutoscaling": true,
+                "fixedLegendDisplayStats": [
+                  "CURRENT"
+                ],
+                "autoColumnTags": false,
+                "numTags": 4,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "includeObsoleteMetrics": false,
+              "name": "Bytes Transferred Rate By Node",
+              "units": "Bytes",
+              "summarization": "MEAN",
+              "base": 1,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 9,
+                  "w": 12,
+                  "h": 4
+                }
+              },
+              "sources": [
+                {
+                  "name": "Source",
+                  "query": "limit(250, rate(ts(\"kubernetes.node.network.tx\", cluster=\"${cluster_name}\" and nodename=\"${node_name}\")))",
+                  "secondaryAxis": false,
+                  "disabled": false,
+                  "querybuilderEnabled": false
+                }
+              ],
+              "noDefaultEvents": false,
+              "description": ""
+            }
+          ],
+          "heightFactor": 80
+        }
+      ]
+    }
+  ],
+  "parameterDetails": {
+    "nodes_group_by": {
+      "parameterType": "SIMPLE",
+      "order": 3,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "value": "none",
+      "label": "nodes_group_by",
+      "valuesToReadableStrings": {
+        "Label": "none"
+      },
+      "allowAll": false
+    },
+    "node_name": {
+      "parameterType": "DYNAMIC",
+      "tagKey": "nodename",
+      "queryValue": "limit(1000,collect(ts(\"kubernetes.node.cpu.limit\", cluster=\"${cluster_name}\"), taggify(1, nodename, \"*\")))",
+      "order": 2,
+      "defaultValue": "Label_2",
+      "hideFromView": false,
+      "value": "*",
+      "label": "node",
+      "dynamicFieldType": "TAG_KEY",
+      "valuesToReadableStrings": {
+        "Label": "*",
+      },
+      "allowAll": false,
+      "selectedLabel": "Label"
+    },
+    "cluster_name": {
+      "parameterType": "DYNAMIC",
+      "tagKey": "cluster",
+      "queryValue": "collect(max(ts(\"kubernetes.cluster.cpu.limit\"), cluster), taggify(1, cluster, \"*\"))",
+      "order": 1,
+      "defaultValue": "Label_533",
+      "hideFromView": false,
+      "value": "*",
+      "label": "cluster",
+      "dynamicFieldType": "TAG_KEY",
+      "valuesToReadableStrings": {
+        "Label": "*",
+      },
+      "allowAll": false,
+      "selectedLabel": "Label"
+    },
+    "nodes_metric": {
+      "parameterType": "SIMPLE",
+      "order": 4,
+      "defaultValue": "Label",
+      "hideFromView": true,
+      "value": "CPU Usage",
+      "label": "nodes_metric",
+      "valuesToReadableStrings": {
+        "Label": "CPU Usage"
+      },
+      "allowAll": false
+    }
+  }
+}
