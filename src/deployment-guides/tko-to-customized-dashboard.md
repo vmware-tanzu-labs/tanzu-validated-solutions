@@ -112,4 +112,4 @@ To create the Tanzu for Kubernetes Operations dashboards in Tanzu Observability,
 
 **Note:** For information about how to generate a Wavefront API Access token, see [Managing API Tokens.](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token)
 
-JSON files to create the Tanzu for Kubernetes Operations dashboards described in this document are available [here](../../automation/tko-to-customized-dashboards-json-scripts).
+JSON files to create the Tanzu for Kubernetes Operations dashboards described in this document are available [here](https://github.com/vmware-tanzu-labs/tanzu-validated-solutions/tree/main/automation/tko-to-customized-dashboards-json-scripts).

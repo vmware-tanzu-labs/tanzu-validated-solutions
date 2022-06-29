@@ -9,7 +9,7 @@ The scope of the document is limited to providing deployment steps based on the 
 The validated Bill of Materials that can be used to install Tanzu Kubernetes Grid on your vSphere with NSX-T environment is as follows:
 
 |**Software Components**|**Version**|
-| :- | :- |
+| --- | --- |
 |Tanzu Kubernetes Grid|1.5.1|
 |VMware vSphere ESXi|7.0 U2 and later|
 |VMware vCenter (VCSA)|7.0 U2 and later|
@@ -66,7 +66,7 @@ Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your en
 The sample entries of the resource pools and folders that need to be created are as follows.
 
 |**Resource Type**|**Sample Resource Pool Name**|**Sample Folder Name**|
-| :- | :- | :- |
+| --- | --- | --- |
 |NSX ALB Components|`nsx-alb-components`|`nsx-alb-components`|
 |TKG Management components|`tkg-management-components`|`tkg-management-components`|
 |TKG Shared Service Components|`tkg-sharedsvc-components`|`tkg-sharedsvc-components`|
@@ -85,7 +85,7 @@ Ensure that the firewall is set up as described in [Firewall Requirements](../re
 For this demonstration, this document makes use of the following subnet CIDR for Tanzu for Kubernetes Operations deployment.
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool in NSXT**|**NSX ALB IP Pool**|
-| :- | :- | :- | :- | :- |
+| --- | --- | --- | --- | --- |
 |NSX ALB Mgmt Network|alb-management-segment|172.19.10.1/24|N/A|172.19.10.100- 172.19.10.200|
 |TKG Management Network|tkg-mgmt-segment|172.19.40.1/24|172.19.40.100- 172.19.40.200|N/A|
 |TKG Shared Service Network|tkg-ss-segment|172.19.41.1/24|172.19.41.100 - 172.19.41.200|N/A|
@@ -238,7 +238,7 @@ For a production-grade deployment, it is recommended to deploy 3 instances of th
 The sample IP address and FQDN set for the NSX ALB controllers is as follows:
 
 |**Controller Node**|**IP Address**|**FQDN**|
-| :- | :- | :- |
+| --- | --- | --- |
 |Node 1 Primary|172.19.10.11|`alb-ctlr01.lab.vmw`|
 |Node 2 Secondary|172.19.10.12|`alb-ctlr02.lab.vmw`|
 |Node 3 Secondary |172.19.10.13|`alb-ctlr03.lab.vmw`|
@@ -382,6 +382,7 @@ NSX ALB may be deployed in multiple environments for the same system. Each envir
 **Service Engine Group 2**: Service engines part of this service engine group hosts virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid workload clusters mapped to this SE group.  
 
 **Note**:
+
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
@@ -462,7 +463,7 @@ As part of the cloud creation, only ALB management network has been configured i
     **Note:** Not all networks will be auto-discovered. For those networks, manually add the subnet.
 
    |**Network Name**|**DHCP** |**Subnet**|**Static IP Pool**|
-   | :- | :- | :- | :- |
+   | --- | --- | --- | --- |
    |tkg-mgmt-segment|Yes|172.19.40.0/24|NA|
    |tkg-ss-segment|Yes|172.19.41.0/24|NA|
    |tkg-workload-segment|Yes|172.19.60.0/24|NA|
@@ -485,7 +486,7 @@ As part of the cloud creation, only ALB management network has been configured i
   1. Change the gateway for VIP networks as per your network configurations.
 
   |Network Name|Gateway Subnet|Next Hop|
-  | :- | :- | :- |
+  | --- | --- | --- |
   |tkg\_cluster\_vip\_pg|0.0.0.0/0|172.19.80.1|
   |tkg\_mgmt\_vip\_pg|0.0.0.0/0|172.19.50.1|
   |tkg\_workload\_vip\_pg|0.0.0.0/0|172.19.70.1|
@@ -501,7 +502,7 @@ Complete the following steps to create an IPAM profile and once created, attach 
 1. Log in to NSX ALB and navigate to **Templates** > **IPAM/DNS Profiles** > **Create** > **IPAM Profile**, and provide the following details, and then click **Save**.
 
      |**Parameter**|**Value**|
-     | :- | :- |
+     | --- | --- |
      |Name|tanzu-vcenter-ipam-01|
      |Type|AVI Vintage IPAM|
      |Cloud for Usable Networks|Tanzu-vcenter-01|
@@ -827,7 +828,7 @@ The Tanzu Kubernetes Grid management cluster is successfully deployed and now yo
 
 ## <a id="tmc-integration"> </a> Register Management Cluster with Tanzu Mission Control
 
-If you want to register your management cluster with Tanzu Mission Control, see [Register Your Management Cluster with Tanzu Mission Control](./tko-saas-services.md/#a-idtmc-a-tanzu-mission-control).
+If you want to register your management cluster with Tanzu Mission Control, see [Register Your Management Cluster with Tanzu Mission Control](tko-saas-services.md#tmc-tkg-mgmt).
 
 ## <a id="createsharedsvc"> </a> Deploy Tanzu Kubernetes Grid Shared Services Cluster
 
