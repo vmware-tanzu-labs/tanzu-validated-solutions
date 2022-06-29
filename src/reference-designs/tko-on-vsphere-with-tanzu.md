@@ -183,7 +183,7 @@ IP address allocation for virtual services can be over DHCP or via NSX Advanced 
 
 ## Network Architecture
 
-To deploy vSphere with Tanzu, build separate networks for the TKG management (Supervisor) cluster, TKG workload clusters, NSX Advanced Load Balancer components, and the TKG control plane HA.
+To deploy vSphere with Tanzu, build separate networks for the Tanzu Kubernetes Grid management (Supervisor) cluster, Tanzu Kubernetes Grid workload clusters, NSX Advanced Load Balancer components, and the Tanzu Kubernetes Grid control plane HA.
 
 The network reference design can be mapped into this general framework.
 
@@ -193,9 +193,9 @@ The network reference design can be mapped into this general framework.
 
 This topology enables the following benefits:
 
-- Isolate and separate SDDC management components (vCenter, ESX) from the vSphere with Tanzu components. This reference design allows only the minimum connectivity between the TKG clusters and NSX Advanced Load Balancer to the vCenter Server.
+- Isolate and separate SDDC management components (vCenter, ESX) from the vSphere with Tanzu components. This reference design allows only the minimum connectivity between the Tanzu Kubernetes Grid clusters and NSX Advanced Load Balancer to the vCenter Server.
 
-- Isolate and separate the NSX Advanced Load Balancer management network from the supervisor cluster network and the TKG workload networks.
+- Isolate and separate the NSX Advanced Load Balancer management network from the supervisor cluster network and the Tanzu Kubernetes Grid workload networks.
 
 - Separate vSphere Admin and Tenant access to the supervisor cluster. This prevents tenants from attempting to connect to the supervisor cluster.
 
@@ -230,9 +230,9 @@ To prepare the firewall, you need the following information:
 
 1. NSX Advanced Load Balancer Controller node and VIP addresses
 1. NSX Advanced Load Balancer Service Engine management IP address
-1. Supervisor Cluster network (TKG Management) CIDR
-1. TKG workload cluster CIDR
-1. TKG cluster VIP address range
+1. Supervisor Cluster network (Tanzu Kubernetes Grid Management) CIDR
+1. Tanzu Kubernetes Grid workload cluster CIDR
+1. Tanzu Kubernetes Grid cluster VIP address range
 1. Client machine IP address
 1. vCenter server IP address
 1. VMware Harbor registry IP address
@@ -389,7 +389,7 @@ There are two main supported installation methods for Harbor:
 
 The SaaS products in the VMware Tanzu portfolio are on the critical path for securing systems at the heart of your IT infrastructure. VMware Tanzu Mission Control provides a centralized control plane for Kubernetes, and Tanzu Service Mesh provides a global control plane for service mesh networks. Tanzu Observability features include Kubernetes monitoring, application observability, and service insights.
 
-To learn more about TKG integration with Tanzu SaaS, see [Tanzu SaaS Services](tko-saas.md).
+To learn more about Tanzu Kubernetes Grid integration with Tanzu SaaS, see [Tanzu SaaS Services](tko-saas.md).
 
 ## Summary
 

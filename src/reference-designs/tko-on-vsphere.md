@@ -153,7 +153,7 @@ As per the defined architecture, the list of required networks follows:
 |TKG Workload VIP/Data Network|No|Virtual services for all applications are hosted on the workload clusters. <br><br>Reserve sufficient IP addresses depending on the number of applications that are planned to be hosted on the workload clusters and scalability considerations.|
 
 ### Subnet and CIDR Examples
-For the purpose of this demonstration, this document makes use of the following CIDR for TKO deployment.
+The deployment descirbed in this document makes use of the following CIDR.
 
 |**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
