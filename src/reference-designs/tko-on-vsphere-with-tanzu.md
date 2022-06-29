@@ -4,7 +4,7 @@ vSphere with Tanzu transforms the vSphere cluster into a platform for running Ku
 
 This document provides a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu.
 
-This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
+The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
 ![Diagram of TKO using vSphere with Tanzu Reference Architecture](./img/tko-on-vsphere-with-tanzu/TKO-VWT-Reference-Design.jpg)
 
