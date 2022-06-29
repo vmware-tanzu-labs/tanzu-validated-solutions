@@ -306,4 +306,4 @@ Tanzu Kubernetes Grid on Azure offers high-performance potential, convenience, a
 This plan meets many Day 0 needs for aligning product capabilities, such as configuring firewall rules, networking, load balancing, and workload computing, to the full stack infrastructure.
 
 ## Deployment Instructions
-For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on AWS](../deployment-guides/tko-on-azure.md).
+For instructions on how to deploy this reference design, see [Deploy Tanzu for Kubernetes Operations on Microsoft Azure](../deployment-guides/tko-on-azure.md).
