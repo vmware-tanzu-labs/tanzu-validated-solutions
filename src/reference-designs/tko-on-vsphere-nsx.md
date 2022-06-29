@@ -96,7 +96,7 @@ Each CNI is suitable for a different use case. The following table lists some co
 | :- | :- | :- |
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p></p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>Pros</p><p>- Provides an option to configure egress IP pool or static egress IP for Kubernetes workloads.</p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for network policies</p><p>- High network performance</p><p>- SCTP support</p><p>Cons</p><p>- No multicast support</p><p></p>|
-|Multus|Multus CNI provides multiple interfaces per each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SRIOV, DPDK, OVS-DPDK, and VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
+|Multus|Multus CNI provides multiple interfaces per each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SR-IOV, DPDK, OVS-DPDK, and VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
 
 ## Tanzu Kubernetes Grid Infrastructure Networking
 Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks including:
@@ -145,7 +145,7 @@ This topology enables the following benefits:
 - Separate provider and tenant access to the Tanzu Kubernetes Grid environment.
   - Only provider administrators need access to the Tanzu Kubernetes Grid management cluster. This prevents tenants from attempting to connect to the TKG management cluster.
 
-### <a id=netreq> </a> Network Requirements
+### <a id="netreq"> </a> Network Requirements
 
 As per the defined architecture, the list of required networks follows:
 
@@ -159,7 +159,7 @@ As per the defined architecture, the list of required networks follows:
 |TKG Management VIP/Data Logical Segment|No|Virtual services for all user-managed packages (such as Contour, Harbor, Contour, Prometheus, Grafana) hosted on the shared service cluster. For more information, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-user-managed-index.html).|
 |TKG Workload VIP/Data Logical Segment|No|Virtual services for all applications hosted on the workload clusters<br>Reserve sufficient IPs depending on the number of applications that are planned to be hosted on the workload clusters along with scalability considerations.|
 
-#### <a id=cidr> </a> Subnet and CIDR Examples
+#### <a id="cidr"> </a> Subnet and CIDR Examples
 
 For the purpose of demonstration, this document makes use of the following subnet CIDR for Tanzu for Kubernetes Operations deployment.
 
@@ -173,7 +173,7 @@ For the purpose of demonstration, this document makes use of the following subne
 |TKG Workload VIP Network|tkg-workload-vip-segment|172.19.70.1/24|N/A|172.19.70.100- 172.19.70.200|
 |TKG Workload Network|tkg-workload-segment|172.19.60.1/24|172.19.60.100- 172.19.60.200|N/A|
 
-### <a id=fwreq> </a> Firewall Requirements
+### <a id="fwreq"> </a> Firewall Requirements
 To prepare the firewall, you need to gather the following information:
 
 1. NSX ALB Controller nodes and Cluster IP address.
@@ -322,7 +322,7 @@ The SaaS products in the VMware Tanzu portfolio are in the critical path for sec
 
 To learn more about Tanzu Kubernetes Grid integration with Tanzu SaaS, see [Tanzu SaaS Services](./tko-saas.md#tanzu-for-kubernetes-operations-saas-integration)
 
-## <a id=appendix-a></a> Appendix A - Configure Node Sizes
+## <a id="appendix-a"></a> Appendix A - Configure Node Sizes
 The Tanzu CLI creates the individual nodes of management clusters and Tanzu Kubernetes clusters according to the settings that you provide in the configuration file.
 
 On vSphere, you can configure all node VMs to have the same predefined configurations, set different predefined configurations for control plane and worker nodes, or customize the configurations of the nodes. By using these settings, you can create clusters that have nodes with different configuration compared to the configuration of management cluster nodes. You can also create clusters in which the control plane nodes and worker nodes have different configuration.
@@ -371,7 +371,7 @@ To define different custom configurations for control plane nodes and worker nod
 - `VSPHERE_WORKER_DISK_GIB: 40`
 - `VSPHERE_WORKER_MEM_MIB: 4096`
 
-## <a id=appendix-b></a> Appendix B - NSX ALB Sizing Guidelines
+## <a id="appendix-b"></a> Appendix B - NSX ALB Sizing Guidelines
 
 ### NSX ALB Controller Sizing Guidelines
 
