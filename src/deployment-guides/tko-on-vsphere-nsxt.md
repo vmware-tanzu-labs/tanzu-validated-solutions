@@ -9,7 +9,7 @@ The scope of the document is limited to providing deployment steps based on the 
 The validated Bill of Materials that can be used to install Tanzu Kubernetes Grid on your vSphere with NSX-T environment is as follows:
 
 |**Software Components**|**Version**|
-| :- | :- |
+| --- | --- |
 |Tanzu Kubernetes Grid|1.5.1|
 |VMware vSphere ESXi|7.0 U2 and later|
 |VMware vCenter (VCSA)|7.0 U2 and later|
@@ -31,7 +31,8 @@ Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your en
 - A vCenter with NSX-T backed environment.
 - Ensure that following NSX-T configurations are in place:
 
-  **Note:** The following information provides only a high-level overview of the required NSX-T configuration. For more information, see [NSX-T Datacenter Installation Guide](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.1/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX-T Datacenter Product Documentation](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/index.html).
+  **Note:** The following provides only a high-level overview of the required NSX-T configuration. For more information, see [NSX-T Datacenter Installation Guide](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.1/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX-T Datacenter Product Documentation](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/index.html).
+
   - NSX-T manager instance is deployed and configured with Advanced or higher license.
   - vCenter Server that is associated with the NSX-T Data Center is configured as Compute Manager.
   - Required overlay and vLAN Transport Zones are created.
@@ -54,7 +55,7 @@ Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your en
     - kubectl cluster CLI 1.22.5
   - A vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-vsphere.html#vsphere-permissions).
   - If working in an internet-restricted environment where a centralized image repository is required, see [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-airgapped-environments.html).
-  - Download and import NSX ALB 20.1.7 OVA to Content Library.
+  - Download and import NSX Advanced Load Balancer 20.1.7 OVA to Content Library.
   - Download the following OVA files from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-151&productid="988&rPId=49705) and import to vCenter. Convert the imported VMs to templates."
     - Photon v3 Kubernetes v1.22.5 OVA and/or
     - Ubuntu 2004 Kubernetes v1.22.5 OVA  
@@ -66,7 +67,7 @@ Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your en
 The sample entries of the resource pools and folders that need to be created are as follows.
 
 |**Resource Type**|**Sample Resource Pool Name**|**Sample Folder Name**|
-| :- | :- | :- |
+| --- | --- | --- |
 |NSX ALB Components|`nsx-alb-components`|`nsx-alb-components`|
 |TKG Management components|`tkg-management-components`|`tkg-management-components`|
 |TKG Shared Service Components|`tkg-sharedsvc-components`|`tkg-sharedsvc-components`|
@@ -85,7 +86,7 @@ Ensure that the firewall is set up as described in [Firewall Requirements](../re
 For this demonstration, this document makes use of the following subnet CIDR for Tanzu for Kubernetes Operations deployment.
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool in NSXT**|**NSX ALB IP Pool**|
-| :- | :- | :- | :- | :- |
+| --- | --- | --- | --- | --- |
 |NSX ALB Mgmt Network|alb-management-segment|172.19.10.1/24|N/A|172.19.10.100- 172.19.10.200|
 |TKG Management Network|tkg-mgmt-segment|172.19.40.1/24|172.19.40.100- 172.19.40.200|N/A|
 |TKG Shared Service Network|tkg-ss-segment|172.19.41.1/24|172.19.41.100 - 172.19.41.200|N/A|
@@ -102,22 +103,23 @@ The steps for deploying Tanzu for Kubernetes Operations on vSphere backed by NSX
 2. [Deploy and Configure NSX Advanced Load Balancer](#deploynsxalb)
 3. [Deploy and Configure Bootstrap Machine](#configurebootstrap)
 4. [Deploy Tanzu Kubernetes Grid Management Cluster](#deploy-mgmt-cluster)
-5. [Register TKG Management Cluster with Tanzu Mission Control](#tmc-integration)
-6. [Deploy TKG Shared Service Cluster](#createsharedsvc)
-7. [Deploy TKG Workload Cluster](#createworkload)
+5. [Register Tanzu Kubernetes Grid Management Cluster with Tanzu Mission Control](#tmc-integration)
+6. [Deploy Tanzu Kubernetes Grid Shared Service Cluster](#createsharedsvc)
+7. [Deploy Tanzu Kubernetes Grid Workload Cluster](#createworkload)
 8. [Integrate Tanzu Kubernetes Clusters with Tanzu Observability](#integrate-to)
 9. [Integrate Tanzu Kubernetes Clusters with Tanzu Service Mesh](#integrate-tsm)
-10. [Deploy User-Managed Packages on TKG Clusters](#packages)
+10. [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#packages)
 
-### <a id="configurensxt"> </a> Configure T1 Gateway and Logical Segments in NSX-T Data Center
+## <a id="configurensxt"> </a> Configure T1 Gateway and Logical Segments in NSX-T Data Center
 
 As a prerequisite, an NSX-T backed vSphere environment must be configured with at least one tier-0 gateway. A tier-0 gateway performs the functions of a tier-0 logical router. It processes traffic between the logical and physical networks. For more information on creating and configuring a tier-0 gateway, see [NSX-T documentation](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.2/administration/GUID-E9E62E02-C226-457D-B3A6-FE71E45628F7.html).
 
 This procedure comprises the following tasks:
+
 1. Add a Tier-1 Gateway
 1. Create Overlay-Backed Segments
 
-#### Add a Tier-1 Gateway
+### Add a Tier-1 Gateway
 The tier-1 logical router must be connected to the tier-0 logical router to get the northbound physical router access. The following procedure provides minimum required configuration to create a tier-1 gateway which is good enough to successfully deploy Tanzu for Kubernetes Operations stack, for more advanced configuration refer [NSX-T documentation](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/index.html).
 
 1. With admin privileges, log in to NSX Manager.
@@ -139,7 +141,7 @@ The tier-1 logical router must be connected to the tier-0 logical router to get 
 
     ![Add tier-1 gateway](img/tko-on-vsphere-nsxt/1-T1-gateway-1.png)
 
-#### Create Overlay-Backed Segments
+### Create Overlay-Backed Segments
 
 An NSX-T data center provides the option to add two kinds of segments: overlay-backed segments and VLAN-backed segments.
 Segments are created as part of a transport zone. There are two types of transport zones: VLAN transport zones and overlay transport zones. A segment created in a VLAN transport zone is a VLAN-backed segment and a segment created in an overlay transport zone is an overlay-backed segment.
@@ -149,7 +151,7 @@ An NSX-T data center supports three types of DHCP configurations on a segment: D
 
 Before creating overlay-backed segments, you must set DHCP configuration on the tier-1 gateway.
 
-##### DHCP configuration on Tier-1 Gateway
+#### DHCP configuration on Tier-1 Gateway
 
 Complete the following steps to set the DHCP configuration in the tier-1 gateway:
 
@@ -182,7 +184,7 @@ Complete the following steps to set the DHCP configuration in the tier-1 gateway
 
    ![Tier-1 gateway save configuration](img/tko-on-vsphere-nsxt/7-T1-gateway-dhcp-7.png)
 
-#### Create Overlay-Backed Segments
+### Create Overlay-Backed Segments
 
 Create the overlay backed logical segments as shown in the [Overlay backed segments CIDR example](#cidrex). All these segments will be a part of the same overlay transport zone and they must be connected to the tier-1 gateway.
 The following procedure provides required details to create one such network which is required for Tanzu for Kubernetes Operations deployment:
@@ -227,49 +229,49 @@ Repeat steps 1-7 to create all other required overlay-backed segments. Once comp
 
 Additionally, you can create the required inventory groups and firewall rules. For more information, see [NSX-T Datacenter Product Documentation](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/index.html).
 
-### <a id="deploynsxalb"> </a>   Deploy and Configure NSX Advanced Load Balancer
+## <a id="deploynsxalb"> </a>   Deploy and Configure NSX Advanced Load Balancer
 
 NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer that provides L4- L7 load balancer support. It is recommended for vSphere deployments without NSX-T or when there are unique scaling requirements.
 
-NSX ALB is deployed in Write Access Mode in the vSphere Environment. This mode grants NSX ALB controllers full write access to the vCenter which helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
+NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment. This mode grants NSX Advanced Load Balancer controllers full write access to the vCenter which helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
 
-For a production-grade deployment, it is recommended to deploy 3 instances of the NSX ALB controller for high availability and resiliency.
+For a production-grade deployment, it is recommended to deploy 3 instances of the NSX Advanced Load Balancer controller for high availability and resiliency.
 
-The sample IP address and FQDN set for the NSX ALB controllers is as follows:
+The sample IP address and FQDN set for the NSX Advanced Load Balancer controllers is as follows:
 
 |**Controller Node**|**IP Address**|**FQDN**|
-| :- | :- | :- |
+| --- | --- | --- |
 |Node 1 Primary|172.19.10.11|`alb-ctlr01.lab.vmw`|
 |Node 2 Secondary|172.19.10.12|`alb-ctlr02.lab.vmw`|
 |Node 3 Secondary |172.19.10.13|`alb-ctlr03.lab.vmw`|
 |HA Address|172.19.10.10|`alb-ha.lab.vmw`|
 
-#### <a id="deploynsxalb"> </a> Deploy NSX Advanced Load Balancer
+### <a id="deploynsxalb"> </a> Deploy NSX Advanced Load Balancer
 
-As part of the prerequisites, you must have the NSX ALB 20.1.7 OVA downloaded and imported to the content library. Deploy the NSX ALB under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
+As part of the prerequisites, you must have the NSX Advanced Load Balancer 20.1.7 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
 
-To deploy NSX ALB, complete the following steps.
+To deploy NSX Advanced Load Balancer, complete the following steps.
 
 1. Log in to **vCenter** and navigate to **Home** > **Content Libraries**.
 1. Select the content library under which the NSX-ALB OVA is placed.
 1. Click on **OVA & OVF Templates**.
-1. Right-click the NSX ALB image and select **New VM from this Template**.
-1. On the Select name and folder page, enter a name and select a folder for the NSX ALB VM as **nsx-alb-components**.
+1. Right-click the NSX Advanced Load Balancer image and select **New VM from this Template**.
+1. On the Select name and folder page, enter a name and select a folder for the NSX Advanced Load Balancer VM as **nsx-alb-components**.
 1. On the Select a compute resource page, select the resource pool **nsx-alb-components**.
 1. On the Review details page, verify the template details and click **Next**.
 1. On the Select storage page, select a storage policy from the VM Storage Policy drop-down menu and choose the  datastore location where you want to store the virtual machine files.
 1. On the Select networks page, select the network **alb-management-segment** and click **Next**.
-1. On the Customize template page, provide the NSX ALB management network details such as IP address, subnet mask, and gateway, and then click **Next**.
+1. On the Customize template page, provide the NSX Advanced Load Balancer management network details such as IP address, subnet mask, and gateway, and then click **Next**.
 1. On the Ready to complete page, review the provided information and click **Finish**.
 
 ![NSX ALB deployment](img/tko-on-vsphere-nsxt/12-ALB-1.png)
 
-A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX ALB virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, navigate to NSX ALB on your browser.  
+A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX Advanced Load Balancer virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, navigate to NSX Advanced Load Balancer on your browser.  
 **Note**: While the system is booting up, a blank web page or a 503 status code may appear.  
 
-#### <a id=""nsx-alb-init""> </a>NSX Advanced Load Balancer: Initial Setup
+### <a id="nsx-alb-init"> </a>NSX Advanced Load Balancer: Initial Setup
 
-Once NSX ALB is successfully deployed and running, navigate to NSX ALB on your browser using the URL https://<em><IP/FQDN></em> and configure the basic system settings:
+Once NSX Advanced Load Balancer is successfully deployed and running, navigate to NSX Advanced Load Balancer on your browser using the URL https://<em><IP/FQDN></em> and configure the basic system settings:
 
 1. Set admin password and click on **Create Account**.
 
@@ -293,7 +295,7 @@ Once NSX ALB is successfully deployed and running, navigate to NSX ALB on your b
 
 If you did not select the **Setup Cloud After** option before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch, and you are directed to a dashboard view on the controller.
 
-#### NSX Advanced Load Balancer: NTP Configuration
+### NSX Advanced Load Balancer: NTP Configuration
 
 To configure NTP, navigate to **Administration** > **Settings** > **DNS/NTP > Edit** and add your NTP server details and then click **Save**.
 
@@ -301,15 +303,15 @@ To configure NTP, navigate to **Administration** > **Settings** > **DNS/NTP > Ed
 
 ![NTP server configuration](img/tko-on-vsphere-nsxt/17-ALB-6.png)
 
-#### NSX Advanced Load Balancer: Licensing
+### NSX Advanced Load Balancer: Licensing
 
-This document focuses on enabling NSX ALB using the license model: **Enterprise License (VMware NSX ALB Enterprise)**.
+This document focuses on enabling NSX Advanced Load Balancer using the license model: **Enterprise License (VMware NSX ALB Enterprise)**.
 
 To configure licensing, navigate to **Administration** > **Settings** > **Licensing** and apply the license key. If you have a license file instead of a license key, apply the license by clicking on the **Upload from Computer** option.
 
 ![License configuration](img/tko-on-vsphere-nsxt/18-ALB-7.png)
 
-#### NSX Advanced Load Balancer: Controller High Availability
+### NSX Advanced Load Balancer: Controller High Availability
 
 In a production environment, it is recommended to deploy additional controller nodes and configure the controller cluster for high availability and disaster recovery. Adding 2 additional nodes to create a 3-node cluster provides node-level redundancy for the controller and also maximizes performance for CPU-intensive analytics functions.
 
@@ -317,9 +319,9 @@ To run a 3-node controller cluster, you deploy the first node and perform the in
 
 The first controller of the cluster receives the Leader role. The second and third controllers work as Follower.
 
-Complete the following steps to configure NSX ALB cluster:
+Complete the following steps to configure NSX Advanced Load Balancer cluster:
 
-1. Log in to the primary NSX ALB controller and navigate to **Administrator** > **Controller** > **Nodes**, and then click **Edit**.
+1. Log in to the primary NSX Advanced Load Balancer controller and navigate to **Administrator** > **Controller** > **Nodes**, and then click **Edit**.
 
     ![Configure NSX ALB controller node](img/tko-on-vsphere-nsxt/19-ALB-8.png)
 
@@ -327,17 +329,17 @@ Complete the following steps to configure NSX ALB cluster:
 
     ![Specify NSX ALB controller node name and IP](img/tko-on-vsphere-nsxt/20-ALB-9.png)
 
-1. Deploy the 2nd and 3rd NSX ALB controller nodes by using steps in [Deploy NSX Advanced Load Balancer](#deploynsxalb).
+1. Deploy the 2nd and 3rd NSX Advanced Load Balancer controller nodes by using steps in [Deploy NSX Advanced Load Balancer](#deploynsxalb).
 
-1. Log into the primary NSX ALB controller using the Controller Cluster IP/FQDN and navigate to **Administrator** > **Controller** >  **Nodes**, and then click **Edit**. The Edit Controller Configuration popup appears.
+1. Log into the primary NSX Advanced Load Balancer controller using the Controller Cluster IP/FQDN and navigate to **Administrator** > **Controller** >  **Nodes**, and then click **Edit**. The Edit Controller Configuration popup appears.
 
 1. In the **Cluster Nodes** field, enter the IP address for the 2nd and 3rd controller, and then click **Save**.
 
     ![Cluster node IP address in controller configuration](img/tko-on-vsphere-nsxt/21-ALB-10.png)
 
-    After you complete these steps, the primary NSX ALB controller becomes the leader for the cluster and invites the other controllers to the cluster as members.
+    After you complete these steps, the primary NSX Advanced Load Balancer controller becomes the leader for the cluster and invites the other controllers to the cluster as members.
 
-    NSX ALB then performs a warm reboot of the cluster. This process can take approximately 10-15 minutes. You will be automatically logged out of the controller node where you are currently logged in. On entering the cluster IP address in the browser, you can see details about the cluster formation task.
+    NSX Advanced Load Balancer then performs a warm reboot of the cluster. This process can take approximately 10-15 minutes. You will be automatically logged out of the controller node where you are currently logged in. On entering the cluster IP address in the browser, you can see details about the cluster formation task.
 
     ![Controller initialization](img/tko-on-vsphere-nsxt/22-ALB-initialization.png)
 
@@ -345,17 +347,17 @@ The configuration of the primary (leader) controller is synchronized to the new 
 
 ![Controller status](img/tko-on-vsphere-nsxt/22-ALB-11.png)
 
-**Note:** In the following tasks, all NSX ALB configurations will be done by connecting to the NSX ALB Controller Cluster IP/FQDN.
+**Note:** In the following tasks, all NSX Advanced Load Balancer configurations are done by connecting to the NSX Advanced Load Balancer Controller Cluster IP/FQDN.
 
-#### NSX Advanced Load Balancer: Certificate Management
+### NSX Advanced Load Balancer: Certificate Management
 
 The default system-generated controller certificate generated for SSL/TSL connections will not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
 
-1. Log in to the NSX ALB controller and navigate to **Templates** > **Security** > **SSL/TLS Certificates**.
+1. Log in to the NSX Advanced Load Balancer controller and navigate to **Templates** > **Security** > **SSL/TLS Certificates**.
 
 1. Click **Create** and select **Controller Certificate**. You can either generate a self-signed certificate, generate CSR, or import a certificate. For the purpose of this document, a self-signed certificate will be generated.
 
-1. Provide all required details as per your infrastructure requirements and in the **Subject Alternate Name (SAN)** field, provide IP address and FQDN of all NSX ALB controllers including NSX ALB cluster IP and FQDN, and then click **Save**.
+1. Provide all required details as per your infrastructure requirements and in the **Subject Alternate Name (SAN)** field, provide IP address and FQDN of all NSX Advanced Load Balancer controllers including NSX Advanced Load Balancer cluster IP and FQDN, and then click **Save**.
 
     ![Self-signed certificate generation](img/tko-on-vsphere-nsxt/23-ALB-12.png)
 
@@ -368,29 +370,31 @@ The default system-generated controller certificate generated for SSL/TSL connec
 
     ![Replace certificate](img/tko-on-vsphere-nsxt/25-ALB-14.png)
 
-1. Log out and log in to NSX ALB.
+1. Log out and log in to NSX Advanced Load Balancer.
 
-#### NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups
+### NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups
 
-NSX ALB may be deployed in multiple environments for the same system. Each environment is called a cloud. The following procedure provides steps on how to create a VMware vCenter cloud, and as shown in the architecture two service engine (SE) groups will be created.
+NSX Advanced Load Balancer may be deployed in multiple environments for the same system. Each environment is called a cloud. The following procedure provides steps on how to create a VMware vCenter cloud, and as shown in the architecture two service engine (SE) groups will be created.
 
 **Service Engine Group 1**: Service engines part of this service engine group hosts:
 
 * Virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid management cluster and workload.
-* Virtual services that load balances control plane nodes of all TKG Kubernetes clusters.
+* Virtual services that load balances control plane nodes of all Tanzu Kubernetes Grid Kubernetes clusters.
 
 **Service Engine Group 2**: Service engines part of this service engine group hosts virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid workload clusters mapped to this SE group.  
 
 **Note**:
+
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
 
-For information about mapping a specific service engine group to Tanzu Kubernetes Grid workload cluster, see [Configure NSX Advanced Load Balancer in TKG Workload Cluster](#workloadako).
+For information about mapping a specific service engine group to Tanzu Kubernetes Grid workload cluster, see [Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster](#workloadako).
 
-The following components are created in NSX ALB.
+The following components are created in NSX Advanced Load Balancer.
 
 <!-- /* cSpell:disable */ -->
+
 | Object | Sample Name |
 | --- | --- |
 | vCenter Cloud | tanzu-vcenter01 |
@@ -399,7 +403,7 @@ The following components are created in NSX ALB.
 
 <!-- /* cSpell:enable */ -->
 
-1.  Log in to NSX ALB and navigate to **Infrastructure** > **Clouds** > **Create** > **VMware vCenter/vSphere ESX**.
+1.  Log in to NSX Advanced Load Balancer and navigate to **Infrastructure** > **Clouds** > **Create** > **VMware vCenter/vSphere ESX**.
 
     ![Create vCenter Cloud](img/tko-on-vsphere-nsxt/26-ALB-15.png)
 
@@ -411,11 +415,11 @@ The following components are created in NSX ALB.
 
     ![Enter infrastructure information for vCenter Cloud](img/tko-on-vsphere-nsxt/28-ALB-17.png)
 
-1.  Under the **Data Center** pane, choose the data center for NSX ALB to discover infrastructure resources.
+1.  Under the **Data Center** pane, choose the data center for NSX Advanced Load Balancer to discover infrastructure resources.
 
     ![Select data center](img/tko-on-vsphere-nsxt/29-ALB-18.png)
 
-1.  Under the **Network** pane, choose the NSX ALB management network for service engines and enter a static IP address pool for SEs and VIP, and then click **Complete**.
+1.  Under the **Network** pane, choose the NSX Advanced Load Balancer management network for service engines and enter a static IP address pool for SEs and VIP, and then click **Complete**.
     ![Enter network information](img/tko-on-vsphere-nsxt/30-ALB-19.png)
 
 1.  Wait for the cloud to get configured and the status to turn green.
@@ -445,9 +449,10 @@ The following components are created in NSX ALB.
 
 ### NSX Advanced Load Balancer: Configure Network and IPAM Profile
 
-#### Configure TKG Networks in NSX ALB
+#### Configure Tanzu Kubernetes Grid Networks in NSX Advanced Load Balancer
 
-As part of the cloud creation, only ALB management network has been configured in NSX ALB. Complete the following procedure to configure these networks:
+As part of the cloud creation, only ALB management network has been configured in NSX Advanced Load Balancer. Complete the following procedure to configure these networks:
+
 - TKG Management Network
 - TKG Shared Services Network
 - TKG Workload Network
@@ -455,14 +460,14 @@ As part of the cloud creation, only ALB management network has been configured i
 - TKG Management VIP/Data Network
 - TKG Workload VIP/Data Network
 
-1. Log in to NSX ALB and navigate to **Infrastructure** > **Networks**.
+1. Log in to NSX Advanced Load Balancer and navigate to **Infrastructure** > **Networks**.
 1. Select the desired cloud. All the networks available in vCenter are listed.
 1. Click on the edit icon next for the network and configure as follows. Change the provided details as per your SDDC configuration.
 
     **Note:** Not all networks will be auto-discovered. For those networks, manually add the subnet.
 
    |**Network Name**|**DHCP** |**Subnet**|**Static IP Pool**|
-   | :- | :- | :- | :- |
+   | --- | --- | --- | --- |
    |tkg-mgmt-segment|Yes|172.19.40.0/24|NA|
    |tkg-ss-segment|Yes|172.19.41.0/24|NA|
    |tkg-workload-segment|Yes|172.19.60.0/24|NA|
@@ -485,23 +490,23 @@ As part of the cloud creation, only ALB management network has been configured i
   1. Change the gateway for VIP networks as per your network configurations.
 
   |Network Name|Gateway Subnet|Next Hop|
-  | :- | :- | :- |
+  | --- | --- | --- |
   |tkg\_cluster\_vip\_pg|0.0.0.0/0|172.19.80.1|
   |tkg\_mgmt\_vip\_pg|0.0.0.0/0|172.19.50.1|
   |tkg\_workload\_vip\_pg|0.0.0.0/0|172.19.70.1|
 
  ![Routes in network configuration](img/tko-on-vsphere-nsxt/37-ALB-26.png)
 
-##### Create IPAM Profile in NSX ALB and Attach it to Cloud
+#### Create IPAM Profile in NSX Advanced Load Balancer and Attach to Cloud
 
-At this point, all the required networks related to Tanzu functionality are configured in NSX ALB, except for Tanzu Kubernetes Grid management and workload network which uses DHCP. NSX ALB provides IPAM service for Tanzu Kubernetes Grid cluster VIP network, management VIP network, and workload VIP network.  
+At this point, all the required networks related to Tanzu functionality are configured in NSX Advanced Load Balancer, except for Tanzu Kubernetes Grid management and workload network which uses DHCP. NSX Advanced Load Balancer provides IPAM service for Tanzu Kubernetes Grid cluster VIP network, management VIP network, and workload VIP network.  
 
 Complete the following steps to create an IPAM profile and once created, attach it to the vCenter cloud created earlier.  
 
-1. Log in to NSX ALB and navigate to **Templates** > **IPAM/DNS Profiles** > **Create** > **IPAM Profile**, and provide the following details, and then click **Save**.
+1. Log in to NSX Advanced Load Balancer and navigate to **Templates** > **IPAM/DNS Profiles** > **Create** > **IPAM Profile**, and provide the following details, and then click **Save**.
 
      |**Parameter**|**Value**|
-     | :- | :- |
+     | --- | --- |
      |Name|tanzu-vcenter-ipam-01|
      |Type|AVI Vintage IPAM|
      |Cloud for Usable Networks|Tanzu-vcenter-01|
@@ -520,9 +525,9 @@ Complete the following steps to create an IPAM profile and once created, attach 
 
      ![Select IPAM and DNS profiles](img/tko-on-vsphere-nsxt/40-ALB-29.png)
 
- This completes NSX ALB configuration. The next step is to deploy and configure a bootstrap machine which will be used to deploy and manage Tanzu Kubernetes clusters.
+ This completes NSX Advanced Load Balancer configuration. The next step is to deploy and configure a bootstrap machine which will be used to deploy and manage Tanzu Kubernetes clusters.
 
-### <a id="configurebootstrap"> </a> Deploy and Configure Bootstrap Machine
+## <a id="configurebootstrap"> </a> Deploy and Configure Bootstrap Machine
 
 The bootstrap machine can be a laptop, host, or server running on Linux, MacOS, or Windows that you deploy management and workload clusters from. The bootstrap machine keeps the Tanzu and Kubernetes configuration files for your deployments and it is typically local.  
 
@@ -643,7 +648,7 @@ For this deployment, a Photon-based virtual machine is used as the bootstrap mac
 
 All required packages are now installed, and the required configurations are in place in the bootstrap virtual machine. The next step is to deploy the Tanzu Kubernetes Grid management cluster.
 
-#### <a id="importbaseimage"> </a> Import Base Image Template for Tanzu Kubernetes Grid Cluster Deployment
+### <a id="importbaseimage"> </a> Import Base Image Template for Tanzu Kubernetes Grid Cluster Deployment
 
 Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
@@ -694,7 +699,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 1. On the VMware vSphere tile, click **DEPLOY**.
 
-1. In the IaaS Provider section, enter the IP/FQDN and credentials of the vCenter server where the TKG management cluster will be deployed.
+1. In the IaaS Provider section, enter the IP/FQDN and credentials of the vCenter server where the Tanzu Kubernetes Grid management cluster will be deployed.
 
    ![IaaS provider details](img/tko-on-vsphere-nsxt/42-mgmt-cluster-2.png)
 
@@ -713,7 +718,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 1. On the Management Cluster Settings section, provide the following details and click **Next**.
 
-    * Based on the environment requirements, select appropriate deployment type for the TKG Management cluster:
+    * Based on the environment requirements, select appropriate deployment type for the Tanzu Kubernetes Grid management cluster:
 
         * Development: Recommended for Dev or POC environments
         * Production: Recommended for Production environments
@@ -721,8 +726,8 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
         It is recommended to set the instance type to `Large` or above. For the purpose of this document, we will proceed with deployment type `Production` and instance type `Medium`.
 
     * Management Cluster Name: Name for your management cluster.
-    * Control Plane Endpoint Provider: Select NSX ALB for Control Plane HA.
-    * Control Plane Endpoint: This is an optional field. If left blank, NSX ALB will assign an IP address from the pool “tkg_cluster_vip_pg” created earlier.  
+    * Control Plane Endpoint Provider: Select NSX Advanced Load Balancer for Control Plane HA.
+    * Control Plane Endpoint: This is an optional field. If left blank, NSX Advanced Load Balancer will assign an IP address from the pool “tkg_cluster_vip_pg” created earlier.  
         If you need to provide an IP address, pick an IP address from “tkg_cluster_vip_pg”  static IP pools configured in AVI and ensure that the IP address is unused.
     * Machine Health Checks: Enable
     * Enable Audit Logging: Enable for audit logging for Kubernetes API server and node VMs. Choose as per your environment needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-troubleshooting-tkg-audit-logging.html).
@@ -731,14 +736,14 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 1. On the NSX Advanced Load Balancer section, provide the following information and click **Next**.
 
-    * Controller Host: NSX ALB Controller IP/FQDN (ALB Controller cluster IP/FQDN of the controller cluster is configured)
-    * Controller credentials: Username and Password of NSX ALB
+    * Controller Host: NSX Advanced Load Balancer Controller IP/FQDN (ALB Controller cluster IP/FQDN of the controller cluster is configured)
+    * Controller credentials: Username and Password of NSX Advanced Load Balancer
     * Controller certificate: Paste the contents of the Certificate Authority that is used to generate your controller certificate into the **Controller Certificate Authority** text box.
 
 1. Once these details are provided, click **Verify Credentials** and choose the following parameters.
 
-    * Cloud Name: Name of the cloud created while configuring NSX ALB `tanzu-vcenter-01`.
-    * Service Engine Group Name: Name of the service engine group created for Tanzu Kubernetes Grid management clusters created while configuring NSX ALB `tanzu-mgmt-segroup-01`.
+    * Cloud Name: Name of the cloud created while configuring NSX Advanced Load Balancer `tanzu-vcenter-01`.
+    * Service Engine Group Name: Name of the service engine group created for Tanzu Kubernetes Grid management clusters created while configuring NSX Advanced Load Balancer `tanzu-mgmt-segroup-01`.
     * Workload VIP Network Name: Select TKG Management VIP/Data network `tkg_mgmt_vip_pg` and select the discovered subnet.
     * Workload VIP network CIDR: Select the discovered subnet, `172.16.50.0/24`
     * Management VIP network Name: Select TKG Cluster VIP/Data network `tkg_cluster_vip_pg`.
@@ -766,7 +771,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
     * If you set `http-proxy`, you must also set `https-proxy` and vice-versa.
     * For the `no-proxy` section:
 
-      * For TKG management and workload clusters, `localhost`, `127.0.0.1`, the values of `CLUSTER_CIDR` and `SERVICE_CIDR`, `.svc`, and `.svc.cluster.local` are appended along with the user specified values.
+      * For Tanzu Kubernetes Grid management and workload clusters, `localhost`, `127.0.0.1`, the values of `CLUSTER_CIDR` and `SERVICE_CIDR`, `.svc`, and `.svc.cluster.local` are appended along with the user specified values.
     * **Note**: If the Kubernetes cluster needs to communicate with external services and infrastructure endpoints in your Tanzu Kubernetes Grid environment, ensure that those endpoints are reachable by your proxies or add them to `TKG_NO_PROXY`. Depending on your environment configuration, this may include, but is not limited to, your OIDC or LDAP server, Harbor, NSX-T, NSX Advanced Load Balancer, and vCenter.
     * For vSphere, you must manually add the CIDR of Tanzu Kubernetes Grid management network and Cluster VIP networks that includes the IP address of your control plane endpoints, to `TKG_NO_PROXY`.
 
@@ -789,20 +794,20 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
     ![Deployment logs in installer UI](img/tko-on-vsphere-nsxt/52-mgmt-cluster-12.png)
 
- While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX ALB and the service engines are mapped to the SE Group `tanzu-mgmt-segroup-01`.​​
+ While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX Advanced Load Balancer and the service engines are mapped to the SE Group `tanzu-mgmt-segroup-01`.​​
 
  When Tanzu Kubernetes Grid management cluster is being deployed, behind the scenes:  
 
- * NSX ALB service engines get deployed in vCenter and this task is orchestrated by the NSX ALB controller.
- * Service engine status in NSX ALB: The following snippet shows the service engines status. They are in the initializing state for some time and then the status changes to Up.
+ * NSX Advanced Load Balancer service engines get deployed in vCenter and this task is orchestrated by the NSX Advanced Load Balancer controller.
+ * Service engine status in NSX Advanced Load Balancer: The following snippet shows the service engines status. They are in the initializing state for some time and then the status changes to Up.
 
     ![Service engine status](img/tko-on-vsphere-nsxt/53-mgmt-cluster-13.png)
 
- * Service engine group status in NSX ALB: As per the configuration, the virtual service required for Tanzu Kubernetes Grid clusters control plane HA will be hosted on service engine group `tkg-mgmt-segroup-01`.  
+ * Service engine group status in NSX Advanced Load Balancer: As per the configuration, the virtual service required for Tanzu Kubernetes Grid clusters control plane HA will be hosted on service engine group `tkg-mgmt-segroup-01`.  
 
     ![Service engine group status](img/tko-on-vsphere-nsxt/54-mgmt-cluster-14.png)
 
- * Virtual service status in NSX ALB: The cluster is configured with Production type that deployed 3 control plane nodes, which are placed behind the cluster VIP.
+ * Virtual service status in NSX Advanced Load Balancer: The cluster is configured with Production type that deployed 3 control plane nodes, which are placed behind the cluster VIP.
 
     ![Virtual service status dashboard](img/tko-on-vsphere-nsxt/54-mgmt-cluster-13.png)
 
@@ -827,7 +832,7 @@ The Tanzu Kubernetes Grid management cluster is successfully deployed and now yo
 
 ## <a id="tmc-integration"> </a> Register Management Cluster with Tanzu Mission Control
 
-If you want to register your management cluster with Tanzu Mission Control, see [Register Your Management Cluster with Tanzu Mission Control](./tko-saas-services.md/#a-idtmc-a-tanzu-mission-control).
+If you want to register your management cluster with Tanzu Mission Control, see [Register Your Management Cluster with Tanzu Mission Control](tko-saas-services.md#tmc-tkg-mgmt).
 
 ## <a id="createsharedsvc"> </a> Deploy Tanzu Kubernetes Grid Shared Services Cluster
 
@@ -932,7 +937,7 @@ Now that the shared service cluster is successfully created, you may proceed wit
 
 ### <a id="createworkload"> </a> Deploy Tanzu Kubernetes Grid Workload Cluster
 
-As per the architecture, workload clusters make use of a separate SE group (**Service Engine Group 2)** and VIP Network (**TKG Workload VIP/Data Network**) for application load balancing. This can be controlled by creating a new **AKODeploymentConfig**. For more information, see [Create and Deploy AKO Deployment Config for TKG Workload Cluster](#configure-nsx-advanced-load-balancer-in-tkg-workload-cluster).
+As per the architecture, workload clusters make use of a separate SE group (**Service Engine Group 2)** and VIP Network (**TKG Workload VIP/Data Network**) for application load balancing. This can be controlled by creating a new **AKODeploymentConfig**. For more information, see [Create and Deploy AKO Deployment Config for Tanzu Kubernetes Grid Workload Cluster](#configure-nsx-advanced-load-balancer-in-tkg-workload-cluster).
 
 Complete the following steps to deploy workload clusters from Tanzu Mission Control:
 
@@ -984,7 +989,7 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
 
     ![agent and extensions health status](img/tko-on-vsphere-nsxt/76-workload-6.png)
 
-#### <a id="workloadako"> </a> Configure NSX Advanced Load Balancer in TKG Workload Cluster
+#### <a id="workloadako"> </a> Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster
 
 Tanzu Kubernetes Grid v1.5.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
 
@@ -1127,9 +1132,9 @@ kubectl label cluster <Cluster_Name> <label>
 
 ![](img/tko-on-vsphere-nsxt/78-workload-ako-2.png)
 
-#### Connect to TKG Workload Cluster and Validate the Deployment
+#### Connect to Tanzu Kubernetes Grid Workload Cluster and Validate the Deployment
 
-1. Now that the Tanzu Kubernetes Grid workload cluster is created and required AKO configurations are applied, use the following command to get the admin context of the TKG workload cluster.
+1. Now that the Tanzu Kubernetes Grid workload cluster is created and required AKO configurations are applied, use the following command to get the admin context of the Tanzu Kubernetes Grid workload cluster.
 
    `tanzu cluster kubeconfig get <cluster-name> --admin`
 
@@ -1146,8 +1151,6 @@ kubectl label cluster <Cluster_Name> <label>
     ![](img/tko-on-vsphere-nsxt/80-workload-ako-4.png)
 
 You can see that the workload cluster is successfully deployed and AKO pod is deployed on the cluster. You can now configure SaaS services for the cluster and deploy user managed packages on this cluster.
-
-### What to Do Next
 
 ## <a id="integrate-to"> </a> Integrate Tanzu Kubernetes clusters with Tanzu Observability
 

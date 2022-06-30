@@ -347,7 +347,7 @@ For the purpose of this document, the bootstrap server is a Photon-based virtual
     ## Install TKG CLI
     tar -xvf tanzu-cli-bundle-linux-amd64.tar
     cd ./cli/
-    sudo install core/v1.4.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+    sudo install core/v1.5.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
 
     ## Install TKG CLI Plugins
