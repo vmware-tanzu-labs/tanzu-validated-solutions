@@ -1,12 +1,12 @@
-# Data Protection
+# Enable Data Protection on a Workload Cluster and Configure Backup
 
 Through Tanzu Mission Control, you can run backup and restore operations to protect your Kubernetes data.
 
-Before you enable Data Protection on a Workload cluster, please ensure you have met the following prerequisites
+Before you enable Data Protection on a workload cluster, ensure the following prerequisites:
 
 - You have an active Tanzu Mission Control subscription.
 
-- The workload cluster which you want to protect is registered or attached in the Tanzu Mission Control portal.
+- The workload cluster that you want to protect is registered or attached with Tanzu Mission Control.
 
 - You have created a credential for Data Protection as per instructions provided in the Tanzu Mission Control [documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-4F349EE4-9C64-4243-84FF-D287F497A3D0.html)
 
@@ -14,7 +14,7 @@ Before you enable Data Protection on a Workload cluster, please ensure you have 
 
 For more information about protecting the data resources in your Kubernetes clusters, see Data Protection in [VMware Tanzu Mission Control Concepts](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-C16557BC-EB1B-4414-8E63-28AD92E0CAE5.html)
 
-**Enable Data Protection on Workload cluster**
+## Enable Data Protection on Workload cluster
 
 To enable Data Protection on a Workload cluster, locate the cluster in the Tanzu Mission Control portal and click on the Overview tab. Under Data protection, click on the Enable Data Protection option.
 
@@ -44,7 +44,7 @@ NAME                                DESIRED   CURRENT   READY   AGE
 replicaset.apps/velero-57cdf5f99f   1         1         1       72s
 ```
 
-**Configure Backup**
+## Configure Backup
 
 After enabling data protection, click on the Create Backup option to configure backup for the workload cluster.
 
@@ -78,7 +78,7 @@ Backup configuration might take some time depending on the Kubernetes objects th
 
 ![](img/tko-data-protection/tko-dp09.png)
 
-**Restore Backup**
+## Restore Backup
 
 To restore the Kubernetes data from the backup, select the backup image and click on the Restore button.
 

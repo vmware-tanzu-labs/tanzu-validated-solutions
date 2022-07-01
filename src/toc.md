@@ -18,4 +18,7 @@ This is the table of contents from which the Tanzu for Kubernetes Operations Ref
 - [Tanzu for Kubernetes Operations SaaS Integration](./reference-designs/tko-saas.md)
     - [Tanzu for Kubernetes Operations SaaS Integration](./deployment-guides/tko-saas-services.md)
     - [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](./deployment-guides/tko-to-customized-dashboard.md)
+- [Authentication with Pinniped](./reference-designs/pinniped-with-tkg.md)
+    - [Prepare External Identity Management](./deployment-guides/pinniped-with-tkg.md)
 - [Deploy User-Managed Packages in Workload Clusters](./deployment-guides/tkg-package-install.md)
+- [Enable Data Protection on a Workload Cluster and Configure Backup](./deployment-guides/tkg-data-protection.md)
