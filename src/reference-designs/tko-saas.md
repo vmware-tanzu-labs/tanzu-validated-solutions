@@ -84,6 +84,10 @@ You can configure Tanzu Observability with an array of capabilities. The followi
 
 To view and download integrations with prebuilt dashboards that are available in Wavefront, see [Integrations](https://vmware.wavefront.com/integrations) on the VMware Tanzu Observability site.
 
+### Custom Tanzu Observability Dashboards
+
+Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your particular deployment. For information on how to customize Tanzu Observability dashboards for Tanzu for Kubernetes Operations, see [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](../deployment-guides/tko-to-customized-dashboard.md).
+
 ## Tanzu Service Mesh (TSM)
 
 Tanzu Service Mesh is VMware’s enterprise-class service mesh solution that provides consistent control and security for microservices, end-users, and data across all your clusters and clouds in the most demanding multi-cluster and multi-cloud environments.
@@ -161,4 +165,4 @@ A Global Namespace connects resources and workloads that form the application in
 
 ## Deployment Instructions
 
-For instructions on how to SaaS services, see [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](../deployment-guides/tko-saas-services.md)
+For instructions on how to deploy and configure SaaS services, see [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](../deployment-guides/tko-saas-services.md)

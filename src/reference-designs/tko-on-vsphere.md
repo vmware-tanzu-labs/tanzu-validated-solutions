@@ -259,8 +259,6 @@ Another option is to use the NSX Advanced Load Balancer Kubernetes ingress contr
 
 ![NSX Advanced Load Balancing capabilities for VMware Tanzu](img/tko-on-vsphere/tko-on-vsphere-vds-6.png)
 
-Figure 6 - NSX Advanced Load Balancing capabilities for VMware Tanzu
-
 For more information about the NSX Advanced Load Balancer ingress controller, see [Configuring L7 Ingress with NSX Advanced Load Balancer](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-networking-configure-l7.html).
 
 [Tanzu Service Mesh](https://tanzu.vmware.com/service-mesh), which is a SaaS offering for modern applications running across multi-cluster, multi-clouds, also offers an ingress controller based on [Istio](https://istio.io/).
@@ -317,8 +315,6 @@ There are three main supported installation methods for Harbor:
 
 ![Harbor Container Registry](img/tko-on-vsphere/tko-on-vsphere-vds-7.png)
 
-Figure 7 - Harbor Container Registry
-
 ## Monitoring
 
 Tanzu Kubernetes Grid provides cluster monitoring services by implementing the open source Prometheus and Grafana projects.
@@ -331,8 +327,6 @@ Tanzu Kubernetes Grid includes signed binaries for Prometheus and Grafana that y
 You deploy Prometheus and Grafana on Tanzu Kubernetes clusters. The following diagram shows how the monitoring components on a cluster interact.
 
 ![Monitoring components interaction in a cluster](img/tko-on-vsphere/images-monitoring-stack.png)
-
-Figure 8 - Interaction of monitoring components
 
 ## Logging
 

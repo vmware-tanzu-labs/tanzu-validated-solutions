@@ -187,6 +187,10 @@ The following table describes the plugins we recommend for this design:
 ![kubernetes-metrics-1](./img/tko-on-aws/image11.png)
 ![kubernetes-metrics-2](./img/tko-on-aws/image6.png)
 
+#### Custom Tanzu Observability Dashboards
+
+Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your particular deployment. For information on how to customize Tanzu Observability dashboards for Tanzu for Kubernetes Operations, see [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](../deployment-guides/tko-to-customized-dashboard.md).
+
 
 ### Metrics Monitoring with Prometheus and Grafana (Alternative Solution)
 
