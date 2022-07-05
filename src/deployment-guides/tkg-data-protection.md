@@ -70,9 +70,9 @@ After enabling data protection,
 
 1. Configure the backup schedule and click **Next**.
 
-![](img/tko-data-protection/tko-dp06.png)
+    ![](img/tko-data-protection/tko-dp06.png)
 
-1. Specify the backup retention period and clic **Next**.
+1. Specify the backup retention period and click **Next**.
 
     ![](img/tko-data-protection/tko-dp07.png)
 
@@ -80,7 +80,7 @@ After enabling data protection,
 
     ![](img/tko-data-protection/tko-dp08.png)
 
-Backup configuration might take some time depending on the Kubernetes objects that you have provisioned in the workload cluster. When backup is configured for the first time, Tanzu Mission Control takes a backup immediately. After that backups are taken as per the backup schedule configured.
+Backup configuration may take some time depending on the Kubernetes objects that you have provisioned in the workload cluster. When backup is configured for the first time, Tanzu Mission Control takes a backup immediately. After that backups are taken as per the backup schedule configured.
 
 ![](img/tko-data-protection/tko-dp09.png)
 
