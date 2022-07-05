@@ -15,6 +15,7 @@ This is the table of contents from which the Tanzu for Kubernetes Operations Ref
     - [Deploy Tanzu for Kubernetes Operations on Microsoft Azure](./deployment-guides/tko-on-azure.md)
 - [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](./reference-designs/tko-on-vsphere-with-tanzu.md)
     - [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](./deployment-guides/tko-on-vsphere-with-tanzu.md)
+- [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX-T Reference Design](./reference-designs/tko-on-vsphere-with-tanzu-nsxt.md)
 - [Tanzu for Kubernetes Operations SaaS Integration](./reference-designs/tko-saas.md)
     - [Tanzu for Kubernetes Operations SaaS Integration](./deployment-guides/tko-saas-services.md)
     - [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](./deployment-guides/tko-to-customized-dashboard.md)
