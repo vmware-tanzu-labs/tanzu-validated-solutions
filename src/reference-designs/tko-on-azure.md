@@ -279,6 +279,10 @@ You can configure Tanzu Observability with an array of capabilities. The followi
 ![kubernetes-metrics-1](img/tko-on-azure/image11.png)
 ![kubernetes-metrics-2](img/tko-on-azure/image6.png)
 
+#### Custom Tanzu Observability Dashboards
+
+Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your particular deployment. For information on how to customize Tanzu Observability dashboards for Tanzu for Kubernetes Operations, see [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](../deployment-guides/tko-to-customized-dashboard.md).
+
 ### Metrics Monitoring with Prometheus and Grafana (Alternative Solution)
 
 Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-grafana.html) as  alternative on-premise solutions for monitoring Kubernetes clusters.
