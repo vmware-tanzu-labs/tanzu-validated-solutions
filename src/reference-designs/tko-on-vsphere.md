@@ -4,9 +4,9 @@ Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud 
 
 This document describes a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere backed by vSphere Networking (VDS).
 
-The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md)
+The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
-![Tanzu for Kubernetes Operations components](img/tko-on-vsphere/TKO-Ref-Arch.jpg)
+![Tanzu for Kubernetes Operations components](img/tko-on-vsphere/tkgm-diagram.png)
 
 ## Supported Component Matrix
 The following table provides the component versions and interoperability matrix supported with the reference design:
