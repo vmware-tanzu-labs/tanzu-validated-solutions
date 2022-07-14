@@ -1,0 +1,68 @@
+{
+  "name": "TKO OOTB SUMMARY DASHBOARD",
+  "url": "TKO-Summary-Dashboard",
+  "description": "Dashboard to show summarized view of TKO Components",
+  "eventFilterType": "BYCHART",
+  "displayDescription": false,
+  "displaySectionTableOfContents": true,
+  "displayQueryParameters": true,
+  "sections": [
+    {
+      "name": "TKO Components Summary Dashboard",
+      "id": "untitled-dashboard-section-1",
+      "rows": [
+        {
+          "charts": [
+            {
+              "anomalySeverity": "medium",
+              "anomalyDetectionOn": false,
+              "chartSettings": {
+                "type": "markdown-widget",
+                "plainMarkdownContent": "|  |  |\n| --- | --- |\nPlease choose from below links for high level dashboard view of all your TKO Components\n![k8s](https://s3-us-west-2.amazonaws.com/wavefront-img/kubernetes.png) [Kubernetes Summary Dashboard](/dashboard/integration-kubernetes-summary) \n![AVI](https://wavefront-img.s3.us-west-2.amazonaws.com/avi_networks.png) [AVI Summary Dashboard](/dashboard/integration-avi-summary)\n![vSphere](https://s3-us-west-2.amazonaws.com/wavefront-img/vsphere.jpg)[VMware vSphere Dashboard](/dashboard/integration-vsphere-summary)\n",
+                "autoColumnTags": false,
+                "defaultSortColumn": null,
+                "sparklineDisplayColor": null,
+                "sparklineLineColor": null,
+                "sparklineFillColor": null
+              },
+              "displayConfidenceBounds": false,
+              "includeObsoleteMetrics": false,
+              "filterOutNonAnomalies": false,
+              "name": "",
+              "anomalySampleSize": "8",
+              "units": "Units",
+              "summarization": "MEAN",
+              "base": 0,
+              "chartAttributes": {
+                "dashboardLayout": {
+                  "x": 0,
+                  "y": 0,
+                  "w": 12,
+                  "h": 13
+                }
+              },
+              "sources": [
+                {
+                  "sourceDescription": "",
+                  "queryType": "WQL",
+                  "query": "",
+                  "name": "A",
+                  "querybuilderEnabled": true,
+                  "secondaryAxis": false,
+                  "scatterPlotSource": "Y",
+                  "disabled": false,
+                  "querybuilderSerialization": "{\"_v\":1,\"filters\":[[],\"and\"],\"functions\":[],\"metric\":\"ts(undefined)\"}"
+                }
+              ],
+              "noDefaultEvents": false,
+              "anomalyType": "both"
+            }
+          ],
+          "heightFactor": 270
+        }
+      ]
+    }
+  ],
+  "parameterDetails": {},
+  "disableRefreshInLiveMode": false
+}
