@@ -62,6 +62,11 @@ VNET
 TKG
 NSXT
 autoscaler
+Mbps
+Gbps
+Bitfusion
+ECMP
+GSLB
 airgap
 FIPS
 VXLAN
