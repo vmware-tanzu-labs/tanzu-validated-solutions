@@ -83,7 +83,7 @@ Here are some recommendations for using namespaces in a vSphere with Tanzu envir
 ## Supported Component Matrix
 
 |**Software Components**|**Version**|
-| --- | --- | --- | --- |
+| --- | --- |
 |Tanzu Kubernetes Release|1.21.2|
 |VMware vSphere ESXi|7.0 U3|
 |VMware vCenter (VCSA)|7.0 U3|
@@ -109,6 +109,7 @@ vSphere with Tanzu is agnostic about which storage option you choose. For Kubern
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
 |TKO-STG-001|Use vSAN storage for TKO|By using vSAN as the shared storage solution, you can take advantage of local storage, which is more cost-effective.|vSAN File Services need to be configured to leverage this. vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions|
+|TKO-STG-002|Use vSAN storage for TKO|vSAN supports NFS volumes in ReadWriteMany access modes.|vSAN File Services need to be configured to leverage this.|
 
 While you can use the default vSAN storage policy, it is often preferable to craft a custom [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html) based on the requirements of your applications. vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters.
 
@@ -129,19 +130,14 @@ The CNI options are open-source software that provide networking for cluster pod
 
 When you deploy a Tanzu Kubernetes cluster using the default configuration of Tanzu CLI, Antrea CNI is automatically enabled in the cluster.
 
-To provision a Tanzu Kubernetes cluster using a non-default CNI, see the following instructions:
-
-- [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-k8s-clusters-networking.html#calico)
-
-- [Implement Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-cni-multus.html)
+To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-k8s-clusters-networking.html#calico)
 
 Each CNI is suitable for a different use case. The following table lists some common use cases for the CNI options that Tanzu Kubernetes Grid supports. This table will help you select the most appropriate CNI for your Tanzu Kubernetes Grid implementation.
 
 |**CNI**|**Use Case**|**Pros and Cons**|
-| --- | --- | --- | --- |
+| --- | --- | --- |
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p></p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>Pros</p><p>- Antrea leverages Open vSwitch as the networking data plane. Open vSwitch supports both Linux and Windows.</p><p>- VMware supports the latest conformant Kubernetes and stable releases of Antrea.</p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for Network Policies</p><p>- High network performance</p><p>- SCTP Support</p><p>Cons</p><p>- No multicast support</p><p></p>|
-|Multus|Multus CNI can give us multiple interfaces for each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces according to the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Each interface can have its own security policy.</p><p>- Supports SR-IOV, DPDK, OVS-DPDK & VPP workloads in Kubernetes with both cloud-native and NFV-based applications in Kubernetes.</p>|
 
 ## Networking for vSphere with Tanzu
 
@@ -159,7 +155,7 @@ In a vSphere with Tanzu environment, a Supervisor Cluster configured with vSpher
 
 You can use one or more distributed port groups as Workload Networks. The network that provides connectivity to the Kubernetes Control Plane VMs is called Primary Workload Network. You can assign this network to all the namespaces on the Supervisor Cluster, or you can use different networks for each namespace. The Tanzu Kubernetes clusters connect to the Workload Network that is assigned to the namespace.
 
-The Supervisor Cluster leverages NSX Advanced Load Balancer (NSX ALB) to provide L4 load balancing for the Tanzu Kubernetes clusters control-plane HA and L7 ingress to the applications deployed in the Tanzu Kubernetes clusters. Users access the applications by connecting to the Virtual IP address (VIP) of the applications provisioned by NSX Advanced Load Balancer.
+The Supervisor Cluster leverages NSX Advanced Load Balancer (NSX ALB) to provide L4 load balancing for the Tanzu Kubernetes clusters control-plane HA. Users access the applications by connecting to the Virtual IP address (VIP) of the applications provisioned by NSX Advanced Load Balancer.
 
 The following diagram shows a general overview for vSphere with Tanzu on vSphere Networking.
 
@@ -189,6 +185,8 @@ The network reference design can be mapped into this general framework.
 
 ![Diagram of network reference design](img/tko-on-vsphere-with-tanzu/tko-vwt08.jpg)
 
+**Note:** The network/portgroup designated for the workload cluster, carries both data and control traffic. Firewalls cannot be utilized to segregate traffic between workload clusters; instead, the underlying CNI must be employed as the main filtering system. Antrea CNI has the Custom Resource Definitions (CRDs) for firewall rules that can be enforce before Kubernetes network policy is added.
+
 **Note:** Based on your requirements, you can create additional networks for your workload cluster. These networks are also referred to as vSphere with Tanzu workload secondary network.
 
 This topology enables the following benefits:
@@ -208,7 +206,7 @@ This topology enables the following benefits:
 As per the reference architecture, the list of required networks is as follows:
 
 |**Network Type**|**DHCP Service**|**Description**|
-| --- | --- | --- | --- |
+| --- | --- | --- |
 |NSX Advanced Load Balancer Management Network|Optional|<p>NSX Advanced Load Balancer controllers and SEs will be attached to this network. </p><p>The Service Engine’s management network can obtain IP from DHCP or IP Pool in NSX Advanced Load Balancer.</p>|
 |TKG Management Network|Yes |Supervisor Cluster nodes will be attached to this network.|
 |TKG Workload Network (Primary)|Yes. |<p>Control plane and worker nodes of TKG workload clusters will be attached to this network.</p><p>The second interface of the Supervisor nodes is also attached to this network.</p>|
@@ -219,8 +217,8 @@ As per the reference architecture, the list of required networks is as follows:
 For the purpose of demonstration, this document makes use of the following Subnet CIDR for TKO deployment.
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool**|**NSX Advanced Load Balancer IP Pool**|
-| --- | --- | --- | --- |
-|NSX Advanced Load Balancer Mgmt Network|NSX-ALB-Mgmt|192.168.11.1/27|NA|192.168.11.14 - 192.168.11.30|
+| --- | --- | --- | --- | --- |
+|NSX Advanced Load Balancer Mgmt Network|NSX-Advanced Load Balancer-Mgmt|192.168.11.1/27|NA|192.168.11.14 - 192.168.11.30|
 |Supervisor Cluster Network|TKG-Management|192.168.12.1/28|192.168.12.2 - 192.168.12.14|NA|
 |TKG Workload Primary Network|TKG-Workload-PG01|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
 |TKG Cluster VIP/Data Network|TKG-Cluster-VIP|192.168.14.1/26|NA|<p>SE Pool: </p><p></p><p>192.168.14.2 - 192.168.14.20</p><p></p><p>TKG Cluster VIP Range: </p><p>192.168.14.21 - 192.168.14.60</p>|
@@ -334,7 +332,7 @@ For more information about Contour, see the [Contour](https://projectcontour.io/
 Each ingress controller has pros and cons of its own. The below table provides general recommendations on when you should use a specific ingress controller for your Kubernetes environment.
 
 |**Ingress Controller**|**Use Cases**|
-| --- | --- | --- | --- |
+| --- | --- |
 |Contour|<p>Use Contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for the north-south traffic by defining the policies in the manifest file for the application.</p><p></p><p>Contour is a reliable solution for simple Kubernetes workloads. </p>|
 |Istio|Use Istio ingress controller when you need to provide security, traffic direction, and insight within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic).|
 
@@ -375,9 +373,7 @@ The initial configuration and setup of the platform does not require any externa
 
 When vSphere with Tanzu is deployed on VDS networking, you can deploy an external container registry (Harbor) for Tanzu Kubernetes clusters.
 
-There are two main supported installation methods for Harbor:
-
-* [Helm-based deployment](https://goharbor.io/docs/2.3.0/install-config/harbor-ha-helm/) to a Kubernetes cluster: This installation method may be preferred if you are already invested in Helm.
+The supported installation method for Harbor in a vSphere with Tanzu environment is described below:
 
 * [VM-based deployment](https://goharbor.io/docs/2.3.0/install-config/installation-prereqs) using `docker-compose`: This installation method is recommended in cases where Tanzu Kubernetes Grid is installed in an air-gapped environment and no pre-existing Kubernetes clusters exist on which to install Harbor.
 
