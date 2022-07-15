@@ -4,15 +4,14 @@ This solution architecture is intended for anyone responsible for designing, imp
 
 ## Topology
 
-Multiple topologies are possible for edge deployments. Some of the topologies are described in this section. However, the VMware Tanzu Edge Solution Architecture uses a centralized or hub and spoke topology, where a vCenter is deployed at the main datacenter location and a vSphere cluster is deployed in the datacenter at each edge site. This design document assumes that the vSphere infrastructure is already deployed.
+Multiple topologies are possible for edge deployments. Some of the topologies are described in this section. However, the VMware Tanzu Edge Solution Architecture uses a centralized or hub and spoke topology, where a vCenter is deployed at the main data center location and a vSphere cluster is deployed in the data center at each edge site. This design document assumes that the vSphere infrastructure is already deployed.
 An edge site can be a storefront (point of sale), manufacturing facility, medical office, or other IT infrastructure located in a remote, distributed site. Although these sites are important to your organization, they usually run up to 100 tenant virtual machines. Because of the critical nature of the workloads, dependencies on a Wide Area Network (WAN) connection must be limited.
 
 ### Hub and Spoke
 
-In this topology, the management plane resides entirely in the main datacenter. The centralized management plane composed of vCenter, NSX Advanced Load Balancer Controller and Tanzu Kubernetes Grid management cluster are all in the same central location.
-Only the Tanzu Kubernetes Grid workload clusters and NSX Advanced Load Balancer Service Engines (SEs) are created at the edge. This design provides a minimal footprint at the edge.
-Once the edge site is deployed, Tanzu Mission Control is used for fleet management, allowing an easy way to manage and lifecycle Tanzu Kubernetes Grid workload clusters at the edge.
-Additional components for monitoring, backup and log management can also be present in the main datacenter.
+In this topology, the management plane resides entirely in the main data center. The centralized management plane composed of vCenter, NSX Advanced Load Balancer Controller, and Tanzu Kubernetes Grid management cluster are all in the same central location. Only the Tanzu Kubernetes Grid workload clusters and NSX Advanced Load Balancer Service Engines (SEs) are created at the edge. This design provides a minimal footprint at the edge.
+
+Once the edge site is deployed, Tanzu Mission Control is used for fleet management, allowing an easy way to manage and lifecycle Tanzu Kubernetes Grid workload clusters at the edge. Additional components for monitoring, backup, and log management can also be present in the main data center.
 
 ![Hub and Spoke Topology](./img/tkg-edge/tkg-edge-hub-spoke.drawio.png)
 
@@ -25,7 +24,7 @@ Additional components for monitoring, backup and log management can also be pres
 ### Hybrid
 
 In this topology, only the Tanzu Kubernetes Grid management cluster is located in a central location.
-Each edge site has the infrastructure management plane (vCenter, and NSX Advanced Load Balancer controllers, DNS servers and NTP server). This design provides a better availability when the edge site gets disconnected from the main datacenter.
+Each edge site has the infrastructure management plane (vCenter, and NSX Advanced Load Balancer controllers, DNS servers and NTP server). This design provides a better availability when the edge site gets disconnected from the main data center.
 Additional component for monitoring, backup, and log management can also be installed at the edge site to provide the functionality locally.
 
 ![Hybrid Topology](./img/tkg-edge/tkg-edge-hybrid.drawio.png)
@@ -36,16 +35,16 @@ Additional component for monitoring, backup, and log management can also be inst
 - Provides more management control at the edge site allowing the edge site to be managed by a 3rd party provider while keeping the control of the Tanzu Kubernetes Grid management cluster.
 - Management overhead.
 
-### Datacenter Fleet
+### Data Center Fleet
 
-In this topology, each edge site has a full-stack infrastructure management plane which includes vCenter, NSX Advanced Load Balancer Controllers and Tanzu Kubernetes Grid management cluster. Each edge site is considered as a separate datacenter and can operate independently.
+In this topology, each edge site has a full-stack infrastructure management plane which includes vCenter, NSX Advanced Load Balancer Controllers and Tanzu Kubernetes Grid management cluster. Each edge site is considered as a separate data center and can operate independently.
 Tanzu Mission Control is used for fleet management, allowing an easy way to create, manage and lifecycle Tanzu Kubernetes Grid workload clusters at the edge.
 
-![Datacenter Fleet Topology](./img/tkg-edge/tkg-edge-dc-fleet.drawio.png)
+![data center Fleet Topology](./img/tkg-edge/tkg-edge-dc-fleet.drawio.png)
 
 #### Key Features
 
-- Edge site can be considered an independent datacenter.
+- Edge site can be considered an independent data center.
 - Tanzu Mission Control use used for fleet management.
 
 This topology is not covered in this design as it is covered by the [TKO Reference Architecture on vSphere][611].
@@ -56,15 +55,17 @@ The design is expected to answer the following business requirements. The key ex
 
 ### Availability / Recoverability
 
-While an Edge site could be considered like any other datacenter, this is not the case when it comes to availability and recoverability. First of all, an edge site is usually tied to business hours (retail store, office, …), additionally the cost of the edge site should be low. As a result the RPO can be still critical (sales transactions) but the RTO is not as critical as a normal datacenter. Especially when the edge site could run
-Here are the expectations depending on the type of outage.
+An edge site can be considered like any other data center except when it comes to availability and recoverability. This is becuase, an edge site, such as a retail store or an office, is usually tied to business hours. Additionally, there is a need to keep cost of the edge site low. Even though the RPO at an edge site can be  critical (sales transactions), the RTO is not as critical as a normal data center.
 
-#### Edge Site disconnected from main site
+The following sections describe the expectations depending on the type of outage.
 
-It is expected that the application running at the edge site should continue to run even if the connectivity with the main datacenter is lost. Management of the site might not be possible.
+#### Edge Site Disconnected from Main Site
+
+It is expected that the application running at the edge site should continue to run even if the connectivity with the main data center is lost. Management of the site might not be possible.
+
 It is assumed that they do not require access to components outside of the edge site
 
-|     | Hub and Spoke | Hybrid | Datacenter Fleet |
+|     | Hub and Spoke | Hybrid | Data Center Fleet |
 | --- | --- | --- | --- |
 | Run existing application | Yes | Yes | Yes |
 | Deploy new application | No | Only if packages are available locally | Only if packages are available locally |
@@ -74,26 +75,26 @@ It is assumed that they do not require access to components outside of the edge 
 | Create or Move Persistent Volumes using vSphere CSI driver | No | Yes | Yes |
 | Impact of a single node failure (assuming there are more than one node) | Unpredictable | Application might have a short disruption but will be able to recover | No impact |
 
-#### Local Hardware failure
+#### Local Hardware Failure
 
 It is expected that the application running at the edge site should continue to run even in the case where there are some hardware failures such as host failure or disk failure.
 
-|     | Hub and Spoke | Hybrid | Datacenter Fleet |
+|     | Hub and Spoke | Hybrid | Data Center Fleet |
 | --- | --- | --- | --- |
 | Running application | Potentially unavailable for few seconds | No impact | No impact |
 | Kubernetes API availability | Potentially unavailable for few minutes | Potentially unavailable for few minutes (if a single control plane node is used) | No impact |
 
-#### Loss of site
+#### Loss of Site
 
-If the site is irremediably lost (from an IT standpoint), once the hardware and the base infrastructure has been rebuilt/recovered, it is expected that the Tanzu stack can be rebuilt in a matter of hours.
+If the site is irremediably lost (from an IT standpoint), after the hardware and the base infrastructure has been rebuilt/recovered, the Tanzu stack can be rebuilt in a matter of hours.
 
-|     | Hub and Spoke | Hybrid | Datacenter Fleet |
+|     | Hub and Spoke | Hybrid | Data Center Fleet |
 | --- | --- | --- | --- |
 | Time to rebuild the site | Short | Medium | Long |
 
 ### Performance
 
-- The application should perform as good as if it was running in the main datacenter.
+- The application should perform as good as if it was running in the main data center.
 
 ### Manageability
 
@@ -103,75 +104,79 @@ If the site is irremediably lost (from an IT standpoint), once the hardware and 
 ### Security
 
 - Access to the management is segregated and secured.
-- Network access to the main datacenter is secured.
+- Network access to the main data center is secured.
 - Authentication can be performed through a centralized authentication system.
 
 ## Edge Site Infrastructure
 
-### Physical servers
+### Physical Servers
 
-Tanzu Kubernetes Grid doesn’t require a specific number of physical servers since all its components are running either in Virtual Machines or Containers. Hence, as long as there are enough resources, the choice for the number of physical servers will be most driven by availability and cost.
-Availability should be considered during normal operations but also during maintenance, below is a quick summary on how the number of host impacts availability.
+Tanzu Kubernetes Grid doesn’t require a specific number of physical servers since all its components are running either in VMs or containers. If the resources are sufficient, the number of physical servers is driven by availability and cost.
 
-#### Impact of the number of physical server on the availability
+Availability should be considered during normal operations but also during maintenance. The following table provides a quick summary about how the number of physical servers impacts availability.
 
-| Number of server | Availability during operations | Availability during maintenance |
+| Number of servers | Availability during operations | Availability during maintenance |
 | --- | --- | --- |
-| 1   | Loss of one server will cause a major outage | Maintenance can only be conducted when application is down. |
+| 1   | Loss of one server will cause a major outage | Maintenance can only be conducted when application is down |
 | 2   | Tolerant to one minor outage | Maintenance will increase risk of major outage (a minor outage during maintenance will cause a major outage) |
 | 3   | Tolerant to minor outages | No major impact to be expected on availability |
 | 4+  | Tolerant to minor outages | Best for N+1 type application as there will be always 3 (2+1) hosts available during maintenance |
 
-### Networking & Security
+### Networking and Security
 
-Tanzu Kubernetes Grid can work on a flat Layer-2 network, however it is recommended for security reasons to use multiple networks (can be VLANs). Having multiple networks will help segregate traffic and isolate components that are publicly exposed as opposed to management components. NSX Distributed Load Balancing not being considered at the Edge, using different networks is the simplest option to ensure security for the management components (most of the routers are providing VLANs).
-A /24 network could be split in smaller networks if needed.
+Tanzu Kubernetes Grid can work on a flat Layer-2 network. However, for better security, we recommend using multiple networks, such as VLANs. Multiple networks help segregate traffic and isolate components that are publicly exposed as opposed to management components. Because distributed load balancing is not provided at the edge, using different networks is the simplest option to ensure security for the management components.
+
+A /24 network can be split in smaller networks if needed.
 
 ![Networking at the Edge](./img/tkg-edge/tko-edge-networking.drawio.png)
 
-#### List of networks at the edge
+#### List of networks at the Edge
+The following table provides a list of the networks at the edge site.
 
-| Network | Usage | IP addresses | Accessibility | Proposed Subnet size | Network Feature |
+| Network | Usage | IP Addresses | Accessibility | Proposed Subnet Size | Network Feature |
 | --- | --- | --- | --- | --- | --- |
-| Application | Where the business application is accessible | Minimum 3 IP addresses:<br />\- 1 per LB (can be down to 1 if Ingress controller is used)<br />\- 1 for each NSX ALB SE | By end user. Do not need to be routed/accessible from the main datacenter | /27 (32 IPs) | No  |
-| Tanzu Kubernetes Grid | Where the TKG Nodes are connected. CNI is built on top of this network to provide connectivity between pods. | Minimum 4 IP addresses:<br />\- 1 per TKG nodes<br />\- 1 for each NSX ALB SE | \- Outbound internet access. (to pull containers)<br />\- Routed to/from main datacenter (to connect to management components) | /26 (64 IPs) | DHCP enabled with the following configuration:<br />\- provide DNS Servers<br />\- provide NTP Servers (Option)<br />\- Leases time greater than the maximum time the site can be down |
-| Management | Where the local management components are connected to | Minimum 2 IP addresses:<br />\- 1 for each NSX ALB SE | Routed to/from main datacenter | /26 (64 IPs) | .   |
+| Application | Where the business application is accessible | Minimum 3 IP addresses:<br />\- 1 per LB (can be down to 1 if Ingress controller is used)<br />\- 1 for each NSX ALB SE | By end user. Do not need to be routed/accessible from the main data center | /27 (32 IPs) | No  |
+| Tanzu Kubernetes Grid | Where the TKG Nodes are connected. CNI is built on top of this network to provide connectivity between pods. | Minimum 4 IP addresses:<br />\- 1 per TKG nodes<br />\- 1 for each NSX ALB SE | \- Outbound internet access. (to pull containers)<br />\- Routed to/from main data center (to connect to management components) | /26 (64 IPs) | DHCP enabled with the following configuration:<br />\- provide DNS Servers<br />\- provide NTP Servers (Option)<br />\- Leases time greater than the maximum time the site can be down |
+| Management | Where the local management components are connected to | Minimum 2 IP addresses:<br />\- 1 for each NSX ALB SE | Routed to/from main data center | /26 (64 IPs) | .   |
 
 The management cluster is separated from the Tanzu Kubernetes Grid network to accommodate the fact that many organizations will not allow DHCP on a network where management components are connected, hence the need of a dedicated network for Tanzu Kubernetes Grid nodes.
 The DHCP lease time is quite important if the edge site can be down for few days. If the Control Plane node doesn’t get the same IP address when it restarts, the cluster won’t restart properly and a manual action will be required. With Tanzu Kubernetes Grid, the etcd component is bound to the first IP address the control plane node gets and doesn’t support any change dynamically.
 
-#### Connectivity to the main datacenter (Hub)
+#### Connectivity to the Main Data Center (Hub)
 
-It is assumed there is a routed connectivity from edge site to main datacenter without any NAT. In this design it is considered that a bandwidth of at least 10 Mbps will be available with maximum latency of 50ms (with minimal packet loss <1%).
+The design assumes that there is a routed connectivity from the edge site to the main data center without any NAT. A bandwidth of at least 10 Mbps must be available with maximum latency of 50ms and a minimal packet loss of <1%.
+
 This connection is heavily used during deployment and upgrade (Tanzu Kubernetes Grid OVA templates copy, containers pulled from global registry).
-If the connectivity doesn’t meet the bandwidth or latency requirement, the Tanzu Edge topology is still possible, however the edge site should be considered an air-gapped datacenter (see [air-gap design][211]) in terms of deployment and lifecycle.
 
-#### Connectivity and Infrastructure Services at the edge site
+If the connectivity doesn’t meet the bandwidth or latency requirement, the Tanzu Edge topology is still possible, however the edge site should be considered an air-gapped data center (see [air-gap design][211]) in terms of deployment and lifecycle.
+
+#### Connectivity and Infrastructure Services at the Edge Site
 
 The hosts are connected with at least a 1 Gbps connection to each other with latency <1ms. 10Gbps is recommended if vSAN is used.
-It is also required to run the following infrastructure services at the edge site
 
-- DHCP server, as part of the Tanzu requirements, a DHCP service is mandatory on the Tanzu Kubernetes Grid cluster networks.
-- NTP server, components are sensitive to time and all of them need to be in sync to work properly
-- DNS server (optionally with a delegated zone that could be leveraged by External DNS)
+The following infrastructure services are required at the edge site.
 
-#### Internet access
+- DHCP server. A DHCP service is mandatory on Tanzu Kubernetes Grid cluster networks.
+- NTP server. Tanzu components are sensitive to time and need to be in sync to work properly.
+- DNS server. Optionally with a delegated zone that can leveraged by External DNS.
 
-- It is assumed that Internet access is provided through the main site, hence, is dependent to WAN connectivity.
+#### Internet Access
+
+It is assumed that Internet access is provided through the main site, hence, is dependent to WAN connectivity.
 
 #### Proxy
 
-It may be configured individually on a per-cluster basis at deployment time.
+Proxy can be configured individually on a per-cluster basis at deployment time.
 
-- Pull package from internet
-- Connection to Tanzu Mission Control
-- Connection to Tanzu Observability
+- Pull package from Internet.
+- Connection to Tanzu Mission Control.
+- Connection to Tanzu Observability.
 
 ![Proxy](./img/tkg-edge/e091590baba38bf13203c4166893699c.png)
 
 #### Network Security
 
-The VMware Edge Compute Stack doesn’t provide network security, hence if any hardening is necessary it needs to be implemented by the customer outside of the VMware Edge Compute Stack.
+The VMware Edge Compute Stack doesn’t provide network security. If any hardening is necessary,  implement it outside of the VMware Edge Compute Stack.
 
 | Source | Destination | Protocol:Port | Description |
 | --- | --- | --- | --- |
@@ -189,47 +194,51 @@ The VMware Edge Compute Stack doesn’t provide network security, hence if any h
 ### Storage
 
 Storage is required at the edge site in order to store Tanzu Kubernetes Grid nodes (VMs), other VMs required at the site as well as all the persistent data (stored in Kubernetes Persistent Volumes) necessary for the applications to run.
-If more than one host is used, shared storage is required to ensure high-availability of the VM as well as load-balancing of the resources. In order to support Kubernetes persistent volumes of ReadWriteMany (RWM) type, the shared storage must be file-based (most likely NFS).
 
-vSAN is the preferred option as it will simplify the overall management (configured and managed from vCenter) as well as the onsite deployment (only servers and networking). It also provide vSAN file service that can be consumed by persistent volumes of ReadWriteMany (RWM) type.
+If more than one host is used, shared storage is required to ensure high availability of the VM and load balancing of the resources. To support Kubernetes persistent volumes of ReadWriteMany (RWM) type, the shared storage must be file-based (most likely NFS).
 
-#### vSAN general considerations
+vSAN is the preferred option because it simplifies overall management (configured and managed from vCenter) and onsite deployment (only servers and networking). It also provides the vSAN file service that can be consumed by persistent volumes of ReadWriteMany (RWM) type.
 
-- A 2-node and 3-node configurations can only tolerate 1 host failure.
-- VMware recommends deploying ESXi hosts with similar or identical configurations across all cluster members, including similar or identical storage configurations. This will ensure an even balance of virtual machine storage components across the disks and hosts cluster.
-- In vSAN hybrid configurations, VMware supports 1Gb but the 1 Gb NIC must be dedicated for vSAN. If a 10Gb or higher bandwidth NICs are used, these can be shared with other network traffic types. vSAN all-flash configurations are only supported with a 10Gb or higher connections.
+#### vSAN General Considerations
+
+- 2-node and 3-node configurations can only tolerate 1 host failure.
+- VMware recommends deploying ESXi hosts with similar or identical configurations across all cluster members, including similar or identical storage configurations. This ensures an even balance of virtual machine storage components across the disks and hosts cluster.
+- In vSAN hybrid configurations, VMware supports 1 GB, but the 1 GB NIC must be dedicated for vSAN. If 10 GB or higher bandwidth NICs are used, these can be shared with other network traffic types. vSAN all-flash configurations are only supported with a 10 GB or higher connections.
 - vSAN file service offers vSAN file shares that are consumed by persistent volumes of the ReadWriteMany (RWM) type. A single RWM volume can be mounted by multiple nodes. The volume can be shared between multiple pods or applications running across Kubernetes nodes or across Kubernetes clusters.
 
-#### vSAN 2-node considerations
+#### vSAN 2-Node Considerations
 
 vSAN 2-node is particularly appealing for edge site as it provides high-availability with a minimal footprint. Here are some key considerations for Tanzu Edge, more details can be found in the [vSAN 2-node Cluster Guide][210]
 
-- a vSAN 2-nodes requires a witness host (virtual machine) to be set up at the main datacenter in the same vCenter as the vSAN cluster.
-- Bandwidth between vSAN Nodes hosting VM objects and the Witness Host are dependent on the number of objects residing on vSAN. It is important to size data site to witness bandwidth appropriately for both availability and growth. A standard rule is 2 Mbps for every 1000 components on vSAN. Because vSAN nodes have a maximum number of 9000 components per host, the maximum bandwidth requirement is 9Mbps per host.
-- In a vSAN 2-node cluster, all read operations occur in the site the VM resides on. This aligns with the behavior of vSAN Stretched Clusters. Read locality overrides the `NumberOfFailuresToTolerate=1` policy’s behavior to distribute reads across the components. The vSAN `DOMOwnerForceWarmCache` setting can be configured to force reads on both Node 1 and Node 2 in a 2-node configuration.
+- A vSAN 2-node requires a witness host (virtual machine) to be set up at the main data center in the same vCenter as the vSAN cluster.
+- Bandwidth between vSAN nodes hosting VM objects and the witness host is dependent on the number of objects residing on vSAN. Ensure that the bandwidth between the data site to the witness host is appropriately sized for both availability and growth. A standard rule is 2 Mbps for every 1000 components on vSAN. Because vSAN nodes have a maximum number of 9000 components per host, the maximum bandwidth requirement is 9 Mbps per host.
+- In a vSAN 2-node cluster, all read operations occur in the site the VM resides on. This aligns with the behavior of vSAN stretched clusters. Read locality overrides the `NumberOfFailuresToTolerate=1` policy’s behavior to distribute reads across the components. The vSAN `DOMOwnerForceWarmCache` setting can be configured to force reads on both Node 1 and Node 2 in a 2-node configuration.
 - The ability to connect 2 nodes directly removes the requirement for a high speed switch. This design can be significantly more cost effective when deploying tens or hundreds sites.
-- In typical 2-node configurations, such as Edge deployments, the latency or RTT between the main datacenter and the edge site is supported up to 500ms (250ms one-way).
+- In typical 2-node configurations, such as Edge deployments, the latency or RTT between the main data center and the edge site is supported up to 500ms (250ms one-way).
 
-### Other considerations
+### Other Considerations
 
 #### Backup
 
-Using Velero to backup the kubernetes cluster or its deployed applications and persistent volumes requires S3-compatible storage. Since this is very unlikely that such storage is available at the edge site, it is assumed that stateful data are going to be backup by a native mechanism outside of the Kubernetes cluster (for example database backup for a database) and stored offsite.
+Using Velero to backup the kubernetes cluster or its deployed applications and persistent volumes requires S3-compatible storage. Since this is very unlikely that such storage is available at the edge site, it is assumed that stateful data will be backed up by a native mechanism outside of the Kubernetes cluster (for example database backup for a database) and stored offsite.
 
-#### Anti-Affinity rules
+#### Anti-Affinity Rules
 
-All the redundant components should be evenly spread across the available ESX hosts.
+All redundant components should be evenly spread across the available ESX hosts.
 
-#### GPU consideration
+#### GPU Consideration
 
-A common reason for having computing power at the Edge is the ability to process data before sending it back to the main datacenter. GPU capabilities often play a key role in data processing and being able to leverage this compute capacity at the Edge helps improving performance, latency and save on network bandwidth. While it is not going to be explored in this design, the Edge Compute Stack has the ability to provide GPU compute power to workloads at the Edge. There are three ways of consuming GPU that could be used at the Edge.
-While all these solutions are working with Tanzu Kubernetes Grid, they require VMware Professional Services to be engaged.
+A common reason for having computing power at the edge is the ability to process data before sending it back to the main data center. GPU capabilities play a key role in data processing, and being able to leverage this compute capacity at the edge helps improve performance, latency, and save on network bandwidth. While this design does not explore GPU compute power, the Edge Compute Stack has the ability to provide GPU compute power to workloads at the edge. 
+
+The following can be used at the edge for consuming GPU: GPU Passthrough, BitFusion, NVIDIA GRID.
+
+While the solutions work with Tanzu Kubernetes Grid, they require VMware Professional Services engagement.
 
 ##### GPU Passthrough
 
 ![GPU Passthrough](./img/tkg-edge/f3a9b5e3df9d8c442b112da8fd660613.png)
 
-The entire GPU card is being passed to the VM. It requires the GPU card to be present in the server where the VM runs. With this configuration, virtual machines will not be able to migrate between servers.
+The entire GPU card is passed to the VM. It requires the GPU card to be present in the server where the VM runs. With this configuration, virtual machines cannot migrate between servers.
 
 ##### BitFusion
 
@@ -241,14 +250,14 @@ One or multiple servers servers with GPU are present at the edge site. Through B
 
 ![NVIDIA GRID](./img/tkg-edge/b7fb5735e266dfaca19d1c5c45e64a3e.png)
 
-One or multiple GPU cards are shared by VMs running on the same server. This configuration leverages the NVIDIA GRID Virtual GPU Manager to share GRID-supported GPU amongst multiple virtual machines. Virtual Machines may be migrated between servers as long as the hardware supports it.
+One or multiple GPU cards are shared by VMs running on the same server. This configuration leverages the NVIDIA GRID Virtual GPU Manager to share GRID-supported GPU amongst multiple virtual machines. Virtual machines may be migrated between servers as long as the hardware supports it.
 
-## Components at the edge
+## Components at the Edge
 
-The primary component at the edge is the Tanzu Kubernetes Grid Workload cluster that will support all of the containerized workloads. Along with this Kubernetes cluster, depending of the topology and the capabilities required at the edge, other components are installed.
-Additionally if resources permit it, it is encouraged to deploy 2 workload clusters. This will allow to use the Blue/Green change management strategy and help reduce the risk during upgrade and application deployment.
+The primary component at the edge is the Tanzu Kubernetes Grid workload cluster that will support all of the containerized workloads. Along with the workload cluster, depending on the topology and the capabilities required at the edge, other components are installed.
+Additionally, if resources permit, we recommend deploying two workload clusters. This allows you to use the Blue/Green change management strategy and helps reduce risk during upgrade and application deployment.
 
-#### Design Decisions for the components at the edge (all topologies)
+### Design Decisions for the components at the edge (all topologies)
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
@@ -257,12 +266,12 @@ Additionally if resources permit it, it is encouraged to deploy 2 workload clust
 
 ### Hub and Spoke Topology
 
-With the Hub and Spoke topology, the management plane is located in a central location. Only the following components are deployed at the edge:
+With the hub and spoke topology, the management plane is located in a central location. Only the following components are deployed at the edge:
 
 - Tanzu Kubernetes Grid workload cluster
 - Load Balancer Service (NSX Advanced Load Balancer)
 
-The minimum footprint consists of the following:
+The following table describes the minimum footprint for edge components in a hub and spoke topology.
 
 | Amount | Machine usage | vCPU | Memory (GB) | Disk (GB) |
 | --- | --- | --- | --- | --- |
@@ -271,7 +280,7 @@ The minimum footprint consists of the following:
 | 2   | NSX ALB Service Engine | 1   | 1   | 15  |
 | 1 * host num | vSAN File services | 4   | 8   | 12  |
 
-As an example for an edge site with 2 hosts and vSAN, the minimal footprint would be:
+For example, the following is the minimum footprint required for an edge site with two hosts and vSAN:
 
 - 16 vCPU
 - 30 GB of memory
@@ -279,14 +288,14 @@ As an example for an edge site with 2 hosts and vSAN, the minimal footprint woul
 
 ### Hybrid Topology
 
-With the Hybrid topology, the infrastructure management plane is deployed at the edge along with the workloads:
+With the hybrid topology, the infrastructure management plane is deployed at the edge along with the workloads:
 
 - Tanzu Kubernetes Grid workload cluster
 - Load Balancer Service (NSX Advanced Load Balancer)
 - vCenter
 - NSX Advanced Load Balancer Controller
 
-The minimum footprint consists of the following:
+The following table describes the minimum footprint for edge components in a hybrid topology.
 
 | Amount | Machine usage | vCPU | Memory (GB) | Disk (GB) |
 | --- | --- | --- | --- | --- |
@@ -297,7 +306,7 @@ The minimum footprint consists of the following:
 | 1   | vCenter Server 7 ([tiny][204]) | 2   | 12  | 579 |
 | 1   | NSX ALB Controller (tiny) | 4   | 12  | 128 |
 
-As an example for an edge site with 3 hosts and vSAN, the minimal footprint would be:
+For example, the following minimum footprint is required for an edge site with three hosts and vSAN:
 
 - 28 vCPU
 - 66 GB of memory
@@ -307,34 +316,34 @@ As an example for an edge site with 3 hosts and vSAN, the minimal footprint woul
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| `TZEDG-HYBRID-EDGE-LB-01` | Use a dedicated NSX-ALB controller per Edge site | Provide management capabilities at the edge when the edge site is disconnected. Without the controller at the edge, AKO cannot perform any changes. | Management & Resource overhead. Can be mitigated through automation |
-| `TZEDG-HYBRID-EDGE-LB-02` | Use 1x NSX-ALB controller in the [smallest form factor][201] | Deploying and managing a 3-node NSX-ALB controller cluster represent a huge overhead in term of resources and management. Having one node with vSphere HA provides the right level of availability for an edge site. The | 1x node with vSphere HA doesn’t protect against data corruption. In this case, it will requires to redeploy and reconfigure the NSX ALB controller. This can be mitigated by regularly backing up the controller configuration on the main datacenter |
-| `TZEDG-HYBRID-EDGE-INFRA-01` | Deploy vCenter at the Edge site | Provide management capabilities at the edge when the edge site is disconnected. CSI requires access to vCenter to work. | Management & Resource overhead. Can be mitigated through automation |
+| `TZEDG-HYBRID-EDGE-LB-01` | Use a dedicated NSX-ALB controller per edge site | Provide management capabilities at the edge when the edge site is disconnected. Without the controller at the edge, AKO cannot perform any changes. | Management & Resource overhead. Can be mitigated through automation |
+| `TZEDG-HYBRID-EDGE-LB-02` | Use 1x NSX-ALB controller in the [smallest form factor][201] | Deploying and managing a 3-node NSX-ALB controller cluster represent a huge overhead in term of resources and management. Having one node with vSphere HA provides the right level of availability for an edge site. The | 1x node with vSphere HA doesn’t protect against data corruption. In this case, it will requires to redeploy and reconfigure the NSX ALB controller. This can be mitigated by regularly backing up the controller configuration on the main data center |
+| `TZEDG-HYBRID-EDGE-INFRA-01` | Deploy vCenter at the edge site | Provide management capabilities at the edge when the edge site is disconnected. CSI requires access to vCenter to work. | Management & Resource overhead. Can be mitigated through automation |
 
 ### Containerized Tools
 
-Additional containerized applications can be deployed at the edge through Tanzu packaging. Thus this might require additional worker nodes or increasing their size.
+Additional containerized applications can be deployed at the edge through Tanzu packaging. This may require additional worker nodes or increasing the size of the existing worker nodes.
 
-- **Contour** for Ingress
+- **Contour** for ingress
 - **Harbor** for container registry
 - **Pinniped** for authentication
-- **Prometheus / Grafana** for metric collections and monitoring
+- **Prometheus / Grafana** for metric collection and monitoring
 
-## Ingress and Load-Balancing at the edge
+## Ingress and Load-Balancing at the Edge
 
-Ingress and Load Balancing are a very important aspect of any Kubernetes deployment as it will define the quality of the access to the application as well as the availability of the control plane.
+Ingress and load balancing are very important aspects of any Kubernetes deployment. It defines the quality of access to applications as well as the availability of the control plane.
 
 ### Control Plane Load Balancing
 
-NSX Advanced Load Balancer or kube-vip can be used to provide HA for control plane endpoints of Tanzu Kubernetes Grid clusters.
+NSX Advanced Load Balancer or Kube-Vip can be used to provide HA for control plane endpoints of Tanzu Kubernetes Grid clusters.
 
 #### Hub and Spoke Topology
 
-Kube-VIP is recommended over NSX Advanced Load Balancer to be used at the Edge site for the Hub and Spoke Topology. With this configuration, the edge site doesn’t rely on a component in the main datacenter for the control-plane access that might be impacted by connectivity issues.
+Kube-Vip is recommended over NSX Advanced Load Balancer to be used at the Edge site for the Hub and Spoke Topology. With this configuration, the edge site doesn’t rely on a component in the main data center for the control-plane access that might be impacted by connectivity issues.
 
 #### Hybrid Topology
 
-NSX Advanced Load Balancer can be used to provide HA for control plane endpoints of Tanzu Kubernetes Grid clusters with the Hybrid Topology.
+NSX Advanced Load Balancer can be used to provide HA for control plane endpoints of Tanzu Kubernetes Grid clusters with a hybrid topology.
 
 ### Workloads Load Balancing
 
@@ -344,10 +353,10 @@ As time of writing the only supported solution to provide Load-Balancing with Ta
 
 #### Considerations for NSX Advanced Load Balancer Service Engines
 
-- NSX Advanced Load Balancer Service Engines (SEs) are deployed manually as virtual machines (VMs) and are joined to the NSX Advanced Load Balancer Controller (on the main datacenter).
-- Depending on the network configuration, the management interface of the Service Engine can be configured through DHCP or with a pre-defined range defined in the controller.
+- NSX Advanced Load Balancer Service Engines (SEs) are deployed manually as virtual machines (VMs) and are joined to the NSX Advanced Load Balancer Controller (on the main data center).
+- Depending on the network configuration, the management interface of the service engine (SE) can be configured through DHCP or with a pre-defined range defined in the controller.
 - Legacy HA Active/Standby Mode is used primarily due to NSX Advanced Load Balancer Essential license limitation. Only two Service Engines may be created. For every virtual service active on one, there is a standby on the other, configured and ready to take over in the event of a failure of the active SE. There is no Service Engine scale out in this HA mode.
-- If the connectivity to the main datacenter is lost, SEs will run headless and not be able to receive configuration updates, but otherwise will continue to operate until connectivity is restored.
+- If the connectivity to the main data center is lost, SEs continue to run headless. The SEs cannot receive configuration updates until connectivity is restored..
 - The latency between an NSX Advanced Load Balancer Controller and an NSX Advanced Load Balancer Service Engine should be less than 75 ms.
 
 ##### Service Engine Configuration
@@ -380,15 +389,15 @@ Tanzu Editions also includes [Contour](https://projectcontour.io/) for Kubernete
 
 ## Container Registry
 
-### Main Datacenter
+### Main Data Center
 
-[Harbor Container Registry](https://goharbor.io/) can be deployed to both the centralized datacenter as well as to each edge site.  Using Harbor, replications can be configured such that all container images which get pushed into the centralized harbor are automatically replicated to each edge. Each edge deployment can reference its local harbor for efficient network resource utilization.
+[Harbor Container Registry](https://goharbor.io/) can be deployed to both the centralized data center as well as to each edge site.  Using Harbor, replications can be configured such that all container images which get pushed into the centralized harbor are automatically replicated to each edge. Each edge deployment can reference its local harbor for efficient network resource utilization.
 
 ![Harbor registry federated topology](./img/tkg-edge/tkg-edge-harbor.drawio.png)
 
 [Replications](https://goharbor.io/docs/2.0.0/administration/configuring-replication/create-replication-rules/) can be defined as manual, scheduled, or event-based.  Manual or scheduled are best suited for initial bulk syncs, where-as event-based can be used to replicate changes on-going.
 
-Schedule replication during low activity (outside of working hours)
+Schedule replication during low activity (outside of working hours).
 
 ![Harbor edge site replications](./img/tkg-edge/f312de8ea37cad334af63d608a37f3d6.png)
 
@@ -404,28 +413,29 @@ Design Decisions on Container Registry configuration
 
 ## Initial Deployment
 
-The initial deployment is meant to performed through a GitOps process. Leveraging GitOps will allow deployment at scale as well as easy rebuild in case of loss of an edge location. Once the infrastructure has been setup, the Tanzu Design can be deployed remotely using Tanzu CLI and automation tools to perform NSX ALB configuration and Kubernetes configuration.
+The initial deployment is done through a GitOps process. Leveraging GitOps will allow deployment at scale as well as easy rebuild in case of loss of an edge location. Once the infrastructure has been setup, the Tanzu Design can be deployed remotely using Tanzu CLI and automation tools to perform NSX ALB configuration and Kubernetes configuration.
 
-### Bill of Materials
+### Supported Component Matrix
 
 - vSphere 6.7+
 - vSphere 7 is recommended to get vSAN File Service for RWM volumes
 - Tanzu Kubernetes Grid 1.5.2
 - NSX Advanced Load Balancer 20.1.7
 - Tanzu Mission Control
-- S3 storage for Backup
+- S3 storage for backup
 
-### Infrastructure considerations
+### Infrastructure Considerations
 
-#### Design Decision for vCenter configuration
+#### Design Decision for vCenter Configuration
+The following table describes the justification and implication for the design decisions.
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| `TZEDG-ALL-EDGE-INFRA-02` | Separate each edge site in a different vSphere Datacenter | A vSphere Datacenter provides a clear boundary in vCenter at the folder level (host, vm, datastore, network). This boundary avoid name collision and ensure resources stay local to the site like templates. It is also easier to segregate access if needed. | NSX ALB considers a vSphere Datacenter as a hard boundary that requires the creation of an endpoint for each one. |
+| `TZEDG-ALL-EDGE-INFRA-02` | Separate each edge site in a different vSphere data center | A vSphere data center provides a clear boundary in vCenter at the folder level (host, vm, datastore, network). This boundary avoid name collision and ensure resources stay local to the site like templates. It is also easier to segregate access if needed. | NSX ALB considers a vSphere data center as a hard boundary that requires the creation of an endpoint for each one. |
 
-#### Template management
+#### Template Management
 
-Tanzu Kubernetes Grid expects the template OVA to be present in the vSphere datacenter where the Kubernetes cluster is created.
+Tanzu Kubernetes Grid expects the template OVA to be present in the vSphere data center where the Kubernetes cluster is created.
 Content library can be used to sync the templates across the various edge site but automation is required to convert a content library item into a vSphere template. Tanzu Kubernetes Grid only consumes vSphere template.
 
 #### Multi-vCenter
@@ -433,25 +443,25 @@ Content library can be used to sync the templates across the various edge site b
 The vCenter configuration can be different for each edge site, hence allowing the support of multiple vCenters.
 However the use of multiple vCenters will impact the ability of Tanzu Mission Control to create and lifecycle clusters. Tanzu Mission Control only supports one vCenter server per Tanzu Kubernetes Grid management cluster.
 
-#### High-Availability considerations
+#### High-Availability Considerations
 
 In order to ensure the best availability, the number of worker nodes should be a multiple of the number of ESX hosts in the vSphere cluster.
 Additionally, to maximize the availability of the application at the edge, the worker nodes should be evenly spread across the ESX hosts as well as the pods. To achieve this, it is possible to leverage the Availability Zones feature in Tanzu Kubernetes Grid.
 One AZ is created per ESX Hosts, the same number of worker nodes are deployed AZ / ESX hosts. As time of writing [this feature][610] is still experimental and won't be considered in the design.
 
-### Deployment of the main datacenter
+### Deployment of the Main Data Center
 
-The deployment of the main datacenter is no different from the [TKO Reference Architecture on vSphere][611] deployment.
+The deployment of the main data center is no different from the [TKO Reference Architecture on vSphere][611] deployment.
 
 Only the management cluster and the shared services cluster are deployed.
 
-### Deployment of the edge site
+### Deployment of the Edge Site
 
-#### Infrastructure requirements
+#### Infrastructure Requirements
 
-It is assumed that the following components are already installed and configured at the edge site:
+This design assumes that the following components are already installed and configured at the edge site:
 
-- vSphere datacenter with one cluster
+- vSphere data center with one cluster
 - Appropriate networking
 - Appropriate shared storage
 - vSphere templates
@@ -530,7 +540,7 @@ These newly created NSX Advanced Load Balancer configuration elements should be 
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| `TZEDG-ALL-EDGE-TKG-02` | Disable MHC | After the Edge location is network isolated from the main datacenter, the TKG Management cluster might recreate the whole cluster causing an outage at the edge | Kubernetes node that are stopped or unresponsive won't be automatically replaced |
+| `TZEDG-ALL-EDGE-TKG-02` | Disable MHC | After the Edge location is network isolated from the main data center, the TKG Management cluster might recreate the whole cluster causing an outage at the edge | Kubernetes node that are stopped or unresponsive won't be automatically replaced |
 | `TZEDG-ALL-EDGE-TKG-03` | Use Kube-VIP for the control plane API endpoint | Avoid unnecessary complexity since we have only one control-plane node. <br />Eliminate the network dependency to the main site (AKO needs connectivity to the main site) | N/A |
 | `TZEDG-ALL-EDGE-TKG-04` | Create one namespace per edge site in the TKG management cluster and creates TKG workload cluster(s) in them | Isolate each edge site for better role base access control. Simplify destruction and creation of an edge site. Avoid mass destructive actions across all edge sites.  | Manual operations are more complex as it is required to switch between namespaces to perform operations across edge sites. |
 
@@ -650,7 +660,7 @@ tanzu package install harbor --namespace tanzu-system-registry --create-namespac
 ```
 <!-- /* cSpell:enable */ -->
 
-#### DNS delegation
+#### DNS Delegation
 
 Optionally a dedicated DNS zone can be delegated to NSX Advanced Load Balancer to facilitate further GSLB configuration.
 
@@ -658,7 +668,7 @@ Optionally a dedicated DNS zone can be delegated to NSX Advanced Load Balancer t
 
 ### vSphere Infrastructure
 
-The physical infrastructure is managed centrally from one or multiple vCenter Server. The management of such an infrastructure should not differ from any other vSphere based infrastructure.
+The physical infrastructure is managed centrally from one or multiple vCenter servers. The management of such an infrastructure should not differ from any other vSphere based infrastructure.
 
 #### Upgrade
 
@@ -694,29 +704,27 @@ tanzu cluster upgrade tkg-edge33-wld01 --namespace edge33
 
 Finally, user-managed package (such as Contour, Harbor, ...) can be [updated][705] as well.
 
-#### Backup & Restore
+#### Backup and Restore
 
 To [back up and restore the workloads][707] hosted by Tanzu Kubernetes Grid Workload clusters, you can use [Velero][706], an open source community standard tool for backing up and restoring Kubernetes cluster objects and persistent volumes. Velero supports a variety of storage providers to store its backups.
 
-You can use Velero to back up and restore a workload cluster’s current workloads and persistent volumes state, for entire clusters or specific namespaces. You can configure pre- and post-hooks for backup and restore to run custom processes before or after backup and restore events. If some aspects of workload or cluster state are not well-suited to backup/restore, you can exclude them.
+You can use Velero to back up and restore a workload cluster’s current workloads and persistent volumes state, for entire clusters or specific namespaces. You can configure pre- and post-hooks for backup and restore to run custom processes before or after backup and restore events. If some aspects of workload or cluster state are not well suited to backup/restore, you can exclude them.
 
-For the Tanzu Edge architecture, it is recommended to backup the stateful workloads on the main datacenter. The main datacenter should have S3 storage since Velero requires S3 storage to be used as a target for the backup.
+For the Tanzu Edge architecture, we recommend that you backup the stateful workloads on the main data center. The main data center should have S3 storage since Velero requires S3 storage to be used as a target for the backup.
 
 While Velero can be setup manually through its CLI, for fleet management it is recommended to use Tanzu Mission Control and its Data Protection capability to perform such a task.
 
-#### Loss of physical host
+#### Loss of Physical Host
 
-The impact of the loss of a host is highly dependent of the workloads that are running on it at the time of the outage. These workloads are going to be automatically restarted by vSphere HA, however minor disruption might occur.
-Here are some example depending on the workload impacted:
+The impact of the loss of a host is highly dependent on the workloads that are running on the host at the time of the outage. The workloads are automatically restarted by vSphere HA, however minor disruptions might occur.
 
-- Active NSX Advanced Load Balancer Service Engine:
-Applications using loadbalancer might not be available for few seconds until the Standby LB Service Engine takes over.
-- Control Plane node:
-In case of a Kubernetes cluster with a single control plane node, the management of the cluster will be unavailable for few minutes until the control plane is restarted and all the Kubernetes components are back up and running.
-- Worker node with application pods and persistent volumes:
-If the application is deployed in a highly available fashion, there should not be any disruption.
+Here are some examples depending on the workload impacted:
 
-### Centralized control plane
+- Active NSX Advanced Load Balancer Service Engine: Applications using a load balancer may not be available for a few seconds until the standby load balancer service engine takes over.
+- Control plane node: In case of a Kubernetes cluster with a single control plane node, the management of the cluster will be unavailable for few minutes until the control plane is restarted and all the Kubernetes components are back up and running.
+- Worker node with application pods and persistent volumes: If the application is deployed in a highly available fashion, there should not be any disruption.
+
+### Centralized Control Plane
 
 For enterprises modernizing their application estate, it is not uncommon to have cloud native deployments across many sites. They will run Kubernetes clusters in their core data centers (in the 10s), mini data centers away from the core data center (in the 100s), and thousands of smaller 2 to 3 server deployments at sites like stores, like what we are testing here. To be able to manage at scale this vast Kubernetes estate you need a centralized control plane that can help you deploy, manage, secure and provide insights into kubernetes deployments. For this reason, a centralized control plane in public cloud, private data center, or a hybrid environment is a requirement. One way to solve this is via Tanzu Mission Control.
 
@@ -761,7 +769,7 @@ With Tanzu Mission Control you can group clusters based on different types of si
 
 ![Managing the edge cluster fleet using Tanzu Mission Control](./img/tkg-edge/ce29c1e20bf0ecc1ffe2dfdc658cb585.png)
 
-#### Policy Management example
+#### Policy Management Example
 
 Policies allow you to provide a set of rules that govern your organization and all the objects it contains. Policies can be applied to fleets of clusters by defining once to ensure that the kubernetes clusters and applications are secure, compliant while enabling self service which makes it very appealing for edge scale.  Tanzu mission control provides following policy types that can be applied to fleets of clusters:
 
@@ -771,15 +779,15 @@ Policies allow you to provide a set of rules that govern your organization and a
 4. Quota policy
 5. Pod Security Policy.
 
-Figure X and Figure X below showcase how customers can create policies and use the policy insights page to review if any of the policies are violated across all the edge deployments.
+The following figures showcase how customers can create policies and use the policy insights page to review if any of the policies are violated across all the edge deployments.
 
 ![Using Tanzu Mission Control to manage edge cluster policies](./img/tkg-edge/a93e92ad27bee927a258c5447a3ed78d.png)
 
 ![Policy reporting across all edge sites](./img/tkg-edge/559bfe3fa044f89dab66d033ee2168cf.png)
 
-#### Usage consideration
+#### Usage Considerations
 
-As of time of writing [Tanzu Mission Control][701] requires,  at least, ~1.5GB of memory and ~1 vCPU per managed cluster to operate.
+[Tanzu Mission Control][701] requires,  at least, ~1.5GB of memory and ~1 vCPU per managed cluster to operate.
 The following table describes the resources used by Tanzu Mission Control components.
 
 <!-- /* cSpell:disable */ -->
@@ -848,7 +856,7 @@ Kubernetes clusters at edge sites can install the Fluent-bit logging extension a
 
 vRealize Log Insight appliance is available as a separate on-prem deployable product. You can also choose to go with the SaaS version vRealize Log Insight Cloud.
 
-Fluent Bit is particularly well suited for an edge use case with its [buffering][802] capability that can be used to retain logs until the main datacenter reconnects.
+Fluent Bit is particularly well suited for an edge use case with its [buffering][802] capability that can be used to retain logs until the main data center reconnects.
 
 ## Summary
 
