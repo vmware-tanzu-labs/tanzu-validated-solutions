@@ -791,6 +791,7 @@ The following figures showcase how customers can create policies and use the pol
 The following table describes the resources used by Tanzu Mission Control components.
 
 <!-- /* cSpell:disable */ -->
+
 | Extension | Memory Reservation | Memory Limit | CPU Reservation | CPU Limit |
 | --- | --- | --- | --- | --- |
 | agent-updater | 100Mi | 150Mi | 100m | 100m |
@@ -806,6 +807,7 @@ The following table describes the resources used by Tanzu Mission Control compon
 | sync-agent | 128Mi | 2Gi | 100m | 2 |
 | tmc-observer | 100Mi | 150Mi | 50m | 100m |
 | Total | 1446Mi | 2546Mi | 870m | 1803m |
+
 <!-- /* cSpell:enable */ -->
 
 ### Authentication with Pinniped
