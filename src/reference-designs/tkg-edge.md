@@ -55,7 +55,7 @@ The design is expected to answer the following business requirements. The key ex
 
 ### Availability / Recoverability
 
-An edge site can be considered like any other data center except when it comes to availability and recoverability. This is becuase, an edge site, such as a retail store or an office, is usually tied to business hours. Additionally, there is a need to keep cost of the edge site low. Even though the RPO at an edge site can be  critical (sales transactions), the RTO is not as critical as a normal data center.
+An edge site can be considered like any other data center except when it comes to availability and recoverability. This is because, an edge site, such as a retail store or an office, is usually tied to business hours. Additionally, there is a need to keep cost of the edge site low. Even though the RPO at an edge site can be  critical (sales transactions), the RTO is not as critical as a normal data center.
 
 The following sections describe the expectations depending on the type of outage.
 
