@@ -1,10 +1,10 @@
 ## Architecture Overview
-This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.0. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.1. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
-![](img/tap-architecture-planning/overview.png)
-<!-- https://lucid.app/lucidchart/313468a7-da40-4872-9075-cd37224c5e2f/ -->
+![](img/tap-architecture-planning/overview.jpg)
+<!-- https://lucid.app/lucidchart/313468a7-da40-4872-9075-cd37224c5e2f/edit -->
 
 ### Cluster Layout
 For production deployments, VMware recommends two fully independent instances of Tanzu Application Platform. One instance for operators to conduct their own reliability tests, and the other instance hosts development, test, QA, and production environments isolated by separate clusters.
@@ -30,45 +30,31 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 #### Recommendations
 * Spread across three Availability Zones (AZs) for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
 
-The Build Cluster includes the following packages:
+The Build Cluster includes the following packages (exact list may differ based on supply chain choice):
 ```
-build.appliveview.tanzu.vmware.com
 buildservice.tanzu.vmware.com
 cartographer.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
 contour.tanzu.vmware.com
 controller.conventions.apps.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
+conventions.appliveview.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
 grype.scanning.apps.tanzu.vmware.com
-image-policy-webhook.signing.apps.tanzu.vmware.com
-metadata-store.apps.tanzu.vmware.com
-ootb-supply-chain-basic.tanzu.vmware.com
+ootb-supply-chain-testing-scanning.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
 scanning.apps.tanzu.vmware.com
 spring-boot-conventions.tanzu.vmware.com
+tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
 ```
 To install a Build Cluster, use the following package definition:
 ```yaml
-profile: full
-excluded_packages:
- - accelerator.apps.tanzu.vmware.com
- - run.appliveview.tanzu.vmware.com
- - api-portal.tanzu.vmware.com
- - cnrs.tanzu.vmware.com
- - ootb-delivery-basic.tanzu.vmware.com
- - developer-conventions.tanzu.vmware.com
- - image-policy-webhook.signing.apps.tanzu.vmware.com
- - learningcenter.tanzu.vmware.com
- - workshops.learningcenter.tanzu.vmware.com
- - services-toolkit.tanzu.vmware.com
- - service-bindings.labs.vmware.com
- - tap-gui.tanzu.vmware.com
+profile: build
  ```
 ### Run Cluster Requirements
 
@@ -85,46 +71,30 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Run Cluster includes the following packages:
 ```
 cartographer.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
 cnrs.tanzu.vmware.com
+connector.appliveview.tanzu.vmware.com
 contour.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
 image-policy-webhook.signing.apps.tanzu.vmware.com
 ootb-delivery-basic.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
-run.appliveview.tanzu.vmware.com
 service-bindings.labs.vmware.com
 services-toolkit.tanzu.vmware.com
+tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
-tekton.tanzu.vmware.com
 ```
+
 To install a Run Cluster, use the following package definition:
 ```yaml
-profile: full
-excluded_packages:
- - accelerator.apps.tanzu.vmware.com
- - api-portal.tanzu.vmware.com
- - build.appliveview.tanzu.vmware.com
- - buildservice.tanzu.vmware.com
- - controller.conventions.apps.tanzu.vmware.com
- - developer-conventions.tanzu.vmware.com
- - grype.scanning.apps.tanzu.vmware.com
- - learningcenter.tanzu.vmware.com
- - metadata-store.apps.tanzu.vmware.com
- - ootb-supply-chain-basic.tanzu.vmware.com
- - ootb-supply-chain-testing.tanzu.vmware.com
- - ootb-supply-chain-testing-scanning.tanzu.vmware.com
- - scanning.apps.tanzu.vmware.com
- - spring-boot-conventions.tanzu.vmware.com
- - tap-gui.tanzu.vmware.com
- - workshops.learningcenter.tanzu.vmware.com
+profile: run
 ```
 ### View Cluster Requirements
 The View Cluster is designed to run the web applications for Tanzu Application Platform. specifically, Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
@@ -140,7 +110,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
 * Utilize a PostgreSQL database for storing user preferences and manually created entities
 
 The View Cluster includes the following packages:
@@ -148,12 +118,14 @@ The View Cluster includes the following packages:
 ```
 accelerator.apps.tanzu.vmware.com
 api-portal.tanzu.vmware.com
+backend.appliveview.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
 contour.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
-image-policy-webhook.signing.apps.tanzu.vmware.com
 learningcenter.tanzu.vmware.com
+metadata-store.apps.tanzu.vmware.com
+tap-auth.tanzu.vmware.com
 tap-gui.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
@@ -162,35 +134,12 @@ workshops.learningcenter.tanzu.vmware.com
 
 To install a View Cluster, use the following package definition:
 ```yaml
-profile: full
-excluded_packages:
- - run.appliveview.tanzu.vmware.com
- - cnrs.tanzu.vmware.com
- - ootb-delivery-basic.tanzu.vmware.com
- - developer-conventions.tanzu.vmware.com
- - image-policy-webhook.signing.apps.tanzu.vmware.com
- - services-toolkit.tanzu.vmware.com
- - service-bindings.labs.vmware.com
- - build.appliveview.tanzu.vmware.com
- - buildservice.tanzu.vmware.com
- - controller.conventions.apps.tanzu.vmware.com
- - developer-conventions.tanzu.vmware.com
- - grype.scanning.apps.tanzu.vmware.com
- - metadata-store.apps.tanzu.vmware.com
- - ootb-supply-chain-basic.tanzu.vmware.com
- - ootb-supply-chain-testing.tanzu.vmware.com
- - ootb-supply-chain-testing-scanning.tanzu.vmware.com
- - scanning.apps.tanzu.vmware.com
- - spring-boot-conventions.tanzu.vmware.com
- - ootb-templates.tanzu.vmware.com
- - tekton.tanzu.vmware.com
- - image-policy-webhook.signing.apps.tanzu.vmware.com
- - cartographer.tanzu.vmware.com
+profile: view
  ```
 ### Iterate Cluster Requirements
 The Iterate Cluster is for "inner loop" development iteration. Developers connect to the Iterate Cluster via their IDE to rapidly iterate on new software features. The Iterate Cluster operates distinctly from the outer loop infrastructure. Each developer should be given their own namespace within the Iterate Cluster during their platform onboarding.
 
-![](img/tap-architecture-planning/iterate-cluster.png)
+![](img/tap-architecture-planning/iterate-cluster.jpg)
 <!-- https://lucid.app/lucidchart/40663cc1-55aa-4892-ae23-1f462d39f262 -->
 
 #### Kubernetes Requirements
@@ -202,22 +151,23 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 #### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Manager (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Iterate Cluster includes the following packages:
 ```
-build.appliveview.tanzu.vmware.com
+backend.appliveview.tanzu.vmware.com
 buildservice.tanzu.vmware.com
 cartographer.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
 cnrs.tanzu.vmware.com
+connector.appliveview.tanzu.vmware.com
 contour.tanzu.vmware.com
 controller.conventions.apps.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
+conventions.appliveview.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
 grype.scanning.apps.tanzu.vmware.com
 image-policy-webhook.signing.apps.tanzu.vmware.com
-metadata-store.apps.tanzu.vmware.com
 ootb-delivery-basic.tanzu.vmware.com
 ootb-supply-chain-basic.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
@@ -226,6 +176,7 @@ scanning.apps.tanzu.vmware.com
 service-bindings.labs.vmware.com
 services-toolkit.tanzu.vmware.com
 spring-boot-conventions.tanzu.vmware.com
+tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
@@ -233,16 +184,7 @@ tekton.tanzu.vmware.com
 
 To install a Iterate Cluster, use the following package definition:
 ```yaml
-profile: full
-excluded_packages:
- - accelerator.apps.tanzu.vmware.com
- - api-portal.tanzu.vmware.com
- - learningcenter.tanzu.vmware.com
- - metadata-store.apps.tanzu.vmware.com
- - ootb-supply-chain-testing.tanzu.vmware.com
- - ootb-supply-chain-testing-scanning.tanzu.vmware.com
- - tap-gui.tanzu.vmware.com
- - workshops.learningcenter.tanzu.vmware.com
+profile: iterate
 ```
 
 ## Tanzu Application Platform Upgrade Approach
@@ -288,18 +230,18 @@ Services can be deployed directly into the same cluster running Tanzu Applicatio
 
 The following diagram shows In-Cluster services with different namespaces.
 
-![](img/tap-architecture-planning/in-cluster.png)
+![](img/tap-architecture-planning/in-cluster.jpg)
 <!-- slides 80-82 https://onevmw-my.sharepoint.com/:p:/g/personal/mijames_vmware_com/EYK5tKWk83RFia7QHHkaAj0BUnnhenCjlto4qpYDY_ZyFw?e=NhmLnZ -->
 
 ### External Cluster
 External clusters allow services to have different infrastructure, security, and scaling requirements. External services clusters are the recommended way to provide rapid service provisioning to platform users.
 
-![](img/tap-architecture-planning/external-cluster.png)
+![](img/tap-architecture-planning/external-cluster.jpg)
 
 ### External Injected
 Applications that consume services that do not adhere to the Kubernetes service binding specification require the usage of a K8s secret, implemented in the same app deployment containing the necessary connection details. This method provides the most flexibility and makes it possible to consume legacy services.
 
-![](img/tap-architecture-planning/external-injected.png)
+![](img/tap-architecture-planning/external-injected.jpg)
 
 ## Monitoring
 The following metrics should be observed. If the values exceed service level objectives, the clusters should be scaled or other actions taken.
