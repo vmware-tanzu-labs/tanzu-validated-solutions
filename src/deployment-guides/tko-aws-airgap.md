@@ -339,7 +339,7 @@ Run the following command to delete the management cluster and related objects:
 tanzu cluster delete <management-cluster-name>
 ```
 
-## <a id=stig-fips> </a>Airgapped STIG/FIPS Deployment on AWS
+## <a id="stig-fips"> </a>Airgapped STIG/FIPS Deployment on AWS
 For how to deploy a STIG-hardened management/FIPS cluster to an airgapped AWS environment, see [Deploy a STIG-Hardened Management Cluster to an Airgapped AWS VPC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-security-airgap-stig-aws.html).<_Is there a later version of this page?_>
 
 
