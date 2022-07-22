@@ -10,6 +10,7 @@ bootstrapper
 bursty
 CEIP
 CNAMES
+cnrs
 containerd
 CoreDNS
 CPUs
@@ -87,3 +88,4 @@ VNET
 vsphere
 VXLAN
 Xeon
+
