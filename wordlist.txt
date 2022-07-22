@@ -87,9 +87,6 @@ VNET
 vsphere
 VXLAN
 Xeon
-<<<<<<< HEAD
-
-=======
 Airgap
 airgap
 untar
@@ -105,4 +102,3 @@ apiserver
 Coredns
 FIPS
 CONTROLPLANE
->>>>>>> 6fbcddd (tkg on nsx-t in airgap RA)
