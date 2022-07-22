@@ -106,3 +106,5 @@ CONTROLPLANE
 apiserver
 SCTP
 LDAPS
+datacenters
+AKOO
