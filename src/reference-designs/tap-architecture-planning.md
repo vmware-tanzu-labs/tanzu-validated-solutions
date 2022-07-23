@@ -24,7 +24,7 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 ### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires one external IP address)
 * Default storage class
-* At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
@@ -65,7 +65,7 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 ### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires 1 external IP address)
 * Default storage class
-* At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
@@ -104,7 +104,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 ### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires 3 external IP addresses)
 * Default storage class
-* At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
@@ -145,7 +145,7 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 ### Kubernetes Requirements
 * LoadBalancer for ingress controller (2 external IP addresses)
 * Default storage class
-* At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
