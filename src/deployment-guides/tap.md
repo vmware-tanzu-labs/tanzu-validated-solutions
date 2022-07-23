@@ -29,14 +29,14 @@ Additional details concerning prerequisites may be found in Tanzu Application Pl
 
 The following provides an overview of the steps necessary to deploy Tanzu Application Platform. Each step links to a detailed information section.
 
-1. [Setup Tanzu Application Platform Build cluster](#tap-build)
-1. [Setup Tanzu Application Platform Run cluster](#tap-run)
-1. [Setup Tanzu Application Platform View cluster](#tap-ui)
-1. [Setup Tanzu Application Platform Iterate cluster](#tap-full)
+1. [Set Up Tanzu Application Platform Build cluster](#tap-build)
+1. [Set Up Tanzu Application Platform Run cluster](#tap-run)
+1. [Set Up Tanzu Application Platform View cluster](#tap-ui)
+1. [Set Up Tanzu Application Platform Iterate cluster](#tap-full)
 1. [Deploy Sample Application](#tap-sample-app)
 
 
-## <a id="tap-build"> </a>Setup Tanzu Application Platform Build Cluster
+## <a id="tap-build"> </a>Set Up Tanzu Application Platform Build Cluster
 
 The Build Cluster is responsible for taking a developer's source code commits and applying a supply chain that will produce a container image and Kubernetes manifests for deploying on a Run Cluster
 
@@ -138,7 +138,7 @@ Provide following user inputs to set environment variables into commands and exe
 * `INSTALL_REGISTRY_USERNAME`- tanzu net username
 * `INSTALL_REGISTRY_PASSWORD` - tanzu net password
 
- See [Build Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-build-sample.html) for further details.
+ For more information, see [Build Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-build-sample.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -270,7 +270,7 @@ Provide the following user inputs to set environments variables into commands an
 <!-- /* cSpell:enable */ -->
 **Note** - Contour settings in tap-values-run.yaml must be modified if you are not using AWS.
 
- See [Run Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-run-sample.html) for further details.
+ For more information, see [Run Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-run-sample.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -318,10 +318,10 @@ kubectl get svc -n tanzu-system-ingress
 
 Perform the steps outlined in [Configure developer namespaces to use installed packages](#tap-dev-namespace)
 
-Execute the steps 1-4 outlined in [Setup Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters.
+Execute steps 1-4 outlined in [Set Up Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters.
 
 
-## <a id=tap-ui> </a> Setup Tanzu Application Platform View Cluster
+## <a id=tap-ui> </a> Set Up Tanzu Application Platform View Cluster
 
 The View cluster is designed to run the web applications for TAP; specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
 
@@ -340,17 +340,18 @@ Provide following user inputs to set environments variables into commands and ex
 * `TAP_REGISTRY_PASSWORD` - registry password
 * `TAP_GITHUB_TOKEN` - GitHub personal access token
 * `TAP_APP_DOMAIN`  - app domain you want to use for tap-gui
-* `TAP_GIT_CATALOG_URL` - git catalog url. Refer this as an [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
+* `TAP_GIT_CATALOG_URL` - git catalog url.  
+    See this [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
 * `TAP_RUN_CLUSTER_NAME` - Run cluster name
 
- See [View Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-view-sample.html) for further details.
+ See [View Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-view-sample.html) for more details.
 
 
 
-  ```bash
-  set -e
-  export TAP_NAMESPACE="tap-install"
-  export TAP_SERVICE_ACCOUNT_NAME="default"
+```bash
+set -e
+export TAP_NAMESPACE="tap-install"
+export TAP_SERVICE_ACCOUNT_NAME="default"
 
 
 cat <<EOF | tee tap-gui-viewer-service-account-rbac.yaml
@@ -550,7 +551,7 @@ See the steps to deploy and test the [sample application](#tap-sample-app).
 For more information, also see [Getting started with the Tanzu Application Platform](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-getting-started.html).
 
 
-## <a id=tap-full> </a> Setup Tanzu Application Platform Iterate Cluster
+## <a id=tap-full> </a> Set Up Tanzu Application Platform Iterate Cluster
 
 The Iterate Cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features
 
@@ -574,7 +575,7 @@ Provide the following user inputs to set environment variables into commands and
 * `INSTALL_REGISTRY_PASSWORD` - tanzu net  password
 * `TAP_ITERATE_CNRS_DOMAIN` - tap iterate cluster cnrs domain
 
- Refer to the [full profile documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-install.html#full-profile) for further details.
+For more information, see [Full Profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-install.html#full-profile) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
