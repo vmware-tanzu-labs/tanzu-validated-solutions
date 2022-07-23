@@ -1,4 +1,4 @@
-## Architecture Overview
+# Architecture Overview
 This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.1. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
@@ -6,7 +6,7 @@ Design decisions enumerated in this document exemplify the main design issues yo
 ![](img/tap-architecture-planning/overview.jpg)
 <!-- https://lucid.app/lucidchart/313468a7-da40-4872-9075-cd37224c5e2f/edit -->
 
-### Cluster Layout
+## Cluster Layout
 For production deployments, VMware recommends two fully independent instances of Tanzu Application Platform. One instance for operators to conduct their own reliability tests, and the other instance hosts development, test, QA, and production environments isolated by separate clusters.
 
 | Decision ID   | Design Decision   | Justification | Implication
@@ -16,19 +16,19 @@ For production deployments, VMware recommends two fully independent instances of
 |TAP-003  | Utilize a single Build Cluster and multiple Run Clusters  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production environment for the build system vs separating into dev/test/qa/prod build systems. Additionally, a single Build Cluster ensures that the container image does not change between environments.  A single Build Cluster is also easier to manage than separate components. |  *Changes lower environments are not as separated as having separate build environments.*
 |TAP-004  | Utilize a View Cluster  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production perception for the build system vs separating into dev/test/qa/prod build systems. Additionally, it raises confidence that the container image does not change between environments.  It also enhances manageability versus having separate components. |  None
 
-### Build Cluster Requirements
+## Build Cluster Requirements
 The Build Cluster is responsible for taking a developer's source code commits and applying a supply chain that will produce a container image and Kubernetes manifests for deploying on a Run Cluster.
 
 The Kubernetes Build Cluster will see bursty workloads as each build or series of builds kicks off. The Build Cluster will see very high pod scheduling loads as these events happen. The amount of resources assigned to the Build Cluster will directly correlate to how quickly parallel builds are able to be completed.
 
-#### Kubernetes Requirements
+### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires one external IP address)
 * Default storage class
 * At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
-#### Recommendations
+### Recommendations
 * Spread across three Availability Zones (AZs) for high availability
 * Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
 
@@ -56,20 +56,20 @@ To install a Build Cluster, use the following package definition:
 ```yaml
 profile: build
  ```
-### Run Cluster Requirements
+## Run Cluster Requirements
 
 The Run Cluster reads the container image and Kubernetes resources created by the Build Cluster and runs them as defined in the `Deliverable` object for each application.
 
 The Run Cluster's requirements are driven primarily by the applications that it will run.  Horizontal and vertical scale is determined based on the type of applications that will be scheduled.
 
-#### Kubernetes Requirements
+### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires 1 external IP address)
 * Default storage class
 * At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
-#### Recommendations
+### Recommendations
 * Spread across three AZs for high availability
 * Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
@@ -96,19 +96,19 @@ To install a Run Cluster, use the following package definition:
 ```yaml
 profile: run
 ```
-### View Cluster Requirements
+## View Cluster Requirements
 The View Cluster is designed to run the web applications for Tanzu Application Platform. specifically, Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
 
 The View Cluster's requirements are driven primarily by the respective applications that it will be running.
 
-#### Kubernetes Requirements
+### Kubernetes Requirements
 * LoadBalancer for ingress controller (requires 3 external IP addresses)
 * Default storage class
 * At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
-#### Recommendations
+### Recommendations
 * Spread across three AZs for high availability
 * Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
 * Utilize a PostgreSQL database for storing user preferences and manually created entities
@@ -136,20 +136,20 @@ To install a View Cluster, use the following package definition:
 ```yaml
 profile: view
  ```
-### Iterate Cluster Requirements
+## Iterate Cluster Requirements
 The Iterate Cluster is for "inner loop" development iteration. Developers connect to the Iterate Cluster via their IDE to rapidly iterate on new software features. The Iterate Cluster operates distinctly from the outer loop infrastructure. Each developer should be given their own namespace within the Iterate Cluster during their platform onboarding.
 
 ![](img/tap-architecture-planning/iterate-cluster.jpg)
 <!-- https://lucid.app/lucidchart/40663cc1-55aa-4892-ae23-1f462d39f262 -->
 
-#### Kubernetes Requirements
+### Kubernetes Requirements
 * LoadBalancer for ingress controller (2 external IP addresses)
 * Default storage class
 * At least 16GB available memory that is allocatable across clusters, with at least 8gb per node
 * Logging is enabled and targets the desired application logging platform
 * Monitoring is enabled and targets the desired application observability platform
 
-#### Recommendations
+### Recommendations
 * Spread across three AZs for high availability
 * Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
