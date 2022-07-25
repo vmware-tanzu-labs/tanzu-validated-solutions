@@ -1,9 +1,9 @@
-# Deploy Tanzu for Kubernetes Operations on AWS in an Airgapped Environment
+# Deploy Tanzu for Kubernetes Operations on AWS in an Air-Gapped Environment
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS in an airgapped (internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS in an air-gapped (internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
 
 ## Prerequisites
-Before deploying VMware Tanzu for Kubernetes Operations in an AWS airgapped environment, ensure that the following are set up.
+Before deploying VMware Tanzu for Kubernetes Operations in an AWS air-gapped environment, ensure that the following are set up.
 
 * **AWS Account**: An IAM user account with **administrative privileges**.
 
@@ -40,7 +40,7 @@ The main steps to deploy Tanzu for Kubernetes Operations on AWS EC2 are as follo
 9. [Install and Configure Packages into Workload Clusters](#install-packages).
 10. [Logs and Troubleshooting](#logs).
 11. [Delete Clusters](#cluster-mgmt).
-12. [Airgapped STIG/FIPS deployment on AWS](#stig-fips). 	
+12. [air-gapped STIG/FIPS deployment on AWS](#stig-fips). 	
 13. [Tanzu Kubernetes Grid Upgrade](#upgrade-tkg).
 
 
@@ -214,7 +214,7 @@ This registry should run outside of Tanzu Kubernetes Grid and is separate from a
 
 ## <a id=copy-tkg-img> </a> Copy the container images required to deploy Tanzu Kubernetes Grid.
 
- Copy the container images required to deploy Tanzu Kubernetes Grid on AWS to a private registry in a physically airgapped, offline environment.  This procedure uses the scripts `download-images.sh`, `gen-publish-images-totar.sh`, and `gen-publish-images-fromtar.sh` to:
+ Copy the container images required to deploy Tanzu Kubernetes Grid on AWS to a private registry in a physically air-gapped, offline environment.  This procedure uses the scripts `download-images.sh`, `gen-publish-images-totar.sh`, and `gen-publish-images-fromtar.sh` to:
 
 * Copy the images from the Tanzu Kubernetes Grid public registry and save them locally in tar format on an offline jumpbox.
 * Extract the images from the tar files and copy them to a private registry.
@@ -339,8 +339,8 @@ Run the following command to delete the management cluster and related objects:
 tanzu cluster delete <management-cluster-name>
 ```
 
-## <a id="stig-fips"> </a>Airgapped STIG/FIPS Deployment on AWS
-For how to deploy a STIG-hardened management/FIPS cluster to an airgapped AWS environment, see [Deploy a STIG-Hardened Management Cluster to an Airgapped AWS VPC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-security-airgap-stig-aws.html).<_Is there a later version of this page?_>
+## <a id="stig-fips"> </a>Air-gapped STIG/FIPS Deployment on AWS
+For how to deploy a STIG-hardened management/FIPS cluster to an air-gapped AWS environment, see [Deploy a STIG-Hardened Management Cluster to an Airgapped AWS VPC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-security-airgap-stig-aws.html).<_Is there a later version of this page?_>
 
 
 ## <a id=upgrade-tkg> </a>Tanzu Kubernetes Grid Upgrade
