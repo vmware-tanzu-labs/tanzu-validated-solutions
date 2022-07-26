@@ -2,7 +2,7 @@
 
 VMware Tanzu Kubernetes Grid (multi-cloud) provides a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes Grid on AWS Networking in an air-gapped environment with Tanzu components on AWS. An air-gapped environment is a network security measure employed to ensure that a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Grid on AWS Networking in an air-gapped environment with Tanzu components on AWS. An air-gapped environment is a network security measure employed to ensure that a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture 1.5](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/1.5/tko-reference-architecture/GUID-reference-designs-index.html).
 
 ![Tanzu reference design diagram for air-gap deployment](./img/tko-on-aws-airgap/tkg-aws-airgap-overview.png)
 
@@ -22,7 +22,8 @@ The following network diagram shows the network layout used with this reference 
 ### Network Recommendations
 
 This reference design uses Tanzu Kubernetes Grid to manage the lifecycle of multiple Kubernetes workload clusters by bootstrapping a Kubernetes management cluster with the Tanzu command-line tool. Consider the following when configuring the network for Tanzu Kubernetes Grid:
-* Create Internet-restricted VPCs with no Internet gateway (“offline VPCs”) for Tanzu Kubernetes Grid management and workload clusters. The Admin/Operator should be able to access/ssh into Internet-restricted (offline) VPCs.
+
+* Create Internet-restricted VPCs with no Internet gateway (offline VPCs) for Tanzu Kubernetes Grid management and workload clusters. The Administrator/Operator must be able to access/ssh into Internet-restricted (offline) VPCs.
 
 * Create an AWS Transit Gateway for a network architecture with multiple VPCs with multiple Availability Zones. The AWS Transit Gateway connects all your VPCs and on-premises networks through a central hub. This simplifies your network and avoids complex peering relationships. The AWS Transit Gateway acts as a cloud router – each new connection is made only once.
 
