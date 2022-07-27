@@ -1,4 +1,4 @@
-# VMware Tanzu in an AWS Air-Gapped Enviromnent Reference Architecture
+# VMware Tanzu in an AWS Air-Gapped Environment Reference Architecture
 
 This is the table of contents from which the Tanzu in an air-gapped environment Reference Architecture Documentation site on docs.vmware.com is built.
 
