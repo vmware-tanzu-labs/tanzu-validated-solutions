@@ -51,7 +51,7 @@ The following table provides the component versions and interoperability matrix 
 |Tanzu Kubernetes Grid|1.5.4|
 |VMware vSphere ESXi|7.0 U2 and later|
 |VMware vCenter Server|7.0 U2 and later|
-|NSX Advanced Load Balancer|21.1.4|
+|NSX Advanced Load Balancer|21.1.3|
 
 For up-to-date interoperability information about other VMware products and versions, see the [VMware Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,7906&row=1,%262,%26789,).
 
