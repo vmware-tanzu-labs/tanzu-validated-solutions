@@ -68,7 +68,6 @@ scrapeable
 SCTP
 SDDC
 SNAT
-SNAT
 Sonobouy
 Spherelet
 SR-IOV
