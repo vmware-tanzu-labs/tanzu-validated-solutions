@@ -470,38 +470,48 @@ The Tanzu CLI provides the following predefined configurations for cluster nodes
 |Large|4|16|40|
 |Extra-large|8|32|80|
 
-To create a cluster in which all of the control plane and worker node VMs are the same size, specify the SIZE variable. If you set the SIZE variable, all nodes will be created with the configuration that you set.
+To create a cluster in which all of the control plane and worker node VMs are the same size, specify the `SIZE` variable. If you set the `SIZE` variable, all nodes will be created with the configuration that you set.
 
-- SIZE: "large"
+  ```yaml
+  SIZE: "large"
+  ```
 
-To create a cluster in which the control plane and worker node VMs are different sizes, specify the CONTROLPLANE\_SIZE and WORKER\_SIZE options.
+To create a cluster in which the control plane and worker node VMs are different sizes, specify the `CONTROLPLANE_SIZE` and `WORKER_SIZE` options.
 
-- CONTROLPLANE\_SIZE: "medium"
-- WORKER\_SIZE: "large"
+  ```yaml
+  CONTROLPLANE_SIZE: "medium"
+  WORKER_SIZE: "large"
+  ```
 
-You can combine the CONTROLPLANE\_SIZE and WORKER\_SIZE options with the SIZE option. For example, if you specify SIZE: "large" with WORKER\_SIZE: "extra-large", the control plane nodes will be set to large and worker nodes will be set to extra-large.
+You can combine the `CONTROLPLANE_SIZE` and `WORKER_SIZE` options with the `SIZE` option. For example, if you specify `SIZE: "large"` with `WORKER_SIZE: "extra-large"`, the control plane nodes will be set to large and worker nodes will be set to extra-large.
 
-- SIZE: "large"
-- WORKER\_SIZE: "extra-large"
+  ```yaml
+  SIZE: "large"
+  WORKER_SIZE: "extra-large"
+  ```
 
 **Define Custom Node Configurations**
 
 You can customize the configuration of the nodes rather than using the predefined configurations. 
 
-To use the same custom configuration for all nodes, specify the VSPHERE\_NUM\_CPUS, VSPHERE\_DISK\_GIB, and VSPHERE\_MEM\_MIB options.
+To use the same custom configuration for all nodes, specify the `VSPHERE_NUM_CPUS`, `VSPHERE_DISK_GIB`, and `VSPHERE_MEM_MIB` options.
 
-- VSPHERE\_NUM\_CPUS: 2
-- ` `VSPHERE\_DISK\_GIB: 40
-- ` `VSPHERE\_MEM\_MIB: 4096
+  ```yaml
+  VSPHERE_NUM_CPUS: 2
+  VSPHERE_DISK_GIB: 40
+  VSPHERE_MEM_MIB: 4096
+  ```
 
-To define different custom configurations for control plane nodes and worker nodes, specify the VSPHERE\_CONTROL\_PLANE\_\* and VSPHERE\_WORKER\_\* 
+To define different custom configurations for control plane nodes and worker nodes, specify the `VSPHERE_CONTROL_PLANE_*` and `VSPHERE_WORKER_*`
 
-- VSPHERE\_CONTROL\_PLANE\_NUM\_CPUS: 2
-- ` `VSPHERE\_CONTROL\_PLANE\_DISK\_GIB: 20
-- ` `VSPHERE\_CONTROL\_PLANE\_MEM\_MIB: 8192
-- ` `VSPHERE\_WORKER\_NUM\_CPUS: 4
-- ` `VSPHERE\_WORKER\_DISK\_GIB: 40
-- VSPHERE\_WORKER\_MEM\_MIB: 4096
+```yaml
+VSPHERE_CONTROL_PLANE_NUM_CPUS: 2
+VSPHERE_CONTROL_PLANE_DISK_GIB: 20
+VSPHERE_CONTROL_PLANE_MEM_MIB: 8192
+VSPHERE_WORKER_NUM_CPUS: 4
+VSPHERE_WORKER_DISK_GIB: 40
+VSPHERE_WORKER_MEM_MIB: 4096
+```
 
 ## NSX ALB Sizing Guidelines
 
