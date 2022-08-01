@@ -93,7 +93,7 @@ TKG-AG-002 | Use separate networks for workload clusters based on their usage | 
 
 VMware recommends deploying your Tanzu Kubernetes Grid cluster in an odd number of AZs to ensure high availability of components that require consensus to operate in failure modes.  
 
-The Tanzu Kubernetes Grid management cluster performs [Machine Health Checks](https://cluster-api.sigs.k8s.io/tasks/healthcheck.html) on all Kubernetes worker VMs.  This ensures that workloads remain in a functional state, and can remediate issues such as:
+The Tanzu Kubernetes Grid management cluster performs [Machine Health Checks](https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/healthchecking.html) on all Kubernetes worker VMs.  This ensures that workloads remain in a functional state, and can remediate issues such as:
 
   * a worker VM is accidentally deleted or corrupted.
   * the Kubelet process on a worker VM is accidentally stopped or corrupted.

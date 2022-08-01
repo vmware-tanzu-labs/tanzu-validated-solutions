@@ -78,7 +78,7 @@ Another variant of multiple VPC and multiple AZ design is to have one VPC for th
 
 We recommend deploying your Tanzu Kubernetes Grid cluster in an odd number of AZs to ensure high availability of components that require consensus to operate in failure modes.  
 
-The Tanzu Kubernetes Grid management cluster performs [Machine Health Checks](https://cluster-api.sigs.k8s.io/tasks/healthcheck.html) on all Kubernetes worker VMs.  This ensures workload remain in a functional state, and can remediate issues such as:
+The Tanzu Kubernetes Grid management cluster performs [Machine Health Checks](https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/healthchecking.html) on all Kubernetes worker VMs.  This ensures workload remain in a functional state, and can remediate issues such as:
 
   * Worker VM is accidentally deleted or corrupted.
   * Kubelet process on worker VM is accidentally stopped or corrupted.
