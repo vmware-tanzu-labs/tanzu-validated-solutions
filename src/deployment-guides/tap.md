@@ -1,6 +1,6 @@
 # Tanzu Application Platform Deployment
 
-This deployment outlines the deployment steps for VMware Tanzu Application Platform 1.0 on a Kubernetes workload cluster. In accordance with the [Tanzu Application Platform Reference Design](../reference-designs/tap-architecture-planning.md), four clusters will be created:
+This deployment outlines the deployment steps for VMware Tanzu Application Platform 1.1 on a Kubernetes workload cluster. In accordance with the [Tanzu Application Platform Reference Design](../reference-designs/tap-architecture-planning.md), four clusters will be created:
 
 * Tanzu Application Platform Build Cluster
 * Tanzu Application Platform Run Cluster
@@ -22,21 +22,21 @@ Before deploying VMware Tanzu Application Platform, ensure that the following pr
 * Accept the End User License Agreements (EULAs).
 * The Kubernetes CLI, kubectl, v1.20, v1.21 or v1.22, installed and authenticated with administrator rights for your target cluster.
 
-Additional details concerning prerequisites may be found in Tanzu Application Platform [documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-prerequisites.html).
+Additional details concerning prerequisites may be found in Tanzu Application Platform [documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-prerequisites.html).
 
 
 ## Overview of the Deployment Steps
 
 The following provides an overview of the steps necessary to deploy Tanzu Application Platform. Each step links to a detailed information section.
 
-1. [Setup Tanzu Application Platform Build cluster](#tap-build)
-1. [Setup Tanzu Application Platform Run cluster](#tap-run)
-1. [Setup Tanzu Application Platform View cluster](#tap-ui)
-1. [Setup Tanzu Application Platform Iterate cluster](#tap-full)
+1. [Set Up Tanzu Application Platform Build cluster](#tap-build)
+1. [Set Up Tanzu Application Platform Run cluster](#tap-run)
+1. [Set Up Tanzu Application Platform View cluster](#tap-ui)
+1. [Set Up Tanzu Application Platform Iterate cluster](#tap-full)
 1. [Deploy Sample Application](#tap-sample-app)
 
 
-## <a id="tap-build"> </a>Setup Tanzu Application Platform Build Cluster
+## <a id="tap-build"> </a>Set Up Tanzu Application Platform Build Cluster
 
 The Build Cluster is responsible for taking a developer's source code commits and applying a supply chain that will produce a container image and Kubernetes manifests for deploying on a Run Cluster
 
@@ -57,7 +57,7 @@ export TANZU_NET_API_TOKEN=<tanzu refresh token>
 export INSTALL_REGISTRY_HOSTNAME="registry.tanzu.vmware.com"
 export INSTALL_REGISTRY_USERNAME=<tanzu username>
 export INSTALL_REGISTRY_PASSWORD=<tanzu password>
-export INSTALL_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle@sha256:82dfaf70656b54dcba0d4def85ccae1578ff27054e7533d08320244af7fb0343
+export INSTALL_BUNDLE=registry.tanzu.vmware.com/tanzu-cluster-essentials/cluster-essentials-bundle@sha256:ab0a3539da241a6ea59c75c0743e9058511d7c56312ea3906178ec0f3491f51d
 
 # login to kubernetes workload cluster using cluster config
 kubectl config use-context "${TAP_WORKLOAD_CONTEXT}"
@@ -69,8 +69,8 @@ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -H "Au
 
 # install tanzu cluster essentials(linux)
 mkdir $HOME/tanzu-cluster-essentials
-wget https://network.tanzu.vmware.com/api/v2/products/tanzu-cluster-essentials/releases/1011100/product_files/1105818/download --header="Authorization: Bearer ${access_token}" -O $HOME/tanzu-cluster-essentials/tanzu-cluster-essentials-linux-amd64-1.0.0.tgz
-tar -xvf $HOME/tanzu-cluster-essentials/tanzu-cluster-essentials-linux-amd64-1.0.0.tgz -C $HOME/tanzu-cluster-essentials
+wget https://network.tanzu.vmware.com/api/v2/products/tanzu-cluster-essentials/releases/1077299/product_files/1191987/download --header="Authorization: Bearer ${access_token}" -O $HOME/tanzu-cluster-essentials/tanzu-cluster-essentials-linux-amd64-1.1.0.tgz
+tar -xvf $HOME/tanzu-cluster-essentials/tanzu-cluster-essentials-linux-amd64-1.1.0.tgz -C $HOME/tanzu-cluster-essentials
 
 cd $HOME/tanzu-cluster-essentials
 ./install.sh
@@ -79,13 +79,13 @@ sudo cp $HOME/tanzu-cluster-essentials/kapp /usr/local/bin/kapp
 
 cd $HOME
 
-# install tanzu cli v(0.10.0) and plug-ins (linux)
+# install tanzu cli v(0.11.2) and plug-ins (linux)
 mkdir $HOME/tanzu
 cd $HOME/tanzu
-wget https://network.pivotal.io/api/v2/products/tanzu-application-platform/releases/1030465/product_files/1114447/download --header="Authorization: Bearer ${access_token}" -O $HOME/tanzu/tanzu-framework-linux-amd64.tar
+wget https://network.pivotal.io/api/v2/products/tanzu-application-platform/releases/1078790/product_files/1190781/download --header="Authorization: Bearer ${access_token}" -O $HOME/tanzu/tanzu-framework-linux-amd64.tar
 tar -xvf $HOME/tanzu/tanzu-framework-linux-amd64.tar -C $HOME/tanzu
 
-sudo install cli/core/v0.10.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+sudo install cli/core/v0.11.2/tanzu-core-linux_amd64 /usr/local/bin/tanzu
 
 # tanzu plug-ins
 export TANZU_CLI_NO_INIT=true
@@ -94,12 +94,6 @@ tanzu plugin list
 
 cd $HOME
 
-# install DEMO-MAGIC for app demo
-wget https://raw.githubusercontent.com/paxtonhare/demo-magic/master/demo-magic.sh
-sudo mv demo-magic.sh /usr/local/bin/demo-magic.sh
-chmod +x /usr/local/bin/demo-magic.sh
-
-sudo apt install pv #required for demo-magic
 
 # install yq package
 sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
@@ -125,7 +119,7 @@ tanzu secret registry add tap-registry \
 
 # tanzu repo add
 tanzu package repository add tanzu-tap-repository \
-  --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.0.0 \
+  --url registry.tanzu.vmware.com/tanzu-application-platform/tap-packages:1.1.0 \
   --namespace "${TAP_NAMESPACE}"
 
 tanzu package repository get tanzu-tap-repository --namespace "${TAP_NAMESPACE}"
@@ -141,6 +135,10 @@ Provide following user inputs to set environment variables into commands and exe
 * `TAP_REGISTRY_SERVER` - uri of registry server
 * `TAP_REGISTRY_USER` - registry user
 * `TAP_REGISTRY_PASSWORD` - registry password
+* `INSTALL_REGISTRY_USERNAME`- tanzu net username
+* `INSTALL_REGISTRY_PASSWORD` - tanzu net password
+
+ For more information, see [Build Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-build-sample.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -149,9 +147,11 @@ export TAP_NAMESPACE="tap-install"
 export TAP_REGISTRY_SERVER=<registry server uri>
 export TAP_REGISTRY_USER=<registry user>
 export TAP_REGISTRY_PASSWORD=<registry password>
+export INSTALL_REGISTRY_USERNAME=<tanzu username>
+export INSTALL_REGISTRY_PASSWORD=<tanzu password>
 
 cat <<EOF | tee tap-values-build.yaml
-profile: full
+profile: build
 ceip_policy_disclosed: true
 buildservice:
   kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
@@ -159,8 +159,10 @@ buildservice:
   kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
   tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
   tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
+  descriptor_name: "full"
+  enable_automatic_dependency_updates: true
 supply_chain: basic
-ootb_supply_chain_basic:
+ootb_supply_chain_basic:    
   registry:
     server: "${TAP_REGISTRY_SERVER}"
     repository: "supply-chain"
@@ -168,29 +170,14 @@ ootb_supply_chain_basic:
     ssh_secret: ""
   cluster_builder: default
   service_account: default
-tap_gui:
-  service_type: LoadBalancer
-
-metadata_store:
-  app_service_type: LoadBalancer
-
-excluded_packages:
-  - accelerator.apps.tanzu.vmware.com
-  - run.appliveview.tanzu.vmware.com
-  - api-portal.tanzu.vmware.com
-  - cnrs.tanzu.vmware.com
-  - ootb-delivery-basic.tanzu.vmware.com
-  - developer-conventions.tanzu.vmware.com
-  - image-policy-webhook.signing.apps.tanzu.vmware.com
-  - learningcenter.tanzu.vmware.com
-  - workshops.learningcenter.tanzu.vmware.com
-  - services-toolkit.tanzu.vmware.com
-  - service-bindings.labs.vmware.com
-  - tap-gui.tanzu.vmware.com
+grype:
+  targetImagePullSecret: "tap-registry"
+image_policy_webhook:
+  allow_unmatched_images: true
 
 EOF
 
-tanzu package install tap -p tap.tanzu.vmware.com -v 1.0.0 --values-file tap-values-build.yaml -n "${TAP_NAMESPACE}"
+tanzu package install tap -p tap.tanzu.vmware.com -v 1.1.0 --values-file tap-values-build.yaml -n "${TAP_NAMESPACE}"
 tanzu package installed get tap -n "${TAP_NAMESPACE}"
 
 # check all build cluster package installed succesfully
@@ -221,7 +208,6 @@ metadata:
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: e30K
-
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -232,70 +218,33 @@ secrets:
 imagePullSecrets:
   - name: registry-credentials
   - name: tap-registry
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: default
-rules:
-- apiGroups: [source.toolkit.fluxcd.io]
-  resources: [gitrepositories]
-  verbs: ['*']
-- apiGroups: [source.apps.tanzu.vmware.com]
-  resources: [imagerepositories]
-  verbs: ['*']
-- apiGroups: [carto.run]
-  resources: [deliverables, runnables]
-  verbs: ['*']
-- apiGroups: [kpack.io]
-  resources: [images]
-  verbs: ['*']
-- apiGroups: [conventions.apps.tanzu.vmware.com]
-  resources: [podintents]
-  verbs: ['*']
-- apiGroups: [""]
-  resources: ['configmaps']
-  verbs: ['*']
-- apiGroups: [""]
-  resources: ['pods']
-  verbs: ['list']
-- apiGroups: [tekton.dev]
-  resources: [taskruns, pipelineruns]
-  verbs: ['*']
-- apiGroups: [tekton.dev]
-  resources: [pipelines]
-  verbs: ['list']
-- apiGroups: [kappctrl.k14s.io]
-  resources: [apps]
-  verbs: ['*']
-- apiGroups: [serving.knative.dev]
-  resources: ['services']
-  verbs: ['*']
-- apiGroups: [servicebinding.io]
-  resources: ['servicebindings']
-  verbs: ['*']
-- apiGroups: [services.apps.tanzu.vmware.com]
-  resources: ['resourceclaims']
-  verbs: ['*']
-- apiGroups: [scanning.apps.tanzu.vmware.com]
-  resources: ['imagescans', 'sourcescans']
-  verbs: ['*']
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: default
+  name: default-permit-deliverable
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: default
+  kind: ClusterRole
+  name: deliverable
 subjects:
   - kind: ServiceAccount
     name: default
-
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: default-permit-workload
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: workload
+subjects:
+  - kind: ServiceAccount
+    name: default
 EOF
+
+
 ```
 
 
@@ -317,8 +266,11 @@ Provide the following user inputs to set environments variables into commands an
 * `TAP_REGISTRY_USER` - registry user
 * `TAP_REGISTRY_PASSWORD` - registry password
 * `TAP_CNRS_DOMAIN` - cnrs app domain (could be sub domain  of main domain like example - run.customer0.io)
+* `TAP_ALV_DOMAIN` -  app live view app domain 
 <!-- /* cSpell:enable */ -->
 **Note** - Contour settings in tap-values-run.yaml must be modified if you are not using AWS.
+
+ For more information, see [Run Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-run-sample.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -328,31 +280,12 @@ export TAP_REGISTRY_SERVER=<registry uri>
 export TAP_REGISTRY_USER=<registry user>
 export TAP_REGISTRY_PASSWORD=<registry password>
 export TAP_CNRS_DOMAIN=<cnrs domain>
+export TAP_ALV_DOMAIN=< app live view app domain>
 
 cat <<EOF | tee tap-values-run.yaml
-profile: full
+profile: run
 ceip_policy_disclosed: true
-buildservice:
-  kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
-  kp_default_repository_username: "${TAP_REGISTRY_USER}"
-  kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
-  tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
-  tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
 supply_chain: basic
-ootb_supply_chain_basic:
-  registry:
-    server: "${TAP_REGISTRY_SERVER}"
-    repository: "supply-chain"
-  gitops:
-    ssh_secret: ""
-  cluster_builder: default
-  service_account: default
-tap_gui:
-  service_type: LoadBalancer
-
-metadata_store:
-  app_service_type: LoadBalancer
-
 contour:
   infrastructure_provider: aws
   envoy:
@@ -360,29 +293,15 @@ contour:
       aws:
         LBType: nlb
 cnrs:
-  domain_name: "${TAP_CNRS_DOMAIN}"
-
-excluded_packages:
- - accelerator.apps.tanzu.vmware.com
- - api-portal.tanzu.vmware.com
- - build.appliveview.tanzu.vmware.com
- - buildservice.tanzu.vmware.com
- - controller.conventions.apps.tanzu.vmware.com
- - developer-conventions.tanzu.vmware.com
- - grype.scanning.apps.tanzu.vmware.com
- - learningcenter.tanzu.vmware.com
- - metadata-store.apps.tanzu.vmware.com
- - ootb-supply-chain-basic.tanzu.vmware.com
- - ootb-supply-chain-testing.tanzu.vmware.com
- - ootb-supply-chain-testing-scanning.tanzu.vmware.com
- - scanning.apps.tanzu.vmware.com
- - spring-boot-conventions.tanzu.vmware.com
- - tap-gui.tanzu.vmware.com
- - workshops.learningcenter.tanzu.vmware.com
+  domain_name: "${tap_run_cnrs_domain}"
+appliveview_connector:
+  backend:
+    sslDisabled: true
+    host: appliveview.$TAP_ALV_DOMAIN
 
 EOF
 
-tanzu package install tap -p tap.tanzu.vmware.com -v 1.0.0 --values-file tap-values-run.yaml -n "${TAP_NAMESPACE}"
+tanzu package install tap -p tap.tanzu.vmware.com -v 1.1.0 --values-file tap-values-run.yaml -n "${TAP_NAMESPACE}"
 tanzu package installed get tap -n "${TAP_NAMESPACE}"
 
 # check all build cluster package installed succesfully
@@ -399,10 +318,10 @@ kubectl get svc -n tanzu-system-ingress
 
 Perform the steps outlined in [Configure developer namespaces to use installed packages](#tap-dev-namespace)
 
-Execute the steps 1-4 outlined in [Setup Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters.
+Execute steps 1-4 outlined in [Set Up Tanzu Application Platform Run cluster](#tap-run) to build Dev/Test/QA/Prod clusters.
 
 
-## <a id=tap-ui> </a> Setup Tanzu Application Platform View Cluster
+## <a id=tap-ui> </a> Set Up Tanzu Application Platform View Cluster
 
 The View cluster is designed to run the web applications for TAP; specifically Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
 
@@ -421,24 +340,132 @@ Provide following user inputs to set environments variables into commands and ex
 * `TAP_REGISTRY_PASSWORD` - registry password
 * `TAP_GITHUB_TOKEN` - GitHub personal access token
 * `TAP_APP_DOMAIN`  - app domain you want to use for tap-gui
-* `TAP_GIT_CATALOG_URL` - git catalog url. Refer this as an [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
+* `TAP_GIT_CATALOG_URL` - git catalog url.  
+    See this [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
 * `TAP_RUN_CLUSTER_NAME` - Run cluster name
-* `TAP_RUN_CLUSTER_API` - Run cluster Kubernetes API endpoint. AWS eks Example `https://xxxxxxxxxxxxxxx.gr7.us-east-2.eks.amazonaws.com`
-* `TAP_RUN_CLUSTER_TOKEN` - Run cluster Kubernetes service account token. Use below kubectl command to get `TAP_RUN_CLUSTER_TOKEN`
 
- See [Full Profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) for further details.
+ See [View Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-view-sample.html) for more details.
 
- **Note:** `TAP_APP_DOMAIN` can be a top-level domain or subdomain. `TAP_RUN_CLUSTER_TOKEN` can be obtained by executing the following command on you Run Cluster:
 
-  ```bash
-  set -e
-  export TAP_NAMESPACE="tap-install"
-  export TAP_SERVICE_ACCOUNT_NAME="default"
 
-  kubectl -n "${TAP_NAMESPACE}" get secret $(kubectl -n "${TAP_NAMESPACE}" get sa "${TAP_SERVICE_ACCOUNT_NAME}" -o=json \
-  | jq -r '.secrets[0].name') -o=json \
-  | jq -r '.data["token"]' \
-  | base64 --decode
+```bash
+set -e
+export TAP_NAMESPACE="tap-install"
+export TAP_SERVICE_ACCOUNT_NAME="default"
+
+
+cat <<EOF | tee tap-gui-viewer-service-account-rbac.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tap-gui
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: tap-gui
+  name: tap-gui-viewer
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tap-gui-read-k8s
+subjects:
+- kind: ServiceAccount
+  namespace: tap-gui
+  name: tap-gui-viewer
+roleRef:
+  kind: ClusterRole
+  name: k8s-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-reader
+rules:
+- apiGroups: ['']
+  resources: ['pods', 'services', 'configmaps']
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['apps']
+  resources: ['deployments', 'replicasets']
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['autoscaling']
+  resources: ['horizontalpodautoscalers']
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['networking.k8s.io']
+  resources: ['ingresses']
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['networking.internal.knative.dev']
+  resources: ['serverlessservices']
+  verbs: ['get', 'watch', 'list']
+- apiGroups: [ 'autoscaling.internal.knative.dev' ]
+  resources: [ 'podautoscalers' ]
+  verbs: [ 'get', 'watch', 'list' ]
+- apiGroups: ['serving.knative.dev']
+  resources:
+  - configurations
+  - revisions
+  - routes
+  - services
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['carto.run']
+  resources:
+  - clusterconfigtemplates
+  - clusterdeliveries
+  - clusterdeploymenttemplates
+  - clusterimagetemplates
+  - clusterruntemplates
+  - clustersourcetemplates
+  - clustersupplychains
+  - clustertemplates
+  - deliverables
+  - runnables
+  - workloads
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['source.toolkit.fluxcd.io']
+  resources:
+  - gitrepositories
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['source.apps.tanzu.vmware.com']
+  resources:
+  - imagerepositories
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['conventions.apps.tanzu.vmware.com']
+  resources:
+  - podintents
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['kpack.io']
+  resources:
+  - images
+  - builds
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['scanning.apps.tanzu.vmware.com']
+  resources:
+  - sourcescans
+  - imagescans
+  - scanpolicies
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['tekton.dev']
+  resources:
+  - taskruns
+  - pipelineruns
+  verbs: ['get', 'watch', 'list']
+- apiGroups: ['kappctrl.k14s.io']
+  resources:
+  - apps
+  verbs: ['get', 'watch', 'list']
+EOF
+
+kubectl create -f tap-gui-viewer-service-account-rbac.yaml
+
+CLUSTER_URL=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+
+CLUSTER_TOKEN=$(kubectl -n tap-gui get secret $(kubectl -n tap-gui get sa tap-gui-viewer -o=json \
+| jq -r '.secrets[0].name') -o=json \
+| jq -r '.data["token"]' \
+| base64 --decode)
+
   ```
 
   See [Backstage](https://backstage.io/docs/features/kubernetes/configuration#label-selector-query-annotation) documentation for multi-cluster/multi-tenant details.
@@ -453,110 +480,57 @@ export TAP_REGISTRY_SERVER=<registry server uri>
 export TAP_REGISTRY_USER=<registry_user>
 export TAP_REGISTRY_PASSWORD=<registry_password>
 export TAP_GITHUB_TOKEN=<github_token>
-export TAP_APP_DOMAIN=<app_domain>
+export TAP_VIEW_APP_DOMAIN=<sub domain of view cluster>
 export TAP_GIT_CATALOG_URL=<git_catalog_url>
 export TAP_RUN_CLUSTER_NAME=<run cluster name>
-export TAP_RUN_CLUSTER_API=<run cluster kubernetes api url>
-export TAP_RUN_CLUSTER_TOKEN=<run cluster serviceAccountToken>
+export TAP_ALV_DOMAIN=< app live view app domain>
 
-cat <<EOF | tee tap-values-ui.yaml
-profile: full
+
+cat <<EOF | tee tap-values-view.yaml
+profile: view
 ceip_policy_disclosed: true
-buildservice:
-  kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
-  kp_default_repository_username: "${TAP_REGISTRY_USER}"
-  kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
-  tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
-  tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
-supply_chain: basic
-ootb_supply_chain_basic:
-  registry:
-    server: "${TAP_REGISTRY_SERVER}"
-    repository: "supply-chain"
-  gitops:
-    ssh_secret: ""
-  cluster_builder: default
-  service_account: default
-
+contour:
+  envoy:
+    service:
+      type: LoadBalancer
 learningcenter:
-  ingressDomain: "${TAP_APP_DOMAIN}"
+  ingressDomain: "learning.${TAP_VIEW_APP_DOMAIN}"
   ingressClass: contour
-
 tap_gui:
-  service_type: LoadBalancer
+  service_type: ClusterIP
   ingressEnabled: "true"
-  ingressDomain: "${TAP_APP_DOMAIN}"
+  ingressDomain: "${TAP_VIEW_APP_DOMAIN}"
   app_config:
     app:
-      baseUrl: "http://tap-gui.${TAP_APP_DOMAIN}"
+      baseUrl: "http://tap-gui.${TAP_VIEW_APP_DOMAIN}"
     catalog:
       locations:
         - type: url
-          target: $git_catalog_url/catalog-info.yaml
+          target: ${TAP_GIT_CATALOG_URL}
     backend:
-        baseUrl: "http://tap-gui.${TAP_APP_DOMAIN}"
+        baseUrl: "http://tap-gui.${TAP_VIEW_APP_DOMAIN}"
         cors:
-          origin: "http://tap-gui.${TAP_APP_DOMAIN}"
-    integrations:
-      github:
-        - host: github.com
-          token: "${TAP_GITHUB_TOKEN}"
-
+          origin: "http://tap-gui.${TAP_VIEW_APP_DOMAIN}"
     kubernetes:
       serviceLocatorMethod:
         type: "multiTenant"
       clusterLocatorMethods:
         - type: "config"
           clusters:
-            - url: $run_cluster_api
-              name: $run_cluster_name
+            - url: ${CLUSTER_URL}
+              name: ${TAP_RUN_CLUSTER_NAME}
               authProvider: "serviceAccount"
               skipTLSVerify: true
               skipMetricsLookup: true
-              serviceAccountToken: "${TAP_RUN_CLUSTER_TOKEN}"
-
-contour:
-  envoy:
-    service:
-      type: LoadBalancer
-cnrs:
-  domain_name: "${TAP_APP_DOMAIN}"
-
+              serviceAccountToken: "${CLUSTER_TOKEN}"
 metadata_store:
   app_service_type: LoadBalancer
-
-server:
-  service_type: "LoadBalancer"
-  watched_namespace: "accelerator-system"
-samples:
-  include: true
-
-excluded_packages:
-  - cnrs.tanzu.vmware.com
-  - ootb-delivery-basic.tanzu.vmware.com
-  - developer-conventions.tanzu.vmware.com
-  - image-policy-webhook.signing.apps.tanzu.vmware.com
-  - services-toolkit.tanzu.vmware.com
-  - service-bindings.labs.vmware.com
-  - build.appliveview.tanzu.vmware.com
-  - buildservice.tanzu.vmware.com
-  - controller.conventions.apps.tanzu.vmware.com
-  - developer-conventions.tanzu.vmware.com
-  - grype.scanning.apps.tanzu.vmware.com
-  - metadata-store.apps.tanzu.vmware.com
-  - ootb-supply-chain-basic.tanzu.vmware.com
-  - ootb-supply-chain-testing.tanzu.vmware.com
-  - ootb-supply-chain-testing-scanning.tanzu.vmware.com
-  - scanning.apps.tanzu.vmware.com
-  - spring-boot-conventions.tanzu.vmware.com
-  - ootb-templates.tanzu.vmware.com
-  - tekton.tanzu.vmware.com
-  - image-policy-webhook.signing.apps.tanzu.vmware.com
-  - cartographer.tanzu.vmware.com
-
+appliveview:
+  ingressEnabled: true
+  ingressDomain: "${TAP_ALV_DOMAIN}" 
 EOF
 
-tanzu package install tap -p tap.tanzu.vmware.com -v 1.0.0 --values-file tap-values-ui.yaml -n "${TAP_NAMESPACE}"
+tanzu package install tap -p tap.tanzu.vmware.com -v 1.1.0 --values-file tap-values-view.yaml -n "${TAP_NAMESPACE}"
 tanzu package installed get tap -n "${TAP_NAMESPACE}"
 
 # ensure all build cluster packages are installed succesfully
@@ -574,10 +548,10 @@ Perform the steps outlined in [Configure developer namespaces to use installed p
 ### Deploy Sample Application
 See the steps to deploy and test the [sample application](#tap-sample-app).
 
-For more information, also see [Getting started with the Tanzu Application Platform](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-getting-started.html).
+For more information, also see [Getting started with the Tanzu Application Platform](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-getting-started.html).
 
 
-## <a id=tap-full> </a> Setup Tanzu Application Platform Iterate Cluster
+## <a id=tap-full> </a> Set Up Tanzu Application Platform Iterate Cluster
 
 The Iterate Cluster is for "inner loop" development iteration where developers are connecting via their IDE to rapidly iterate on new software features
 
@@ -597,9 +571,11 @@ Provide the following user inputs to set environment variables into commands and
 * `TAP_REGISTRY_PASSWORD` - registry user
 * `TAP_GITHUB_TOKEN` - GitHub personal access token
 * `TAP_APP_DOMAIN` - app domain you want to use for tap-gui
-* `TAP_GIT_CATALOG_URL` - git catalog url. if you don't have one , use this [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
+* `INSTALL_REGISTRY_USERNAME`- tanzu net username
+* `INSTALL_REGISTRY_PASSWORD` - tanzu net  password
+* `TAP_ITERATE_CNRS_DOMAIN` - tap iterate cluster cnrs domain
 
- Refer to the [full profile documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-install.html#full-profile) for further details.
+For more information, see [Full Profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-install.html#full-profile) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -609,19 +585,26 @@ export TAP_NAMESPACE="tap-install"
 export TAP_REGISTRY_SERVER=<registry server uri>
 export TAP_REGISTRY_USER=<registry user>
 export TAP_REGISTRY_PASSWORD=<registry password>
-export TAP_GITHUB_TOKEN=<github token>
-export TAP_APP_DOMAIN=<app domain>
-export TAP_GIT_CATALOG_URL=<git catalog url>
+export TAP_ITERATE_CNRS_DOMAIN=<tap iterate cnrs  domain>
+export INSTALL_REGISTRY_USERNAME=<tanzu net username>
+export INSTALL_REGISTRY_PASSWORD=<tanzu net  password>
+
 
 cat <<EOF | tee tap-values-iterate.yaml
-profile: full
+
+profile: iterate
+
 ceip_policy_disclosed: true
+
 buildservice:
   kp_default_repository: "${TAP_REGISTRY_SERVER}/build-service"
   kp_default_repository_username: "${TAP_REGISTRY_USER}"
   kp_default_repository_password: "${TAP_REGISTRY_PASSWORD}"
   tanzunet_username: "${INSTALL_REGISTRY_USERNAME}"
   tanzunet_password: "${INSTALL_REGISTRY_PASSWORD}"
+  descriptor_name: "full"
+  enable_automatic_dependency_updates: true
+
 supply_chain: basic
 ootb_supply_chain_basic:
   registry:
@@ -629,51 +612,23 @@ ootb_supply_chain_basic:
     repository: "supply-chain"
   gitops:
     ssh_secret: ""
-  cluster_builder: default
-  service_account: default
-
-tap_gui:
-  service_type: LoadBalancer
-  ingressEnabled: "true"
-  ingressDomain: "${TAP_APP_DOMAIN}"
-  app_config:
-    app:
-      baseUrl: "http://tap-gui.${TAP_APP_DOMAIN}"
-    catalog:
-      locations:
-        - type: url
-          target: "${TAP_GIT_CATALOG_URL}/catalog-info.yaml"
-    backend:
-        baseUrl: "http://tap-gui.${TAP_APP_DOMAIN}"
-        cors:
-          origin: "http://tap-gui.${TAP_APP_DOMAIN}"
-    integrations:
-      github:
-        - host: github.com
-          token: "${TAP_GITHUB_TOKEN}"
-contour:
-  envoy:
-    service:
-      type: LoadBalancer
-cnrs:
-  domain_name: "${TAP_APP_DOMAIN}"
 
 metadata_store:
   app_service_type: LoadBalancer
 
-excluded_packages:
- - accelerator.apps.tanzu.vmware.com
- - api-portal.tanzu.vmware.com
- - learningcenter.tanzu.vmware.com
- - metadata-store.apps.tanzu.vmware.com
- - ootb-supply-chain-testing.tanzu.vmware.com
- - ootb-supply-chain-testing-scanning.tanzu.vmware.com
- - tap-gui.tanzu.vmware.com
- - workshops.learningcenter.tanzu.vmware.com
+image_policy_webhook:
+  allow_unmatched_tags: true
 
-EOF
+contour:
+  envoy:
+    service:
+      type: LoadBalancer
 
-tanzu package install tap -p tap.tanzu.vmware.com -v 1.0.0 --values-file tap-values-iterate.yaml -n "${TAP_NAMESPACE}"
+cnrs:
+  domain_name: "${TAP_ITERATE_CNRS_DOMAIN}"
+
+
+tanzu package install tap -p tap.tanzu.vmware.com -v 1.1.0 --values-file tap-values-iterate.yaml -n "${TAP_NAMESPACE}"
 tanzu package installed get tap -n "${TAP_NAMESPACE}"
 
 #check all build cluster package installed succesfully
@@ -713,9 +668,10 @@ tanzu apps workload create "${TAP_APP_NAME}" --git-repo "${TAP_APP_GIT_URL}" --g
 tanzu apps workload create "${TAP_APP_NAME}" \
 --git-repo "${TAP_APP_GIT_URL}" \
 --git-branch main \
---git-tag tap-1.0 \
+--git-tag tap-1.1 \
 --type web \
 --label app.kubernetes.io/part-of="${TAP_APP_NAME}" \
+--label apps.tanzu.vmware.com/has-tests=true \
 --yes
 
 # app deployment logs#sam
@@ -767,7 +723,7 @@ kubectl apply -f app-delivery.yaml
 kubectl get deliverables "${TAP_APP_NAME}"
 
 # get app url
-kubectl get all -A | grep route.serving.knative
+kubectl get ksvc
 
 # copy app url and paste into browser to see the sample app
 
@@ -785,14 +741,14 @@ kubectl get all -A | grep route.serving.knative
 In the event of failure, use the following command to obtain failure details:
 `kubectl get packageinstall/<package> -n tap-install -o yaml`.
 
-See [Troubleshooting Tanzu Application Platform Tips](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-troubleshooting.html) for additional details.
+See [Troubleshooting Tanzu Application Platform Tips](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-troubleshooting.html) for additional details.
 
 
 ### Service Bindings for Kubernetes
 
-See [Service Bindings for Kubernetes](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-service-bindings-about.html) for additional details.
+See [Service Bindings for Kubernetes](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-service-bindings-about.html) for additional details.
 
 
 ### Tanzu Application Platform GUI Auth Provider
 
-See [Setting up a Tanzu Application Platform GUI authentication provider](https://docs.vmware.com/en/Tanzu-Application-Platform/1.0/tap/GUID-tap-gui-auth.html) for additional details.
+See [Setting up a Tanzu Application Platform GUI authentication provider](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-tap-gui-auth.html) for additional details.
