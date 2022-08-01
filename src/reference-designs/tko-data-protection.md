@@ -32,7 +32,7 @@ Tanzu Mission Control manages the entire Valero lifecycle automatically, elimina
 
 If Tanzu Mission Control data protection does not handle all of your backup requirements, there is also a standalone version of Velero that you can install on your Tanzu Kubernetes clusters. Using the Velero standalone is advisable in the following scenarios:
 
-- In an internet-restricted or airgap environment, where the Tanzu Kubernetes clusters are not connected to the internet.
+- In an internet-restricted or air-gapped environment, where the Tanzu Kubernetes clusters are not connected to the internet.
 - When a Kubernetes workload recovery is intended to be conducted in a cluster other than the source cluster.
 
 To learn more about Tanzu Mission Control data protection features, see the [Tanzu Mission Control product documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-C16557BC-EB1B-4414-8E63-28AD92E0CAE5.html)

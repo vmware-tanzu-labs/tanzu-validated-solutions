@@ -1,10 +1,10 @@
-# Tanzu Kubernetes Grid on vSphere Networking in an Airgapped Environment - Reference Design
+# Tanzu Kubernetes Grid on vSphere Networking in an Air-gapped Environment - Reference Design
 
 VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations. 
 
-An airgapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This means a computer or network is disconnected from all other systems. 
+An air-gapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This means a computer or network is disconnected from all other systems. 
 
-This document lays out a reference design for deploying Tanzu Kubernetes Grid on vSphere Networking in an airgapped environment and offers a high-level overview of the different components required for setting up a Tanzu Kubernetes Grid environment. 
+This document lays out a reference design for deploying Tanzu Kubernetes Grid on vSphere Networking in an air-gapped environment and offers a high-level overview of the different components required for setting up a Tanzu Kubernetes Grid environment. 
 
 ## Components
 
@@ -29,7 +29,7 @@ The following components are used in the reference architecture:
 
   - [**Multus CNI**](https://github.com/k8snetworkplumbingwg/multus-cni) - Enables attaching multiple network interfaces to pods. Multus CNI is a container network interface (CNI) plugin for Kubernetes that lets you attach multiple network interfaces to a single pod and associate each with a different address range.
 
-- **Bastion Host -** Bastion host is the physical/virtual machine where you download the required installation images/binaries (for TKG installation) from the internet. This machine needs to be outside the airgap environment. The downloaded items then need to be shipped to the bootstrap machine which is inside the airgap environment.
+- **Bastion Host -** Bastion host is the physical/virtual machine where you download the required installation images/binaries (for TKG installation) from the internet. This machine needs to be outside the air-gapped environment. The downloaded items then need to be shipped to the bootstrap machine which is inside the air-gapped environment.
 
 - **Jumpbox/Bootstrap Machine -** The bootstrap machine is the machine on which you run the Tanzu CLI and other utilities such as [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), [Kind](https://kind.sigs.k8s.io/), etc. This is where the initial bootstrapping of a management cluster occurs before it is pushed to the platform where it will run. 
 
@@ -37,7 +37,7 @@ The following components are used in the reference architecture:
 
 - **Local Image Registry -** An image registry provides a location for pushing, pulling, storing, and scanning container images used in the Tanzu Kubernetes Grid environment. The image registry is also used for day-2 operations of the Tanzu Kubernetes clusters, such as storing application images, upgrading Tanzu Kubernetes clusters, and so forth. 
 
-In an airgapped environment, there are two ways to deploy an image registry:
+In an air-gapped environment, there are two ways to deploy an image registry:
 
 - **Existing Image Registry -** An image registry pre-existing in the environment with a project created for storing TKG binaries. The bootstrap machine has access to this registry. After unzipping the tarball present at the bootstrap machine, the operator uses a script included in the tarball to push the TKG binaries to the TKG project. This registry can be a [Harbor](https://goharbor.io/) registry or any other container registry solution.
 
@@ -251,7 +251,7 @@ Tanzu Kubernetes Grid management cluster is the first component that you deploy 
 You can deploy the management cluster in two ways:
 
 - Run the Tanzu Kubernetes Grid installer, a wizard interface that guides you through the process of deploying a management cluster. 
-- Create and edit YAML configuration files, and use them to deploy a management cluster with the CLI commands. This is the recommended method if you are installing a TKG Management cluster in an airgapped environment.
+- Create and edit YAML configuration files, and use them to deploy a management cluster with the CLI commands. This is the recommended method if you are installing a TKG Management cluster in an air-gapped environment.
 
 See supplemental information [Cluster Deployment Parameters](#deployment-parameters) for a sample YAML file used for management cluster deployment.
 
@@ -280,7 +280,7 @@ The following table provides general recommendations on when you should use a sp
 
 # Tanzu Kubernetes Grid Monitoring
 
-In an airgapped environment, monitoring for the Tanzu Kubernetes clusters is provided via [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/). Tanzu Kubernetes Grid includes signed binaries for Prometheus and Grafana that you can deploy on Tanzu Kubernetes clusters to monitor cluster health and services
+In an air-gapped environment, monitoring for the Tanzu Kubernetes clusters is provided via [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/). Tanzu Kubernetes Grid includes signed binaries for Prometheus and Grafana that you can deploy on Tanzu Kubernetes clusters to monitor cluster health and services
 
 - Prometheus is an open-source system monitoring and alerting toolkit. It can collect metrics from target clusters at specified intervals, evaluate rule expressions, display the results, and trigger alerts if certain conditions arise. The Tanzu Kubernetes Grid implementation of Prometheus includes **Alert Manager**, which you can configure to notify you when certain events occur.
 - Grafana is open-source visualization and analytics software. It allows you to query, visualize, alert on, and explore your metrics no matter where they are stored. 
@@ -381,7 +381,7 @@ VMware provides FIPS-Capable Kubernetes ova which can be used to deploy FIPS com
 
 ## <a id=deployment-parameters> </a> **Cluster Deployment Parameters**
 
-The following sample below provides the bare minimum input needed to deploy a Tanzu Kubernetes Grid management cluster in an airgapped environment.
+The following sample below provides the bare minimum input needed to deploy a Tanzu Kubernetes Grid management cluster in an air-gapped environment.
 
 ```yaml
 # NSX Advanced Load Balancer details

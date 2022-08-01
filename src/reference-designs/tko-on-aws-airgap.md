@@ -1,8 +1,8 @@
-# VMware Tanzu Kubernetes Grid on AWS Airgapped Reference Design
+# VMware Tanzu Kubernetes Grid on AWS Air-gapped Reference Design
 
 VMware Tanzu Kubernetes Grid (multi-cloud) provides a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
-This document lays out a reference design for deploying VMware Tanzu for Kubernetes Grid on AWS Networking in an airgapped environment with Tanzu components on AWS. An airgapped environment is a network security measure employed to ensure that a computer or computer network is secure by physically isolating it from unsecured networks, such as the public internet or an unsecured local area network. This reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
+This document lays out a reference design for deploying VMware Tanzu for Kubernetes Grid on AWS Networking in an air-gapped environment with Tanzu components on AWS. An air-gapped environment is a network security measure employed to ensure that a computer or computer network is secure by physically isolating it from unsecured networks, such as the public internet or an unsecured local area network. This reference design is based on the architecture and components described in [Tanzu Solution Reference Architecture Overview](index.md).
 
 ![Tanzu Edition reference design diagram](./img/tko-on-aws-airgap/tkg-aws-airgap-overview.png)
 
@@ -116,13 +116,13 @@ See [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/
 
 ## Private Registry for Tanzu Kubernetes Grid
 
-Before installing Tanzu Kubernetes grid into an airgapped environment, a private Docker-compatible container registry such as [Harbor](https://goharbor.io/), [Docker](https://www.docker.com/), or [Artifactory](https://jfrog.com/artifactory/) must be installed and configured as follows:
+Before installing Tanzu Kubernetes grid into an air-gapped environment, a private Docker-compatible container registry such as [Harbor](https://goharbor.io/), [Docker](https://www.docker.com/), or [Artifactory](https://jfrog.com/artifactory/) must be installed and configured as follows:
 
  * Should run outside of Tanzu Kubernetes Grid and should be separate from any registry deployed as a shared service for clusters.
  * Should use an RFC 1918 (private) address and remain routable to the Tanzu Kubernetes Grid clusters.
  * Should be configured with SSL certificates signed by a trusted CA.
  * Must not implement user authentication. For example, if you use a Harbor registry, the project must be public, not private.
- * Must have all the Tanzu Kubernetes Grid images uploaded before you start installing Tanzu Kubernetes grid. See [Copy installing Tanzu Kubernetes grid Images into an Airgapped Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-image-copy-airgapped.html) for more details.
+ * Must have all the Tanzu Kubernetes Grid images uploaded before you start installing Tanzu Kubernetes grid. See [Copy installing Tanzu Kubernetes grid Images into an Air-gapped Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-image-copy-airgapped.html) for more details.
 
 ## Compliance and Security
 VMware-published Tanzu Kubernetes releases (TKrs), along with compatible versions of Kubernetes and supporting components, use the latest stable and generally-available update of the OS version that it packages, containing all current CVE and USN fixes as of the day that the image is built. The image files are signed by VMware and have filenames that contain a unique hash identifier.
@@ -223,7 +223,7 @@ VMware recommends the following best practices for managing identities in Tanzu 
 
 ### Tanzu Kubernetes Grid Monitoring
 
-In an airgapped environment, monitoring for the Tanzu Kubernetes clusters is provided via [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/). 
+In an air-gapped environment, monitoring for the Tanzu Kubernetes clusters is provided via [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/). 
 * **Prometheus** is an open-source system monitoring and alerting toolkit. It can collect metrics from target clusters at specified intervals, evaluate rule expressions, display the results, and trigger alerts if certain conditions arise. The Tanzu Kubernetes Grid implementation of Prometheus includes Alert Manager, which you can configure to notify you when certain events occur.Prometheus exposes scrapable metrics endpoints for various monitoring targets throughout your cluster. Metrics are ingested by polling the endpoints at a set interval. The metrics are then stored in a time-series database. You use the [Prometheus Query Language](https://prometheus.io/docs/prometheus/latest/querying/basics/) interface to explore the metrics.
 * **Grafana** is an open-source visualization and analytics software. It allows you to query, visualize, alert on, and explore your metrics no matter where they are stored. Grafana is responsible for visualizing Prometheus metrics without the need to manually write the PromQL queries. You can create custom charts and graphs in addition to the pre-packaged options.
 Both Prometheus and Grafana are installed via user-managed Tanzu packages by creating the deployment manifests and invoking the kubectl command to deploy the packages in the Tanzu Kubernetes clusters.

@@ -338,7 +338,7 @@ There are three main supported installation methods for Harbor:
 
 - [**Tanzu Kubernetes Grid Package deployment**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html) on a Tanzu Kubernetes Grid shared service cluster. Tanzu Kubernetes Grid includes signed binaries for Harbor, which you can deploy into a shared services cluster to provide container registry services for other Tanzu Kubernetes (workload) clusters. This installation method is recommended for general use cases.
 - [**Helm-based deployment**](https://goharbor.io/docs/2.4.0/install-config/harbor-ha-helm/) to a Kubernetes cluster - this installation method may be preferred for customers already invested in Helm.
-- [**VM-based deployment**](https://goharbor.io/docs/2.1.0/install-config/installation-prereqs/) using Docker Compose. VMware recommends this installation method when Tanzu Kubernetes Grid is installed in an airgapped environment and there are no pre-existing Kubernetes clusters on which to install Harbor.
+- [**VM-based deployment**](https://goharbor.io/docs/2.1.0/install-config/installation-prereqs/) using Docker Compose. VMware recommends this installation method when Tanzu Kubernetes Grid is installed in an air-gapped environment and there are no pre-existing Kubernetes clusters on which to install Harbor.
 
 ![Harbor Container Registry](img/tko-on-vmc-aws/tko-vmc-aws06.png)
 
