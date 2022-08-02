@@ -1,5 +1,3 @@
-airgap
-airgapped
 Alertmanager
 allottable
 Antrea

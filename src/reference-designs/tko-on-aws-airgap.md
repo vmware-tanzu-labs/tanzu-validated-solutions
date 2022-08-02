@@ -123,7 +123,7 @@ Before installing Tanzu Kubernetes grid into an air-gapped environment, a privat
  * Should use an RFC 1918 (private) address and remain routable to the Tanzu Kubernetes Grid clusters.
  * Should be configured with SSL certificates signed by a trusted CA.
  * Must not implement user authentication. For example, if you use a Harbor registry, the project must be public, not private.
- * Must have all the Tanzu Kubernetes Grid images uploaded before you start installing Tanzu Kubernetes grid. See [Copy installing Tanzu Kubernetes grid Images into an Airgapped Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-image-copy-airgapped.html) for more details.
+ * Must have all the Tanzu Kubernetes Grid images uploaded before you start installing Tanzu Kubernetes grid. See [Copy installing Tanzu Kubernetes grid Images into an Air-gapped Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-image-copy-airgapped.html) for more details.
 
 ## Compliance and Security
 VMware-published Tanzu Kubernetes releases (TKrs), along with compatible versions of Kubernetes and supporting components, use the latest stable and generally-available update of the OS version that it packages, containing all current CVE and USN fixes as of the day that the image is built. The image files are signed by VMware and have filenames that contain a unique hash identifier.
