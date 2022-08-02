@@ -1,0 +1,5 @@
+# VMware Tanzu Kubernetes Grid 1.5 on AWS Air-Gapped Reference Design and Deployment
+
+You can deploy Tanzu Kubernetes Grid management clusters and Tanzu Kubernetes Grid workload clusters in air-gapped environments that do not have a physical connection to the Internet. 
+
+This documentation provides a reference design and the steps to deploy Tanzu Kubernetes Grid in an air-gapped environment on AWS.
