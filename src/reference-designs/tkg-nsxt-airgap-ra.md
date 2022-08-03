@@ -1,4 +1,4 @@
-﻿# Tanzu Kubernetes Grid on vSphere with NSX-T Networking in Air-gapped Environment Reference Design
+﻿# Tanzu Kubernetes Grid on vSphere with NSX-T Networking in Air-Gapped Environment Reference Design
 
 VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 

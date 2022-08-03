@@ -1,6 +1,6 @@
 # Deploy Tanzu for Kubernetes Operations on AWS in an Air-Gapped Environment
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS in an air-gapped (internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS in an air-gapped (Internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ Before deploying VMware Tanzu for Kubernetes Operations in an AWS air-gapped env
 * **An Internet-connected Linux bootstrap machine**
   The bootstrap machine can be a local device such as a laptop or a virtual machine running in, for example, VMware Workstation or Fusion. You will use the bootstrap machine to create the AWS VPC and jumpbox. The bootstrap machine:
 
-  * Is not inside the internet-restricted environment or is able to access the domains listed in Proxy Server Allowlist.
+  * Is not inside the Internet-restricted environment or is able to access the domains listed in Proxy Server Allowlist.
   * Has the Docker client app installed.
   * Has [imgpkg](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-install-cli.html) installed.
   * Has the latest version of yq installed.
@@ -204,7 +204,7 @@ See [Copy the container images required to deploy Tanzu Kubernetes Grid](https:/
 
 ## <a id=prepEnv> </a> Prepare an Internet-Restricted Environment
 
-Before you can deploy management clusters and Tanzu Kubernetes clusters in an internet-restricted environment, you need to prepare the environment. Follow the instructions in [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-airgapped-environments.html).
+Before you can deploy management clusters and Tanzu Kubernetes clusters in an Internet-restricted environment, you need to prepare the environment. Follow the instructions in [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-airgapped-environments.html).
 
 ## <a id=install-tkg></a> Deploy a Tanzu Kubernetes Grid Management Cluster
 
@@ -217,7 +217,7 @@ Before creating a management cluster using the Tanzu CLI, define the base config
 **Note** In the configuration file for the management cluster, enable the AWS internal load balancer as follows:
 
 `AWS_LOAD_BALANCER_SCHEME_INTERNAL: "true"`
-Using an internal load balancer scheme prevents the Kubernetes API server for the cluster from being accessed and routed over the internet.
+Using an internal load balancer scheme prevents the Kubernetes API server for the cluster from being accessed and routed over the Internet.
 
 To create a new Tanzu Kubernetes Grid management cluster, run the following command:
 
@@ -318,9 +318,9 @@ tanzu cluster delete <management-cluster-name>
 
 ## <a id="stig-fips"> </a>Air-Gapped STIG/FIPS Deployment on AWS
 
-For how to deploy a STIG-hardened management/FIPS cluster to an air-gapped AWS environment, see [Deploy a STIG-Hardened Management Cluster to an Air-gapped AWS VPC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-security-airgap-stig-aws.html).<_Is there a later version of this page?_>
+For how to deploy a STIG-hardened management/FIPS cluster to an air-gapped AWS environment, see [Deploy a STIG-Hardened Management Cluster to an Air-gapped AWS VPC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-security-airgap-stig-aws.html).
 
 ## <a id=upgrade-tkg> </a>Tanzu Kubernetes Grid Upgrade
 
-For how to upgrade the previous version of Tanzu Kubernetes Grid into your environment, see [Tanzu Kubernetes Grid Upgrade](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-upgrade-tkg-index.html).
+For information about how to upgrade to Tanzu Kubernetes Grid 1.5, see [Tanzu Kubernetes Grid Upgrade](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-upgrade-tkg-index.html).
  

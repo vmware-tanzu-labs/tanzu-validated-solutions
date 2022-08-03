@@ -1,4 +1,4 @@
-# Tanzu Kubernetes Grid on vSphere Networking in an Air-gapped Environment - Reference Design
+# Tanzu Kubernetes Grid on vSphere Networking in an Air-Gapped Environment Reference Design
 
 VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations. 
 
@@ -47,7 +47,7 @@ In an air-gapped environment, there are two ways to deploy an image registry:
 The following table provides the component versions and interoperability matrix supported with the reference design:
 
 |**Software Components**|**Version**|
-| :- | :- |
+| - | - |
 |Tanzu Kubernetes Grid|1.5.4|
 |VMware vSphere ESXi|7.0 U2 and later|
 |VMware vCenter Server|7.0 U2 and later|
