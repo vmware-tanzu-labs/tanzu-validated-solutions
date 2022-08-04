@@ -213,13 +213,13 @@ For the purpose of this demonstration, this document makes use of the following 
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool in NSXT**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
-|NSX ALB Mgmt Network|nsx-alb-mgmt-segment|172.19.10.1/27|N/A|172.19.10.6- 172.19.10.30|
-|TKG Management Network|tkg-mgmt-segment|172.19.11.1/27|172.19.11.2- 172.19.11.30|N/A|
-|TKG Shared Service Network|tkg-ss-segment|172.19.12.1/27|172.19.12.2 - 172.19.12.30|N/A|
-|TKG Mgmt VIP Network|tkg-mgmt-vip-segment|172.19.13.1/26|N/A|172.19.13.2- 172.19.13.60|
-|TKG Cluster VIP Network|tkg-cluster-vip-segment|172.19.14.1/26|N/A|172.19.14.2- 172.19.14.60|
-|TKG Workload VIP Network|tkg-workload-vip-segment|172.19.15.1/26|N/A|172.19.15.2- 172.19.15.60|
-|TKG Workload Network|tkg-workload-segment|172.19.16.1/24|172.19.16.2- 172.19.16.251|N/A|
+|NSX ALB Mgmt Network|alb-mgmt-ls|172.19.71.1/27|N/A|172.19.71.6 - 172.19.71.30|
+|TKG Management Network|tkg-mgmt-ls|172.19.72.1/27|172.19.72.10 - 172.19.72.30|N/A|
+|TKG Shared Service Network|tkg-ss-ls|172.19.73.1/27|172.19.73.2 - 172.19.73.30|N/A|
+|TKG Mgmt VIP Network|tkg-mgmt-vip-ls|172.19.74.1/26|N/A|172.19.74.2 - 172.19.74.62|
+|TKG Cluster VIP Network|tkg-cluster-vip-ls|172.19.75.1/26|N/A|172.19.75.2 - 172.19.75.62|
+|TKG Workload VIP Network|tkg-workload-vip-ls|172.19.76.1/26|N/A|172.19.76.2 - 172.19.76.62|
+|TKG Workload Network|tkg-workload-ls|172.19.77.1/24|172.19.77.2 - 172.19.77.251|N/A|
 
 ## <a id=firewall-requirements> </a> Firewall Requirements
 
@@ -248,7 +248,7 @@ The following table provides a list of firewall rules based on the assumption th
 |Bootstrap machine|NSX Advanced Load Balancer controller nodes and cluster IP Address.|TCP:443|To access NSX Advanced Load Balancer portal for configuration|
 |Bootstrap machine|vCenter Server|TCP:443|To create resource pools, VM folders, etc, in vCenter|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|<p>DNS Server</p><p><br></p><p>NTP Server</p><p></p><p>DHCP Server</p>|<p>UDP:53</p><p><br></p><p>UDP:123</p><p></p><p>UDP: 67, 68</p>|<p>DNS service </p><p><br></p><p>Time synchronization</p><p></p><p>Allows TKG nodes to get DHCP addresses</p>|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|<p>vCenter IP</p><p></p><p></p><p></p><p>Internal Harbor Registry</p>|<p>TCP:443</p><p></p><p></p><p></p><p>TCP:443</p>|<p>Allows components to access vCenter to create VMs and storage volumes</p><p></p><p>Allows components to retrieve container images|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|vCenter IP|TCP:443|Allows components to access vCenter to create VMs and storage volumes|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|<p>Internal Harbor Registry</p><p></p>|<p>TCP:443</p><p></p>|Allows components to retrieve container images |
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|TKG Cluster VIP Range. |TCP:6443|<p>For management cluster to configure shared services and workload cluster</p><p></p><p>Allow shared services and workload clusters to register with the management cluster</p>|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|NSX Advanced Load Balancer Controllers and Cluster IP Address.|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to Avi Controller|
