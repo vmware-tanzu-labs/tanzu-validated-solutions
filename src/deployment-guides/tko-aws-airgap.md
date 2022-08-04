@@ -1,4 +1,4 @@
-# Deploy Tanzu for Kubernetes Operations on AWS in an Air-Gapped Environment
+# Deploy Tanzu Kubernetes Grid on AWS in an Air-Gapped Environment
 
 This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS in an air-gapped (Internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
 
