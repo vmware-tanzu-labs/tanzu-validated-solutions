@@ -85,3 +85,10 @@ VNET
 vsphere
 VXLAN
 Xeon
+airgap
+yumdownloader
+fromtar
+totar
+datasource
+TKRS
+kubeconfig
