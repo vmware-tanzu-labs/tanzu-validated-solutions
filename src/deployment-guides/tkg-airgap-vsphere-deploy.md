@@ -75,13 +75,13 @@ For the purpose of this demonstration, this document makes use of the following 
 Here are the high-level steps for deploying Tanzu Kubernetes Grid on vSphere VDS networking in an airgap environment:
 
 - [Configure Bastion Host](#configure-bastion)
-- [Install Harbor Image Registry](#_5oevzm4ti5lx)
+- [Install Harbor Image Registry](#install-harbor)
 - [Configure Bootstrap Virtual machine](#configure-bootstrap)
 - [Deploy and Configure NSX Advanced Load Balancer](#configure-alb)
 - [Deploy TKGm Management Cluster](#deploy-tkg-management)
 - [Deploy TKGm Shared Service Cluster](#deploy-tkg-shared-services)
-- [Deploy TKGm Workload Cluster](#_rflcdoorgrn2)
-- [Deploy User-Managed packages on TKG clusters](#_7f6dc9mzskv4)
+- [Deploy TKGm Workload Cluster](#deploy-workload-cluster)
+- [Deploy User-Managed packages on TKG clusters](#deploy-packages)
 
 # <a id=configure-bastion> </a> **Deploy and Configure Bastion Host**
 
@@ -118,9 +118,13 @@ The yumdownloader command downloads the following binaries.
 ![](img/tkg-airgap-vsphere-deploy/docker-installation-binaries.jpg)
 
 2. Download Harbor installation binaries from [here](https://github.com/goharbor/harbor/releases/tag/v2.3.3). 
+
 3. Download NSX Advanced Load Balancer ova from [here](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/21_1_x).
+
 4. Download **Tanzu CLI, Kubectl, and the Kubernetes ova** images from [here](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-154&productId=988&rPId=90871). Tanzu CLI and Plugins need to be installed on the bastion host and the bootstrap machine.
+
 5. Download the [yq](https://github.com/mikefarah/yq) installation binary from [here](https://github.com/mikefarah/yq/releases/tag/v4.25.2).
+
 6. Download the [gen-publish-images](https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-totar.sh) script for pulling TKG installation binaries from the internet.
 
 **Configure Bastion Host**
@@ -316,7 +320,7 @@ Transfer the generated publish-images-fromtar.sh script file to the bootstrap ma
 
 Step 8: Collect all the binaries that you downloaded in steps 1 - 3, step 6c and step 7c of the section [Deploy and Configure Bastion Host ](#configure-bastion)and move them to the bootstrap vm using your internal process. 
 
-# Install Harbor Image Registry
+# <a id=install-harbor> </a> Install Harbor Image Registry
 
 This step is only needed if you don’t have any existing image repository in your environment and will deploy a new registry solution using Harbor. 
 
@@ -533,7 +537,7 @@ ssh-add ~/.ssh/id_rsa
 ### If the above command fails, execute "eval $(ssh-agent)" and then rerun the command.
 ```
 
-Make a note of the public key from the file **$home/.ssh/id\_rsa.pub**. You need this while creating a config file for deploying the TKG management cluster.
+Make a note of the public key from the file **$home/.ssh/id_rsa.pub**. You need this while creating a config file for deploying the TKG management cluster.
 
 Step 8: Push TKG installation binaries to your private image registry.
 
@@ -567,7 +571,7 @@ Create a content library following the instructions provided in the VMware [docu
 
 NSX ALB is deployed in Write Access Mode mode in the vSphere Environment. This mode grants NSX ALB Controllers full write access to the vCenter which helps in automatically creating, modifying, and removing SEs and other resources as needed to adapt to changing traffic needs.
 
-For a production-grade deployment, it is recommended to deploy 3 instances of the NSX ALB Controller for high availability and resiliency. To know more about how NSX ALB provides load balancing in the Tanzu Kubernetes Grid environment, please see the official [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-install-nsx-adv-lb.html)**
+For a production-grade deployment, it is recommended to deploy 3 instances of the NSX ALB Controller for high availability and resiliency. To know more about how NSX ALB provides load balancing in the Tanzu Kubernetes Grid environment, please see the product [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-install-nsx-adv-lb.html)
 
 Below is the sample IP and FQDN set for the NSX ALB controllers:
 
@@ -592,7 +596,7 @@ To deploy NSX ALB controller nodes, follow the steps provided in the[ Deploy a V
 
 A new task for creating the virtual machine appears in the Recent Tasks pane. After the task is complete, the NSX ALB virtual machine is created on the selected resource. Power on the Virtual Machine and give it a few minutes for the system to boot, upon successful boot up navigate to NSX ALB on your browser.
 
-Once the NSX ALB is successfully deployed and boots up, navigate to NSX ALB on your browser using the URL “https://<ALB\_IP/FQDN>/” and configure the basic system settings as follows:
+Once the NSX ALB is successfully deployed and boots up, navigate to NSX ALB on your browser using the URL “https://<ALB_IP/FQDN>/” and configure the basic system settings as follows:
 
 - Configure the administrator account by setting up a password and email (optional).
 
@@ -674,7 +678,7 @@ The configuration of the primary (leader) Controller is synchronized to the new 
 
 **Note:** Going forward all NSX ALB configurations will be configured by connecting to the NSX ALB Controller Cluster IP/FQDN
 
-### **Change NSX Advanced Load Balancer Portal Certificate**
+## Change NSX Advanced Load Balancer Portal Certificate
 
 The default system-generated controller certificate generated for SSL/TSL connections will not have required SAN entries. Follow the below steps to create a Controller certificate
 
@@ -1020,8 +1024,7 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 
 For a full list of configurable values and to know more about the fields present in the template file, please see [Create a Management Cluster Configuration File](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-config-reference.html)
 
-
-Create a file using the values provided in the template and save the file with .yaml extension. A sample yaml file used for management cluster deployment is provided in the Appendix (#supplemental-information) section for the reference.
+Create a file using the values provided in the template and save the file with .yaml extension. A sample yaml file used for management cluster deployment is provided in the [Appendix Section](#supplemental-information) for the reference.
 
 After you have created or updated the cluster configuration file, you can deploy a management cluster by running the `tanzu mc create --file CONFIG-FILE` command, where CONFIG-FILE is the name of the configuration file. 
 
@@ -1051,7 +1054,7 @@ Kubectl config use-context <mgmt cluster context>
 
 The TKG management cluster is successfully deployed and now you can proceed with creating Shared Service and workload clusters.
 
-# **Deploy Tanzu Kubernetes Grid Shared Services Cluster**
+# <a id=deploy-tkg-shared-services> </a> Deploy Tanzu Kubernetes Grid Shared Services Cluster
 
 Each Tanzu Kubernetes Grid instance can have only one shared services cluster. Create a shared services cluster if you intend to deploy Harbor.
 
@@ -1140,7 +1143,8 @@ ako-0   1/1     Running   0          41s
 ```
 Now the shared service cluster is successfully created, you may proceed with deploying the workload clusters. 
 
-# **Deploy Tanzu Kubernetes Grid Workload Cluster**
+# <a id=deploy-workload-cluster> </a> Deploy Tanzu Kubernetes Grid Workload Cluster
+
 Deployment of the workload cluster** is done using a yaml similar to the shared services cluster yaml but customized for the workload cluster placement objects.
 
 A sample yaml for the workload cluster deployment is given below:
@@ -1186,7 +1190,7 @@ Cluster creation roughly takes 15-20 minutes to complete. Verify the health of t
 
 ![](img/tkg-airgap-vsphere-deploy/tkg-clusters-list.jpg)
 
-As per the architecture, workload clusters make use of a separate SE group **(wld-segroup-01)** and VIP Network **(TKG-WLD-VIP)** for application load balancing. This can be controlled by creating a new **AKODeploymentConfig**. For more details refer to the next section.
+As per the architecture, workload clusters make use of a separate SE group `wld-segroup-01` and VIP Network `TKG-WLD-VIP` for application load balancing. This can be controlled by creating a new **AKODeploymentConfig**. For more details refer to the next section.
 
 ## Configure NSX Advanced Load Balancer in TKG Workload Cluster
 
@@ -1195,7 +1199,7 @@ Tanzu Kubernetes Grid v1.5.4 management clusters with NSX Advanced Load Balancer
 1. `Install-ako-for-management-cluster`: default config for management cluster
 2. `Install-ako-for-all`:  default config for all TKG clusters. By default, any clusters that match the cluster labels defined in install-ako-for-all will reference this file for their virtual IP networks, service engine (SE) groups, and L7 ingress. As part of our architecture, only the shared service cluster makes use of the configuration defined in the default AKODeploymentConfig “install-ako-for-all”
 
-As per the defined architecture, workload clusters must **not** make **use** of **Service Engine Group mgmt-segroup-01** and VIP Network **TKG-Cluster-VIP** for application load balancer services.
+As per the defined architecture, workload clusters must **not** make **use** of Service Engine Group `mgmt-segroup-01` and VIP Network `TKG-Cluster-VIP` for application load balancer services.
 
 These configurations can be enforced on workload clusters by
 
@@ -1248,7 +1252,6 @@ The following is a sample AKODeploymentConfig file with sample values in place. 
 
 - cloud: tkg-vsphere​
 - service engine Group: wld-segroup-01
-- Node Network: TKG-Workload
 - VIP/data network: TKG-WLD-VIP
 
 ```yaml
@@ -1292,7 +1295,7 @@ spec:
 Once you have the AKO configuration file ready, use the kubectl command to set the context to the TKG management cluster and use the below command to create AKODeploymentConfig for the workload cluster.
 
 ```bash
-kubectl apply -f <path\_to\_akodeploymentconfig.yaml>
+kubectl apply -f <path_to_akodeploymentconfig.yaml>
 ```
 
 Use the below command to list all AKODeploymentConfig created under management cluster
@@ -1331,12 +1334,11 @@ kubectl get pods -A              ## Lists all pods and it’s status
 
 You can see that the workload cluster is successfully deployed and AKO pod is deployed on the cluster. You can now deploy user-managed packages on this cluster.
 
-# Deploy User-Managed Packages
+# <a id=deploy-packages> </a> Deploy User-Managed Packages
 
 user-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
 
 Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.
-
 
 |**Function**|**Package**|**Location**|
 | :- | :- | :- |
@@ -1347,7 +1349,7 @@ Tanzu Kubernetes Grid includes the following user-managed packages. These packag
 |Log forwarding|fluent-bit|Workload cluster|
 |Monitoring|Grafana<br>Prometheus|Workload cluster|
 
-user-managed packages can be installed via CLI by invoking the **tanzu package install** command. Before installing the user-managed packages, ensure that you have switched to the context of the cluster where you want to install the packages.
+user-managed packages can be installed via CLI by invoking the `tanzu package install` command. Before installing the user-managed packages, ensure that you have switched to the context of the cluster where you want to install the packages.
 
 Also, ensure that the tanzu-standard repository is configured on the cluster where you want to install the packages. By default, the newly deployed clusters should have the tanzu-standard repository configured.
 
@@ -1470,7 +1472,7 @@ STATUS:                  Reconcile succeeded
 CONDITIONS:              [{ReconcileSucceeded True  }]
 ```
 
-### **Install Harbor**
+## Install Harbor
 
 [Harbor](https://goharbor.io/) is an open-source container registry. Harbor Registry may be used as a private registry for container images that you want to deploy to Tanzu Kubernetes clusters.
 
@@ -1577,7 +1579,7 @@ This creates a configuration file named prometheus-data-values.yaml that you can
 |Ingress.tlsCertificate.tls.crt|Null|<p><Full chain cert provided in Input file></p><p></p><p>Note: This is optional.</p>|
 |ingress.tlsCertificate.tls.key|Null|<p><Cert Key provided in Input file</p><p></p><p>Note: This is optional.</p>|
 |ingress.enabled|false|true|
-|ingress.virtual\_host\_fqdn|prometheus.system.tanzu|prometheus.<your-domain>|
+|ingress.virtual_host_fqdn|prometheus.system.tanzu|prometheus.<your-domain>|
 
 To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html#config-table).
 
@@ -1607,11 +1609,11 @@ STATUS:                  Reconcile succeeded
 CONDITIONS:              [{ReconcileSucceeded True  }]
 ```
 
-### **Install Grafana**
+## Install Grafana
 
 [Grafana](https://grafana.com/) allows you to query, visualize, alert on, and explore metrics no matter where they are stored. Grafana provides tools to form graphs and visualizations from application data. 
 
-**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, **tanzu-system-monitoring**, you need to change the Grafana datasource configuration in the code shown below.
+**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, `tanzu-system-monitoring`, you need to change the Grafana datasource configuration in the code shown below.
 
 1: Retrieve the version of the available package
 
@@ -1685,7 +1687,7 @@ CONDITIONS:              [{ReconcileSucceeded True  }]
 
 The current release of Fluent Bit allows you to gather logs from management clusters or Tanzu Kubernetes clusters running in vSphere, Amazon EC2, and Azure. You can then forward them to a log storage provider such as [Elastic Search](https://www.elastic.co/), [Kafka](https://www.confluent.io/confluent-operator/), [Splunk](https://www.splunk.com/), or an HTTP endpoint. 
 
-The example shown in this document uses HTTP endpoint ([vRealize Log Insight Cloud](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html)) for forwarding logs from Tanzu Kubernetes clusters.
+The example shown in this document uses HTTP endpoint `vRealize Log Insight` for forwarding logs from Tanzu Kubernetes clusters.
 
 1: Retrieve the version of the available package
 
@@ -1710,17 +1712,21 @@ cp /tmp/fluent-bit-1.7.5+vmware.2-tkg.1/config/values.yaml fluentbit-data-values
 3: Modify the resulting fluentbit-data-values.yaml file and configure the endpoint as per your choice. A sample endpoint configuration for sending logs to vRealize Log Insight Cloud over http is shown below for the reference.
 
 ```bash
-outputs: |
-      [OUTPUT]
-        Name            http
-        Match           *
-        Host            data.mgmt.cloud.vmware.com
-        Port            443
-        URI             /le-mans/v1/streams/ingestion-pipeline-stream
-        Header          Authorization Bearer Sl0dzovlCKArhgyGdbvC8M9C7tfvT9Y5
-        Format          json
-        tls             On
-        tls.verify      off
+[OUTPUT]
+        Name              syslog
+        Match             *
+        Host              vrli.tanzu.lab
+        Port              514
+        Mode              udp
+        Syslog_Format        rfc5424
+        Syslog_Hostname_key  tkg_cluster
+        Syslog_Appname_key   pod_name
+        Syslog_Procid_key    container_name
+        Syslog_Message_key   message
+        Syslog_SD_key        k8s
+        Syslog_SD_key        labels
+        Syslog_SD_key        annotations
+        Syslog_SD_key        tkg
 ```
 
 4: Deploy Fluent-Bit package
@@ -1743,5 +1749,62 @@ STATUS:                  Reconcile succeeded
 CONDITIONS:              [{ReconcileSucceeded True  }]
 ```
 
+# <a id=supplemental-information> </a> Appendix 
 
+## Appendix A - Management Cluster Configuration File
+
+```yaml
+AVI_CA_DATA_B64: LS0tLS1CRUdJTiBDRVJUSUZJQ0FUN[.....]VYU2p5dHRacy85U25yR2t0cwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t
+AVI_CLOUD_NAME: tkg-vsphere
+AVI_CONTROL_PLANE_HA_PROVIDER: "true"
+AVI_CONTROLLER: alb01.vstellar.local
+AVI_DATA_NETWORK: TKG-SS-VIP
+AVI_DATA_NETWORK_CIDR: 172.16.17.0/26
+AVI_ENABLE: "true"
+AVI_LABELS: |
+    'type': 'management'
+AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_CIDR: 172.16.16.0/26
+AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_NAME: TKG-Cluster-VIP
+AVI_PASSWORD: <encoded:Vk13YXJlMSE=>
+AVI_SERVICE_ENGINE_GROUP: tkg-mgmt-seg
+AVI_USERNAME: admin
+CLUSTER_CIDR: 100.96.0.0/11
+CLUSTER_NAME: mj-tkg154-mgmt-agp
+CLUSTER_PLAN: prod
+ENABLE_AUDIT_LOGGING: "true"
+ENABLE_CEIP_PARTICIPATION: "false"
+ENABLE_MHC: "true"
+IDENTITY_MANAGEMENT_TYPE: none
+INFRASTRUCTURE_PROVIDER: vsphere
+OS_ARCH: amd64
+OS_NAME: photon
+OS_VERSION: "3"
+SERVICE_CIDR: 100.64.0.0/13
+TKG_HTTP_PROXY_ENABLED: "false"
+TKG_IP_FAMILY: ipv4
+VSPHERE_CONTROL_PLANE_ENDPOINT: ""
+VSPHERE_CONTROL_PLANE_DISK_GIB: "40"
+VSPHERE_CONTROL_PLANE_MEM_MIB: "8192"
+VSPHERE_CONTROL_PLANE_NUM_CPUS: "2"
+VSPHERE_WORKER_DISK_GIB: "40"
+VSPHERE_WORKER_MEM_MIB: "8192"
+VSPHERE_WORKER_NUM_CPUS: "2"
+VSPHERE_DATACENTER: /Mgmt-DC01
+VSPHERE_DATASTORE: /Mgmt-DC01/datastore/vsanDatastore
+VSPHERE_FOLDER: /Mgmt-DC01/vm/TKG-Mgmt
+VSPHERE_INSECURE: "true"
+VSPHERE_NETWORK: /Mgmt-DC01/network/TKG-Management
+VSPHERE_PASSWORD: <encoded:Vk13YXJlMSE=>
+VSPHERE_RESOURCE_POOL: /Mgmt-DC01/host/Mgmt-CL01/Resources/TKG-Mgmt
+VSPHERE_SERVER: mgmt-vc01.vstellar.local
+VSPHERE_SSH_AUTHORIZED_KEY: ssh-rsa AAAAB3NzaC1yc[.....]3+qW8vtBHQ== manish@vmware
+VSPHERE_TLS_THUMBPRINT: ""
+VSPHERE_USERNAME: administrator@vsphere.local
+CONTROL_PLANE_MACHINE_COUNT: "3"
+WORKER_MACHINE_COUNT: "3"
+DEPLOY_TKG_ON_VSPHERE7: 'true'
+TKG_CUSTOM_IMAGE_REPOSITORY: registry.vstellar.local/tkg154
+TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY: 'false'
+TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE: LS0tLS1CRUdJTiBD[.....]RVJUSUZJQ0FURS0tLJQ0FURS0tLS0tCg==
+```
 
