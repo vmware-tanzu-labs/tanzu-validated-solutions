@@ -256,7 +256,7 @@ VMware Tanzu Service Mesh (TSM) is an enterprise-class service mesh solution tha
 ### Onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh
 You can onboard Tanzu Service Mesh with or without Tanzu Mission Control.
 
-*If you are installing user managed packages, you will want to install them prior to onboarding your cluster in Tanzu Service Mesh or there may be issues reconciling.*
+*If you are installing user managed packages, you will want to install them prior to onboarding your cluster in Tanzu Service Mesh or there may be issues reconciling. Make sure to exclude the namespaces where you will be installing user-managed packages and any other namespace where you don't need istio injection by Tanzu Service Mesh.*
 
 ### Prerequisites
 
