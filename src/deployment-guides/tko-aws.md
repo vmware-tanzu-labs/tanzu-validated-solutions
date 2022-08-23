@@ -2,6 +2,16 @@
 
 This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 
+## Deploying with VMware Service Installer for Tanzu
+ 
+You can use VMware Service Installer for VMware Tanzu to automate this deployment.
+ 
+VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
+ 
+To use Service Installer to automate this deployment, see [Deploying Tanzu for Kubernetes Operations on Non Air-gapped AWS VPC Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/1.3/service-installer/GUID-AWS%20-%20Non%20Airgap-AWSNonAirgap-DeploymentGuide.html).
+ 
+Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
+
 ## Prerequisites
 Before deploying VMware Tanzu for Kubernetes Operations on AWS, ensure that the following are set up.
 

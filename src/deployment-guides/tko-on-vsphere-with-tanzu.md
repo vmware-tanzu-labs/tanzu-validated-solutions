@@ -4,6 +4,16 @@ This document outlines the steps for deploying Tanzu for Kubernetes Operations u
 
 The scope of the document is limited to providing deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design](../reference-designs/tko-on-vsphere-with-tanzu.md). This document does not cover any deployment procedures for the underlying SDDC components.
 
+## Deploying with VMware Service Installer for Tanzu
+ 
+You can use VMware Service Installer for VMware Tanzu to automate this deployment.
+ 
+VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
+ 
+To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu and vSphere Distributed Switch Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/1.3/service-installer/GUID-vSphere%20-%20Backed%20by%20VDS-TKGs-TKOonVsphereVDStkgs.html).
+ 
+Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
+
 ## Prerequisites
 
 Before deploying Tanzu Kubernetes Operations using vSphere with Tanzu on vSphere networking, ensure that your environment is set up as described in the following:
