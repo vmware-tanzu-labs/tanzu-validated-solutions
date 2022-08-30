@@ -623,11 +623,11 @@ Do the following to deploy the Tanzu Kubernetes Grid management cluster using th
     ![](./img/tko-on-vsphere-vds/image84.png)
 
 1. Optionally, specify **Identity Management with OIDC or LDAPs** - This is not covered in this document and will be documented separately.
-  For the purpose of this document, identity management integration has been **disabled** .
+  For the purpose of this document, identity management integration has been deactivated .
   
     ![](./img/tko-on-vsphere-vds/image35.png)
 
-1. Select the **OS image** that will be used for the management cluster deployment.
+2. Select the **OS image** that will be used for the management cluster deployment.
   **Note**: This list will appear empty if you don’t have a compatible template present in your environment. See the steps provided in [Import Base Image template for TKG Cluster deployment](#import-base-image-template-for-tkg-cluster-deployment).
   
     ![](./img/tko-on-vsphere-vds/image44.png)

@@ -787,7 +787,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
     ![Kubernetes Network page for management cluster](img/tko-on-vsphere-nsxt/49-mgmt-cluster-9.png)
 
-1. (Optional) Specify identity management with OIDC or LDAP. For the purpose of this document, identity management integration has been disabled.
+1. (Optional) Specify identity management with OIDC or LDAP. For the purpose of this document, identity management integration is deactivated.
 
     If you would like to enable Identity Management, see **Enable and Configure Identity Management During Management Cluster Deployment** section in the Tanzu Kubernetes Grid Integration with Pinniped Deployment Guide.
 
