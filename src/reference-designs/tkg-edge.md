@@ -540,7 +540,7 @@ These newly created NSX Advanced Load Balancer configuration elements should be 
 
 | Decision ID | Design Decision | Design Justification | Design Implication |
 | --- | --- | --- | --- |
-| `TZEDG-ALL-EDGE-TKG-02` | Disable MHC | After the Edge location is network isolated from the main data center, the TKG Management cluster might recreate the whole cluster causing an outage at the edge | Kubernetes node that are stopped or unresponsive won't be automatically replaced |
+| `TZEDG-ALL-EDGE-TKG-02` | Deactivate MHC | After the Edge location is network isolated from the main data center, the TKG Management cluster might recreate the whole cluster causing an outage at the edge | Kubernetes node that are stopped or unresponsive won't be automatically replaced |
 | `TZEDG-ALL-EDGE-TKG-03` | Use Kube-VIP for the control plane API endpoint | Avoid unnecessary complexity since we have only one control-plane node. <br />Eliminate the network dependency to the main site (AKO needs connectivity to the main site) | N/A |
 | `TZEDG-ALL-EDGE-TKG-04` | Create one namespace per edge site in the TKG management cluster and creates TKG workload cluster(s) in them | Isolate each edge site for better role base access control. Simplify destruction and creation of an edge site. Avoid mass destructive actions across all edge sites.  | Manual operations are more complex as it is required to switch between namespaces to perform operations across edge sites. |
 

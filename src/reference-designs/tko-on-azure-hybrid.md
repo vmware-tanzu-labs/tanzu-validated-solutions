@@ -1,4 +1,4 @@
-# VMware TKGm on Hybrid-Cloud Azure
+# VMware Tanzu Kubernetes Grid on Hybrid-Cloud Azure
 
 _A validated augmentation for the [TKO on Azure reference architecture](tko-on-azure.md)_
 
@@ -78,7 +78,7 @@ It is recommended that all such _cloud service_ resources are provided via Priva
 
 ## Platform Configuration - Architecture Enablement
 
-### TKGm
+### Tanzu Kubernetes Grid
 
 The hybrid-cloud TKGm solution depicted in this reference architecture depends upon v1.4. This version provides a cluster configuration flag of _AZURE_ENABLE_PRIVATE_CLUSTER_ which assigns a private IP address from the associated subnet to the ingress Azure Load Balancer. In addition, TKG will deploy proxy configuration details to other members of the solution given the following configuration directives:
 
