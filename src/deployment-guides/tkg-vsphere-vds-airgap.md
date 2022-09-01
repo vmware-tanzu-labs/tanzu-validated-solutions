@@ -120,7 +120,7 @@ Ensure the following:
 
     ![code screen captures displaying the binaries](img/tkg-airgap-vsphere-deploy/docker-installation-binaries.jpg)
 
-2. Download the Harbor installation binaries from [goharbor / harbor](https://github.com/goharbor/harbor/releases/tag/v2.3.3)  GitHub repository. 
+2. Download installation binaries from the [Harbor GitHub repository](https://github.com/goharbor/harbor/releases/tag/v2.3.3). 
 
 3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/21_1_x).
 
@@ -220,9 +220,9 @@ Ensure the following:
       ```bash
       imgpkg pull -i ${TKG_IMAGE_REPO}/tkr-compatibility:v$(imgpkg tag list -i ${TKG_IMAGE_REPO}/tkr-compatibility |sed 's/v//' |sort -rn |head -1) --output "tkr-tmp"; cat tkr-tmp/tkr-compatibility.yaml; rm -rf tkr-tmp
       ```
-      For your Tanzu Kubernetes Grid version, note the supported Kubernetes versions. The one with the latest minor version is used by the management cluster. For example the Tanzu Kubernetes Grid v1.5.4 management cluster uses TKr v1.22.9\_vmware.1-tkg.1.
+      For your Tanzu Kubernetes Grid version, note the supported Kubernetes versions. The one with the latest minor version is used by the management cluster. For example the Tanzu Kubernetes Grid v1.5.4 management cluster uses TKr v1.22.9_vmware.1-tkg.1.
 
-      Export as DOWNLOAD\_TKRS a space-separated string of the TKrs required for your management cluster and workloads. For example, to download the images for Kubernetes v1.21 and v1.22 versions supported by Tanzu Kubernetes Grid v1.5.4:
+      Export as `DOWNLOAD_TKRS` a space-separated string of the TKrs required for your management cluster and workloads. For example, to download the images for Kubernetes v1.21 and v1.22 versions supported by Tanzu Kubernetes Grid v1.5.4:
 
       ```bash
       export DOWNLOAD_TKRS="v1.21.11_vmware.1-tkg.3 v1.22.9_vmware.1-tkg.1"
@@ -397,7 +397,7 @@ The following procedure provides steps to configure the bootstrap virtual machin
 
       By default the Tanzu global config file, `config.yaml`, which gets created when you first run `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Because there is no Internet in the environment, the commands fails after some time.
 
-      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `config set` command to add `TKG\_CUSTOM\_IMAGE\_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
+      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `config set` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
 
       If your image registry is configured with a public signed CA certificate, set the following environment variables.
 
@@ -407,7 +407,7 @@ The following procedure provides steps to configure the bootstrap virtual machin
       tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY true
       ```
 
-      If your registry solution uses self-signed certificates, also add TKG\_CUSTOM\_IMAGE\_REPOSITORY\_CA\_CERTIFICATE in base64-encoded format to the global Tanzu CLI configuration file. For self-signed certificates, set the following environment variables:
+      If your registry solution uses self-signed certificates, also add TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE in base64-encoded format to the global Tanzu CLI configuration file. For self-signed certificates, set the following environment variables:
 
       ```bash
       tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
@@ -544,7 +544,7 @@ The following procedure provides steps to configure the bootstrap virtual machin
 
 1. Push Tanzu Kubernetes Grid installation binaries to your private image registry.
 
-    Navigate to the folder which contains all Tanzu Kubernetes Grid binaries and the publish-images-fromtar.sh file that you have copied from the bastion host and then execute the following command to push the binaries to your private image registry. 
+    Navigate to the folder which contains all Tanzu Kubernetes Grid binaries and the `publish-images-fromtar.sh` file that you have copied from the bastion host and then execute the following command to push the binaries to your private image registry. 
 
     ```bash
     ### Make the publish-images-fromtar.sh script executable.
@@ -582,10 +582,10 @@ The following table provides an example IP and FQDN set for the NSX Advanced Loa
 
 |**Controller Node**|**IP Address**|**FQDN**|
 | --- | --- | --- |
-|Node 01 (Primary)|172.16.13.3|alb01.vstellar.local|
-|Node 02 (Secondary)|172.16.13.4|alb02.vstellar.local|
-|Node 03 (Secondary) |172.16.13.5|alb03.vstellar.local|
-|Controller Cluster|172.16.13.2|alb.vstellar.local|
+|Node 01 (Primary)|172.16.13.3|`alb01.vstellar.local`|
+|Node 02 (Secondary)|172.16.13.4|`alb02.vstellar.local`|
+|Node 03 (Secondary) |172.16.13.5|`alb03.vstellar.local`|
+|Controller Cluster|172.16.13.2|`alb.vstellar.local`|
 
 ### Deploy NSX Advanced Load Balancer Controllers
 
@@ -744,8 +744,8 @@ The following table lists the components that are be created in NSX Advanced Loa
 |Object|Sample Name|
 | --- | --- |
 |vCenter Cloud|tkg-vsphere|
-|Service Engine Group 1|mgmt-segroup-01|
-|Service Engine Group 2|wld-segroup-01|
+|Service Engine Group 1|`mgmt-segroup-01`|
+|Service Engine Group 2|`wld-segroup-01`|
 
 1. Log in to NSX Advanced Load Balancer.
 2. Go to **Infrastructure > Clouds > Create > VMware vCenter/vSphere ESX**. 
@@ -1055,7 +1055,7 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 
 For a full list of configurable values and to learn more about the fields present in the template file, see [Create a Management Cluster Configuration File](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-config-reference.html).
 
-Create a file using the values provided in the template and save the file with a .yaml extension. See [Appendix Section](#supplemental-information) for a sample YAML file to use for deploying a management cluster.
+Create a file using the values provided in the template and save the file with a `.yaml` extension. See [Appendix Section](#supplemental-information) for a sample YAML file to use for deploying a management cluster.
 
 After you have created or updated the cluster configuration file, you can deploy a management cluster by running the `tanzu mc create --file CONFIG-FILE` command, where CONFIG-FILE is the name of the configuration file. 
 
@@ -1073,7 +1073,7 @@ tanzu management-cluster get
 
 ![TKG management cluster status](img/tkg-airgap-vsphere-deploy/mgmt-cluster-status.jpg)
 
-To interact with the management cluster using the kubectl command, retrieve the management cluster kubeconfig and switch to the cluster context to run kubectl commands.
+To interact with the management cluster using the kubectl command, retrieve the management cluster `kubeconfig` and switch to the cluster context to run kubectl commands.
 
 ```bash
 tanzu mc kubeconfig get --admin
@@ -1081,7 +1081,7 @@ tanzu mc kubeconfig get --admin
 Kubectl config use-context <mgmt cluster context>
 ```
 
-![Get Kubeconfig and switch context](img/tkg-airgap-vsphere-deploy/connect-mgmt-cluster.jpg)
+![Get `kubeconfig` and switch context](img/tkg-airgap-vsphere-deploy/connect-mgmt-cluster.jpg)
 
 The Tanzu Kubernetes Grid management cluster is successfully deployed. You can now proceed with creating shared services and workload clusters.
 
@@ -1094,7 +1094,7 @@ Deploying a shared service cluster and workload cluster is the same with the fol
 - You will add a `tanzu-services` label to the shared services cluster. The label identifies the shared services cluster's role to the management cluster and workload clusters.
 - The Cluster Labels applied to the shared service cluster are defined while deploying management cluster. This enforces that only the shared services cluster makes use of the **TKG-Cluster-VIP** network for application load balancing purposes and the virtual services are deployed on the same Service Engine that is used by the management cluster.
 
-Deployment of the shared services cluster is done by creating a YAML file and invoking the `tanzu cluster create -f <file-name>` command. The YAML file used for shared services deployment is usually a bit smaller than the YAML used for the management cluster deployment because you don’t need to define the AVI fields except `AVI\_CONTROL\_PLANE\_HA\_PROVIDER` in the YAML. 
+Deployment of the shared services cluster is done by creating a YAML file and invoking the `tanzu cluster create -f <file-name>` command. The YAML file used for shared services deployment is usually a bit smaller than the YAML used for the management cluster deployment because you don’t need to define the AVI fields except `AVI_CONTROL_PLANE_HA_PROVIDER` in the YAML. 
 
 The following is a sample YAML for deploying a shared services cluster:
 
@@ -1280,9 +1280,9 @@ spec:
 
 The following is a sample AKODeploymentConfig file with sample values in place. In this example, the Tanzu Kubernetes Grid management cluster deploys the AKO pod on any workload cluster that matches the label **type=workload**. The AKO configuration will be as follows:
 
-- cloud: tkg-vsphere​
-- service engine Group: wld-segroup-01
-- VIP/data network: TKG-WLD-VIP
+- cloud: `tkg-vsphere​`
+- service engine Group: `wld-segroup-01`
+- VIP/data network: `TKG-WLD-VIP`
 
 ```yaml
 apiVersion: networking.tkg.tanzu.vmware.com/v1alpha1
@@ -1523,7 +1523,7 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 
     ![List of harbor package versions](img/tkg-airgap-vsphere-deploy/harbor-package-list.jpg)
 
-1. Create a configuration file named harbor-data-values.yaml by executing the following commands:
+1. Create a configuration file named `harbor-data-values.yaml` by executing the following commands:
 
     ```bash
     image_url=$(kubectl -n tanzu-package-repo-global get packages harbor.tanzu.vmware.com.2.3.3+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
@@ -1533,13 +1533,13 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
     cp /tmp/harbor-package/config/values.yaml harbor-data-values.yaml
     ```
 
-1. Set the mandatory passwords and secrets in the harbor-data-values.yaml file
+1. Set the mandatory passwords and secrets in the `harbor-data-values.yaml` file
 
     ```bash
     bash /tmp/harbor-package/config/scripts/generate-passwords.sh harbor-data-values.yaml
     ```
 
-1. Edit the harbor-data-values.yaml file and configure the values for the following mandatory parameters. 
+1. Edit the `harbor-data-values.yaml` file and configure the values for the following mandatory parameters. 
 
       - namespace
       - port
@@ -1548,7 +1548,7 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 
     You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [Deploy Harbor into a Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html#deploy-harbor-into-a-cluster-5).
 
-1. Remove the comments in the harbor-data-values.yaml file
+1. Remove the comments in the `harbor-data-values.yaml` file
 
     ```bash
     yq -i eval '... comments=""' harbor-data-values.yaml
@@ -1600,7 +1600,7 @@ Do the following to deploy Prometheus into a workload cluster:
     cp /tmp/prometheus-package-2.27.0+vmware.1-tkg.1/config/values.yaml prometheus-data-values.yaml
     ```
 
-    This creates a configuration file named prometheus-data-values.yaml that you can modify.
+    This creates a configuration file named `prometheus-data-values.yaml` that you can modify.
 
 1. To customize the Prometheus installation, modify the following values.
 
@@ -1613,7 +1613,7 @@ Do the following to deploy Prometheus into a workload cluster:
 
     To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html#config-table).
 
-1. After you make any changes needed to your prometheus-data-values.yaml file, remove all comments in the file:
+1. After you make any changes needed to your `prometheus-data-values.yaml` file, remove all comments in the file:
 
     ```bash
     yq -i eval '... comments=""' prometheus-data-values.yaml
@@ -1643,7 +1643,7 @@ Do the following to deploy Prometheus into a workload cluster:
 
 [Grafana](https://grafana.com/) allows you to query, visualize, alert on, and explore metrics no matter where they are stored. Grafana provides tools to form graphs and visualizations from application data. 
 
-**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, `tanzu-system-monitoring`, you need to change the Grafana datasource configuration in the following code.
+**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, `tanzu-system-monitoring`, you need to change the Grafana data source configuration in the following code.
 
 1. Retrieve the version of the available package.
 
@@ -1671,12 +1671,12 @@ Do the following to deploy Prometheus into a workload cluster:
 
     |**Key**|**Default Value**|**Modified value**|
     | --- | --- | --- |
-    |virtual\_host\_fqdn|grafana.system.tanzu|grafana.<your-domain>|
-    |secret.admin\_password|Null|Your password in Base64 encoded format.|
+    |virtual_host_fqdn|grafana.system.tanzu|grafana.<your-domain>|
+    |secret.admin_password|Null|Your password in Base64 encoded format.|
 
-5: (Optional) Modify the Grafana data source configuration. 
+5. (Optional) Modify the Grafana data source configuration. 
 
-    Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, tanzu-system-monitoring, you need to change the Grafana datasource configuration in grafana-data-values.yaml.
+    Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, `tanzu-system-monitoring`, you need to change the Grafana data source configuration in `grafana-data-values.yaml`.
 
     ```yaml
     datasources:
@@ -1685,7 +1685,7 @@ Do the following to deploy Prometheus into a workload cluster:
               url: prometheus-server.<change-to-prometheus-namespace>.svc.cluster.local
     ```
 
-6. Remove all comments from grafana-data-values.yaml file
+6. Remove all comments from `grafana-data-values.yaml` file
 
     ```bash
     yq -i eval '... comments=""' grafana-data-values.yaml
@@ -1739,7 +1739,7 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
     cp /tmp/fluent-bit-1.7.5+vmware.2-tkg.1/config/values.yaml fluentbit-data-values.yaml
     ```
 
-3. Modify the resulting fluentbit-data-values.yaml file and configure the endpoint as per your choice. A sample endpoint configuration for sending logs to vRealize Log Insight Cloud over HTTP is shown in the following example.
+3. Modify the resulting `fluentbit-data-values.yaml` file and configure the endpoint as per your choice. A sample endpoint configuration for sending logs to vRealize Log Insight Cloud over HTTP is shown in the following example.
 
     ```bash
     [OUTPUT]
