@@ -836,7 +836,7 @@ Typically creating and configuring vSphere namespaces (permissions, limits, etc.
 
 A self-service namespace is a new feature that is available with vSphere 7.0 U2 and later versions and allows users with DevOps persona to create and consume vSphere namespaces in a self-service fashion.
 
-Before a DevOps user can start creating namespace on his own, the vSphere Administrator must enable Namespace service on the supervisor cluster; this will build a template that will be used over and over again whenever a developer requests a new Namespace.
+Before a DevOps user can start creating a namespace, the vSphere Administrator must enable Namespace service on the supervisor cluster; this will build a template that will be used over and over again whenever a developer requests a new Namespace.
 
 The workflow for enabling Namespace service on the supervisor cluster is as follows:
 

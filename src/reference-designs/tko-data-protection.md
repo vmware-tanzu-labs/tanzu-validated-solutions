@@ -1,4 +1,4 @@
-## **Tanzu Kubernetes Grid Data Protection**
+# Tanzu Kubernetes Grid Data Protection
 
 Kubernetes maintains many states stored in the cluster itself in addition to your application state. Config maps, custom resource definitions, and secrets are all stored in the Kubernetes control plane. All of these are critical to your clusters’ operations. Protecting this data is just as critical as protecting any other element of your IT infrastructure, so it should be covered by data protection and your disaster recovery plan.
 
