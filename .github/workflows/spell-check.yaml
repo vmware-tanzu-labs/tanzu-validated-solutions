@@ -8,9 +8,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Check wordlist is sorted
+        run: |
+          # we need to install locale-gen for the local development use case
+          sudo apt-get update
+          sudo apt-get install -y locales
+          sudo locale-gen en_US.UTF-8
+
+          LC_COLLATE="en_US.UTF8"
+          if ! sort -cf wordlist.txt; then 
+            echo "wordlist.txt is not sorted.";
+            echo "To sort the file run:";
+            echo "LC_COLLATE="en_US.UTF8" sort -o wordlist.txt wordlist.txt";
+            exit -1;
+          fi;
+      - name: Check wordlist does not have duplicate entries
+        run: |
+          DUPES=$(uniq -id wordlist.txt)
+          if [ ! -z "$DUPES" ]; then 
+            echo "wordlist.txt has duplicate entries:"
+            echo "$DUPES"; 
+            exit -1; 
+          fi;
       - uses: actions/setup-node@v1
         name: Run spell check
         with:
           node-version: "14"
       - run: npm install -g cspell
-      - run: cspell --config ./cspell.json 
+      - run: cspell --config ./cspell.json
