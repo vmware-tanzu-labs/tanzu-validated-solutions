@@ -9,7 +9,7 @@ The scope of the document is limited to providing the deployment steps based on 
 The validated Bill of Materials that can be used to install Tanzu Kubernetes Grid on your vSphere environment is as follows:
 
 |**Software Components**|**Version**|
-| :- | :- |
+| ---| --- |
 |Tanzu Kubernetes Grid|1.5.1|
 |VMware vSphere ESXi|7.0U2 and later|
 |VMware vCenter (VCSA)|7.0U2 and later|

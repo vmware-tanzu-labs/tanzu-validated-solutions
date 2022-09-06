@@ -4,6 +4,16 @@ This document provides step-by-step instructions for deploying Tanzu Kubernetes 
 
 The scope of the document is limited to providing deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T](../reference-designs/tko-on-vsphere-nsx.md). It does not cover deployment procedures for the underlying SDDC components.
 
+## Deploying with VMware Service Installer for Tanzu
+ 
+You can use VMware Service Installer for VMware Tanzu to automate this deployment.
+ 
+VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
+ 
+To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/1.3/service-installer/GUID-vSphere%20-%20Backed%20by%20NSX-T-tkoVsphereNSXT.html).
+ 
+Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
+
 ## Supported Component Matrix
 
 The validated Bill of Materials that can be used to install Tanzu Kubernetes Grid on your vSphere with NSX-T environment is as follows:
@@ -18,7 +28,7 @@ The validated Bill of Materials that can be used to install Tanzu Kubernetes Gri
 
 For up-to-date information about which software versions can be used together, check the Interoperability Matrix [here](https://interopmatrix.vmware.com/Interoperability?col=551,&row=2,%26789,).
 
-## Prepare the Environment for Deployment of the Tanzu Kubernetes Operations
+## Prepare Environment for Deploying Tanzu for Kubernetes Operations
 
 Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your environment is set up as described in the following requirements:
 
@@ -777,7 +787,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
     ![Kubernetes Network page for management cluster](img/tko-on-vsphere-nsxt/49-mgmt-cluster-9.png)
 
-1. (Optional) Specify identity management with OIDC or LDAP. For the purpose of this document, identity management integration has been disabled.
+1. (Optional) Specify identity management with OIDC or LDAP. For the purpose of this document, identity management integration is deactivated.
 
     If you would like to enable Identity Management, see **Enable and Configure Identity Management During Management Cluster Deployment** section in the Tanzu Kubernetes Grid Integration with Pinniped Deployment Guide.
 

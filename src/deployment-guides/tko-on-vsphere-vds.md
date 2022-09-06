@@ -2,7 +2,17 @@
 
 This document provides step-by-step instructions for installing and configuring Tanzu for Kubernetes Operations on a vSphere environment backed by a Virtual Distributed Switch (VDS). The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](../reference-designs/tko-on-vsphere.md). This document does not provide instructions for deploying the underlying SDDC components.
 
-## Prepare Your Environment for Deploying Tanzu Kubernetes Operations
+## Deploying with VMware Service Installer for Tanzu
+ 
+You can use VMware Service Installer for VMware Tanzu to automate this deployment.
+ 
+VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
+ 
+To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with vSphere Distributed Switch Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/1.3/service-installer/GUID-vSphere%20-%20Backed%20by%20VDS-TKGm-TKOonVsphereVDStkg.html).
+ 
+Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
+
+## Prepare Your Environment for Deploying Tanzu for Kubernetes Operations
 
 Before you start the deployment, ensure that the required resource pools and folders are created.
 Following are sample entries of the resource pools and folders.
@@ -613,11 +623,11 @@ Do the following to deploy the Tanzu Kubernetes Grid management cluster using th
     ![](./img/tko-on-vsphere-vds/image84.png)
 
 1. Optionally, specify **Identity Management with OIDC or LDAPs** - This is not covered in this document and will be documented separately.
-  For the purpose of this document, identity management integration has been **disabled** .
+  For the purpose of this document, identity management integration has been deactivated .
   
     ![](./img/tko-on-vsphere-vds/image35.png)
 
-1. Select the **OS image** that will be used for the management cluster deployment.
+2. Select the **OS image** that will be used for the management cluster deployment.
   **Note**: This list will appear empty if you don’t have a compatible template present in your environment. See the steps provided in [Import Base Image template for TKG Cluster deployment](#import-base-image-template-for-tkg-cluster-deployment).
   
     ![](./img/tko-on-vsphere-vds/image44.png)

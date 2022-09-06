@@ -24,6 +24,7 @@ Before deploying VMware Tanzu Application Platform, ensure that the following pr
 
 Additional details concerning prerequisites may be found in Tanzu Application Platform [documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-prerequisites.html).
 
+*Note:* Use the Kubernetes defaults `serviceDomain` of `cluster.local` in workload clusters where Tanzu Application Platform is deployed.
 
 ## Overview of the Deployment Steps
 
@@ -102,6 +103,14 @@ yq --version
 ```
 
 ### <a id=tap-package-repo> </a>Step 2: Add the Tanzu Application Platform Package Repository
+
+To install kapp-controller on workload clusters that are deployed on vSphere with Tanzu (TKGS) using YAML files and Tanzu Kubernetes Grid API, see [Prepare a Tanzu Kubernetes Cluster Created by Using vSphere with Tanzu to Run Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prep-tkgs-kapp.html).
+<!-- /* cSpell:disable */ -->
+After installing `kapp-controller`, install [carvel-secretgen-controller](https://github.com/vmware-tanzu/carvel-secretgen-controller). Use the following command:
+<!-- /* cSpell:enable */ -->
+```bash
+kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/latest/download/release.yml
+```
 
 Execute following commands to add TAP package.
 
