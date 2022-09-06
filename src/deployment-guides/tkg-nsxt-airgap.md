@@ -319,7 +319,7 @@ The bastion host needs to be deployed with the following hardware configuration:
           wget  https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-fromtar.sh
           ```
 
-      1. Make the gen-publish-images-fromtar.sh script executable.
+      1. Make the `gen-publish-images-fromtar.sh` script executable.
 
           ```bash
           chmod +x gen-publish-images-fromtar.sh
@@ -609,7 +609,7 @@ To deploy NSX ALB controller nodes, follow the steps provided on [ Deploy a Virt
 - VM Name and select the NSX-ALB-VMs folder for controller nodes placement.
 - Select the **NSX-ALB** resource pool as a compute resource.
 - Select the datastore for the controller node deployment.
-- Select the **nsx\_alb\_management\_pg** port group for the management network.
+- Select the **nsx_alb_management_pg** port group for the management network.
 - Customize the configuration by providing management interface IP address, subnet mask, and default gateway. The rest of the fields are optional and should be left blank.
 
 ![Deploy NSX ALB controller VMs from OVF template](img/tkg-airgap-nsxt/deploy-alb01.jpg)
@@ -1605,7 +1605,7 @@ Follow this procedure to deploy Prometheus into a workload cluster.
     |Ingress.tlsCertificate.tls.crt|Null|<p><Full chain cert provided in Input file></p><p></p><p>Note: This is optional.</p>|
     |ingress.tlsCertificate.tls.key|Null|<p><Cert Key provided in Input file</p><p></p><p>Note: This is optional.</p>|
     |ingress.enabled|false|true|
-    |ingress.virtual\_host\_fqdn|prometheus.system.tanzu|prometheus.<your-domain>|
+    |ingress.virtual_host_fqdn|prometheus.system.tanzu|prometheus.<your-domain>|
 
     To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html#config-table).
 
@@ -1639,7 +1639,7 @@ Follow this procedure to deploy Prometheus into a workload cluster.
 
 [Grafana](https://grafana.com/) allows you to query, visualize, alert on, and explore metrics no matter where they are stored. Grafana provides tools to form graphs and visualizations from application data.
 
-**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, `tanzu-system-monitoring`, you need to change the Grafana datasource configuration in the code as follows.
+**Note:** Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, `tanzu-system-monitoring`, you need to change the Grafana data source configuration in the code as follows.
 
 1. Retrieve the version of the available package.
 
@@ -1667,12 +1667,12 @@ Follow this procedure to deploy Prometheus into a workload cluster.
 
 ``|**Key**|**Default Value**|**Modified value**|
 | :- | :- | :- |
-|virtual\_host\_fqdn|grafana.system.tanzu|grafana.<your-domain>|
-|secret.admin\_password|Null|Your password in Base64 encoded format.|``
+|virtual_host_fqdn|grafana.system.tanzu|grafana.<your-domain>|
+|secret.admin_password|Null|Your password in Base64 encoded format.|``
 
-1. (Optional) Modify the Grafana datasource configuration.
+1. (Optional) Modify the Grafana data source configuration.
 
-    Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, tanzu-system-monitoring, you need to change the Grafana datasource configuration in grafana-data-values.yaml.
+    Grafana is configured with Prometheus as a default data source. If you have customized the Prometheus deployment namespace and it is not deployed in the default namespace, tanzu-system-monitoring, you need to change the Grafana data source configuration in grafana-data-values.yaml.
 
     ```yaml
     datasources:
