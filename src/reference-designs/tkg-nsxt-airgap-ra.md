@@ -1,4 +1,4 @@
-﻿# Tanzu Kubernetes Grid on vSphere with NSX-T Networking in Air-gapped Environment Reference Design
+﻿# Tanzu Kubernetes Grid on vSphere with NSX-T Networking in Air-Gapped Environment Reference Design
 
 VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
@@ -29,7 +29,7 @@ The following components are used in the reference architecture:
 
   - [**Multus CNI**](https://github.com/k8snetworkplumbingwg/multus-cni) - Enables attaching multiple network interfaces to pods. Multus CNI is a container network interface (CNI) plugin for Kubernetes that lets you attach multiple network interfaces to a single pod and associate each interface with a different address range.
 
-- **Bastion Host -** Bastion host is the physical/virtual machine where you download the required installation images/binaries (for TKG installation) from the internet. This machine needs to be outside the air-gapped environment. The downloaded items then need to be shipped to the bootstrap machine which is inside the air-gapped environment.
+- **Bastion Host -** Bastion host is the physical/virtual machine where you download the required installation images/binaries (for TKG installation) from the Internet. This machine needs to be outside the air-gapped environment. The downloaded items then need to be shipped to the bootstrap machine which is inside the air-gapped environment.
 
 - **Jumpbox/Bootstrap Machine -** The bootstrap machine is the machine on which you run the Tanzu CLI and other utilities such as [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/), [Kind](https://kind.sigs.k8s.io/), etc. This is where the initial bootstrapping of a management cluster occurs before it is pushed to the platform where it will run. 
 
@@ -47,7 +47,7 @@ In an air-gapped environment, there are a couple of possible solutions for using
 The following table provides the component versions and interoperability matrix supported with the reference design:
 
 |**Software Components**|**Version**|
-| :- | :- |
+| - | - |
 |Tanzu Kubernetes Grid|1.5.4|
 |VMware vSphere ESXi|7.0 U2 and later|
 |VMware vCenter Server|7.0 U2 and later|
