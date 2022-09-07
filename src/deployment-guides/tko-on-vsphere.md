@@ -639,7 +639,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
     ![NSX Advanced Load Balancer settings for management cluster](img/tko-on-vsphere/41-Mgmt-cluster-6.png)
 
-    **Note:** With the above configurations, when Tanzu Kubernetes Grid clusters (shared service/workload) are tagged with label `type: management`, `ako` pod gets deployed on the cluster, and any applications hosted on the cluster that requires the load balancing service is exposed through network `tkg_mgmt_vip_pg` and the virtual service is placed on SE group `tanzu-mgmt-segroup-01`.  
+    **Note:** With the above configurations, when Tanzu Kubernetes Grid clusters (shared service/workload) are tagged with label `type: management`, an `ako` pod gets deployed on the cluster. Applications hosted on the cluster that require the load balancing service are exposed through network `tkg_mgmt_vip_pg` and the virtual service is placed on the SE group `tanzu-mgmt-segroup-01`.  
 
     As defined in the architecture, cluster labels specified here are applied only on the shared service cluster. If no labels are specified in the “Cluster Labels” section, the `ako` pod is deployed on all the clusters without any labeling requirement. This is a deviation from the defined architecture.
                 
@@ -665,7 +665,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 4. (Optional) Specify identity management with OIDC or LDAP. For this deployment, deactivate identity management integration.
 
-    If you would like to enable Identity Management, see **Enable and Configure Identity Management During Management Cluster Deployment** section in the Tanzu Kubernetes Grid Integration with Pinniped Deployment Guide.
+    If you would like to enable Identity Management, see [Enable and Configure Identity Management During Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/1.5/tko-reference-architecture/GUID-deployment-guides-pinniped-with-tkg.html#enable-and-configure-identity-management-during-management-cluster-deployment-0).
 
     ![Identity management for management cluster](img/tko-on-vsphere/45-Mgmt-cluster-10.png)  
 
@@ -719,7 +719,7 @@ When Tanzu Kubernetes Grid management cluster is being deployed, behind the scen
 
 ## <a id="register-tmc"> </a>Register Management Cluster with Tanzu Mission Control
 
- If you want to register your management cluster with Tanzu Mission Control, see [Register Your Management Cluster with Tanzu Mission Control](./tko-saas-services.md/#a-idtmc-a-tanzu-mission-control).
+ If you want to register your management cluster with Tanzu Mission Control, see [Register Your Management Cluster with Tanzu Mission Control](./tko-saas-services.md#a-idtmc-a-tanzu-mission-control).
 
 ## Deploy Tanzu Shared Service Cluster  
 
@@ -868,8 +868,8 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
 
 7. Customize the default node pool for your workload cluster.
 
- * Specify the number of worker nodes to provision.
- * Select the instance type.
+       * Specify the number of worker nodes to provision.
+       * Select the instance type.
 
 1. Click **CREATE CLUSTER** to start provisioning your workload cluster.
 
@@ -897,7 +897,7 @@ A separate SE group (**Service Engine Group 2)** and VIP Network (**TKG Workload
 * Apply the new AKODeploymentConfig:  Label the workload cluster to match the `AKODeploymentConfig.spec.clusterSelector.matchLabels` element in the AKODeploymentConfig file.
   Once the labels are applied on the workload cluster, Tanzu Kubernetes Grid management cluster will deploy AKO pod on the target workload cluster which has the configuration defined in the new AKODeploymentConfig.
 
-The format of the AKODeploymentConfig yaml file is as follows.
+The format of the AKODeploymentConfig YAML file is as follows.
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1063,3 +1063,7 @@ kubectl get pods -A
 ![](img/tko-on-vsphere/86-ako-workload-4.png)
 
 You can now [configure SaaS services](./tko-saas-services.md/#configure-tanzu-saas-components-for-tanzu-for-kubernetes-operations) for the cluster and deploy user managed packages on this cluster.
+
+## <a id=dep-user-mgd-packages></a> Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters
+
+For more information, see [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).
