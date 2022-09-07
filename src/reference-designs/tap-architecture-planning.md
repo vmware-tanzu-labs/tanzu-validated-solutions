@@ -90,6 +90,7 @@ services-toolkit.tanzu.vmware.com
 tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
+sso.apps.tanzu.vmware.com
 ```
 
 To install a Run Cluster, use the following package definition:
@@ -180,6 +181,7 @@ tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
+sso.apps.tanzu.vmware.com
 ```
 
 To install a Iterate Cluster, use the following package definition:
@@ -270,3 +272,6 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
 |TAP-009  |Use an external logging platform.          |  An external logging platform will keep logs for the duration of their retention window and offer superior searching capabilities.  | None
+
+## Deployment Instructions
+For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.2/tap/GUID-multicluster-installing-multicluster.html).
