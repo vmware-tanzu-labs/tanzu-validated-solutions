@@ -4,7 +4,7 @@ VMware Tanzu Kubernetes Grid (TKG) provides a consistent, upstream-compatible, r
 
 An air-gap installation method is used when the Tanzu Kubernetes Grid bootstrapper and cluster nodes components are unable to connect to the Internet to download the installation binaries from the public [VMware Registry](https://projects.registry.vmware.com/) during Tanzu Kubernetes Grid installation or upgrades. 
 
-The scope of this document is limited to providing deployment steps based on the reference design in [Tanzu Kubernetes Grid on vSphere Networking](../reference-designs/vsphere-vds-airgap.md). This document does not provide any deployment procedures for the underlying SDDC components.
+The scope of this document is limited to providing deployment steps based on the reference design in [Tanzu Kubernetes Grid on vSphere Networking](../reference-designs/tkg-vsphere-vds-airgap.md). This document does not provide any deployment procedures for the underlying SDDC components.
 
 ## Supported Component Matrix
 
@@ -52,12 +52,12 @@ Below are the sample entries of the resource pools and folders that need to be c
 |TKG Shared Service Components|TKG-SS|TKG-SS|
 |TKG Workload components|TKG-Workload|TKG-Workload|
 
-### <a id=network-requirements> </a> **Network Requirements**
+### <a id=network-requirements> </a> Network Requirements
 
-Create Port groups on vSphere Distributed Switch for deploying Tanzu Kubernetes Grid components as defined in [Network Requirements](../reference-designs/vsphere-vds-airgap.md) in the reference architecture. 
+Create Port groups on vSphere Distributed Switch for deploying Tanzu Kubernetes Grid components as defined in [Network Requirements](../reference-designs/tkg-vsphere-vds-airgap.md) in the reference architecture. 
 
-### <a id=firewall-requirements> </a> **Firewall Requirements**
-Ensure that the firewall is set up as described in [Firewall Requirements](../reference-designs/vsphere-vds-airgap.md/#a-idfirewall-requirements-a-firewall-requirements). 
+### <a id=firewall-requirements> </a> Firewall Requirements
+Ensure that the firewall is set up as described in [Firewall Requirements](../reference-designs/tkg-vsphere-vds-airgap.md#ra-firewall-requirements).
 
 ### Subnet and CIDR Examples
 For the purpose of this demonstration, this document makes use of the following CIDR for TKO deployment. Please change the values to reflect your environment.
