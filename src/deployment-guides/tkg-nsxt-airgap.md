@@ -67,11 +67,11 @@ The sample entries of the resource pools and folders that need to be created are
 
 ### <a id=network-requirements> </a> Network Requirements
 
-Create logical segments in NSX-T for deploying Tanzu Kubernetes Grid components as per [Network Requirements](../reference-designs/tkg-nsxt-airgap-ra.md/#network-requirements) defined in the reference architecture.
+Create logical segments in NSX-T for deploying Tanzu Kubernetes Grid components as per [Network Requirements](../reference-designs/tkg-nsxt-airgap-ra.md#ra-network-requirements) defined in the reference architecture.
 
 ### <a id=firewall-requirements> </a> Firewall Requirements
 
-Ensure that the firewall is set up as described in [Firewall Requirements](../reference-designs/tkg-nsxt-airgap-ra.md/#a-idfirewall-requirements-a-firewall-requirements). 
+Ensure that the firewall is set up as described in [Firewall Requirements](../reference-designs/tkg-nsxt-airgap-ra.md#ra-firewall-requirements).
 
 ### <a id=subnet-and-cidr-examples> </a> Subnet and CIDR Examples
 

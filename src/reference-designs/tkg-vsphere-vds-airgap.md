@@ -209,7 +209,7 @@ The deployment described in this document makes use of the following CIDR.
 |TKG Workload VIP Network|TKG-WLD-VIP|172.16.18.1/26|N/A|172.16.18.2 - 172.16.18.62|
 
 
-## <a id=firewall-requirements> </a> Firewall Requirements
+## <a id=ra-firewall-requirements> </a> Firewall Requirements
 
 To prepare the firewall, you need to gather the following information:
 

@@ -193,7 +193,7 @@ This topology enables the following benefits:
 
 - Only allow tenants to access their Tanzu Kubernetes Grid workload clusters and restrict access to this cluster from other tenants.
 
-## Network Requirements
+## <a id=ra-network-requirements> </a> Network Requirements
 
 As per the defined architecture, the list of required networks follows:
 
@@ -221,7 +221,7 @@ For the purpose of this demonstration, this document makes use of the following 
 |TKG Workload VIP Network|tkg-workload-vip-ls|172.19.76.1/26|N/A|172.19.76.2 - 172.19.76.62|
 |TKG Workload Network|tkg-workload-ls|172.19.77.1/24|172.19.77.2 - 172.19.77.251|N/A|
 
-## <a id=firewall-requirements> </a> Firewall Requirements
+## <a id=ra-firewall-requirements> </a> Firewall Requirements
 
 To prepare the firewall, you need to gather the following information:
 
