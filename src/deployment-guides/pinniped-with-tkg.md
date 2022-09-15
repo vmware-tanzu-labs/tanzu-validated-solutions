@@ -39,7 +39,7 @@ When you are deploying your management cluster using the installer interface, co
    1. Enable **Enable Identity Management Settings**.
    2. Select the provider as **OIDC** or **LDAPS**.
 
-   ![](img/pinniped-with-tkg/01-pinniped-1.png)
+   ![Enable identity management and specify the provider](img/pinniped-with-tkg/01-pinniped-1.png)
 
 2. If you choose to use **OIDC**, provide details of your OIDC provider account, for example, Okta.
 
@@ -55,7 +55,7 @@ When you are deploying your management cluster using the installer interface, co
 
    - **Groups Claim**: The name of your groups claim. This is used to set a user’s group in the JWT claim. For example, **groups**.
 
-      ![](img/pinniped-with-tkg/01-pinniped-2.png)
+      ![Identity management settings for OIDC](img/pinniped-with-tkg/01-pinniped-2.png)
 
 3. If you choose to use **LDAPS**, provide details of your company’s LDAPS server. All settings except for LDAPS Endpoint are optional.
 
@@ -72,7 +72,7 @@ When you are deploying your management cluster using the installer interface, co
    - **Group Attribute**: The attribute of the group record that holds the user/member information. For example, member.
    - Paste the contents of the LDAPS server CA certificate into the Root CA text box.
 
-      ![](img/pinniped-with-tkg/01-pinniped-3.png)
+      ![Identity management settings for LDAPS](img/pinniped-with-tkg/01-pinniped-3.png)
    
    - (Optional) Verify the LDAP settings.
       - Click **Verify LDAP Configuration**.
@@ -400,9 +400,9 @@ If you configured the management cluster to use OIDC authentication, you must pr
 1. Under Login, update **Login redirect URIs** to include the address of the node in which the pinniped-supervisor is running. 
 1. Add the external IP address of the node at which the pinniped-supervisor service is running, that you noted in the previous procedure.
 
-   **Note**:  You must specify https, not http
+   **Note**:  You must specify https, not http.
 
-   ![](img/pinniped-with-tkg/01-pinniped-4.png)
+   ![Specify callback URI for management cluster to OIDC identity provider](img/pinniped-with-tkg/01-pinniped-4.png)
 
 ## Enable Identity Management on Workload Clusters
 
@@ -599,14 +599,14 @@ This procedure allows you to test the login step of the authentication process i
 
    **LDAPS**:
 
-   ![](img/pinniped-with-tkg/01-pinniped-5.png)
+   ![LDAPS login page](img/pinniped-with-tkg/01-pinniped-5.png)
 
    **OIDC**:
 
-   ![](img/pinniped-with-tkg/01-pinniped-6.png)
+   ![OIDC provider login page](img/pinniped-with-tkg/01-pinniped-6.png)
 
    Enter the credentials of a user account that exists in your OIDC or LDAP server. After a successful login, the browser should display the following. 
-   ![](img/pinniped-with-tkg/01-pinniped-7.png)
+   ![Login confirmation message](img/pinniped-with-tkg/01-pinniped-7.png)
 
 3. Go back to the terminal in which you run tanzu and kubectl commands:
    - If you already configured a role binding on the cluster for the authenticated user, the output of `kubectl get pods -A` appears, displaying the pod information.
@@ -742,11 +742,11 @@ For clusters based on TKr v1.22.5 (default for Tanzu Kubernetes Grid v1.5) or la
 
 5. Copy the link and paste it into a browser on your local machine and log in to your identity provider. 
 
-   ![](img/pinniped-with-tkg/01-pinniped-8.png)
+   ![LDAPS login page](img/pinniped-with-tkg/01-pinniped-8.png)
 
 6. A page appears prompting you to paste an authorization code into the CLI to finish you login:
 
-   ![](img/pinniped-with-tkg/01-pinniped-9.png)
+   ![Authorization code prompt](img/pinniped-with-tkg/01-pinniped-9.png)
 
 7. Copy the authorization code and paste it into the CLI, after the Optionally, paste your authorization code: prompt.
 

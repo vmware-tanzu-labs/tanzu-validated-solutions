@@ -134,7 +134,7 @@ The bastion host needs to be deployed with the following hardware configuration:
 
    The `yumdownloader` command downloads the following binaries.
 
-   ![docker installation binaries.](img/tkg-airgap-nsxt/docker-installation-binaries.jpg)
+   ![Docker installation binaries](img/tkg-airgap-nsxt/docker-installation-binaries.jpg)
 
 2. Download Harbor installation binaries from the [Harbor release page on GitHub](https://github.com/goharbor/harbor/releases/tag/v2.3.3).
 
@@ -195,7 +195,7 @@ The bastion host needs to be deployed with the following hardware configuration:
 
     After installing the Tanzu CLI plugins, run the `tanzu plugin list` command to check the plugins version and installation status.
 
-    ![Tanzu plugin list.](img/tkg-airgap-nsxt/tanzu-plugins-version.jpg)
+    ![Tanzu plugin list](img/tkg-airgap-nsxt/tanzu-plugins-version.jpg)
 
     Validate the BOM files by listing the contents of the folder **.config/tanzu/tkg/bom/**
 
@@ -533,7 +533,7 @@ The following procedure provides steps to configure bootstrap virtual machines b
 
     Wait for the installation process to finish.
 
-    ![The Docker installation progress](img/tkg-airgap-nsxt/docker-installation.jpg)
+    ![Docker installation progress](img/tkg-airgap-nsxt/docker-installation.jpg)
 
     Start the Docker service and set the service to run at boot time.
 
@@ -840,11 +840,11 @@ After the VIP networks are configured, set the default routes for all VIP or dat
 
 1. Navigate to the **Routing** page and click **Create**. 
 1. Add default routes for the VIP networks.
-![](img/tkg-airgap-nsxt/deploy-alb30.jpg)
+![Default routes for the VIP networks](img/tkg-airgap-nsxt/deploy-alb30.jpg)
 
     A total of 3 default gateways are configured.
 
-    ![Configure routes in network configuration](img/tkg-airgap-nsxt/deploy-alb31.jpg)
+    ![Default gateways in network configuration](img/tkg-airgap-nsxt/deploy-alb31.jpg)
 
 ### Create IPAM and DNS Profiles
 
@@ -1330,7 +1330,7 @@ Use the following command to list all AKODeploymentConfig created under the mana
 kubectl get akodeploymentconfig
 ```
 
-![ADC List](img/tkg-airgap-nsxt/tkg-adc.jpg)
+![List AKODeploymentConfig created under management cluster](img/tkg-airgap-nsxt/tkg-adc.jpg)
 
 Now that you have successfully created the AKO deployment config, you need to apply the cluster labels defined in the AKODeploymentConfig to any of the Tanzu Kubernetes Grid workload clusters. Once the labels are applied, AKO operator running in the Tanzu Kubernetes Grid management cluster will deploy AKO pod on the target workload cluster.
 
@@ -1381,7 +1381,7 @@ Also, ensure that the `tanzu-standard` repository is configured on the cluster w
 
 You can run the command `tanzu package repository list -n tanzu-package-repo-global` to verify this. Also, ensure that the repository status is `Reconcile succeeded`.
 
-![Verify that `tanzu-standard` repository is configured on the cluster](img/tkg-airgap-nsxt/package-repository-list.jpg)
+![Verify that tanzu-standard repository is configured on the cluster](img/tkg-airgap-nsxt/package-repository-list.jpg)
 
 ### Install cert-manager
 
@@ -1715,7 +1715,7 @@ The current release of Fluent Bit allows you to gather logs from management clus
 
 The example shown in this document uses HTTP endpoint ([vRealize Log Insight Cloud](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html)) for forwarding logs from Tanzu Kubernetes clusters.
 
-1. Retrieve the version of the available package
+1. Retrieve the version of the available package.
 
     ```bash
     tanzu package available list fluent-bit.tanzu.vmware.com -A

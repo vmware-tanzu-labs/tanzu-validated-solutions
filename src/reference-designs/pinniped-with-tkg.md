@@ -22,7 +22,7 @@ The authentication flow between the management and workload clusters includes th
 
 In the following image, the blue arrows represent the authentication flow between the workload cluster, the management cluster, and the external IdP. The green arrows represent Tanzu CLI and kubectl traffic between the workload cluster, the management cluster, and the external IdP.
 
-![](img/pinniped-with-tkg/1-pinniped-1.png)
+![Authentication flow and Tanzu CLI and kubectl traffic between the workload cluster, the management cluster, and the external IdP](img/pinniped-with-tkg/1-pinniped-1.png)
 
 We recommend the following best practices for managing identities in Tanzu Kubernetes Grid provisioned clusters:
 

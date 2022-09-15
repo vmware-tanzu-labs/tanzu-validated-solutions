@@ -40,7 +40,7 @@ Additional component for monitoring, backup, and log management can also be inst
 In this topology, each edge site has a full-stack infrastructure management plane which includes vCenter, NSX Advanced Load Balancer Controllers and Tanzu Kubernetes Grid management cluster. Each edge site is considered as a separate data center and can operate independently.
 Tanzu Mission Control is used for fleet management, allowing an easy way to create, manage and lifecycle Tanzu Kubernetes Grid workload clusters at the edge.
 
-![data center Fleet Topology](./img/tkg-edge/tkg-edge-dc-fleet.drawio.png)
+![Data center Fleet Topology](./img/tkg-edge/tkg-edge-dc-fleet.drawio.png)
 
 #### Key Features
 

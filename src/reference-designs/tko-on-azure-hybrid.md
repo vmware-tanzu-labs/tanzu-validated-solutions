@@ -15,7 +15,7 @@ The solution areas for a hybrid-cloud-accessible TKGm solution can be summarized
 
 Further, though TKO components are assumed to be in the cloud environment, the solution allows for hybrid placement and each location can reach the other.
 
-![Overview Hybrid Cloud TKGm Architecture](img/tko-on-azure-hybrid/tkgm-azure-hybrid.png)
+![Overview Hybrid Cloud TKG Architecture](img/tko-on-azure-hybrid/tkgm-azure-hybrid.png)
 
 ## Network & WAN Architecture
 

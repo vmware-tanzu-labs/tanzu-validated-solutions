@@ -119,7 +119,7 @@ Do the following to deploy NSX Advanced Load Balancer controller node:
 
    The following example shows the final configuration of the NSX Advanced Load Balancer controller node.
 
-   ![Completed configuration of the NSX Advanced Load Balancer Controller node](img/tko-on-vsphere-with-tanzu/TKO-VWT01.png)
+   ![Completed configuration of the NSX Advanced Load Balancer controller node](img/tko-on-vsphere-with-tanzu/TKO-VWT01.png)
 
  For more information, see the product documentation [Deploy the Controller](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F.html).
 
