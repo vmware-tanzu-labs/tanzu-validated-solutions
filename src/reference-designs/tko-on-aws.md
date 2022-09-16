@@ -18,7 +18,7 @@ The following network diagram shows the network layout used with this reference 
 1. One private subnet for each AWS availability zone (AZ). These subnets are not automatically allocated a public IP address. The default gateway is a NAT gateway.
 1. One public subnet for each AWS availability zone (AZ). These subnets are automatically allocated a public IP address. The default gateway is an Internet gateway if subnet is connected to the Internet. A public subnet is optional if you do not need Internet ingress or egress.  
 
-![TKGm AWS network overview diagram](./img/tko-on-aws/tkg-aws-network-overview.png)
+![TKG AWS network overview diagram](./img/tko-on-aws/tkg-aws-network-overview.png)
 
 ### Network Recommendations
 
@@ -58,7 +58,7 @@ Based on your application needs and desired outcomes, you can organize your work
 
 Most use cases require only a single VPC spread across multiple AZs as shown in the reference diagram. If more separation is needed within one VPC, more subnets can be used to provide better IP based visibility to corporate firewalls.
 
-![TKGm on AWS with Single VPC and Multiple Availability Zones diagram](./img/tko-on-aws/tkg-aws-single-vpc-multi-az.jpg)
+![TKG on AWS with Single VPC and Multiple Availability Zones diagram](./img/tko-on-aws/tkg-aws-single-vpc-multi-az.jpg)
 
 
 ### Multiple VPC with Multiple Availability Zones
@@ -67,11 +67,11 @@ For more separation of application workloads on AWS, you can deploy separate Kub
 
 The following diagram shows an example architecture with multiple VPCs. The control plane load balancers in the example architecture are configured as internal load balancers.
 
-![TKGm on AWS with Multiple VPCs and Multiple Availability Zones diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az.jpg)
+![TKG on AWS with Multiple VPCs and Multiple Availability Zones diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az.jpg)
 
 Another variant of multiple VPC and multiple AZ design is to have one VPC for the control plane and another for just workload clusters. The following diagram shows such a design.
 
-![TKGm on AWS with Segregated VPCs for control plane and workloads diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az-separated-control-plane-and-workloads.jpg)
+![TKG on AWS with Segregated VPCs for control plane and workloads diagram](./img/tko-on-aws/tkg-aws-multi-vpc-multi-az-separated-control-plane-and-workloads.jpg)
 
 
 ## Availability
@@ -138,7 +138,7 @@ For workload clusters, the Tanzu Kubernetes Grid [Contour ingress controller pac
 
 If you have deployed with both public and private subnets, by default you will get an Internet-facing load balancer. If you want a private load balancer, you can specifically request one by setting `service.beta.kubernetes.io/aws-load-balancer-internal: "true"` in the annotations of the service. This setting also applies to the Contour ingress and controls whether Contour is internal-facing or external-facing.  
 
-![TKGm on AWS ingress with Contour diagram](./img/tko-on-aws/tkg-aws-ingress-contour.jpg)
+![TKG on AWS ingress with Contour diagram](./img/tko-on-aws/tkg-aws-ingress-contour.jpg)
 
 In Tanzu Kubernetes Grid, you can optionally deploy the [external-dns package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-external-dns.html), which automates the updates to DNS records in AWS (Route53) associated with ingress resources or LoadBalancer services. This can automate away toil associated with DNS record management for externally exposed services.
 

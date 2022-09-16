@@ -114,13 +114,13 @@ New-AzResourceGroupDeployment -ResourceGroupName <Resource Group Name> -Template
 If you prefer to use the Azure Portal, do the following to process an ARM template directly on the Azure Portal.
 
 1. Search and click **Deploy a Custom Template > Build your own template in the editor**.
-    ![Custom Deployment](img/tko-on-azure/CustomDeployment.png)
+    ![Custom Deployment of ARM template](img/tko-on-azure/CustomDeployment.png)
 
 1. Click **Load file** to upload the ARM template, `azuredeploy.json`.
-    ![Load File](img/tko-on-azure/LoadFile.png)
+    ![Load file to upload ARM template](img/tko-on-azure/LoadFile.png)
 
 1. Fill in the parameter values so that the values are specific to your deployment.
-    ![Provide Parameter Values](img/tko-on-azure/Parameters.png)
+    ![Provide parameter values for custom deployment](img/tko-on-azure/Parameters.png)
 
 ### Azure Service Principal/Application Registration Creation
 The Tanzu CLI requires access to an Azure Service Principal (SP) or Application Registration to programmatically configure the Tanzu cluster’s infrastructure during deployment and during auto-scale events.

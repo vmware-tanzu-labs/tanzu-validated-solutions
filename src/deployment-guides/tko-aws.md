@@ -342,16 +342,16 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 
 3. Click **Deploy** on the **Amazon EC2** tile to start the management cluster setup on Amazon EC2.
 
-	![Amazon EC2 select](./img/tko-aws/aws-ui-1.png)
+	![Start deployment on Amazon EC2](./img/tko-aws/aws-ui-1.png)
 
 4. For **IaaS Provider** settings, enter your **AWS Access Key ID**, **Secret Access Key**, **Session Token**, and **Region**, then click **Connect** followed by **Next**.
 	Select the region you selected in [Set up AWS infrastructure](#aws-infra).
 
-	![aws credential](./img/tko-aws/aws-ui-2.png)
+	![AWS credentials](./img/tko-aws/aws-ui-2.png)
 
 5. For **VPC for AWS** settings, select the VPC ID you created in [Set up AWS infrastructure](#aws-infra), select the check box next to **This is not internet facing vpc** and click **Next**.
 
-	![aws vpc](./img/tko-aws/select-existing-vpc.png)
+	![AWS VPC settings](./img/tko-aws/select-existing-vpc.png)
 
 6. For **Management Cluster Settings**, select **Production** and the
    instance type for the control plane nodes.
@@ -369,19 +369,19 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 	- **VPC Public and Private Subnets**: Select the existing subnets on the VPC for each AZ.
 	- **Worker Node Instance Type**: Select the configuration for the worker node VMs.
 
-	![management cluster spec](./img/tko-aws/aws-ui-4.png)
+	![management cluster specifications](./img/tko-aws/aws-ui-4.png)
 
 8. For **Kubernetes Network**, enter the Network CNI settings and click **Next**.
 
 	Optionally, if you already have a proxy server set up and want to send outgoing HTTP(S) traffic from the management cluster to a proxy, toggle **Enable Proxy Settings**. For more information on how to configure proxy settings, see [Configure the Kubernetes Network and Proxies](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-deploy-ui.html#configure-the-kubernetes-network-and-proxies-15).
 
-	![management cluster spec](./img/tko-aws/aws-ui-5.png)
+	![CNI settings for Kubernetes cluster](./img/tko-aws/aws-ui-5.png)
 
 9. For **Identity Management**, toggle **Enable Identity Management Settings** to configure your IDP and click **Next**.
 
 	For more information about configuring the identity management settings, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html).
 
-	![identity management](./img/tko-aws/aws-ui-6.png)
+	![identity management settings](./img/tko-aws/aws-ui-6.png)
 
 10. For **OS Image**, use the drop-down menu to select the OS and Kubernetes version image template to use for deploying Tanzu Kubernetes Grid VM. Select Ubuntu OS image (amd64) and click **Next**.
 
@@ -394,12 +394,12 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 12. For **CEIP Agreement**, select the check box to opt in to the VMware Customer Experience Improvement Program (CEIP), and click **Next**.
 
 	A summary of the configuration displays.
-	![tmc register](./img/tko-aws/review.png)
+	![CEIP agreement opt-in](./img/tko-aws/review.png)
 
 13. Review the summary of the configuration.
 14. Click **Deploy Management Cluster** to complete the installation.
 
-	![complete](./img/tko-aws/aws-ui-7.png)
+	![Complete management cluster deployment](./img/tko-aws/aws-ui-7.png)
 
 ### <a id=config-cli> </a>Deploy Management Clusters from a Configuration File
 

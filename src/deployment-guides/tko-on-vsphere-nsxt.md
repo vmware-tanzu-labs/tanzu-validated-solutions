@@ -229,7 +229,7 @@ The following procedure provides required details to create one such network whi
 
    1. Review the provided information and click **Apply** to close the Set DHCP Config dialog box.
 
-      ![Apply DHCP config](img/tko-on-vsphere-nsxt/10-segments-3.png)
+      ![Apply DHCP configuration](img/tko-on-vsphere-nsxt/10-segments-3.png)
 
    1. Click **Save** to create the logical segment.
 
@@ -772,7 +772,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
     ![metadata page for management cluster](img/tko-on-vsphere-nsxt/47-mgmt-cluster-7.png)
 
 1. On the Resources section, specify the resources to be consumed by the Tanzu Kubernetes Grid management cluster and click **Next**.  
-    ![resources page for management cluster](img/tko-on-vsphere-nsxt/48-mgmt-cluster-8.png)
+    ![Resources page for management cluster](img/tko-on-vsphere-nsxt/48-mgmt-cluster-8.png)
 
 1. On the Kubernetes Network section, select the Tanzu Kubernetes Grid management network (`tkg_mgmt_pg`) where the control plane and worker nodes will be placed during management cluster deployment. Ensure that the network has DHCP service enabled. Optionally, change the pod and service CIDR.
 
@@ -830,11 +830,11 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
     `tanzu management-cluster get`
 
-    ![management cluster status CLI output](img/tko-on-vsphere-nsxt/56-mgmt-cluster-16.png)
+    ![Management cluster status CLI output](img/tko-on-vsphere-nsxt/56-mgmt-cluster-16.png)
 
    Use `kubectl` to get the status of the Tanzu Kubernetes Grid management cluster nodes.
 
-    ![management cluster nodes status CLI output](img/tko-on-vsphere-nsxt/57-mgmt-cluster-17.png)
+    ![Management cluster nodes status CLI output](img/tko-on-vsphere-nsxt/57-mgmt-cluster-17.png)
 
 The Tanzu Kubernetes Grid management cluster is successfully deployed and now you can proceed with registering it with Tanzu Mission Control and creating shared services and workload clusters.
 
@@ -897,7 +897,7 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 
 1. Once the cluster is created, you can check the status from Tanzu Mission Control.
 
-    ![cluster status after provisioning](img/tko-on-vsphere-nsxt/69-ss-8.png)
+    ![Cluster status after provisioning](img/tko-on-vsphere-nsxt/69-ss-8.png)
 
 	Cluster creation roughly takes 15-20 minutes to complete. After the cluster deployment completes, ensure that agent and extensions health shows green.
 
@@ -957,11 +957,11 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
 
 1. Select the provisioner for creating the workload cluster. Provisioner reflects the vSphere namespaces that you have created and that are associated with the management cluster.
 
-    ![select provisioner to create workload cluster](img/tko-on-vsphere-nsxt/71-workload-0.png)
+    ![Select provisioner to create workload cluster](img/tko-on-vsphere-nsxt/71-workload-0.png)
 
 1. Enter a name for the cluster and select the cluster group  to which you want to attach your cluster. Cluster names must be unique within an organization. For cluster groups, you can optionally enter a description and apply labels.
 
-    ![enter cluster name and select cluster group for workload cluster](img/tko-on-vsphere-nsxt/71-workload-1.png)
+    ![Enter cluster name and select cluster group for workload cluster](img/tko-on-vsphere-nsxt/71-workload-1.png)
 
 1. On the Configure page, specify the following items:
 
@@ -979,7 +979,7 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
 
 1. Select the high availability mode for the control plane nodes of the workload cluster. For a production deployment, it is recommended to deploy a highly available workload cluster.
 
-    ![select between single node or HA mode for workload cluster](img/tko-on-vsphere-nsxt/74-workload-4.png)
+    ![Select between single node or HA mode for workload cluster](img/tko-on-vsphere-nsxt/74-workload-4.png)
 
 1. (Optional) Customize the default node pool for your workload cluster.
 
@@ -992,12 +992,12 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
     ![Start cluster provisioning](img/tko-on-vsphere-nsxt/75-workload-5.png)
 
 1. You can monitor the workload cluster creation from the Tanzu Mission Control console.
-    ![cluster creation status](img/tko-on-vsphere-nsxt/75-workload-6.png)
+    ![Cluster creation status](img/tko-on-vsphere-nsxt/75-workload-6.png)
 
  Cluster creation roughly takes 15-20 minutes to complete.
 1. After the cluster deployment completes, ensure that agent and extensions health shows green.
 
-    ![agent and extensions health status](img/tko-on-vsphere-nsxt/76-workload-6.png)
+    ![Agent and extensions health status](img/tko-on-vsphere-nsxt/76-workload-6.png)
 
 #### <a id="workloadako"> </a> Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster
 
@@ -1130,7 +1130,7 @@ kubectl get akodeploymentconfig
 ```
 <!-- /* cSpell:enable */ -->
 
-![](img/tko-on-vsphere-nsxt/77-workload-ako-1.png)
+![List of all AKODeploymentConfig created under management cluster](img/tko-on-vsphere-nsxt/77-workload-ako-1.png)
 
 Now that you have successfully created the AKO deployment config, you need to apply the cluster labels defined in the AKODeploymentConfig to any of the Tanzu Kubernetes Grid workload clusters. Once the labels are applied, Tanzu Kubernetes Grid management cluster will deploy AKO pod on the target workload cluster.
 
@@ -1140,7 +1140,7 @@ kubectl label cluster <Cluster_Name> <label>
 ```
 <!-- /* cSpell:enable */ -->
 
-![](img/tko-on-vsphere-nsxt/78-workload-ako-2.png)
+![Apply cluster labels defined in AKODeploymentConfig to TKG workload clusters](img/tko-on-vsphere-nsxt/78-workload-ako-2.png)
 
 #### Connect to Tanzu Kubernetes Grid Workload Cluster and Validate the Deployment
 
@@ -1148,7 +1148,7 @@ kubectl label cluster <Cluster_Name> <label>
 
    `tanzu cluster kubeconfig get <cluster-name> --admin`
 
-    ![](img/tko-on-vsphere-nsxt/79-workload-ako-3.png)
+    ![Admin context of TKG workload cluster](img/tko-on-vsphere-nsxt/79-workload-ako-3.png)
 
 1. Connect to the Tanzu Kubernetes Grid workload cluster using the `kubectl` command and run the following commands to check the status of AKO and other components.
 
@@ -1158,7 +1158,7 @@ kubectl label cluster <Cluster_Name> <label>
 
    - Lists all pods and its status: `kubectl get pods -A`  
 
-    ![](img/tko-on-vsphere-nsxt/80-workload-ako-4.png)
+    ![Status of AKO and other components](img/tko-on-vsphere-nsxt/80-workload-ako-4.png)
 
 You can see that the workload cluster is successfully deployed and AKO pod is deployed on the cluster. You can now configure SaaS services for the cluster and deploy user managed packages on this cluster.
 

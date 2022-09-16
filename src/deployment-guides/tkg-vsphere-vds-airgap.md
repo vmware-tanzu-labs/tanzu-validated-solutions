@@ -1397,7 +1397,7 @@ The first package that you should install on your cluster is the [**cert-manager
     tanzu package available list cert-manager.tanzu.vmware.com -n tanzu-package-repo-global
     ```
 
-    ![list fo the cert manager versions](img/tkg-airgap-vsphere-deploy/cert-manager-list.jpg)
+    ![list of the cert manager versions](img/tkg-airgap-vsphere-deploy/cert-manager-list.jpg)
 
 2. Install the `cert-manager` package.
 

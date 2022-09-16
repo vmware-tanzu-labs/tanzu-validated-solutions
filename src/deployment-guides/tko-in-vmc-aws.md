@@ -133,22 +133,22 @@ After the controller VM is deployed and powered on, connect to the URL for the n
 
 1. Create the administrator account by setting the password and optional email address.
 
-    ![Configure admin window](img/tko-in-vmc-aws/deploy-tko-vmc-01.jpg)
+    ![Configure admin account for NSX ALB](img/tko-in-vmc-aws/deploy-tko-vmc-01.jpg)
 
 2. Configure System Settings by specifying the backup passphrase and DNS information.
 
-    ![Configure System settings](img/tko-in-vmc-aws/deploy-tko-vmc-02.jpg)
+    ![Configure System settings for NSX ALB](img/tko-in-vmc-aws/deploy-tko-vmc-02.jpg)
 
 3. (Optional) Configure **Email/SMTP**
 
-    ![Configure Email/SMTP](img/tko-in-vmc-aws/deploy-tko-vmc-03.jpg)
+    ![Configure Email/SMTP for NSX ALB](img/tko-in-vmc-aws/deploy-tko-vmc-03.jpg)
 
 4. Configure **Multi-Tenant** settings as follows:
 
       - **IP Route Domain:** Per tenant IP route domain.
       - **Service Engine Context:** Tenant context, (not shared across tenants).
 
-    ![Multi-Tenant settings](img/tko-in-vmc-aws/deploy-tko-vmc-04.jpg)
+    ![Multi-Tenant settings for NSX ALB](img/tko-in-vmc-aws/deploy-tko-vmc-04.jpg)
 
 5. Click **Save** to complete the post-deployment configuration wizard.
 
