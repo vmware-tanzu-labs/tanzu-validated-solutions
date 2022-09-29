@@ -266,6 +266,7 @@ NSX Advanced Load Balancer may be deployed in multiple environments for the same
 **Service Engine Group 2**: Service engines part of this service engine group hosts virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid workload clusters mapped to this SE group.  
 
 **Note**:
+
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
@@ -332,6 +333,7 @@ The following components are created in NSX Advanced Load Balancer.
 #### Configure Tanzu Kubernetes Grid Networks in NSX Advanced Load Balancer
 
 As part of the cloud creation in NSX Advanced Load Balancer, only management network has been configured in NSX Advanced Load Balancer. Complete the following procedure to configure these networks:
+
   * TKG Management Network
   * TKG Workload Network
   * TKG Cluster VIP/Data Network
@@ -348,9 +350,9 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
     **Note:** Not all networks are auto-discovered. For those networks, manually add the subnet.
 
     <!-- /* cSpell:disable */ -->
-    |     |     |     |     |
-    | --- | --- | --- | --- |
+    
     | Network Name | DHCP | Subnet | Static IP Pool |
+    | --- | --- | --- | --- |
     | tkg_mgmt_pg | Yes | 172.16.40.0/24 | NA  |
     | tkg_workload_pg | Yes | 172.16.60.0/24 | NA  |
     | tkg_cluster_vip_pg | No  | 172.16.80.0/24 | 172.16.80.100 - 172.16.80.200 |
@@ -365,22 +367,6 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 	After the networks are configured, the configuration must look like the following image.
     ![Network list after configuration](img/tko-on-vsphere/32.ALB-Networks-3.png)
 
-3. After the networks are configured, set the default routes for all VIP/data networks.
-  1. Click **Routing** > **Create** and add default routes for following networks.  
-  2. Change the gateway for VIP networks as per your network configurations.
-
-    <!-- /* cSpell:disable */ -->
-    | Network Name | Gateway Subnet | Next Hop |
-    | --- | --- | --- |
-    | tkg_cluster_vip_pg | 0.0.0.0/0 | 172.16.80.1 |
-    | tkg_mgmt_vip_pg | 0.0.0.0/0 | 172.16.50.1 |
-    | tkg_workload_vip_pg | 0.0.0.0/0 | 172.16.70.1 |
-
-		<!-- /* cSpell:enable */ -->
-
-    ![Routes in network configuration](img/tko-on-vsphere/33.ALB-Networks-4.png)  
-
-
 #### Create IPAM and DNS Profile in NSX Advanced Load Balancer and attach it to Cloud
 
 At this point, all the required networks related to Tanzu functionality are configured in NSX Advanced Load Balancer, except for Tanzu Kubernetes Grid management and workload network which uses DHCP. NSX Advanced Load Balancer provides IPAM service for Tanzu Kubernetes Grid cluster VIP network, management VIP network, and workload VIP network.  
@@ -390,6 +376,7 @@ Complete the following steps to create an IPAM profile and attach it to the vCen
 1. Log in to NSX Advanced Load Balancer and go to **Templates** > **IPAM/DNS Profiles** > **Create** > **IPAM Profile**, and provide the following details, and click **Save**.  
 
     <!-- /* cSpell:disable */ -->
+    
     | Parameter | Value |
     | --- | --- |
     | Name | tanzu-vcenter-ipam-01 |
