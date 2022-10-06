@@ -408,8 +408,8 @@ The following components are created in NSX Advanced Load Balancer.
 | Object | Sample Name |
 | --- | --- |
 | NSX Cloud | tanzu-nsx |
-| Service Engine Group 1 | tanzu-mgmt-seg |
-| Service Engine Group 2 | tanzu-wld-seg |
+| Service Engine Group 1 | tkg-mgmt-seg |
+| Service Engine Group 2 | tkg-wld-seg |
 
 <!-- /* cSpell:enable */ -->
 
@@ -504,7 +504,7 @@ To configure IP Pools for the networks, follow the procedure provided below:
    |**Network Name**|**DHCP** |**Subnet**|**Static IP Pool**|
    | --- | --- | --- | --- |
    |alb-mgmt-ls|No|172.19.71.0/24|172.19.71.6 - 172.19.71.30|
-   |tkg-cluster-vip-ls|No|172.19.75.0/26|172.19.75.2 - 172.19.75.60|
+   |tkg-cluster-vip|No|172.19.75.0/26|172.19.75.2 - 172.19.75.60|
 
    The following snippet shows configuring one of the networks. For example: `alb-mgmt-ls`
 
