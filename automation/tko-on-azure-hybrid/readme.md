@@ -2,6 +2,10 @@
 
 Based on the Reference Architecture, [TKO on Azure Hybrid-Cloud](../../src/reference-designs/tko-on-azure-hybrid.md)
 
+## !!! UPDATES [08/19/2022]
+
+The new home of this automation code is with [VMware's Service Installer (SIVT)](https://github.com/vmware-tanzu/service-installer-for-vmware-tanzu/tree/main/azure)
+
 ## !!! UPDATES [03/11/2022]
 
 Without refactoring this guide, let the following playbook inform this deployment kit's usage (**validation testing**):
