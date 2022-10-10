@@ -276,6 +276,7 @@ For information about mapping a specific service engine group to Tanzu Kubernete
 The following components are created in NSX Advanced Load Balancer.
 
 <!-- /* cSpell:disable */ -->
+
 | Object | Sample Name |
 | --- | --- |
 | vCenter Cloud | tanzu-vcenter01 |
