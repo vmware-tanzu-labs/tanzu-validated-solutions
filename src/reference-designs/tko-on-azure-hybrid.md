@@ -80,7 +80,7 @@ It is recommended that all such _cloud service_ resources are provided via Priva
 
 ### Tanzu Kubernetes Grid
 
-The hybrid-cloud TKGm solution depicted in this reference architecture depends upon v1.4. This version provides a cluster configuration flag of _AZURE_ENABLE_PRIVATE_CLUSTER_ which assigns a private IP address from the associated subnet to the ingress Azure Load Balancer. In addition, TKG will deploy proxy configuration details to other members of the solution given the following configuration directives:
+The hybrid-cloud Tanzu Kubernetes Grid solution depicted in this reference architecture depends upon v1.4 or later. This version provides a cluster configuration flag of _AZURE_ENABLE_PRIVATE_CLUSTER_ that assigns a private IP address from the associated subnet to the ingress Azure Load Balancer. In addition, Tanzu Kubernetes Grid deploys proxy configuration details to other members of the solution given the following configuration directives:
 
 <!-- /* cSpell:disable */ -->
 ```bash
