@@ -505,7 +505,6 @@ Run the following command to create a basic workload cluster:
 
 <!-- /* cSpell:disable */ -->
 ```bash
-
 tanzu cluster create <cluster_name> --plan=prod
 ```
 <!-- /* cSpell:enable */ -->
