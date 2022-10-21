@@ -284,9 +284,10 @@ NSX ALB may be deployed in multiple environments for the same system. Each envir
 * Virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid management cluster and workload.
 * Virtual services that load balances control plane nodes of all TKG Kubernetes clusters.
 
-**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid workload clusters mapped to this SE group.  
+**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes and virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
 
 **Note**:
+
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
@@ -296,7 +297,8 @@ For information about mapping a specific service engine group to Tanzu Kubernete
 The following components are created in NSX ALB.
 
 <!-- /* cSpell:disable */ -->
-| Object | Sample Name |
+
+| **Object** | **Sample Name** |
 | --- | --- |
 | vCenter Cloud | tanzu-vcenter01 |
 | Service Engine Group 1 | tanzu-mgmt-segroup-01 |
@@ -779,7 +781,7 @@ Another difference between the shared services cluster and workload clusters is
 
 After the management cluster is registered with Tanzu Mission Control, the deployment of the Tanzu Kubernetes clusters can be done in just a few clicks. The procedure for creating Tanzu Kubernetes clusters is as follows.
 
-1. Navigate to the Clusters tab and click **Create Cluster**.
+### <a id="sharedako"> </a> Configure AKODeploymentConfig (ADC) for Shared Services Cluster
 
 1. Under the Create cluster page, select the management cluster which you registered in the previous step and click **Continue to create cluster**.
 
