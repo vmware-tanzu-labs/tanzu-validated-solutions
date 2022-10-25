@@ -270,3 +270,46 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
 |TAP-009  |Use an external logging platform.          |  An external logging platform will keep logs for the duration of their retention window and offer superior searching capabilities.  | None
+
+## Authentication and Authorization
+### Authentication
+There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity management into Tanzu Application Platform.
+
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-login.html).
+
+| Decision ID   | Design Decision   | Justification | Implication
+|---            |---                |---            |---
+|TAP-010 |Install Pinniped Supervisor into View Cluster. | View Cluster is the place to host all common components of Tanzu Application Platform. | None
+### Authorization 
+
+Tanzu Application Platform supports RBAC (role-based access control) authorization. It provide six default roles to set up permissions for users and service accounts within a namespace on a cluster that runs one of the Tanzu Application Platform profiles. Following are the default roles.
+
+Four roles are for users:
+
+ * app-editor
+ * app-viewertekton
+ * app-operator
+ * service-operator
+
+Two roles are for service accounts associated with the Tanzu Supply Chain:
+
+* workload
+* deliverable
+
+Refer [Tanzu Application Platform authorization ](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
+## CI/CD Pipelines
+Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. Refer [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-tekton-tekton-about.html) for more information.
+
+## Application Workloads
+Tanzu Application Platform allows users to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, etc.
+
+When using the Out of the Box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are:
+
+| Workload Type   | Description  | Indicators
+|---            |---                |---
+web | Scalable Web Applications | - Scales based on request load <br> - Automatically exposed by means of HTTP Ingress <br> - Does not perform background work <br> - Works with Service Bindings <br> - Stateless
+server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or LoadBalancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+worker | Background Applications | - Does not provide network services <br> - Not exposed externally as a network service <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+
+## Deployment Instructions
+For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-multicluster-installing-multicluster.html).
