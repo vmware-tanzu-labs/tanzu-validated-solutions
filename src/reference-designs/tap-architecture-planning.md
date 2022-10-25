@@ -295,14 +295,14 @@ To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https:/
 Tanzu Application Platform supports RBAC (role-based access control) authorization. It provide six default roles to set up permissions for users and service accounts within a namespace on a cluster that runs one of the Tanzu Application Platform profiles. Following are the default roles.
  
 Four roles are for users:
- * app-editor
- * app-viewertekton
- * app-operator
- * service-operator
+ * `app-editor`
+ * `app-viewertekton`
+ * `app-operator`
+ * `service-operator`
 
 Two roles are for service accounts associated with the Tanzu Supply Chain:
-* workload
-* deliverable
+* `workload`
+* `deliverable`
 
 Refer [Tanzu Application Platform authorization ](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
 ## CI/CD Pipelines
