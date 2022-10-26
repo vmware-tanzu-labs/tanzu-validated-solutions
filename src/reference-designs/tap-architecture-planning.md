@@ -1,5 +1,5 @@
 # Architecture Overview
-This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.2. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.3. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
@@ -14,7 +14,7 @@ For production deployments, VMware recommends two fully independent instances of
 |TAP-001  | Install using multiple clusters.         |  Utilizing multiple clusters allows you to separate your workloads and environments while still leveraging combined build infrastructure.   |  Multiple cluster design requires more installation effort and possibly more maintenance versus a single cluster design.
 |TAP-002  | Create an operator sandbox environment.  |  An operator sandbox environment allows platform operators to test upgrades and architectural changes before introducing them to production. |  An operator sandbox requires additional computer resources.
 |TAP-003  | Utilize a single Build Cluster and multiple Run Clusters  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production environment for the build system vs separating into dev/test/qa/prod build systems. Additionally, a single Build Cluster ensures that the container image does not change between environments.  A single Build Cluster is also easier to manage than separate components. |  *Changes lower environments are not as separated as having separate build environments.*
-|TAP-004  | Utilize a View Cluster  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production perception for the build system vs separating into dev/test/qa/prod build systems. Additionally, it raises confidence that the container image does not change between environments.  It also enhances manageability versus having separate components. |  None
+|TAP-004  | Utilize a View Cluster  | Utilizing a single View Cluster with multiple Run Clusters creates the correct production perception for the common systems like learning portal, GUI, app resource monitoring, etc. |  None
 
 ## Build Cluster Requirements
 The Build Cluster is responsible for taking a developer's source code commits and applying a supply chain that will produce a container image and Kubernetes manifests for deploying on a Run Cluster.
@@ -30,7 +30,7 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 ### Recommendations
 * Spread across three Availability Zones (AZs) for high availability
-* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not Tanzu Application Platform
+
 
 The Build Cluster includes the following packages (exact list may differ based on supply chain choice):
 ```
@@ -51,6 +51,7 @@ tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
+
 ```
 To install a Build Cluster, use the following package definition:
 ```yaml
@@ -71,26 +72,29 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 ### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
 
 The Run Cluster includes the following packages:
 ```
+apis.apps.tanzu.vmware.com 
 cartographer.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
 cnrs.tanzu.vmware.com
 connector.appliveview.tanzu.vmware.com
 contour.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
+eventing.tanzu.vmware.com 
 fluxcd.source.controller.tanzu.vmware.com
 image-policy-webhook.signing.apps.tanzu.vmware.com
 ootb-delivery-basic.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
+policy.apps.tanzu.vmware.com 
+sso.apps.tanzu.vmware.com
 service-bindings.labs.vmware.com
 services-toolkit.tanzu.vmware.com
 tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
-sso.apps.tanzu.vmware.com
+
 ```
 
 To install a Run Cluster, use the following package definition:
@@ -111,8 +115,8 @@ The View Cluster's requirements are driven primarily by the respective applicati
 
 ### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Mesh (TSM) is not installed or is restricted namespaces that are not for Tanzu Application Platform
 * Utilize a PostgreSQL database for storing user preferences and manually created entities
+* Add Build and all Run Clusters to View Cluster to monitor runtime resources of apps. 
 
 The View Cluster includes the following packages:
 
@@ -131,6 +135,7 @@ tap-gui.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 workshops.learningcenter.tanzu.vmware.com
+
 ```
 
 To install a View Cluster, use the following package definition:
@@ -152,10 +157,11 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 ### Recommendations
 * Spread across three AZs for high availability
-* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
+
 
 The Iterate Cluster includes the following packages:
 ```
+apis.apps.tanzu.vmware.com  
 backend.appliveview.tanzu.vmware.com
 buildservice.tanzu.vmware.com
 cartographer.tanzu.vmware.com
@@ -173,6 +179,7 @@ ootb-delivery-basic.tanzu.vmware.com
 ootb-supply-chain-basic.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
 run.appliveview.tanzu.vmware.com
+sso.apps.tanzu.vmware.com
 scanning.apps.tanzu.vmware.com
 service-bindings.labs.vmware.com
 services-toolkit.tanzu.vmware.com
@@ -181,7 +188,7 @@ tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
-sso.apps.tanzu.vmware.com
+
 ```
 
 To install a Iterate Cluster, use the following package definition:
@@ -260,6 +267,7 @@ The following metrics should be observed. If the values exceed service level obj
 
 ### View Components
 * Response time
+* Runtime resource monitoring
 * Availability
 
 | Decision ID   | Design Decision   | Justification | Implication
@@ -273,5 +281,43 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 |---            |---                |---            |---
 |TAP-009  |Use an external logging platform.          |  An external logging platform will keep logs for the duration of their retention window and offer superior searching capabilities.  | None
 
+## Authentication and Authorization
+### Authentication
+There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity management into Tanzu Application Platform.
+
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-login.html).
+
+| Decision ID   | Design Decision   | Justification | Implication
+|---            |---                |---            |---
+|TAP-010 |Install Pinniped Supervisor into View Cluster. | View Cluster is the place to host all common components of Tanzu Application Platform. | None
+### Authorization 
+
+Tanzu Application Platform supports RBAC (role-based access control) authorization. It provide six default roles to set up permissions for users and service accounts within a namespace on a cluster that runs one of the Tanzu Application Platform profiles. Following are the default roles.
+ 
+Four roles are for users:
+ * `app-editor`
+ * `app-viewertekton`
+ * `app-operator`
+ * `service-operator`
+
+Two roles are for service accounts associated with the Tanzu Supply Chain:
+* `workload`
+* `deliverable`
+
+Refer [Tanzu Application Platform authorization ](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
+## CI/CD Pipelines
+Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. Refer [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-tekton-tekton-about.html) for more information.
+
+## Application Workloads
+Tanzu Application Platform allows users to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, etc.
+
+When using the Out of the Box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are:
+
+| Workload Type   | Description  | Indicators
+|---            |---                |---
+web | Scalable Web Applications | - Scales based on request load <br> - Automatically exposed by means of HTTP Ingress <br> - Does not perform background work <br> - Works with Service Bindings <br> - Stateless
+server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or LoadBalancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+worker | Background Applications | - Does not provide network services <br> - Not exposed externally as a network service <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+
 ## Deployment Instructions
-For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.2/tap/GUID-multicluster-installing-multicluster.html).
+For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-multicluster-installing-multicluster.html).

@@ -1,5 +1,3 @@
-
-abc
 Alertmanager
 allottable
 Antrea
@@ -73,6 +71,7 @@ SR-IOV
 STIG
 subfolders
 tanzu
+Tekton
 templating
 TKG
 TKGS
