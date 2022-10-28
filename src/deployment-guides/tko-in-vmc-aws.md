@@ -10,7 +10,7 @@ You can use VMware Service Installer for VMware Tanzu to automate this deploymen
 
 VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
 
-To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/1.6/tko-reference-architecture/GUID-reference-designs-tko-on-vmc-aws.html).
+To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/1.4/service-installer/GUID-VMware%20Cloud%20on%20AWS%20-%20VMC-TKOonVMConAWS.html).
 
 Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
 
@@ -513,7 +513,7 @@ The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid man
 
 To deploy the Tanzu Kubernetes Grid instance, you must first import the supported version of the Kubernetes OVA into your vCenter server and convert the imported OVA into a template. This template is used by the Tanzu Kubernetes Grid installer to deploy the management and workload clusters.
 
-For importing an OVA template in vCenter, see [these instructions](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-17BEDA21-43F6-41F4-8FB2-E01D275FE9B4.html).
+For importing an OVA template in vCenter, see [Deploy an OVF or OVA Template](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-17BEDA21-43F6-41F4-8FB2-E01D275FE9B4.html).
 
 To learn more about the supported Kubernetes version with Tanzu Kubernetes Grid 1.6.0, see the [Tanzu Kubernetes Grid Release Notes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-release-notes.html).
 
@@ -736,7 +736,7 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
    - **Control Plane Endpoint:** This is an optional field. If left blank, NSX Advanced Load Balancer assigns an IP address from the pool `TKG-Cluster-VIP` which is configured in NSX Advanced Load Balancer. If you need to provide an IP address, pick an unused IP address from the `TKG-Cluster-VIP` static IP pool.
    - **Deployment Type:** Development (recommended for Dev or POC environments)/ Production (recommended for Production environments).
    - **Machine Health Checks:** Enable
-   - **Enable Audit Logging:** Enables audit logging for Kubernetes API server and node VMs, choose as per environmental needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-troubleshooting-tkg-audit-logging.html).
+   - **Enable Audit Logging:** Enables audit logging for Kubernetes API server and node VMs, choose as per environmental needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-troubleshooting-tkg-audit-logging.html).
 
     ![Management Cluster Settings](img/tko-in-vmc-aws/deploy-tko-vmc-49.jpg)
 
@@ -789,7 +789,7 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
 
     ![Kubernetes Network](img/tko-in-vmc-aws/deploy-tko-vmc-54.jpg)
 
-    If LDAP is configured in your environment, see the [VMware documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-iam-configure-id-mgmt.html) for instructions on how to integrate an identity management system with Tanzu Kubernetes Grid.
+    If LDAP is configured in your environment, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-iam-configure-id-mgmt.html) for instructions on how to integrate an identity management system with Tanzu Kubernetes Grid.
 
     In this example, identity management integration is deactivated.
 
