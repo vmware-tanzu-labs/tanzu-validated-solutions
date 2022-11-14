@@ -2,6 +2,8 @@ Alertmanager
 allottable
 Antrea
 apiserver
+appliveview
+Appsso
 autoscaler
 Bitfusion
 bootstrapper
@@ -25,6 +27,7 @@ fluentbit
 Gbps
 Geneve
 grafana
+grype
 GSLB
 hyperconverged
 imgpkg
@@ -63,9 +66,11 @@ saas
 schedulable
 scrapable
 scrapeable
+SCST
 SCTP
 SDDC
 SNAT
+Snyk
 Sonobouy
 Spherelet
 SR-IOV
