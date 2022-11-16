@@ -163,7 +163,7 @@ For the deployment of Tanzu Kubernetes Grid in the vSphere environment, it is re
 
 The network reference design can be mapped into this general framework.
 
-![Tanzu for Kubernetes Grid network layout](img/tko-on-vsphere/tko-on-vsphere-vds-3.png)
+![Tanzu for Kubernetes Grid network layout](img/tko-on-vsphere/tko-on-vsphere-vds-3.jpg)
 
 This topology enables the following benefits:
 
@@ -495,34 +495,30 @@ To define different custom configurations for control plane nodes and worker nod
 
 ### NSX Advanced Load Balancer Controller Sizing Guidelines
 
-Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5000 virtual services, which is a hard limit. For more information, see [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Controller(s)](https://docs.vmware.com/en/VMware-Cloud-Foundation/services/vcf-nsx-advanced-load-balancer-v1/GUID-0B159D7A-E9ED-4C3C-B959-AC09877D26CE.html).
+Controllers are classified into the following categories:
 
-|**Controller Size**|**VM Configuration**|**Virtual Services**|**Avi SE Scale**|
-| --- | --- | --- | --- |
-|Small|4 vCPUS, 12 GB RAM|0-50|0-10|
-|Medium|8 vCPUS, 24 GB RAM|0-200|0-100|
-|Large|16 vCPUS, 32 GB RAM|200-1000|100-200|
-|Extra Large|24 vCPUS, 48 GB RAM|1000-5000|200-400|
+| **Classification** | **vCPUs** | **Memory (GB)** | **Virtual Services** | **Avi SE Scale** 
+| -------------------- | ----------- | ----------------- | ----------- | -------|
+| Essentials         | 4         | 12              |  0-50          |   0-10
+| Small              | 8         | 24              |  0-200         |  0-100
+| Medium             | 16        | 32              | 200-1000       |100-200
+| Large              | 24        | 48              |1000-5000       |200-400
+
+The number of virtual services that can be deployed per controller cluster is directly proportional to the controller cluster size. See the NSX Advanced Load Balancer [Configuration Maximums Guide](https://configmax.esp.vmware.com/guest?vmwareproduct=NSX%20Advanced%20Load%20Balancer&release=21.1.4&categories=119-0) for more information.
 
 ### Service Engine Sizing Guidelines
 
-For guidance on sizing your service engines (SEs), see [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Service Engine(s)](https://docs.vmware.com/en/VMware-Cloud-Foundation/services/vcf-nsx-advanced-load-balancer-v1/GUID-149D3FFA-BF77-4B6F-B73D-A42D5375E9CF.html).
+The service engines can be configured with a minimum of 1 vCPU core and 2 GB RAM up to a maximum of 64 vCPU cores and 256 GB RAM. The following table provides guidance for sizing a service engine VM with regards to performance:
 
-|**Performance Metric**|**1 vCPU Core**|
-| --- | --- |
-|Throughput|4 Gb/s|
-|Connections/s|40k|
-|SSL Throughput|1 Gb/s|
-|SSL TPS (RSA2K)|~600|
-|SSL TPS (ECC)|2500|
+| **Performance metric**   | **Per core performance** | **Maximum performance on a single Service Engine VM** |
+| -------------------------- | -------------------------- | ------------------------------------------------------- |
+| HTTP Throughput          | 5 Gbps                   | 7 Gbps                                                |
+| HTTP requests per second | 50k                      | 175k                                                  |
+| SSL Throughput           | 1 Gbps                   | 7 Gbps                                                |
+| SSL TPS (RSA2K)          | 750                      | 40K                                                   |
+| SSL TPS (ECC)            | 2000                     | 40K                                                   |
 
 Multiple performance vectors or features may have an impact on performance. For instance, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX Advanced Load Balancer recommends two cores.
-
-NSX Advanced Load Balancer SEs may be configured with as little as 1 vCPU core and 1 GB RAM, or up to 36 vCPU cores and 128 GB RAM. SEs can be deployed in Active/Active or Active/Standby mode depending on the license tier used. NSX Advanced Load Balancer Essentials license doesn’t support Active/Active HA mode for SE.
-
-|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
-| --- | --- | --- | --- |
-|TKO-ALB-SE-001|Configure the high availability mode for SEs.|To mitigate a single point of failure for the NSX ALB data plane.|High availability for SEs is configured by setting the Elastic HA mode to Active/Active or N+M in the SE Group.|
 
 ## Summary
 
