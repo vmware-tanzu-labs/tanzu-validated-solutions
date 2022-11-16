@@ -1,6 +1,6 @@
 # Tanzu Kubernetes Grid on vSphere Networking in an Air-Gapped Environment Reference Design
 
-VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
+Tanzu for Kubernetes Operations(TKO) simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open-source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
 An air-gapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This means a computer or network is disconnected from all other systems.
 
@@ -10,9 +10,9 @@ This document lays out a reference design for deploying Tanzu Kubernetes Grid on
 
 The following components are used in the reference architecture:
 
-- **Tanzu Kubernetes Grid (TKG)** - Enables creation and lifecycle management of Kubernetes clusters.
+- **[Tanzu Kubernetes Grid Instance (TKG)](https://tanzu.vmware.com/kubernetes-grid)** - A Tanzu Kubernetes Grid instance is a full deployment of Tanzu Kubernetes Grid, including the management cluster, the deployed workload clusters, and the shared and in-cluster services that you configure..
 
-- **NSX Advanced Load Balancer Enterprise Edition** - Provides layer 4 service type load balancer and layer 7 ingress support. NSX Advanced Load Balancer is recommended for vSphere deployments without NSX-T, or which have unique scale requirements.
+- **NSX Advanced Load Balancer** - Tanzu Kubernetes Grid leverages NSX Advanced Load Balancer to provide L4 load balancing for the Tanzu Kubernetes Clusters Control-Plane HA, and L4/L7 ingress to the applications deployed in the Tanzu Kubernetes Clusters. Users access the applications by connecting to the Virtual IP address (VIP) of the Virtual Service provisioned by NSX ALB
 
 - **User-Managed Tanzu Packages:**
   - [**Cert Manager**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-cert-manager.html) - Provides automated certificate management. It runs by default in management clusters.
@@ -206,7 +206,7 @@ This topology enables the following benefits:
 - Depending on the workload cluster type and use case, multiple workload clusters may leverage the same workload network or new networks can be used for each workload cluster. To isolate and separate Tanzu Kubernetes Grid workload cluster networking from each other it’s recommended to make use of separate networks for each workload cluster and configure the required firewall between these networks. For more information, see [Firewall Requirements](#firewall-requirements).
 - Separate provider and tenant access to the Tanzu Kubernetes Grid environment.
   - Only provider administrators need access to the Tanzu Kubernetes Grid management cluster. This prevents tenants from attempting to connect to the TKG management cluster.
-- Only allow tenants to access their Tanzu Kubernetes Grid workload clusters and restrict access to this cluster from other tenants.
+- Only allow tenants to access their Tanzu Kubernetes Grid workload clusters and restrict access to this cluster from other tenants. network-architecture
 
 ## Network Requirements
 
@@ -612,30 +612,31 @@ VSPHERE_WORKER_MEM_MIB: 4096
 
 #### NSX ALB Controller Sizing Guidelines
 
-Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5000 virtual services, which is a hard limit. For further details, refer to [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Controller(s)](https://docs.vmware.com/en/VMware-Cloud-Foundation/services/vcf-nsx-advanced-load-balancer-v1/GUID-0B159D7A-E9ED-4C3C-B959-AC09877D26CE.html).
+Controllers are classified into the following categories:
 
-|**Controller Size**|**VM Configuration**|**Virtual Services**|**NSX ALB SE Scale**|
-| --- | --- | --- | --- |
-|Small|4 vCPUs, 12 GB RAM|0-50|0-10|
-|Medium|8 vCPUs, 24 GB RAM|0-200|0-100|
-|Large|16 vCPUs, 32 GB RAM|200-1000|100-200|
-|Extra Large|24 vCPUs, 48 GB RAM|1000-5000|200-400|
+| **Classification** | **vCPUs** | **Memory (GB)** | **Virtual Services** | **Avi SE Scale** 
+| -------------------- | ----------- | ----------------- | ----------- | -------|
+| Essentials         | 4         | 12              |  0-50          |   0-10
+| Small              | 8         | 24              |  0-200         |  0-100
+| Medium             | 16        | 32              | 200-1000       |100-200
+| Large              | 24        | 48              |1000-5000       |200-400
+
+The number of virtual services that can be deployed per controller cluster is directly proportional to the controller cluster size. See the NSX Advanced Load Balancer [Configuration Maximums Guide](https://configmax.esp.vmware.com/guest?vmwareproduct=NSX%20Advanced%20Load%20Balancer&release=21.1.4&categories=119-0) for more information.
+
 
 #### Service Engine Sizing Guidelines
 
-For guidance on sizing your service engines (SEs), see [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Service Engine(s)](https://docs.vmware.com/en/VMware-Cloud-Foundation/services/vcf-nsx-advanced-load-balancer-v1/GUID-149D3FFA-BF77-4B6F-B73D-A42D5375E9CF.html).
+The service engines can be configured with a minimum of 1 vCPU core and 2 GB RAM up to a maximum of 64 vCPU cores and 256 GB RAM. The following table provides guidance for sizing a service engine VM with regards to performance:
 
-|**Performance metric**|**1 vCPU core**|
-| --- | --- |
-|Throughput|4 Gb/s|
-|Connections/s|40k|
-|SSL Throughput|1 Gb/s|
-|SSL TPS (RSA2K)|~600|
-|SSL TPS (ECC)|2500|
+| **Performance metric**   | **Per core performance** | **Maximum performance on a single Service Engine VM** |
+| -------------------------- | -------------------------- | ------------------------------------------------------- |
+| HTTP Throughput          | 5 Gbps                   | 7 Gbps                                                |
+| HTTP requests per second | 50k                      | 175k                                                  |
+| SSL Throughput           | 1 Gbps                   | 7 Gbps                                                |
+| SSL TPS (RSA2K)          | 750                      | 40K                                                   |
+| SSL TPS (ECC)            | 2000                     | 40K                                                   |
 
-Multiple performance vectors or features may have an impact on performance.  For instance, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX ALB recommends two cores.
-
-NSX ALB Service Engines may be configured with as little as 1 vCPU core and 1 GB RAM, or up to 36 vCPU cores and 128 GB RAM. Service Engines can be deployed in Active/Active or Active/Standby mode depending on the license tier used. NSX ALB Essentials license doesn’t support Active/Active HA mode for SE.
+Multiple performance vectors or features may have an impact on performance. For instance, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX Advanced Load Balancer recommends two cores.
 
 ## Summary
 
