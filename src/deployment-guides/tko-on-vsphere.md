@@ -1146,22 +1146,26 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels.
     <!-- /* cSpell:disable */ -->
      ```bash
-     ## Connect to tkg management cluster
-
-    kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
-
     ## verify the shared service cluster creation
 
      tanzu cluster list
     NAME                NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
      tkg-160-shared-svc  default    running  3/3           3/3      v1.23.8+vmware.2  <none>  prod  v1.23.8---vmware.2-tkg.1
 
+    ## Connect to tkg management cluster
 
-    ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
+    kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
+
+    ## Add the tanzu-services label to the shared services cluster as its cluster role. In the following command "tkg-160-shared-svc” is the name of the shared service cluster
+
+     kubectl label cluster.cluster.x-k8s.io/tkg-160-shared-svc cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
+    cluster.cluster.x-k8s.io/tkg160-shared-services-airgap labeled
+
+    ## Validate that TMC has applied the AVI_LABEL while deploying the cluster and shared services label
 
      kubectl get cluster tkg-160-shared-svc --show-labels
     NAME                 PHASE         AGE   VERSION   LABELS
-    tkg-160-shared-svc   Provisioned   58m             networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.23.8---vmware.2-tkg.1,tkg.tanzu.vmware.com/cluster-name=tkg-160-shared-svc,type=shared-services
+    tkg-160-shared-svc   Provisioned   58m             cluster-role.tkg.tanzu.vmware.com/tanzu-services=,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.23.8---vmware.2-tkg.1,tkg.tanzu.vmware.com/cluster-name=tkg-160-shared-svc,type=shared-services
       ```
     <!-- /* cSpell:enable */ -->
 
@@ -1258,11 +1262,7 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
-     ## Connect to tkg management cluster
-
-    kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
-
-    ## verify the shared service cluster creation
+    ## verify the workload  service cluster creation
 
     tanzu cluster list
     NAME                  NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
@@ -1271,6 +1271,9 @@ Complete the following steps to deploy workload clusters from Tanzu Mission Cont
 
     tkgm-160-workload-l7  default    running  3/3           3/3      v1.23.8+vmware.2  <none>  prod  v1.23.8---vmware.2-tkg.1
 
+    ## Connect to tkg management cluster
+
+    kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
 
     ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
 
