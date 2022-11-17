@@ -1,5 +1,6 @@
 
 abc
+airgapped
 Alertmanager
 allottable
 Antrea
@@ -57,6 +58,7 @@ onboarded
 overcommitted
 Portgroup
 preconfigured
+proxied
 proxying
 restic
 routable
