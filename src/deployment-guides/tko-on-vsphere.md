@@ -290,7 +290,7 @@ The following components are created in NSX Advanced Load Balancer.
 
 <!-- /* cSpell:disable */ -->
 
-| **Object** | **Sample Name** |
+| Object | Sample Name |
 | --- | --- |
 | vCenter Cloud | tanzu-vcenter01 |
 | Service Engine Group 1 | tanzu-mgmt-segroup-01 |
