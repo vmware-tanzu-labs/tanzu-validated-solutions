@@ -354,7 +354,7 @@ The deployment of the Tanzu Kubernetes Grid management and workload clusters is 
 
 The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure for a macOS or Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-install-cli.html).
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-install-cli.html).
 
 The bootstrap machine must meet the following prerequisites:
 
@@ -368,7 +368,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384).
 
    * VMware Tanzu CLI 1.6.0 for Linux
-   * kubectl cluster cli v1.23.8 for Linux
+   * kubectl cluster CLI v1.23.8 for Linux
 
 1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
     ```bash
@@ -390,8 +390,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     sha: 6288c751-dirty
     ```
 
-
-1. Install the Kubectl utility.
+1. Install the kubectl utility.
 
       ```bash
      gunzip kubectl-linux-v1.23.8+vmware.2.gz
@@ -527,7 +526,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     ```
     Run the `yq -V` command to check that the correct version of yq is installed and executable.
 
-1. Execute the following commands to start the Docker service and enable it to start at boot. Photon OS has Docker installed by default.
+1. Run the following commands to start the Docker service and enable it to start at boot. Photon OS has Docker installed by default.
 
     ```bash
     ## Check Docker service status
@@ -603,7 +602,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
 
-1. Select Local file, click the button to upload files, and go to the downloaded OVA file on your local machine.
+1. Select **Local file**, click the button to upload files, and select the downloaded OVA file on your local machine.
 
 1. Follow the installer prompts to deploy a VM from the OVA.
 
@@ -617,9 +616,9 @@ For information about how to create the user and role for Tanzu Kubernetes Grid,
 
 ### Import NSX Advanced Load Balancer in Content Library
 
-Create a content library following the instructions provided in [Create a Library](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-2A0F1C13-7336-45CE-B211-610D39A6E1F4.html) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library. 
+Create a content library following the instructions provided in [Create a Library](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-2A0F1C13-7336-45CE-B211-610D39A6E1F4.html) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library.
 
-To import the OVA into the content library, see [Import Items to a Content Library](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-897EEEC2-B378-41A7-B92B-D1159B5F6095.html). 
+To import the OVA into the content library, see [Import Items to a Content Library](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-897EEEC2-B378-41A7-B92B-D1159B5F6095.html).
 
 ## <a id=configure-alb> </a> Deploy and Configure NSX Advanced Load Balancer
 
@@ -761,7 +760,7 @@ The configuration of the primary (leader) controller is synchronized to the new 
 
 ### <a id="nsx-alb-cert-mgmt"> </a> NSX Advanced Load Balancer: Certificate Management
 
-The default system-generated controller certificate generated for SSL/TSL connections will not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
+The default system-generated controller certificate generated for SSL/TSL connections does not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
 
 1. Log in to the NSX Advanced Load Balancer controller and go to **Templates** > **Security** > **SSL/TLS Certificates**.
 
@@ -800,7 +799,7 @@ NSX Advanced Load Balancer can be deployed in multiple environments for the same
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
-* Control plane VIP for the workload clusters will be placed on the respective Service Engine group assigned through AKO Deployment Config (ADC) during cluster creation.
+* Control plane VIP for the workload clusters is placed on the respective SE group assigned through AKO Deployment Config (ADC) during cluster creation.
 
 For information about mapping a specific service engine group to Tanzu Kubernetes Grid workload cluster, see [Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster](#workloadalb).
 
@@ -864,7 +863,7 @@ The following components are created in NSX Advanced Load Balancer.
 
 #### Configure Tanzu Kubernetes Grid Networks in NSX Advanced Load Balancer
 
-As part of the cloud creation in NSX Advanced Load Balancer, only management network has been configured in NSX Advanced Load Balancer. Complete the following steps to configure these networks:
+As part of the cloud creation in NSX Advanced Load Balancer, only management network is configured in NSX Advanced Load Balancer. Complete the following steps to configure these networks:
 
    * TKG Management Network
    * TKG Workload Network
@@ -874,7 +873,8 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 
 1. Log in to NSX Advanced Load Balancer and go to **Infrastructure** > **Cloud Resources** > **Networks**.
 
-1. Select the desired cloud. All the networks available in vCenter are listed.
+1. Select the desired cloud. All the networks available in vCenter are listed. 
+
 
 1. Click on the edit icon next for the network and configure as follows. Change the provided details as per your SDDC configuration.
 
@@ -886,6 +886,7 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
     | --- | --- | --- | --- |
     | tkg_mgmt_pg | Yes | 172.16.40.0/24 | NA  |
     | tkg_workload_pg | Yes | 172.16.60.0/24 | NA  |
+    | nsx_alb_management-pg | No  | 172.16.10.0/24 | 172.16.10.100 - 172.16.10.200 |
     | tkg_cluster_vip_pg | No  | 172.16.80.0/24 | 172.16.80.100 - 172.16.80.200 |
     | tkg_mgmt_vip_pg | No  | 172.16.50.0/24 | 172.16.50.100 - 172.16.50.200 |
     | tkg_workload_vip_pg | No  | 172.16.70.0/24 | 172.16.70.100 - 172.16.70.200 |
@@ -1252,7 +1253,7 @@ As per this Tanzu deployment, create 2 more ADCs:
 
 ### <a id="sharedako"> </a> Configure AKO Deployment Config (ADC) for Shared Services Cluster
 
-As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `tanzu-mgmt-segroup-01` SE group. This configuration is enforced by creating a custom AKO Deployment Config (ADC) and applying the respective `AVI_LABELS` while deploying the shared services cluster.
+As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `tanzu-mgmt-segroup-01` SE group. This configuration is enforced by creating a custom AKODeploymentConfig (ADC) and applying the respective `AVI_LABELS` while deploying the shared services cluster.
 
 The format of the AKODeploymentConfig YAML file is as follows.
 
@@ -1357,7 +1358,7 @@ akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-shared created
 ```
 <!-- /* cSpell:enable */ -->
 
-Use the following command to list all AKODeploymentConfig created under the management cluster:
+Use the following command to list all AKODeploymentConfigs created under the management cluster:
 
 <!-- /* cSpell:disable */ -->
 ```
@@ -1369,13 +1370,13 @@ tanzu-ako-for-shared                 13s
 ```
 <!-- /* cSpell:enable */ -->
 
-### <a id="l7workloadako"> </a> Configure AKO Deployment Config (ADC) for Workload Cluster to Enable NSX ALB L7 Ingress with NodePortLocal Mode
+### <a id="l7workloadako"> </a> Configure AKODeploymentConfig (ADC) for Workload Cluster to Enable NSX ALB L7 Ingress with NodePortLocal Mode
 
 VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the AVI_LABEL while deploying the workload cluster.  
 
-As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `tanzu-wkld-segroup-01` SE group. 
+As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `tanzu-wkld-segroup-01` SE group.
 
-Below are the changes in ADC Ingress section when compare to the default ADC. 
+Below are the changes in ADC Ingress section when compare to the default ADC.
 
 * **disableIngressClass**: set to `false` to enable NSX ALB L7 Ingress.
 
@@ -2243,4 +2244,3 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
     CONDITIONS:              [{ReconcileSucceeded True  }]
     USEFUL-ERROR-MESSAGE:
     ```
-
