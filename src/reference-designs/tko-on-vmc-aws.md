@@ -181,13 +181,13 @@ As per the defined architecture, the list of required networks includes:
 
 | **Network Type**                | **DHCP Service** | <p>**Description & Recommendations**</p><p></p>                                                                                                                                             |
 | --------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| NSX ALB management network      | Optional         | <p>NSX ALB controllers and SEs are attached to this network. </p><p><br>DHCP is not a mandatory requirement on this network as NSX ALB can handle IPAM services for a given network</p> |
+| NSX ALB management network      | Optional         | <p>NSX ALB controllers and SEs are attached to this network. </p><p><br>DHCP is not a mandatory requirement on this network as IPs to NSX ALB controllers can be static.  IPs can be assigned statically to SE interfaces or by making use of NSX ALB IPAM profiles.</p> |
 | TKG management network          | Yes              | Control plane and worker nodes of TKG management cluster clusters are attached to this network                                                                                          |
 | TKG shared services network      | Yes              | Control plane and worker nodes of TKG shared services cluster are attached to this network.                                                                                              |
 | TKG workload network            | Yes              | Control plane and worker nodes of TKG workload clusters are attached to this network.                                                                                                   |
-| TKG cluster VIP/data network    | No               | Virtual services for Control plane HA of all TKG clusters (management, shared services, and workload).                                                                                       |
-| TKG management VIP/data network | No               | Virtual services for all user-managed packages (such as Contour and Harbor) hosted on the shared services cluster.                                                                           |
-| TKG workload VIP/data network   | No               | Virtual services for all applications hosted on the workload clusters.                                                                                                                      |
+| TKG cluster VIP/data network    | Optional               | Virtual services for Control plane HA of all TKG clusters (management, shared services, and workload).                                                                                       |
+| TKG management VIP/data network | Optional               | Virtual services for all user-managed packages (such as Contour and Harbor) hosted on the shared services cluster.                                                                           |
+| TKG workload VIP/data network   | Optional             | Virtual services for all applications hosted on the workload clusters.                                                                                                                      |
 
 ### Subnet and CIDR Examples
 
@@ -195,13 +195,13 @@ For the purpose of demonstration, this document makes use of the following Subne
 
 | **Network Type**            | **Segment Name**   | **Gateway CIDR** | **DHCP Pool**                 | **NSX ALB IP Pool**           |
 | ----------------------------- | -------------------- | ------------------ | ------------------------------- | ------------------------------- |
-| NSX ALB management network        | NSX-ALB-Mgmt       | 192.168.11.1/27  | 192.168.11.15 - 192.168.11.20 | 192.168.11.21 - 192.168.11.30 |
+| NSX ALB management network        | NSX-ALB-Mgmt       | 192.168.11.1/27  | 192.168.11.15 - 192.168.11.30 | NA|
 | TKG management network      | TKG-Management     | 192.168.12.1/24  | 192.168.12.2 - 192.168.12.251 | NA                            |
 | TKG workload network        | TKG-Workload  | 192.168.13.1/24  | 192.168.13.2 - 192.168.13.251 | NA                            |
-| TKG cluster VIP network     | TKG-Cluster-VIP    | 192.168.14.1/26  | NA                            | 192.168.14.2 - 192.168.14.60  |
-| TKG management VIP network        | TKG-Management-VIP         | 192.168.15.1/26  | NA                            | 192.168.15.2 - 192.168.15.60  |
-| TKG workload VIP network    | TKG-Workload-VIP   | 192.168.16.1/26  | NA                            | 192.168.16.2 - 192.168.16.60  |
-| TKG shared services network | TKG-Shared-Service | 192.168.17.1/24  | 192.168.17.2 - 192.168.17.251 |                               |
+| TKG cluster VIP network     | TKG-Cluster-VIP    | 192.168.14.1/26  | 192.168.14.2 - 192.168.14.30                            | 192.168.14.31 - 192.168.14.60  |
+| TKG management VIP network        | TKG-Management-VIP         | 192.168.15.1/26  | 192.168.15.2 - 192.168.15.30                            | 192.168.15.31 - 192.168.15.60  |
+| TKG workload VIP network    | TKG-Workload-VIP   | 192.168.16.1/26  | 192.168.16.2 - 192.168.16.30                            | 192.168.16.31 - 192.168.16.60  |
+| TKG shared services network | TKG-Shared-Service | 192.168.17.1/24  | 192.168.17.2 - 192.168.17.251 | NA                              |
 
 ### <a id=firewall></a>Firewall Recommendations
 
@@ -285,7 +285,7 @@ The following table provides the recommendations for configuring NSX Advanced Lo
 | TKO-ALB-006     | Use separate VIP networks per TKC for application load balancing.                                       | Separate dev/test and prod workloads L7 load balancing traffic.                                                                                | Install AKO in TKG clusters manually by creating `AkodeploymentConfig`.                                                                                                                                                                                                                                      |
 | TKO-ALB-007     | Create separate SE Groups for TKG management and workload clusters.                                     | This allows isolating load balancing traffic of the management and shared services cluster from workload clusters.                             | <p>Create dedicated service engine Groups under the no-orchestrator cloud configured manually.</p><p></p><p></p><p></p>                                                                                                                                                                                     |
 | TKO-ALB-008     | Share service engines for the same type of workload (dev/test/prod) clusters.                            | Minimize the licensing cost                                                                                                                    | <p>Each service engine contributes to the CPU core capacity associated with a license.</p><p></p><p>An SE group can be shared by any number of workload clusters as long as the sum of the number of distinct cluster node networks and the number of distinct cluster VIP networks is not more than 8.</p> |
-| TKO-ALB-009     | Enable DHCP in the No-Orchestrator cloud.                                                               | Reduce the administrative overhead of manually configuring IP pools for the networks where DHCP is available.                                  |                                                                                                                                                                                                                                                                                                             |
+| TKO-ALB-009     | Enable DHCP in the No-Orchestrator cloud.                                                               | Reduce the administrative overhead of manually configuring IP pools for the networks where DHCP is available.                                  |                                                                                                                                                                                                                                                                                                              |
 
 ### Network Recommendations
 
@@ -362,7 +362,7 @@ The NodePort mode is the default mode when AKO is installed on Tanzu Kubernetes 
 
 #### L7 Ingress in NodePortLocal Mode
 
-This feature is supported only with Antrea CNI. You must enable this feature on a workload cluster before its creation. The primary difference between this mode and the NodePort mode is that the traffic is sent directly to the pods in your workload cluster through node ports without interfering Kube-proxy. With this option, the workload clusters can share SE groups. Similar to the ClusterIP Mode, this option avoids the potential extra hop when sending traffic from the NSX Advanced Load Balancer SEs to the pod by targeting the right nodes where the pods run.
+This feature is supported only with Antrea CNI. The primary difference between this mode and the NodePort mode is that the traffic is sent directly to the pods in your workload cluster through node ports without interfering Kube-proxy. With this option, the workload clusters can share SE groups. Similar to the ClusterIP Mode, this option avoids the potential extra hop when sending traffic from the NSX Advanced Load Balancer SEs to the pod by targeting the right nodes where the pods run.
 
 Antrea agent configures NodePortLocal port mapping rules at the node in the format “NodeIP:Unique Port” to expose each pod on the node on which the pod of the service is running. The default range of the port number is 61000-62000. Even if the pods of the service are running on the same Kubernetes node, Antrea agent publishes unique ports to expose the pods at the node level to integrate with the load balancer.
 
@@ -593,17 +593,18 @@ This deploys a new service engine with a VM name of `_se-1_` into the resource p
 
 Controllers are classified into the following categories:
 
-| **Classification** | **vCPUs** | **Memory (GB)** |
-| -------------------- | ----------- | ----------------- |
-| Small              | 8-15      | 24-32           |
-| Medium             | 16-23     | 32-48           |
-| Large              | >24       | >48             |
+| **Classification** | **vCPUs** | **Memory (GB)** | **Virtual Services** | **Avi SE Scale** 
+| -------------------- | ----------- | ----------------- | ----------- | -------|
+| Essentials         | 4         | 12              |  0-50          |   0-10
+| Small              | 8         | 24              |  0-200         |  0-100
+| Medium             | 16        | 32              | 200-1000       |100-200
+| Large              | 24        | 48              |1000-5000       |200-400
 
 The number of virtual services that can be deployed per controller cluster is directly proportional to the controller cluster size. See the NSX Advanced Load Balancer [Configuration Maximums Guide](https://configmax.esp.vmware.com/guest?vmwareproduct=NSX%20Advanced%20Load%20Balancer&release=21.1.4&categories=119-0) for more information.
 
 #### Service Engine Sizing Guidelines
 
-The service engines can be configured with a minimum of 1 vCPU core and 1 GB RAM up to a maximum of 64 vCPU cores and 256 GB RAM. The following table provides guidance for sizing a service engine VM with regards to performance:
+The service engines can be configured with a minimum of 1 vCPU core and 2 GB RAM up to a maximum of 64 vCPU cores and 256 GB RAM. The following table provides guidance for sizing a service engine VM with regards to performance:
 
 | **Performance metric**   | **Per core performance** | **Maximum performance on a single Service Engine VM** |
 | -------------------------- | -------------------------- | ------------------------------------------------------- |
@@ -619,7 +620,7 @@ Service engines can be deployed in Active/Active or Active/Standby mode dependin
 
 | **Decision ID** | **Design Decision**                          | **Design Justification**                                          | **Design Implications**                                                                                                                  |
 | ----------------- | ---------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| TKO-ALB-SE-001  | Configure the High Availability mode for SEs | To mitigate a single point of failure for the NSX ALB data plane. | High Availability for service engines is configured via setting the Elastic HA mode to Active/Active or N+M in the service engine Group. |
+| TKO-ALB-SE-001  | Configure the High Availability mode for SEs | To mitigate a single point of failure for the NSX ALB data plane. | Configure SE group for Active/Active HA mode.	Provides optimum resiliency, performance, and utilization.	Certain applications might not work in Active/Active HA mode. For instance, applications that require preserving client IP address. In such cases, use the legacy Active/Standby HA mode. |
 
 ### <a id=appendix-b></a> Configure Node Sizes
 
