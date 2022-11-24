@@ -79,13 +79,13 @@ For the purpose of demonstration, this document uses the following subnet CIDRs 
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool**|**NSX Advanced Load Balancer IP Pool**|
 | --- | --- | --- | --- | --- |
-|NSX ALB Mgmt Network|NSX-ALB-Mgmt|192.168.11.1/27|192.168.11.15 - 192.168.11.20|192.168.11.21 - 192.168.11.30|
+|NSX ALB Mgmt Network|NSX-ALB-Mgmt|192.168.11.1/27|192.168.11.15 - 192.168.11.30|NA|
 |TKG Management Network|TKG-Management|192.168.12.1/24|192.168.12.2 - 192.168.12.251|NA|
 |TKG Workload Network|TKG-Workload|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
-|TKG Cluster VIP Network|TKG-Cluster-VIP|192.168.14.1/26|NA|192.168.14.2 - 192.168.14.60|
-|TKG Mgmt VIP Network|TKG-Management-VIP|192.168.15.1/26|NA|192.168.15.2 - 192.168.15.60|
-|TKG Workload VIP Network|TKG-Workload-VIP|192.168.16.1/26|NA|192.168.16.2 - 192.168.16.60|
-|TKG Shared Services Network|TKG-Shared-Service|192.168.17.1/24|192.168.17.2 - 192.168.17.251||
+|TKG Cluster VIP Network|TKG-Cluster-VIP|192.168.14.1/26|192.168.14.2 - 192.168.14.30|192.168.14.31 - 192.168.14.60|
+|TKG Mgmt VIP Network|TKG-Management-VIP|192.168.15.1/26|192.168.15.2 - 192.168.15.30|192.168.15.31 - 192.168.15.60|
+|TKG Workload VIP Network|TKG-Workload-VIP|192.168.16.1/26|192.168.16.2 - 192.168.16.30|192.168.16.31 - 192.168.16.60|
+|TKG Shared Services Network|TKG-Shared-Service|192.168.17.1/24|192.168.17.2 - 192.168.17.251|NA|
 
 ## Deployment Overview
 
@@ -285,9 +285,9 @@ Tanzu for Kubernetes Operations deployment is based on the use of distinct servi
 **TKG-Mgmt-SEG**: The service engines part of this SE group hosts:
 
 - Virtual services for all load balancer functionalities requested by the Tanzu Kubernetes Grid management and shared services clusters.
-- Virtual services that load balances control plane nodes of all Tanzu Kubernetes Grid clusters.
+- Virtual services that load balances control plane nodes of Management Cluster and Shared services cluster.
 
-**TKG-WLD01-SEG**: The service engines part of this SE group hosts virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid workload clusters mapped to this SE group.
+**TKG-WLD01-SEG**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes & virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
 
 **Note:**
 
@@ -303,7 +303,7 @@ To create and configure a new SE group, complete the following steps.
 
 2. Provide a name for the SE group and configure the following settings:
 
-   - **High Availability Mode:** Elastic HA N + M (buffer)
+   - **High Availability Mode:** Elastic HA Active/Active
    - **VS Placement across SEs:** Compact
    - **Virtual Service per Service Engine:** 10
    - **SE Self-Election:** Selected
