@@ -285,7 +285,7 @@ Tanzu for Kubernetes Operations deployment is based on the use of distinct servi
 **TKG-Mgmt-SEG**: The service engines part of this SE group hosts:
 
 - Virtual services for all load balancer functionalities requested by the Tanzu Kubernetes Grid management and shared services clusters.
-- Virtual services that load balance control plane nodes of management Cluster and shared services cluster.
+- Virtual services that load balance control plane nodes of management cluster and shared services cluster.
 
 **TKG-WLD01-SEG**: Service engines part of this SE group host virtual services that load balance control plane nodes and virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group.
 
