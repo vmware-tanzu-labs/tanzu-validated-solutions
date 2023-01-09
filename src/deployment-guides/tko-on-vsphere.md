@@ -276,9 +276,10 @@ NSX Advanced Load Balancer can be deployed in multiple environments for the same
 * Virtual services that load balances control plane nodes of Management Cluster and Shared services cluster.
 * Virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid management cluster and Shared services cluster.
 
-**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes & virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
+**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes and virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
 
 **Note**:
+
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
@@ -290,7 +291,7 @@ The following components are created in NSX Advanced Load Balancer.
 
 <!-- /* cSpell:disable */ -->
 
-| Object | Sample Name |
+| **Object** | **Sample Name** |
 | --- | --- |
 | vCenter Cloud | tanzu-vcenter01 |
 | Service Engine Group 1 | tanzu-mgmt-segroup-01 |
@@ -821,7 +822,7 @@ As per this Tanzu deployment, create 2 more ADCs:
 
 * `tanzu-ako-for-workload-L7-ingress`: Use this ADC only if you would like to enable NSX Advanced Load Balancer L7 ingress on workload cluster. Otherwise, leave the cluster labels empty to apply the network configuration from default ADC `install-ako-for-all`.
 
-### <a id="sharedako"> </a> Configure AKO Deployment Config (ADC) for Shared Services Cluster
+### <a id="sharedako"> </a> Configure AKODeploymentConfig (ADC) for Shared Services Cluster
 
 As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `tanzu-mgmt-segroup-01` SE group. This configuration is enforced by creating a custom AKO Deployment Config (ADC) and applying the respective `AVI_LABELS` while deploying the shared services cluster.
 

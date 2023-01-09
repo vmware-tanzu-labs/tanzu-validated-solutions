@@ -1226,4 +1226,4 @@ For instructions on installing Tanzu Service Mesh on your workload cluster, see 
 
 ## <a id=deploy-user-managed-packages> </a> Deploy User-Managed Packages on Tanzu Kubernetes clusters
 
-For instructions on installing user-Managed packages on the Tanzu Kubernetes clusters, see [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).
+For instructions on installing user-managed packages on the Tanzu Kubernetes clusters, see [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).

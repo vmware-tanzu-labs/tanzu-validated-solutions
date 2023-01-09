@@ -275,14 +275,15 @@ The following metrics should be observed. If the values exceed service level obj
 |TAP-008  | Monitor platform KPIs and setup alerts.         |  An external monitoring platform will keep metrics for the duration of their retention window. Further alerts will allow rapid response to issues before they impact developers and users.   | None
 
 ## Logging
+
 Logging for Tanzu Application Platform is handled by the upstream Kubernetes integration for both applications and internal system components. An external logging platform should be used for storing and searching those logs.  For logging integration, refer to the reference architecture of your platform or logging platform.
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
 |TAP-009  |Use an external logging platform.          |  An external logging platform will keep logs for the duration of their retention window and offer superior searching capabilities.  | None
 
-## Authentication and Authorization
-### Authentication
+## Authentication
+
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity management into Tanzu Application Platform.
 
 To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-login.html).
@@ -290,10 +291,11 @@ To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https:/
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
 |TAP-010 |Install Pinniped Supervisor into View Cluster. | View Cluster is the place to host all common components of Tanzu Application Platform. | None
-### Authorization 
+
+## Authorization
 
 Tanzu Application Platform supports RBAC (role-based access control) authorization. It provide six default roles to set up permissions for users and service accounts within a namespace on a cluster that runs one of the Tanzu Application Platform profiles. Following are the default roles.
- 
+
 Four roles are for users:
  * `app-editor`
  * `app-viewertekton`
@@ -304,7 +306,7 @@ Two roles are for service accounts associated with the Tanzu Supply Chain:
 * `workload`
 * `deliverable`
 
-Refer [Tanzu Application Platform authorization ](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
+Refer [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
 ## CI/CD Pipelines
 Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. Refer [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-tekton-tekton-about.html) for more information.
 
