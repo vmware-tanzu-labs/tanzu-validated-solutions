@@ -1,4 +1,5 @@
 # Architecture Overview
+
 This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.3. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
@@ -7,6 +8,7 @@ Design decisions enumerated in this document exemplify the main design issues yo
 <!-- https://lucid.app/lucidchart/313468a7-da40-4872-9075-cd37224c5e2f/edit -->
 
 ## Cluster Layout
+
 For production deployments, VMware recommends two fully independent instances of Tanzu Application Platform. One instance for operators to conduct their own reliability tests, and the other instance hosts development, test, QA, and production environments isolated by separate clusters.
 
 | Decision ID   | Design Decision   | Justification | Implication
@@ -17,20 +19,24 @@ For production deployments, VMware recommends two fully independent instances of
 |TAP-004  | Utilize a View Cluster  | Utilizing a single View Cluster with multiple Run Clusters creates the correct production perception for the common systems like learning portal, GUI, app resource monitoring, etc. |  None
 
 ## Build Cluster Requirements
+
 The Build Cluster is responsible for taking a developer's source code commits and applying a supply chain that will produce a container image and Kubernetes manifests for deploying on a Run Cluster.
 
 The Kubernetes Build Cluster will see bursty workloads as each build or series of builds kicks off. The Build Cluster will see very high pod scheduling loads as these events happen. The amount of resources assigned to the Build Cluster will directly correlate to how quickly parallel builds are able to be completed.
 
-### Kubernetes Requirements
-* LoadBalancer for ingress controller (requires one external IP address)
-* Default storage class
-* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
-* Logging is enabled and targets the desired application logging platform
-* Monitoring is enabled and targets the desired application observability platform
+### Kubernetes Requirements - Build Cluster
 
-### Recommendations
-* Spread across three Availability Zones (AZs) for high availability
+* Supported Kubernetes versions are 1.22, 1.23, 1.24.
+* Default storage class.
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* Logging is enabled and targets the desired application logging platform.
+* Monitoring is enabled and targets the desired application observability platform.
+* **docker** runtime container is configured with full build service such as `descriptor_name: "full"`.
 
+### Recommendations - Build Cluster
+
+* Spread across three availability zones (AZs) for high availability.
+* Install build profile build service with lite descriptor such as `descriptor_name: "lite"`.
 
 The Build Cluster includes the following packages (exact list may differ based on supply chain choice):
 ```
@@ -57,21 +63,25 @@ To install a Build Cluster, use the following package definition:
 ```yaml
 profile: build
  ```
+
 ## Run Cluster Requirements
 
 The Run Cluster reads the container image and Kubernetes resources created by the Build Cluster and runs them as defined in the `Deliverable` object for each application.
 
 The Run Cluster's requirements are driven primarily by the applications that it will run.  Horizontal and vertical scale is determined based on the type of applications that will be scheduled.
 
-### Kubernetes Requirements
-* LoadBalancer for ingress controller (requires 1 external IP address)
-* Default storage class
-* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
-* Logging is enabled and targets the desired application logging platform
-* Monitoring is enabled and targets the desired application observability platform
+### Kubernetes Requirements - Run Cluster
 
-### Recommendations
-* Spread across three AZs for high availability
+* Supported Kubernetes versions are 1.22, 1.23, 1.24.
+* LoadBalancer for ingress controller (requires 1 external IP address).
+* Default storage class.
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* Logging is enabled and targets the desired application logging platform.
+* Monitoring is enabled and targets the desired application observability platform.
+
+### Recommendations - Run Cluster
+
+* Spread across three AZs for high availability.
 
 The Run Cluster includes the following packages:
 ```
@@ -101,22 +111,27 @@ To install a Run Cluster, use the following package definition:
 ```yaml
 profile: run
 ```
+
 ## View Cluster Requirements
+
 The View Cluster is designed to run the web applications for Tanzu Application Platform. specifically, Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
 
 The View Cluster's requirements are driven primarily by the respective applications that it will be running.
 
-### Kubernetes Requirements
-* LoadBalancer for ingress controller (requires 3 external IP addresses)
-* Default storage class
-* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
-* Logging is enabled and targets the desired application logging platform
-* Monitoring is enabled and targets the desired application observability platform
+### Kubernetes Requirements - View Cluster
 
-### Recommendations
-* Spread across three AZs for high availability
-* Utilize a PostgreSQL database for storing user preferences and manually created entities
-* Add Build and all Run Clusters to View Cluster to monitor runtime resources of apps. 
+* Supported Kubernetes versions are 1.22, 1.23, 1.24.
+* LoadBalancer for ingress controller (requires 3 external IP addresses).
+* Default storage class.
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* Logging is enabled and targets the desired application logging platform.
+* Monitoring is enabled and targets the desired application observability platform.
+
+### Recommendations - View Cluster
+
+* Spread across three AZs for high availability.
+* Utilize a PostgreSQL database for storing user preferences and manually created entities.
+* Add Build and all Run Clusters service accounts into View Cluster config yaml to monitor runtime resources of apps in Tanzu Application Platform GUI.
 
 The View Cluster includes the following packages:
 
@@ -142,22 +157,28 @@ To install a View Cluster, use the following package definition:
 ```yaml
 profile: view
  ```
+
 ## Iterate Cluster Requirements
+
 The Iterate Cluster is for "inner loop" development iteration. Developers connect to the Iterate Cluster via their IDE to rapidly iterate on new software features. The Iterate Cluster operates distinctly from the outer loop infrastructure. Each developer should be given their own namespace within the Iterate Cluster during their platform onboarding.
 
 ![Iterate Cluster components](img/tap-architecture-planning/iterate-cluster.jpg)
 <!-- https://lucid.app/lucidchart/40663cc1-55aa-4892-ae23-1f462d39f262 -->
 
-### Kubernetes Requirements
-* LoadBalancer for ingress controller (2 external IP addresses)
-* Default storage class
-* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node
-* Logging is enabled and targets the desired application logging platform
-* Monitoring is enabled and targets the desired application observability platform
+### Kubernetes Requirements - Iterate Cluster
 
-### Recommendations
-* Spread across three AZs for high availability
+* Supported Kubernetes versions are 1.22, 1.23, 1.24.
+* LoadBalancer for ingress controller (2 external IP addresses).
+* Default storage class.
+* At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* Logging is enabled and targets the desired application logging platform.
+* Monitoring is enabled and targets the desired application observability platform.
+* **docker** runtime container is configured with full build service such as `descriptor_name: "full"`.
 
+### Recommendations - Iterate Cluster
+
+* Spread across three AZs for high availability.
+* Install build profile build service with lite descriptor such as `descriptor_name: "lite"`.
 
 The Iterate Cluster includes the following packages:
 ```
@@ -197,6 +218,7 @@ profile: iterate
 ```
 
 ## Tanzu Application Platform Upgrade Approach
+
 When a new version of Tanzu Application Platform is released, we recommended that you first upgrade the operator sandbox environment.
 
 Before upgrading the production environment, install a sample subset of applications and perform any applicable platform tests specific to your organization in the sandbox. Such tests may include building a representative set of applications and verifying that they still deploy successfully to your sandbox Run Cluster.
@@ -204,34 +226,34 @@ Before upgrading the production environment, install a sample subset of applicat
 The following upgrade sequence is recommended:
 
 * Sandbox
-    * View
-    * Build
-    * Run  
+  * View
+  * Build
+  * Run  
 * Production
-    * Iterate
-    * View
-    * Build
-    * Run (dev)
-    * Run (test)
-    * Run (QA)
-    * Run (prod)
-
+  * Iterate
+  * View
+  * Build
+  * Run (dev)
+  * Run (test)
+  * Run (QA)
+  * Run (prod)
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
 |TAP-006  | Follow the upgrade order specified.         |  Upgrading in order promotes confidence in that software, configuration, and architecture is stable and reliable.   |  None
 
 ## Services Architecture
+
 The primary ways to consume services are In-Cluster, External Cluster, and External Injected. Services are consumed by applications via the 'workload.yaml'. The request is presented to the system as a ServiceClaim. The preferred method of service integration is the external cluster.
 
 External Cluster provides services operations with their specific life cycle and performance requirements and separates the stateless and stateful workloads.
-
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
 |TAP-007  | Use external services and service clusters.         |  Utilizing external services allows the service operators to customize their cluster parameters for their specific services and manage their respective life cycles independently.   | Utilizing external clusters adds some technical complexity.
 
 ### In-Cluster
+
 Services can be deployed directly into the same cluster running Tanzu Application Service. This kind of deployment is more suited to iterate cluster environments. Possible implementations include:
 
   - same namespace
@@ -243,29 +265,35 @@ The following diagram shows In-Cluster services with different namespaces.
 <!-- slides 80-82 https://onevmw-my.sharepoint.com/:p:/g/personal/mijames_vmware_com/EYK5tKWk83RFia7QHHkaAj0BUnnhenCjlto4qpYDY_ZyFw?e=NhmLnZ -->
 
 ### External Cluster
+
 External clusters allow services to have different infrastructure, security, and scaling requirements. External services clusters are the recommended way to provide rapid service provisioning to platform users.
 
 ![External services clusters](img/tap-architecture-planning/external-cluster.jpg)
 
 ### External Injected
+
 Applications that consume services that do not adhere to the Kubernetes service binding specification require the usage of a K8s secret, implemented in the same app deployment containing the necessary connection details. This method provides the most flexibility and makes it possible to consume legacy services.
 
 ![External injected applications](img/tap-architecture-planning/external-injected.jpg)
 
 ## Monitoring
+
 The following metrics should be observed. If the values exceed service level objectives, the clusters should be scaled or other actions taken.
 
 ### Build Cluster
+
 * Number of pods waiting to be scheduled
 * Number of builds completed in the last 60 minutes
 * Maximum number of seconds that any pod has waited for scheduling
 
 ### Run Cluster
+
 * Number of pods waiting to be scheduled
 * Maximum number of seconds that any pod has waited for scheduling
 * Remaining allottable memory and CPU
 
 ### View Components
+
 * Response time
 * Runtime resource monitoring
 * Availability
@@ -307,19 +335,14 @@ Two roles are for service accounts associated with the Tanzu Supply Chain:
 * `deliverable`
 
 Refer [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
+
 ## CI/CD Pipelines
 Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. Refer [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-tekton-tekton-about.html) for more information.
 
-## Application Workloads
-Tanzu Application Platform allows users to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, etc.
+## Developer tools (Inner-Loop)
 
-When using the Out of the Box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are:
-
-| Workload Type   | Description  | Indicators
-|---            |---                |---
-web | Scalable Web Applications | - Scales based on request load <br> - Automatically exposed by means of HTTP Ingress <br> - Does not perform background work <br> - Works with Service Bindings <br> - Stateless
-server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or LoadBalancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
-worker | Background Applications | - Does not provide network services <br> - Not exposed externally as a network service <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+Tanzu Application Platform allows developers to quickly build and test applications and provide many in-built developer friendly platform capabilities. To learn more about these capabilities, refer to [Tanzu Application Platform Developer Components](tap-architecture-dev-components.md).
 
 ## Deployment Instructions
+
 For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-multicluster-installing-multicluster.html).
