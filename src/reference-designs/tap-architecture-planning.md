@@ -310,7 +310,6 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 |---            |---                |---            |---
 |TAP-009  |Use an external logging platform.          |  An external logging platform will keep logs for the duration of their retention window and offer superior searching capabilities.  | None
 
-
 ## Authentication
 
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity management into Tanzu Application Platform.
@@ -335,7 +334,10 @@ Two roles are for service accounts associated with the Tanzu Supply Chain:
 * `workload`
 * `deliverable`
 
-Refer to [Tanzu Application Platform authorization ](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
+Refer [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-overview.html) for more information.
+
+## CI/CD Pipelines
+Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. Refer [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-tekton-tekton-about.html) for more information.
 
 ## Developer tools (Inner-Loop)
 
