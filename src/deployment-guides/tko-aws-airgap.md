@@ -40,10 +40,10 @@ For additional information about preparing to deploy Tanzu Kubernetes Grid on AW
 
 The main steps to deploy Tanzu for Kubernetes Operations on AWS EC2 are as follows. Each step links to more detailed instructions.
 
-1. [Set up AWS Infrastructure](#aws-infra).
+1. [Set Up AWS Infrastructure](#aws-infra).
 2. [Create an Offline JumpBox](#offline-jumpbox).
-3. [Create and Set Up a Private container registry](#private-repo).
-4. [Copy the container images required to deploy Tanzu Kubernetes Grid](#copy-tkg-img).
+3. [Create and Set Up a Private Container Registry](#private-repo).
+4. [Copy the Container Images Required to Deploy Tanzu Kubernetes Grid](#copy-tkg-img).
 5. [Tanzu Kubernetes Grid Build Machine Image](#tkg-build-machine-img).
 6. [Prepare an Internet-Restricted Environment](#prepEnv).
 7. [Install Tanzu Kubernetes Grid Management Cluster](#install-tkg).
@@ -55,7 +55,7 @@ The main steps to deploy Tanzu for Kubernetes Operations on AWS EC2 are as follo
 13. [Air-Gapped STIG/FIPS Deployment on AWS](#stig-fips).
 14. [Tanzu Kubernetes Grid Upgrade](#upgrade-tkg).
 
-## <a id=aws-infra> </a> Set up AWS Infrastructure
+## <a id=aws-infra> </a> Set Up AWS Infrastructure
 
 The following describes the steps to create your AWS environment and configure your network. Follow the steps in the order provided.
 
