@@ -219,7 +219,7 @@ profile: iterate
 
 ## Tanzu Application Platform Upgrade Approach
 
-When a new version of Tanzu Application Platform is released, we recommended that you first upgrade the operator sandbox environment.
+When a new version of Tanzu Application Platform is released, we recommend that you first upgrade the operator sandbox environment.
 
 Before upgrading the production environment, install a sample subset of applications and perform any applicable platform tests specific to your organization in the sandbox. Such tests may include building a representative set of applications and verifying that they still deploy successfully to your sandbox Run Cluster.
 
@@ -312,7 +312,7 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 
 ## Authentication
 
-There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity management into Tanzu Application Platform.
+There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity provider into Tanzu Application Platform.
 
 To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.3/tap/GUID-authn-authz-pinniped-login.html).
 
