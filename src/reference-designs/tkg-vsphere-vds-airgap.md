@@ -75,7 +75,7 @@ Tanzu Kubernetes Grid comprises the following components:
 
 **Tanzu CLI -** A command-line utility that provides the necessary commands to build and operate Tanzu management and Tanzu Kubernetes clusters.
 
-bernetes Grid uses the following Carvel tools:
+Kubernetes Grid uses the following Carvel tools:
 
 - **ytt -** A command-line tool for templating and patching YAML files. You can also use `ytt` to collect fragments and piles of YAML into modular chunks for reuse.
 
