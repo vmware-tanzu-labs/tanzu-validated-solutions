@@ -14,7 +14,8 @@ The following reference design is based on the architecture and components descr
 
   The Supervisor Cluster runs on top of an SDDC layer that consists of ESXi for compute, vSphere Distributed Switch for networking, and vSAN or another shared storage solution.
 
-- **vSphere Namespaces:** A vSphere Namespace is a tenancy boundary within vSphere with Tanzu. A vSphere Namespace allows for sharing vSphere resources (computer, networking, storage) and enforcing resource limits with the underlying objects such as Tanzu Kubernetes clusters. For each namespace, you configure role-based access control ( policies and permissions ), images library amd virtul machine classes.
+- **vSphere Namespaces:** A vSphere Namespace is a tenancy boundary within vSphere with Tanzu. A vSphere Namespace allows for sharing vSphere resources (computer, networking, storage) and enforcing resource limits with the underlying objects such as Tanzu Kubernetes clusters. For each namespace, you configure role-based access control ( policies and permissions ), images library amd virtua
+l machine classes.
 
 - **Tanzu Kubernetes Grid Service:** Tanzu Kubernetes Grid Service (TKGS) allows you to create and manage ubiquitous Kubernetes clusters on a VMware vSphere infrastructure using the Kubernetes Cluster API. The Cluster API provides declarative, Kubernetes-style APIs for the creation, configuration, and management of the Tanzu Kubernetes Cluster.
 
@@ -267,7 +268,7 @@ Starting with vSphere 8, when you enable vSphere with Tanzu, you can configure e
 
 ## Single-Zone Deployment of Supervisor
 
-A supervisor deployed on s single vSphere cluster has theee control plane VMs, which reside on the ESXi hosts part of the cluster. A single zone is created for the Supervisor automatically or you can use a zone that is created in advance. In a Single-Zone deployment, cluster-level high availablity is maintained through vSphere HA and can scale with vSphere with Tanzu setup by adding physical hosts to vSphere cluster that maps to the Supervisor. 
+A supervisor deployed on s single vSphere cluster has three control plane VMs, which reside on the ESXi hosts part of the cluster. A single zone is created for the Supervisor automatically or you can use a zone that is created in advance. In a Single-Zone deployment, cluster-level high availability is maintained through vSphere HA and can scale with vSphere with Tanzu setup by adding physical hosts to vSphere cluster that maps to the Supervisor. 
 You can run workloads through vSphere Pods, Tanzu Kubernetes Grid clusters and VMs when Supervisor is enabled with the NSX networking stack.
 
 ## Three-Zone Deployment of Supervisor
@@ -277,7 +278,7 @@ provide :
 
 - Cluster-level high availability to the Supervisor as vSphere cluster is an independent failure domain.
 - Distribute the nodes of Tanzu Kubernetes Grid clusters across all three vSphere zones and provide availability via vSphere HA at cluster level.
-- Scale the Supervisor by additing hosts to each of the three vSphere clusters.
+- Scale the Supervisor by adding hosts to each of the three vSphere clusters.
 
 For more information, see [Supervisor Architecture and Components](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-74EC2571-4352-4E15-838E-5F56C8C68D15.html)
 
@@ -389,7 +390,7 @@ See [Sizing Service Engines](https://avinetworks.com/docs/22.1/sizing-service-en
 
 Multiple performance vectors or features may have an impact on performance.  For example, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX Advanced Load Balancer recommends two cores.
 
-NSX Advanced Load Balancer Service Engines may be configured with as little as 1 vCPU core and 2 GB RAM, or up to 64 vCPU cores and 256 GB RAM. It is recommended for a Service Engine to have atleast 4 GB of memory when Geo
+NSX Advanced Load Balancer Service Engines may be configured with as little as 1 vCPU core and 2 GB RAM, or up to 64 vCPU cores and 256 GB RAM. It is recommended for a Service Engine to have at least 4 GB of memory when Geo
 
 ## Container Registry
 
