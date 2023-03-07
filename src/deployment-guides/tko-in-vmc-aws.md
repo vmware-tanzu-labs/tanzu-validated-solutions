@@ -50,9 +50,33 @@ Your environment should meet the following general requirements:
 - SDDC v1.18 or later deployed in VMC on AWS.
 - Your SDDC has the following objects in place:
   - Dedicated resource pools and VM folders for collecting Tanzu Kubernetes Grid and NSX Advanced Load Balancer VMs. Refer to the Resource Pools and VM Folders section for more information.
-  - NSX Advanced Load Balancer 21.1.4 OVA downloaded from the [customer connect](https://customerconnect.vmware.com/home?bmctx=89E60DF848C641FD518EB9F6B9A6E5334F602FA3A762B409625CD531863AC847&contextType=external&username=string&password=secure_string&challenge_url=https:%2F%2Fcustomerconnect.vmware.com%2Fhome&request_id=-7975651889850440054&authn_try_count=0&locale=en_GB&resource_url=https%253A%252F%252Fcustomerconnect.vmware.com%252Fweb%252Fvmware%252Fchecksession) portal and readily available for deployment.
+  - NSX Advanced Load Balancer 22.1.2 OVA downloaded from the [customer connect](https://customerconnect.vmware.com/home?bmctx=89E60DF848C641FD518EB9F6B9A6E5334F602FA3A762B409625CD531863AC847&contextType=external&username=string&password=secure_string&challenge_url=https:%2F%2Fcustomerconnect.vmware.com%2Fhome&request_id=-7975651889850440054&authn_try_count=0&locale=en_GB&resource_url=https%253A%252F%252Fcustomerconnect.vmware.com%252Fweb%252Fvmware%252Fchecksession) portal and readily available for deployment.
 
   - A content library to store NSX Advanced Load Balancer Controller and service engine OVA templates.  
+* Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384). As part of this documentation, refer to the section to configure required packages on the Photon OS machine.
+
+  * Tanzu CLI 2.1.0
+  * kubectl cluster CLI 1.24.9
+
+* A vSphere account with the permissions described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+* Download and import NSX Advanced Load Balancer 20.1.7 OVA to Content Library.
+* Download the following OVA from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import to vCenter. Convert the imported VMs to templates.
+
+  * Photon v3 Kubernetes v1.24.9 OVA
+  * Ubuntu 2004 Kubernetes v1.24.9 OVA  
+
+**Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.
+
+#### Resource Pools and VM Folders
+
+The sample entries of the resource pools and folders that need to be created are as follows.
+
+|**Resource Type**|**Sample Resource Pool Name**|**Sample Folder Name**|
+| --- | --- | --- |
+|NSX ALB Components|`tkg-alb-components`|`tkg-alb-components`|
+|TKG Management components|`tkg-management-components`|`tkg-management-components`|
+|TKG Shared Service Components|`tkg-sharedsvc-components`|`tkg-sharedsvc-components`|
+|TKG Workload components|`tkg-workload01-components`|`tkg-workload01-components`|
 
 ### <a id="netreq"> </a> Network Requirements
 
@@ -62,16 +86,7 @@ Create NSX-T logical segments for deploying Tanzu for Kubernetes Operations comp
 
 Ensure that the firewall is set up as described in [Firewall Recommendations](../reference-designs/tko-on-vmc-aws.md#a-idfirewallafirewall-recommendations).
 
-### <a id="resource-pools-and-vm-folders"> </a> Resource Pools and VM Folders
 
-The following table shows sample entries of the resource pools and folders that you should create in your SDDC.
-
-|**Resource Type**|**Resource Pool Name**|**Sample Folder Name**|
-| --- | --- | --- |
-|NSX Advanced Load Balancer Components|<p>tkg-vsphere-alb-components|tkg-vsphere-alb-components|
-|TKG Management Components|tkg-management-components|tkg-management-components|
-|TKG Shared Services Components|tkg-vsphere-shared-services|tkg-vsphere-shared-services|
-|TKG Workload Components|tkg-vsphere-workload	|tkg-vsphere-workload	|
 
 ### <a id=subnet-and-cidr-examples> </a> Subnet and CIDR Examples
 
@@ -81,13 +96,13 @@ For the purpose of demonstration, this document uses the following subnet CIDRs 
 | --- | --- | --- | --- | --- |
 |NSX ALB Mgmt Network|sfo01-w01-vds01-albmanagement|192.168.11.1/27|192.168.11.15 - 192.168.11.30|NA|
 |TKG Management Network|sfo01-w01-vds01-tkgmanagement|192.168.12.1/24|192.168.12.2 - 192.168.12.251|NA|
-|TKG Workload Network|sfo01-w01-vds01-tkgworkload|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
+|TKG Workload Network|sfo01-w01-vds01-tkgworkload01|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
 |TKG Cluster VIP Network|sfo01-w01-vds01-tkgclustervip|192.168.14.1/26|192.168.14.2 - 192.168.14.30|192.168.14.31 - 192.168.14.60|
 |TKG Mgmt VIP Network|sfo01-w01-vds01-tkgmanagementvip|192.168.15.1/26|192.168.15.2 - 192.168.15.30|192.168.15.31 - 192.168.15.60|
 |TKG Workload VIP Network|sfo01-w01-vds01-tkgworkloadvip|192.168.16.1/26|192.168.16.2 - 192.168.16.30|192.168.16.31 - 192.168.16.60|
 |TKG Shared Services Network|sfo01-w01-vds01-tkgshared|192.168.17.1/24|192.168.17.2 - 192.168.17.251|NA|
 
-## Deployment Overview
+## Tanzu for Kubernetes Operations Deployment Overview
 
 The high-level steps for deploying Tanzu for Kubernetes Operation on VMware Cloud on AWS are as follows:
 
@@ -103,7 +118,13 @@ The high-level steps for deploying Tanzu for Kubernetes Operation on VMware Clou
 
 ## <a id="dep-config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
 
-For the purpose of demonstration, this document describes how to deploy NSX Advanced Load Balancer as a cluster of three nodes. After the first node is deployed and configured, two more nodes are deployed to form the cluster.
+
+NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer that provides L4 - L7 load balancer support.
+NSX Advanced Load Balancer is deployed in No Orchestrator Access Mode in the VMC Environment.in this mode, adding, removing, or modifying properties of a Service Engine requires an administrator to manually perform the changes. For instance, an administrator would need to install a new SE through the orchestrator, such as vCenter, by uploading the OVA and setting the resource and networking properties.
+
+For a production-grade deployment, it is recommended to deploy three instances of the NSX Advanced Load Balancer controller for high availability and resiliency.  
+
+The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:  
 
 The following IP addresses are reserved for NSX Advanced Load Balancer:
 
@@ -114,7 +135,7 @@ The following IP addresses are reserved for NSX Advanced Load Balancer:
 |Node03 (Secondary) |192.168.11.10|sfo01albctlr01c.sfo01.rainpole.local|
 |Controller Cluster IP|192.168.11.11|sfo01albctlr01.sfo01.rainpole.local|
 
-To deploy NSX Advanced Load Balancer controller nodes:
+Follow these steps to deploy and configure NSX Advanced Load Balancer:
 
 1. Log in to the vCenter server from the vSphere client.
 
@@ -125,9 +146,9 @@ To deploy NSX Advanced Load Balancer controller nodes:
 4. Follow the wizard to configure the following:
 
     - Set the **VM Name** and **Folder Location**.
-    - Select the **NSX-Advanced Load Balancer** resource pool as a compute resource.
+    - Select the **nsx-alb-components** resource pool as a compute resource.
     - Select the datastore for the controller node deployment.
-    - Select the **NSX-ALB-Mgmt** port group for the Management Network.
+    - Select the **sfo01-w01-vds01-albmanagement** port group for the Management Network.
     - Customize the configuration by providing the **Management Interface IP Address**, **Subnet Mask**, and **Default Gateway**. The remaining fields are optional and can be left blank.
 
 After the controller VM is deployed and powered on, connect to the URL for the node and configure the node for your Tanzu Kubernetes Grid environment as follows:
@@ -155,21 +176,6 @@ After the controller VM is deployed and powered on, connect to the URL for the n
 
 If you did not select the **Setup Cloud After** option before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a Dashboard view on the controller.
 
-### Configure No Orchestrator Cloud
-
-1. To configure the No Orchestrator Cloud, navigate to the **Infrastructure > Clouds** tab.
-
-2. Click **Create** and select **No Orchestrator** from the dropdown list.
-
-    ![Configure No Orchestrator cloud](img/tko-in-vmc-aws/deploy-tko-vmc-05.jpg)
-
-3. Provide a name for the cloud, enable IPv4 DHCP under DHCP settings, and click **Save**.
-
-    ![New cloud name](img/tko-in-vmc-aws/deploy-tko-vmc-06.JPG)
-
-4. After the cloud is created, ensure that the health status of the cloud is green.
-
-    ![Cloud health status](img/tko-in-vmc-aws/deploy-tko-vmc-08.JPG)
 
 ### Configure Licensing
 
@@ -187,19 +193,16 @@ Tanzu for Kubernetes Operations is bundled with a license for NSX Advanced Load 
 
    ![Licensing configuration 03](img/tko-in-vmc-aws/deploy-tko-vmc-10.JPG)
 
-### Configure NTP Settings
+### NSX Advanced Load Balancer: NTP Configuration
 
-Configure NTP settings if you want to use an internal NTP server. To configure NTP settings, complete the following steps.
+To configure NTP, go to **Administration** > **Settings** > **DNS/NTP > Edit** and add your NTP server details and click **Save**.
 
-1. Navigate to **Administration > Settings > DNS/NTP**.
+**Note:** You may also delete the default NTP servers.
 
    ![DNS/NTP settings](img/tko-in-vmc-aws/deploy-tko-vmc-11.jpg)
 
-2. Edit the settings using the pencil icon to specify the NTP server that you want to use and save the settings.
 
-   ![Update system settings](img/tko-in-vmc-aws/deploy-tko-vmc-12.jpg)
-
-### Configure NSX Advanced Load Balancer Controller Cluster
+### <a id="nsx-alb-ha"> </a> NSX Advanced Load Balancer: Controller High Availability
 
 In a production environment, VMware recommends that you deploy additional controller nodes and configure the controller cluster for high availability and disaster recovery. Adding two additional nodes to create a 3-node cluster provides node-level redundancy for the controller and also maximizes performance for CPU-intensive analytics functions.
 
@@ -257,6 +260,7 @@ For the purpose of the demonstration, this document uses a self-signed certifica
 4. Click **Save** to save the certificate.
 
     ![New certificate](img/tko-in-vmc-aws/deploy-tko-vmc-18.jpg)
+    ![New certificate](img/tko-in-vmc-aws/deploy-tko-vmc-118.jpg)
 
 5. To change the NSX Advanced Load Balancer portal certificate, navigate to the **Administration** > **Settings** >**Access Settings** page and click the pencil icon to edit the settings.
 
@@ -278,6 +282,23 @@ After the certificate is created, export the certificate thumbprint. The thumbpr
 
     ![Export SSL Certificate](img/tko-in-vmc-aws/deploy-tko-vmc-20-1.jpg)
 
+### <a id="nsx-alb-vcenter-se"> </a> NSX Advanced Load Balancer: Create No Orchestrator Cloud and SE Groups
+
+1. To configure the No Orchestrator Cloud, navigate to the **Infrastructure > Clouds** tab.
+
+2. Click **Create** and select **No Orchestrator** from the dropdown list.
+
+    ![Configure No Orchestrator cloud](img/tko-in-vmc-aws/deploy-tko-vmc-05.jpg)
+
+3. Provide a name for the cloud, enable IPv4 DHCP under DHCP settings, and click **Save**.
+
+    ![New cloud name](img/tko-in-vmc-aws/deploy-tko-vmc-06.JPG)
+
+4. After the cloud is created, ensure that the health status of the cloud is green.
+
+    ![Cloud health status](img/tko-in-vmc-aws/deploy-tko-vmc-08.JPG)
+
+
 ### Configure Service Engine Groups
 
 Tanzu for Kubernetes Operations deployment is based on the use of distinct service engine (SE) groups for the Tanzu Kubernetes Grid management and workload clusters. The service engines for the management cluster are deployed in the Tanzu Kubernetes Grid management SE group, and the service engines for Tanzu Kubernetes Grid workload clusters are deployed in the Tanzu Kubernetes Grid workload SE group.
@@ -296,11 +317,17 @@ Tanzu for Kubernetes Operations deployment is based on the use of distinct servi
 - A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
 
 To create and configure a new SE group, complete the following steps.
+The following components are created in NSX Advanced Load Balancer.
+
+<!-- /* cSpell:disable */ -->
+
+| **Object** | **Sample Name** |
+| --- | --- |
+| vCenter Cloud | sfo01w01vc01 |
+| Service Engine Group 1 | sfo01m01segroup01 |
+| Service Engine Group 2 | sfo01w01segroup01 |
 
 1. Go to **Infrastructure > Service Engine Group** under Cloud Resources and click **Create**.
-
-    ![Create Service Engine Group](img/tko-in-vmc-aws/deploy-tko-vmc-21.JPG)
-
 2. Provide a name for the SE group and configure the following settings:
 
    - **High Availability Mode:** Elastic HA Active/Active
@@ -308,7 +335,10 @@ To create and configure a new SE group, complete the following steps.
    - **Virtual Service per Service Engine:** 10
    - **SE Self-Election:** Selected
 
-    ![New Service Engine Group](img/tko-in-vmc-aws/deploy-tko-vmc-22.JPG)
+
+
+    ![Create Service Engine Group](img/tko-in-vmc-aws/deploy-tko-vmc-21.JPG)
+
 
 3. Repeat the steps to create an SE group for the Tanzu Kubernetes Grid workload cluster. You should have created two service engine groups.
 
@@ -327,8 +357,6 @@ As per the reference architecture, Tanzu for Kubernetes Operations deployment ma
 To create and configure the VIP networks, complete the following steps.
 
 1. Go to the **Infrastructure > Networks** tab under Cloud Resources and click **Create**. Check that the VIP networks are being created under the correct cloud.
-
-    ![Configure VIP Networks](img/tko-in-vmc-aws/deploy-tko-vmc-24.JPG)
 
 2. Provide a name for the VIP network and uncheck the **DHCP Enabled** and **IPv6 Auto-Configuration** options.
 
@@ -357,23 +385,15 @@ After configuring the VIP networks, set the default routes for all VIP/data netw
 
 |**Network Name**|**Gateway Subnet Mask**|**Next Hop**|
 | --- | --- | --- |
-|TKG-Cluster-VIP|0.0.0.0/0|192.168.14.1|
-|TKG-Management-VIP|0.0.0.0/0|192.168.15.1|
-|TKG-Workload-VIP|0.0.0.0/0|192.168.16.1|
+|sfo01-w01-vds01-tkgclustervip|0.0.0.0/0|192.168.14.1|
+|sfo01-w01-vds01-tkgmanagementvip|0.0.0.0/0|192.168.15.1|
+|sfo01-w01-vds01-tkgworkloadvip|0.0.0.0/0|192.168.16.1|
 
 **Note:** Change the gateway subnet addresses to match your network configuration.
 
-1. Go to the **Routing** page and click **Create**.
+1. Go to the **Infrastructure** > **VRF Context** > Edit **global** and add **Static Route**.
 
     ![Routing](img/tko-in-vmc-aws/deploy-tko-vmc-29.jpg)
-
-2. Add default routes for the VIP networks.
-
-    ![Edit Static Route](img/tko-in-vmc-aws/deploy-tko-vmc-30.jpg)
-
-3. Repeat the steps to configure additional routing. A total of three default gateways are configured.
-
-    ![Additional routing](img/tko-in-vmc-aws/deploy-tko-vmc-31.jpg)
 
 ### Configuring IPAM and DNS Profiles
 
@@ -383,20 +403,17 @@ To create an IPAM profile, complete the following steps.
 
 1. Navigate to the **Templates > Profiles > IPAM/DNS Profiles** page, click **Create**, and select **IPAM Profile**.
 
-    ![IPAM/DNS Profiles](img/tko-in-vmc-aws/deploy-tko-vmc-32.JPG)
 
 2. Create the profile using the values shown in the following table.
 
     |**Parameter**|**Value**|
     | --- | --- |
-    |Name|ALB-TKG-IPAM|
+    |Name|sfo01w01ipam01|
     |Type|AVI Vantage IPAM|
     |Cloud for Usable Networks|tkg-vmc|
-    |Usable Networks|<p>TKG-Cluster-VIP</p><p>TKG-Management-VIP</p><p>TKG-Workload-VIP</p>|
+    |Usable Networks|<p>sfo01-w01-vds01-tkgclustervip</p><p>sfo01-w01-vds01-tkgmanagementvip</p><p>sfo01-w01-vds01-tkgworkloadvip</p>|
 
 3. Click **Save** to finish the IPAM creation wizard.
-
-    ![IPAM creation wizard completion](img/tko-in-vmc-aws/deploy-tko-vmc-33.jpg)
 
 4. To create a DNS profile, click **Create** again and select **DNS Profile**.
 
@@ -454,15 +471,15 @@ To generate a cluster UUID and auth token, navigate to **Infrastructure > Clouds
 
    The service engine for the Tanzu Kubernetes Grid management cluster is connected to the following networks:
 
-   - Management: NSX-ALB-Mgmt
-   - Data Network 1: TKG-Cluster-VIP
-   - Data Network 2: TKG-Management-VIP
-   - Data Network 3: TKG-Management
-   - Data Network 4: TKG-Shared-Services
+   - Management: sfo01-w01-vds01-albmanagement
+   - Data Network 1: sfo01-w01-vds01-tkgclustervip
+   - Data Network 2: sfo01-w01-vds01-tkgmanagementvip
+   - Data Network 3: sfo01-w01-vds01-tkgmanagement
+   - Data Network 4: sfo01-w01-vds01-tkgshared
 
     ![Deploy OVF Template](img/tko-in-vmc-aws/deploy-tko-vmc-38.jpg)
 
-3. Provide the cluster UUID and authentication token that you generated earlier on the **Customize template** page. Configure the service engine VM management network settings as well.
+3. Provide the cluster UUID and authentication token that you generated earlier on the **Customize template** page on the time of SE Deployment. Configure the service engine VM management network settings as well.
 
     ![Customize template](img/tko-in-vmc-aws/deploy-tko-vmc-39.jpg)
 
@@ -470,7 +487,6 @@ To generate a cluster UUID and auth token, navigate to **Infrastructure > Clouds
 
 By default, service engine VMs are created in the default Service Engine Group.
 
-![Service Engine Group](img/tko-in-vmc-aws/deploy-tko-vmc-40.JPG)
 
 To map the service engine VMs to the correct Service Engine Group, 
 
@@ -488,16 +504,16 @@ On the **Service Engine Group** page, you can confirm the association of service
 
 Service engine VMs deployed for Tanzu Kubernetes Grid workload cluster are connected to the following networks:
 
-- Management: NSX-ALB-Mgmt
-- Data Network 1: TKG-Workload-VIP
-- Data Network 2: TKG-Workload
-- Data Network 3: TKG-Cluster-VIP
+- Management: sfo01-w01-vds01-albmanagement
+- Data Network 1: sfo01-w01-vds01-tkgworkloadvip
+- Data Network 2: sfo01-w01-vds01-tkgworkload
+- Data Network 3: sfo01-w01-vds01-tkgclustervip
 
 ![Edit virtual hardware settings](img/tko-in-vmc-aws/deploy-tko-vmc-43.jpg)
 
 You need to deploy service engine VMs with the above settings.
 
-After deploying the service engines, edit the service engine VMs and associate them with the **TKG-WLD01-SEG** Service Engine Group.
+After deploying the service engines, edit the service engine VMs and associate them with the **sfo01w01segroup01** Service Engine Group.
 
 ![Associate Service Engines VMs with Service Engine Group](img/tko-in-vmc-aws/deploy-tko-vmc-44.jpg)
 
@@ -509,184 +525,202 @@ The deployment of the Tanzu Kubernetes Grid management and workload cluster is f
 
 The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed via the Tanzu CLI.
 
-### Download Kubernetes Templates and Tanzu Kubernetes Grid Tools
+## <a id="bootstrap"> </a> Deploy and Configure Bootstrap Machine
 
-To deploy the Tanzu Kubernetes Grid instance, you must first import the supported version of the Kubernetes OVA into your vCenter server and convert the imported OVA into a template. This template is used by the Tanzu Kubernetes Grid installer to deploy the management and workload clusters.
+The deployment of the Tanzu Kubernetes Grid management and workload clusters is facilitated by setting up a bootstrap machine where you install the Tanzu CLI and Kubectl utilities which are used to create and manage the Tanzu Kubernetes Grid instance. This machine also keeps the Tanzu Kubernetes Grid and Kubernetes configuration files for your deployments. The bootstrap machine can be a laptop, host, or server running on Linux, macOS, or Windows that you deploy management and workload clusters from.
 
-For importing an OVA template in vCenter, see [Deploy an OVF or OVA Template](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-17BEDA21-43F6-41F4-8FB2-E01D275FE9B4.html).
+The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-To learn more about the supported Kubernetes version with Tanzu Kubernetes Grid 1.6.0, see the [Tanzu Kubernetes Grid Release Notes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-release-notes.html).
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure for a macOS or Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-install-cli.html).
 
-You can download the supported Kubernetes templates for Tanzu Kubernetes Grid 1.6.0 from the VMware [customer connect](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-160&productId=1098&rPId=84734) portal.
+The bootstrap machine must meet the following prerequisites:
 
-Download the following items from the portal:
+   * A minimum of 6 GB of RAM and a 2-core CPU.
+   * System time is synchronized with a Network Time Protocol (NTP) server.
+   * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
+   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `tkg_mgmt_pg`.
 
-- Photon v3 Kubernetes v1.23.8 or Ubuntu 2004 Kubernetes v1.23.8 OVA
-- VMware Tanzu CLI
-- kubectl CLI v1.23.8 for Linux
+To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
 
-### Configure Bootstrap Environment
+1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384).
 
-In the VMC on AWS environment, the bootstrap machine must be a cloud VM, not a local machine, and should meet the following prerequisites:
+   * VMware Tanzu CLI 2.1.0 for Linux
+   * kubectl cluster cli v1.24.9 for Linux
 
-- A minimum of 6 GB of RAM and a 2-core CPU.
-- System time is synchronized with a Network Time Protocol (NTP) server.
-- Docker and containerd binaries are installed. For instructions on how to install Docker, see the official [Docker documentation](https://docs.docker.com/engine/install/).
+1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
+    ```bash
+    ## Install required packages
+    tdnf install tar zip unzip wget -y
 
-**Note:** For the purpose of the demonstration, this document refers to a bootstrapper machine as a CentOS-7 instance deployed in VMC SDDC and attached to the logical segment designated for the Tanzu Kubernetes Grid management cluster.
+    ## Install Tanzu Kubernetes Grid CLI
+    tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
+    cd ./cli/
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+    chmod +x /usr/local/bin/tanzu
 
-To use the Tanzu Kubernetes Grid installation binaries, upload the Tanzu CLI and Kubectl binary to the bootstrapper machine using WinSCP or a similar utility and unpack them using the system utilities like `tar/unzip/gunzip`.
+    ## Verify Tanzu CLI version
 
-### Install Tanzu CLI Plugins
+     [root@tkg160-bootstrap ~] # tanzu version
 
-After you unpack the Tanzu CLI bundle file, a CLI folder with multiple subfolders and files is created. Use the following command to install the Tanzu CLI.
+    version: v0.28.0
+    buildDate: 2023-01-20
+    sha: 3c34115bc-dirty
 
-```
-[root@tkg-bootstrapper ~]# tar -xvf tanzu-cli-bundle-linux-amd64.tar
+    ## Install Tanzu Kubernetes Grid CLI Plugins
 
-[root@tkg-bootstrapper ~]# install cli/core/v0.25.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
-```
-At the command line, run the `tanzu version` command to check that the correct version of the Tanzu CLI is properly installed. After you have installed the Tanzu CLI, you must install the plugins related to Tanzu Kubernetes cluster management and feature operations.
+    [root@tkg160-bootstrap ~] # tanzu plugin sync
 
-To install the Tanzu plugins, run the `tanzu plugin sync` command.
+    Checking for required plugins...
+    Installing plugin 'login:v0.28.0'
+    Installing plugin 'management-cluster:v0.28.0'
+    Installing plugin 'package:v0.28.0'
+    Installing plugin 'pinniped-auth:v0.28.0'
+    Installing plugin 'secret:v0.28.0'
+    Installing plugin 'telemetry:v0.28.0'
+    Successfully installed all required plugins
+    ✔  Done
 
-```
-[root@tkg-bootstrapper ~]# tanzu plugin sync
-Checking for required plugins...
-Installing plugin 'login:v0.25.0'
-Installing plugin 'management-cluster:v0.25.0'
-Installing plugin 'package:v0.25.0'
-Installing plugin 'pinniped-auth:v0.25.0'
-Installing plugin 'secret:v0.25.0'
-Installing plugin 'telemetry:v0.25.0'
-Successfully installed all required plugins
-✔  Done
-```
+    ## Verify the plugins are installed
 
-After a successful installation, run the `tanzu plugin list` command to validate that the status of the plugin is showing as installed.
+    [root@tkg160-bootstrap ~]# tanzu plugin list
+    NAME                DESCRIPTION                                                        SCOPE       DISCOVERY  VERSION  STATUS
+    login               Login to the platform                                              Standalone  default    v0.28.0  installed
+    management-cluster  Kubernetes management-cluster operations                           Standalone  default    v0.28.0  installed
+    package             Tanzu package management                                           Standalone  default    v0.28.0  installed
+    pinniped-auth       Pinniped authentication operations (usually not directly invoked)  Standalone  default    v0.25.0  installed
+    secret              Tanzu secret management                                            Standalone  default    v0.28.0  installed
+    telemetry           Configure cluster-wide telemetry settings                          Standalone  default    v0.28.0  installed
 
-### Install Kubectl
 
-Run the following commands to install the `kubectl` utility:
+    ## Install Kubectl CLI
+    gunzip kubectl-linux-v1.24.9+vmware.1.gz
+    mv kubectl-linux-v1.24.9+vmware.1 /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
 
-```
-[root@tkg-bootstrapper ~]# gunzip kubectl-linux-v1.23.8+vmware.2.gz
+    # Install Carvel tools
 
-[root@tkg-bootstrapper ~]# mv kubectl-linux-v1.23.8+vmware.2 kubectl
+    ##Install ytt
+    cd ./cli
+    gunzip ytt-linux-amd64-v0.43.1+vmware.1.gz
+    chmod ugo+x ytt-linux-amd64-v0.43.1+vmware.1 &&  mv ./ytt-linux-amd64-v0.43.1+vmware.1 /usr/local/bin/ytt
 
-[root@tkg-bootstrapper ~]# chmod +x kubectl
+    ##Install kapp
 
-[root@tkg-bootstrapper ~]# mv kubectl /usr/local/bin/
-```
+    cd ./cli
+    gunzip kapp-linux-amd64-v0.53.2+vmware.1.gz
+    chmod ugo+x kapp-linux-amd64-v0.53.2+vmware.1 && mv ./kapp-linux-amd64-v0.53.2+vmware.1 /usr/local/bin/kapp
 
-After installing `kubectl`, run the `kubectl version` command to validate that `kubectl` is working and that the version reports as 1.22.5.
+    ##Install kbld
 
-### Create an SSH Key Pair
+    cd ./cli
+    gunzip kbld-linux-amd64-v0.35.1+vmware.1.gz
+    chmod ugo+x kbld-linux-amd64-v0.35.1+vmware.1 && mv ./kbld-linux-amd64-v0.35.1+vmware.1 /usr/local/bin/kbld
 
-An SSH key pair is required for Tanzu CLI to connect to vSphere from the bootstrap machine. The public key part of the generated key is passed during the deployment of the Tanzu Kubernetes Grid management cluster.
+    ##Install impkg
 
-1. To generate a new SSH key pair, execute the `ssh-keygen` command as shown below:
-
+    cd ./cli
+    gunzip imgpkg-linux-amd64-v0.31.1+vmware.1.gz
+    chmod ugo+x imgpkg-linux-amd64-v0.31.1+vmware.1 && mv ./imgpkg-linux-amd64-v0.31.1+vmware.1 /usr/local/bin/imgpkg
     ```
-    [root@tkg-bootstrapper ~]# ssh-keygen -t rsa -b 4096 -C "email@example.com"
+
+1. Validate Carvel tools installation using the following commands.
+
+    ```bash
+    ytt version
+    kapp version
+    kbld version
+    imgpkg version
     ```
 
-2. You are prompted to enter the file in which to save the key. Press **Enter** to accept the default.
+1. Install `yq`. `yq` is a lightweight and portable command-line YAML processor. `yq` uses `jq`-like syntax but works with YAML and JSON files.
 
-3. Enter and repeat a password for the key pair.
+    ```bash
+    wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64.tar.gz
 
-4. Add the private key to the SSH agent running on your machine and enter the password you created in the previous step.
-
-    ```
-    [root@tkg-bootstrapper ~]# ssh-add ~/.ssh/id_rsa
+    tar -xvf yq_linux_amd64.tar.gz && mv yq_linux_amd64 /usr/local/bin/yq
     ```
 
-    If the `ssh-add` command fails, execute `eval $(ssh-agent)` and then re-run the `ssh-add` command.
+1. Install `kind`.
 
-5. Make a note of the public key from the file $home/.ssh/id_rsa.pub. You need this while creating a config file for deploying the Tanzu Kubernetes Grid management cluster.
+    ```bash
+    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
+    chmod +x ./kind
+    mv ./kind /usr/local/bin/kind
+    ```
 
-### Install Carvel Tools
+1. Execute the following commands to start the Docker service and enable it to start at boot. Photon OS has Docker installed by default.
 
-Tanzu Kubernetes Grid uses the following tools from the Carvel open-source project:
+    ```bash
+    ## Check Docker service status
+    systemctl status docker
 
-- **[ytt](https://carvel.dev/ytt/)** - a command-line tool for templating and patching YAML files. You can also use ytt to collect fragments and piles of YAML into modular chunks for easy re-use.
+    ## Start Docker Service
+    systemctl start docker
 
-- **[kapp](https://carvel.dev/kapp/)** - the application deployment CLI for Kubernetes. It allows you to install, upgrade, and delete multiple Kubernetes resources as one application.
+    ## To start Docker Service at boot
+    systemctl enable docker
+    ```
 
-- **[kbld](https://carvel.dev/kbld/)** - an image-building and resolution tool.
+1. Execute the following commands to ensure that the bootstrap machine uses [cgroup v1](https://man7.org/linux/man-pages/man7/cgroups.7.html).
 
-- **[imgpkg](https://carvel.dev/imgpkg/)** - a tool that enables Kubernetes to store configurations and the associated container images as OCI images, and to transfer these images.
+    ```bash
+    docker info | grep -i cgroup
 
-#### Install ytt
+    ## You should see the following
+    Cgroup Driver: cgroupfs
+    ```
 
-Navigate to the location on your bootstrap environment machine where you unpacked the Tanzu CLI bundle tar file, `cd` to the `cli` sub-folder, and run the following commands to install and verify `ytt`.
+1. Create an SSH key pair.
 
-```
-[root@tkg-bootstrapper ~]# cd cli
-[root@tkg-bootstrapper cli]# gunzip ytt-linux-amd64-v0.41.1+vmware.1.gz
-[root@tkg-bootstrapper cli]# chmod +x ytt-linux-amd64-v0.41.1+vmware.1
-[root@tkg-bootstrapper cli]# mv ytt-linux-amd64-v0.41.1+vmware.1 /usr/local/bin/ytt
-```
-Check the `ytt` version:
-```
-[root@tkg-bootstrapper cli]# ytt version
-ytt version 0.41.1
-```
+   An SSH key pair is required for Tanzu CLI to connect to vSphere from the bootstrap machine.  
 
-#### Install kapp
-```
-[root@tkg-bootstrapper cli]# gunzip kapp-linux-amd64-v0.49.0+vmware.1.gz
-[root@tkg-bootstrapper cli]# chmod +x kapp-linux-amd64-v0.49.0+vmware.1
-[root@tkg-bootstrapper cli]# mv kapp-linux-amd64-v0.49.0+vmware.1 /usr/local/bin/kapp
-```
-Check the `kapp` version:
-```
-[root@tkg-bootstrapper cli]# kapp version
-kapp version 0.49.0
-```
+   The public key part of the generated key is passed during the Tanzu Kubernetes Grid management cluster deployment.
 
-#### Install kbld
+   ```bash
+   ## Generate SSH key pair
+   ## When prompted enter file in which to save the key (/root/.ssh/id_rsa): press Enter to accept the default and provide password
+   ssh-keygen -t rsa -b 4096 -C "email@example.com"
 
-```
-[root@tkg-bootstrapper cli]# gunzip kbld-linux-amd64-v0.34.0+vmware.1.gz
-[root@tkg-bootstrapper cli]# chmod +x kbld-linux-amd64-v0.34.0+vmware.1
-[root@tkg-bootstrapper cli]# mv .kbld-linux-amd64-v0.34.0+vmware.1 /usr/local/bin/kbld
-```
-Check the `kbld` version:
-```
-[root@tkg-bootstrapper cli]# kbld version
-kbld version 0.34.0
-```
+   ## Add the private key to the SSH agent running on your machine and enter the password you created in the previous step
+   ssh-add ~/.ssh/id_rsa
+   ## If the above command fails, execute "eval $(ssh-agent)" and then rerun the command
+   ```
 
-#### Install imgpkg
+1. If your bootstrap machine runs Linux or Windows Subsystem for Linux, and it has a Linux kernel built after the May 2021 Linux security patch, for example Linux 5.11 and 5.12 with Fedora, run the following command.
 
-```
-[root@tkg-bootstrapper cli]# gunzip imgpkg-linux-amd64-v0.29.0+vmware.1.gz
-[root@tkg-bootstrapper cli]# chmod +x imgpkg-linux-amd64-v0.29.0+vmware.1
-[root@tkg-bootstrapper cli]# mv imgpkg-linux-amd64-v0.29.0+vmware.1 /usr/local/bin/imgpkg
-```
-Check the `imgpkg` version:
-```
-[root@tkg-bootstrapper cli]# imgpkg version
-imgpkg version 0.29.0
-```
+   ```
+    sudo sysctl net/netfilter/nf_conntrack_max=131072
+   ```
 
-#### Install yq
+All required packages are now installed and the required configurations are in place in the bootstrap virtual machine. The next step is to deploy the Tanzu Kubernetes Grid management cluster.
 
-`yq` a lightweight and portable command-line YAML processor. ``yq`` uses `jq`-like syntax but works with both YAML and JSON files.
+### Import Base Image template for Tanzu Kubernetes Grid Cluster Deployment
 
-```
-[root@tkg-bootstrapper cli]# wget https://github.com/mikefarah/yq/releases/download/v4.24.5/yq_linux_amd64.tar.gz
-[root@tkg-bootstrapper cli]# tar -xvf yq_linux_amd64.tar.gz
-[root@tkg-bootstrapper cli]# mv yq_linux_amd64 /usr/local/bin/yq
-```
-Check the `yq` version:
-```
-[root@tkg-bootstrapper ~]# yq --version
-yq (https://github.com/mikefarah/yq/) version 4.24.5
-```
+Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
-You are now ready to deploy the Tanzu Kubernetes Grid management cluster.
+1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
+
+* For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.24.9 OVA.
+
+     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-build-images-index.html).
+* For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
+
+    **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
+
+1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
+
+1. Select Local file, click the button to upload files, and go to the downloaded OVA file on your local machine.
+
+1. Follow the installer prompts to deploy a VM from the OVA.
+
+1. Click **Finish** to deploy the VM. When the OVA deployment finishes, right-click the VM and select **Template** > **Convert to Template**.
+
+    **Note:** Do not power on the VM before you convert it to a template.
+
+1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
+
+For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+
+
 
 ## <a id="deploy-mgmt-cluster"></a>Deploy Tanzu Kubernetes Grid Management Cluster
 
@@ -810,22 +844,12 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
 17. Click **Review Configuration** to verify your configuration settings.
 
     ![Deploy Management Cluster on vSphere Review](img/tko-in-vmc-aws/deploy-tko-vmc-58.jpg)
-
-    **Note**: Tanzu Kubernetes Grid 1.6 has a known issue that installer UI populates an empty `AVI_LABEL` in the cluster configuration and leads to management cluster creation failure. It is recommended to export the cluster configuration to a file, delete the empty label, and run the cluster creation command from CLI instead of deploying the cluster from UI.
     
     When you click **Review Configuration**, the installer populates the cluster configuration file, which is located in the `~/.config/tanzu/tkg/clusterconfigs` subdirectory, with the settings that you specified in the interface. You can optionally export a copy of this configuration file by clicking **Export Configuration**.
 
     ![Deploy Management Cluster](img/tko-in-vmc-aws/deploy-tko-vmc-59.jpg)
 
-18. Edit the cluster configuration file and remove the empty AVI label.
-
-    <!-- /* cSpell:disable */ -->
-        
-        AVI_LABELS: |
-        '': ''
-    <!-- /* cSpell:enable */ -->
-
-19. Deploy the management cluster from this configuration file by running the command:
+18. Deploy the management cluster from this configuration file by running the command:
 
     ```
     tanzu management-cluster create -f t4uv9zk25b.yaml  -v 6
@@ -837,7 +861,7 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
 
     The installer automatically sets the context to the management cluster so that you can log in to it and perform additional tasks such as verifying health of the management cluster and deploying the workload clusters.
 
-20. After the Tanzu Kubernetes Grid management cluster deployment, run the following command to verify the health status of the cluster:
+19. After the Tanzu Kubernetes Grid management cluster deployment, run the following command to verify the health status of the cluster:
 
     ```
     tanzu management-cluster get
@@ -925,11 +949,11 @@ spec:
 
 The sample AKODeploymentConfig with sample values in place is as follows. You should add the respective AVI label `type=shared-services` while deploying shared services cluster to enforce this network configuration.
 
-- cloud: ​`tkg-vmc​`
-- service engine group: `TKG-Mgmt-SEG`
-- Control Plane network: `TKG-Cluster-VIP`
-- VIP/data network: `TKG-Management-VIP`
-- Node Network: `TKG-Mgmt-SEG`
+- cloud: ​`sfo01w01vmcvc01​`
+- service engine group: `sfo01m01segroup01`
+- Control Plane network: `sfo01-w01-vds01-tkgclustervip`
+- VIP/data network: `sfo01-w01-vds01-tkgmanagementvip`
+- Node Network: `sfo01-w01-vds01-tkgmanagement`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -951,11 +975,11 @@ spec:
       type: shared
   controlPlaneNetwork:
     cidr: 192.168.14.0/26
-    name: TKG-Cluster-VIP
-  controller: 192.168.11.10
+    name: sfo01-w01-vds01-tkgclustervip
+  controller: 192.168.11.8
   dataNetwork:
-    cidr: 192.168.15.0/26
-    name: TKG-Management-VIP
+    cidr: 192.168.16.0/26
+    name: sfo01-w01-vds01-tkgmanagementvip
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: true
@@ -963,8 +987,8 @@ spec:
       defaultIngressController: false
       disableIngressClass: true
       nodeNetworkList:
-      - networkName: TKG-Management
-  serviceEngineGroup: TKG-Mgmt-SEG
+      - networkName: sfo01-w01-vds01-tkgmanagement
+  serviceEngineGroup: sfo01m01segroup01
 
 ```
 <!-- /* cSpell:enable */ -->
@@ -1055,11 +1079,11 @@ spec:
 
 The AKODeploymentConfig with sample values in place is as follows. You should add the respective avi label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
 
-- cloud: ​`tkg-vmc​`
-- service engine group: `TKG-WLD01-SEG`
-- Control Plane network: `TKG-Cluster-VIP`
-- VIP/data network: `TKG-Workload-VIP`
-- Node Network: `TKG-Workload`
+- cloud: ​`sfo01w01vc01​`
+- service engine group: `sfo01w01segroup01`
+- Control Plane network: `sfo01-w01-vds01-tkgclustervip`
+- VIP/data network: `sfo01-w01-vds01-tkgworkloadvip`
+- Node Network: `sfo01-w01-vds01-tkgworkload`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1080,11 +1104,11 @@ spec:
       type: wkld01-l7
   controlPlaneNetwork:
     cidr: 192.168.14.0/26
-    name: TKG-Cluster-VIP
-  controller: 192.168.11.10
+    name: sfo01-w01-vds01-tkgclustervip
+  controller: 192.168.11.8
   dataNetwork:
-    cidr: 192.168.16.0/26
-    name: TKG-Workload-VIP
+    cidr: 192.168.15.0/26
+    name: sfo01-w01-vds01-tkgworkloadvip
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false
@@ -1093,10 +1117,10 @@ spec:
       nodeNetworkList:
         - cidrs:
           - 192.168.13.0/24
-          networkName: TKG-Workload
+          networkName: sfo01-w01-vds01-tkgworkload
       serviceType: NodePortLocal
       shardVSSize: MEDIUM
-  serviceEngineGroup: TKG-WLD01-SEG
+  serviceEngineGroup: sfo01w01segroup01
 
 ```
 <!-- /* cSpell:enable */ -->
@@ -1151,70 +1175,45 @@ Shared services cluster use the custom ADC tanzu-ako-for-shared created earlier 
 
     ![Create cluster - select management cluster](img/tko-in-vmc-aws/deploy-tko-vmc-64.jpg)
 
-4. Enter a name for the cluster. Cluster names must be unique within an organization.
+4. Enter a name for the cluster and select the cluster group to which you want to attach your cluster. Cluster names must be unique within an organization. For the cluster group, you can optionally enter a description and apply labels.Select Cluster Class by clicking on the down arrow button.<p> If you have deployed your management cluster with Avi_Labels, you can pass the same labels in the key:value format in the shared services cluster configuration to leverage the VIP network and service engine group that you have specified for the workload cluster in the management cluster configuration.
 
-5. Select the cluster group to which you want to attach your cluster. Optionally, enter a description and apply labels.
 
     ![Create cluster - select provisioner](img/tko-in-vmc-aws/deploy-tko-vmc-65.jpg)
 
-6. On the **Configure** page, specify the following:
+5. On the **Configure** page, specify the following:
 
-   - Select the Kubernetes version to use for the cluster. The latest supported version is preselected. To select an earlier version, click the down arrow.
-   - Select the network for the shared services cluster. The control plane nodes and the worker nodes connect to this network.
-   - Paste the SSH key that you generated while configuring the bootstrap environment.
-   - Optionally, define an alternative CIDR for the pod and service. The Pod CIDR and Service CIDR cannot be changed after the cluster is created.
-   - Optionally, specify a proxy configuration to use for this cluster.
+   - Update the vCenter details and tlsThumbprint for the authentication.
+   - Select the Kubernetes version to use for the cluster by template option. The latest supported version is preselected for you. You can choose the desired Kubernetes version by clicking on the down arrow button.
 
-    **Note:** This document doesn't cover using a proxy server with Tanzu Kubernetes Grid. If your environment uses a proxy server to connect to the internet, ensure that the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Supervisor Cluster in the **No proxy list**, as described [here](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-AF0B66C8-00D2-46F7-9A62-64C6E279B9A7.html#GUID-AF0B66C8-00D2-46F7-9A62-64C6E279B9A7).
+   - Select required datacenter ,resourcePool , folder , network , and datastore
+   - Update sshAuthorizedKeys
 
     ![Configure Kubernetes version, network and storage options](img/tko-in-vmc-aws/deploy-tko-vmc-66.jpg)
 
-7. Specify the placement containers such as Resource pool, VM Folder and datastore for the shared services cluster.
+6. Update POD CIDR and Service CIDR if necessary.
 
     ![Specify resources](img/tko-in-vmc-aws/deploy-tko-vmc-67.jpg)
 
-8. Select the High Availability mode for the control plane nodes of the workload cluster. For a production deployment, a highly available workload cluster is recommended.
+7. Select the High Availability mode for the control plane nodes of the workload cluster. For a production deployment, a highly available workload cluster is recommended.
 
     The control plane endpoint and API server port options are retrieved from the management cluster and are not customizable here.
 
     ![Select control plane](img/tko-in-vmc-aws/deploy-tko-vmc-68.jpg)
 
-9. You can optionally define the default node pool for your workload cluster.
+8. You can optionally define the default node pool for your workload cluster.
 
    - Specify the number of worker nodes to provision.
-   - Select the instance type.
-
-10. Click **Create Cluster** to start provisioning your workload cluster.
-
     ![Edit node pool](img/tko-in-vmc-aws/deploy-tko-vmc-69.jpg)
+10. Click **Create Cluster** to start provisioning your workload cluster.
 
     Cluster creation roughly takes 15-20 minutes to complete. After the cluster deployment completes, ensure that **Agent and extensions health** shows green.
 
     ![Cluster health status](img/tko-in-vmc-aws/deploy-tko-vmc-70.jpg)
 
-    Post deployment of the shared services cluster, execute the following commands to apply the labels to the cluster.
-
-11. Switch to the management cluster context.
-
-    ```
-    kubectl config use-context tkg149-mgmt-vmc-admin@tkg149-mgmt-vmc
-    ```
-
-12. Apply the `tanzu-services` label to update the cluster role.
-
-    ```
-    kubectl label cluster.cluster.x-k8s.io/<shared-services-cluster-name> cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
-    ```
-
-    Example:
-
-    ```
-    kubectl label cluster.cluster.x-k8s.io/tkg-ss-vmc cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
-    ```
 
 ## <a id=deploy-workload-cluster> </a> Deploy Tanzu Kubernetes Clusters (Workload Clusters)
 
-The steps for deploying a workload cluster are almost exactly the same as for a shared services cluster, except that the names of the cluster and the placement containers (resource pools, VM folder, network, etc.) are different.
+The steps for deploying a workload cluster are almost exactly the same as for a shared services cluster, except that the the AVI Lables, names of the cluster and the placement containers (resource pools, VM folder, network, etc.) are different.
 
 ## <a id=integrate-to> </a> Integrate Tanzu Kubernetes Clusters with Tanzu Observability
 
