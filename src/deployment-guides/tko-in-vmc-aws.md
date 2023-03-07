@@ -27,11 +27,11 @@ These instructions assume that you have the following set up:
 
 |**Software Components**|**Version**|
 | --- | --- |
-|Tanzu Kubernetes Grid|1.6.0
+|Tanzu Kubernetes Grid|2.1.0
 |VMware Cloud on AWS SDDC Version|1.18 and later|
-|NSX Advanced Load Balancer|21.1.4|
+|NSX Advanced Load Balancer|22.1.2|
 
-To verify the interoperability of other versions and products, see [VMware Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,5305&row=648,&row=1,%262,%26789).
+To verify the interoperability of other versions and products, see [VMware Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability).
 
 ## Prepare the Environment for Deploying Tanzu for Kubernetes Operations
 
@@ -68,10 +68,10 @@ The following table shows sample entries of the resource pools and folders that 
 
 |**Resource Type**|**Resource Pool Name**|**Sample Folder Name**|
 | --- | --- | --- |
-|NSX Advanced Load Balancer Components|<p>NSX-Advanced Load Balancer</p><p></p>|NSX-Advanced Load Balancer-VMS|
-|TKG Management Components|TKG-Management|TKG-Mgmt-VMS|
-|TKG Shared Services Components|TKG-Shared-Services|TKG-Shared-Services-VMS|
-|TKG Workload Components|TKG-Workload|TKG-Workload-VMS|
+|NSX Advanced Load Balancer Components|<p>tkg-vsphere-alb-components|tkg-vsphere-alb-components|
+|TKG Management Components|tkg-management-components|tkg-management-components|
+|TKG Shared Services Components|tkg-vsphere-shared-services|tkg-vsphere-shared-services|
+|TKG Workload Components|tkg-vsphere-workload	|tkg-vsphere-workload	|
 
 ### <a id=subnet-and-cidr-examples> </a> Subnet and CIDR Examples
 
@@ -79,13 +79,13 @@ For the purpose of demonstration, this document uses the following subnet CIDRs 
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool**|**NSX Advanced Load Balancer IP Pool**|
 | --- | --- | --- | --- | --- |
-|NSX ALB Mgmt Network|NSX-ALB-Mgmt|192.168.11.1/27|192.168.11.15 - 192.168.11.30|NA|
-|TKG Management Network|TKG-Management|192.168.12.1/24|192.168.12.2 - 192.168.12.251|NA|
-|TKG Workload Network|TKG-Workload|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
-|TKG Cluster VIP Network|TKG-Cluster-VIP|192.168.14.1/26|192.168.14.2 - 192.168.14.30|192.168.14.31 - 192.168.14.60|
-|TKG Mgmt VIP Network|TKG-Management-VIP|192.168.15.1/26|192.168.15.2 - 192.168.15.30|192.168.15.31 - 192.168.15.60|
-|TKG Workload VIP Network|TKG-Workload-VIP|192.168.16.1/26|192.168.16.2 - 192.168.16.30|192.168.16.31 - 192.168.16.60|
-|TKG Shared Services Network|TKG-Shared-Service|192.168.17.1/24|192.168.17.2 - 192.168.17.251|NA|
+|NSX ALB Mgmt Network|sfo01-w01-vds01-albmanagement|192.168.11.1/27|192.168.11.15 - 192.168.11.30|NA|
+|TKG Management Network|sfo01-w01-vds01-tkgmanagement|192.168.12.1/24|192.168.12.2 - 192.168.12.251|NA|
+|TKG Workload Network|sfo01-w01-vds01-tkgworkload|192.168.13.1/24|192.168.13.2 - 192.168.13.251|NA|
+|TKG Cluster VIP Network|sfo01-w01-vds01-tkgclustervip|192.168.14.1/26|192.168.14.2 - 192.168.14.30|192.168.14.31 - 192.168.14.60|
+|TKG Mgmt VIP Network|sfo01-w01-vds01-tkgmanagementvip|192.168.15.1/26|192.168.15.2 - 192.168.15.30|192.168.15.31 - 192.168.15.60|
+|TKG Workload VIP Network|sfo01-w01-vds01-tkgworkloadvip|192.168.16.1/26|192.168.16.2 - 192.168.16.30|192.168.16.31 - 192.168.16.60|
+|TKG Shared Services Network|sfo01-w01-vds01-tkgshared|192.168.17.1/24|192.168.17.2 - 192.168.17.251|NA|
 
 ## Deployment Overview
 
@@ -109,10 +109,10 @@ The following IP addresses are reserved for NSX Advanced Load Balancer:
 
 |**Controller Node**|**IP Address**|**FQDN**|
 | --- | --- | --- |
-|Node01 (Primary)|192.168.11.11|alb01.tanzu.lab|
-|Node02 (Secondary)|192.168.11.12|alb02.tanzu.lab|
-|Node03 (Secondary) |192.168.11.13|alb03.tanzu.lab|
-|Controller Cluster IP|192.168.11.10|alb.tanzu.lab|
+|Node01 (Primary)|192.168.11.8|sfo01albctlr01a.sfo01.rainpole.local|
+|Node02 (Secondary)|192.168.11.9|sfo01albctlr01b.sfo01.rainpole.local|
+|Node03 (Secondary) |192.168.11.10|sfo01albctlr01c.sfo01.rainpole.local|
+|Controller Cluster IP|192.168.11.11|sfo01albctlr01.sfo01.rainpole.local|
 
 To deploy NSX Advanced Load Balancer controller nodes:
 
