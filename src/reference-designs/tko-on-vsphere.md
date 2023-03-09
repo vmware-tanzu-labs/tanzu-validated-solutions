@@ -15,9 +15,9 @@ The following table provides the component versions and interoperability matrix 
 |**Software Components**|**Version**|
 | --- | --- |
 | Tanzu Kubernetes Grid | 2.1.0 |
-| VMware vSphere ESXi | 7.0 U3 and later |
-| VMware vCenter (VCSA)| 7.0 U3 and later|
-| VMware vSAN | 7.0 U3 and later |
+| VMware vSphere ESXi | 7.0 U3 |
+| VMware vCenter (VCSA)| 7.0 U3 |
+| VMware vSAN | 7.0 U3 |
 | NSX Advanced LB | 22.1.2 |
 
 For the latest information, see [VMware Product Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
@@ -164,7 +164,7 @@ IP address allocation for virtual services can be over DHCP or using NSX ALB in-
 |TKO-TKG-001|Deploy TKG management cluster from TKG Installer UI.|Simplified method of installation|NA|
 |TKO-TKG-002|Register the management cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manages the life cycle of all clusters centrally.|Only Antrea CNI and Photon OS are supported on Workload clusters created from the TMC portal.  |
 |TKO-TKG-003|Use NSX ALB as your control plane endpoint provider and for application load balancing.|NSX ALB is tightly coupled with TKG and vSphere. Since NSX ALB is a VMware product, customers will have single point of contact for support.| Adds NSX ALB  License Cost to the solution  |
-|TKO-TKG-004|Deploy Tanzu Kubernetes Management clusters in large form factor|Large form factor should suffice to integrate TKG Mgmt Cluster with TMC, pinipped and velero deployment. This must be capable of accommodating 100+ Tanzu Workload Clusters|Consume more Resources from Infrastructure |
+|TKO-TKG-004|Deploy Tanzu Kubernetes Management clusters in large form factor|Large form factor should suffice to integrate TKG Mgmt Cluster with TMC, pinniped and velero deployment. This must be capable of accommodating 100+ Tanzu Workload Clusters|Consume more Resources from Infrastructure |
 |TKO-TKG-005|Deploy Tanzu Kubernetes clusters with prod plan(Management Cluster and Workload Clusters ).|This deploys multiple control plane nodes and provides high availability for the control plane.|Consume more Resources from Infrastructure. |
 |TKO-TKG-006|Enable identity management for TKG clusters|Role-based access control to Tanzu Kubernetes Grid clusters| Required External Identity Management |
 |TKO-TKG-007|Enable Machine Health Checks for TKG clusters|MachineHealthCheck controller helps to provide health monitoring and auto-repair for management and workload clusters Machines.| NA|
@@ -298,7 +298,7 @@ Another option is to use the NSX ALB Kubernetes ingress controller that offers a
 
 ![NSX Advanced Load Balancing capabilities for VMware Tanzu](img/tko-on-vsphere/tko-on-vsphere-vds-6.png)
 
-For more information about the NSX ALB ingress controller, see [Configuring L7 Ingress with NSX Advanced Load Balancer](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/index.html).
+For more information about the NSX ALB ingress controller, see [Configuring L7 Ingress with NSX Advanced Load Balancer](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-network-nsx-alb-ingress.html).
 
 [Tanzu Service Mesh](https://tanzu.vmware.com/service-mesh), which is a SaaS offering for modern applications running across multi-cluster, multi-clouds, also offers an ingress controller based on [Istio](https://istio.io/).
 
@@ -360,9 +360,9 @@ Harbor registry is used for day-2 operations of the Tanzu Kubernetes workload cl
 
 You may use one of the following methods to install Harbor:
 
-- [**Tanzu Kubernetes Grid Package deployment**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-ref.html) to a Tanzu Kubernetes Grid cluster - VMware recommends this installation method for general use cases. The Tanzu packages, including Harbor, must either be pulled directly from VMware or be hosted in an internal registry.
-- [**VM-based deployment**](https://goharbor.io/docs/latest/install-config/installation-prereqs/) using `docker-compose` - VMware recommends using this installation method in cases where Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-less environment and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-less deployments. Do not use this method for hosting application images.
-- [**Helm-based deployment**](https://goharbor.io/docs/latest/install-config/harbor-ha-helm/) to a Kubernetes cluster - This installation method may be preferred for customers already invested in Helm. Helm deployments of Harbor are only supported by the Open Source community and not by VMware Global Support Services.
+- [**Tanzu Kubernetes Grid Package deployment**](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-harbor.html) to a Tanzu Kubernetes Grid cluster - VMware recommends this installation method for general use cases. The Tanzu packages, including Harbor, must either be pulled directly from VMware or be hosted in an internal registry.
+- [**VM-based deployment**](https://goharbor.io/docs/2.6.0/install-config/installation-prereqs/) using `docker-compose` - VMware recommends using this installation method in cases where Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-less environment and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-less deployments. Do not use this method for hosting application images.
+- [**Helm-based deployment**](https://goharbor.io/docs/2.6.0/install-config/harbor-ha-helm/) to a Kubernetes cluster - This installation method may be preferred for customers already invested in Helm. Helm deployments of Harbor are only supported by the Open Source community and not by VMware Global Support Services.
 
 If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To do so, follow the procedure in [Trust Custom CA Certificates on Cluster Nodes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-secret.html).
 
