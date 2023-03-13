@@ -43,7 +43,7 @@ The following table provides recommendations for configuring VM Classes/Storage 
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-TKGS-001|Create custom Storage Classes/Profiles/Policies|To provide different levels of QoS and SLA for prod and dev/test K8s workloads. <br>To isolate Supervisor clusters from workload clusters.|Default VSAN Storage Policy might not be adequate if deployed applications have different performance and availabity requirements.<br>VSAN should guarantee policy application.  If VSAN cannot guarantee a policy, you cannot provision  workload that uses custom policy unless you enable force provisioning.|
+|TKO-TKGS-001|Create custom Storage Classes/Profiles/Policies|To provide different levels of QoS and SLA for prod and dev/test K8s workloads. <br>To isolate Supervisor clusters from workload clusters.|Default VSAN Storage Policy might not be adequate if deployed applications have different performance and availability requirements.<br>VSAN should guarantee policy application.  If VSAN cannot guarantee a policy, you cannot provision  workload that uses custom policy unless you enable force provisioning.|
 |TKO-TKGS-002|Create custom VM Classes|To facilitate deployment of K8s workloads with specific compute/storage requirements.|Default VM Classes in vSphere with Tanzu are not adequate to run a wide variety of K8s workloads.</br>|
 
 ## vSphere with Tanzu Architecture
@@ -108,7 +108,7 @@ vSphere with Tanzu is agnostic about which storage option you choose. For Kubern
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-STG-001|Use vSAN storage for TKO|VSAN provides creation of Software defined storage plocies which can be crafted based on application requirements.|Adds additional cost as you have to procure vSAN license before can use.|
+|TKO-STG-001|Use vSAN storage for TKO|VSAN provides creation of Software defined storage policies which can be crafted based on application requirements.|Adds additional cost as you have to procure vSAN license before can use.|
 
 
 While you can use the default vSAN storage policy, it is often preferable to craft a custom [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-storage/GUID-3F124146-E387-4613-8BCA-6F1375E2CA64.html) based on the requirements of your applications. vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters.
@@ -332,7 +332,7 @@ The following are the key network recommendations for a production-grade vSphere
 | --- | --- | --- | --- |
 |TKO-TKGS-001|Create a Subscribed Content Library. |<p>Subscribed Content Library can automatically pull the latest OVAs used by the Tanzu Kubernetes Grid Service to build cluster nodes.</p><p>Using a subscribed content library facilitates template management as new versions can be pulled by initiating the library sync.</p>|<p>Local Content Library would require manual upload of images, suitable for air-gapped or Internet restricted environment.</p>|
 |TKO-TKGS-002|Deploy Supervisor cluster control plane nodes in large form factor.|Large form factor should suffice to integrate Supervisor Cluster with TMC and velero deployment.|Consume more Resources from Infrastructure.|
-|TKO-TKGS-003|Register Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Need outbound connecitvity to internet for TMC registration.|
+|TKO-TKGS-003|Register Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Need outbound connectivity to internet for TMC registration.|
 
 **Note:** SaaS endpoints here refers to Tanzu Mission Control, Tanzu Service Mesh and Tanzu Observability. 
 
