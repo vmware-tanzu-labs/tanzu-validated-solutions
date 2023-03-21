@@ -62,6 +62,8 @@ The general requirements for deploying Tanzu for Kubernetes Operations on vSpher
 
 **Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.
 
+**Note**: Tanzu Kubernetes Grid nodes will unable to resolve hostnames with the ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
+
 #### Resource Pools and VM Folders
 
 The sample entries of the resource pools and folders that need to be created are as follows.
@@ -135,7 +137,7 @@ Follow these steps to deploy and configure NSX Advanced Load Balancer:
 
 ### <a id="dep-nsx-alb"> </a> Deploy NSX Advanced Load Balancer
 
-As part of the prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
+As a prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
 
 To deploy NSX Advanced Load Balancer, complete the following steps.
 
@@ -291,39 +293,35 @@ For information about mapping a specific service engine group to Tanzu Kubernete
 
     ![Create vCenter Cloud](img/tko-on-vsphere/21.ALB-Clouds.png)
 
-1. Enter cloud name 
+1. Under **General** pane, in the **Name** field, enter a Cloud name. 
 
     ![Enter cloud name](img/tko-on-vsphere/22.ALB-Clouds-1.png)
 
-1. Under the **vCenter/vSphere** pane, enter vCenter address, username, and password, click **CONNECT**.
+1. Under the **vCenter/vSphere** pane, enter information for * vCenter address*, *Username*, and *Password* fields and  click **CONNECT**.
 
     ![Enter infrastructure information for vCenter Cloud](img/tko-on-vsphere/23.ALB-Clouds-2.png)
 
-1. Under the **Data Center** pane, choose the data center for NSX Advanced Load Balancer to discover infrastructure resources.Select **Content Library** For SE template Click **SAVE & LAUNCH**.
+1. Under the **Data Center** pane, choose the data center from the Data Center dropdown.Select **Content Library** for SE template and click **SAVE & LAUNCH**.
 
     ![Select data center](img/tko-on-vsphere/24.ALB-Clouds-3.png)
 
-1. Under the **Management Network** pane, choose the NSX Advanced Load Balancer management network for service engines and enter a static IP address pool for SEs and VIP, and click **Complete**.
+1. Select the Management Network from the **Management Network** drop down to choose the NSX Advanced Load Balancer management network for service engines. Enter a static IP address pool for SEs and VIP, and click **Complete**.
     ![Enter network information](img/tko-on-vsphere/25.ALB-Clouds-4.png)
 
 1. Wait for the cloud to get configured and the status to turn green.
 
     ![Wait for completion](img/tko-on-vsphere/26.ALB-Clouds-5.png)
 
-1. To create a service engine group for Tanzu Kubernetes Grid management clusters, navigate to **Infrastructure** > **Cloud Resources** > **Service Engine Group** tab, under Select Cloud choose the cloud created in the previous step, and click **Create**.
-
-
+1. To create a service engine group for Tanzu Kubernetes Grid management clusters, under **Infrastructure** tab, go to **Cloud Resources** > **Service Engine Group**.
+From the **Select Cloud** drop down, select the cloud created in the previous step and click **Create**.<p>
 The following components are created in NSX Advanced Load Balancer.
 
-<!-- /* cSpell:disable */ -->
+   | **Object** | **Sample Name** |
+   | --- | --- |
+   | vCenter Cloud | sfo01w01vc01 |
+   | Service Engine Group 1 | sfo01m01segroup01 |
+   | Service Engine Group 2 | sfo01w01segroup01 |
 
-| **Object** | **Sample Name** |
-| --- | --- |
-| vCenter Cloud | sfo01w01vc01 |
-| Service Engine Group 1 | sfo01m01segroup01 |
-| Service Engine Group 2 | sfo01w01segroup01 |
-
-<!-- /* cSpell:enable */ -->
 
 1. Enter a name for the Tanzu Kubernetes Grid management service engine group and set the following parameters:  
 
@@ -1098,23 +1096,20 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 
     ![Select provisioner for shared services cluster](img/tko-on-vsphere/66-shared-service-2.png)
 
-1. On the Cluster Details Page 
+1. On the **Cluster Details** page, do the following: 
 - Enter a name for the cluster (Cluster names must be unique within an organization).
-- select the cluster group to which you want to attach your cluster.
-- Select Cluster Class by clicking on the down arrow button.
+- Select the cluster group to which you want to attach your cluster.
+- Select Cluster Class from the down.
 - Use the NSXALB_Labels created for shared cluster on AKO Deployment.
 
     ![Cluster name and cluster group](img/tko-on-vsphere/67-shared-service-3.png)
 
 5. On the **Configure** page, specify the following:
 
-   - Update the vCenter details and tlsThumbprint for the authentication.
-   - Select the Kubernetes version to use for the cluster by template option. The latest supported version is preselected for you. You can choose the desired Kubernetes version by clicking on the down arrow button.
-
-   - Select required datacenter ,resourcePool , folder , network , and datastore
-   - Update sshAuthorizedKeys
-
-
+   - In the **vCenter** and **tlsThumbprint** fields, enter the details for authentication.
+   - From the  **datacenter**, **resourcePool**, **folder**, **network**, and **datastore** drop down, select the required information.
+   - From the **template** drop down, select the Kubernetes version.The latest supported version is preselected for you. 
+   - In the **sshAuthorizedKeys** field, enter the SSH key that was created earlier.
 
     ![Kubernetes version, network and storage options](img/tko-on-vsphere/68-shared-service-4.png)
 
