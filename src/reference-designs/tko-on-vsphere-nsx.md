@@ -363,7 +363,7 @@ The key network recommendations for a production-grade Tanzu Kubernetes Grid dep
 |TKO-TKG-002|Use NSX Advanced Load Balancer as your control plane endpoint provider and for application load balancing.|Eliminates the requirement for an external load balancer and additional configuration changes on your Tanzu Kubernetes Grid clusters.|Adds NSX Advanced Load Balancer License cost to the solution.|
 |TKO-TKG-003|Deploy Tanzu Kubernetes Management cluster in large form factor.|Large form factor should suffice to integrate TKG Management cluster with TMC, pinniped and Velero. This must be capable of accommodating 100+ Tanzu Workload Clusters.|<p>Consume more resources from infrastructure.</p>|
 |TKO-TKG-004|Deploy the Tanzu Kubernetes Cluster with prod plan(Management and Workload Clusters).|Deploying three control plane nodes ensures the state of your Tanzu Kubernetes Cluster control plane stays healthy in the event of a node failure.|<p>Consume more resources from infrastructure.</p>|
-|TKO-TKG-005|Enable identity management for Tanzu Kubernetes Grid clusters.|To avoid usage of administrator credentials and ensure that required users with right roles have access to Tanzu Kubernetes Grid clusters.|<p>Required external Indentity Management.</p>
+|TKO-TKG-005|Enable identity management for Tanzu Kubernetes Grid clusters.|To avoid usage of administrator credentials and ensure that required users with right roles have access to Tanzu Kubernetes Grid clusters.|<p>Required external Identity Management.</p>
 |TKO-TKG-006|Enable MachineHealthCheck for TKG clusters.|vSphere HA and MachineHealthCheck interoperability work together to enhance workload resiliency.|NA|
 
 ## Container Registry
@@ -496,7 +496,7 @@ Regardless of NSX Advanced Load Balancer Controller configuration, each controll
 
 |**Controller Size**|**VM Configuration**|**Virtual Services**|**Avi SE Scale**|
 | --- | --- | --- | --- |
-|Esssential|4 vCPUS, 24 GB RAM|0-50|0-10|
+|Essential|4 vCPUS, 24 GB RAM|0-50|0-10|
 |Small|6 vCPUS, 24 GB RAM|0-200|0-100|
 |Medium|10 vCPUS, 32 GB RAM|200-1000|100-200|
 |Large|16 vCPUS, 48 GB RAM|1000-5000|200-400|
