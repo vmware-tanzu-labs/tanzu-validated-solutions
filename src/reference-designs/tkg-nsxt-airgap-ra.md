@@ -26,7 +26,7 @@ The following components are used in the reference architecture:
 
 - **Tanzu Kubernetes Grid (TKG)** - Enables creation and lifecycle management of Kubernetes clusters.
 
-- **NSX Advanced Load Balancer Enterprise Edition** - Provides layer 4 service type load balancer and layer 7 ingress support. NSX Advanced Load Balancer is recommended for vSphere deployments without NSX-T, or which have unique scale requirements.
+- **NSX Advanced Load Balancer Enterprise Edition** - Provides layer 4 service type load balancer and layer 7 ingress support.
 
 - **Tanzu User-Managed Packages:** User-managed packages are distributed through package repositories. The `tanzu-standard` package repository includes the following user-managed packages:
 
@@ -50,6 +50,14 @@ The following components are used in the reference architecture:
 
 The binaries for Tanzu Kubernetes Grid installation are made available in ISO or tarball format on this machine. This machine should have access to the infrastructure components such as the vCenter server and the components that are deployed during the installation of Tanzu Kubernetes Grid. This machine should have a browser installed to access the UI of the components described above.
 
+With TKG 2.1.0, instead of custom script, a new Tanzu CLI plugin isolated-cluster has been provided which will pre-populate air gapped internal registry.
+
+This new Tanzu CLI plugin has two separate commands :
+
+Download-bundle: Downloads the images and bundles as tar files. Along with the downloads, a YAML file gets created that contains the mapping from the image name to the tar location.
+
+Upload-bundle: Upload images to private repository. Bootstrap VM should have access to this private repository for Tanzu installation.
+
 - **Local Image Registry -** An image registry provides a location for pushing, pulling, storing, and scanning container images used in the Tanzu Kubernetes Grid environment. The image registry is also used for day-2 operations of the Tanzu Kubernetes clusters. Typical day-2 operations include tasks such as storing application images, upgrading Tanzu Kubernetes clusters, etc.
 
 In an air-gapped environment, there are a couple of possible solutions for using an image registry:
@@ -66,7 +74,7 @@ Tanzu Kubernetes Grid comprises the following components:
 
 - **Management Cluster -** A management cluster is the first element that you deploy when you create a Tanzu Kubernetes Grid instance. The management cluster is a Kubernetes cluster that performs the role of the primary management and operational center for the Tanzu Kubernetes Grid instance. The management cluster is purpose-built for operating the platform and managing the lifecycle of Tanzu Kubernetes clusters.
 
-**ClusterClass API -** Tanzu Kubernetes Grid 2 functions through the creation of a management Kubernetes cluster which houses [ClusterClass API](https://cluster-api.sigs.k8s.io/introduction.html). The ClusterClass API then interacts with the infrastructure provider to service workload Kubernetes cluster lifecycle requests.The earlier primitives of Tanzu Kubernetes Clusters will still exist for Tanzu Kubernetes Grid 1.X . A new feature has been introduced as a part of Cluster API called ClusterClass which reduces the need for redundant templating and enables powerful customization of clusters. The whole process for creating a cluster using ClusterClass is the same as before but with slightly different parameters. 
+- **ClusterClass API -** Tanzu Kubernetes Grid 2 functions through the creation of a management Kubernetes cluster which holds [ClusterClass API](https://cluster-api.sigs.k8s.io/introduction.html). The ClusterClass API then interacts with the infrastructure provider to service workload Kubernetes cluster lifecycle requests.The earlier primitives of Tanzu Kubernetes Clusters will still exist for Tanzu Kubernetes Grid 1.X . A new feature has been introduced as a part of Cluster API called ClusterClass which reduces the need for redundant templating and enables powerful customization of clusters. The whole process for creating a cluster using ClusterClass is the same as before but with slightly different parameters. 
 
 - **Tanzu Kubernetes Cluster -** Tanzu Kubernetes clusters are the Kubernetes clusters in which your application workloads run. These clusters are also referred to as workload clusters. Tanzu Kubernetes clusters can run different versions of Kubernetes, depending on the needs of the applications they run.
 
@@ -107,18 +115,11 @@ Tanzu Kubernetes Grid Cluster Plans can be defined by operators to use a certain
 
 Tanzu Kubernetes Grid is agnostic about which option you choose. For Kubernetes stateful workloads, Tanzu Kubernetes Grid installs the [vSphere Container Storage interface (vSphere CSI)](https://github.com/container-storage-interface/spec/blob/master/spec.md) to automatically provision Kubernetes persistent volumes for pods.
 
-[VMware vSAN](https://docs.vmware.com/en/VMware-vSAN/index.html) is a recommended storage solution for deploying Tanzu Kubernetes Grid clusters on vSphere. 
-
-|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
-| --- | --- | --- | --- |
-|TKO-STG-001|Use vSAN storage for TKO|By using vSAN as the shared storage solution, you can take advantage of local storage, which is more cost-effective.|Adds additional cost as you have to procure vSAN license before you can use. |
-|TKO-STG-002|Use vSAN storage for TKO|vSAN supports NFS volumes in ReadWriteMany access modes.|vSAN File Services need to be configured to leverage this.|
-
-**Note:** vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions.
-
-While the default vSAN storage policy can be used, administrators should evaluate the needs of their applications and craft a specific [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.vsphere.storage.doc/GUID-89091D59-D844-46B2-94C2-35A3961D23E7.html). vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters. For more information on this, see [vSAN Policy Design](https://docs.vmware.com/en/VMware-Validated-Design/6.2/sddc-architecture-and-design-for-the-management-domain/GUID-450DFB03-1882-4A2A-B09F-2C7627095FD3.html#vsan-policy-design-3)
+While the default vSAN storage policy can be used, administrators should evaluate the needs of their applications and craft a specific [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-3F124146-E387-4613-8BCA-6F1375E2CA64.html). vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters. For more information on this, see [vSAN Policy Design](https://docs.vmware.com/en/VMware-Validated-Design/6.2/sddc-architecture-and-design-for-the-management-domain/GUID-450DFB03-1882-4A2A-B09F-2C7627095FD3.html#vsan-policy-design-3)
 
 ![vSAN storage policy for TKG](img/tkg-nsxt-airgap/tkg-nsxt-airgap01.png)
+
+**Note:** vSAN File Service is available only in the vSAN Enterprise and Enterprise Plus editions.
 
 ## Tanzu Kubernetes Clusters Networking
 
@@ -131,7 +132,7 @@ Both are open-source software that provide networking for cluster pods, services
 
 When you deploy a Tanzu Kubernetes cluster using Tanzu CLI, Antrea CNI is automatically enabled in the cluster.
 
-To provision a Tanzu Kubernetes cluster using a non-default CNI, see [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-k8s-clusters-networking.html#calico).
+To provision a Tanzu Kubernetes cluster using a non-default CNI, see [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-networking.html?hWord=N4IghgNiBcIMaQJZwPYgL5A).
 
 Each CNI is suitable for a different use case. The following table lists common use cases for the three CNIs that Tanzu Kubernetes Grid supports. This table helps you with information on selecting the right CNI in your Tanzu Kubernetes Grid implementation.
 
@@ -147,13 +148,21 @@ Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks in
 - VMware NSX-T Data Center Networking
 - vSphere Networking (VDS)
 
-**Note:** The scope of this document is limited to NSX-T Data Center Networking.
+**Note:** The scope of this document is limited to NSX-T Data Center Networking with NSX Advanced load balancer Enterprise Edition.
 
 ## Tanzu Kubernetes Grid on NSX-T Networking with NSX Advanced Load Balancer
 
-Tanzu Kubernetes Grid, when deployed on the VMware NSX-T Networking, uses the NSX-T logical segments and tier-1 gateways to provide connectivity to Kubernetes control plane VMs, worker nodes, services, and applications. All hosts from the cluster where Tanzu Kubernetes clusters are deployed are configured as NSX-T transport nodes that provide network connectivity to the Kubernetes environment.
+When deployed on VMware NSX-T Networking, Tanzu Kubernetes Grid uses the NSX-T logical segments and gateways to provide connectivity to Kubernetes control plane VMs, worker nodes, services, and applications. All hosts from the cluster where Tanzu Kubernetes clusters are deployed are configured as NSX-T transport nodes, which provide network connectivity to the Kubernetes environment.
 
-Tanzu Kubernetes Grid leverages NSX Advanced Load Balancer to provide layer 4 load balancing for the Tanzu Kubernetes clusters control-plane HA and layer 4 or layer 7 for the applications deployed in the Tanzu Kubernetes clusters. Users access the applications by connecting to the virtual IP address (VIP) of the applications provisioned by NSX Advanced Load Balancer.
+You can configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid as:
+
+- L4 load balancer for application hosted on the TKG cluster.
+
+- The L7 ingress service provider for the applications in the clusters that are deployed on vSphere.
+
+- L4 load balancer for the control plane API server.
+
+Each workload cluster integrates with NSX Advanced Load Balancer by running an Avi Kubernetes Operator (AKO) on one of its nodes. The cluster’s AKO calls the Kubernetes API to manage the lifecycle of load balancing and ingress resources for its workloads.
 
 ## NSX Advanced Load Balancer Components
 
@@ -264,18 +273,18 @@ The following table provides the recommendations for configuring NSX Advanced Lo
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-ALB-001|Deploy NSX ALB controller cluster nodes on a network dedicated to NSX ALB.|Isolate NSX ALB traffic from infrastructure management traffic and Kubernetes workloads.|Allows for ease of management for the controllers.<br> Additional Network (VLAN) is required.|
+|TKO-ALB-001|Deploy NSX ALB controller cluster nodes on a network dedicated to NSX ALB.|Isolate NSX ALB traffic from infrastructure management traffic and Kubernetes workloads.|Allows ease of management for the controllers.<br> Additional Network (VLAN) is required.|
 |TKO-ALB-002|Deploy 3 NSX ALB controller nodes.|To achieve high availability for the NSX ALB platform.In clustered mode, NSX ALB availability is not impacted by an individual controller node failure. The failed node can be removed from the cluster and redeployed if recovery is not possible.|<br> Clustered mode requires more compute and storage resources.</br>|
-|TKO-ALB-003|Initial setup should be done only on one NSX ALB controller VM out of the three deployed to create an NSX ALB controller cluster.|NSX ALB controller cluster is created from an initialized NSX ALB controller which becomes the cluster leader.<br> Follower NSX ALB controller nodes need to be uninitialized to join the cluster.|NSX ALB controller cluster creation fails if more than one NSX ALB controller is initialized.|
-|TKO-ALB-004|Use static IP addresses for the NSX ALB controllers.|NSX ALB controller cluster uses management IP addresses to form and maintain quorum for the control plane cluster. Any changes to management IP addresses are disruptive.|NSX ALB Controller control plane might go down if the management IP addresses of the controller node change.|
+|TKO-ALB-003|Initial setup should be done only on one NSX ALB controller VM out of the three deployed, to create an NSX ALB controller cluster.|NSX ALB controller cluster is created from an initialized NSX ALB controller which becomes the cluster leader.<br> Follower NSX ALB controller nodes need to be uninitialized to join the cluster.|NSX ALB controller cluster creation fails if more than one NSX ALB controller is initialized.|
+|TKO-ALB-004|Use static IP addresses for the NSX ALB controllers.|NSX ALB controller cluster uses management IP addresses to form and maintain quorum for the control plane cluster. Any changes to management IP addresses are disruptive.|NSX ALB Controller control plane might go down if the management IP addresses of the controller node changes.|
 |TKO-ALB-005|Use NSX ALB IPAM for service engine data network and virtual services. |Guarantees IP address assignment for service engine data NICs and virtual services.|Removes the corner case scenario when the DHCP server runs out of the lease or is down.|
 |TKO-ALB-006|Reserve an IP address in the NSX ALB management subnet to be used as the cluster IP address for the controller cluster.|NSX ALB portal is always accessible over cluster IP address regardless of a specific individual controller node failure.|NSX ALB administration is not affected by an individual controller node failure.|
-|TKO-ALB-007|Shared service engines for the same type of workload (dev/test/prod) clusters.|Minimize the licensing cost.|<p>Each service engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing service engines can help reduce the licensing cost. </p>|
+|TKO-ALB-007|Shared service engines for the same type of workload (dev/test/prod) clusters.|Minimize the licensing cost|<p>Each service engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing service engines can help reduce the licensing cost. </p>|
 |TKO-ALB-008|Configure anti-affinity rules for the NSX ALB controller cluster.|This is to ensure that no two controllers end up in same ESXi host and thus avoid single point of failure.|Anti-Affinity rules need to be created manually.|
 |TKO-ALB-009|Configure backup for the NSX ALB Controller cluster.|Backups are required if the NSX ALB Controller becomes inoperable or if the environment needs to be restored from a previous state.|To store backups, a SCP capable backup location is needed. SCP is the only supported protocol currently.|
-|TKO-ALB-010|Create an NSX-T Cloud connector on NSX ALB controller for each NSX transport zone requiring load balancing.|An NSX-T Cloud connector configured on the NSX ALB controller provides load balancing for workloads belonging to a transport zone on NSX-T.|None.|
-|TKO-ALB-011|Configure Remote logging for NSX ALB Controller to send events on Syslog.|For operations teams to be able to centrally monitor NSX ALB and escalate alerts events must be sent from the NSX ALB Controller|  Additional Operational Overhead.<br> Additional infrastructure Resource.  
-|TKO-ALB-012|Use LDAP/SAML based Authentication for NSX ALB| Helps to Maintain Role based Access Control | Additional Configuration is required
+|TKO-ALB-010|Create an NSX-T Cloud connector on NSX ALB controller for each NSX transport zone requiring load balancing.|An NSX-T Cloud connector configured on the NSX ALB controller provides load balancing for workloads belonging to a transport zone on NSX-T.|None|
+|TKO-ALB-011|Configure Remote logging for NSX ALB Controller to send events on Syslog.|For operations teams to be able to centrally monitor NSX ALB and escalate alerts events must be sent from the NSX ALB Controller|  Additional Operational Overhead.<br> Additional infrastructure Resource.|
+|TKO-ALB-012|Use LDAP/SAML based Authentication for NSX ALB| Helps to maintain Role based Access Control | Additional Configuration is required.|
 
 ### NSX Advanced Load Balancer Service Engine Recommendations
 
@@ -314,13 +323,13 @@ The default installation of Tanzu Kubernetes Grid does not have any default ingr
 
 Contour is an open-source controller for Kubernetes ingress routing. Contour can be installed in the shared services cluster on any Tanzu Kubernetes cluster. Deploying Contour is a prerequisite if you want to deploy the Prometheus, Grafana, and Harbor packages on a workload cluster.
 
-For more information about Contour, see the [Contour](https://projectcontour.io/) website and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-ingress-contour.html).
+For more information about Contour, see the [Contour](https://projectcontour.io/) website and [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-contour.html).
 
 Another option is to use the NSX Advanced Load Balancer Kubernetes ingress controller (available only with the NSX ALB Enterprise license) which offers an advanced L7 ingress for containerized applications that are deployed in the Tanzu Kubernetes workload cluster.
 
 ![NSX ALB Ingress Capabilities](img/tkg-nsxt-airgap/tkg-nsxt-airgap04.png)
 
-For more information about the NSX ALB ingress controller, see [Configuring L7 Ingress with NSX Advanced Load Balancer](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-ingress-contour.html).
+For more information about the NSX ALB ingress controller, see [Configuring L7 Ingress with NSX Advanced Load Balancer](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-network-nsx-alb-ingress.html).
 
 The following table provides general recommendations on when you should use a specific ingress controller for your Kubernetes environment.
 
@@ -396,12 +405,12 @@ The key network recommendations for a production-grade Tanzu Kubernetes Grid dep
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-TKG-001|Deploy TKG management cluster from CLI.|UI doesn’t provide an option of specifying an internal registry to use for TKG installation.|None.|
-|TKO-TKG-002|Use NSX ALB as your control plane endpoint provider and for application load balancing.|Eliminates the requirement for an external load balancer and additional configuration changes on your Tanzu Kubernetes Grid clusters.|NSX ALB is a true SDN solution and offers a flexible deployment model and automated way of scaling load balancer objects when needed.|
-|TKO-TKG-003|Deploy the Tanzu Kubernetes Cluster with a minimum of three control plane nodes.|This deploys multiple control plane nodes and provides high availability for the control plane.|TKG infrastructure is not impacted by a single node failure.|
-|TKO-TKG-004|Deploy the Tanzu Kubernetes Cluster with a minimum of three worker nodes.|Deploying three worker nodes provides a higher potential level of availability of your workloads deployed to the Tanzu Kubernetes Cluster.|You must configure your application workloads to use effectively the additional worker nodes in the Tanzu Kubernetes Cluster to provide high availability on an application-level.|
-|TKO-TKG-005|Enable identity management for Tanzu Kubernetes Grid clusters.|To avoid usage of administrator credentials and ensure that required users with the right roles have access to the Tanzu Kubernetes Grid clusters.|<p>Pinniped package helps with integrating the TKG management cluster with LDAPS/OIDC authentication.</p><p></p><p>Workload cluster inherits the authentication configuration from the management cluster.</p>|
-|TKO-TKG-006|Enable Machine Health Checks for TKG clusters.|vSphere HA and Machine Health Checks interoperably work together to enhance workload resiliency.|A MachineHealthCheck allows users to define conditions under which Machines within a Cluster should be considered unhealthy. Remediation actions can be taken when MachineHealthCheck has identified a node as unhealthy.|
+|TKO-TKG-001|Use NSX ALB as your control plane endpoint provider and for application load balancing.|Eliminates the requirement for an external load balancer and additional configuration changes on your Tanzu Kubernetes Grid clusters.|Add NSX ALB License cost to the solution.|
+|TKO-TKG-002|Use NSX Advanced Load Balancer as your control plane endpoint provider and for application load balancing.|Eliminates the requirement for an external load balancer and additional configuration changes on your Tanzu Kubernetes Grid clusters.|Adds NSX Advanced Load Balancer License cost to the solution.|
+|TKO-TKG-003|Deploy Tanzu Kubernetes Management cluster in large form factor.|Large form factor should suffice to integrate TKG Management cluster with TMC, pinniped and Velero. This must be capable of accommodating 100+ Tanzu Workload Clusters.|<p>Consume more resources from infrastructure.</p>|
+|TKO-TKG-004|Deploy the Tanzu Kubernetes Cluster with prod plan(Management and Workload Clusters).|Deploying three control plane nodes ensures the state of your Tanzu Kubernetes Cluster control plane stays healthy in the event of a node failure.|<p>Consume more resources from infrastructure.</p>|
+|TKO-TKG-005|Enable identity management for Tanzu Kubernetes Grid clusters.|To avoid usage of administrator credentials and ensure that required users with right roles have access to Tanzu Kubernetes Grid clusters.|<p>Required external Indentity Management.</p>
+|TKO-TKG-006|Enable MachineHealthCheck for TKG clusters.|vSphere HA and MachineHealthCheck interoperability work together to enhance workload resiliency.|NA|
 
 ## Tanzu Kubernetes Grid Monitoring
 
@@ -442,7 +451,7 @@ Harbor registry is used for day-2 operations of the Tanzu Kubernetes workload cl
 
 Harbor can be installed in the [**VM form factor**](https://goharbor.io/docs/latest/install-config/installation-prereqs/) using `docker-compose` - VMware recommends using this installation method in cases where Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-restricted environment and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-restricted deployments. Do not use this method for hosting application images.
 
-If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To do so, follow the procedure in [Trust Custom CA Certificates on Cluster Nodes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-cluster-lifecycle-secrets.html#trust-custom-ca-certificates-in-new-clusters-6).
+If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To do so, follow the procedure in [Trust Custom CA Certificates on Cluster Nodes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-secret.html).
 
 ![Harbor Container Registry](img/tkg-nsxt-airgap/tkg-nsxt-airgap10.jpg)
 
@@ -450,7 +459,7 @@ If you are deploying Harbor without a publicly signed certificate, you must incl
 
 Fluent Bit is a lightweight log processor and forwarder that allows you to collect data and logs from different sources, unify them, and send them to multiple destinations. Tanzu Kubernetes Grid includes signed binaries for Fluent Bit, that you can deploy on management clusters and on Tanzu Kubernetes clusters to provide a log-forwarding service.
 
-Tanzu Standard Runtime includes Fluent Bit as a user-managed package for the integration with logging platforms such as vRealize LogInsight, Elasticsearch, Splunk, or other logging solutions. For information about configuring Fluent Bit to your logging provider, see [Implement Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-logging-fluentbit.html)
+Tanzu Standard Runtime includes Fluent Bit as a user-managed package for the integration with logging platforms such as vRealize LogInsight, Elasticsearch, Splunk, or other logging solutions. For information about configuring Fluent Bit to your logging provider, see [Implement Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-fluentbit.html)
 
 You can deploy Fluent Bit on any management cluster or Tanzu Kubernetes clusters from which you want to collect logs. First, you configure an output plugin on the cluster from which you want to gather logs, depending on the endpoint that you use. Then, you deploy Fluent Bit on the cluster as a package.
 
@@ -464,13 +473,13 @@ A custom image must be based on the operating system (OS) versions that are supp
 
 |**vSphere**|**AWS**|**Azure**|
 | --- | --- | --- |
-|Ubuntu 20.04</p><p>Ubuntu 18.04</p><p>RHEL 7</p><p>Photon OS 3</p>|<p>Ubuntu 20.04</p><p>Ubuntu 18.04</p><p>Amazon Linux 2</p>|<p>Ubuntu 20.04</p><p>Ubuntu 18.04</p>|
+|Ubuntu 20.04</p><p>Ubuntu 18.04</p><p>RHEL 8</p><p>Photon OS 3</p>|<p>Ubuntu 20.04</p><p>Ubuntu 18.04</p><p>Amazon Linux 2</p>|<p>Ubuntu 20.04</p><p>Ubuntu 18.04</p>|
 
-For additional information on building custom images for Tanzu Kubernetes Grid, see [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-build-images-index.html).
+For additional information on building custom images for Tanzu Kubernetes Grid, see [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
 
-- [Linux Custom Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-build-images-linux.html)
+- [Linux Custom Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-linux.html)
 
-- [Windows Custom Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-build-images-windows.html)
+- [Windows Custom Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-windows.html)
 
 ## Compliance and Security
 
@@ -561,7 +570,7 @@ TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY: "rue/false" # Optional. Set to true
 ```
 <!-- /* cSpell:enable */ -->
 
-For a full list of configurable values, see [Tanzu CLI Configuration File Variable Reference](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-tanzu-config-reference.html).
+For a full list of configurable values, see [Tanzu CLI Configuration File Variable Reference](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-deploy-config-ref.html).
 
 ## Configure Node Sizes
 
@@ -617,18 +626,18 @@ To define different custom configurations for control plane nodes and worker nod
 
 ### NSX ALB Controller Sizing Guidelines
 
-Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5000 virtual services, which is a hard limit. For further details, refer to [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Controller(s)](https://docs.vmware.com/en/VMware-Cloud-Foundation/services/vcf-nsx-advanced-load-balancer-v1/GUID-0B159D7A-E9ED-4C3C-B959-AC09877D26CE.html).
+Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5000 virtual services, which is a hard limit. For further details, refer to [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Controller(s)](https://avinetworks.com/docs/22.1/avi-controller-sizing/).
 
 |**Controller Size**|**VM Configuration**|**Virtual Services**|**NSX Advanced Load Balancer SE Scale**|
 | --- | --- | --- | --- |
-|Small|4 vCPUs, 12 GB RAM|0-50|0-10|
-|Medium|8 vCPUs, 24 GB RAM|0-200|0-100|
-|Large|16 vCPUs, 32 GB RAM|200-1000|100-200|
-|Extra Large|24 vCPUs, 48 GB RAM|1000-5000|200-400|
+|Essentials|4 vCPUs, 24 GB RAM|0-50|0-10|
+|Small|6 vCPUs, 24 GB RAM|0-200|0-100|
+|Medium|10 vCPUs, 32 GB RAM|200-1000|100-200|
+|Large|16 vCPUs, 48 GB RAM|1000-5000|200-400|
 
 ### Service Engine Sizing Guidelines
 
-For guidance on sizing your service engines (SEs), see [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Service Engine(s)](https://docs.vmware.com/en/VMware-Cloud-Foundation/services/vcf-nsx-advanced-load-balancer-v1/GUID-149D3FFA-BF77-4B6F-B73D-A42D5375E9CF.html).
+For guidance on sizing your service engines (SEs), see [Sizing Compute and Storage Resources for NSX Advanced Load Balancer Service Engine(s)](https://avinetworks.com/docs/22.1/sizing-service-engines/).
 
 |**Performance metric**|**1 vCPU core**|
 | --- | --- |
@@ -641,13 +650,6 @@ For guidance on sizing your service engines (SEs), see [Sizing Compute and Stora
 Multiple performance vectors or features may have an impact on performance.  For instance, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX ALB recommends two cores.
 
 NSX ALB Service Engines may be configured with as little as 1 vCPU core and 1 GB RAM, or up to 36 vCPU cores and 128 GB RAM. Service Engines can be deployed in Active/Active or Active/Standby mode depending on the license tier used. NSX ALB Essentials license doesn’t support Active/Active HA mode for SE. 
-
-The following table describes the justification and implication for  design decisions concerning service engines.
-
-|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
-| --- | --- | --- | --- |
-|TKO-ALB-SE-001|Configure the High Availability mode for SEs.|To mitigate a single point of failure for the NSX ALB data plane.|High availability for SEs is configured by setting the Elastic HA mode to Active/Active or N+M in the SE group.|
-|TKO-ALB-SE-002|<p>Configure compute reservations in the SE group as follows:</p><p>vCPU: 2</p><p>Memory: 4 GB</p>|SE with just one vCPU and 1 GB (default settings in SE group) might not be enough for production workloads.|Changing the default vCPU count in the SE group results in extra license core consumption.|
 
 ## Summary
 
