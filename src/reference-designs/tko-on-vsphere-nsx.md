@@ -67,13 +67,6 @@ Tanzu Kubernetes Grid is agnostic to which option you choose. For Kubernetes sta
 
 Tanzu Kubernetes Grid Cluster Plans can be defined by operators to use a certain vSphere datastore when creating new workload clusters. All developers then have the ability to provision container-backed persistent volumes from that underlying datastore.
 
-While the default vSAN storage policy can be used, administrators should evaluate the needs of their applications and craft a specific [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-3F124146-E387-4613-8BCA-6F1375E2CA64.html). vSAN storage policies describe classes of storage (For example, SSD or NVME) along with quotas for your clusters.
-
-![Tanzu for Kubernetes Grid storage integration with vSAN](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-2.jpg)
-
-Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kubernetes also supports the creation of NFS File Volumes, which support ReadWriteMany access modes. This allows for provisioning volumes, which can be read and written from multiple pods simultaneously. To support this, you must enable vSAN File Service.
-
-**Note:** vSAN File Service is available only in the vSAN Enterprise and Enterprise Plus editions.
 
 ## Tanzu Kubernetes Clusters Networking
 
