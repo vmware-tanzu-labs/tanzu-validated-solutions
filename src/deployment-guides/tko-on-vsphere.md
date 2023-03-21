@@ -62,7 +62,7 @@ The general requirements for deploying Tanzu for Kubernetes Operations on vSpher
 
 **Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.
 
-**Note**: Tanzu Kubernetes Grid nodes will unable to resolve hostnames with the ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
+**Note**: In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
 
 #### Resource Pools and VM Folders
 

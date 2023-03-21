@@ -92,3 +92,13 @@ VNET
 vsphere
 VXLAN
 Xeon
+hostnames
+albmanagement
+tkgmanagement
+tkgmanagementvip
+tkgclustervip
+tkgworkloadvip
+tkgworkload
+segroup
+Matkgmanagementvip
+NSXALB
