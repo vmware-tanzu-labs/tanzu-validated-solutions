@@ -43,8 +43,8 @@ The following table provides recommendations for configuring VM Classes/Storage 
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-TKGS-001|Create custom Storage Classes/Profiles/Policies|To provide different levels of QoS and SLA for prod and dev/test K8s workloads. <br>To isolate Supervisor clusters from workload clusters.|Default VSAN Storage Policy might not be adequate if deployed applications have different performance and availability requirements.<br>VSAN should guarantee policy application.  If VSAN cannot guarantee a policy, you cannot provision  workload that uses custom policy unless you enable force provisioning.|
-|TKO-TKGS-002|Create custom VM Classes|To facilitate deployment of K8s workloads with specific compute/storage requirements.|Default VM Classes in vSphere with Tanzu are not adequate to run a wide variety of K8s workloads.</br>|
+|TKO-TKGS-001|Create custom Storage Classes/Profiles/Policies|To provide different levels of QoS and SLA for prod and dev/test K8s workloads. <br>To isolate Supervisor clusters from workload clusters.</br>|Default Storage Policy might not be adequate if deployed applications have different performance and availability requirements. |
+|TKO-TKGS-002|Create custom VM Classes|To facilitate deployment of K8s workloads with specific compute/storage requirements.|Default VM Classes in vSphere with Tanzu are not adequate to run a wide variety of K8s workloads. |
 
 ## vSphere with Tanzu Architecture
 
@@ -104,21 +104,6 @@ Before you enable vSphere with Tanzu, create storage policies to be used by the 
 
 vSphere with Tanzu is agnostic about which storage option you choose. For Kubernetes stateful workloads, vSphere with Tanzu installs the [vSphere Container Storage Interface (vSphere CSI)](https://github.com/container-storage-interface/spec) to automatically provision Kubernetes persistent volumes for pods.
 
-[VMware vSAN](https://docs.vmware.com/en/VMware-vSAN/index.html) is a recommended storage solution for both Supervisor and workload cluster VMs.
-
-|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
-| --- | --- | --- | --- |
-|TKO-STG-001|Use vSAN storage for TKO|VSAN provides creation of Software defined storage policies which can be crafted based on application requirements.|Adds additional cost as you have to procure vSAN license before can use.|
-
-
-While you can use the default vSAN storage policy, it is often preferable to craft a custom [vSphere Storage Policy](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-storage/GUID-3F124146-E387-4613-8BCA-6F1375E2CA64.html) based on the requirements of your applications. vSAN storage policies describe classes of storage (e.g. SSD, NVME, etc.) along with quotas for your clusters.
-
-![Diagram of vSphere with Tanzu on vSAN Storage](img/tko-on-vsphere-with-tanzu/tko-vwt06.png)
-
-Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kubernetes also supports the creation of NFS File Volumes, which support ReadWriteMany access modes. This allows for provisioning volumes, which can be read and written from multiple pods simultaneously. To support this, you must enable vSAN File Service.
-
-**Note:** vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions.
-
 ## Tanzu Kubernetes Clusters Networking
 
 A Tanzu Kubernetes cluster provisioned by the Tanzu Kubernetes Grid supports the following Container Network Interface (CNI) options:
@@ -130,7 +115,7 @@ The CNI options are open-source software that provide networking for cluster pod
 
 When you deploy a Tanzu Kubernetes cluster using the default configuration of Tanzu CLI, Antrea CNI is automatically enabled in the cluster.
 
-To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-tanzu-k8s-clusters-networking.html#calico)
+To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-networking.html?hWord=N4IghgNiBcIMaQJZwPYgL5A)
 
 Each CNI is suitable for a different use case. The following table lists some common use cases for the CNI options that Tanzu Kubernetes Grid supports. This table will help you select the most appropriate CNI for your Tanzu Kubernetes Grid implementation.
 
@@ -207,9 +192,9 @@ As per the reference architecture, the list of required networks is as follows:
 
 |**Network Type**|**DHCP Service**|**Description**|
 | --- | --- | --- |
-|NSX Advanced Load Balancer Management Network|Optional|<p>NSX Advanced Load Balancer controllers and SEs will be attached to this network. </p><p>The Service Engine’s management network can obtain IP from DHCP or IP Pool in NSX Advanced Load Balancer.</p>|
-|TKG Management Network|Yes |Supervisor Cluster nodes will be attached to this network.|
-|TKG Workload Network (Primary)|Yes. |<p>Control plane and worker nodes of TKG workload clusters will be attached to this network.</p><p>The second interface of the Supervisor nodes is also attached to this network.</p>|
+|NSX Advanced Load Balancer Management Network|Optional|<p>NSX Advanced Load Balancer controllers and SEs will be attached to this network. </p> |
+|TKG Management Network|Optional |Supervisor Cluster nodes will be attached to this network.|
+|TKG Workload Network (Primary)|Optional |<p>Control plane and worker nodes of TKG workload clusters will be attached to this network.</p><p>The second interface of the Supervisor nodes is also attached to this network.</p>|
 |TKG Cluster VIP/Data Network|No|<p>Virtual Services (L4) for Control plane HA of all TKG clusters (Supervisor and Workload).</p><p>Reserve sufficient IPs depending on the number of TKG clusters planned to be deployed in the environment.</p>|
 
 ## Subnet and CIDR Examples
@@ -312,8 +297,8 @@ The following table provides recommendations for configuring NSX Advanced Load B
 |TKO-Advanced Load Balancer-009|Configure anti-affinity rules for the NSX ALB controller cluster.|This is to ensure that no two controllers end up in same ESXi host and thus avoid single point of failure.|Anti-Affinity rules need to be created manually.|
 |TKO-Advanced Load Balancer-0010|Configure backup for the NSX ALB Controller cluster.|Backups are required if the NSX ALB Controller becomes inoperable or if the environment needs to be restored from a previous state.|To store backups, a SCP capable backup location is needed. SCP is the only supported protocol currently.|
 |TKO-Advanced Load Balancer-0011|Initial setup should be done only on one NSX ALB controller VM out of the three deployed to create an NSX ALB controller cluster.|NSX ALB controller cluster is created from an initialized NSX ALB controller which becomes the cluster leader.<br> Follower NSX ALB controller nodes need to be uninitialized to join the cluster.|NSX ALB controller cluster creation fails if more than one NSX ALB controller is initialized.|
-|TKO-Advanced Load Balancer-0012|Configure Remote logging for NSX ALB Controller to send events on Syslog.|For operations teams to be able to centrally monitor NSX ALB and escalate alerts events must be sent from the NSX ALB Controller|  Additional Operational Overhead.<br> Additional infrastructure Resource.  
-|TKO-Advanced Load Balancer-0013|Use LDAP/SAML based Authentication for NSX ALB| Helps to Maintain Role based Access Control | Additional Configuration is required
+|TKO-Advanced Load Balancer-0012|Configure Remote logging for NSX ALB Controller to send events on Syslog.|For operations teams to centrally monitor NSX ALB and escalate alerts events must be sent from the NSX ALB Controller|  Additional Operational Overhead.<br> Additional infrastructure Resource. |  
+|TKO-Advanced Load Balancer-0013|Use LDAP/SAML based Authentication for NSX ALB| Helps to Maintain Role based Access Control. | Additional Configuration is required. |
 
 ### Network Recommendations
 
@@ -323,8 +308,7 @@ The following are the key network recommendations for a production-grade vSphere
 | --- | --- | --- | --- |
 |TKO-NET-001|Use separate networks for Supervisor cluster and workload clusters.|To have a flexible firewall and security policies|Sharing the same network for multiple clusters can complicate creation of firewall rules. |
 |TKO-NET-002|Use distinct port groups for network separation of K8s workloads.|Isolate production Kubernetes clusters from dev/test clusters by placing them on distinct port groups.|Network mapping is done at the namespace level.  All Kubernetes clusters created in a namespace connect to the same port group. |
-|TKO-NET-003|Configure DHCP for TKG clusters.|vSphere with Tanzu does not support static IP assignments for Kubernetes VM components.|<p>An IP Block of 5 continuous IP Addresses can be used for the Supervisor cluster if DHCP is not available. </p><p></p><p>IP Pool can be used for the Workload cluster in absence of the DHCP.</p>|
-|TKO-NET-004|Use routable networks for Tanzu Kubernetes clusters.|Allow connectivity between the TKG clusters and infrastructure components.|Networks that are used for Tanzu Kubernetes cluster traffic must be routable between each other and the Supervisor Cluster Management Network.|
+|TKO-NET-003|Use routable networks for Tanzu Kubernetes clusters.|Allow connectivity between the TKG clusters and infrastructure components.|Networks that are used for Tanzu Kubernetes cluster traffic must be routable between each other and the Supervisor Cluster Management Network.|
 
 ### Recommendations for Supervisor Clusters
 
@@ -341,9 +325,9 @@ The following are the key network recommendations for a production-grade vSphere
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
 |TKO-TKC-001|Deploy Tanzu Kubernetes clusters with prod plan and multiple worker nodes.|The prod plan provides high availability for the control plane. |Consume from resource from Infrastructure.|
-|TKO-TKC-002|Use guaranteed VM class for Tanzu Kubernetes clusters.|Guarantees compute resources are always available for containerized workloads.|Guaranteed VM class reserves CPU/memory on the backend IaaS.|
+|TKO-TKC-002|Use guaranteed VM class for Tanzu Kubernetes clusters.|Guarantees compute resources are always available for containerized workloads.|Could prevent automatic migration of nodes by DRS.|
 |TKO-TKC-003|Implement RBAC for Tanzu Kubernetes clusters.|To avoid the usage of administrator credentials for managing the clusters.|External AD/LDAP needs to be integrated with vCenter or SSO groups need to be created manually.
-|TKO-TKC-04|Deploy Tanzu Kubernetes clusters from Tanzu Mission Control.|Tanzu Mission Control provides life-cycle management for the Tanzu Kubernetes clusters and automatic integration with Tanzu Service Mesh and Tanzu Observability.|Only Antrea CNI and Photon OS are supported on Workload clusters created from TMC portal.|
+|TKO-TKC-04|Deploy Tanzu Kubernetes clusters from Tanzu Mission Control.|Tanzu Mission Control provides life-cycle management for the Tanzu Kubernetes clusters and automatic integration with Tanzu Service Mesh and Tanzu Observability.|Only Antrea CNI is supported on Workload clusters created from TMC portal.|
 
 ## Kubernetes Ingress Routing
 vSphere with Tanzu does not ship with a default ingress controller. Any Tanzu-supported ingress controller can be used.
@@ -389,7 +373,7 @@ See [Sizing Service Engines](https://avinetworks.com/docs/22.1/sizing-service-en
 
 Multiple performance vectors or features may have an impact on performance.  For example, to achieve 1 Gb/s of SSL throughput and 2000 TPS of SSL with EC certificates, NSX Advanced Load Balancer recommends two cores.
 
-NSX Advanced Load Balancer Service Engines may be configured with as little as 1 vCPU core and 2 GB RAM, or up to 64 vCPU cores and 256 GB RAM. It is recommended for a Service Engine to have at least 4 GB of memory when Geo
+NSX Advanced Load Balancer Service Engines may be configured with as little as 1 vCPU core and 2 GB RAM, or up to 64 vCPU cores and 256 GB RAM. It is recommended for a Service Engine to have at least 4 GB of memory when GeoDB is in use.
 
 ## Container Registry
 
