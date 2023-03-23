@@ -62,7 +62,7 @@ while read -r net; \
 do \
   name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
   if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
-  vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
+  vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ' | tr '/' '_')"; \
   cmd="govc dvs.portgroup.add -dvs vSwitch0 ${name}-${vlan}"; \
   echo "--> $cmd"; \
   $cmd; \
