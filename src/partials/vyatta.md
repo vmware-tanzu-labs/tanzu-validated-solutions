@@ -37,14 +37,13 @@ while read -r net; \
 do \
   name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
   if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
-  vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
-  cidr="$(awk -F '|' '{print $5}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
-  cmd="govc host.portgroup.add -vswitch vSwitch0 ${name}-${cidr}-${vlan}"; \
+  cidr="$(awk -F '|' '{print $4}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
+  cmd="govc host.portgroup.add -vswitch vSwitch0 ${name}-${cidr}"; \
   echo "--> $cmd"; \
   $cmd; \
-  govc host.portgroup.change -allow-promiscuous=true -forged-transmits=true -mac-changes=true "${name}-${cidr}-${vlan}"; \
-  govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}-${vlan}" -net.adapter=vmxnet3; \
-done < <(grep --color -E 'Network +\|.*_pg +\| [0-9]{4} +\| 172.*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
+  govc host.portgroup.change -allow-promiscuous=true -forged-transmits=true -mac-changes=true "${name}-${cidr}"; \
+  govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}" -net.adapter=vmxnet3; \
+done < <(grep -E 'Network {0,}\|.*_pg {0,}\| {0,}[0-9]{3}\..*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
 ```
 >
 If your VM's NICs are connected to a port group on a distributed virtual
@@ -64,12 +63,11 @@ do \
   name="$(awk -F '|' '{print $3}' <<< "$net" | sed 's/management/mgmt/g' | tr -d ' ')"; \
   if test "$(wc -c <<< "$name")" -gt 12; then name=$(head -c 10 <<< "$name"); fi; \
   vlan="$(awk -F '|' '{print $4}' <<< "$net" | tr -d ' ')"; \
-  cidr="$(awk -F '|' '{print $5}' <<< "$net" | sed -E 's/ +//' | tr -d ' ' | tr '/' '_')"; \
-  cmd="govc dvs.portgroup.add -dvs vSwitch0 ${name}-${cidr}-${vlan}"; \
+  cmd="govc dvs.portgroup.add -dvs vSwitch0 ${name}-${vlan}"; \
   echo "--> $cmd"; \
   $cmd; \
-  govc vm.network.add -vm="$VM_NAME" -net="${name}-${cidr}-${vlan}" -net.adapter=vmxnet3; \
-done < <(grep --color -E 'Network +\|.*_pg +\| [0-9]{4} +\| 172.*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
+  govc vm.network.add -vm="$VM_NAME" -net="${name}-${vlan}" -net.adapter=vmxnet3; \
+done < <(grep -E 'Network {0,}\|.*_pg {0,}\| {0,}[0-9]{3}\..*' "src/deployment-guides/${DEPLOYMENT_GUIDE}.md")
 ```
 
 Next, go into the vCenter portal and connect to the VM's console. Log in with the username `vyos` and the password `vyos`.
