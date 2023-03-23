@@ -146,13 +146,9 @@ the block of code above.
 >
 ```sh
 VYOS_IP=10.220.3.252
-ifaces=$(sshpass -p vyos ssh vyos@$VYOS_IP \
-  find /sys/class/net -mindepth 1 -maxdepth 1 \
-  -not -name lo -printf "%P: " -execdir 'cat {}/address \;')
+ifaces=$(sshpass -p vyos ssh vyos@$VYOS_IP find /sys/class/net -mindepth 1 -maxdepth 1 -not -name lo -printf "%P: " -execdir 'cat {}/address \;')
 govc vm.info -json=true $VM_NAME |
-  jq -r '.VirtualMachines[0].Config.Hardware.Device[] | \
-select(.MacAddress != null and .DeviceInfo.Summary != "VM Network") | \
-.MacAddress + ";" + .DeviceInfo.Summary' |
+  jq -r '.VirtualMachines[0].Config.Hardware.Device[] | select(.MacAddress != null and .DeviceInfo.Summary != "VM Network") | .MacAddress + ";" + .DeviceInfo.Summary' |
   while read -r line;
   do
     mac=$(echo "$line" | cut -f1 -d ';');
