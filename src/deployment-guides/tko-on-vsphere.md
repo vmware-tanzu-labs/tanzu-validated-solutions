@@ -77,7 +77,7 @@ The sample entries of the resource pools and folders that need to be created are
 
 ### <a id="network-req"> </a> Network Requirements
 
-Create port groups on vSphere DVSwitch for deploying Tanzu for Kubernetes Operations components as per [Network Requirements](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/1.6/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere.html#network-requirements-8) defined in the reference architecture.
+Create port groups on vSphere DVSwitch for deploying Tanzu for Kubernetes Operations components as per [Network Requirements](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.1/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere.html#network-requirements-8) defined in the reference architecture.
 
 ### <a id="firewall-req"></a> Firewall Requirements
 
