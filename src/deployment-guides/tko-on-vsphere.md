@@ -48,7 +48,7 @@ The general requirements for deploying Tanzu for Kubernetes Operations on vSpher
 * A datastore with sufficient capacity for the control plane and worker node VM files.
 * Network Time Protocol (NTP) service running on all hosts and vCenter.
 * A host, server, or VM based on Linux, MacOS, or Windows that acts as your bootstrap machine and that has docker installed. For this deployment, a virtual machine based on Photon OS is used.
-* Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384). As part of this documentation, refer to the section to configure required packages on the Photon OS machine.
+* Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). As part of this documentation, refer to the section to configure required packages on the Photon OS machine.
 
   * Tanzu CLI 2.1.0
   * kubectl cluster CLI 1.24.9
@@ -679,9 +679,9 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
     * Control Plane Endpoint Provider: Select NSX Advanced Load Balancer for Control Plane HA.
     * Control Plane Endpoint: This is an optional field. If left blank, NSX Advanced Load Balancer will assign an IP address from the pool “tkg_cluster_vip_pg” created earlier.  
         If you need to provide an IP address, pick an IP address from “tkg_cluster_vip_pg”  static IP pools configured in NSX_ALB and ensure that the IP address is unused.
-    * Machine Health Checks: Enable. You can activate or deactivate MachineHealthCheck on clusters after deployment by using the CLI. For instructions, see [Configure Machine Health Checks for Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-cluster-lifecycle-configure-health-checks.html).
+    * Machine Health Checks: Enable. You can activate or deactivate MachineHealthCheck on clusters after deployment by using the CLI. For instructions, see [Configure Machine Health Checks for Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-mhc.html).
 
-    * Enable Audit Logging: Enable for audit logging for Kubernetes API server and node VMs. Choose as per your environment needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-troubleshooting-tkg-audit-logging.html).
+    * Enable Audit Logging: Enable for audit logging for Kubernetes API server and node VMs. Choose as per your environment needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-troubleshoot-audit-logging.html?hWord=N4IghgNiBcIIIFcAmBLALgAgDIHsDmeKAdniAL5A).
 
      ![Management cluster settings](img/tko-on-vsphere/40-Mgmt-cluster-5.png)
 
@@ -695,9 +695,9 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 1. After these details are provided, click **Verify Credentials** and choose the following parameters.
 
-    **Note:** In Tanzu Kubernetes Grid v1.6, you can configure the network to separate the endpoint VIP network of the cluster from the external IP network of the load balancer service and the ingress service in the cluster. This feature lets you ensure the security of the clusters by providing you an option to expose the endpoint of your management or the workload cluster and the load balancer service and ingress service in the cluster, in different networks.
+    **Note:** In Tanzu Kubernetes Grid v2.1.0, you can configure the network to separate the endpoint VIP network of the cluster from the external IP network of the load balancer service and the ingress service in the cluster. This feature lets you ensure the security of the clusters by providing you an option to expose the endpoint of your management or the workload cluster and the load balancer service and ingress service in the cluster, in different networks.
 
-    As per the Tanzu for Kubernetes Operations 1.6 Reference Architecture, all the control plane endpoints connected to Tanzu Kubernetes Grid cluster VIP network and data plane networks are connected to respective management data VIP network or workload data VIP network.
+    As per the Tanzu for Kubernetes Operations 2.1 Reference Architecture, all the control plane endpoints connected to Tanzu Kubernetes Grid cluster VIP network and data plane networks are connected to respective management data VIP network or workload data VIP network.
 
     * **Cloud Name**: Name of the cloud created while configuring NSX Advanced Load Balancer `sfo01w01vc01`.
     * **Workload Cluster service Engine Group Name**: Name of the service engine group created for Tanzu Kubernetes Grid workload clusters created while configuring NSX Advanced Load Balancer `sfo01w01segroup01`.
@@ -812,7 +812,7 @@ When Tanzu Kubernetes Grid management cluster is being deployed, behind the scen
 
 ## <a id="workloadalb"> </a> Configure AKO Deployment Config (ADC) for Workload Clusters
 
-Tanzu Kubernetes Grid v1.6.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
+Tanzu Kubernetes Grid v2.1.0 management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
 
 * `install-ako-for-management-cluster`: default configuration for management cluster
 * `install-ako-for-all`:  default configuration for all workload clusters. By default, all the workload clusters reference this file for their virtual IP networks and service engine (SE) groups. This ADC configuration does not enable NSX L7 Ingress by default.
