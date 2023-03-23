@@ -816,7 +816,7 @@ As per this Tanzu deployment, create 2 more ADCs:
 
 ### <a id="sharedako"> </a> Configure AKODeploymentConfig (ADC) for Shared Services Cluster
 
-As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `tanzu-mgmt-segroup-01` SE group. This configuration is enforced by creating a custom AKO Deployment Config (ADC) and applying the respective `NSXALB_LABELS` while deploying the shared services cluster.
+As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `sfo01m01segroup01` SE group. This configuration is enforced by creating a custom AKO Deployment Config (ADC) and applying the respective `NSXALB_LABELS` while deploying the shared services cluster.
 
 The format of the AKODeploymentConfig YAML file is as follows.
 
@@ -903,7 +903,7 @@ spec:
       defaultIngressController: false
       disableIngressClass: true
       nodeNetworkList:
-      - networkName: sfo01-w01-vds01-tkgmanagementvip
+      - networkName: sfo01-w01-vds01-tkgmanagement
   serviceEngineGroup: sfo01m01segroup01
 ```
 <!-- /* cSpell:enable */ -->
@@ -912,8 +912,8 @@ After you have the AKO configuration file ready, use the `kubectl` command to se
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
-Switched to context "tkg-160-mgmt-admin@tkg-160-mgmt".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 
 # kubectl apply -f ako-shared-services.yaml
@@ -937,7 +937,7 @@ tanzu-ako-for-shared                 113s
 
 VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the NSX_ALB LABEL while deploying the workload cluster.  
 
-As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `tanzu-wkld-segroup-01` SE group. 
+As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `sfo01w01segroup01` SE group. 
 
 Below are the changes in ADC Ingress section when compare to the default ADC. 
 
@@ -995,10 +995,10 @@ spec:
 The AKODeploymentConfig with sample values in place is as follows. You should add the respective NSX ALB label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
 
 * cloud: ​`sfo01w01vc01​`
-* service engine group: `tanzu-wkld-segroup-01`
+* service engine group: `sfo01w01segroup01`
 * Control Plane network: `sfo01-w01-vds01-tkgclustervip`
-* VIP/data network: `tkg_workload_vip_pg`
-* Node Network: `tkg_workload_pg`
+* VIP/data network: `sfo01-w01-vds01-tkgworkloadvip`
+* Node Network: `sfo01-w01-vds01-tkgworkload`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1017,7 +1017,7 @@ spec:
   clusterSelector:
     matchLabels:
       workload-l7-enabled: "true"
-  controller: 172.16.10.10
+  controller: sfo01albctlr01.sfo01.rainpole.local
   controlPlaneNetwork:
     cidr: 172.16.80.0/24
     name: sfo01-w01-vds01-tkgclustervip
@@ -1043,8 +1043,8 @@ Use the `kubectl` command to set the context to Tanzu Kubernetes Grid management
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg-160-mgmt-admin@sfo01w01vc01
-Switched to context "tkg-160-mgmt-admin@sfo01w01vc01".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 # kubectl apply -f workload-adc-l7.yaml
 akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-workload-l7-ingress created
@@ -1145,14 +1145,14 @@ Now that the shared services cluster is successfully created, you may proceed wi
     ## Add the tanzu-services label to the shared services cluster as its cluster role. In the following command "sfo01w01tkgshared01” is the name of the shared service cluster
     
     kubectl label cluster.cluster.x-k8s.io/sfo01w0tkgshared01 cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
-    cluster.cluster.x-k8s.io/sfo01w0tkgshared01-shared-services labeled
+    cluster.cluster.x-k8s.io/sfo01w0tkgshared01 labeled
 
     ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
 
     kubectl get cluster sfo01w0tkgshared01 --show-labels
     NAME                   PHASE         AGE    VERSION   LABELS
     
-    sfo01w0tkgshared01   Provisioned   105m             cluster-role.tkg.tanzu.vmware.com/tanzu-services=,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.24.9---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w0tkgshared01-shared-svc,type=shared-services
+    sfo01w0tkgshared01   Provisioned   105m             cluster-role.tkg.tanzu.vmware.com/tanzu-services=,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.24.9---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w0tkgshared01,type=shared-services
 
       ```
     <!-- /* cSpell:enable */ -->
@@ -1171,7 +1171,7 @@ Now that the shared services cluster is successfully created, you may proceed wi
 
     ## Use the following command to use the context of workload Cluster
 
-    kubectl config use-context tkgm-160-workload-l7-admin@tkgm-160-workload-l7
+    kubectl config use-context sfo01w0tkgshared01-admin@sfo01w0tkgshared01
     
     Switched to context "sfo01w0tkgshared01-admin@sfo01w0tkgshared01".
     
@@ -1214,10 +1214,10 @@ The steps for deploying a workload cluster are the same as for a shared services
 
     ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
 
-    kubectl get cluster tkgm-160-workload-l7 --show-labels
+    kubectl get cluster sfo01w01workload01 --show-labels
     NAME                   PHASE         AGE    VERSION   LABELS
     
-    tkgm-160-workload-l7   Provisioned   105m             cluster.x-k8s.io/cluster-name=sfo01w01workload01,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-workload-l7-ingress,run.tanzu.vmware.com/tkr=v1.24.9---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w01workload01,topology.cluster.x-k8s.io/owned=,workload-l7-enabled=true
+    sfo01w01workload01   Provisioned   105m             networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-workload-l7-ingress,tanzuKubernetesRelease=v1.249---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w01workload01,workload-l7-enabled=true
 
 
       ```
@@ -1237,7 +1237,7 @@ The steps for deploying a workload cluster are the same as for a shared services
 
     ## Use the following command to use the context of workload Cluster
 
-    kubectl config use-context tkgm-160-workload-l7-admin@tkgm-160-workload-l7
+    kubectl config use-context sfo01w01workload01-admin@sfo01w01workload01
     
     Switched to context "sfo01w01workload01-admin@sfo01w01workload01".
     
