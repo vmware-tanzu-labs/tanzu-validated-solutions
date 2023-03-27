@@ -21,8 +21,8 @@ The validated Bill of Materials that can be used to install Tanzu Kubernetes Gri
 |**Software Components**|**Version**|
 | --- | --- |
 |Tanzu Kubernetes Grid|2.1.0|
-|VMware vSphere ESXi|7.0 U3d |
-|VMware vCenter (VCSA)|7.0 U3d |
+|VMware vSphere ESXi|7.0 U3d & Above|
+|VMware vCenter (VCSA)|7.0 U3d & Above |
 |NSX Advanced Load Balancer|22.1.2|
 |VMware NSX-T|3.2.1.2|
 
@@ -594,7 +594,7 @@ The bootstrap machine must meet the following prerequisites:
    * A minimum of 6 GB of RAM and a 2-core CPU.
    * System time is synchronized with a Network Time Protocol (NTP) server.
    * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
-   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `tkg_mgmt_pg`.
+   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
 
@@ -831,10 +831,10 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
     * Management Cluster Name: Name for your management cluster.
     * Control Plane Endpoint Provider: Select NSX Advanced Load Balancer for Control Plane HA.
-    * Control Plane Endpoint: This is an optional field. If left blank, NSX Advanced Load Balancer will assign an IP address from the pool defined for the network "tkg-cluster-vip".  
-        If you need to provide an IP address, pick an IP address from “tkg_cluster_vip_pg”  static IP pools configured in AVI and ensure that the IP address is unused.
+    * Control Plane Endpoint: This is an optional field. If left blank, NSX Advanced Load Balancer will assign an IP address from the pool defined for the network "sfo01-w01-vds01-tkgclustervip".  
+        If you need to provide an IP address, pick an IP address from “sfo01-w01-vds01-tkgclustervip”  static IP pools configured in AVI and ensure that the IP address is unused.
     * Machine Health Checks: Enable
-    * Enable Audit Logging: Enable for audit logging for Kubernetes API server and node VMs. Choose as per your environment needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-troubleshooting-tkg-audit-logging.html).
+    * Enable Audit Logging: Enable for audit logging for Kubernetes API server and node VMs. Choose as per your environment needs. For more information, see [Audit Logging](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-security-audit-log.html).
 
     ![Management cluster settings](img/tko-on-vsphere-nsxt/tkg-installer-05.png)
 
@@ -892,7 +892,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 1. Select the OS image that will be used for the management cluster deployment.
 
-    Note: This list will appear empty if you don’t have a compatible template present in your environment. Refer steps provided in [Import Base Image template for TKG Cluster deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#import-a-base-image-template-into-vsphere-4).
+    Note: This list will appear empty if you don’t have a compatible template present in your environment. Refer steps provided in [Import Base Image template for TKG Cluster deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
     ![OS image for management cluster](img/tko-on-vsphere-nsxt/tkg-installer-12.png)
 
@@ -910,7 +910,8 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
    ![Deployment logs in installer UI](img/tko-on-vsphere-nsxt/tkg-installer-15.png)
 
-1. Edit the file and insert the key `AVI_NSXT_T1LR`. The value of this key is the tier-1 gateway where you have connected the `sfo01-w01-vds01-tkgmanagement` network. In this example, the value is set to `tanzu-t1-gw`. 
+1. Edit the file and insert the key `AVI_NSXT_T1LR`. The value of this key is the tier-1 gateway where you have connected the `sfo01-w01-vds01-tkgmanagement` network. In this example, the value is set to `tanzu-t1-gw`.
+1. Deploy the Management cluster from this config file by running the command:<p>tanzu management-cluster create -f example.yaml  -v 6
 
 A sample file used for the management cluster deployment is shown below.
 
@@ -994,7 +995,7 @@ If you want to register your management cluster with Tanzu Mission Control, see 
 
 ## <a id="workloadalb"> </a> Configure AKO Deployment Config (ADC) for Workload Clusters
 
-Tanzu Kubernetes Grid v1.6.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
+Tanzu Kubernetes Grid v2.1.0 management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
 
 * `install-ako-for-management-cluster`: default configuration for management cluster
 * `install-ako-for-all`:  default configuration for all workload clusters. By default, all the workload clusters reference this file for their virtual IP networks and service engine (SE) groups. This ADC configuration does not enable NSX L7 Ingress by default.
@@ -1103,8 +1104,8 @@ After you have the AKO configuration file ready, use the `kubectl` command to se
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
-Switched to context "tkg-160-mgmt-admin@tkg-160-mgmt".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 
 # kubectl apply -f ako-shared-services.yaml
@@ -1128,7 +1129,7 @@ tanzu-ako-for-shared                 113s
 
 VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the NSXALB_LABEL while deploying the workload cluster.  
 
-As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `tanzu-wkld-segroup-01` SE group. 
+As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `sfo01-w01-vds01-tkgworkloadvip` SE group. 
 
 Below are the changes in ADC Ingress section when compare to the default ADC. 
 
@@ -1234,8 +1235,8 @@ Use the `kubectl` command to set the context to Tanzu Kubernetes Grid management
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg-160-mgmt-admin@tkg-160-mgmt
-Switched to context "tkg-160-mgmt-admin@tkg-160-mgmt".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 # kubectl apply -f workload-adc-l7.yaml
 akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-workload-l7-ingress created
@@ -1283,7 +1284,7 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 1. On the Cluster Details Page 
 - Enter a name for the cluster (Cluster names must be unique within an organization).
 - select the cluster group to which you want to attach your cluster.
-- Select Cluster Class by clicking on the down arrow button.
+- Select Cluster Class by clicking on the drop down arrow button.
 - Use the NSXALB_Labels created for shared cluster on AKO Deployment.
 
     ![Cluster name and cluster group](img/tko-on-vsphere-nsxt/shared-svc-tmc04.png)
@@ -1294,6 +1295,7 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
    * Select the Kubernetes version to use for the cluster by template option. The latest supported version is preselected for you. You can choose the desired Kubernetes version by clicking on the down arrow button.
    * Select required datacenter ,resourcePool , folder , network , and datastore
    * Update sshAuthorizedKeys.
+   * Enable aviAPIServerHAProvider
 
    ![Resources backing the cluster](img/tko-on-vsphere-nsxt/shared-svc-tmc05.png)
 
