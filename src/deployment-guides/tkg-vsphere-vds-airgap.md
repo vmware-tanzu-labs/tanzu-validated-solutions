@@ -466,10 +466,10 @@ The following table provides a sample IP address and FQDN set for the NSX Advanc
 
 |**Controller Node**|**IP Address**|**FQDN**|
 | --- | --- | --- |
-|Node 1 Primary|172.16.10.11|`alb-ctlr01.lab.vmw`|
-|Node 2 Secondary|172.16.10.12|`alb-ctlr02.lab.vmw`|
-|Node 3 Secondary |172.16.10.13|`alb-ctlr03.lab.vmw`|
-|HA Address|172.16.10.10|`alb-ha.lab.vmw`|
+|Node 1 Primary|172.16.10.11|`sfo01albctlr01a.sfo01.rainpole.local`|
+|Node 2 Secondary|172.16.10.12|`sfo01albctlr01b.sfo01.rainpole.local`|
+|Node 3 Secondary |172.16.10.13|`sfo01albctlr01c.sfo01.rainpole.local`|
+|HA Address|172.16.10.10|`sfo01albctlr01.sfo01.rainpole.local`|
 
 Follow these steps to deploy and configure NSX Advanced Load Balancer:
 
@@ -880,7 +880,9 @@ In an air-gap environment, we recommend deploying a management cluster using a Y
 
 The templates include all of the options that are relevant to deploying management clusters on vSphere. You can copy this template and use it to deploy management clusters to vSphere.
 
-**Important:** The environment variables that you have set, override values from a cluster configuration file. To use all settings from a cluster configuration file, remove any conflicting environment variables before you deploy the management cluster from the CLI.
+**Important:** The environment variables that you have set, override values from a cluster configuration file. To use all settings from a cluster configuration file, remove any conflicting environment variables before you deploy the management cluster from the CLI.<p>
+**Important:** Image repository configuration is very importat details which will not be part of default config file when we are creating from TKG UI.<p>
+
 
 ```yaml
 #! ---------------------------------------------------------------------
@@ -1022,7 +1024,7 @@ After you have created or updated the cluster configuration file, you can deploy
 #! Basic cluster creation configuration
 #! ---------------------------------------------------------------------
 
-CLUSTER_NAME: tkg160-mgmt-airgap
+CLUSTER_NAME: sfo01w01vc01
 CLUSTER_PLAN: prod
 INFRASTRUCTURE_PROVIDER: vsphere
 ENABLE_CEIP_PARTICIPATION: "true"
@@ -1035,14 +1037,14 @@ SERVICE_CIDR: 100.64.0.0/13
 #! vSphere configuration
 #! ---------------------------------------------------------------------
 
-VSPHERE_SERVER: vcenter.lab.vmw
-VSPHERE_USERNAME: tkg-admin@vsphere.local
+VSPHERE_SERVER: sfo01w01vc01.sfo01.rainpole.local
+VSPHERE_USERNAME: administrator@vsphere.local
 VSPHERE_PASSWORD: <encoded:Vk13YXJlMSE=>
-VSPHERE_DATACENTER: /tkgm-internet-dc1
-VSPHERE_RESOURCE_POOL: /tkgm-internet-dc1/host/tkgm-internet-c1/Resources/tkg-management-components
-VSPHERE_DATASTORE: /tkgm-internet-dc1/datastore/vsanDatastore
-VSPHERE_FOLDER: /tkgm-internet-dc1/vm/tkg-management-components
-VSPHERE_NETWORK: /tkgm-internet-dc1/network/tkg_mgmt_pg
+VSPHERE_DATACENTER: /sfo01w01dc01
+VSPHERE_RESOURCE_POOL: /sfo01w01dc01/host/tkg-management-components/Resources/tkg-management-components
+VSPHERE_DATASTORE: /sfo01w01dc01datastore/vsanDatastore
+VSPHERE_FOLDER: /sfo01w01dc01vm/tkg-management-components
+VSPHERE_NETWORK: /sfo01w01dc01/network/sfo01-w01-vds01-tkgmanagement
 VSPHERE_CONTROL_PLANE_ENDPOINT: #Leave blank as VIP network is configured in NSX ALB and IPAM is configured with VIP network
 
 # VSPHERE_TEMPLATE:
@@ -1071,22 +1073,22 @@ VSPHERE_WORKER_MEM_MIB: 8192
 #! ---------------------------------------------------------------------
 
 AVI_CA_DATA_B64: LS0t[...]tLS0tLQ==
-AVI_CLOUD_NAME: tanzu-vcenter01
+AVI_CLOUD_NAME: sfo01w01vc01
 AVI_CONTROL_PLANE_HA_PROVIDER: "true"
-AVI_CONTROL_PLANE_NETWORK: tkg_cluster_vip_pg
+AVI_CONTROL_PLANE_NETWORK: sfo01-w01-vds01-tkgclustervip
 AVI_CONTROL_PLANE_NETWORK_CIDR: 172.16.80.0/24
-AVI_CONTROLLER: alb-ha.lab.vmw
-AVI_DATA_NETWORK: tkg_workload_vip_pg
+AVI_CONTROLLER: sfo01albctlr01.sfo01.rainpole.local
+AVI_DATA_NETWORK: sfo01-w01-vds01-tkgworkloadvip
 AVI_DATA_NETWORK_CIDR: 172.16.70.0/24
 AVI_ENABLE: "true"
 AVI_LABELS: 
 AVI_MANAGEMENT_CLUSTER_CONTROL_PLANE_VIP_NETWORK_CIDR: 172.16.80.0/24
-AVI_MANAGEMENT_CLUSTER_CONTROL_PLANE_VIP_NETWORK_NAME: tkg_cluster_vip_pg
-AVI_MANAGEMENT_CLUSTER_SERVICE_ENGINE_GROUP: tanzu-mgmt-segroup-01
+AVI_MANAGEMENT_CLUSTER_CONTROL_PLANE_VIP_NETWORK_NAME: sfo01-w01-vds01-tkgclustervip
+AVI_MANAGEMENT_CLUSTER_SERVICE_ENGINE_GROUP: sfo01m01segroup01
 AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_CIDR: 172.16.50.0/24
-AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_NAME: tkg_mgmt_vip_pg
+AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_NAME: sfo01-w01-vds01-tkgmanagementvip
 AVI_PASSWORD: <encoded:Vk13YXJlMSE=>
-AVI_SERVICE_ENGINE_GROUP: tanzu-wkld-segroup-01
+AVI_SERVICE_ENGINE_GROUP: sfo01w01segroup01
 AVI_USERNAME: admin
 
 
@@ -1115,7 +1117,7 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 
 The cluster deployment logs are streamed in the terminal when you run the `tanzu mc create` command. The first run of `tanzu mc create` takes longer than subsequent runs because it has to pull the required Docker images into the image store on your bootstrap machine. Subsequent runs do not require this step, and thus the process is faster.
 
-While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX Advanced Load Balancer. The service engines are mapped to the SE Group `tanzu-mgmt-segroup-01`​.
+While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX Advanced Load Balancer. The service engines are mapped to the SE Group `sfo01m01segroup01`​.
 
 Now you can access the Tanzu Kubernetes Grid management cluster from the bootstrap machine and perform additional tasks such as verifying the management cluster health and deploying the workload clusters.
 
@@ -1130,22 +1132,21 @@ tanzu management-cluster get
 To interact with the management cluster using the kubectl command, retrieve the management cluster `kubeconfig` and switch to the cluster context to run kubectl commands.
 
 ```bash
-# tanzu mc kubeconfig get --admin
-Credentials of cluster 'tkg160-mgmt-airgap' have been saved
-You can now access the cluster by running 'kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap'
+# kubectl config get-contexts
+Get Context of  Management cluster
 
-
-]# kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
+]# kubectl config use-context sfo01w01tkgmgmt01-admin@sfo01w01tkgmgmt01
+Switched to context "sfo01w01tkgmgmt01-admin@sfo01w01tkgmgmt01".
 
 ]# kubectl get nodes
-NAME                                       STATUS   ROLES                  AGE   VERSION
-tkg160-mgmt-airgap-control-plane-k7t7m     Ready    control-plane,master   44m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-control-plane-q568p     Ready    control-plane,master   26m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-control-plane-xh2zd     Ready    control-plane,master   17m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-md-0-5c46d59854-9f9zp   Ready    <none>                 32m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-md-1-d969dbf8b-j49mg    Ready    <none>                 32m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-md-2-c67f865d8-4sj8p    Ready    <none>                 32m   v1.23.8+vmware.2
+NAME                                            STATUS   ROLES           AGE     VERSION
+sfo01w01tkgmgmt01-b6tjz-rg7x8                   Ready    control-plane   36h     v1.24.9+vmware.1
+sfo01w01tkgmgmt01-b6tjz-tm9rw                   Ready    control-plane   6d21h   v1.24.9+vmware.1
+sfo01w01tkgmgmt01-md-0-dsn6c-76c9f9487c-r7ntc   Ready    <none>          6d21h   v1.24.9+vmware.1
+sfo01w01tkgmgmt01-md-1-k6cs9-5bc955d8db-c6gs6   Ready    <none>          6d21h   v1.24.9+vmware.1
+sfo01w01tkgmgmt01-md-2-7djsl-54f5dcc497-lktjs   Ready    <none>          6d21h   v1.24.9+vmware.1
+
+
 
 # kubectl get apps -A
 NAMESPACE    NAME                                DESCRIPTION           SINCE-DEPLOY   AGE
@@ -1168,7 +1169,7 @@ The Tanzu Kubernetes Grid management cluster is successfully deployed. You can n
 
 ## <a id="workloadalb"> </a> Configure AKO Deployment Config (ADC) for Workload Clusters
 
-Tanzu Kubernetes Grid v1.6.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
+Tanzu Kubernetes Grid v2.1.0 management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
 
 * `install-ako-for-management-cluster`: default configuration for management cluster
 * `install-ako-for-all`:  default configuration for all workload clusters. By default, all the workload clusters reference this file for their virtual IP networks and service engine (SE) groups. This ADC configuration does not enable NSX L7 Ingress by default.
@@ -1179,9 +1180,9 @@ As per this Tanzu deployment, create 2 more ADCs:
 
 * `tanzu-ako-for-workload-L7-ingress`: Use this ADC only if you would like to enable NSX Advanced Load Balancer L7 ingress on workload cluster. Otherwise, leave the cluster labels empty to apply the network configuration from default ADC `install-ako-for-all`.
 
-### <a id="sharedako"> </a> Configure AKO Deployment Config (ADC) for Shared Services Cluster
+### <a id="sharedako"> </a> Configure AKODeploymentConfig (ADC) for Shared Services Cluster
 
-As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `tanzu-mgmt-segroup-01` SE group. This configuration is enforced by creating a custom AKODeploymentConfig (ADC) and applying the respective `AVI_LABELS` while deploying the shared services cluster.
+As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `sfo01m01segroup01` SE group. This configuration is enforced by creating a custom AKO Deployment Config (ADC) and applying the respective `NSXALB_LABELS` while deploying the shared services cluster.
 
 The format of the AKODeploymentConfig YAML file is as follows.
 
@@ -1225,13 +1226,13 @@ spec:
 ```
 <!-- /* cSpell:enable */ -->
 
-The sample AKODeploymentConfig with sample values in place is as follows. You should add the respective avi label `type=shared-services` while deploying shared services cluster to enforce this network configuration.
+The sample AKODeploymentConfig with sample values in place is as follows. You should add the respective NSX_ALB label `type=shared-services` while deploying shared services cluster to enforce this network configuration.
 
-* cloud: ​`tanzu-vcenter-01​`
-* service engine group: `tanzu-mgmt-segroup-01`
-* Control Plane network: `tkg_cluster_vip_pg`
-* VIP/data network: `tkg_mgmt_vip_pg`
-* Node Network: `tkg_mgmt_pg`
+* cloud: ​`sfo01w01vc01​`
+* service engine group: `sfo01m01segroup01`
+* Control Plane network: `sfo01-w01-vds01-tkgclustervip`
+* VIP/data network: `sfo01-w01-vds01-tkgmanagementvip`
+* Node Network: `sfo01-w01-vds01-tkgmanagement`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1245,22 +1246,22 @@ metadata:
   name: tanzu-ako-for-shared
 spec:
   adminCredentialRef:
-    name: avi-controller-credentials
+    name: NSX_ALB-controller-credentials
     namespace: tkg-system-networking
   certificateAuthorityRef:
-    name: avi-controller-ca
+    name: NSX_ALB-controller-ca
     namespace: tkg-system-networking
-  cloudName: tanzu-vcenter01
+  cloudName: sfo01w01vc01
   clusterSelector:
     matchLabels:
       type: shared-services
   controlPlaneNetwork:
     cidr: 172.16.80.0/24
-    name: tkg_cluster_vip_pg
-  controller: alb-ha.lab.vmw
+    name: sfo01-w01-vds01-tkgclustervip
+  controller: sfo01albctlr01.sfo01.rainpole.local
   dataNetwork:
     cidr: 172.16.50.0/24
-    name: tkg_mgmt_vip_pg
+    name: sfo01-w01-vds01-tkgmanagementvip
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: true
@@ -1268,8 +1269,8 @@ spec:
       defaultIngressController: false
       disableIngressClass: true
       nodeNetworkList:
-      - networkName: tkg_mgmt_pg
-  serviceEngineGroup: tanzu-mgmt-segroup-01
+      - networkName: sfo01-w01-vds01-tkgmanagement
+  serviceEngineGroup: sfo01m01segroup01
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1277,8 +1278,8 @@ After you have the AKO configuration file ready, use the `kubectl` command to se
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 
 # kubectl apply -f ako-shared-services.yaml
@@ -1286,25 +1287,25 @@ akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-shared created
 ```
 <!-- /* cSpell:enable */ -->
 
-Use the following command to list all AKODeploymentConfigs created under the management cluster:
+Use the following command to list all AKODeploymentConfig created under the management cluster:
 
 <!-- /* cSpell:disable */ -->
 ```
 # kubectl get adc
 NAME                                 AGE
-install-ako-for-all                  16m
-install-ako-for-management-cluster   16m
-tanzu-ako-for-shared                 13s
+install-ako-for-all                  21h
+install-ako-for-management-cluster   21h
+tanzu-ako-for-shared                 113s
 ```
 <!-- /* cSpell:enable */ -->
 
-### <a id="l7workloadako"> </a> Configure AKODeploymentConfig (ADC) for Workload Cluster to Enable NSX ALB L7 Ingress with NodePortLocal Mode
+### <a id="l7workloadako"> </a> Configure AKO Deployment Config (ADC) for Workload Cluster to Enable NSX ALB L7 Ingress with NodePortLocal Mode
 
-VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the AVI_LABEL while deploying the workload cluster.  
+VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the NSX_ALB LABEL while deploying the workload cluster.  
 
-As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `tanzu-wkld-segroup-01` SE group.
+As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `sfo01w01segroup01` SE group. 
 
-Below are the changes in ADC Ingress section when compare to the default ADC.
+Below are the changes in ADC Ingress section when compare to the default ADC. 
 
 * **disableIngressClass**: set to `false` to enable NSX ALB L7 Ingress.
 
@@ -1324,10 +1325,10 @@ metadata:
   name: <unique-name-for-adc>
 spec:
   adminCredentialRef:
-    name: avi-controller-credentials
+    name: NSX_ALB-controller-credentials
     namespace: tkg-system-networking
   certificateAuthorityRef:
-    name: avi-controller-ca
+    name: NSX_ALB-controller-ca
     namespace: tkg-system-networking
   cloudName: <cloud name configured in nsx alb>
   clusterSelector:
@@ -1357,13 +1358,13 @@ spec:
 ```
 <!-- /* cSpell:enable */ -->
 
-The AKODeploymentConfig with sample values in place is as follows. You should add the respective avi label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
+The AKODeploymentConfig with sample values in place is as follows. You should add the respective NSX ALB label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
 
-* cloud: ​`tanzu-vcenter-01​`
-* service engine group: `tanzu-wkld-segroup-01`
-* Control Plane network: `tkg_cluster_vip_pg`
-* VIP/data network: `tkg_workload_vip_pg`
-* Node Network: `tkg_workload_pg`
+* cloud: ​`sfo01w01vc01​`
+* service engine group: `sfo01w01segroup01`
+* Control Plane network: `sfo01-w01-vds01-tkgclustervip`
+* VIP/data network: `sfo01-w01-vds01-tkgworkloadvip`
+* Node Network: `sfo01-w01-vds01-tkgworkload`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1373,34 +1374,34 @@ metadata:
   name: tanzu-ako-for-workload-l7-ingress
 spec:
   adminCredentialRef:
-    name: avi-controller-credentials
+    name: NSX_ALB-controller-credentials
     namespace: tkg-system-networking
   certificateAuthorityRef:
-    name: avi-controller-ca
+    name: NSX_ALB-controller-ca
     namespace: tkg-system-networking
-  cloudName: tanzu-vcenter01
+  cloudName: sfo01w01vc01
   clusterSelector:
     matchLabels:
       workload-l7-enabled: "true"
-  controller: 172.16.10.10
+  controller: sfo01albctlr01.sfo01.rainpole.local
   controlPlaneNetwork:
     cidr: 172.16.80.0/24
-    name: tkg_cluster_vip_pg
+    name: sfo01-w01-vds01-tkgclustervip
   dataNetwork:
     cidr: 172.16.70.0/24
-    name: tkg_workload_vip_pg
+    name: sfo01-w01-vds01-tkgworkloadvip
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false                               # required
     ingress:
       disableIngressClass: false                                # required
       nodeNetworkList:                                          # required
-        - networkName: tkg_workload_pg
+        - networkName: sfo01-w01-vds01-tkgworkload
           cidrs:
             - 172.16.60.0/24
       serviceType: NodePortLocal                                # required
       shardVSSize: MEDIUM                                       # required
-  serviceEngineGroup: tanzu-wkld-segroup-01
+  serviceEngineGroup: sfo01w01segroup01
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1408,9 +1409,8 @@ Use the `kubectl` command to set the context to Tanzu Kubernetes Grid management
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
-
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 # kubectl apply -f workload-adc-l7.yaml
 akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-workload-l7-ingress created
@@ -1423,10 +1423,11 @@ Use the following command to list all AKODeploymentConfig created under the mana
 ```
 # kubectl get adc
 NAME                                 AGE
-install-ako-for-all                  17m
-install-ako-for-management-cluster   17m
-tanzu-ako-for-shared                 79s
-tanzu-ako-for-workload-l7-ingress    12s
+install-ako-for-all                  22h
+install-ako-for-management-cluster   22h
+tanzu-ako-for-shared                 82m
+tanzu-ako-for-workload-l7-ingress    25s
+
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1445,7 +1446,7 @@ Deployment of the shared services cluster is done by creating a YAML file and in
 The following is a sample YAML for deploying a shared services cluster:
 
 ```yaml
-CLUSTER_NAME: tkg160-shared-services-airgap
+CLUSTER_NAME: sfo01w01workload01
 CLUSTER_PLAN: prod
 INFRASTRUCTURE_PROVIDER: vsphere
 ENABLE_CEIP_PARTICIPATION: "true"
@@ -1453,13 +1454,13 @@ ENABLE_AUDIT_LOGGING: "true"
 CLUSTER_CIDR: 100.96.0.0/11
 SERVICE_CIDR: 100.64.0.0/13
 VSPHERE_SERVER: vcenter.lab.vmw
-VSPHERE_USERNAME: tkg-admin@vsphere.local
+VSPHERE_USERNAME: administrator@vsphere.local
 VSPHERE_PASSWORD: <encoded:Vk13YXJlMSE=>
-VSPHERE_DATACENTER: /tkgm-internet-dc1
-VSPHERE_RESOURCE_POOL: /tkgm-internet-dc1/host/tkgm-internet-c1/Resources/tkg-sharedsvc-components
-VSPHERE_DATASTORE: /tkgm-internet-dc1/datastore/vsanDatastore
-VSPHERE_FOLDER: /tkgm-internet-dc1/vm/tkg-sharedsvc-components
-VSPHERE_NETWORK: /tkgm-internet-dc1/network/tkg_mgmt_pg
+VSPHERE_DATACENTER: /sfo01w01dc01
+VSPHERE_RESOURCE_POOL: /sfo01w01dc01/host/tkgm-internet-c1/Resources/tkg-sharedsvc-components
+VSPHERE_DATASTORE: /sfo01w01dc01/datastore/vsanDatastore
+VSPHERE_FOLDER: /sfo01w01dc01/vm/tkg-sharedsvc-components
+VSPHERE_NETWORK: /sfo01w01dc01/network/sfo01-w01-vds01-tkgmanagement
 VSPHERE_CONTROL_PLANE_ENDPOINT: #Leave blank as VIP network is configured in NSX ALB and IPAM is configured with VIP network
 VSPHERE_SSH_AUTHORIZED_KEY: ssh-rsa AAAA[...]== email@example.com
 VSPHERE_TLS_THUMBPRINT: DC:FA:81:1D:CA:08:21:AB:4E:15:BD:2B:AE:12:2C:6B:CA:65:49:B8
