@@ -92,3 +92,11 @@ VNET
 vsphere
 VXLAN
 Xeon
+albmanagement
+tkgmanagement
+tkgmanagementvip
+tkgclustervip
+tkgworkloadvip
+tkgworkload
+segroup
+fromtar
