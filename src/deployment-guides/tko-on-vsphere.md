@@ -21,9 +21,9 @@ The following table provides the validated component versions for this deploymen
 |**Software Components**|**Version**|
 | ---| --- |
 |Tanzu Kubernetes Grid|2.1.x|
-|VMware vSphere ESXi|7.0U3 & Above|
-|VMware vCenter (VCSA)|7.0U3 & Above|
-|VMware vSAN|7.0U3 & Above|
+|VMware vSphere ESXi|7.0U3 and later|
+|VMware vCenter (VCSA)|7.0U3 and later|
+|VMware vSAN|7.0U3 and later|
 |NSX Advanced LB|22.1.2 |
 
 For the latest information, see [VMware Product Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
@@ -1101,7 +1101,7 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
    - From the  **datacenter**, **resourcePool**, **folder**, **network**, and **datastore** drop down, select the required information.
    - From the **template** drop down, select the Kubernetes version.The latest supported version is preselected for you. 
    - In the **sshAuthorizedKeys** field, enter the SSH key that was created earlier.
-   - Enable aviAPIServerHAProvider
+   - Enable aviAPIServerHAProvider.
 
     ![Kubernetes version, network and storage options](img/tko-on-vsphere/68-shared-service-4.png)
 
@@ -1188,7 +1188,7 @@ Now that the shared services cluster is successfully created, you may proceed wi
      ```
     <!-- /* cSpell:enable */ -->
 
-Now that the shared services cluster is successfully created, you may proceed with deploying the Harbor package. For more information, see Install Harbor in Deploy User-Managed Packages in Workload Clusters.
+Now that the shared services cluster is successfully created, you may proceed with deploying the Harbor package. For more information, see Install [Harbor in Deploy User-Managed Packages in Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-harbor.html)
 
 ## <a id="dep-workload-cluster"> </a> Deploy Tanzu Kubernetes Grid Workload Clusters
 
