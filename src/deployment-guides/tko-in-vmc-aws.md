@@ -27,7 +27,7 @@ These instructions assume that you have the following set up:
 
 |**Software Components**|**Version**|
 | --- | --- |
-|Tanzu Kubernetes Grid|2.1.0
+|Tanzu Kubernetes Grid|2.1.x|
 |VMware Cloud on AWS SDDC Version|1.18 and later|
 |NSX Advanced Load Balancer|22.1.2|
 
@@ -55,17 +55,19 @@ Your environment should meet the following general requirements:
   - A content library to store NSX Advanced Load Balancer Controller and service engine OVA templates.  
 * Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). As part of this documentation, refer to the section to configure required packages on the Photon OS machine.
 
-  * Tanzu CLI 2.1.0
+  * Tanzu CLI 2.1.x
   * kubectl cluster CLI 1.24.9
 
 * A vSphere account with the permissions described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
-* Download and import NSX Advanced Load Balancer 21.1.2 OVA to Content Library.
+* Download and import NSX Advanced Load Balancer 22.1.2 OVA to Content Library.
 * Download the following OVA from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and import to vCenter. Convert the imported VMs to templates.
 
   * Photon v3 Kubernetes v1.24.9 OVA
   * Ubuntu 2004 Kubernetes v1.24.9 OVA  
 
 **Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.
+
+**Note**: In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
 
 #### Resource Pools and VM Folders
 
@@ -780,9 +782,9 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
 
 10. Click the **Verify Credentials** to select/configure the following:
 
-    **Note:** In Tanzu Kubernetes Grid v1.6, you can configure the network to separate the endpoint VIP network of the cluster from the external IP network of the load balancer service and the ingress service in the cluster. This feature lets you ensure the security of the clusters by providing you an option to expose the endpoint of your management or the workload cluster and the load balancer service and ingress service in the cluster, in different networks.
+    **Note:** In Tanzu Kubernetes Grid v2.1.x, you can configure the network to separate the endpoint VIP network of the cluster from the external IP network of the load balancer service and the ingress service in the cluster. This feature lets you ensure the security of the clusters by providing you an option to expose the endpoint of your management or the workload cluster and the load balancer service and ingress service in the cluster, in different networks.
 
-    As per the Tanzu for Kubernetes Operations 1.6 Reference Architecture, all the control plane endpoints connected to Tanzu Kubernetes Grid cluster VIP network and data plane networks are connected to the respective management data VIP network or workload data VIP network.
+    As per the Tanzu for Kubernetes Operations 2.1.x Reference Architecture, all the control plane endpoints connected to Tanzu Kubernetes Grid cluster VIP network and data plane networks are connected to the respective management data VIP network or workload data VIP network.
 
    - **Cloud Name:** Name of the cloud created while configuring NSX Advanced Load Balancer
      `sfo01w01vc01`.
@@ -865,7 +867,7 @@ The Tanzu Kubernetes Grid installer wizard is an easy way to deploy the cluster.
 
     ![Cluster status report](img/tko-in-vmc-aws/deploy-tko-vmc-61.jpg)
 
-    See [Examine the Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-verify-deployment.html) to perform additional health checks.
+    See [Examine the Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-deploy-post-deploy.html) to perform additional health checks.
 
 21.  When deployment is completed successfully, run the following command to install the additional Tanzu plugins:
 
@@ -884,7 +886,7 @@ After the management cluster is deployed, you must register the management clust
 
 ### Create AKO Deployment Config for Tanzu Kubernetes Grid Workload Cluster
 
-Tanzu Kubernetes Grid v1.6.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
+Tanzu Kubernetes Grid v2.1.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
 
 * `install-ako-for-management-cluster`: default config for management cluster
 * `install-ako-for-all`:  default config for all workload clusters. By default, all the workload clusters reference this file for their virtual IP networks, service engine (SE) groups. This ADC configuration does not enable NSX L7 Ingress by default.
@@ -963,10 +965,10 @@ spec:
   certificateAuthorityRef:
     name: nsx_alb-controller-ca
     namespace: tkg-system-networking
-  cloudName: tkg-vmc
+  cloudName: sfo01w01vc01
   clusterSelector:
     matchLabels:
-      type: shared
+      type: shared-services
   controlPlaneNetwork:
     cidr: 192.168.14.0/26
     name: sfo01-w01-vds01-tkgclustervip
@@ -991,8 +993,8 @@ After you have the AKO configuration file ready, use the `kubectl` command to se
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg149-mgmt-vmc-admin@tkg149-mgmt-vmc
-Switched to context "tkg149-mgmt-vmc-admin@tkg149-mgmt-vmc".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 
 # kubectl apply -f ako-shared-services.yaml
@@ -1095,7 +1097,7 @@ spec:
   cloudName: tkg-vmc
   clusterSelector:
     matchLabels:
-      type: wkld01-l7
+      workload-l7-enabled: "true"
   controlPlaneNetwork:
     cidr: 192.168.14.0/26
     name: sfo01-w01-vds01-tkgclustervip
@@ -1179,11 +1181,11 @@ Shared services cluster use the custom ADC tanzu-ako-for-shared created earlier 
 
 5. On the **Configure** page, specify the following:
 
-   - Update the vCenter details and tlsThumbprint for the authentication.
-   - Select the Kubernetes version to use for the cluster by template option. The latest supported version is preselected for you. You can choose the desired Kubernetes version by clicking on the down arrow button.
-
-   - Select required datacenter ,resourcePool , folder , network , and datastore
-   - Update sshAuthorizedKeys
+   - In the **vCenter** and **tlsThumbprint** fields, enter the details for authentication.
+   - From the  **datacenter**, **resourcePool**, **folder**, **network**, and **datastore** drop down, select the required information.
+   - From the **template** drop down, select the Kubernetes version.The latest supported version is preselected for you. 
+   - In the **sshAuthorizedKeys** field, enter the SSH key that was created earlier.
+   - Enable aviAPIServerHAProvider.
 
     ![Configure Kubernetes version, network and storage options](img/tko-in-vmc-aws/deploy-tko-vmc-66.jpg)
 
@@ -1205,13 +1207,135 @@ Shared services cluster use the custom ADC tanzu-ako-for-shared created earlier 
 
     Cluster creation roughly takes 15-20 minutes to complete. After the cluster deployment completes, ensure that **Agent and extensions health** shows green.
 
-    ![Cluster health status](img/tko-in-vmc-aws/deploy-tko-vmc-70.jpg)<p>Now that the shared services cluster is successfully created, you may proceed with deploying the Harbor package. For more information, see Install Harbor in [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).
+    ![Cluster health status](img/tko-in-vmc-aws/deploy-tko-vmc-70.jpg)
+
+1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
+    <!-- /* cSpell:disable */ -->
+     ```bash
+    ## verify the workload  service cluster creation
+
+    tanzu cluster list
+    NAME                  NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
+    
+    sfo01w0tkgshared01    default    running  3/3           3/3      v1.24.9+vmware.1  <none>  prod  v1.24.9---vmware.1-tkg.1
+
+
+    ## Connect to tkg management cluster
+
+    kubectl config use-context sfo01w01tkgmgmt01-admin@sfo01w01tkgmgmt01
+
+    ## Add the tanzu-services label to the shared services cluster as its cluster role. In the following command "sfo01w01tkgshared01” is the name of the shared service cluster
+    
+    kubectl label cluster.cluster.x-k8s.io/sfo01w0tkgshared01 cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
+    cluster.cluster.x-k8s.io/sfo01w0tkgshared01 labeled
+
+    ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
+
+    kubectl get cluster sfo01w0tkgshared01 --show-labels
+    NAME                   PHASE         AGE    VERSION   LABELS
+    
+    sfo01w0tkgshared01   Provisioned   105m             cluster-role.tkg.tanzu.vmware.com/tanzu-services=,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.24.9---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w0tkgshared01,type=shared-services
+
+      ```
+    <!-- /* cSpell:enable */ -->
+
+1. Connect to admin context of the workload cluster using the following commands and validate the ako pod status.
+
+    <!-- /* cSpell:disable */ -->
+     ```bash
+    ## Use the following command to get the admin context of workload Cluster.
+
+    tanzu cluster kubeconfig get sfo01w0tkgshared01 --admin
+    
+    Credentials of cluster 'sfo01w0tkgshared01' have been saved
+    You can now access the cluster by running 'kubectl config use-context sfo01w0tkgshared01-admin@sfo01w0tkgshared01'
+
+
+    ## Use the following command to use the context of workload Cluster
+
+    kubectl config use-context sfo01w0tkgshared01-admin@sfo01w0tkgshared01
+    
+    Switched to context "sfo01w0tkgshared01-admin@sfo01w0tkgshared01".
+    
+    # Verify that ako pod gets deployed in avi-system namespace
+
+     kubectl get pods -n avi-system
+    NAME    READY   STATUS    RESTARTS   AGE
+    ako-0   1/1     Running   0          73m
+
+    # verify the nodes and pods status by running the command:
+    kubectl get nodes -o wide
+
+    kubectl get pods -A 
+     ```
+    <!-- /* cSpell:enable */ -->
+
+Now that the shared services cluster is successfully created, you may proceed with deploying the Harbor package. For more information, see Install Harbor in [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).
 
 ## <a id=deploy-workload-cluster> </a> Deploy Tanzu Kubernetes Clusters (Workload Clusters)
 
 As per the architecture, workload clusters make use of a custom ADC to enable NSX Advanced Load Balancer L7 ingress with NodePortLocal mode. This is enforced by providing the NSXALB_LABEL while deploying the workload cluster.
 
-The steps for deploying a workload cluster are the same as for a shared services cluster. except use the NSXALB Labels created for the Workload cluster on AKO Deployment in step number 4.
+The steps for deploying a workload cluster are the same as for a shared services cluster. However, in step number 4, use the NSXALB Labels created for the Workload cluster on AKO Deployment.
+
+**After the Worload cluster creation verify the cluster labels and ako pod status**
+1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
+    <!-- /* cSpell:disable */ -->
+     ```bash
+    ## verify the workload  service cluster creation
+
+    tanzu cluster list
+    NAME                  NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
+    
+    sfo01w01shared01    default    running  3/3           3/3      v1.24.9+vmware.1  <none>  prod   v1.24.9---vmware.1-tkg.1
+
+    sfo01w01workload01  default    running  3/3           3/3      v1.24.9+vmware.1  <none>  prod   v1.24.9---vmware.1-tkg.1
+
+    ## Connect to tkg management cluster
+
+    kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+
+    ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
+
+    kubectl get cluster sfo01w01workload01 --show-labels
+    NAME                   PHASE         AGE    VERSION   LABELS
+    
+    sfo01w01workload01   Provisioned   105m             networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-workload-l7-ingress,tanzuKubernetesRelease=v1.249---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w01workload01,workload-l7-enabled=true
+
+
+      ```
+    <!-- /* cSpell:enable */ -->
+
+1. Connect to admin context of the workload cluster using the following commands and validate the ako pod status.
+
+    <!-- /* cSpell:disable */ -->
+     ```bash
+    ## Use the following command to get the admin context of workload Cluster.
+
+    tanzu cluster kubeconfig get sfo01w01workload01 --admin
+    
+    Credentials of cluster 'sfo01w01workload01' have been saved
+    You can now access the cluster by running 'kubectl config use-context sfo01w01workload01-admin@sfo01w01workload01'
+
+
+    ## Use the following command to use the context of workload Cluster
+
+    kubectl config use-context sfo01w01workload01-admin@sfo01w01workload01
+    
+    Switched to context "sfo01w01workload01-admin@sfo01w01workload01".
+    
+    # Verify that ako pod gets deployed in avi-system namespace
+
+     kubectl get pods -n avi-system
+    NAME    READY   STATUS    RESTARTS   AGE
+    ako-0   1/1     Running   0          73m
+
+    # verify the nodes and pods status by running the command:
+    kubectl get nodes -o wide
+
+    kubectl get pods -A 
+     ```
+    <!-- /* cSpell:enable */ -->
 
 You can now configure SaaS components and deploy user-managed packages on the cluster.
 
