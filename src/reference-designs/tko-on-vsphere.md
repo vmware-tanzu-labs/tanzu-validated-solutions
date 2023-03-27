@@ -14,10 +14,10 @@ The following table provides the component versions and interoperability matrix 
 
 |**Software Components**|**Version**|
 | --- | --- |
-| Tanzu Kubernetes Grid | 2.1.0 |
-| VMware vSphere ESXi | 7.0 U3 & Above|
-| VMware vCenter (VCSA)| 7.0 U3 & Above|
-| VMware vSAN | 7.0 U3 & Above |
+| Tanzu Kubernetes Grid | 2.1.x |
+| VMware vSphere ESXi | 7.0 U3 and later|
+| VMware vCenter (VCSA)| 7.0 U3 and later|
+| VMware vSAN | 7.0 U3 and later |
 | NSX Advanced LB | 22.1.2 |
 
 For the latest information, see [VMware Product Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
