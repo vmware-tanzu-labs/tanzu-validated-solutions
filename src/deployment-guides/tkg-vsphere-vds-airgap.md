@@ -11,13 +11,14 @@ The scope of this document is limited to providing deployment steps based on the
 The following table provides the component versions and interoperability matrix supported with the reference design:
 
 |**Software Components**|**Version**|
-| --- | --- |
-|Tanzu Kubernetes Grid|1.6.0|
-|VMware vSphere ESXi|7.0 U3 |
-|VMware vCenter Server|7.0 U3 |
-|NSX Advanced Load Balancer|21.1.4|
+| ---| --- |
+|Tanzu Kubernetes Grid|2.1.x|
+|VMware vSphere ESXi|7.0U3 and later|
+|VMware vCenter (VCSA)|7.0U3 and later|
+|VMware vSAN|7.0U3 and later|
+|NSX Advanced LB|22.1.2 |
 
-For up-to-date interoperability information about other VMware products and versions, see the [VMware Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,8803&row=789,%262,%26912,).
+For the latest information, see [VMware Product Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
 
 ## Prepare your Environment for Deploying Tanzu Kubernetes Grid
 
@@ -38,7 +39,7 @@ Before deploying the Tanzu Kubernetes Grid in the vSphere environment, ensure th
   - Network Time Protocol (NTP) service is running on all ESXi hosts and vCenter and time is synchronized from the centralized NTP servers.
   - A host/server/VM based on Linux that acts as your **bastion host** and is located **outside the Internet-restricted environment (i.e. connected to the Internet)**. The installation binaries for Tanzu Kubernetes Grid and NSX Advanced Load Balancer will be downloaded on this machine. You will need to transfer files from this bastion host to your Internet-restricted environment (proxy connection, shared drive, USB drive, sneakernet, etc.).
   - A host/server/VM **inside your Internet-restricted environment** based on Linux/Windows which acts as your bootstrap machine and has Tanzu CLI, Kubectl and docker installed. This document makes use of a virtual machine based on CentOS. An internal Harbor registry will be installed on the same machine.
-- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 **Note:** You can also download and import supported older versions of Kubernetes in order to deploy workload clusters on the intended Kubernetes versions.
 
@@ -64,12 +65,12 @@ For the purpose of this demonstration, this document makes use of the following 
 
 |**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
-|NSX ALB Management Network|nsx_alb_management_pg|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
-|TKG Management Network|tkg_mgmt_pg|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
-|TKG Management VIP Network|tkg_mgmt_vip_pg|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
-|TKG Cluster VIP Network|tkg_cluster_vip_pg|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
-|TKG Workload VIP Network|tkg_workload_vip_pg|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
-|TKG Workload Segment|tkg_workload_pg|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
+|NSX ALB Management Network|sfo01-w01-vds01-albmanagement|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
+|TKG Management Network|sfo01-w01-vds01-tkgmanagement|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
+|TKG Management VIP Network|sfo01-w01-vds01-tkgmanagementvip|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
+|TKG Cluster VIP Network|sfo01-w01-vds01-tkgclustervip|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
+|TKG Workload VIP Network|sfo01-w01-vds01-tkgworkloadvip|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
+|TKG Workload Segment|sfo01-w01-vds01-tkgworkload|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
 
 ## Deployment Overview
 Here are the high-level steps for deploying Tanzu Kubernetes Grid on vSphere VDS networking in an air-gap environment:
@@ -122,9 +123,9 @@ Ensure the following:
 
 2. Download installation binaries from the [Harbor GitHub repository](https://github.com/goharbor/harbor/releases/tag/v2.3.3). 
 
-3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/21_1_x).
+3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/22_1_x).
 
-4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-160&productId=988&rPId=90871). Tanzu CLI and Plugins need to be installed on the bastion host and the bootstrap machine.
+4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). Tanzu CLI and Plugins need to be installed on the bastion host and the bootstrap machine.
 
 5. Download the [yq](https://github.com/mikefarah/yq) installation binary from [mikefarah / yq](https://github.com/mikefarah/yq/releases/tag/v4.25.2) GitHub repository.
 
@@ -137,7 +138,7 @@ Ensure the following:
     ```bash
     tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
     cd ./cli/
-    sudo install core/v0.25.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
     ```
     Run the `tanzu version` command to check that the correct version of tanzu is installed and executable.
@@ -145,196 +146,32 @@ Ensure the following:
     ```bash
     # tanzu version
 
-    version: v0.25.0
-    buildDate: 2022-08-25
-    sha: 6288c751-dirty
+    version: v0.28.0
+    buildDate: 2023-01-20
+    sha: 3c34115bc-dirty
     ```
+1. Download the Images .
 
-1. Install [imgpkg](https://carvel.dev/imgpkg/).
-
-    imgpkg is a tool that enables Kubernetes to store configurations and the associated container images as OCI images and to transfer these images.
+    Before performing this step, ensure that the disk partition where you download the images has 45 GB of available space.
 
     ```bash
-    gunzip imgpkg-linux-amd64-v0.29.0+vmware.1.gz
-    chmod ugo+x imgpkg-linux-amd64-v0.29.0+vmware.1 && mv ./imgpkg-linux-amd64-v0.29.0+vmware.1 /usr/local/bin/imgpkg
+    tanzu isolated-cluster download-bundle --source-repo <SOURCE-REGISTRY> --tkg-version <TKG-VERSION> --ca-certificate <SECURITY-CERTIFICATE>
     ```
 
-1. Install the Tanzu CLI plugins.
-
-    The Tanzu CLI plugins provides commands for Tanzu Kubernetes cluster management and feature operations.
-
-    Running the `tanzu init` command for the first time installs the necessary Tanzu Kubernetes Grid configuration files in the `~/.config/tanzu/tkg` folder on your system. The script that you create and run in subsequent steps requires the Bill of Materials (BoM) YAML files in the `~/.config/tanzu/tkg/bom` folder to be present on your machine. The scripts in this procedure use the BoM files to identify the correct versions of the different Tanzu Kubernetes Grid component images to pull.
-
+   * SOURCE-REGISTRY is the IP address or the hostname of the registry where the images are stored.
+   * TKG-VERSION is the version of Tanzu Kubernetes Grid that you want to deploy in the proxied or air-gapped environment.
+   * SECURITY-CERTIFICATE is the security certificate of the registry where the images are stored. To bypass the security certificate validation, use --insecure, instead of --ca-certificate. Both the strings are optional. If you do not specify any value, the system validates the default server security certificate.
     ```bash
-    # tanzu init
-
-    Checking for required plugins...
-    Installing plugin 'login:v0.25.0'
-    Installing plugin 'management-cluster:v0.25.0'
-    Installing plugin 'package:v0.25.0'
-    Installing plugin 'pinniped-auth:v0.25.0'
-    Installing plugin 'secret:v0.25.0'
-    Installing plugin 'telemetry:v0.25.0'
-    Successfully installed all required plugins
-    ✔  Done
+    tanzu isolated-cluster download-bundle --source-repo projects.registry.vmware.com/tkg --tkg-version v2.1.0
     ```
+   The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. After installing the Tanzu plugins, run the `tanzu plugin list` command to check the plugins version and installation status.
+1. Copy the Files to the bootstrap Machine.
 
-    ```bash
-    # tanzu plugin list
-    NAME                DESCRIPTION                                                        SCOPE       DISCOVERY  VERSION  STATUS
-    login               Login to the platform                                              Standalone  default    v0.25.0  installed
-    management-cluster  Kubernetes management-cluster operations                           Standalone  default    v0.25.0  installed
-    package             Tanzu package management                                           Standalone  default    v0.25.0  installed
-    pinniped-auth       Pinniped authentication operations (usually not directly invoked)  Standalone  default    v0.25.0  installed
-    secret              Tanzu secret management                                            Standalone  default    v0.25.0  installed
-    telemetry           Configure cluster-wide telemetry settings                          Standalone  default    v0.25.0  installed
-    ```
+    Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other storage medium:
+   * The Image TAR files.
+   * The YAML files
 
-
-    Validate the BOM files by listing the contents in the `.config/tanzu/tkg/bom/` folder.
-
-    ```bash
-    ls .config/tanzu/tkg/bom/
-
-    tkg-bom-v1.6.0.yaml  tkr-bom-v1.23.8+vmware.1-tkg.1.yaml
-    ```
-
-1. Set the following environment variables.
-
-   - IP address or FQDN of your local image registry. 
-
-      ```bash
-      export TKG_CUSTOM_IMAGE_REPOSITORY="PRIVATE-REGISTRY"
-      ```
-
-      Where PRIVATE-REGISTRY is the IP address or FQDN of your private registry and the name of the project. For example, `registry.example.com/library`
-
-   - The repository from which to fetch Bill of Materials (BoM) YAML files.
-
-      ```bash
-      export TKG_IMAGE_REPO="projects.registry.vmware.com/tkg"
-
-      export TKG_BOM_IMAGE_TAG="v1.6.0"
-      ```
-
-   - If your private registry uses a self-signed certificate, provide the CA certificate of the registry in base64 encoded format. For example, `base64 -w 0 your-ca.crt`.
-
-      ```bash
-      export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE=LS0t[...]tLS0tLQ==
-      ```
-      This CA certificate is automatically injected into all Tanzu Kubernetes clusters that you create in this Tanzu Kubernetes Grid instance. 
-
-   - (Optional) Define the Tanzu Kubernetes releases (TKrs) to download. By default, the download script retrieves container images used in Tanzu Kubernetes Grid versions v1.3.0 and later. 
-
-      List all TKrs and their associations with a Tanzu Kubernetes Grid releases.
-
-      ```bash
-      imgpkg pull -i ${TKG_IMAGE_REPO}/tkr-compatibility:v$(imgpkg tag list -i ${TKG_IMAGE_REPO}/tkr-compatibility |sed 's/v//' |sort -rn |head -1) --output "tkr-tmp"; cat tkr-tmp/tkr-compatibility.yaml; rm -rf tkr-tmp
-      ```
-      For your Tanzu Kubernetes Grid version, note the supported Kubernetes versions. The one with the latest minor version is used by the management cluster. For example the Tanzu Kubernetes Grid v1.6.0 management cluster uses TKr v1.23.8_vmware.1-tkg.1.
-
-      Export as `DOWNLOAD_TKRS` a space-separated string of the TKrs required for your management cluster and workloads. For example, to download the images for Kubernetes v1.23 and v1.22 versions supported by Tanzu Kubernetes Grid v1.6.0:
-
-      ```bash
-      export DOWNLOAD_TKRS="v1.23.8_vmware.2-tkg.1 v1.22.11_vmware.2-tkg.1""
-      ```
-
-1. Prepare and execute the scripts for pulling Tanzu Kubernetes Grid installation binaries.
-
-   - Create a folder to collect Tanzu Kubernetes Grid installation binaries.
-
-      ```bash
-      mkdir -p /root/tkg-images && cd /root/tkg-images
-      ```
-   - Download the script `gen-publish-images-totar.sh`.
-
-      ```bash
-     wget https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/f07a8853e2462d96ec184abdb0a0a63b00d38a9a/hack/gen-publish-images-totar.sh
-      ```
-
-   - Make the `gen-publish-images-totar.sh` script executable.
-
-      ```bash
-      chmod +x gen-publish-images-totar.sh
-      ```
-
-   - Generate the `images-to-tar-list` file. 
-
-      ```bash
-      ./gen-publish-images.sh > images-to-tar-list
-      ```
-
-1. Run the `download-images.sh` script.
-
-   - Create the script using the following code snippet to download the Tanzu Kubernetes Grid installation binaries.
-
-      ```bash
-      #!/bin/bash
-
-        set -euo pipefail
-
-        images_script=${1:-}
-        if [ ! -f $images_script ]; then
-        echo "You may add your images list filename as an argument."
-        echo "E.g ./download-images.sh image-copy-list"
-        fi
-
-        commands="$(cat ${images_script} |grep imgpkg |sort |uniq)"
-
-        while IFS= read -r cmd; do
-        echo -e "\nrunning $cmd\n"
-        until $cmd; do
-            echo -e "\nDownload failed. Retrying....\n"
-            sleep 1
-        done
-        done <<< "$commands"
-      ```
-
-   - Make the `download-images script` executable.
-
-      ```bash
-      chmod +x download-images.sh
-      ```
-
-   - Run the `download-images.sh` script on the `images-to-tar-list` file to pull the required images from the public Tanzu Kubernetes Grid registry and save them as a TAR file.
-
-      ```bash
-      ./download-images.sh images-to-tar-list
-      ```
-      After the script has finished execution, you will see the required Tanzu Kubernetes Grid binaries in TAR format in the directory `tkg-images`. You will move the binaries to the bootstrap machine which is running inside the air-gap environment.
-
-1. Generate the `publish-images-fromtar.sh` script.
-
-    Run the script on the bootstrap machine after you have copied the download Tanzu Kubernetes Grid binaries onto the bootstrap VM. The script will copies the binaries from the bootstrap VM into the project in your private repository.
-
-   1. Download the script named `gen-publish-images-fromtar.sh`.
-
-      ```bash
-      wget https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-fromtar.sh
-      ```
-
-   1. Make the `gen-publish-images-fromtar.sh` script executable.
-
-      ```bash
-      chmod +x gen-publish-images-fromtar.sh
-      ```
-
-   1. Generate a `publish-images-fromtar.sh` shell script that is populated with the address of your private Docker registry.
-
-      ```bash
-      ./gen-publish-images-fromtar.sh > publish-images-fromtar.sh
-      ```
-
-   1. Verify that the generated script contains the correct registry address.
-
-      ```bash
-      cat publish-images-fromtar.sh
-      ```
-   1. Transfer the generated `publish-images-fromtar.sh` script file to the bootstrap machine. 
-
-2. Move the binaries you downloaded to the bootstrap VM. 
 
 ## <a id=install-harbor> </a> Install Harbor Image Registry
 
@@ -354,47 +191,69 @@ The deployment of the Tanzu Kubernetes Grid management and workload clusters is 
 
 The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-install-cli.html).
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
 The bootstrap machine must meet the following prerequisites:
 
-   * A minimum of 6 GB of RAM and a 2-core CPU.
+   * A minimum of 6 GB of RAM,  2-core CPU , 160 Storage GB .
    * System time is synchronized with a Network Time Protocol (NTP) server.
    * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
-   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `tkg_mgmt_pg`.
+   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
 
-1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384).
+1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
-   * VMware Tanzu CLI 1.6.0 for Linux
-   * kubectl cluster CLI v1.23.8 for Linux
+   * VMware Tanzu CLI 2.1.0 for Linux
+   * kubectl cluster CLI v1.24.9 for Linux
 
 1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
     ```bash
     ## Install required packages
-    tdnf install tar zip unzip wget -y
+    install tar, zip, unzip, wget
 
     ## Install Tanzu Kubernetes Grid CLI
     tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
     cd ./cli/
-    sudo install core/v0.25.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
 
     ## Verify Tanzu CLI version
 
      [root@tkg160-bootstrap ~] # tanzu version
 
-    version: v0.25.0
-    buildDate: 2022-08-25
+    version: v0.28.0
+    buildDate: 2023-01-20
     sha: 6288c751-dirty
     ```
+1. Install the isolated-cluster plugin on the offline bootstrap machine:
+
+      ```bash
+     tanzu plugin install isolated-cluster --local standalone-plugins/
+
+      ```
+1. Log in to the Private Registry on the Offline Machine.
+      ```bash
+     docker login <URL>
+      ```
+   Note:- If your private registry uses a self-signed certificate, save the CA certificate of the registry in "/etc/docker/certs.d/registry.example.com/ca.crt"
+1. Upload the Images to the Private Registry.
+      ```bash
+     tanzu isolated-cluster upload-bundle --source-directory <SOURCE-DIRECTORY> --destination-repo <DESTINATION-REGISTRY> --ca-certificate <SECURITY-CERTIFICATE>
+      ```
+    * SOURCE-DIRECTORY is the path to the location where the image TAR files are stored.
+    * DESTINATION-REGISTRY is the path to the private registry where the images will be hosted in the air-gapped environment.
+    * SECURITY-CERTIFICATE is the security certificate of the private registry where the images will be hosted in the proxied or air-gapped environment. 
+      ```bash
+     Example:- tanzu isolated-cluster upload-bundle --source-directory ./ --destination-repo registry.example.com/library --ca-certificate /etc/docker/certs.d/registry.example.com/ca.crt
+      ```
+  Note :- we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
 
 1. Install the kubectl utility.
 
       ```bash
-     gunzip kubectl-linux-v1.23.8+vmware.2.gz
-     mv kubectl-linux-v1.23.8+vmware.2 /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+     gunzip kubectl-linux-v1.24.9+vmware.1.gz
+     mv kubectl-linux-v1.24.9+vmware.1.gz /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
       ```
 
       Run the `kubectl version --short=true` to check that the correct version of kubectl is installed and executable.
@@ -419,27 +278,27 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
       By default the Tanzu global config file, `config.yaml`, which gets created when you first run `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Because there is no Internet in the environment, the commands fails after some time.
 
-      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `config set` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
+      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `export` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
 
       If your image registry is configured with a public signed CA certificate, set the following environment variables.
 
       ```bash
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
+      export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
 
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY true
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=true
       ```
 
       If your registry solution uses self-signed certificates, also add TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE in base64-encoded format to the global Tanzu CLI configuration file. For self-signed certificates, set the following environment variables:
 
       ```bash
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
+      export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
 
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY false
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY false
 
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
+      export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
 
       ```
-
+  Note:If we reboot the VM , this setting will go to default 
 1. Initialize Tanzu Kubernetes Grid and Install Tanzu CLI plugins.
 
       ```bash
@@ -470,23 +329,18 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
         ```bash
         cd ./cli
 
-        gunzip ytt-linux-amd64-v0.41.1+vmware.1.gz
+        ytt-linux-amd64-v0.43.1+vmware.1.gz
 
-        mv ytt-linux-amd64-v0.41.1+vmware.1 /usr/local/bin/ytt
-
-        chmod +x /usr/local/bin/ytt
-
+        chmod ugo+x ytt-linux-amd64-v0.43.1+vmware.1 &&  mv ./ytt-linux-amd64-v0.43.1+vmware.1 /usr/local/bin/ytt
         ```
         Run `ytt --version` to check that the correct version of ytt is installed and executable
 
    1. Install kapp.
 
       ```bash
-      gunzip kapp-linux-amd64-v0.49.0+vmware.1.gz
+      gunzip kapp-linux-amd64-v0.53.2+vmware.1.gz
 
-      mv kapp-linux-amd64-v0.49.0+vmware.1 /usr/local/bin/kapp
-
-      chmod +x /usr/local/bin/kapp
+      chmod ugo+x kapp-linux-amd64-v0.53.2+vmware.1 && mv ./kapp-linux-amd64-v0.53.2+vmware.1 /usr/local/bin/kapp
       ```
 
       Run `kapp --version` to check that the correct version of kapp is installed and executable.
@@ -494,11 +348,9 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    2. Install kbld.
 
       ```bash
-      gunzip kbld-linux-amd64-v0.34.0+vmware.1.gz
+      gunzip kbld-linux-amd64-v0.35.1+vmware.1.gz
 
-      mv kbld-linux-amd64-v0.34.0+vmware.1 /usr/local/bin/kbld
-
-      chmod +x /usr/local/bin/kbld
+      chmod ugo+x kbld-linux-amd64-v0.35.1+vmware.1 && mv ./kbld-linux-amd64-v0.35.1+vmware.1 /usr/local/bin/kbld
       ```
 
       Run `kbld --version` to check that the correct version of kbld is installed and executable.
@@ -506,20 +358,18 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    3. Install imgpkg.
 
       ```bash
-      gunzip imgpkg-linux-amd64-v0.29.0+vmware.1.gz
-      mv imgpkg-linux-amd64-v0.29.0+vmware.1 /usr/local/bin/imgpkg
-      chmod +x /usr/local/bin/imgpkg
+      gunzip imgpkg-linux-amd64-v0.31.1+vmware.1.gz
+      chmod ugo+x imgpkg-linux-amd64-v0.31.1+vmware.1 && mv ./imgpkg-linux-amd64-v0.31.1+vmware.1 /usr/local/bin/imgpkg
       ```
 
       Run `imgpkg --version` to check that the correct version of imgpkg is installed and executable.
 
 1. Install yq.
 
-    yq a lightweight and portable command-line YAML processor. 
+    yq a lightweight and portable command-line YAML processor.
+    Download [yq](https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz)
 
     ```bash
-    wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz
-
     tar -zxvf yq_linux_amd64.tar.gz
 
     mv yq_linux_amd64 /usr/local/bin/
@@ -571,31 +421,15 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     sudo sysctl net/netfilter/nf_conntrack_max=131072
    ```
 
-1. Push Tanzu Kubernetes Grid installation binaries to your private image registry.
-
-    Navigate to the folder which contains all Tanzu Kubernetes Grid binaries and the `publish-images-fromtar.sh` file that you have copied from the bastion host and then execute the following command to push the binaries to your private image registry. 
-
-    ```bash
-    ### Make the publish-images-fromtar.sh script executable.
-
-    chmod +x publish-images-fromtar.sh
-
-    ### Execute the publish-images-fromtar.sh script
-
-    sh publish-images-fromtar.sh
-    ```
-
-Now all the required packages are installed and required configurations are in place on the bootstrap virtual machine.
-
 ### Import the Base Image Template in vCenter Server
 
 Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
-1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
+1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
 
 * For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.23.8 OVA.
 
-     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-build-images-index.html).
+     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
 * For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
     **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
@@ -612,7 +446,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
 
-For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 ### Import NSX Advanced Load Balancer in Content Library
 
@@ -722,6 +556,104 @@ This document focuses on enabling NSX Advanced Load Balancer using the license m
 
 ### <a id="nsx-alb-ha"> </a> NSX Advanced Load Balancer: Controller High Availability
 
+NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer that provides L4 - L7 load balancer support. It is recommended for vSphere deployments without NSX-T, or when there are unique scaling requirements.
+
+NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment. This mode grants NSX Advanced Load Balancer controllers full write access to vCenter that helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
+
+For a production-grade deployment, it is recommended to deploy three instances of the NSX Advanced Load Balancer controller for high availability and resiliency.  
+
+The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:  
+
+|**Controller Node**|**IP Address**|**FQDN**|
+| --- | --- | --- |
+|Node 1 Primary|172.16.10.11|`sfo01albctlr01a.sfo01.rainpole.local`|
+|Node 2 Secondary|172.16.10.12|`sfo01albctlr01b.sfo01.rainpole.local`|
+|Node 3 Secondary |172.16.10.13|`sfo01albctlr01c.sfo01.rainpole.local`|
+|HA Address|172.16.10.10|`sfo01albctlr01.sfo01.rainpole.local`|
+
+Follow these steps to deploy and configure NSX Advanced Load Balancer:
+
+1. [Deploy NSX Advanced Load Balancer](#dep-nsx-alb)
+1. [NSX Advanced Load Balancer: Initial setup](#nsx-alb-init)
+1. [NSX Advanced Load Balancer: Licensing](#nsx-alb-license)
+1. [NSX Advanced Load Balancer: Controller High Availability](#nsx-alb-ha)
+1. [NSX Advanced Load Balancer: Certificate Management](#nsx-alb-cert-mgmt)
+1. [NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups](#nsx-alb-vcenter-se)
+1. [NSX Advanced Load Balancer: Configure Network and IPAM & DNS Profiles](#nsx-alb-net-ipam)
+
+### <a id="dep-nsx-alb"> </a> Deploy NSX Advanced Load Balancer
+
+As a prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
+
+To deploy NSX Advanced Load Balancer, complete the following steps.
+
+1. Log in to **vCenter** and go to **Home** > **Content Libraries**.
+1. Select the content library under which the NSX Advanced Load Balancer OVA is placed.
+1. Click on **OVA & OVF Templates**.
+1. Right-click the NSX Advanced Load Balancer image and select **New VM from this Template**.
+1. On the Select name and folder page, enter a name and select a folder for the NSX Advanced Load Balancer VM as **nsx-alb-components**.
+1. On the Select a compute resource page, select the resource pool **nsx-alb-components**.
+1. On the Review details page, verify the template details and click **Next**.
+1. On the Select storage page, select a storage policy from the VM Storage Policy drop-down menu and choose the  datastore location where you want to store the virtual machine files.
+1. On the Select networks page, select the network **sfo01-w01-vds01-albmanagement** and click **Next**.
+1. On the Customize template page, provide the NSX Advanced Load Balancer management network details such as IP address, subnet mask, and gateway, and click **Next**.
+1. On the Ready to complete page, review the page and click **Finish**.
+
+    ![Deployment of NSX Advanced Load Balancer](img/tko-on-vsphere/6-AVI-ova-config.png)
+
+A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX Advanced Load Balancer virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, go to NSX Advanced Load Balancer on your browser.  
+**Note**: While the system is booting up, a blank web page or a 503 status code may appear.  
+
+### <a id="nsx-alb-init"> </a> NSX Advanced Load Balancer: Initial Setup
+
+After NSX Advanced Load Balancer is successfully deployed and running, go to NSX Advanced Load Balancer on your browser using the URL https://<em><IP/FQDN></em> and configure the basic system settings:
+
+1. Set admin password and click on **Create Account**.
+
+    ![Set admin password and create account](img/tko-on-vsphere/7.ALB-login.png)
+
+
+2. On the Welcome page, under **System Settings**, set backup passphrase and provide DNS information, and click **Next**.
+
+    ![Set backup passphrase and provide DNS information](img/tko-on-vsphere/8.ALB-Welcome-screen.png)
+
+3. Under **Email/SMTP**, provide email and SMTP information, and click **Next**.
+
+    ![Provide email and SMTP information](img/tko-on-vsphere/9.ALB-Welcome-email-smtp.png)
+
+4. Under **Multi-Tenant**, configure settings as follows and click **Save**.
+    - IP Route Domain: Share IP route domain across tenants  
+    - Service Engines are managed within the: Provider (Shared across tenants)  
+    - Tenant Access to Service Engine: Read Access
+
+    ![Configure multi-tenant settings](img/tko-on-vsphere/10.ALB-Welcome-Multi-tenant.png)
+
+If you did not select the **Setup Cloud After** option before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a dashboard view on the controller.
+
+### NSX Advanced Load Balancer: NTP Configuration
+
+To configure NTP, go to **Administration** > **Settings** > **DNS/NTP > Edit** and add your NTP server details and click **Save**.
+
+**Note:** You may also delete the default NTP servers.
+
+![NTP server configuration](img/tko-on-vsphere/11.ALB-NTP.png)
+
+### <a id="nsx-alb-license"></a> NSX Advanced Load Balancer: Licensing
+
+This document focuses on enabling NSX Advanced Load Balancer using the license model: **Enterprise License (VMware NSX ALB Enterprise)**.
+1. To configure licensing, go to **Administration**  > **Licensing** and click on the gear icon to change the license type to Enterprise. 
+
+    ![License configuration - change licensing type](img/tko-on-vsphere/12.ALB-Licensing-01.png)
+1. Select Enterprise Tier as the license type and click **Save**
+
+    ![License configuration - select Enterprise tier](img/tko-on-vsphere/12.ALB-Licensing-02.png)
+
+1. Once the license tier is changed, apply the NSX Advanced Load Balancer Enterprise license key. If you have a license file instead of a license key, apply the license by clicking on the **Upload a License File(.lic)** option.
+
+    ![License configuration - apply license](img/tko-on-vsphere/12.ALB-Licensing-03.png)
+
+### <a id="nsx-alb-ha"> </a> NSX Advanced Load Balancer: Controller High Availability
+
 In a production environment, it is recommended to deploy additional controller nodes and configure the controller cluster for high availability and disaster recovery. Adding 2 additional nodes to create a 3-node cluster provides node-level redundancy for the controller and also maximizes performance for CPU-intensive analytics functions.
 
 To run a 3-node controller cluster, you deploy the first node and perform the initial configuration, and set the cluster IP address. After that, you deploy and power on two more controller VMs, but you must not run the initial configuration wizard or change the admin password for these controllers VMs. The configuration of the first controller VM is assigned to the two new controller VMs.
@@ -732,11 +664,11 @@ Complete the following steps to configure NSX Advanced Load Balancer cluster.
 
 1. Log in to the primary NSX Advanced Load Balancer controller and go to **Administrator** > **Controller** > **Nodes**, and click **Edit**.
 
-    ![Configure NSX Advanced Load Balancer controller node](img/tkg-airgap-vsphere-deploy/13.ALB-Nodes.png)
+    ![Configure NSX Advanced Load Balancer controller node](img/tko-on-vsphere/13.ALB-Nodes.png)
 
 2. Specify **Name** and **Controller Cluster IP**, and click **Save**. This IP address must be from the NSX Advanced Load Balancer management network.
 
-    ![Specify NSX Advanced Load Balancer controller node name and IP address](img/tkg-airgap-vsphere-deploy/14.ALB-controller-vip.png)
+    ![Specify NSX Advanced Load Balancer controller node name and IP address](img/tko-on-vsphere/14.ALB-controller-vip.png)
 
 3. Deploy the 2nd and 3rd NSX Advanced Load Balancer controller nodes by using steps in [Deploy NSX Advanced Load Balancer](#dep-nsx-alb).
 
@@ -744,23 +676,23 @@ Complete the following steps to configure NSX Advanced Load Balancer cluster.
 
 5. In the **Cluster Nodes** field, enter the IP address for the 2nd and 3rd controller, and click **Save**.
 
-    ![Cluster node IP address in controller configuration](img/tkg-airgap-vsphere-deploy/15.ALB-additional-nodes.png)
+    ![Cluster node IP address in controller configuration](img/tko-on-vsphere/15.ALB-additional-nodes.png)
 
     After you complete these steps, the primary NSX Advanced Load Balancer controller becomes the leader for the cluster and invites the other controllers to the cluster as members.
 
     NSX Advanced Load Balancer then performs a warm reboot of the cluster. This process can take approximately 10-15 minutes. You are automatically logged out of the controller node where you are currently logged in. Enter the cluster IP address in the browser, to see details about the cluster formation task.
 
-    ![Controller initialization](img/tkg-airgap-vsphere-deploy/16.ALB-Controller-initialization.png)
+    ![Controller initialization](img/tko-on-vsphere/16.ALB-Controller-initialization.png)
 
 The configuration of the primary (leader) controller is synchronized to the new member nodes when the cluster comes online following the reboot. After the cluster is successfully formed, you can see the following status:
 
-![Controller status](img/tkg-airgap-vsphere-deploy/17.ALB-cluster.png)
+![Controller status](img/tko-on-vsphere/17.ALB-cluster.png)
 
 **Note:** In the following tasks, all NSX Advanced Load Balancer configurations are done by connecting to the NSX ALB Controller Cluster IP/FQDN.
 
 ### <a id="nsx-alb-cert-mgmt"> </a> NSX Advanced Load Balancer: Certificate Management
 
-The default system-generated controller certificate generated for SSL/TSL connections does not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
+The default system-generated controller certificate generated for SSL/TSL connections will not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
 
 1. Log in to the NSX Advanced Load Balancer controller and go to **Templates** > **Security** > **SSL/TLS Certificates**.
 
@@ -768,17 +700,17 @@ The default system-generated controller certificate generated for SSL/TSL connec
 
 1. Provide all required details as per your infrastructure requirements and in the **Subject Alternate Name (SAN)** field, provide IP address and FQDN of all NSX Advanced Load Balancer controllers including NSX Advanced Load Balancer cluster IP and FQDN, and click **Save**.
 
-    ![Self-signed certificate - General tab](img/tkg-airgap-vsphere-deploy/18.ALB-Certificate-01.png)
-    ![Self-signed certificate - Certificate tab](img/tkg-airgap-vsphere-deploy/18.ALB-Certificate-02.png)
+    ![Self-signed certificate - General tab](img/tko-on-vsphere/18.ALB-Certificate-01.png)
+    ![Self-signed certificate - Certificate tab](img/tko-on-vsphere/18.ALB-Certificate-02.png)
 
 1. After the certificate is created, capture the certificate contents as this is required while deploying the Tanzu Kubernetes Grid management cluster.
   To capture the certificate content, click on the Download icon next to the certificate, and click **Copy to clipboard** under **Certificate**.
 
-    ![Copy certificate contents](img/tkg-airgap-vsphere-deploy/19.ALB-Certificate-contents.png)
+    ![Copy certificate contents](img/tko-on-vsphere/19.ALB-Certificate-contents.png)
 
 1. To replace the certificate, go to **Administration** > **Settings** > **Access Settings**, and click the pencil icon at the top right to edit the system access settings, and then replace the SSL/TSL certificate and click **Save**.
 
-    ![Replace certificate](img/tkg-airgap-vsphere-deploy/20.ALB-Cert-replace.png)
+    ![Replace certificate](img/tko-on-vsphere/20.ALB-Cert-replace.png)
 
 1. Log out and log in to NSX Advanced Load Balancer.
 
@@ -791,79 +723,76 @@ NSX Advanced Load Balancer can be deployed in multiple environments for the same
 * Virtual services that load balances control plane nodes of Management Cluster and Shared services cluster.
 * Virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid management cluster and Shared services cluster.
 
-**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes & virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
-
+**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes and virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
 
 **Note**:
 
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
-* Control plane VIP for the workload clusters is placed on the respective SE group assigned through AKO Deployment Config (ADC) during cluster creation.
+* Control plane VIP for the workload clusters will be placed on the respective Service Engine group assigned through AKO Deployment Config (ADC) during cluster creation.
 
 For information about mapping a specific service engine group to Tanzu Kubernetes Grid workload cluster, see [Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster](#workloadalb).
 
-The following components are created in NSX Advanced Load Balancer.
-
-<!-- /* cSpell:disable */ -->
-
-| **Object** | **Sample Name** |
-| --- | --- |
-| vCenter Cloud | tanzu-vcenter01 |
-| Service Engine Group 1 | tanzu-mgmt-segroup-01 |
-| Service Engine Group 2 | tanzu-wkld-segroup-01 |
-
-<!-- /* cSpell:enable */ -->
 
 1. Log in to NSX Advanced Load Balancer and go to **Infrastructure** > **Clouds** > **Create** > **VMware vCenter/vSphere ESX**.
 
-    ![Create vCenter Cloud](img/tkg-airgap-vsphere-deploy/21.ALB-Clouds.png)
+    ![Create vCenter Cloud](img/tko-on-vsphere/21.ALB-Clouds.png)
 
-1. Enter cloud name and click **Next**.
+1. Under **General** pane, in the **Name** field, enter a Cloud name. 
 
-    ![Enter cloud name](img/tkg-airgap-vsphere-deploy/22.ALB-Clouds-1.png)
+    ![Enter cloud name](img/tko-on-vsphere/22.ALB-Clouds-1.png)
 
-1. Under the **Infrastructure** pane, enter vCenter address, username, and password, set **Access Permission** to Write and click **Next**.
+1. Under the **vCenter/vSphere** pane, enter information for * vCenter address*, *Username*, and *Password* fields and  click **CONNECT**.
 
-    ![Enter infrastructure information for vCenter Cloud](img/tkg-airgap-vsphere-deploy/23.ALB-Clouds-2.png)
+    ![Enter infrastructure information for vCenter Cloud](img/tko-on-vsphere/23.ALB-Clouds-2.png)
 
-1. Under the **Data Center** pane, choose the data center for NSX Advanced Load Balancer to discover infrastructure resources.
+1. Under the **Data Center** pane, choose the data center from the Data Center dropdown.Select **Content Library** for SE template and click **SAVE & LAUNCH**.
 
-    ![Select data center](img/tkg-airgap-vsphere-deploy/24.ALB-Clouds-3.png)
+    ![Select data center](img/tko-on-vsphere/24.ALB-Clouds-3.png)
 
-1. Under the **Network** pane, choose the NSX Advanced Load Balancer management network for service engines and enter a static IP address pool for SEs and VIP, and click **Complete**.
-    ![Enter network information](img/tkg-airgap-vsphere-deploy/25.ALB-Clouds-4.png)
+1. Select the Management Network from the **Management Network** drop down to choose the NSX Advanced Load Balancer management network for service engines. Enter a static IP address pool for SEs and VIP, and click **Complete**.
+    ![Enter network information](img/tko-on-vsphere/25.ALB-Clouds-4.png)
 
 1. Wait for the cloud to get configured and the status to turn green.
 
-    ![Wait for completion](img/tkg-airgap-vsphere-deploy/26.ALB-Clouds-5.png)
+    ![Wait for completion](img/tko-on-vsphere/26.ALB-Clouds-5.png)
 
-1. To create a service engine group for Tanzu Kubernetes Grid management clusters, navigate to **Infrastructure** > **Cloud Resources** > **Service Engine Group** tab, under Select Cloud choose the cloud created in the previous step, and click **Create**.
+1. To create a service engine group for Tanzu Kubernetes Grid management clusters, under **Infrastructure** tab, go to **Cloud Resources** > **Service Engine Group**.
+From the **Select Cloud** drop down, select the cloud created in the previous step and click **Create**.<p>
+The following components are created in NSX Advanced Load Balancer.
+
+   | **Object** | **Sample Name** |
+   | --- | --- |
+   | vCenter Cloud | sfo01w01vc01 |
+   | Service Engine Group 1 | sfo01m01segroup01 |
+   | Service Engine Group 2 | sfo01w01segroup01 |
+
 
 1. Enter a name for the Tanzu Kubernetes Grid management service engine group and set the following parameters:  
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | High availability mode | N+M (buffer) |
+    | High availability mode | Active/Active |
     | Memory per Service Engine | 4   |
     | vCPU per Service Engine | 2   |
 
     Use the default values for the rest of the parameters.
 
-    ![Create service engine group - basic settings](img/tkg-airgap-vsphere-deploy/27.ALB-SE.png)
+    ![Create service engine group - basic settings](img/tko-on-vsphere/27.ALB-SE.png)
 
-    For advanced configuration, click on the Advanced tab, specify a specific cluster and datastore for service engine placement, change the AVI SE folder name, and service engine name prefix, and click **Save**.
+    For advanced configuration, click on the Advanced tab, specify a specific cluster and datastore for service engine placement, change the NSX_ALB SE folder name, and service engine name prefix, and click **Save**.
 
-    ![Create service engine group - advanced settings](img/tkg-airgap-vsphere-deploy/28.ALB-SE-Group2.png)  
+    ![Create service engine group - advanced settings](img/tko-on-vsphere/28.ALB-SE-Group2.png)  
 
 1. Repeat steps 7 and 8 to create another service engine group for Tanzu Kubernetes Grid workload clusters. After completing this step, you will have created two service engine groups.  
-    ![Service engine groups created](img/tkg-airgap-vsphere-deploy/29.ALB-SE-Group3.png)
+    ![Service engine groups created](img/tko-on-vsphere/29.ALB-SE-Group3.png)
 
 ### <a id="nsx-alb-net-ipam"> </a> NSX Advanced Load Balancer: Configure Network and IPAM Profile
 
 #### Configure Tanzu Kubernetes Grid Networks in NSX Advanced Load Balancer
 
-As part of the cloud creation in NSX Advanced Load Balancer, only management network is configured in NSX Advanced Load Balancer. Complete the following steps to configure these networks:
+As part of the cloud creation in NSX Advanced Load Balancer, only management network has been configured in NSX Advanced Load Balancer. Complete the following steps to configure these networks:
 
    * TKG Management Network
    * TKG Workload Network
@@ -873,8 +802,7 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 
 1. Log in to NSX Advanced Load Balancer and go to **Infrastructure** > **Cloud Resources** > **Networks**.
 
-1. Select the desired cloud. All the networks available in vCenter are listed. 
-
+1. Select the desired cloud. All the networks available in vCenter are listed.
 
 1. Click on the edit icon next for the network and configure as follows. Change the provided details as per your SDDC configuration.
 
@@ -884,20 +812,21 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 
     | **Network Name** | **DHCP** | **Subnet** | **Static IP Pool** |
     | --- | --- | --- | --- |
-    | tkg_mgmt_pg | Yes | 172.16.40.0/24 | NA  |
-    | tkg_workload_pg | Yes | 172.16.60.0/24 | NA  |
-    | nsx_alb_management-pg | No  | 172.16.10.0/24 | 172.16.10.100 - 172.16.10.200 |
-    | tkg_cluster_vip_pg | No  | 172.16.80.0/24 | 172.16.80.100 - 172.16.80.200 |
-    | tkg_mgmt_vip_pg | No  | 172.16.50.0/24 | 172.16.50.100 - 172.16.50.200 |
-    | tkg_workload_vip_pg | No  | 172.16.70.0/24 | 172.16.70.100 - 172.16.70.200 |
+    | sfo01-w01-vds01-tkgmanagement | Yes | 172.16.40.0/24 | NA  |
+    | sfo01-w01-vds01-tkgworkload | Yes | 172.16.60.0/24 | NA  |
+    | sfo01-w01-vds01-tkgclustervip | No  | 172.16.80.0/24 | 172.16.80.100 - 172.16.80.200 |
+    | sfo01-w01-vds01-tkgmanagementvip | No  | 172.16.50.0/24 | 172.16.50.100 - 172.16.50.200 |
+    | sfo01-w01-vds01-tkgworkloadvip | No  | 172.16.70.0/24 | 172.16.70.100 - 172.16.70.200 |
     <!-- /* cSpell:enable */ -->
 
-    The following snippet shows an example network configuration: `tkg_cluster_vip_pg`
+    The following snippet shows an example network configuration: `sfo01-w01-vds01-tkgclustervip` , Same configuration should be applied in Matkgmanagementvip and sfo01-w01-vds01-tkgworkloadvip
 
-    ![Change network settings](img/tkg-airgap-vsphere-deploy/31.ALB-Networks-2.png)
+    ![Change network settings](img/tko-on-vsphere/31.ALB-Networks-2.png)
+
+    sfo01-w01-vds01-tkgmanagement and sfo01-w01-vds01-tkgworkload network should be enabled with DHCP
 
     After the networks are configured, the configuration must look like the following image.
-    ![Network list after configuration](img/tkg-airgap-vsphere-deploy/32.ALB-Networks-3.png)
+    ![Network list after configuration](img/tko-on-vsphere/32.ALB-Networks-3.png)
 
 #### Create IPAM and DNS Profile in NSX Advanced Load Balancer and Attach it to Cloud
 
@@ -911,27 +840,26 @@ Complete the following steps to create an IPAM profile and attach it to the vCen
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | Name | tanzu-vcenter-ipam-01 |
+    | Name | sfo01-w01-vcenter-ipam-01 |
     | Type | AVI Vintage IPAM |
     | Cloud for Usable Networks | Tanzu-vcenter-01 (created earlier in this deployment) |
-    | Usable Networks | tkg_cluster_vip_pg  <br>tkg_mgmt_vip_pg  <br>tkg_workload_vip_pg |
+    | Usable Networks | sfo01-w01-vds01-tkgclustervip  <br>sfo01-w01-vds01-tkgmanagementvip  <br>sfo01-w01-vds01-tkgworkloadvip |
 
     <!-- /* cSpell:enable */ -->
 
-    ![Create IPAM profile](img/tkg-airgap-vsphere-deploy/34.ALB-IPAM.png)
+    ![Create IPAM profile](img/tko-on-vsphere/34.ALB-IPAM.png)
 
 1. Click **Create** > **DNS Profile** and provide the domain name.
 
-    ![Enter domain name](img/tkg-airgap-vsphere-deploy/34.ALB-DNS.png)
+    ![Enter domain name](img/tko-on-vsphere/34.ALB-DNS.png)
 
-1. Attach the IPAM and DNS profiles to the `tanzu-vcenter-01` cloud.
+1. Attach the IPAM and DNS profiles to the `sfo01w01vc01` cloud.
     1. Navigate to **Infrastructure** > **Clouds**.
-    2. Edit the tanzu-vcenter-01 cloud.
+    2. Edit the sfo01w01vc01 cloud.
     3. Under IPAM/DNS section, choose the IPAM and DNS profiles created earlier and save the updated configuration.  
-    ![Select IPAM and DNS profiles](img/tkg-airgap-vsphere-deploy/35.ALB-IPAM-DNS.png)  
+    ![Select IPAM and DNS profiles](img/tko-on-vsphere/35.ALB-IPAM-DNS.png)  
 
 This completes the NSX Advanced Load Balancer configuration. The next step is to deploy and configure a bootstrap machine. The bootstrap machine is used to deploy and manage Tanzu Kubernetes clusters.
-
 ## <a id=deploy-tkg-management> </a> Deploy Tanzu Kubernetes Grid Management Cluster
 
 The management cluster is a Kubernetes cluster that runs Cluster API operations on a specific cloud provider to create and manage workload clusters on that provider.
