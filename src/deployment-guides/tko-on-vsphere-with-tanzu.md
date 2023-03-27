@@ -38,7 +38,7 @@ Ensure that your environment meets the following general requirements:
 - A user account with **Modify cluster-wide configuration** permissions.
 - NSX Advanced Load Balancer 22.1.2 OVA downloaded from [customer connect](https://customerconnect.vmware.com/) portal and readily available for deployment.
 
-**Note**: Tanzu Kubernetes Grid nodes will unable to resolve hostnames with the “.local” domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623)
+**Note**: Tanzu Kubernetes Grid nodes will unable to resolve hostname with the “.local” domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623)
 
 For additional information on general prerequisites, see [vSphere with Tanzu product documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-7FF30A74-DDDD-4231-AAAE-0A92828B93CD.html).
 
