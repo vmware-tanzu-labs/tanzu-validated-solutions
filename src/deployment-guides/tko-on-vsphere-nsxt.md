@@ -1283,7 +1283,7 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 
 1. On the Cluster Details page, do the following: 
 - Enter a name for the cluster (Cluster names must be unique within an organization).
-- select the cluster group to which you want to attach your cluster.
+- Select the cluster group to which you want to attach your cluster.
 - Select Cluster Class from the drop down. 
 - Use the NSXALB_Labels created for shared cluster on AKO Deployment.
 
@@ -1291,11 +1291,11 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 
 5. On the Configure page, specify the following items:
 
-   * Update the vCenter details and tlsThumbprint for the authentication.  
-   * Select the Kubernetes version to use for the cluster by template option. The latest supported version is preselected for you. You can choose the desired Kubernetes version by clicking on the down arrow button.
-   * Select required datacenter ,resourcePool , folder , network , and datastore
-   * Update sshAuthorizedKeys.
-   * Enable aviAPIServerHAProvider
+   * In the **vCenter** and **tlsThumbprint** fields, enter the details for authentication.
+   * From the  **datacenter**, **resourcePool**, **folder**, **network**, and **datastore** drop down, select the required information.
+   * From the **template** drop down, select the Kubernetes version.The latest supported version is preselected for you. 
+   * In the **sshAuthorizedKeys** field, enter the SSH key that was created earlier.
+   * Enable aviAPIServerHAProvider.
 
    ![Resources backing the cluster](img/tko-on-vsphere-nsxt/shared-svc-tmc05.png)
 
