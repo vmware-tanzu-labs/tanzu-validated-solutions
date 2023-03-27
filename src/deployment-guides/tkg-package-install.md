@@ -36,7 +36,7 @@ After supplying any custom parameters, click **Install Package** to initiate the
 
 ![Screenshot of the cert-manager install screen](img/tanzu-pkgs/tanzu-pkgs03.png)
 
-After installing cert-manager, ensure that the installation status for the cert-manager package on the **Installed Packages** screen is **Succeeded**.
+After installing cert-manager, ensure that the installation status for the cert-manager package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing list of installed packages](img/tanzu-pkgs/tanzu-pkgs04.png)
 
@@ -70,13 +70,13 @@ envoy:
  pspNames: "vmware-system-privileged"
 ```
 
-For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-ingress-contour.html#optional-configuration-6)
+For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-contour.html)
 
 **Note:** You can leave the default settings if you don’t need to customize the package installation.
 
 ![Screenshot of the Contour installation screen showing a YAML overlay file](img/tanzu-pkgs/tanzu-pkgs06.png)
 
-After installing Contour, ensure that the installation status for the Contour package on the **Installed Packages** screen is **Succeeded**.
+After installing Contour, ensure that the installation status for the Contour package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Contour](img/tanzu-pkgs/tanzu-pkgs07.png)
 
@@ -111,13 +111,13 @@ metrics:
   enabled: false
 ```
 
-For a full list of user-configurable values, see the official [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html#harbordatavalues-file-for-vsphere-7-11)
+For a full list of user-configurable values, see the official [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-harbor.html)
 
 A screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation follows.
 
 ![Screenshot of Harbor installation page showing a sample YAML customization file](img/tanzu-pkgs/tanzu-pkgs08.png)
 
-After installing Harbor, ensure that the installation status for the Harbor package on the **Installed Packages** screen is **Succeeded**.
+After installing Harbor, ensure that the installation status for the Harbor package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Harbor](img/tanzu-pkgs/tanzu-pkgs09.png)
 
@@ -145,13 +145,13 @@ alertmanager:
     storageClassName: "vsan-default-storage-policy"
 ```
 
-For a full list of user-configurable values, see the official [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-prometheus.html#review-configuration-parameters-9)
+For a full list of user-configurable values, see the official [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-prometheus.html)
 
 An example screenshot of a customized Prometheus installation follows.
 
 ![Screenshot showing customized Prometheus installation](img/tanzu-pkgs/tanzu-pkgs10.png)
 
-After installing Prometheus, ensure that the installation status for the Prometheus package on the **Installed Packages** screen is **Succeeded**.
+After installing Prometheus, ensure that the installation status for the Prometheus package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Prometheus](img/tanzu-pkgs/tanzu-pkgs11.png)
 
@@ -169,13 +169,13 @@ ingress:
 namespace: tanzu-system-monitoring
 ```
 
-For a full list of user-configurable values, see the official [Grafana documentation]https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-grafana.html#grafana-package-configuration-parameters-5)
+For a full list of user-configurable values, see the official [Grafana documentation]https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-grafana.html)
 
 An example screenshot for customizing your Grafana installation follows.
 
 ![Screenshot of Install Grafana screen showing custom YAML file](img/tanzu-pkgs/tanzu-pkgs12.png)
 
-After installing Grafana, ensure that the installation status for the Grafana package on the **Installed Packages** screen is **Succeeded**.
+After installing Grafana, ensure that the installation status for the Grafana package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Grafana](img/tanzu-pkgs/tanzu-pkgs13.png)
 
@@ -187,7 +187,7 @@ You can use Fluent Bit to gather logs from management clusters or Tanzu Kubernet
 
 The example shown in this document uses an HTTP endpoint [vRealize Log Insight Cloud](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html) for forwarding logs from Tanzu Kubernetes clusters.
 
-A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the official [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-logging-fluentbit.html#fluent-bit-package-configuration-parameters-4).
+A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the official [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-fluentbit.html).
 
 Before you add the following YAML code in TMC for installing Fluent Bit, you must [create an API key](https://vmc.techzone.vmware.com/resource/implement-centralized-logging-tanzu-kubernetes-grid-fluent-bit).
 
@@ -225,7 +225,7 @@ An example screenshot for fluent-bit installation follows.
 
 ![Screenshot showing Fluent Bit installation](img/tanzu-pkgs/tanzu-pkgs14.png)
 
-After installing Fluent Bit, ensure that the installation status for the Fluent Bit package on the **Installed Packages** screen has changed to **Successful**.
+After installing Fluent Bit, ensure that the installation status for the Fluent Bit package on the **Installed Tanzu Packages** screen has changed to **Green**.
 
 ![Screenshot showing successful installation of Fluent Bit](img/tanzu-pkgs/tanzu-pkgs15.png)
 
@@ -237,6 +237,6 @@ To install the Multus CNI package, repeat the steps for the package installation
 
 ![Screenshot showing Multus CNI installation](img/tanzu-pkgs/tanzu-pkgs16.png)
 
-After installing Multus CNI, ensure that the installation status for the Multus CNI package on the **Installed Packages** screen is **Succeeded**.
+After installing Multus CNI, ensure that the installation status for the Multus CNI package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Multus CNI](img/tanzu-pkgs/tanzu-pkgs17.png)
