@@ -20,7 +20,7 @@ The following table provides the validated component versions for this deploymen
 
 |**Software Components**|**Version**|
 | ---| --- |
-|Tanzu Kubernetes Grid|2.1.0|
+|Tanzu Kubernetes Grid|2.1.x|
 |VMware vSphere ESXi|7.0U3 & Above|
 |VMware vCenter (VCSA)|7.0U3 & Above|
 |VMware vSAN|7.0U3 & Above|
