@@ -1386,7 +1386,7 @@ As per the architecture, workload clusters make use of a custom ADC to enable NS
 
 The steps for deploying a workload cluster are the same as for a shared services cluster. except use the NSX ALB Labels created for the Workload cluster on AKO Deployment in step number 4.
 
-**After the Worload cluster creation verify the cluster labels and ako pod status**
+**After the Workload cluster creation verify the cluster labels and ako pod status**
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
