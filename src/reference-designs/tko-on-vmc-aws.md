@@ -16,7 +16,7 @@ The following table provides the component versions and interoperability matrix 
 
 | **Software Components**    | **Version**    |
 | ---------------------------- | ---------------- |
-| Tanzu Kubernetes Grid      | 2.1.0          |
+| Tanzu Kubernetes Grid      | 2.1.x          |
 | VMC on AWS SDDC Version    | 1.18 and later |
 | NSX Advanced Load Balancer | 22.1.2         |
 
@@ -99,8 +99,8 @@ Both are open-source software that provide networking for cluster pods, services
 
 When you deploy a Tanzu Kubernetes cluster using Tanzu Mission Control or Tanzu CLI, Antrea CNI is automatically enabled in the cluster. To provision a Tanzu Kubernetes cluster using a non-default CNI, see the following instructions:
 
-- [Deploy Tanzu Kubernetes clusters with calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-tanzu-k8s-clusters-networking.html).
-- [Implement Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-cni-multus.html).
+- [Deploy Tanzu Kubernetes clusters with calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-networking.html#calico)
+- [Implement Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-multus.html)
 
 Each CNI is suitable for a different use case. The following table lists some common use cases for the three CNIs that Tanzu Kubernetes Grid supports. This table helps you select the most appropriate CNI for your Tanzu Kubernetes Grid implementation.
 
@@ -162,7 +162,7 @@ IP address allocation for virtual services can be over DHCP or via NSX Advanced 
 | --- | --- | --- | --- |
 |TKO-TKG-001|Register the management cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manages the life cycle of all clusters centrally.|Only Antrea CNI is supported on Workload clusters created from the TMC portal.  |
 |TKO-TKG-002|Use NSX Advanced Load Balancer as your control plane endpoint provider and for application load balancing.|AVI is tightly coupled with TKG and vSphere. Since AVI is a VMware product, customers will have single point of contact for support.| Adds NSX Advanced Load Balancer  License Cost to the solution  |
-|TKO-TKG-003|Deploy Tanzu Kubernetes Management clusters in large form factor|Large form factor should suffice to integrate TKG Mgmt Cluster with TMC, pinniped and velero deployment. This must be capable of accommodating 100+ Tanzu Workload Clusters|Consume more Resources from Infrastructure |
+|TKO-TKG-003|Deploy Tanzu Kubernetes Management clusters in large form factor|Large form factor should suffice to integrate TKG Management Cluster with TMC, pinniped and velero deployment. This must be capable of accommodating 100+ Tanzu Workload Clusters|Consume more Resources from Infrastructure |
 |TKO-TKG-004|Deploy Tanzu Kubernetes clusters with prod plan.|This deploys multiple control plane nodes and provides high availability for the control plane.|Consume more Resources from Infrastructure. |
 |TKO-TKG-005|Enable identity management for TKG clusters|Role-based access control to Tanzu Kubernetes Grid clusters| Required External Identity Management|
 |TKO-TKG-006|Enable Machine Health Checks for TKG clusters|MachineHealthCheck controller helps to provide health monitoring and auto-repair for management and workload clusters Machines.| NA|
@@ -170,7 +170,7 @@ IP address allocation for virtual services can be over DHCP or via NSX Advanced 
 
 ## Network Architecture
 
-For deployment of Tanzu Kubernetes Grid in VMware Cloud on AWS SDDCs, separate segments are built for the Tanzu Kubernetes Grid management cluster, Tanzu Kubernetes Grid shared services cluster, Tanzu Kubernetes Grid workload clusters, NSX Advanced Load Balancer management, Cluster-VIP segment for control plane HA, Tanzu Kubernetes Grid Mgmt VIP/Data segment, and Tanzu Kubernetes Grid workload Data/VIP segment.
+For deployment of Tanzu Kubernetes Grid in VMware Cloud on AWS SDDCs, separate segments are built for the Tanzu Kubernetes Grid management cluster, Tanzu Kubernetes Grid shared services cluster, Tanzu Kubernetes Grid workload clusters, NSX Advanced Load Balancer management, Cluster-VIP segment for control plane HA, Tanzu Kubernetes Grid Management VIP/Data segment, and Tanzu Kubernetes Grid workload Data/VIP segment.
 
 The network reference design can be mapped into this general framework.
 
@@ -218,7 +218,7 @@ The deployment described in this document makes use of the following CIDR.
 | TKG management network      | `sfo01-w01-vds01-tkgmanagement`| 192.168.12.1/24  | 192.168.12.2 - 192.168.12.251 | NA                            |
 | TKG workload network        | `sfo01-w01-vds01-tkgworkload`  | 192.168.13.1/24  | 192.168.13.2 - 192.168.13.251 | NA                            |
 | TKG cluster VIP network     | `sfo01-w01-vds01-tkgclustervip`  | 192.168.14.1/26  | 192.168.14.2 - 192.168.14.30                            | 192.168.14.31 - 192.168.14.60  |
-|TKG Mgmt VIP Network|`sfo01-w01-vds01-tkgmanagementvip`| 192.168.15.1/26  | 192.168.15.2 - 192.168.15.30                            | 192.168.15.31 - 192.168.15.60  |
+|TKG Management VIP Network|`sfo01-w01-vds01-tkgmanagementvip`| 192.168.15.1/26  | 192.168.15.2 - 192.168.15.30                            | 192.168.15.31 - 192.168.15.60  |
 | TKG workload VIP network    | `sfo01-w01-vds01-tkgworkloadvip`  | 192.168.16.1/26  | 192.168.16.2 - 192.168.16.30                            | 192.168.16.31 - 192.168.16.60  |
 | TKG shared services network | `sfo01-w01-vds01-tkgshared` | 192.168.17.1/24  | 192.168.17.2 - 192.168.17.251 | NA                              |
 
