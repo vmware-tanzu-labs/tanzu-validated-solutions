@@ -1,3 +1,4 @@
+albmanagement
 Alertmanager
 allottable
 Antrea
@@ -29,6 +30,7 @@ Geneve
 grafana
 grype
 GSLB
+hostnames
 hyperconverged
 imgpkg
 interoperably
@@ -52,6 +54,7 @@ milliCPU
 minio
 Multus
 myVmware
+NSXALB
 NSXT
 NVME
 OIDC
@@ -70,6 +73,7 @@ scrapeable
 SCST
 SCTP
 SDDC
+segroup
 SNAT
 Snyk
 Sonobouy
@@ -81,7 +85,12 @@ tanzu
 Tekton
 templating
 TKG
+tkgclustervip
+tkgmanagement
+tkgmanagementvip
 TKGS
+tkgworkload
+tkgworkloadvip
 TRFV
 untar
 vCenter
