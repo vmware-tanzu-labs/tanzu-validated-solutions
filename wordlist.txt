@@ -1,7 +1,11 @@
 Albctlr
+<<<<<<< HEAD
 Albmanagement
 albctlr
+=======
+>>>>>>> 6f8a8c2 (Corrected wordlist file-Updated-2)
 albmanagement
+Albmanagement
 Alertmanager
 Allottable
 Antrea
@@ -89,8 +93,8 @@ tanzu
 Tekton
 templating
 TKG
-Tkgclustervip
 tkgclustervip
+Tkgclustervip
 Tkgmanagement
 tkgmanagement
 tkgmanagementvip
