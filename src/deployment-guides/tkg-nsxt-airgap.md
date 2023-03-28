@@ -12,12 +12,13 @@ The following table provides the component versions and interoperability matrix 
 
 |**Software Components**|**Version**|
 | --- | --- |
-|Tanzu Kubernetes Grid|1.5.4|
-|VMware vSphere ESXi|7.0 U2 and later|
-|VMware vCenter Server|7.0 U2 and later|
-|NSX Advanced Load Balancer|21.1.3|
+|Tanzu Kubernetes Grid|2.1.x|
+|VMware vSphere ESXi|7.0 U3d and later|
+|VMware vCenter (VCSA)|7.0 U3d and later |
+|NSX Advanced Load Balancer|22.1.2|
+|VMware NSX-T|3.2.1.2|
 
-For up-to-date interoperability information about other VMware products and versions, see the [VMware Product Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,7906&row=789,%262,).
+For up-to-date information about which software versions can be used together, see the [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
 
 ## <a id=prepare-environment-deployment-tkg> </a> Prepare the Environment for Deployment of Tanzu Kubernetes Grid
 
@@ -29,41 +30,52 @@ Before deploying Tanzu Kubernetes Grid in the your VMware NSX-T environment, ens
 
 ### <a id=general-requirements> </a>  General Requirements
 
-- vSphere 7.0 U2 or later instance with an Enterprise Plus license.
+
 - A vCenter with NSX-T backed environment.
-- Ensure that the following NSX-T configurations are in place:
-  - NSX-T manager instance is deployed and configured with an Advanced or higher license.
+- Ensure that following NSX-T configurations are in place:
+
+  **Note:** The following provides only a high-level overview of the required NSX-T configuration. For more information, see [NSX-T Data Center Installation Guide](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.2/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX-T Data Center Product Documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
+
+  - NSX-T manager instance is deployed and configured with Advanced or higher license.
   - vCenter Server that is associated with the NSX-T Data Center is configured as Compute Manager.
-  - Required overlays and VLAN Transport Zones are created.
+  - Required overlay and vLAN Transport Zones are created.
   - IP pools for host and edge tunnel endpoints (TEP) are created.
   - Host and edge uplink profiles are in place.
-  - Transport node profiles are created. This is not required if configuring NSX-T datacenter on each host instead of the cluster.
-  - NSX-T datacenter configured on all hosts part of the vSphere cluster or clusters.
-  - Edge transport nodes and at least one edge cluster is created.
-  - Tier-0 uplink segments and tier-0 gateway are created.
-  - Tier-0 router has peered with uplink L3 switch.
-- Your SDDC environment has the following objects in place:
-  - A vSphere cluster with at least 3 hosts, on which vSphere DRS is activated and NSX-T is successfully configured. If you are using vSAN for shared storage, it is recommended that you use 4 ESXi hosts.
-  - A dedicated resource pool in which to deploy the Tanzu Kubernetes Grid Instance.
-  - VM folders in which to collect the Tanzu Kubernetes Grid VMs.
-  - A shared datastore with sufficient capacity for the control plane and worker node VMs.
-  - Network Time Protocol (NTP) service is running on all ESXi hosts and vCenter and time is synchronized from the centralized NTP servers.
-  - A host, server, or VM based on Linux which acts as your Bastion host and is outside the Internet-restricted environment (i.e. it connected to the Internet). The installation binaries for Tanzu Kubernetes Grid and NSX Advanced Load Balancer will be downloaded on this machine. You will need to transfer files from this Bastion host to your Internet-restricted environment (proxy connection, shared drive, USB drive, sneakernet, etc.).
-  - A host, server, or VM inside your Internet-restricted environment based on Linux or Windows which acts as your bootstrap machine and has Tanzu CLI, Kubectl, and docker installed. An internal Harbor registry will be installed on the same machine. This document makes use of a virtual machine based on CentOS.
-- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+  - Transport node profiles are created. This is not required if configuring NSX-T data center on each host instead of the cluster.
+  - NSX-T data center configured on all hosts part of the vSphere cluster or clusters.
+  - Edge transport nodes and at least one edge cluster is created
+  - Tier-0 uplink segments and tier-0 gateway is created.
+  - Tier-0 router is peered with uplink L3 switch.
+  - DHCP profile is created in NSX.
+- SDDC environment has the following objects in place:
+  - A vSphere cluster with at least three hosts on which vSphere DRS is enabled and NSX-T is successfully configured.
+  - A dedicated resource pool to deploy the following Tanzu Kubernetes management cluster, shared services cluster, and workload clusters. The number of required resource pools depends on the number of workload clusters to be deployed.
+  - VM folders to collect the Tanzu Kubernetes Grid VMs.
+  - A datastore with sufficient capacity for the control plane and worker node VM files.
+  - Network time protocol (NTP) service is running on all hosts and vCenter.
+  - A host, server, or VM based on Linux, macOS, or Windows which acts as your bootstrap machine which has docker installed. For this deployment, a virtual machine based on Photon OS will be used.
+  - Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). To configure required packages on the Cent OS machine, see [Deploy and Configure Bootstrap Machine](#configurebootstrap)."
+    - Tanzu CLI 2.1.0
+    - Kubectl cluster CLI 1.24.9
+  - A vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
+  - Download and import NSX Advanced Load Balancer 22.1.2 OVA to Content Library.
+  - Download the following OVA files from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and import to vCenter. Convert the imported VMs to templates."
+    - Photon v3 Kubernetes v1.24.9 OVA and/or
+    - Ubuntu 2004 Kubernetes v1.24.9 OVA  
 
-**Note:** You can also download and import supported older versions of Kubernetes in order to deploy workload clusters on the intended Kubernetes versions.
+**Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.<p>
+**Note**: In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
 
 ### <a id=resource-pools-and-vm-folders> </a> Resource Pools and VM Folders
 
 The sample entries of the resource pools and folders that need to be created are as follows.
 
-|**Resource Type**|**Resource Pool**|**Sample Folder**|
+|**Resource Type**|**Sample Resource Pool Name**|**Sample Folder Name**|
 | --- | --- | --- |
-|NSX ALB components|NSX-ALB|NSX-ALB-VMs|
-|TKG Management components|TKG-Mgmt|TKG-Mgmt-VMs|
-|TKG Shared Services components|TKG-SS|TKG-SS-VMs|
-|TKG Workload components|TKG-Workload|TKG-Workload-VMs|
+|NSX ALB Components|`tkg-vsphere-alb-components`|`tkg-vsphere-alb-components`|
+|TKG Management components|`tkg-management-components`|`tkg-management-components`|
+|TKG Shared Service Components|`tkg-vsphere-shared-services`|`tkg-vsphere-shared-services`|
+|TKG Workload components|`tkg-vsphere-workload`|`tkg-vsphere-workload`|
 
 ### <a id=network-requirements> </a> Network Requirements
 
@@ -77,15 +89,13 @@ Ensure that the firewall is set up as described in [Firewall Requirements](../re
 
 For this demonstration, this document makes use of the following CIDR for Tanzu Kubernetes Grid deployment. Change the values to reflect your environment.
 
-|**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
+|**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool in NSXT**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
-|NSX ALB Mgmt Network|alb-mgmt-ls|172.19.71.1/27|N/A|172.19.71.6 - 172.19.71.30|
-|TKG Management Network|tkg-mgmt-ls|172.19.72.1/27|172.19.72.10 - 172.19.72.30|N/A|
-|TKG Shared Service Network|tkg-ss-ls|172.19.73.1/27|172.19.73.2 - 172.19.73.30|N/A|
-|TKG Mgmt VIP Network|tkg-mgmt-vip-ls|172.19.74.1/26|N/A|172.19.74.2 - 172.19.74.62|
-|TKG Cluster VIP Network|tkg-cluster-vip-ls|172.19.75.1/26|N/A|172.19.75.2 - 172.19.75.62|
-|TKG Workload VIP Network|tkg-workload-vip-ls|172.19.76.1/26|N/A|172.19.76.2 - 172.19.76.62|
-|TKG Workload Network|tkg-workload-ls|172.19.77.1/24|172.19.77.2 - 172.19.77.251|N/A|
+|NSX ALB Management Network|sfo01-w01-vds01-albmanagement|172.16.170.1/24|N/A|172.19.170.24 - 172.19.170.200|
+|TKG Cluster VIP Network|sfo01-w01-vds01-tkgclustervip|172.16.180.1/24|N/A|172.16.180.8 - 172.16.180.200|
+|TKG Management Network|sfo01-w01-vds01-tkgmanagement|172.16.140.1/24|172.16.140.8 - 172.16.140.200|N/A|
+|TKG Shared Service Network|sfo01-w01-vds01-tkgshared|172.16.150.1/27|172.16.150.8 - 172.16.150.200|N/A|
+|TKG Workload Network|sfo01-w01-vds01-tkgworkload|172.16.160.1/24|172.16.160.8- 172.16.160.200|N/A|
 
 ## <a id=tkg-deployment-workflow> </a> Tanzu Kubernetes Grid Deployment Workflow
 
@@ -136,13 +146,13 @@ The bastion host needs to be deployed with the following hardware configuration:
 
    ![Docker installation binaries](img/tkg-airgap-nsxt/docker-installation-binaries.jpg)
 
-2. Download Harbor installation binaries from the [Harbor release page on GitHub](https://github.com/goharbor/harbor/releases/tag/v2.3.3).
+2. Download installation binaries from the [Harbor GitHub repository](https://github.com/goharbor/harbor/releases/tag/v2.3.3). 
 
-3. Download the NSX Advanced Load Balancer OVA file from the [VMware Customer Connect Downloads page](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/21_1_x).
+3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/22_1_x).
 
-4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [VMware Customer Connect Downloads page for Tanzu Kubernetes Grid](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-154&productId=988&rPId=90871). Tanzu CLI and plugins need to be installed on the bastion host and the bootstrap machine.
+4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). Tanzu CLI and Plugins need to be installed on the bastion host and the bootstrap machine.
 
-5. Download the `yq` installation binary from the [yq release page on GitHub](https://github.com/mikefarah/yq/releases/tag/v4.25.2).
+5. Download the [yq](https://github.com/mikefarah/yq) installation binary from [mikefarah / yq](https://github.com/mikefarah/yq/releases/tag/v4.25.2) GitHub repository.
 
 6. Download the [gen-publish-images](https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-totar.sh) script for pulling Tanzu Kubernetes Grid installation binaries from the Internet.
 
@@ -151,198 +161,45 @@ The bastion host needs to be deployed with the following hardware configuration:
 1. Install Tanzu CLI.
 
     ```bash
-    gunzip tanzu-cli-bundle-linux-amd64.tar.gz
-
-    cd cli/
-
-    sudo install core/v0.11.6/tanzu-core-linux_amd64 /usr/local/bin/tanzu 
-
+    tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
+    cd ./cli/
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
     ```
-  
-    Run the `tanzu version` command to check that the correct version of Tanzu CLI is installed and it is executable.
-
-2. Install `imgpkg`.
-
-    [imgpkg](https://carvel.dev/imgpkg/) is a tool that activates Kubernetes to store configurations and the associated container images as OCI images and to transfer these images.
+    Run the `tanzu version` command to check that the correct version of tanzu is installed and executable.
 
     ```bash
-    gunzip imgpkg-linux-amd64-v0.22.0+vmware.1.gz
+    # tanzu version
 
-    chmod +x imgpkg-linux-amd64-v0.22.0+vmware.1
-
-    mv imgpkg-linux-amd64-v0.22.0+vmware.1 /usr/local/bin/imgpkg
+    version: v0.28.0
+    buildDate: 2023-01-20
+    sha: 3c34115bc-dirty
     ```
+1. Download the Images .
 
-3. Install the Tanzu CLI plugins.
-
-    The Tanzu CLI plugins provides commands for Tanzu Kubernetes cluster management and feature operations.
-
-    Running the `tanzu init` command for the first time installs the necessary Tanzu Kubernetes Grid configuration files in the `~/.config/tanzu/tkg` directory on your system. The script that you create and run in subsequent steps requires the Bill of Materials (BoM) YAML files located in the `~/.config/tanzu/tkg/bom` directory to be present on your machine. The scripts in this procedure use the BoM files to identify the correct versions of the different Tanzu Kubernetes Grid component images to pull.
+    Before performing this step, ensure that the disk partition where you download the images has 45 GB of available space.
 
     ```bash
-    # tanzu init
-
-    Checking for required plugins...
-    Installing plugin 'login:v0.11.6'
-    Installing plugin 'management-cluster:v0.11.6'
-    Installing plugin 'package:v0.11.6'
-    Installing plugin 'pinniped-auth:v0.11.6'
-    Installing plugin 'secret:v0.11.6'
-    Successfully installed all required plugins
-    ✔  successfully initialized CLI
+    tanzu isolated-cluster download-bundle --source-repo <SOURCE-REGISTRY> --tkg-version <TKG-VERSION> --ca-certificate <SECURITY-CERTIFICATE>
     ```
 
-    After installing the Tanzu CLI plugins, run the `tanzu plugin list` command to check the plugins version and installation status.
-
-    ![Tanzu plugin list](img/tkg-airgap-nsxt/tanzu-plugins-version.jpg)
-
-    Validate the BOM files by listing the contents of the folder **.config/tanzu/tkg/bom/**
-
+   * SOURCE-REGISTRY is the IP address or the hostname of the registry where the images are stored.
+   * TKG-VERSION is the version of Tanzu Kubernetes Grid that you want to deploy in the proxied or air-gapped environment.
+   * SECURITY-CERTIFICATE is the security certificate of the registry where the images are stored. To bypass the security certificate validation, use --insecure, instead of --ca-certificate. Both the strings are optional. If you do not specify any value, the system validates the default server security certificate.
     ```bash
-    ls .config/tanzu/tkg/bom/
-
-    tkg-bom-v1.5.4.yaml  tkr-bom-v1.22.9+vmware.1-tkg.1.yaml
+    tanzu isolated-cluster download-bundle --source-repo projects.registry.vmware.com/tkg --tkg-version v2.1.0
     ```
+   The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-4. Set the following environment variables.
+1. Copy the Files to the bootstrap Machine.
 
-   1. IP address or FQDN of your local image registry.
-
-      ```bash
-      export TKG_CUSTOM_IMAGE_REPOSITORY="PRIVATE-REGISTRY"
-      ```
-
-      Where `PRIVATE-REGISTRY` is the IP address or FQDN of your private registry and the name of the project. For example, `registry.example.com/library`
-
-    1. Set the repository from which to fetch Bill of Materials (BoM) YAML files.
-
-        ```bash
-        export TKG_IMAGE_REPO="projects.registry.vmware.com/tkg"
-
-        export TKG_BOM_IMAGE_TAG="v1.5.4"
-        ```
-
-      1. If your private registry uses a self-signed certificate, provide the CA certificate of the registry in base64 encoded format. For example, `base64 -w 0 your-ca.crt`
-
-          ```bash
-          export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE=LS0t[...]tLS0tLQ==
-          ```
-          This CA certificate is automatically injected into all Tanzu Kubernetes clusters that you create in this Tanzu Kubernetes Grid instance.
-
-      1. (Optional) Define the Tanzu Kubernetes releases (TKrs) to download. By default, the download script retrieves container images used in Tanzu Kubernetes Grid versions v1.3.0 and later.
-
-          List all Tanzu Kubernetes releases and their associations with a TKG releases.
-
-          ```bash
-          imgpkg pull -i ${TKG_IMAGE_REPO}/tkr-compatibility:v$(imgpkg tag list -i ${TKG_IMAGE_REPO}/tkr-compatibility |sed 's/v//' |sort -rn |head -1) --output "tkr-tmp"; cat tkr-tmp/tkr-compatibility.yaml; rm -rf tkr-tmp
-          ```
-          For your Tanzu Kubernetes Grid version, note the supported Kubernetes versions. The one with the latest minor version is used by the management cluster. For example, Tanzu Kubernetes Grid v1.5.4 management cluster uses TKr `v1.22.9_vmware.1-tkg.1`.
-
-          Export as `DOWNLOAD_TKRS` a space-separated string of the TKrs required for your management cluster and workloads. For example, to download the images for Kubernetes v1.21 and v1.22 versions supported by TKG v1.5.4:
-
-          ```bash
-          export DOWNLOAD_TKRS="v1.21.11_vmware.1-tkg.3 v1.22.9_vmware.1-tkg.1"
-          ```
-
-5. Prepare and execute the scripts for pulling Tanzu Kubernetes Grid installation binaries.
-
-   1. Create a folder to collect Tanzu Kubernetes Grid installation binaries.
-
-      ```bash
-      mkdir -p /root/tkg-images && cd /root/tkg-images
-      ```
-   1. Download the `gen-publish-images-totar.sh` script.
-
-      ```bash
-      wget https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-totar.sh
-      ```
-
-    1. Make the `gen-publish-images-totar.sh` script executable.
-
-        ```bash
-        chmod +x gen-publish-images-totar.sh
-        ```
-
-    1. Generate the `images-to-tar-list` file.
-
-        ```bash
-        ./gen-publish-images.sh > images-to-tar-list
-        ```
-
-6. Run the `download-images.sh` script
-
-   1. Create the script using the following code snippet to download the Tanzu Kubernetes Grid installation binaries.
-
-      ```bash
-      #!/bin/bash
-
-      set -euo pipefail
-
-      images_script=${1:-}
-      if [ ! -f $images_script ]; then
-        echo "You may add your images list filename as an argument."
-        echo "E.g ./download-images.sh image-copy-list"
-      fi
-
-      commands="$(cat ${images_script} |grep imgpkg |sort |uniq)"
-
-      while IFS= read -r cmd; do
-        echo -e "\nrunning $cmd\n"
-        until $cmd; do
-          echo -e "\nDownload failed. Retrying....\n"
-          sleep 1
-        done
-      done <<< "$commands"
-      ```
-
-   1. Make the `download-images` script executable.
-
-      ```bash
-      chmod +x download-images.sh
-      ```
-
-   1. Run the `download-images.sh` script on the `images-to-tar-list` file to pull the required images from the public Tanzu Kubernetes Grid registry and save them as a TAR file.
-
-      ```bash
-      ./download-images.sh images-to-tar-list
-      ```
-      After the script completes its run, the required Tanzu Kubernetes Grid binaries are available in TAR format in the directory `tkg-images`. The content of this directory needs to be transferred to the bootstrap machine which is running inside the air-gapped environment.
-
-7. Generate the `publish-images-fromtar.sh` script.
-
-    This script needs to be run on the bootstrap machine when you have copied the download TKG binaries onto the bootstrap VM. This script will copy the binaries from bootstrap VM into the project in your private repository.
-
-      1. Download the `gen-publish-images-fromtar.sh` script.
-
-          ```bash
-          wget  https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-fromtar.sh
-          ```
-
-      1. Make the `gen-publish-images-fromtar.sh` script executable.
-
-          ```bash
-          chmod +x gen-publish-images-fromtar.sh
-          ```
-
-      1. Generate a `publish-images-fromtar.sh` shell script that is populated with the address of your private Docker registry.
-
-          ```bash
-          ./gen-publish-images-fromtar.sh > publish-images-fromtar.sh
-          ```
-
-      1. Verify that the generated script contains the correct registry address.
-
-          ```bash
-          cat publish-images-fromtar.sh
-          ```
-          Transfer the generated `publish-images-fromtar.sh` script file to the bootstrap machine.
-
-8. Collect all the binaries that you downloaded in steps 1 - 3 of the [Download Binaries Required for Configuring Bastion Host](#download-banaries-for-bastion) section and steps 6.3 and 7.3 of the [Deploy and Configure Bastion Host](#configure-bastion) section, and move them to the bootstrap VM using your internal process.
+    Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other storage medium:
+   * The Image TAR files.
+   * The YAML files 
 
 ## <a id=install-harbor> </a> Install Harbor Image Registry
 
-You need to do this task only if you don’t have any existing image repository in your environment and you will deploy a new registry solution using Harbor.
+Install the Harbor only if you don’t have any existing image repository in your environment. 
 
 To install Harbor, deploy an operating system of your choice with the following hardware configuration:
 
@@ -350,200 +207,224 @@ To install Harbor, deploy an operating system of your choice with the following 
 - Memory: 8 GB
 - Storage (HDD): 160 GB
 
-Copy the Harbor binary from the bootstrap VM to the Harbor VM and follow the instructions provided in [Harbor Installation and Configuration](https://goharbor.io/docs/2.3.0/install-config/) page to deploy and configure Harbor. It is recommended to deploy Harbor on the logical segment chosen for Tanzu Kubernetes Grid management.  
+Copy the Harbor binary from the bootstrap VM to the Harbor VM. Follow the instructions provided in [Harbor Installation and Configuration](https://goharbor.io/docs/2.3.0/install-config/) to deploy and configure Harbor.
+
 
 ## <a id=configure-bootstrap> </a> Deploy and Configure Bootstrap Machine
 
-The bootstrap machine can be a laptop, host, or server (running on Linux, MacOS, or Windows OS) that you deploy management and workload clusters from, and that keeps the Tanzu and Kubernetes configuration files for your deployments. The bootstrap machine is typically local.
+The deployment of the Tanzu Kubernetes Grid management and workload clusters is facilitated by setting up a bootstrap machine where you install the Tanzu CLI and Kubectl utilities which are used to create and manage the Tanzu Kubernetes Grid instance. This machine also keeps the Tanzu Kubernetes Grid and Kubernetes configuration files for your deployments. The bootstrap machine can be a laptop, host, or server running on Linux, macOS, or Windows that you deploy management and workload clusters from.
 
-This machine now hosts all the required binaries for Tanzu Kubernetes Grid installation. The bootstrap machine must have the following resources allocated:
+The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-- vCPU: 4
-- RAM: 8 GB
-- Storage: 200 GB or greater
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
-The following procedure provides steps to configure bootstrap virtual machines based on CentOS.  Refer to [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-install-cli.html) to configure MacOS or Windows machines.
+The bootstrap machine must meet the following prerequisites:
 
-- It is recommended to connect the bootstrap VM is connected to logical segment chosen for Tanzu Kubernetes Grid management network.
-- [Configure NTP](https://www.cyberithub.com/how-to-install-configure-ntp-server-in-rhel-centos-7-8/) on your bootstrap VM and ensure that time is synchronized with the NTP server. It is recommended to use the same NTP server that you have configured for the other infrastructure components such as vCenter, ESXi hosts, etc.
+   * A minimum of 6 GB of RAM,  2-core CPU , 160 Storage GB .
+   * System time is synchronized with a Network Time Protocol (NTP) server.
+   * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
+   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
-1. Install Tanzu CLI.
+To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
 
+1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
+
+   * VMware Tanzu CLI 2.1.0 for Linux
+   * kubectl cluster CLI v1.24.9 for Linux
+
+1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
     ```bash
-    gunzip tanzu-cli-bundle-linux-amd64.tar.gz
+    ## Install required packages
+    install tar, zip, unzip, wget
 
-    cd cli/
-
-    install core/v0.11.6/tanzu-core-linux_amd64 /usr/local/bin/tanzu
-    
+    ## Install Tanzu Kubernetes Grid CLI
+    tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
+    cd ./cli/
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
+
+    ## Verify Tanzu CLI version
+
+     [root@tkg160-bootstrap ~] # tanzu version
+
+    version: v0.28.0
+    buildDate: 2023-01-20
+    sha: 6288c751-dirty
     ```
-
-    Run the `tanzu version` command to check that the correct version of tanzu CLI is installed and it is executable.
-
-2. Install the Kubectl utility.
-
-    ```bash
-    gunzip kubectl-linux-v1.22.9+vmware.1.gz
-
-    mv kubectl-linux-v1.22.9+vmware.1 /usr/local/bin/kubectl
-
-    chmod +x /usr/local/bin/kubectl
-    ```
-
-    Run the `kubectl version --short=true` command to check that the correct version of kubectl is installed and it is executable.
-
-3. Configure environment variables.
-
-    In an air-gapped environment, if you run the `tanzu init` or `tanzu plugin sync` command, the command hangs and times out after some time with an error:
-
-    ```bash
-    [root@bootstrap ~]# tanzu init
-    Checking for required plugins...
-    unable to list plugin from discovery 'default': error while processing package: failed to get resource files from discovery: Checking if image is bundle: Fetching image: Get "https://projects.registry.vmware.com/v2/": dial tcp 10.188.25.227:443: i/o timeout
-    All required plugins are already installed and up-to-date
-    ✔  successfully initialized CLI
-
-    [root@bootstrap ~]# tanzu plugin sync
-    Checking for required plugins...
-    unable to list plugin from discovery 'default': error while processing package: failed to get resource files from discovery: Checking if image is bundle: Fetching image: Get "https://projects.registry.vmware.com/v2/": dial tcp 10.188.25.227:443: i/o timeout
-    All required plugins are already installed and up-to-date
-    ✔  Done
-    ```
-
-    By default, the Tanzu global configuration file (`config.yaml`) which gets created when you first run the `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Because there is no Internet in the environment, the commands fails after some time.
-
-    To make sure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the `tanzu config set` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`.
-
-    If your image registry is configured with a public signed CA certificate, set the following environment variables.
-
-    ```bash
-    tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
-
-    tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY true
-    ```
-
-    If your registry solution uses self-signed certificates, also add `TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE` in base64-encoded format to the global Tanzu CLI configuration file. If you are using self-signed certificates, set the following environment variables:
+1. Install the isolated-cluster plugin on the offline bootstrap machine:
 
       ```bash
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
-
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY false
-
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
+     tanzu plugin install isolated-cluster --local standalone-plugins/
 
       ```
+1. Log in to the Private Registry on the Offline Machine.
+      ```bash
+     docker login <URL>
+      ```
+   Note:- If your private registry uses a self-signed certificate, save the CA certificate of the registry in "/etc/docker/certs.d/registry.example.com/ca.crt"
+1. Upload the Images to the Private Registry.
+      ```bash
+     tanzu isolated-cluster upload-bundle --source-directory <SOURCE-DIRECTORY> --destination-repo <DESTINATION-REGISTRY> --ca-certificate <SECURITY-CERTIFICATE>
+      ```
+    * SOURCE-DIRECTORY is the path to the location where the image TAR files are stored.
+    * DESTINATION-REGISTRY is the path to the private registry where the images will be hosted in the air-gapped environment.
+    * SECURITY-CERTIFICATE is the security certificate of the private registry where the images will be hosted in the proxied or air-gapped environment. 
+      ```bash
+     Example:- tanzu isolated-cluster upload-bundle --source-directory ./ --destination-repo registry.example.com/library --ca-certificate /etc/docker/certs.d/registry.example.com/ca.crt
+      ```
+  Note :- we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
 
-4. Initialize Tanzu Kubernetes Grid and install Tanzu CLI plugins.
+1. Install the kubectl utility.
 
-    ```bash
-    ### Initialize Tanzu Kubernetes Grid:
+      ```bash
+     gunzip kubectl-linux-v1.24.9+vmware.1.gz
+     mv kubectl-linux-v1.24.9+vmware.1.gz /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+      ```
 
-    tanzu config init 
+      Run the `kubectl version --short=true` to check that the correct version of kubectl is installed and executable.
 
-    ## (Optional) Remove existing plugins from any previous CLI installations:
+1. Configure the environment variables.
 
-    tanzu plugin clean
+      In an air-gap environment, if you run the `tanzu init` or `tanzu plugin sync` commands, the command hangs and times out after some time with the following error:
 
-    tanzu plugin sync
-    ```
+      ```bash
+      [root@bootstrap ~]# tanzu init
+      Checking for required plugins...
+      unable to list plugin from discovery 'default': error while processing package: failed to get resource files from discovery: Checking if image is bundle: Fetching image: Get "https://projects.registry.vmware.com/v2/": dial tcp 10.188.25.227:443: i/o timeout
+      All required plugins are already installed and up-to-date
+      ✔  successfully initialized CLI
 
-    After installing the Tanzu CLI plugins, run the `tanzu plugin list` command to check the plugins' version and installation status.
+      [root@bootstrap ~]# tanzu plugin sync
+      Checking for required plugins...
+      unable to list plugin from discovery 'default': error while processing package: failed to get resource files from discovery: Checking if image is bundle: Fetching image: Get "https://projects.registry.vmware.com/v2/": dial tcp 10.188.25.227:443: i/o timeout
+      All required plugins are already installed and up-to-date
+      ✔  Done
+      ```
 
-5. Install Carvel tools.
+      By default the Tanzu global config file, `config.yaml`, which gets created when you first run `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Because there is no Internet in the environment, the commands fails after some time.
 
-   Tanzu Kubernetes Grid uses the following tools from the Carvel open-source project:
+      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `export` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
 
-   - [`ytt`](https://carvel.dev/ytt/) - a command-line tool for templating and patching YAML files. You can also use ytt to collect fragments and piles of YAML into modular chunks for easy re-use.
-   - [`kapp`](https://carvel.dev/kapp/) - the application deployment CLI for Kubernetes. It allows you to install, upgrade, and delete multiple Kubernetes resources as one application.
-   - [`kbld`](https://carvel.dev/kbld/) - an image-building and resolution tool.
-   - [`imgpkg`](https://carvel.dev/imgpkg/) - a tool that activates Kubernetes to store configurations and the associated container images as OCI images, and to transfer these images.
+      If your image registry is configured with a public signed CA certificate, set the following environment variables.
 
-    
-    1. Install `ytt`.
+      ```bash
+      export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
+
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=true
+      ```
+
+      If your registry solution uses self-signed certificates, also add TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE in base64-encoded format to the global Tanzu CLI configuration file. For self-signed certificates, set the following environment variables:
+
+      ```bash
+      export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
+
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY false
+
+      export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
+
+      ```
+  Note:If we reboot the VM , this setting will go to default 
+1. Initialize Tanzu Kubernetes Grid and Install Tanzu CLI plugins.
+
+      ```bash
+      ### Initialize Tanzu Kubernetes Grid 
+
+      tanzu config init 
+
+      ## (Optional) Remove existing plugins from any previous CLI installations.
+
+      tanzu plugin clean
+
+      tanzu plugin sync
+      ```
+
+      After installing the tanzu plugins, run the tanzu plugin list command to check the plugins version and installation status.
+
+1. Install Carvel tools.
+
+    Tanzu Kubernetes Grid uses the following tools from the Carvel open-source project:
+
+    - [ytt](https://carvel.dev/ytt/) - a command-line tool for templating and patching YAML files. You can also use ytt to collect fragments and piles of YAML into modular chunks for easy re-use.
+    - [kapp](https://carvel.dev/kapp/) - the application deployment CLI for Kubernetes. It allows you to install, upgrade, and delete multiple Kubernetes resources as one application.
+    - [kbld](https://carvel.dev/kbld/) - an image-building and resolution tool.
+    - [imgpkg](https://carvel.dev/imgpkg/) - a tool that enables Kubernetes to store configurations and the associated container images as OCI images, and to transfer these images.
+
+    1. Install ytt
 
         ```bash
         cd ./cli
 
-        gunzip ytt-linux-amd64-v0.37.0+vmware.1.gz
+        ytt-linux-amd64-v0.43.1+vmware.1.gz
 
-        mv ytt-linux-amd64-v0.37.0+vmware.1 /usr/local/bin/ytt
-
-        chmod +x /usr/local/bin/ytt
-
+        chmod ugo+x ytt-linux-amd64-v0.43.1+vmware.1 &&  mv ./ytt-linux-amd64-v0.43.1+vmware.1 /usr/local/bin/ytt
         ```
-        Run `ytt --version` to check that the correct version of `ytt` is installed and it is executable.
+        Run `ytt --version` to check that the correct version of ytt is installed and executable
 
-     1. Install `kapp`.
+   1. Install kapp.
 
-        ```bash
-        gunzip kapp-linux-amd64-v0.42.0+vmware.2.gz
+      ```bash
+      gunzip kapp-linux-amd64-v0.53.2+vmware.1.gz
 
-        mv kapp-linux-amd64-v0.42.0+vmware.2 /usr/local/bin/kapp
+      chmod ugo+x kapp-linux-amd64-v0.53.2+vmware.1 && mv ./kapp-linux-amd64-v0.53.2+vmware.1 /usr/local/bin/kapp
+      ```
 
-        chmod +x /usr/local/bin/kapp
-        ```
+      Run `kapp --version` to check that the correct version of kapp is installed and executable.
 
-        Run `kapp --version` to check that the correct version of `kapp` is installed and it is executable.
+   2. Install kbld.
 
-    1. Install `kbld`.
+      ```bash
+      gunzip kbld-linux-amd64-v0.35.1+vmware.1.gz
 
-        ```bash
-        gunzip kbld-linux-amd64-v0.31.0+vmware.1.gz
+      chmod ugo+x kbld-linux-amd64-v0.35.1+vmware.1 && mv ./kbld-linux-amd64-v0.35.1+vmware.1 /usr/local/bin/kbld
+      ```
 
-        mv kbld-linux-amd64-v0.31.0+vmware.1 /usr/local/bin/kbld
+      Run `kbld --version` to check that the correct version of kbld is installed and executable.
 
-        chmod +x /usr/local/bin/kbld
-        ```
+   3. Install imgpkg.
 
-        Run `kbld --version` to check that the correct version of `kbld` is installed and it is executable.
+      ```bash
+      gunzip imgpkg-linux-amd64-v0.31.1+vmware.1.gz
+      chmod ugo+x imgpkg-linux-amd64-v0.31.1+vmware.1 && mv ./imgpkg-linux-amd64-v0.31.1+vmware.1 /usr/local/bin/imgpkg
+      ```
 
-    1. Install `imgpkg`.
+      Run `imgpkg --version` to check that the correct version of imgpkg is installed and executable.
 
-        ```bash
-        gunzip imgpkg-linux-amd64-v0.22.0+vmware.1.gz
-        mv imgpkg-linux-amd64-v0.22.0+vmware.1 /usr/local/bin/imgpkg
-        chmod +x /usr/local/bin/imgpkg
-        ```
+1. Install yq.
 
-        Run `imgpkg --version` to check that the correct version of `imgpkg` is installed and it is executable.
-
-6. Install `yq`.
-
-    `yq` a light-weight and portable command-line YAML processor.
+    yq a lightweight and portable command-line YAML processor.
+    Download [yq](https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz)
 
     ```bash
-    wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz
-
     tar -zxvf yq_linux_amd64.tar.gz
 
     mv yq_linux_amd64 /usr/local/bin/
     ```
-    Run the `yq -V` command to check that the correct version of `yq` is installed and it is executable.
+    Run the `yq -V` command to check that the correct version of yq is installed and executable.
 
-7. Install Docker.
-
-    Navigate to the directory where the Docker installation binaries are located and run the `rpm -ivh <package-name>` command.
+1. Run the following commands to start the Docker service and enable it to start at boot. Photon OS has Docker installed by default.
 
     ```bash
-    cd docker-binaries
+    ## Check Docker service status
+    systemctl status docker
 
-    rpm -ivh *.rpm
+    ## Start Docker Service
+    systemctl start docker
+
+    ## To start Docker Service at boot
+    systemctl enable docker
     ```
-
-    Wait for the installation process to finish.
-
-    ![Docker installation progress](img/tkg-airgap-nsxt/docker-installation.jpg)
-
-    Start the Docker service and set the service to run at boot time.
+1. Execute the following commands to ensure that the bootstrap machine uses [cgroup v1](https://man7.org/linux/man-pages/man7/cgroups.7.html).
 
     ```bash
-    systemctl start docker && systemctl enable docker && systemctl status docker
+    docker info | grep -i cgroup
+
+    ## You should see the following
+    Cgroup Driver: cgroupfs
     ```
 
-8. Create an SSH key pair.
+1. Create an SSH key-pair.
 
-    This is required for Tanzu CLI to connect to vSphere from the bootstrap machine.  The public key part of the generated key will be passed during the TKG management cluster deployment.  
+    This is required for Tanzu CLI to connect to vSphere from the bootstrap machine.  The public key part of the generated key will be passed during the Tanzu Kubernetes Grid management cluster deployment.  
 
     ```bash
     ### Generate public/Private key pair.
@@ -557,35 +438,46 @@ The following procedure provides steps to configure bootstrap virtual machines b
     ### If the above command fails, execute "eval $(ssh-agent)" and then rerun the command.
     ```
 
-    Make a note of the public key from the file `$home/.ssh/id_rsa.pub`. You need this while creating a config file for deploying the Tanzu Kubernetes Grid management cluster.
+    Make a note of the public key from the file **$home/.ssh/id_rsa.pub**. You need this while creating a config file for deploying the Tanzu Kubernetes Grid management cluster.
 
-9. Push Tanzu Kubernetes Grid installation binaries to your private image registry.
+1. If your bootstrap machine runs Linux or Windows Subsystem for Linux, and it has a Linux kernel built after the May 2021 Linux security patch, for example Linux 5.11 and 5.12 with Fedora, run the following command.
 
-    Navigate to the directory which contains all Tanzu Kubernetes Grid binaries and the `publish-images-fromtar.sh` file that you have copied from the bastion host. Then, run the following command to push the binaries to your private image registry.
-
-    ```bash
-    ### Make the publish-images-fromtar.sh script executable.
-
-    chmod +x publish-images-fromtar.sh
-
-    ### Execute the publish-images-fromtar.sh script
-
-    sh publish-images-fromtar.sh
-    ```
-
-Now, all the required packages are installed and required configurations are in place on the bootstrap virtual machine.
+   ```
+    sudo sysctl net/netfilter/nf_conntrack_max=131072
+   ```
 
 ### Import the Base Image Template in vCenter Server
 
-A base image template containing the OS and Kubernetes versions, which will be used to deploy management and workload clusters, is imported in vSphere. For more information, see [Import the Base Image Template into vSphere](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-vsphere.html#import-a-base-image-template-into-vsphere-4).
+Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
-**Note:** If you are using a **non-administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and then assign the **tkg-user** to the template with the **TKG role**.
+1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
 
-For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+* For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.23.8 OVA.
+
+     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
+* For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
+
+    **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
+
+1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
+
+1. Select **Local file**, click the button to upload files, and select the downloaded OVA file on your local machine.
+
+1. Follow the installer prompts to deploy a VM from the OVA.
+
+1. Click **Finish** to deploy the VM. When the OVA deployment finishes, right-click the VM and select **Template** > **Convert to Template**.
+
+    **Note:** Do not power on the VM before you convert it to a template.
+
+1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
+
+For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 ### Import NSX Advanced Load Balancer in Content Library
 
-Create a content library following the instructions provided in the VMware [documentation](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-2A0F1C13-7336-45CE-B211-610D39A6E1F4.html). NSX Advanced Load Balancer ova is stored in this library. To import the ova into the content library, follow the instructions provided [here](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-897EEEC2-B378-41A7-B92B-D1159B5F6095.html). 
+Create a content library following the instructions provided in [Create a Library](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-2A0F1C13-7336-45CE-B211-610D39A6E1F4.html) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library.
+
+To import the OVA into the content library, see [Import Items to a Content Library](https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-897EEEC2-B378-41A7-B92B-D1159B5F6095.html).
 
 ## Deploy and Configure NSX Advanced Load Balancer
 
