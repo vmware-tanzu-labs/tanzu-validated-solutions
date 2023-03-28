@@ -1,8 +1,7 @@
+Albctlr
+Albmanagement
 Alertmanager
 Allottable
-Albmanagement
-Albctlr
-Albctlr
 Antrea
 Apiserver
 Appliveview
@@ -86,10 +85,10 @@ tanzu
 Tekton
 templating
 TKG
-TKGS
-Tkgmanagement
-Tkgworkload
 Tkgclustervip
+Tkgmanagement
+TKGS
+Tkgworkload
 TRFV
 untar
 vCenter
