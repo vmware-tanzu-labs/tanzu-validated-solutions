@@ -67,8 +67,9 @@ Your environment should meet the following general requirements:
 
 **Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.
 
-**Note**: In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
+**Note**: In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623).<p>
 
+**Note**: VMC vCenter fqdn should redirect to vCenter local IP.
 #### Resource Pools and VM Folders
 
 The sample entries of the resource pools and folders that need to be created are as follows.
@@ -1278,7 +1279,7 @@ As per the architecture, workload clusters make use of a custom ADC to enable NS
 
 The steps for deploying a workload cluster are the same as for a shared services cluster. However, in step number 4, use the NSXALB Labels created for the Workload cluster on AKO Deployment.
 
-**After the Worload cluster creation verify the cluster labels and ako pod status**
+**After the Workload cluster creation verify the cluster labels and ako pod status**
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
