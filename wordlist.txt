@@ -89,6 +89,7 @@ tkgclustervip
 tkgmanagement
 tkgmanagementvip
 TKGS
+tkgshared
 tkgworkload
 tkgworkloadvip
 TRFV
