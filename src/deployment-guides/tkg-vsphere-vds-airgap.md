@@ -166,9 +166,9 @@ Ensure the following:
     ```
    The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. Copy the Files to the bootstrap Machine.
+1. Copy the Files to the bootstrap Machine after bootstrap Machine deployment.
 
-    Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other storage medium:
+    Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other medium:
    * The Image TAR files.
    * The YAML files
 
@@ -183,7 +183,7 @@ To install Harbor, deploy an operating system of your choice with the following 
 - Memory: 8 GB
 - Storage (HDD): 160 GB
 
-Copy the Harbor binary from the bootstrap VM to the Harbor VM. Follow the instructions provided in [Harbor Installation and Configuration](https://goharbor.io/docs/2.3.0/install-config/) to deploy and configure Harbor.
+ Follow the instructions provided in [Harbor Installation and Configuration](https://goharbor.io/docs/2.3.0/install-config/) to deploy and configure Harbor.
 
 ## <a id=configure-bootstrap> </a> Deploy and Configure Bootstrap VM
 
@@ -201,7 +201,10 @@ The bootstrap machine must meet the following prerequisites:
    * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
-
+1. Copy  Files to  bootstrap Machine.<p>
+   Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
+   * The Image TAR files.
+   * The YAML files
 1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
    * VMware Tanzu CLI 2.1.0 for Linux
@@ -285,7 +288,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
       ```bash
       export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
 
-      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=true
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=false
       ```
 
       If your registry solution uses self-signed certificates, also add TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE in base64-encoded format to the global Tanzu CLI configuration file. For self-signed certificates, set the following environment variables:
@@ -293,7 +296,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
       ```bash
       export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
 
-      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY false
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=false
 
       export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
 
@@ -553,104 +556,6 @@ This document focuses on enabling NSX Advanced Load Balancer using the license m
 1. Once the license tier is changed, apply the NSX Advanced Load Balancer Enterprise license key. If you have a license file instead of a license key, apply the license by clicking on the **Upload a License File(.lic)** option.
 
     ![License configuration - apply license](img/tkg-airgap-vsphere-deploy/12.ALB-Licensing-03.png)
-
-### <a id="nsx-alb-ha"> </a> NSX Advanced Load Balancer: Controller High Availability
-
-NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer that provides L4 - L7 load balancer support. It is recommended for vSphere deployments without NSX-T, or when there are unique scaling requirements.
-
-NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment. This mode grants NSX Advanced Load Balancer controllers full write access to vCenter that helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
-
-For a production-grade deployment, it is recommended to deploy three instances of the NSX Advanced Load Balancer controller for high availability and resiliency.  
-
-The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:  
-
-|**Controller Node**|**IP Address**|**FQDN**|
-| --- | --- | --- |
-|Node 1 Primary|172.16.10.11|`sfo01albctlr01a.sfo01.rainpole.local`|
-|Node 2 Secondary|172.16.10.12|`sfo01albctlr01b.sfo01.rainpole.local`|
-|Node 3 Secondary |172.16.10.13|`sfo01albctlr01c.sfo01.rainpole.local`|
-|HA Address|172.16.10.10|`sfo01albctlr01.sfo01.rainpole.local`|
-
-Follow these steps to deploy and configure NSX Advanced Load Balancer:
-
-1. [Deploy NSX Advanced Load Balancer](#dep-nsx-alb)
-1. [NSX Advanced Load Balancer: Initial setup](#nsx-alb-init)
-1. [NSX Advanced Load Balancer: Licensing](#nsx-alb-license)
-1. [NSX Advanced Load Balancer: Controller High Availability](#nsx-alb-ha)
-1. [NSX Advanced Load Balancer: Certificate Management](#nsx-alb-cert-mgmt)
-1. [NSX Advanced Load Balancer: Create vCenter Cloud and SE Groups](#nsx-alb-vcenter-se)
-1. [NSX Advanced Load Balancer: Configure Network and IPAM & DNS Profiles](#nsx-alb-net-ipam)
-
-### <a id="dep-nsx-alb"> </a> Deploy NSX Advanced Load Balancer
-
-As a prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
-
-To deploy NSX Advanced Load Balancer, complete the following steps.
-
-1. Log in to **vCenter** and go to **Home** > **Content Libraries**.
-1. Select the content library under which the NSX Advanced Load Balancer OVA is placed.
-1. Click on **OVA & OVF Templates**.
-1. Right-click the NSX Advanced Load Balancer image and select **New VM from this Template**.
-1. On the Select name and folder page, enter a name and select a folder for the NSX Advanced Load Balancer VM as **nsx-alb-components**.
-1. On the Select a compute resource page, select the resource pool **nsx-alb-components**.
-1. On the Review details page, verify the template details and click **Next**.
-1. On the Select storage page, select a storage policy from the VM Storage Policy drop-down menu and choose the  datastore location where you want to store the virtual machine files.
-1. On the Select networks page, select the network **sfo01-w01-vds01-albmanagement** and click **Next**.
-1. On the Customize template page, provide the NSX Advanced Load Balancer management network details such as IP address, subnet mask, and gateway, and click **Next**.
-1. On the Ready to complete page, review the page and click **Finish**.
-
-    ![Deployment of NSX Advanced Load Balancer](img/tko-on-vsphere/6-AVI-ova-config.png)
-
-A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX Advanced Load Balancer virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, go to NSX Advanced Load Balancer on your browser.  
-**Note**: While the system is booting up, a blank web page or a 503 status code may appear.  
-
-### <a id="nsx-alb-init"> </a> NSX Advanced Load Balancer: Initial Setup
-
-After NSX Advanced Load Balancer is successfully deployed and running, go to NSX Advanced Load Balancer on your browser using the URL https://<em><IP/FQDN></em> and configure the basic system settings:
-
-1. Set admin password and click on **Create Account**.
-
-    ![Set admin password and create account](img/tko-on-vsphere/7.ALB-login.png)
-
-
-2. On the Welcome page, under **System Settings**, set backup passphrase and provide DNS information, and click **Next**.
-
-    ![Set backup passphrase and provide DNS information](img/tko-on-vsphere/8.ALB-Welcome-screen.png)
-
-3. Under **Email/SMTP**, provide email and SMTP information, and click **Next**.
-
-    ![Provide email and SMTP information](img/tko-on-vsphere/9.ALB-Welcome-email-smtp.png)
-
-4. Under **Multi-Tenant**, configure settings as follows and click **Save**.
-    - IP Route Domain: Share IP route domain across tenants  
-    - Service Engines are managed within the: Provider (Shared across tenants)  
-    - Tenant Access to Service Engine: Read Access
-
-    ![Configure multi-tenant settings](img/tko-on-vsphere/10.ALB-Welcome-Multi-tenant.png)
-
-If you did not select the **Setup Cloud After** option before saving, the initial configuration wizard exits. The Cloud configuration window does not automatically launch and you are directed to a dashboard view on the controller.
-
-### NSX Advanced Load Balancer: NTP Configuration
-
-To configure NTP, go to **Administration** > **Settings** > **DNS/NTP > Edit** and add your NTP server details and click **Save**.
-
-**Note:** You may also delete the default NTP servers.
-
-![NTP server configuration](img/tko-on-vsphere/11.ALB-NTP.png)
-
-### <a id="nsx-alb-license"></a> NSX Advanced Load Balancer: Licensing
-
-This document focuses on enabling NSX Advanced Load Balancer using the license model: **Enterprise License (VMware NSX ALB Enterprise)**.
-1. To configure licensing, go to **Administration**  > **Licensing** and click on the gear icon to change the license type to Enterprise. 
-
-    ![License configuration - change licensing type](img/tko-on-vsphere/12.ALB-Licensing-01.png)
-1. Select Enterprise Tier as the license type and click **Save**
-
-    ![License configuration - select Enterprise tier](img/tko-on-vsphere/12.ALB-Licensing-02.png)
-
-1. Once the license tier is changed, apply the NSX Advanced Load Balancer Enterprise license key. If you have a license file instead of a license key, apply the license by clicking on the **Upload a License File(.lic)** option.
-
-    ![License configuration - apply license](img/tko-on-vsphere/12.ALB-Licensing-03.png)
 
 ### <a id="nsx-alb-ha"> </a> NSX Advanced Load Balancer: Controller High Availability
 
@@ -1114,7 +1019,10 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 
 #! ---------------------------------------------------------------------
 ```
-
+To create Managment Cluster execute the following command:
+```bash
+tanzu management-cluster create --file config.yaml
+```
 The cluster deployment logs are streamed in the terminal when you run the `tanzu mc create` command. The first run of `tanzu mc create` takes longer than subsequent runs because it has to pull the required Docker images into the image store on your bootstrap machine. Subsequent runs do not require this step, and thus the process is faster.
 
 While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX Advanced Load Balancer. The service engines are mapped to the SE Group `sfo01m01segroup01`​.
@@ -1484,6 +1392,11 @@ ENABLE_MHC: true
 IDENTITY_MANAGEMENT_TYPE: "none"
 ```
 
+To create Workload Cluster execute the following command:
+```bash
+tanzu cluster create --file config.yaml
+```
+
 Cluster creation takes approximately 15-20 minutes to complete. Verify the health of the cluster and validate the cluster labels applied.
 
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
@@ -1592,6 +1505,10 @@ TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY: false
 TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE: LS0t[...]tLS0tLQ==
 ENABLE_MHC: true
 IDENTITY_MANAGEMENT_TYPE: "none"
+```
+To create Workload Cluster execute the following command:
+```bash
+tanzu cluster create --file config.yaml
 ```
 Cluster creation roughly takes 15-20 minutes to complete. Verify the health of the cluster and apply the labels.
 
