@@ -1,3 +1,4 @@
+albmanagement
 Alertmanager
 allottable
 Antrea
@@ -24,6 +25,7 @@ ECMP
 FIPS
 firewalling
 fluentbit
+fromtar
 Gbps
 Geneve
 grafana
@@ -70,6 +72,7 @@ scrapeable
 SCST
 SCTP
 SDDC
+segroup
 SNAT
 Snyk
 Sonobouy
@@ -81,7 +84,12 @@ tanzu
 Tekton
 templating
 TKG
+tkgclustervip
+tkgmanagement
+tkgmanagementvip
 TKGS
+tkgworkload
+tkgworkloadvip
 TRFV
 untar
 vCenter
@@ -92,11 +100,3 @@ VNET
 vsphere
 VXLAN
 Xeon
-albmanagement
-tkgmanagement
-tkgmanagementvip
-tkgclustervip
-tkgworkloadvip
-tkgworkload
-segroup
-fromtar
