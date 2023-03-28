@@ -87,9 +87,9 @@ templating
 TKG
 tkgclustervip
 tkgmanagement
-tkgshared
 tkgmanagementvip
 TKGS
+tkgshared
 tkgworkload
 tkgworkloadvip
 TRFV
