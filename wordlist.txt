@@ -30,6 +30,7 @@ Geneve
 grafana
 grype
 GSLB
+hostnames
 hyperconverged
 imgpkg
 interoperably
@@ -53,6 +54,7 @@ milliCPU
 minio
 Multus
 myVmware
+NSXALB
 NSXT
 NVME
 OIDC
@@ -71,6 +73,7 @@ scrapeable
 SCST
 SCTP
 SDDC
+segroup
 SNAT
 Snyk
 Sonobouy
@@ -84,8 +87,9 @@ templating
 TKG
 tkgclustervip
 tkgmanagement
-TKGS
 tkgshared
+tkgmanagementvip
+TKGS
 tkgworkload
 tkgworkloadvip
 TRFV
