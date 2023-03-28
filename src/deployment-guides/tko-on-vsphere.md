@@ -373,7 +373,7 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
     | sfo01-w01-vds01-tkgworkloadvip | No  | 172.16.70.0/24 | 172.16.70.100 - 172.16.70.200 |
     <!-- /* cSpell:enable */ -->
 
-    The following snippet shows an example network configuration: `sfo01-w01-vds01-tkgclustervip` , Same configuration should be applied in Matkgmanagementvip and sfo01-w01-vds01-tkgworkloadvip
+    The following snippet shows an example network configuration: `sfo01-w01-vds01-tkgclustervip` , Same configuration should be applied in sfo01-w01-vds01-tkgmanagementvip and sfo01-w01-vds01-tkgworkloadvip
 
     ![Change network settings](img/tko-on-vsphere/31.ALB-Networks-2.png)
 
