@@ -89,14 +89,14 @@ Tekton
 templating
 TKG
 Tkgclustervip
-Tkgmanagement
-TKGS
-Tkgworkload
 tkgclustervip
+Tkgmanagement
 tkgmanagement
 tkgmanagementvip
+TKGS
 tkgshared
 tkgworkload
+Tkgworkload
 tkgworkloadvip
 TRFV
 untar
