@@ -1,3 +1,4 @@
+albctlr
 albmanagement
 Alertmanager
 allottable
@@ -31,6 +32,7 @@ Geneve
 grafana
 grype
 GSLB
+hostnames
 hyperconverged
 imgpkg
 interoperably
@@ -54,6 +56,7 @@ milliCPU
 minio
 Multus
 myVmware
+NSXALB
 NSXT
 NVME
 OIDC
@@ -63,6 +66,7 @@ Portgroup
 preconfigured
 proxied
 proxying
+rainpole
 restic
 routable
 saas
@@ -88,6 +92,7 @@ tkgclustervip
 tkgmanagement
 tkgmanagementvip
 TKGS
+tkgshared
 tkgworkload
 tkgworkloadvip
 TRFV
