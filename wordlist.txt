@@ -1,9 +1,5 @@
-Albctlr
-<<<<<<< HEAD
-Albmanagement
 albctlr
-=======
->>>>>>> 6f8a8c2 (Corrected wordlist file-Updated-2)
+Albctlr
 albmanagement
 Albmanagement
 Alertmanager
@@ -93,15 +89,15 @@ tanzu
 Tekton
 templating
 TKG
-tkgclustervip
 Tkgclustervip
+tkgclustervip
 Tkgmanagement
 tkgmanagement
 tkgmanagementvip
 TKGS
 tkgshared
-tkgworkload
 Tkgworkload
+tkgworkload
 tkgworkloadvip
 TRFV
 untar
