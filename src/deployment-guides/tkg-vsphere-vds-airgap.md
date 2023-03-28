@@ -664,11 +664,11 @@ Complete the following steps to configure NSX Advanced Load Balancer cluster.
 
 1. Log in to the primary NSX Advanced Load Balancer controller and go to **Administrator** > **Controller** > **Nodes**, and click **Edit**.
 
-    ![Configure NSX Advanced Load Balancer controller node](img/tko-on-vsphere/13.ALB-Nodes.png)
+    ![Configure NSX Advanced Load Balancer controller node](img/tkg-airgap-vsphere-deploy/13.ALB-Nodes.png)
 
 2. Specify **Name** and **Controller Cluster IP**, and click **Save**. This IP address must be from the NSX Advanced Load Balancer management network.
 
-    ![Specify NSX Advanced Load Balancer controller node name and IP address](img/tko-on-vsphere/14.ALB-controller-vip.png)
+    ![Specify NSX Advanced Load Balancer controller node name and IP address](img/tkg-airgap-vsphere-deploy/14.ALB-controller-vip.png)
 
 3. Deploy the 2nd and 3rd NSX Advanced Load Balancer controller nodes by using steps in [Deploy NSX Advanced Load Balancer](#dep-nsx-alb).
 
@@ -676,17 +676,17 @@ Complete the following steps to configure NSX Advanced Load Balancer cluster.
 
 5. In the **Cluster Nodes** field, enter the IP address for the 2nd and 3rd controller, and click **Save**.
 
-    ![Cluster node IP address in controller configuration](img/tko-on-vsphere/15.ALB-additional-nodes.png)
+    ![Cluster node IP address in controller configuration](img/tkg-airgap-vsphere-deploy/15.ALB-additional-nodes.png)
 
     After you complete these steps, the primary NSX Advanced Load Balancer controller becomes the leader for the cluster and invites the other controllers to the cluster as members.
 
     NSX Advanced Load Balancer then performs a warm reboot of the cluster. This process can take approximately 10-15 minutes. You are automatically logged out of the controller node where you are currently logged in. Enter the cluster IP address in the browser, to see details about the cluster formation task.
 
-    ![Controller initialization](img/tko-on-vsphere/16.ALB-Controller-initialization.png)
+    ![Controller initialization](img/tkg-airgap-vsphere-deploy/16.ALB-Controller-initialization.png)
 
 The configuration of the primary (leader) controller is synchronized to the new member nodes when the cluster comes online following the reboot. After the cluster is successfully formed, you can see the following status:
 
-![Controller status](img/tko-on-vsphere/17.ALB-cluster.png)
+![Controller status](img/tkg-airgap-vsphere-deploy/17.ALB-cluster.png)
 
 **Note:** In the following tasks, all NSX Advanced Load Balancer configurations are done by connecting to the NSX ALB Controller Cluster IP/FQDN.
 
@@ -700,17 +700,17 @@ The default system-generated controller certificate generated for SSL/TSL connec
 
 1. Provide all required details as per your infrastructure requirements and in the **Subject Alternate Name (SAN)** field, provide IP address and FQDN of all NSX Advanced Load Balancer controllers including NSX Advanced Load Balancer cluster IP and FQDN, and click **Save**.
 
-    ![Self-signed certificate - General tab](img/tko-on-vsphere/18.ALB-Certificate-01.png)
-    ![Self-signed certificate - Certificate tab](img/tko-on-vsphere/18.ALB-Certificate-02.png)
+    ![Self-signed certificate - General tab](img/tkg-airgap-vsphere-deploy/18.ALB-Certificate-01.png)
+    ![Self-signed certificate - Certificate tab](img/tkg-airgap-vsphere-deploy/18.ALB-Certificate-02.png)
 
 1. After the certificate is created, capture the certificate contents as this is required while deploying the Tanzu Kubernetes Grid management cluster.
   To capture the certificate content, click on the Download icon next to the certificate, and click **Copy to clipboard** under **Certificate**.
 
-    ![Copy certificate contents](img/tko-on-vsphere/19.ALB-Certificate-contents.png)
+    ![Copy certificate contents](img/tkg-airgap-vsphere-deploy/19.ALB-Certificate-contents.png)
 
 1. To replace the certificate, go to **Administration** > **Settings** > **Access Settings**, and click the pencil icon at the top right to edit the system access settings, and then replace the SSL/TSL certificate and click **Save**.
 
-    ![Replace certificate](img/tko-on-vsphere/20.ALB-Cert-replace.png)
+    ![Replace certificate](img/tkg-airgap-vsphere-deploy/20.ALB-Cert-replace.png)
 
 1. Log out and log in to NSX Advanced Load Balancer.
 
@@ -737,26 +737,26 @@ For information about mapping a specific service engine group to Tanzu Kubernete
 
 1. Log in to NSX Advanced Load Balancer and go to **Infrastructure** > **Clouds** > **Create** > **VMware vCenter/vSphere ESX**.
 
-    ![Create vCenter Cloud](img/tko-on-vsphere/21.ALB-Clouds.png)
+    ![Create vCenter Cloud](img/tkg-airgap-vsphere-deploy/21.ALB-Clouds.png)
 
 1. Under **General** pane, in the **Name** field, enter a Cloud name. 
 
-    ![Enter cloud name](img/tko-on-vsphere/22.ALB-Clouds-1.png)
+    ![Enter cloud name](img/tkg-airgap-vsphere-deploy/22.ALB-Clouds-1.png)
 
 1. Under the **vCenter/vSphere** pane, enter information for * vCenter address*, *Username*, and *Password* fields and  click **CONNECT**.
 
-    ![Enter infrastructure information for vCenter Cloud](img/tko-on-vsphere/23.ALB-Clouds-2.png)
+    ![Enter infrastructure information for vCenter Cloud](img/tkg-airgap-vsphere-deploy/23.ALB-Clouds-2.png)
 
 1. Under the **Data Center** pane, choose the data center from the Data Center dropdown.Select **Content Library** for SE template and click **SAVE & LAUNCH**.
 
-    ![Select data center](img/tko-on-vsphere/24.ALB-Clouds-3.png)
+    ![Select data center](img/tkg-airgap-vsphere-deploy/24.ALB-Clouds-3.png)
 
 1. Select the Management Network from the **Management Network** drop down to choose the NSX Advanced Load Balancer management network for service engines. Enter a static IP address pool for SEs and VIP, and click **Complete**.
-    ![Enter network information](img/tko-on-vsphere/25.ALB-Clouds-4.png)
+    ![Enter network information](img/tkg-airgap-vsphere-deploy/25.ALB-Clouds-4.png)
 
 1. Wait for the cloud to get configured and the status to turn green.
 
-    ![Wait for completion](img/tko-on-vsphere/26.ALB-Clouds-5.png)
+    ![Wait for completion](img/tkg-airgap-vsphere-deploy/26.ALB-Clouds-5.png)
 
 1. To create a service engine group for Tanzu Kubernetes Grid management clusters, under **Infrastructure** tab, go to **Cloud Resources** > **Service Engine Group**.
 From the **Select Cloud** drop down, select the cloud created in the previous step and click **Create**.<p>
@@ -779,14 +779,14 @@ The following components are created in NSX Advanced Load Balancer.
 
     Use the default values for the rest of the parameters.
 
-    ![Create service engine group - basic settings](img/tko-on-vsphere/27.ALB-SE.png)
+    ![Create service engine group - basic settings](img/tkg-airgap-vsphere-deploy/27.ALB-SE.png)
 
     For advanced configuration, click on the Advanced tab, specify a specific cluster and datastore for service engine placement, change the NSX_ALB SE folder name, and service engine name prefix, and click **Save**.
 
-    ![Create service engine group - advanced settings](img/tko-on-vsphere/28.ALB-SE-Group2.png)  
+    ![Create service engine group - advanced settings](img/tkg-airgap-vsphere-deploy/28.ALB-SE-Group2.png)  
 
 1. Repeat steps 7 and 8 to create another service engine group for Tanzu Kubernetes Grid workload clusters. After completing this step, you will have created two service engine groups.  
-    ![Service engine groups created](img/tko-on-vsphere/29.ALB-SE-Group3.png)
+    ![Service engine groups created](img/tkg-airgap-vsphere-deploy/29.ALB-SE-Group3.png)
 
 ### <a id="nsx-alb-net-ipam"> </a> NSX Advanced Load Balancer: Configure Network and IPAM Profile
 
@@ -821,12 +821,12 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 
     The following snippet shows an example network configuration: `sfo01-w01-vds01-tkgclustervip` , Same configuration should be applied in Matkgmanagementvip and sfo01-w01-vds01-tkgworkloadvip
 
-    ![Change network settings](img/tko-on-vsphere/31.ALB-Networks-2.png)
+    ![Change network settings](img/tkg-airgap-vsphere-deploy/31.ALB-Networks-2.png)
 
     sfo01-w01-vds01-tkgmanagement and sfo01-w01-vds01-tkgworkload network should be enabled with DHCP
 
     After the networks are configured, the configuration must look like the following image.
-    ![Network list after configuration](img/tko-on-vsphere/32.ALB-Networks-3.png)
+    ![Network list after configuration](img/tkg-airgap-vsphere-deploy/32.ALB-Networks-3.png)
 
 #### Create IPAM and DNS Profile in NSX Advanced Load Balancer and Attach it to Cloud
 
@@ -847,17 +847,17 @@ Complete the following steps to create an IPAM profile and attach it to the vCen
 
     <!-- /* cSpell:enable */ -->
 
-    ![Create IPAM profile](img/tko-on-vsphere/34.ALB-IPAM.png)
+    ![Create IPAM profile](img/tkg-airgap-vsphere-deploy/34.ALB-IPAM.png)
 
 1. Click **Create** > **DNS Profile** and provide the domain name.
 
-    ![Enter domain name](img/tko-on-vsphere/34.ALB-DNS.png)
+    ![Enter domain name](img/tkg-airgap-vsphere-deploy/34.ALB-DNS.png)
 
 1. Attach the IPAM and DNS profiles to the `sfo01w01vc01` cloud.
     1. Navigate to **Infrastructure** > **Clouds**.
     2. Edit the sfo01w01vc01 cloud.
     3. Under IPAM/DNS section, choose the IPAM and DNS profiles created earlier and save the updated configuration.  
-    ![Select IPAM and DNS profiles](img/tko-on-vsphere/35.ALB-IPAM-DNS.png)  
+    ![Select IPAM and DNS profiles](img/tkg-airgap-vsphere-deploy/35.ALB-IPAM-DNS.png)  
 
 This completes the NSX Advanced Load Balancer configuration. The next step is to deploy and configure a bootstrap machine. The bootstrap machine is used to deploy and manage Tanzu Kubernetes clusters.
 ## <a id=deploy-tkg-management> </a> Deploy Tanzu Kubernetes Grid Management Cluster
