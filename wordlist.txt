@@ -1,3 +1,4 @@
+albmanagement
 Alertmanager
 allottable
 Antrea
@@ -81,7 +82,12 @@ tanzu
 Tekton
 templating
 TKG
+tkgclustervip
+tkgmanagement
 TKGS
+tkgshared
+tkgworkload
+tkgworkloadvip
 TRFV
 untar
 vCenter
@@ -92,11 +98,3 @@ VNET
 vsphere
 VXLAN
 Xeon
-albmanagement
-tkgclustervip
-tkgmanagement
-tkgshared
-tkgworkload
-tkgclustervip
-tkgworkloadvip
-tkgworkloadvip
