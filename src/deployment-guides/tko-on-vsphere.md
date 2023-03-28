@@ -1195,7 +1195,7 @@ Now that the shared services cluster is successfully created, you may proceed wi
 As per the architecture, workload clusters make use of a custom ADC to enable NSX Advanced Load Balancer L7 ingress with NodePortLocal mode. This is enforced by providing the NSXALB_LABEL while deploying the workload cluster.
 
 The steps for deploying a workload cluster are the same as for a shared services cluster. except use the NSX ALB Labels created for the Workload cluster on AKO Deployment in step number 4.<p>
-**After the Worload cluster creation verify the cluster labels and ako pod status**
+**After the Workload cluster creation verify the cluster labels and ako pod status**
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
