@@ -1659,7 +1659,8 @@ You can see that the workload cluster is successfully deployed and the AKO pod i
 
 User-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
 
-Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.
+Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.<p>[Installing and Managing Packages with the Tanzu CLI
+](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-index.html)
 
 |**Function**|**Package**|**Location**|
 | --- | --- | --- |
@@ -1696,7 +1697,7 @@ The first package that you should install on your cluster is the [**cert-manager
 1. Capture the available Cert Manager package versions.
 
     ```bash
-    # tanzu package available list cert-manager.tanzu.vmware.com -n tanzu-package-repo-global
+    # tanzu package available list cert-manager.tanzu.vmware.com -A
 
     NAME                           VERSION               RELEASED-AT
     cert-manager.tanzu.vmware.com  1.5.3+vmware.7-tkg.1  2021-08-23 18:00:00 +0000 UTC
@@ -1714,15 +1715,25 @@ The first package that you should install on your cluster is the [**cert-manager
     ```bash
     tanzu package install cert-manager --package-name cert-manager.tanzu.vmware.com --namespace package-cert-manager --version <AVAILABLE-PACKAGE-VERSION> --create-namespace
 
-    ]# kubectl create ns cert-manager-package
     ]# tanzu package install cert-manager --package-name cert-manager.tanzu.vmware.com --namespace cert-manager-package --version 1.7.2+vmware.3-tkg.1 --create-namespace
-    7:28:29AM: Deploy succeeded
+    ℹ   Installing package 'cert-manager.tanzu.vmware.com'
+    ℹ   Creating namespace 'cert-manager-package'
+    ℹ   Getting package metadata for 'cert-manager.tanzu.vmware.com'
+    ℹ   Creating service account 'cert-manager-cert-manager-package-sa'
+    ℹ   Creating cluster admin role 'cert-manager-cert-manager-package-cluster-role'
+    ℹ   Creating cluster role binding 'cert-manager-cert-manager-package-cluster-rolebinding'
+    ℹ   Creating package resource
+    ℹ   Waiting for 'PackageInstall' reconciliation for 'cert-manager'
+    ℹ   'PackageInstall' resource install status: Reconciling
+    ℹ   'PackageInstall' resource install status: ReconcileSucceeded
+    ℹ   'PackageInstall' resource successfully reconciled
+
     ```
 
 1. Confirm that the `cert-manager` package has been installed successfully and the status is `Reconcile succeeded`.
 
     ```bash
-   ]# tanzu package installed get cert-manager -n cert-manager
+   ]# tanzu package installed get cert-manager -n cert-manager-package
     NAME:                    cert-manager
     PACKAGE-NAME:            cert-manager.tanzu.vmware.com
     PACKAGE-VERSION:         1.7.2+vmware.3-tkg.1
@@ -1776,7 +1787,7 @@ For a full list of user-configurable values, see [Configure the Contour Extensio
 1. Capture the available Contour package versions.
 
     ```bash
-    # tanzu package available list contour.tanzu.vmware.com -n tanzu-package-repo-global
+    # tanzu package available list contour.tanzu.vmware.com -A
 
     NAME                      VERSION                RELEASED-AT
     contour.tanzu.vmware.com  1.22.3+vmware.1-tkg.1  2022-12-12 18:00:00 +0000 UTC
@@ -1789,15 +1800,29 @@ For a full list of user-configurable values, see [Configure the Contour Extensio
     ```bash
     tanzu package install contour --package-name contour.tanzu.vmware.com --version <AVAILABLE-PACKAGE-VERSION> --values-file <Path_to_contour-data-values.yaml_file> --namespace tanzu-system-contour --create-namespace
 
-    # tanzu package install contour --package-name contour.tanzu.vmware.com --version 1.22.3+vmware.1-tkg.1 --values-file ./contour-data-values.yaml --namespace tanzu-system-ingress --create-namespace
+    # kubectl create namespace tanzu-system-ingress 
+    # kubectl create namespace tanzu-contour-ingress
+    #tanzu package install contour --package-name contour.tanzu.vmware.com --version 1.22.3+vmware.1-tkg.1 --values-file ./contour-data-values.yaml --namespace tanzu-contour-ingress
 
-    7:45:21AM: Deploy succeeded
+    ℹ   Installing package 'contour.tanzu.vmware.com'
+    ℹ   Creating namespace 'tanzu-system-ingress'
+    ℹ   Getting package metadata for 'contour.tanzu.vmware.com'
+    ℹ   Creating service account 'contour-tanzu-system-ingress-sa'
+    ℹ   Creating cluster admin role 'contour-tanzu-system-ingress-cluster-role'
+    ℹ   Creating cluster role binding 'contour-tanzu-system-ingress-cluster-rolebinding'
+    ℹ   Creating secret 'contour-tanzu-system-ingress-values'
+    ℹ   Creating package resource
+    ℹ   Waiting for 'PackageInstall' reconciliation for 'contour'
+    ℹ   'PackageInstall' resource install status: Reconciling
+    ℹ   'PackageInstall' resource install status: ReconcileSucceeded
+    ℹ
+        Added installed package 'contour'
     ```
 
 3. Confirm that the Contour package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get contour --namespace tanzu-system-ingress
+    # tanzu package installed get contour --namespace tanzu-contour-ingress
 
     NAME:                    contour
     PACKAGE-NAME:            contour.tanzu.vmware.com
@@ -1838,7 +1863,7 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 1. Create a configuration file named `harbor-data-values.yaml` by executing the following commands:
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages harbor.tanzu.vmware.com.2.6.3+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages harbor.tanzu.vmware.com.2.6.3+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
     
     imgpkg pull -b $image_url -o /tmp/harbor-package --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
@@ -1869,8 +1894,24 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 1. Install the Harbor package by executing the following command:
 
     ```bash
-    # tanzu package install harbor --package-name harbor.tanzu.vmware.com --version 2.5.3+vmware.1-tkg.1 --values-file ./harbor-data-values.yaml --namespace tanzu-system-registry --create-namespace
+    # kubectl create namespace tanzu-system-registry
+    # kubectl create namespace tanzu-harbor-registry
+    # tanzu package install harbor --package-name harbor.tanzu.vmware.com --version 2.5.3+vmware.1-tkg.1 --values-file harbor-data-values.yaml --namespace tanzu-harbor-registry
 
+     8:01:14AM: Creating service account 'harbor-tanzu-system-registry-sa'
+     8:01:14AM: Creating cluster admin role 'harbor-tanzu-system-registry-cluster-role'
+     8:01:15AM: Creating cluster role binding 'harbor-tanzu-system-registry-cluster-rolebinding'
+     8:01:15AM: Creating secret 'harbor-tanzu-system-registry-values'
+     8:01:15AM: Creating overlay secrets
+     8:01:15AM: Creating package install resource
+     8:01:15AM: Waiting for PackageInstall reconciliation for 'harbor'
+     8:01:15AM: Fetch started (6s ago)
+            | 8:04:50AM:  L ongoing: waiting on pod/harbor-registry-78c99df744-v8psj (v1) namespace: tanzu-system-registry
+            | 8:04:50AM:     ^ Condition Ready is not True (False)
+            | 8:04:52AM: ok: reconcile deployment/harbor-registry (apps/v1) namespace: tanzu-system-registry
+            | 8:04:52AM: ---- applying complete [50/50 done] ----
+            | 8:04:52AM: ---- waiting complete [50/50 done] ----
+            | Succeeded
     8:04:52AM: Deploy succeeded
     ```
 
@@ -1878,6 +1919,7 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 
     ```bash
     # tanzu package installed get harbor --namespace tanzu-system-registry
+
 
     NAME:                    harbor
     PACKAGE-NAME:            harbor.tanzu.vmware.com
@@ -1940,15 +1982,33 @@ Do the following to deploy Prometheus into a workload cluster:
 1. Install Prometheus package.
 
     ```bash
-    # tanzu package install prometheus --package-name prometheus.tanzu.vmware.com --version 2.37.0+vmware.1-tkg.1 --values-file ./prometheus-data-values.yaml --namespace tanzu-system-monitoring --create-namespace
+    # kubectl create namespace tanzu-system-monitoring 
+    # kubectl create namespace tanzu-prometheus-monitoring
+    # tanzu package install prometheus --package-name prometheus.tanzu.vmware.com --version 2.37.0+vmware.1-tkg.1 --values-file prometheus-data-values.yaml --namespace tanzu-prometheus-monitoring
 
-    8:04:52AM: Deploy succeeded
+    8:20:09AM: Creating service account 'prometheus-tanzu-system-monitoring-sa'
+    8:20:09AM: Creating cluster admin role 'prometheus-tanzu-system-monitoring-cluster-role'
+    8:20:09AM: Creating cluster role binding 'prometheus-tanzu-system-monitoring-cluster-rolebinding'
+    8:20:09AM: Creating secret 'prometheus-tanzu-system-monitoring-values'
+    8:20:09AM: Creating overlay secrets
+    8:20:09AM: Creating package install resource
+    8:20:09AM: Waiting for PackageInstall reconciliation for 'prometheus'
+ 
+            | 8:22:02AM:  L ok: waiting on replicaset/alertmanager-56f6ccfc64 (apps/v1) namespace: tanzu-system-monitoring
+            | 8:22:02AM:  L ok: waiting on pod/alertmanager-56f6ccfc64-h5tl9 (v1) namespace: tanzu-system-monitoring
+            | 8:22:03AM: ok: reconcile deployment/alertmanager (apps/v1) namespace: tanzu-system-monitoring
+            | 8:22:03AM: ---- waiting on 1 changes [35/36 done] ----
+            | 8:22:23AM: ok: reconcile deployment/prometheus-server (apps/v1) namespace: tanzu-system-monitoring
+            | 8:22:23AM: ---- applying complete [36/36 done] ----
+            | 8:22:23AM: ---- waiting complete [36/36 done] ----
+            | Succeeded
+    8:22:23AM: Deploy succeeded (1s ago)
     ```
 
 1. Confirm that the Prometheus package has been installed successfully and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get prometheus -n tanzu-system-monitoring
+    # tanzu package installed get prometheus -n tanzu-prometheus-monitoring
 
     NAME:                    prometheus
     PACKAGE-NAME:            prometheus.tanzu.vmware.com
@@ -1980,7 +2040,7 @@ Do the following to deploy Prometheus into a workload cluster:
 2. Retrieve the template of the Grafana package’s default configuration.
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages grafana.tanzu.vmware.com.7.5.16+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages grafana.tanzu.vmware.com.7.5.16+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
 
     imgpkg pull -b $image_url -o /tmp/grafana-package-7.5.16+vmware.1-tkg.1 --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
@@ -1995,7 +2055,6 @@ Do the following to deploy Prometheus into a workload cluster:
     | --- | --- | --- |
     |secret.admin_password|Null|Your password in Base64 encoded format.|
     |grafana.service.type	|LoadBalancer|NodePort|
-    |secret.admin_password|Null|Your password in Base64 encoded format.|
     |ingress.virtual_host_fqdn|grafana.system.tanzu	|User-Provided FQDN from Input File|
     |ingress.tlsCertificate.tls.crt	|Null|Full chain cert provided in Input file|
     |ingress.tlsCertificate.tls.key	|Null|Full chain cert provided in Input file|
@@ -2020,15 +2079,33 @@ Do the following to deploy Prometheus into a workload cluster:
 7. Install Grafana.
 
     ```bash
-   # tanzu package install grafana --package-name grafana.tanzu.vmware.com --version 7.5.16+vmware.1-tkg.1 --values-file grafana-data-values.yaml --namespace tanzu-system-dashboards --create-namespace
+   # kubectl create namespace tanzu-system-dashboards
+   # kubectl create namespace tanzu-grafana-dashboards
+   #  tanzu package install grafana --package-name grafana.tanzu.vmware.com --version 7.5.16+vmware.1-tkg.2 --values-file grafana-data-values.yaml --namespace tanzu-grafana-dashboards
 
-    8:14:31AM: Deploy succeeded
+    8:12:41AM: Creating service account 'grafana-tanzu-system-dashboards-sa'
+    8:12:42AM: Creating cluster admin role 'grafana-tanzu-system-dashboards-cluster-role'
+    8:12:42AM: Creating cluster role binding 'grafana-tanzu-system-dashboards-cluster-rolebinding'
+    8:12:42AM: Creating secret 'grafana-tanzu-system-dashboards-values'
+    8:12:42AM: Creating overlay secrets
+    8:12:42AM: Creating package install resource
+    8:12:42AM: Waiting for PackageInstall reconciliation for 'grafana'
+            | 8:14:19AM: ongoing: reconcile deployment/grafana (apps/v1) namespace: tanzu-system-dashboards
+            | 8:14:19AM:  ^ Waiting for 1 unavailable replicas
+            | 8:14:19AM:  L ok: waiting on replicaset/grafana-58656c5f9b (apps/v1) namespace: tanzu-system-dashboards
+            | 8:14:19AM:  L ongoing: waiting on pod/grafana-58656c5f9b-mjphv (v1) namespace: tanzu-system-dashboards
+            | 8:14:19AM:     ^ Condition Ready is not True (False)
+            | 8:14:31AM: ok: reconcile deployment/grafana (apps/v1) namespace: tanzu-system-dashboards
+            | 8:14:31AM: ---- applying complete [18/18 done] ----
+            | 8:14:31AM: ---- waiting complete [18/18 done] ----
+            | Succeeded
+   8:14:31AM: Deploy succeeded
     ```
 
 1. Confirm that the Grafana package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get grafana -n tanzu-system-dashboards
+    # tanzu package installed get grafana -n tanzu-grafana-dashboards
 
     NAME:                    grafana
     PACKAGE-NAME:            grafana.tanzu.vmware.com
@@ -2064,7 +2141,7 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
 2.  Retrieve the template of the Fluent Bit package’s default configuration.
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages fluent-bit.tanzu.vmware.com.1.9.5+vmware.1-tkg.1  -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages fluent-bit.tanzu.vmware.com.1.9.5+vmware.1-tkg.1  -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
 
     imgpkg pull -b $image_url -o /tmp/fluent-bit-1.9.5+vmware.1-tkg.1 --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
@@ -2094,18 +2171,28 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
 4. Deploy Fluent Bit.
 
     ```bash
-    # tanzu package install fluent-bit --package-name fluent-bit.tanzu.vmware.com --version 1.8.15+vmware.1-tkg.1 --namespace tanzu-system-logging --create-namespace
+    # kubectl create namespace tanzu-system-logging
+    # kubectl create namespace tanzu-fluent-bit-logging
 
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
+     tanzu package install fluent-bit --package-name fluent-bit.tanzu.vmware.com --version 1.9.5+vmware.1-tkg.1 --namespace tanzu-fluent-bit-logging --values-file fluent-bit-data-values.yaml
 
+    ℹ   Installing package 'fluent-bit.tanzu.vmware.com'
+    ℹ   Getting package metadata for 'fluent-bit.tanzu.vmware.com'
+    ℹ   Creating service account 'fluent-bit-tanzu-fluent-bit-logging-sa'
+    ℹ   Creating cluster admin role 'fluent-bit-tanzu-fluent-bit-logging-cluster-role'
+    ℹ   Creating cluster role binding 'fluent-bit-tanzu-fluent-bit-logging-cluster-rolebinding'
+    ℹ   Creating package resource
+    ℹ   Waiting for 'PackageInstall' reconciliation for 'fluent-bit'
+    ℹ   'PackageInstall' resource install status: Reconciling
+    ℹ   'PackageInstall' resource install status: ReconcileSucceeded
+    ℹ
     Added installed package 'fluent-bit'
     ```
 
 5. Confirm that the Fluent Bit package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get fluent-bit -n tanzu-system-logging
+    # tanzu package installed get fluent-bit --namespace tanzu-fluent-bit-logging
 
     NAME:                    fluent-bit
     PACKAGE-NAME:            fluent-bit.tanzu.vmware.com
