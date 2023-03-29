@@ -176,7 +176,7 @@ IP address allocation for virtual services can be over DHCP or using NSX Advance
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
 |TKO-TKG-001|Use NSX Advanced Load Balancer as your control plane endpoint provider and for application load balancing.|AVI is tightly coupled with TKG and vSphere. <br>Since AVI is a VMware product customers will have single point of contact for Support.| Adds NSX Advanced Load Balancer  License Cost to the solution  |
-|TKO-TKG-002|Deploy Tanzu Kubernetes Management clusters in large form factor|Large form factor should suffice to integrate TKG Mgmt Cluster with TMC, pinniped and velero deployment. This must be capable of accommodating 100+ Tanzu Workload Clusters|<p> Consume more Resources from Infrastructure. </p><p></p>|
+|TKO-TKG-002|Deploy Tanzu Kubernetes Management clusters in large form factor|Large form factor should suffice for pinniped and velero deployment. This must be capable of accommodating 100+ Tanzu Workload Clusters|<p> Consume more Resources from Infrastructure. </p><p></p>|
 |TKO-TKG-003|Deploy Tanzu Kubernetes clusters with prod plan.|This deploys multiple control plane nodes and provides high availability for the control plane.|Consume more Resources from Infrastructure. |
 |TKO-TKG-004|Enable identity management for Tanzu Kubernetes Grid clusters.|Role-based access control to Tanzu Kubernetes Grid clusters.| Required External Identity Management</p>|
 |TKO-TKG-005|Enable Machine Health Checks for TKG clusters.|MachineHealthCheck controller helps to provide health monitoring and auto-repair for management and workload clusters Machines.| NA|
