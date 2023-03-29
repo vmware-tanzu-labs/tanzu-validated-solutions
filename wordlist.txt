@@ -26,6 +26,7 @@ ECMP
 FIPS
 firewalling
 fluentbit
+fromtar
 Gbps
 Geneve
 grafana
@@ -104,4 +105,3 @@ VNET
 vsphere
 VXLAN
 Xeon
-fromtar
