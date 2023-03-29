@@ -42,6 +42,7 @@ Before deploying the Tanzu Kubernetes Grid in the vSphere environment, ensure th
 - vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 **Note:** You can also download and import supported older versions of Kubernetes in order to deploy workload clusters on the intended Kubernetes versions.
+**Note:** In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623)
 
 ### Resource Pools and VM Folders
 The sample entries of the resource pools and folders that need to be created are as follows.
@@ -169,8 +170,8 @@ Ensure the following:
 1. Copy the Files to the bootstrap Machine after bootstrap Machine deployment.
 
     Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other medium:
-   * The Image TAR files.
-   * The YAML files
+   * Image TAR files
+   * YAML files
 
 
 ## <a id=install-harbor> </a> Install Harbor Image Registry
@@ -195,7 +196,7 @@ For this deployment, a Photon-based virtual machine is used as the bootstrap mac
 
 The bootstrap machine must meet the following prerequisites:
 
-   * A minimum of 6 GB of RAM,  2-core CPU , 160 Storage GB .
+   * A minimum of 6 GB of RAM, 2-core CPU, 160 Storage GB .
    * System time is synchronized with a Network Time Protocol (NTP) server.
    * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
    * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
@@ -203,8 +204,8 @@ The bootstrap machine must meet the following prerequisites:
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
 1. Copy  Files to  bootstrap Machine.<p>
    Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
-   * The Image TAR files.
-   * The YAML files
+   * Image TAR files
+   * YAML files
 1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
    * VMware Tanzu CLI 2.1.0 for Linux
@@ -239,7 +240,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
       ```bash
      docker login <URL>
       ```
-   Note:- If your private registry uses a self-signed certificate, save the CA certificate of the registry in "/etc/docker/certs.d/registry.example.com/ca.crt"
+   **Note** If your private registry uses a self-signed certificate, save the CA certificate of the registry in "/etc/docker/certs.d/registry.example.com/ca.crt"
 1. Upload the Images to the Private Registry.
       ```bash
      tanzu isolated-cluster upload-bundle --source-directory <SOURCE-DIRECTORY> --destination-repo <DESTINATION-REGISTRY> --ca-certificate <SECURITY-CERTIFICATE>
@@ -247,10 +248,10 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     * SOURCE-DIRECTORY is the path to the location where the image TAR files are stored.
     * DESTINATION-REGISTRY is the path to the private registry where the images will be hosted in the air-gapped environment.
     * SECURITY-CERTIFICATE is the security certificate of the private registry where the images will be hosted in the proxied or air-gapped environment. 
-      ```bash
+    ```bash
      Example:- tanzu isolated-cluster upload-bundle --source-directory ./ --destination-repo registry.example.com/library --ca-certificate /etc/docker/certs.d/registry.example.com/ca.crt
       ```
-  Note :- we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
+  **Note** we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
 
 1. Install the kubectl utility.
 
@@ -299,10 +300,10 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
       export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=false
 
       export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
-
       ```
-  Note:If we reboot the VM , this setting will go to default 
-1. Initialize Tanzu Kubernetes Grid and Install Tanzu CLI plugins.
+  **Note** If we reboot the VM, above configuration will be set to default.
+
+1. Initialize Tanzu Kubernetes Grid and install Tanzu CLI plugins.
 
       ```bash
       ### Initialize Tanzu Kubernetes Grid 
@@ -686,7 +687,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     ![Create service engine group - basic settings](img/tkg-airgap-vsphere-deploy/27.ALB-SE.png)
 
-    For advanced configuration, click on the Advanced tab, specify a specific cluster and datastore for service engine placement, change the NSX_ALB SE folder name, and service engine name prefix, and click **Save**.
+    For advanced configuration, click on the **Advanced tab**, specify a specific cluster and datastore for service engine placement, change the NSX_ALB SE folder name, and service engine name prefix, and click **Save**.
 
     ![Create service engine group - advanced settings](img/tkg-airgap-vsphere-deploy/28.ALB-SE-Group2.png)  
 
@@ -1019,7 +1020,7 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 
 #! ---------------------------------------------------------------------
 ```
-To create Managment Cluster execute the following command:
+To create Management Cluster execute the following command:
 ```bash
 tanzu management-cluster create --file config.yaml
 ```
