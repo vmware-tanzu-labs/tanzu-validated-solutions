@@ -397,7 +397,7 @@ The following components are created in NSX Advanced Load Balancer.
 
 | Object | Sample Name |
 | --- | --- |
-| NSX Cloud | tanzu-nsx |
+| NSX Cloud | sfo01w01vc01|
 | Service Engine Group 1 | sfo01m01segroup01|
 | Service Engine Group 2 | sfo01w01segroup01 |
 
@@ -461,7 +461,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     | Parameter | Value |
     | --- | --- |
-    | High availability mode | Active/Active |
+    | High availability mode | N+M |
     | VS Placement | Compact |
     | Memory per Service Engine | 4 |
     | vCPU per Service Engine | 2 |
@@ -517,7 +517,7 @@ To configure IP address pools for the networks, follow this procedure:
 
    The default gateway for the `sfo01-w01-vds01-albmanagement` network is set in the global VRF context and for the `sfo01-w01-vds01-tkgclustervip` network, the VRF Context is set to NSX tier-1 gateway.
 
-   To set the default gateway for the `asfo01-w01-vds01-albmanagement` network, click **CREATE** under the global VRF context and set the default gateway to gateway of the NSX Advanced Load Balancer management subnet.
+   To set the default gateway for the `asfo01-w01-vds01-albmanagement` network, click **ADD** Static Route under the global VRF context and set the default gateway to gateway of the NSX Advanced Load Balancer management subnet.
 
    ![Configure default gateway of the Advanced Load Balancer management network](img/tkg-airgap-nsxt/alb40.png)
 
@@ -556,7 +556,7 @@ Complete the following steps to create an IPAM profile and once created, attach 
 
 3. Attach the IPAM and DNS profiles to the NSX-T cloud.
     1. Navigate to **Infrastructure** > **Clouds**.
-    2. Edit the `tanzu-nsx` cloud.
+    2. Edit the `sfo01w01vc01` cloud.
     3. Under IPAM/DNS section, choose the IPAM and DNS profiles created earlier and save the updated configuration.  
 
      ![Select IPAM and DNS profiles](img/tkg-airgap-nsxt/alb46.png)
@@ -580,7 +580,7 @@ The bastion host needs to be deployed with the following hardware configuration:
 
 - CPU: 1
 - Memory: 4 GB
-- Storage (HDD): 200 GB or greater.
+- Storage (HDD): 160 GB or greater.
 
 **Note:** The following instructions are for CentOS 7. If you are using any other operating system for your bastion host, change the commands accordingly.
 
@@ -734,10 +734,11 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     * SOURCE-DIRECTORY is the path to the location where the image TAR files are stored.
     * DESTINATION-REGISTRY is the path to the private registry where the images will be hosted in the air-gapped environment.
     * SECURITY-CERTIFICATE is the security certificate of the private registry where the images will be hosted in the proxied or air-gapped environment. 
-      ```bash
+      
+    ```bash
      Example:- tanzu isolated-cluster upload-bundle --source-directory ./ --destination-repo registry.example.com/library --ca-certificate /etc/docker/certs.d/registry.example.com/ca.crt
       ```
-  Note :- we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
+  **Note** :- we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
 
 1. Install the kubectl utility.
 
@@ -972,7 +973,7 @@ The templates include all of the options that are relevant to deploying manageme
 
 **Important:** The environment variables that you have set, override values from a cluster configuration file. To use all settings from a cluster configuration file, unset any conflicting environment variables before you deploy the management cluster from the CLI.<p>
 **Important:** Image repository configuration is very important details which will not be part of default config file when we are creating from TKG UI.<p>
-**Important:** Insert the key `AVI_NSXT_T1LR`. The value of this key is the tier-1 gateway where you have connected the `tkg management network` network. In this example, the value is set to `tanzu-t1-gw`.
+**Important:** Insert the key `AVI_NSXT_T1LR`. The value of this key is the tier-1 gateway where you have connected the `tkg management network` network.
 
 ```yaml
 #! ---------------------------------------------------------------------
@@ -1707,7 +1708,6 @@ The first package that you should install on your cluster is the [**cert-manager
     ℹ   'PackageInstall' resource install status: Reconciling
     ℹ   'PackageInstall' resource install status: ReconcileSucceeded
     ℹ   'PackageInstall' resource successfully reconciled
-
     ```
 
 1. Confirm that the `cert-manager` package has been installed successfully and the status is `Reconcile succeeded`.
