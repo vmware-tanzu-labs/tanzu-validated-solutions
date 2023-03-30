@@ -205,6 +205,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
    * Image TAR files
    * YAML files
+
 1. Copy the following Linux CLI packages from Bastion Host.
 
    * VMware Tanzu CLI 2.1.0 for Linux
