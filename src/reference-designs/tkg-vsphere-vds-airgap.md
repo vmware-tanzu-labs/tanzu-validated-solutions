@@ -257,7 +257,7 @@ The following table provides a list of firewall rules based on the assumption th
 |**Source**|**Destination**|**Protocol:Port**|**Description**|
 | --- | --- | --- | --- |
 |Bastion Host|Internet|TCP:80/443|To download installation binaries required for TKG installation.|
-|Bootstrap VM|vCenter Server|TCP:443|To create resource pools, VM folders, etc. in vCenter.|
+|Bootstrap VM|vCenter Server|TCP:443|To create resource pools, VM folders and so on in vCenter.|
 |Bootstrap VM|NSX ALB Controller nodes and Cluster IP Address.|TCP:443|To access the NSX ALB portal for configuration.|
 |<p>TKG Management Network CIDR</p><p></p><p>TKG Workload Network CIDR.</p>|<p>DNS Server</p><p><br></p><p>NTP Server</p>|<p>UDP:53</p><p><br></p><p>UDP:123</p>|<p>DNS Service </p><p><br></p><p>Time Synchronization</p>|
 |<p>TKG Management Network CIDR</p><p></p><p>TKG Workload Network CIDR.</p>|DHCP Server|UDP: 67, 68|Allows TKG nodes to get DHCP addresses.|
@@ -327,7 +327,7 @@ The following table provides general recommendations on when you should use a sp
 |**Ingress Controller**|**Use Cases**|
 | --- | --- |
 |Contour|<p>Use contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for north-south traffic by defining the policies in the applications manifest file.</p><p></p><p>Contour is a reliable solution for simple Kubernetes workloads. </p>|
-|NSX ALB Ingress controller|Use the NSX ALB ingress controller when a containerized application requires features like local and global server load balancing (GSLB), web application firewall, performance monitoring, direct routing from LB to pod, etc.|
+|NSX ALB Ingress controller|Use the NSX ALB ingress controller when a containerized application requires features like local and global server load balancing (GSLB), web application firewall, performance monitoring, direct routing from LB to pod and so on.|
 |Istio|Use Istio ingress controller when you intend to provide security, traffic direction, and insights within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic).|
 
 ### NSX ALB as in L4+L7 Ingress Service Provider
