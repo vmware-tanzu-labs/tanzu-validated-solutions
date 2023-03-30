@@ -471,7 +471,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     | Parameter | Value |
     | --- | --- |
-    | High availability mode | Active/Active |
+    | High availability mode | N + M |
     | VS Placement | Compact |
     | Memory per Service Engine | 4 |
     | vCPU per Service Engine | 2 |
