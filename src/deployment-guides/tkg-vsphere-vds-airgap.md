@@ -11,13 +11,14 @@ The scope of this document is limited to providing deployment steps based on the
 The following table provides the component versions and interoperability matrix supported with the reference design:
 
 |**Software Components**|**Version**|
-| --- | --- |
-|Tanzu Kubernetes Grid|1.6.0|
-|VMware vSphere ESXi|7.0 U3 |
-|VMware vCenter Server|7.0 U3 |
-|NSX Advanced Load Balancer|21.1.4|
+| ---| --- |
+|Tanzu Kubernetes Grid|2.1.x|
+|VMware vSphere ESXi|7.0U3 and later|
+|VMware vCenter (VCSA)|7.0U3 and later|
+|VMware vSAN|7.0U3 and later|
+|NSX Advanced LB|22.1.2 |
 
-For up-to-date interoperability information about other VMware products and versions, see the [VMware Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,8803&row=789,%262,%26912,).
+For the latest information, see [VMware Product Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
 
 ## Prepare your Environment for Deploying Tanzu Kubernetes Grid
 
@@ -38,9 +39,10 @@ Before deploying the Tanzu Kubernetes Grid in the vSphere environment, ensure th
   - Network Time Protocol (NTP) service is running on all ESXi hosts and vCenter and time is synchronized from the centralized NTP servers.
   - A host/server/VM based on Linux that acts as your **bastion host** and is located **outside the Internet-restricted environment (i.e. connected to the Internet)**. The installation binaries for Tanzu Kubernetes Grid and NSX Advanced Load Balancer will be downloaded on this machine. You will need to transfer files from this bastion host to your Internet-restricted environment (proxy connection, shared drive, USB drive, sneakernet, etc.).
   - A host/server/VM **inside your Internet-restricted environment** based on Linux/Windows which acts as your bootstrap machine and has Tanzu CLI, Kubectl and docker installed. This document makes use of a virtual machine based on CentOS. An internal Harbor registry will be installed on the same machine.
-- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 **Note:** You can also download and import supported older versions of Kubernetes in order to deploy workload clusters on the intended Kubernetes versions.
+**Note:** In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623)
 
 ### Resource Pools and VM Folders
 The sample entries of the resource pools and folders that need to be created are as follows.
@@ -64,12 +66,12 @@ For the purpose of this demonstration, this document makes use of the following 
 
 |**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
-|NSX ALB Management Network|nsx_alb_management_pg|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
-|TKG Management Network|tkg_mgmt_pg|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
-|TKG Management VIP Network|tkg_mgmt_vip_pg|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
-|TKG Cluster VIP Network|tkg_cluster_vip_pg|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
-|TKG Workload VIP Network|tkg_workload_vip_pg|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
-|TKG Workload Segment|tkg_workload_pg|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
+|NSX ALB Management Network|sfo01-w01-vds01-albmanagement|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
+|TKG Management Network|sfo01-w01-vds01-tkgmanagement|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
+|TKG Management VIP Network|sfo01-w01-vds01-tkgmanagementvip|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
+|TKG Cluster VIP Network|sfo01-w01-vds01-tkgclustervip|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
+|TKG Workload VIP Network|sfo01-w01-vds01-tkgworkloadvip|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
+|TKG Workload Segment|sfo01-w01-vds01-tkgworkload|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
 
 ## Deployment Overview
 Here are the high-level steps for deploying Tanzu Kubernetes Grid on vSphere VDS networking in an air-gap environment:
@@ -122,9 +124,9 @@ Ensure the following:
 
 2. Download installation binaries from the [Harbor GitHub repository](https://github.com/goharbor/harbor/releases/tag/v2.3.3). 
 
-3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/21_1_x).
+3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/22_1_x).
 
-4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/details?downloadGroup=TKG-160&productId=988&rPId=90871). Tanzu CLI and Plugins need to be installed on the bastion host and the bootstrap machine.
+4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). Tanzu CLI and Plugins need to be installed on the bastion host and the bootstrap machine.
 
 5. Download the [yq](https://github.com/mikefarah/yq) installation binary from [mikefarah / yq](https://github.com/mikefarah/yq/releases/tag/v4.25.2) GitHub repository.
 
@@ -137,7 +139,7 @@ Ensure the following:
     ```bash
     tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
     cd ./cli/
-    sudo install core/v0.25.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
     ```
     Run the `tanzu version` command to check that the correct version of tanzu is installed and executable.
@@ -145,196 +147,32 @@ Ensure the following:
     ```bash
     # tanzu version
 
-    version: v0.25.0
-    buildDate: 2022-08-25
-    sha: 6288c751-dirty
+    version: v0.28.0
+    buildDate: 2023-01-20
+    sha: 3c34115bc-dirty
     ```
+1. Download the Images .
 
-1. Install [imgpkg](https://carvel.dev/imgpkg/).
-
-    imgpkg is a tool that enables Kubernetes to store configurations and the associated container images as OCI images and to transfer these images.
+    Before performing this step, ensure that the disk partition where you download the images has 45 GB of available space.
 
     ```bash
-    gunzip imgpkg-linux-amd64-v0.29.0+vmware.1.gz
-    chmod ugo+x imgpkg-linux-amd64-v0.29.0+vmware.1 && mv ./imgpkg-linux-amd64-v0.29.0+vmware.1 /usr/local/bin/imgpkg
+    tanzu isolated-cluster download-bundle --source-repo <SOURCE-REGISTRY> --tkg-version <TKG-VERSION> --ca-certificate <SECURITY-CERTIFICATE>
     ```
 
-1. Install the Tanzu CLI plugins.
-
-    The Tanzu CLI plugins provides commands for Tanzu Kubernetes cluster management and feature operations.
-
-    Running the `tanzu init` command for the first time installs the necessary Tanzu Kubernetes Grid configuration files in the `~/.config/tanzu/tkg` folder on your system. The script that you create and run in subsequent steps requires the Bill of Materials (BoM) YAML files in the `~/.config/tanzu/tkg/bom` folder to be present on your machine. The scripts in this procedure use the BoM files to identify the correct versions of the different Tanzu Kubernetes Grid component images to pull.
-
+   * SOURCE-REGISTRY is the IP address or the hostname of the registry where the images are stored.
+   * TKG-VERSION is the version of Tanzu Kubernetes Grid that you want to deploy in the proxied or air-gapped environment.
+   * SECURITY-CERTIFICATE is the security certificate of the registry where the images are stored. To bypass the security certificate validation, use --insecure, instead of --ca-certificate. Both the strings are optional. If you do not specify any value, the system validates the default server security certificate.
     ```bash
-    # tanzu init
-
-    Checking for required plugins...
-    Installing plugin 'login:v0.25.0'
-    Installing plugin 'management-cluster:v0.25.0'
-    Installing plugin 'package:v0.25.0'
-    Installing plugin 'pinniped-auth:v0.25.0'
-    Installing plugin 'secret:v0.25.0'
-    Installing plugin 'telemetry:v0.25.0'
-    Successfully installed all required plugins
-    ✔  Done
+    tanzu isolated-cluster download-bundle --source-repo projects.registry.vmware.com/tkg --tkg-version v2.1.0
     ```
+   The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. After installing the Tanzu plugins, run the `tanzu plugin list` command to check the plugins version and installation status.
+1. Copy the Files to the bootstrap Machine after bootstrap Machine deployment.
 
-    ```bash
-    # tanzu plugin list
-    NAME                DESCRIPTION                                                        SCOPE       DISCOVERY  VERSION  STATUS
-    login               Login to the platform                                              Standalone  default    v0.25.0  installed
-    management-cluster  Kubernetes management-cluster operations                           Standalone  default    v0.25.0  installed
-    package             Tanzu package management                                           Standalone  default    v0.25.0  installed
-    pinniped-auth       Pinniped authentication operations (usually not directly invoked)  Standalone  default    v0.25.0  installed
-    secret              Tanzu secret management                                            Standalone  default    v0.25.0  installed
-    telemetry           Configure cluster-wide telemetry settings                          Standalone  default    v0.25.0  installed
-    ```
+    Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other medium:
+   * Image TAR files
+   * YAML files
 
-
-    Validate the BOM files by listing the contents in the `.config/tanzu/tkg/bom/` folder.
-
-    ```bash
-    ls .config/tanzu/tkg/bom/
-
-    tkg-bom-v1.6.0.yaml  tkr-bom-v1.23.8+vmware.1-tkg.1.yaml
-    ```
-
-1. Set the following environment variables.
-
-   - IP address or FQDN of your local image registry. 
-
-      ```bash
-      export TKG_CUSTOM_IMAGE_REPOSITORY="PRIVATE-REGISTRY"
-      ```
-
-      Where PRIVATE-REGISTRY is the IP address or FQDN of your private registry and the name of the project. For example, `registry.example.com/library`
-
-   - The repository from which to fetch Bill of Materials (BoM) YAML files.
-
-      ```bash
-      export TKG_IMAGE_REPO="projects.registry.vmware.com/tkg"
-
-      export TKG_BOM_IMAGE_TAG="v1.6.0"
-      ```
-
-   - If your private registry uses a self-signed certificate, provide the CA certificate of the registry in base64 encoded format. For example, `base64 -w 0 your-ca.crt`.
-
-      ```bash
-      export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE=LS0t[...]tLS0tLQ==
-      ```
-      This CA certificate is automatically injected into all Tanzu Kubernetes clusters that you create in this Tanzu Kubernetes Grid instance. 
-
-   - (Optional) Define the Tanzu Kubernetes releases (TKrs) to download. By default, the download script retrieves container images used in Tanzu Kubernetes Grid versions v1.3.0 and later. 
-
-      List all TKrs and their associations with a Tanzu Kubernetes Grid releases.
-
-      ```bash
-      imgpkg pull -i ${TKG_IMAGE_REPO}/tkr-compatibility:v$(imgpkg tag list -i ${TKG_IMAGE_REPO}/tkr-compatibility |sed 's/v//' |sort -rn |head -1) --output "tkr-tmp"; cat tkr-tmp/tkr-compatibility.yaml; rm -rf tkr-tmp
-      ```
-      For your Tanzu Kubernetes Grid version, note the supported Kubernetes versions. The one with the latest minor version is used by the management cluster. For example the Tanzu Kubernetes Grid v1.6.0 management cluster uses TKr v1.23.8_vmware.1-tkg.1.
-
-      Export as `DOWNLOAD_TKRS` a space-separated string of the TKrs required for your management cluster and workloads. For example, to download the images for Kubernetes v1.23 and v1.22 versions supported by Tanzu Kubernetes Grid v1.6.0:
-
-      ```bash
-      export DOWNLOAD_TKRS="v1.23.8_vmware.2-tkg.1 v1.22.11_vmware.2-tkg.1""
-      ```
-
-1. Prepare and execute the scripts for pulling Tanzu Kubernetes Grid installation binaries.
-
-   - Create a folder to collect Tanzu Kubernetes Grid installation binaries.
-
-      ```bash
-      mkdir -p /root/tkg-images && cd /root/tkg-images
-      ```
-   - Download the script `gen-publish-images-totar.sh`.
-
-      ```bash
-     wget https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/f07a8853e2462d96ec184abdb0a0a63b00d38a9a/hack/gen-publish-images-totar.sh
-      ```
-
-   - Make the `gen-publish-images-totar.sh` script executable.
-
-      ```bash
-      chmod +x gen-publish-images-totar.sh
-      ```
-
-   - Generate the `images-to-tar-list` file. 
-
-      ```bash
-      ./gen-publish-images.sh > images-to-tar-list
-      ```
-
-1. Run the `download-images.sh` script.
-
-   - Create the script using the following code snippet to download the Tanzu Kubernetes Grid installation binaries.
-
-      ```bash
-      #!/bin/bash
-
-        set -euo pipefail
-
-        images_script=${1:-}
-        if [ ! -f $images_script ]; then
-        echo "You may add your images list filename as an argument."
-        echo "E.g ./download-images.sh image-copy-list"
-        fi
-
-        commands="$(cat ${images_script} |grep imgpkg |sort |uniq)"
-
-        while IFS= read -r cmd; do
-        echo -e "\nrunning $cmd\n"
-        until $cmd; do
-            echo -e "\nDownload failed. Retrying....\n"
-            sleep 1
-        done
-        done <<< "$commands"
-      ```
-
-   - Make the `download-images script` executable.
-
-      ```bash
-      chmod +x download-images.sh
-      ```
-
-   - Run the `download-images.sh` script on the `images-to-tar-list` file to pull the required images from the public Tanzu Kubernetes Grid registry and save them as a TAR file.
-
-      ```bash
-      ./download-images.sh images-to-tar-list
-      ```
-      After the script has finished execution, you will see the required Tanzu Kubernetes Grid binaries in TAR format in the directory `tkg-images`. You will move the binaries to the bootstrap machine which is running inside the air-gap environment.
-
-1. Generate the `publish-images-fromtar.sh` script.
-
-    Run the script on the bootstrap machine after you have copied the download Tanzu Kubernetes Grid binaries onto the bootstrap VM. The script will copies the binaries from the bootstrap VM into the project in your private repository.
-
-   1. Download the script named `gen-publish-images-fromtar.sh`.
-
-      ```bash
-      wget https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-fromtar.sh
-      ```
-
-   1. Make the `gen-publish-images-fromtar.sh` script executable.
-
-      ```bash
-      chmod +x gen-publish-images-fromtar.sh
-      ```
-
-   1. Generate a `publish-images-fromtar.sh` shell script that is populated with the address of your private Docker registry.
-
-      ```bash
-      ./gen-publish-images-fromtar.sh > publish-images-fromtar.sh
-      ```
-
-   1. Verify that the generated script contains the correct registry address.
-
-      ```bash
-      cat publish-images-fromtar.sh
-      ```
-   1. Transfer the generated `publish-images-fromtar.sh` script file to the bootstrap machine. 
-
-2. Move the binaries you downloaded to the bootstrap VM. 
 
 ## <a id=install-harbor> </a> Install Harbor Image Registry
 
@@ -346,7 +184,7 @@ To install Harbor, deploy an operating system of your choice with the following 
 - Memory: 8 GB
 - Storage (HDD): 160 GB
 
-Copy the Harbor binary from the bootstrap VM to the Harbor VM. Follow the instructions provided in [Harbor Installation and Configuration](https://goharbor.io/docs/2.3.0/install-config/) to deploy and configure Harbor.
+ Follow the instructions provided in [Harbor Installation and Configuration](https://goharbor.io/docs/2.3.0/install-config/) to deploy and configure Harbor.
 
 ## <a id=configure-bootstrap> </a> Deploy and Configure Bootstrap VM
 
@@ -354,47 +192,72 @@ The deployment of the Tanzu Kubernetes Grid management and workload clusters is 
 
 The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-install-cli.html).
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
 The bootstrap machine must meet the following prerequisites:
 
-   * A minimum of 6 GB of RAM and a 2-core CPU.
+   * A minimum of 6 GB of RAM, 2-core CPU, 160 Storage GB .
    * System time is synchronized with a Network Time Protocol (NTP) server.
    * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
-   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `tkg_mgmt_pg`.
+   * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
+1. Copy  Files to  bootstrap Machine.<p>
+   Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
+   * Image TAR files
+   * YAML files
+1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
-1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384).
-
-   * VMware Tanzu CLI 1.6.0 for Linux
-   * kubectl cluster CLI v1.23.8 for Linux
+   * VMware Tanzu CLI 2.1.0 for Linux
+   * kubectl cluster CLI v1.24.9 for Linux
 
 1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
     ```bash
     ## Install required packages
-    tdnf install tar zip unzip wget -y
+    install tar, zip, unzip, wget
 
     ## Install Tanzu Kubernetes Grid CLI
     tar -xvf tanzu-cli-bundle-linux-amd64.tar.gz
     cd ./cli/
-    sudo install core/v0.25.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
+    sudo install core/v0.28.0/tanzu-core-linux_amd64 /usr/local/bin/tanzu
     chmod +x /usr/local/bin/tanzu
 
     ## Verify Tanzu CLI version
 
      [root@tkg160-bootstrap ~] # tanzu version
 
-    version: v0.25.0
-    buildDate: 2022-08-25
+    version: v0.28.0
+    buildDate: 2023-01-20
     sha: 6288c751-dirty
     ```
+1. Install the isolated-cluster plugin on the offline bootstrap machine:
+
+      ```bash
+     tanzu plugin install isolated-cluster --local standalone-plugins/
+
+      ```
+1. Log in to the Private Registry on the Offline Machine.
+      ```bash
+     docker login <URL>
+      ```
+   **Note** If your private registry uses a self-signed certificate, save the CA certificate of the registry in "/etc/docker/certs.d/registry.example.com/ca.crt"
+1. Upload the Images to the Private Registry.
+      ```bash
+     tanzu isolated-cluster upload-bundle --source-directory <SOURCE-DIRECTORY> --destination-repo <DESTINATION-REGISTRY> --ca-certificate <SECURITY-CERTIFICATE>
+      ```
+    * SOURCE-DIRECTORY is the path to the location where the image TAR files are stored.
+    * DESTINATION-REGISTRY is the path to the private registry where the images will be hosted in the air-gapped environment.
+    * SECURITY-CERTIFICATE is the security certificate of the private registry where the images will be hosted in the proxied or air-gapped environment. 
+    ```bash
+     Example:- tanzu isolated-cluster upload-bundle --source-directory ./ --destination-repo registry.example.com/library --ca-certificate /etc/docker/certs.d/registry.example.com/ca.crt
+      ```
+  **Note** we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
 
 1. Install the kubectl utility.
 
       ```bash
-     gunzip kubectl-linux-v1.23.8+vmware.2.gz
-     mv kubectl-linux-v1.23.8+vmware.2 /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+     gunzip kubectl-linux-v1.24.9+vmware.1.gz
+     mv kubectl-linux-v1.24.9+vmware.1.gz /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
       ```
 
       Run the `kubectl version --short=true` to check that the correct version of kubectl is installed and executable.
@@ -419,28 +282,28 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
       By default the Tanzu global config file, `config.yaml`, which gets created when you first run `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Because there is no Internet in the environment, the commands fails after some time.
 
-      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `config set` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
+      To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `export` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
 
       If your image registry is configured with a public signed CA certificate, set the following environment variables.
 
       ```bash
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
+      export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
 
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY true
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=false
       ```
 
       If your registry solution uses self-signed certificates, also add TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE in base64-encoded format to the global Tanzu CLI configuration file. For self-signed certificates, set the following environment variables:
 
       ```bash
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY custom-image-repository.io/yourproject
+      export TKG_CUSTOM_IMAGE_REPOSITORY=custom-image-repository.io/yourproject
 
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY false
+      export TKG_CUSTOM_IMAGE_REPOSITORY_SKIP_TLS_VERIFY=false
 
-      tanzu config set env.TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
-
+      export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
       ```
+  **Note** If we reboot the VM, above configuration will be set to default.
 
-1. Initialize Tanzu Kubernetes Grid and Install Tanzu CLI plugins.
+1. Initialize Tanzu Kubernetes Grid and install Tanzu CLI plugins.
 
       ```bash
       ### Initialize Tanzu Kubernetes Grid 
@@ -470,23 +333,18 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
         ```bash
         cd ./cli
 
-        gunzip ytt-linux-amd64-v0.41.1+vmware.1.gz
+        ytt-linux-amd64-v0.43.1+vmware.1.gz
 
-        mv ytt-linux-amd64-v0.41.1+vmware.1 /usr/local/bin/ytt
-
-        chmod +x /usr/local/bin/ytt
-
+        chmod ugo+x ytt-linux-amd64-v0.43.1+vmware.1 &&  mv ./ytt-linux-amd64-v0.43.1+vmware.1 /usr/local/bin/ytt
         ```
         Run `ytt --version` to check that the correct version of ytt is installed and executable
 
    1. Install kapp.
 
       ```bash
-      gunzip kapp-linux-amd64-v0.49.0+vmware.1.gz
+      gunzip kapp-linux-amd64-v0.53.2+vmware.1.gz
 
-      mv kapp-linux-amd64-v0.49.0+vmware.1 /usr/local/bin/kapp
-
-      chmod +x /usr/local/bin/kapp
+      chmod ugo+x kapp-linux-amd64-v0.53.2+vmware.1 && mv ./kapp-linux-amd64-v0.53.2+vmware.1 /usr/local/bin/kapp
       ```
 
       Run `kapp --version` to check that the correct version of kapp is installed and executable.
@@ -494,11 +352,9 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    2. Install kbld.
 
       ```bash
-      gunzip kbld-linux-amd64-v0.34.0+vmware.1.gz
+      gunzip kbld-linux-amd64-v0.35.1+vmware.1.gz
 
-      mv kbld-linux-amd64-v0.34.0+vmware.1 /usr/local/bin/kbld
-
-      chmod +x /usr/local/bin/kbld
+      chmod ugo+x kbld-linux-amd64-v0.35.1+vmware.1 && mv ./kbld-linux-amd64-v0.35.1+vmware.1 /usr/local/bin/kbld
       ```
 
       Run `kbld --version` to check that the correct version of kbld is installed and executable.
@@ -506,20 +362,18 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    3. Install imgpkg.
 
       ```bash
-      gunzip imgpkg-linux-amd64-v0.29.0+vmware.1.gz
-      mv imgpkg-linux-amd64-v0.29.0+vmware.1 /usr/local/bin/imgpkg
-      chmod +x /usr/local/bin/imgpkg
+      gunzip imgpkg-linux-amd64-v0.31.1+vmware.1.gz
+      chmod ugo+x imgpkg-linux-amd64-v0.31.1+vmware.1 && mv ./imgpkg-linux-amd64-v0.31.1+vmware.1 /usr/local/bin/imgpkg
       ```
 
       Run `imgpkg --version` to check that the correct version of imgpkg is installed and executable.
 
 1. Install yq.
 
-    yq a lightweight and portable command-line YAML processor. 
+    yq a lightweight and portable command-line YAML processor.
+    Download [yq](https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz)
 
     ```bash
-    wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz
-
     tar -zxvf yq_linux_amd64.tar.gz
 
     mv yq_linux_amd64 /usr/local/bin/
@@ -571,31 +425,15 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     sudo sysctl net/netfilter/nf_conntrack_max=131072
    ```
 
-1. Push Tanzu Kubernetes Grid installation binaries to your private image registry.
-
-    Navigate to the folder which contains all Tanzu Kubernetes Grid binaries and the `publish-images-fromtar.sh` file that you have copied from the bastion host and then execute the following command to push the binaries to your private image registry. 
-
-    ```bash
-    ### Make the publish-images-fromtar.sh script executable.
-
-    chmod +x publish-images-fromtar.sh
-
-    ### Execute the publish-images-fromtar.sh script
-
-    sh publish-images-fromtar.sh
-    ```
-
-Now all the required packages are installed and required configurations are in place on the bootstrap virtual machine.
-
 ### Import the Base Image Template in vCenter Server
 
 Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
 
-1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
+1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
 
 * For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.23.8 OVA.
 
-     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-build-images-index.html).
+     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
 * For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
     **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
@@ -612,7 +450,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
 
-For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-vsphere.html#required-permissions-for-the-vsphere-account-5).
+For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 ### Import NSX Advanced Load Balancer in Content Library
 
@@ -632,10 +470,10 @@ The following table provides a sample IP address and FQDN set for the NSX Advanc
 
 |**Controller Node**|**IP Address**|**FQDN**|
 | --- | --- | --- |
-|Node 1 Primary|172.16.10.11|`alb-ctlr01.lab.vmw`|
-|Node 2 Secondary|172.16.10.12|`alb-ctlr02.lab.vmw`|
-|Node 3 Secondary |172.16.10.13|`alb-ctlr03.lab.vmw`|
-|HA Address|172.16.10.10|`alb-ha.lab.vmw`|
+|Node 1 Primary|172.16.10.11|`sfo01albctlr01a.sfo01.rainpole.local`|
+|Node 2 Secondary|172.16.10.12|`sfo01albctlr01b.sfo01.rainpole.local`|
+|Node 3 Secondary |172.16.10.13|`sfo01albctlr01c.sfo01.rainpole.local`|
+|HA Address|172.16.10.10|`sfo01albctlr01.sfo01.rainpole.local`|
 
 Follow these steps to deploy and configure NSX Advanced Load Balancer:
 
@@ -760,7 +598,7 @@ The configuration of the primary (leader) controller is synchronized to the new 
 
 ### <a id="nsx-alb-cert-mgmt"> </a> NSX Advanced Load Balancer: Certificate Management
 
-The default system-generated controller certificate generated for SSL/TSL connections does not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
+The default system-generated controller certificate generated for SSL/TSL connections will not have the required subject alternate name (SAN) entries. Complete the following steps to create a controller certificate:
 
 1. Log in to the NSX Advanced Load Balancer controller and go to **Templates** > **Security** > **SSL/TLS Certificates**.
 
@@ -791,60 +629,57 @@ NSX Advanced Load Balancer can be deployed in multiple environments for the same
 * Virtual services that load balances control plane nodes of Management Cluster and Shared services cluster.
 * Virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid management cluster and Shared services cluster.
 
-**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes & virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
-
+**Service Engine Group 2**: Service engines part of this service engine group hosts virtual services that load balances control plane nodes and virtual services for all load balancer functionalities requested by the workload clusters mapped to this SE group. 
 
 **Note**:
 
 * Based on your requirements, you can create additional SE groups for the workload clusters.
 * Multiple workload clusters can be mapped to a single SE group.
 * A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
-* Control plane VIP for the workload clusters is placed on the respective SE group assigned through AKO Deployment Config (ADC) during cluster creation.
+* Control plane VIP for the workload clusters will be placed on the respective Service Engine group assigned through AKO Deployment Config (ADC) during cluster creation.
 
 For information about mapping a specific service engine group to Tanzu Kubernetes Grid workload cluster, see [Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster](#workloadalb).
 
-The following components are created in NSX Advanced Load Balancer.
-
-<!-- /* cSpell:disable */ -->
-
-| **Object** | **Sample Name** |
-| --- | --- |
-| vCenter Cloud | tanzu-vcenter01 |
-| Service Engine Group 1 | tanzu-mgmt-segroup-01 |
-| Service Engine Group 2 | tanzu-wkld-segroup-01 |
-
-<!-- /* cSpell:enable */ -->
 
 1. Log in to NSX Advanced Load Balancer and go to **Infrastructure** > **Clouds** > **Create** > **VMware vCenter/vSphere ESX**.
 
     ![Create vCenter Cloud](img/tkg-airgap-vsphere-deploy/21.ALB-Clouds.png)
 
-1. Enter cloud name and click **Next**.
+1. Under **General** pane, in the **Name** field, enter a Cloud name. 
 
     ![Enter cloud name](img/tkg-airgap-vsphere-deploy/22.ALB-Clouds-1.png)
 
-1. Under the **Infrastructure** pane, enter vCenter address, username, and password, set **Access Permission** to Write and click **Next**.
+1. Under the **vCenter/vSphere** pane, enter information for * vCenter address*, *Username*, and *Password* fields and  click **CONNECT**.
 
     ![Enter infrastructure information for vCenter Cloud](img/tkg-airgap-vsphere-deploy/23.ALB-Clouds-2.png)
 
-1. Under the **Data Center** pane, choose the data center for NSX Advanced Load Balancer to discover infrastructure resources.
+1. Under the **Data Center** pane, choose the data center from the Data Center dropdown.Select **Content Library** for SE template and click **SAVE & LAUNCH**.
 
     ![Select data center](img/tkg-airgap-vsphere-deploy/24.ALB-Clouds-3.png)
 
-1. Under the **Network** pane, choose the NSX Advanced Load Balancer management network for service engines and enter a static IP address pool for SEs and VIP, and click **Complete**.
+1. Select the Management Network from the **Management Network** drop down to choose the NSX Advanced Load Balancer management network for service engines. Enter a static IP address pool for SEs and VIP, and click **Complete**.
     ![Enter network information](img/tkg-airgap-vsphere-deploy/25.ALB-Clouds-4.png)
 
 1. Wait for the cloud to get configured and the status to turn green.
 
     ![Wait for completion](img/tkg-airgap-vsphere-deploy/26.ALB-Clouds-5.png)
 
-1. To create a service engine group for Tanzu Kubernetes Grid management clusters, navigate to **Infrastructure** > **Cloud Resources** > **Service Engine Group** tab, under Select Cloud choose the cloud created in the previous step, and click **Create**.
+1. To create a service engine group for Tanzu Kubernetes Grid management clusters, under **Infrastructure** tab, go to **Cloud Resources** > **Service Engine Group**.
+From the **Select Cloud** drop down, select the cloud created in the previous step and click **Create**.<p>
+The following components are created in NSX Advanced Load Balancer.
+
+   | **Object** | **Sample Name** |
+   | --- | --- |
+   | vCenter Cloud | sfo01w01vc01 |
+   | Service Engine Group 1 | sfo01m01segroup01 |
+   | Service Engine Group 2 | sfo01w01segroup01 |
+
 
 1. Enter a name for the Tanzu Kubernetes Grid management service engine group and set the following parameters:  
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | High availability mode | N+M (buffer) |
+    | High availability mode | Active/Active |
     | Memory per Service Engine | 4   |
     | vCPU per Service Engine | 2   |
 
@@ -852,7 +687,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     ![Create service engine group - basic settings](img/tkg-airgap-vsphere-deploy/27.ALB-SE.png)
 
-    For advanced configuration, click on the Advanced tab, specify a specific cluster and datastore for service engine placement, change the AVI SE folder name, and service engine name prefix, and click **Save**.
+    For advanced configuration, click on the **Advanced tab**, specify a specific cluster and datastore for service engine placement, change the NSX_ALB SE folder name, and service engine name prefix, and click **Save**.
 
     ![Create service engine group - advanced settings](img/tkg-airgap-vsphere-deploy/28.ALB-SE-Group2.png)  
 
@@ -863,7 +698,7 @@ The following components are created in NSX Advanced Load Balancer.
 
 #### Configure Tanzu Kubernetes Grid Networks in NSX Advanced Load Balancer
 
-As part of the cloud creation in NSX Advanced Load Balancer, only management network is configured in NSX Advanced Load Balancer. Complete the following steps to configure these networks:
+As part of the cloud creation in NSX Advanced Load Balancer, only management network has been configured in NSX Advanced Load Balancer. Complete the following steps to configure these networks:
 
    * TKG Management Network
    * TKG Workload Network
@@ -873,8 +708,7 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 
 1. Log in to NSX Advanced Load Balancer and go to **Infrastructure** > **Cloud Resources** > **Networks**.
 
-1. Select the desired cloud. All the networks available in vCenter are listed. 
-
+1. Select the desired cloud. All the networks available in vCenter are listed.
 
 1. Click on the edit icon next for the network and configure as follows. Change the provided details as per your SDDC configuration.
 
@@ -884,17 +718,18 @@ As part of the cloud creation in NSX Advanced Load Balancer, only management net
 
     | **Network Name** | **DHCP** | **Subnet** | **Static IP Pool** |
     | --- | --- | --- | --- |
-    | tkg_mgmt_pg | Yes | 172.16.40.0/24 | NA  |
-    | tkg_workload_pg | Yes | 172.16.60.0/24 | NA  |
-    | nsx_alb_management-pg | No  | 172.16.10.0/24 | 172.16.10.100 - 172.16.10.200 |
-    | tkg_cluster_vip_pg | No  | 172.16.80.0/24 | 172.16.80.100 - 172.16.80.200 |
-    | tkg_mgmt_vip_pg | No  | 172.16.50.0/24 | 172.16.50.100 - 172.16.50.200 |
-    | tkg_workload_vip_pg | No  | 172.16.70.0/24 | 172.16.70.100 - 172.16.70.200 |
+    | sfo01-w01-vds01-tkgmanagement | Yes | 172.16.40.0/24 | NA  |
+    | sfo01-w01-vds01-tkgworkload | Yes | 172.16.60.0/24 | NA  |
+    | sfo01-w01-vds01-tkgclustervip | No  | 172.16.80.0/24 | 172.16.80.100 - 172.16.80.200 |
+    | sfo01-w01-vds01-tkgmanagementvip | No  | 172.16.50.0/24 | 172.16.50.100 - 172.16.50.200 |
+    | sfo01-w01-vds01-tkgworkloadvip | No  | 172.16.70.0/24 | 172.16.70.100 - 172.16.70.200 |
     <!-- /* cSpell:enable */ -->
 
-    The following snippet shows an example network configuration: `tkg_cluster_vip_pg`
+    The following snippet shows an example network configuration: `sfo01-w01-vds01-tkgclustervip` , Same configuration should be applied in sfo01-w01-vds01-tkgmanagementvip and sfo01-w01-vds01-tkgworkloadvip
 
     ![Change network settings](img/tkg-airgap-vsphere-deploy/31.ALB-Networks-2.png)
+
+    sfo01-w01-vds01-tkgmanagement and sfo01-w01-vds01-tkgworkload network should be enabled with DHCP
 
     After the networks are configured, the configuration must look like the following image.
     ![Network list after configuration](img/tkg-airgap-vsphere-deploy/32.ALB-Networks-3.png)
@@ -911,10 +746,10 @@ Complete the following steps to create an IPAM profile and attach it to the vCen
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | Name | tanzu-vcenter-ipam-01 |
+    | Name | sfo01-w01-vcenter-ipam-01 |
     | Type | AVI Vintage IPAM |
     | Cloud for Usable Networks | Tanzu-vcenter-01 (created earlier in this deployment) |
-    | Usable Networks | tkg_cluster_vip_pg  <br>tkg_mgmt_vip_pg  <br>tkg_workload_vip_pg |
+    | Usable Networks | sfo01-w01-vds01-tkgclustervip  <br>sfo01-w01-vds01-tkgmanagementvip  <br>sfo01-w01-vds01-tkgworkloadvip |
 
     <!-- /* cSpell:enable */ -->
 
@@ -924,14 +759,13 @@ Complete the following steps to create an IPAM profile and attach it to the vCen
 
     ![Enter domain name](img/tkg-airgap-vsphere-deploy/34.ALB-DNS.png)
 
-1. Attach the IPAM and DNS profiles to the `tanzu-vcenter-01` cloud.
+1. Attach the IPAM and DNS profiles to the `sfo01w01vc01` cloud.
     1. Navigate to **Infrastructure** > **Clouds**.
-    2. Edit the tanzu-vcenter-01 cloud.
+    2. Edit the sfo01w01vc01 cloud.
     3. Under IPAM/DNS section, choose the IPAM and DNS profiles created earlier and save the updated configuration.  
     ![Select IPAM and DNS profiles](img/tkg-airgap-vsphere-deploy/35.ALB-IPAM-DNS.png)  
 
 This completes the NSX Advanced Load Balancer configuration. The next step is to deploy and configure a bootstrap machine. The bootstrap machine is used to deploy and manage Tanzu Kubernetes clusters.
-
 ## <a id=deploy-tkg-management> </a> Deploy Tanzu Kubernetes Grid Management Cluster
 
 The management cluster is a Kubernetes cluster that runs Cluster API operations on a specific cloud provider to create and manage workload clusters on that provider.
@@ -952,7 +786,9 @@ In an air-gap environment, we recommend deploying a management cluster using a Y
 
 The templates include all of the options that are relevant to deploying management clusters on vSphere. You can copy this template and use it to deploy management clusters to vSphere.
 
-**Important:** The environment variables that you have set, override values from a cluster configuration file. To use all settings from a cluster configuration file, remove any conflicting environment variables before you deploy the management cluster from the CLI.
+**Important:** The environment variables that you have set, override values from a cluster configuration file. To use all settings from a cluster configuration file, remove any conflicting environment variables before you deploy the management cluster from the CLI.<p>
+**Important:** Image repository configuration is very important details which will not be part of default config file when we are creating from TKG UI.<p>
+
 
 ```yaml
 #! ---------------------------------------------------------------------
@@ -1094,7 +930,7 @@ After you have created or updated the cluster configuration file, you can deploy
 #! Basic cluster creation configuration
 #! ---------------------------------------------------------------------
 
-CLUSTER_NAME: tkg160-mgmt-airgap
+CLUSTER_NAME: sfo01w01vc01
 CLUSTER_PLAN: prod
 INFRASTRUCTURE_PROVIDER: vsphere
 ENABLE_CEIP_PARTICIPATION: "true"
@@ -1107,14 +943,14 @@ SERVICE_CIDR: 100.64.0.0/13
 #! vSphere configuration
 #! ---------------------------------------------------------------------
 
-VSPHERE_SERVER: vcenter.lab.vmw
-VSPHERE_USERNAME: tkg-admin@vsphere.local
+VSPHERE_SERVER: sfo01w01vc01.sfo01.rainpole.local
+VSPHERE_USERNAME: administrator@vsphere.local
 VSPHERE_PASSWORD: <encoded:Vk13YXJlMSE=>
-VSPHERE_DATACENTER: /tkgm-internet-dc1
-VSPHERE_RESOURCE_POOL: /tkgm-internet-dc1/host/tkgm-internet-c1/Resources/tkg-management-components
-VSPHERE_DATASTORE: /tkgm-internet-dc1/datastore/vsanDatastore
-VSPHERE_FOLDER: /tkgm-internet-dc1/vm/tkg-management-components
-VSPHERE_NETWORK: /tkgm-internet-dc1/network/tkg_mgmt_pg
+VSPHERE_DATACENTER: /sfo01w01dc01
+VSPHERE_RESOURCE_POOL: /sfo01w01dc01/host/tkg-management-components/Resources/tkg-management-components
+VSPHERE_DATASTORE: /sfo01w01dc01datastore/vsanDatastore
+VSPHERE_FOLDER: /sfo01w01dc01vm/tkg-management-components
+VSPHERE_NETWORK: /sfo01w01dc01/network/sfo01-w01-vds01-tkgmanagement
 VSPHERE_CONTROL_PLANE_ENDPOINT: #Leave blank as VIP network is configured in NSX ALB and IPAM is configured with VIP network
 
 # VSPHERE_TEMPLATE:
@@ -1143,22 +979,22 @@ VSPHERE_WORKER_MEM_MIB: 8192
 #! ---------------------------------------------------------------------
 
 AVI_CA_DATA_B64: LS0t[...]tLS0tLQ==
-AVI_CLOUD_NAME: tanzu-vcenter01
+AVI_CLOUD_NAME: sfo01w01vc01
 AVI_CONTROL_PLANE_HA_PROVIDER: "true"
-AVI_CONTROL_PLANE_NETWORK: tkg_cluster_vip_pg
+AVI_CONTROL_PLANE_NETWORK: sfo01-w01-vds01-tkgclustervip
 AVI_CONTROL_PLANE_NETWORK_CIDR: 172.16.80.0/24
-AVI_CONTROLLER: alb-ha.lab.vmw
-AVI_DATA_NETWORK: tkg_workload_vip_pg
+AVI_CONTROLLER: sfo01albctlr01.sfo01.rainpole.local
+AVI_DATA_NETWORK: sfo01-w01-vds01-tkgworkloadvip
 AVI_DATA_NETWORK_CIDR: 172.16.70.0/24
 AVI_ENABLE: "true"
 AVI_LABELS: 
 AVI_MANAGEMENT_CLUSTER_CONTROL_PLANE_VIP_NETWORK_CIDR: 172.16.80.0/24
-AVI_MANAGEMENT_CLUSTER_CONTROL_PLANE_VIP_NETWORK_NAME: tkg_cluster_vip_pg
-AVI_MANAGEMENT_CLUSTER_SERVICE_ENGINE_GROUP: tanzu-mgmt-segroup-01
+AVI_MANAGEMENT_CLUSTER_CONTROL_PLANE_VIP_NETWORK_NAME: sfo01-w01-vds01-tkgclustervip
+AVI_MANAGEMENT_CLUSTER_SERVICE_ENGINE_GROUP: sfo01m01segroup01
 AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_CIDR: 172.16.50.0/24
-AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_NAME: tkg_mgmt_vip_pg
+AVI_MANAGEMENT_CLUSTER_VIP_NETWORK_NAME: sfo01-w01-vds01-tkgmanagementvip
 AVI_PASSWORD: <encoded:Vk13YXJlMSE=>
-AVI_SERVICE_ENGINE_GROUP: tanzu-wkld-segroup-01
+AVI_SERVICE_ENGINE_GROUP: sfo01w01segroup01
 AVI_USERNAME: admin
 
 
@@ -1184,10 +1020,13 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 
 #! ---------------------------------------------------------------------
 ```
-
+To create Management Cluster execute the following command:
+```bash
+tanzu management-cluster create --file config.yaml
+```
 The cluster deployment logs are streamed in the terminal when you run the `tanzu mc create` command. The first run of `tanzu mc create` takes longer than subsequent runs because it has to pull the required Docker images into the image store on your bootstrap machine. Subsequent runs do not require this step, and thus the process is faster.
 
-While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX Advanced Load Balancer. The service engines are mapped to the SE Group `tanzu-mgmt-segroup-01`​.
+While the cluster is being deployed, you will find that a virtual service is created in NSX Advanced Load Balancer and new service engines are deployed in vCenter by NSX Advanced Load Balancer. The service engines are mapped to the SE Group `sfo01m01segroup01`​.
 
 Now you can access the Tanzu Kubernetes Grid management cluster from the bootstrap machine and perform additional tasks such as verifying the management cluster health and deploying the workload clusters.
 
@@ -1202,22 +1041,21 @@ tanzu management-cluster get
 To interact with the management cluster using the kubectl command, retrieve the management cluster `kubeconfig` and switch to the cluster context to run kubectl commands.
 
 ```bash
-# tanzu mc kubeconfig get --admin
-Credentials of cluster 'tkg160-mgmt-airgap' have been saved
-You can now access the cluster by running 'kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap'
+# kubectl config get-contexts
+Get Context of  Management cluster
 
-
-]# kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
+]# kubectl config use-context sfo01w01tkgmgmt01-admin@sfo01w01tkgmgmt01
+Switched to context "sfo01w01tkgmgmt01-admin@sfo01w01tkgmgmt01".
 
 ]# kubectl get nodes
-NAME                                       STATUS   ROLES                  AGE   VERSION
-tkg160-mgmt-airgap-control-plane-k7t7m     Ready    control-plane,master   44m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-control-plane-q568p     Ready    control-plane,master   26m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-control-plane-xh2zd     Ready    control-plane,master   17m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-md-0-5c46d59854-9f9zp   Ready    <none>                 32m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-md-1-d969dbf8b-j49mg    Ready    <none>                 32m   v1.23.8+vmware.2
-tkg160-mgmt-airgap-md-2-c67f865d8-4sj8p    Ready    <none>                 32m   v1.23.8+vmware.2
+NAME                                            STATUS   ROLES           AGE     VERSION
+sfo01w01tkgmgmt01-b6tjz-rg7x8                   Ready    control-plane   36h     v1.24.9+vmware.1
+sfo01w01tkgmgmt01-b6tjz-tm9rw                   Ready    control-plane   6d21h   v1.24.9+vmware.1
+sfo01w01tkgmgmt01-md-0-dsn6c-76c9f9487c-r7ntc   Ready    <none>          6d21h   v1.24.9+vmware.1
+sfo01w01tkgmgmt01-md-1-k6cs9-5bc955d8db-c6gs6   Ready    <none>          6d21h   v1.24.9+vmware.1
+sfo01w01tkgmgmt01-md-2-7djsl-54f5dcc497-lktjs   Ready    <none>          6d21h   v1.24.9+vmware.1
+
+
 
 # kubectl get apps -A
 NAMESPACE    NAME                                DESCRIPTION           SINCE-DEPLOY   AGE
@@ -1240,7 +1078,7 @@ The Tanzu Kubernetes Grid management cluster is successfully deployed. You can n
 
 ## <a id="workloadalb"> </a> Configure AKO Deployment Config (ADC) for Workload Clusters
 
-Tanzu Kubernetes Grid v1.6.x management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
+Tanzu Kubernetes Grid v2.1.0 management clusters with NSX Advanced Load Balancer are deployed with 2 AKODeploymentConfigs.
 
 * `install-ako-for-management-cluster`: default configuration for management cluster
 * `install-ako-for-all`:  default configuration for all workload clusters. By default, all the workload clusters reference this file for their virtual IP networks and service engine (SE) groups. This ADC configuration does not enable NSX L7 Ingress by default.
@@ -1251,9 +1089,9 @@ As per this Tanzu deployment, create 2 more ADCs:
 
 * `tanzu-ako-for-workload-L7-ingress`: Use this ADC only if you would like to enable NSX Advanced Load Balancer L7 ingress on workload cluster. Otherwise, leave the cluster labels empty to apply the network configuration from default ADC `install-ako-for-all`.
 
-### <a id="sharedako"> </a> Configure AKO Deployment Config (ADC) for Shared Services Cluster
+### <a id="sharedako"> </a> Configure AKODeploymentConfig (ADC) for Shared Services Cluster
 
-As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `tanzu-mgmt-segroup-01` SE group. This configuration is enforced by creating a custom AKODeploymentConfig (ADC) and applying the respective `AVI_LABELS` while deploying the shared services cluster.
+As per the defined architecture, shared services cluster uses the same control plane and data plane network as the management cluster. Shared services cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Management Data VIP network` and the virtual services are deployed in `sfo01m01segroup01` SE group. This configuration is enforced by creating a custom AKO Deployment Config (ADC) and applying the respective `NSXALB_LABELS` while deploying the shared services cluster.
 
 The format of the AKODeploymentConfig YAML file is as follows.
 
@@ -1297,13 +1135,13 @@ spec:
 ```
 <!-- /* cSpell:enable */ -->
 
-The sample AKODeploymentConfig with sample values in place is as follows. You should add the respective avi label `type=shared-services` while deploying shared services cluster to enforce this network configuration.
+The sample AKODeploymentConfig with sample values in place is as follows. You should add the respective NSX_ALB label `type=shared-services` while deploying shared services cluster to enforce this network configuration.
 
-* cloud: ​`tanzu-vcenter-01​`
-* service engine group: `tanzu-mgmt-segroup-01`
-* Control Plane network: `tkg_cluster_vip_pg`
-* VIP/data network: `tkg_mgmt_vip_pg`
-* Node Network: `tkg_mgmt_pg`
+* cloud: ​`sfo01w01vc01​`
+* service engine group: `sfo01m01segroup01`
+* Control Plane network: `sfo01-w01-vds01-tkgclustervip`
+* VIP/data network: `sfo01-w01-vds01-tkgmanagementvip`
+* Node Network: `sfo01-w01-vds01-tkgmanagement`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1317,22 +1155,22 @@ metadata:
   name: tanzu-ako-for-shared
 spec:
   adminCredentialRef:
-    name: avi-controller-credentials
+    name: NSX_ALB-controller-credentials
     namespace: tkg-system-networking
   certificateAuthorityRef:
-    name: avi-controller-ca
+    name: NSX_ALB-controller-ca
     namespace: tkg-system-networking
-  cloudName: tanzu-vcenter01
+  cloudName: sfo01w01vc01
   clusterSelector:
     matchLabels:
       type: shared-services
   controlPlaneNetwork:
     cidr: 172.16.80.0/24
-    name: tkg_cluster_vip_pg
-  controller: alb-ha.lab.vmw
+    name: sfo01-w01-vds01-tkgclustervip
+  controller: sfo01albctlr01.sfo01.rainpole.local
   dataNetwork:
     cidr: 172.16.50.0/24
-    name: tkg_mgmt_vip_pg
+    name: sfo01-w01-vds01-tkgmanagementvip
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: true
@@ -1340,8 +1178,8 @@ spec:
       defaultIngressController: false
       disableIngressClass: true
       nodeNetworkList:
-      - networkName: tkg_mgmt_pg
-  serviceEngineGroup: tanzu-mgmt-segroup-01
+      - networkName: sfo01-w01-vds01-tkgmanagement
+  serviceEngineGroup: sfo01m01segroup01
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1349,8 +1187,8 @@ After you have the AKO configuration file ready, use the `kubectl` command to se
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 
 # kubectl apply -f ako-shared-services.yaml
@@ -1358,25 +1196,25 @@ akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-shared created
 ```
 <!-- /* cSpell:enable */ -->
 
-Use the following command to list all AKODeploymentConfigs created under the management cluster:
+Use the following command to list all AKODeploymentConfig created under the management cluster:
 
 <!-- /* cSpell:disable */ -->
 ```
 # kubectl get adc
 NAME                                 AGE
-install-ako-for-all                  16m
-install-ako-for-management-cluster   16m
-tanzu-ako-for-shared                 13s
+install-ako-for-all                  21h
+install-ako-for-management-cluster   21h
+tanzu-ako-for-shared                 113s
 ```
 <!-- /* cSpell:enable */ -->
 
-### <a id="l7workloadako"> </a> Configure AKODeploymentConfig (ADC) for Workload Cluster to Enable NSX ALB L7 Ingress with NodePortLocal Mode
+### <a id="l7workloadako"> </a> Configure AKO Deployment Config (ADC) for Workload Cluster to Enable NSX ALB L7 Ingress with NodePortLocal Mode
 
-VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the AVI_LABEL while deploying the workload cluster.  
+VMware recommends using NSX Advanced Load Balancer L7 ingress with NodePortLocal mode for the L7 application load balancing. This is enabled by creating a custom ADC with ingress settings enabled, and then applying the NSX_ALB LABEL while deploying the workload cluster.  
 
-As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `tanzu-wkld-segroup-01` SE group.
+As per the defined architecture, workload cluster cluster control plane endpoint uses `TKG Cluster VIP Network`, application loadbalancing uses `TKG Workload Data VIP network` and the virtual services are deployed in `sfo01w01segroup01` SE group. 
 
-Below are the changes in ADC Ingress section when compare to the default ADC.
+Below are the changes in ADC Ingress section when compare to the default ADC. 
 
 * **disableIngressClass**: set to `false` to enable NSX ALB L7 Ingress.
 
@@ -1396,10 +1234,10 @@ metadata:
   name: <unique-name-for-adc>
 spec:
   adminCredentialRef:
-    name: avi-controller-credentials
+    name: NSX_ALB-controller-credentials
     namespace: tkg-system-networking
   certificateAuthorityRef:
-    name: avi-controller-ca
+    name: NSX_ALB-controller-ca
     namespace: tkg-system-networking
   cloudName: <cloud name configured in nsx alb>
   clusterSelector:
@@ -1429,13 +1267,13 @@ spec:
 ```
 <!-- /* cSpell:enable */ -->
 
-The AKODeploymentConfig with sample values in place is as follows. You should add the respective avi label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
+The AKODeploymentConfig with sample values in place is as follows. You should add the respective NSX ALB label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
 
-* cloud: ​`tanzu-vcenter-01​`
-* service engine group: `tanzu-wkld-segroup-01`
-* Control Plane network: `tkg_cluster_vip_pg`
-* VIP/data network: `tkg_workload_vip_pg`
-* Node Network: `tkg_workload_pg`
+* cloud: ​`sfo01w01vc01​`
+* service engine group: `sfo01w01segroup01`
+* Control Plane network: `sfo01-w01-vds01-tkgclustervip`
+* VIP/data network: `sfo01-w01-vds01-tkgworkloadvip`
+* Node Network: `sfo01-w01-vds01-tkgworkload`
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1445,34 +1283,34 @@ metadata:
   name: tanzu-ako-for-workload-l7-ingress
 spec:
   adminCredentialRef:
-    name: avi-controller-credentials
+    name: NSX_ALB-controller-credentials
     namespace: tkg-system-networking
   certificateAuthorityRef:
-    name: avi-controller-ca
+    name: NSX_ALB-controller-ca
     namespace: tkg-system-networking
-  cloudName: tanzu-vcenter01
+  cloudName: sfo01w01vc01
   clusterSelector:
     matchLabels:
       workload-l7-enabled: "true"
-  controller: 172.16.10.10
+  controller: sfo01albctlr01.sfo01.rainpole.local
   controlPlaneNetwork:
     cidr: 172.16.80.0/24
-    name: tkg_cluster_vip_pg
+    name: sfo01-w01-vds01-tkgclustervip
   dataNetwork:
     cidr: 172.16.70.0/24
-    name: tkg_workload_vip_pg
+    name: sfo01-w01-vds01-tkgworkloadvip
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false                               # required
     ingress:
       disableIngressClass: false                                # required
       nodeNetworkList:                                          # required
-        - networkName: tkg_workload_pg
+        - networkName: sfo01-w01-vds01-tkgworkload
           cidrs:
             - 172.16.60.0/24
       serviceType: NodePortLocal                                # required
       shardVSSize: MEDIUM                                       # required
-  serviceEngineGroup: tanzu-wkld-segroup-01
+  serviceEngineGroup: sfo01w01segroup01
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1480,9 +1318,8 @@ Use the `kubectl` command to set the context to Tanzu Kubernetes Grid management
 
 <!-- /* cSpell:disable */ -->
 ```
-# kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
-
+# kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
+Switched to context "sfo01w01vc01-admin@sfo01w01vc01".
 
 # kubectl apply -f workload-adc-l7.yaml
 akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-workload-l7-ingress created
@@ -1495,10 +1332,11 @@ Use the following command to list all AKODeploymentConfig created under the mana
 ```
 # kubectl get adc
 NAME                                 AGE
-install-ako-for-all                  17m
-install-ako-for-management-cluster   17m
-tanzu-ako-for-shared                 79s
-tanzu-ako-for-workload-l7-ingress    12s
+install-ako-for-all                  22h
+install-ako-for-management-cluster   22h
+tanzu-ako-for-shared                 82m
+tanzu-ako-for-workload-l7-ingress    25s
+
 ```
 <!-- /* cSpell:enable */ -->
 
@@ -1517,21 +1355,21 @@ Deployment of the shared services cluster is done by creating a YAML file and in
 The following is a sample YAML for deploying a shared services cluster:
 
 ```yaml
-CLUSTER_NAME: tkg160-shared-services-airgap
+CLUSTER_NAME: sfo01w01shared01
 CLUSTER_PLAN: prod
 INFRASTRUCTURE_PROVIDER: vsphere
 ENABLE_CEIP_PARTICIPATION: "true"
 ENABLE_AUDIT_LOGGING: "true"
 CLUSTER_CIDR: 100.96.0.0/11
 SERVICE_CIDR: 100.64.0.0/13
-VSPHERE_SERVER: vcenter.lab.vmw
-VSPHERE_USERNAME: tkg-admin@vsphere.local
+VSPHERE_SERVER: sfo01w01vc01.sfo01.rainpole.local
+VSPHERE_USERNAME: administrator@vsphere.local
 VSPHERE_PASSWORD: <encoded:Vk13YXJlMSE=>
-VSPHERE_DATACENTER: /tkgm-internet-dc1
-VSPHERE_RESOURCE_POOL: /tkgm-internet-dc1/host/tkgm-internet-c1/Resources/tkg-sharedsvc-components
-VSPHERE_DATASTORE: /tkgm-internet-dc1/datastore/vsanDatastore
-VSPHERE_FOLDER: /tkgm-internet-dc1/vm/tkg-sharedsvc-components
-VSPHERE_NETWORK: /tkgm-internet-dc1/network/tkg_mgmt_pg
+VSPHERE_DATACENTER: /sfo01w01dc01
+VSPHERE_RESOURCE_POOL: /sfo01w01dc01/host/sfo01w01vc01/Resources/tkg-sharedsvc-components
+VSPHERE_DATASTORE: /sfo01w01dc01/datastore/vsanDatastore
+VSPHERE_FOLDER: /sfo01w01dc01/vm/tkg-sharedsvc-components
+VSPHERE_NETWORK: /sfo01w01dc01/network/sfo01-w01-vds01-tkgmanagement
 VSPHERE_CONTROL_PLANE_ENDPOINT: #Leave blank as VIP network is configured in NSX ALB and IPAM is configured with VIP network
 VSPHERE_SSH_AUTHORIZED_KEY: ssh-rsa AAAA[...]== email@example.com
 VSPHERE_TLS_THUMBPRINT: DC:FA:81:1D:CA:08:21:AB:4E:15:BD:2B:AE:12:2C:6B:CA:65:49:B8
@@ -1555,62 +1393,75 @@ ENABLE_MHC: true
 IDENTITY_MANAGEMENT_TYPE: "none"
 ```
 
+To create Workload Cluster execute the following command:
+```bash
+tanzu cluster create --file config.yaml
+```
+
 Cluster creation takes approximately 15-20 minutes to complete. Verify the health of the cluster and validate the cluster labels applied.
 
-1. After the cluster deployment completes, connect to the Tanzu Management Cluster context and verify the cluster labels.
+1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
-     ## Connect to tkg management cluster
+    ## verify the workload  service cluster creation
 
-    # kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-    Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
+    tanzu cluster list
+    NAME                  NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
     
-    ## verify the shared service cluster creation
-
-     # tanzu cluster list
-    NAME                           NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
-    tkg160-shared-services-airgap  default    running  3/3           3/3      v1.23.8+vmware.2  <none>  prod  v1.23.8---vmware.2-tkg.1
-
-    ## Add the tanzu-services label to the shared services cluster as its cluster role. In the following command "tkg160-shared-services-airgap” is the name of the shared service cluster
-
-    # kubectl label cluster.cluster.x-k8s.io/tkg160-shared-services-airgap cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
-    cluster.cluster.x-k8s.io/tkg160-shared-services-airgap labeled
+    sfo01w0tkgshared01    default    running  3/3           3/3      v1.24.9+vmware.1  <none>  prod  v1.24.9---vmware.1-tkg.1
 
 
-    ## Validate that the AVI_LABEL has been applied and cluster is using the tanzu-ako-for-shared ADC.
+    ## Connect to tkg management cluster
 
-     # kubectl get cluster tkg160-shared-services-airgap --show-labels
-    NAME                            PHASE         AGE   VERSION   LABELS
-    tkg160-shared-services-airgap   Provisioned   49m             cluster-role.tkg.tanzu.vmware.com/tanzu-services=,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.23.8---vmware.2-tkg.1,tkg.tanzu.vmware.com/cluster-name=tkg160-shared-services-airgap,type=shared-services
+    kubectl config use-context sfo01w01tkgmgmt01-admin@sfo01w01tkgmgmt01
+
+    ## Add the tanzu-services label to the shared services cluster as its cluster role. In the following command "sfo01w01tkgshared01” is the name of the shared service cluster
+    
+    kubectl label cluster.cluster.x-k8s.io/sfo01w0tkgshared01 cluster-role.tkg.tanzu.vmware.com/tanzu-services="" --overwrite=true
+    cluster.cluster.x-k8s.io/sfo01w0tkgshared01 labeled
+
+    ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
+
+    kubectl get cluster sfo01w0tkgshared01 --show-labels
+    NAME                   PHASE         AGE    VERSION   LABELS
+    
+    sfo01w0tkgshared01   Provisioned   105m             cluster-role.tkg.tanzu.vmware.com/tanzu-services=,networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-shared,tanzuKubernetesRelease=v1.24.9---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w0tkgshared01,type=shared-services
+
       ```
     <!-- /* cSpell:enable */ -->
 
-1.  Connect to the admin context of the shared service cluster using the following commands and verify the ako pod status.
+1. Connect to admin context of the workload cluster using the following commands and validate the ako pod status.
+
     <!-- /* cSpell:disable */ -->
      ```bash
-    ## Use the following command to get the admin context of Shared Service Cluster. In the following command tkg-160-shared-svc is the name of the shared service cluster
+    ## Use the following command to get the admin context of workload Cluster.
 
-    # tanzu cluster kubeconfig get tkg160-shared-services-airgap --admin
-    Credentials of cluster 'tkg160-shared-services-airgap' have been saved
-    You can now access the cluster by running 'kubectl config use-context tkg160-shared-services-airgap-admin@tkg160-shared-services-airgap'
+    tanzu cluster kubeconfig get sfo01w0tkgshared01 --admin
+    
+    Credentials of cluster 'sfo01w0tkgshared01' have been saved
+    You can now access the cluster by running 'kubectl config use-context sfo01w0tkgshared01-admin@sfo01w0tkgshared01'
 
 
+    ## Use the following command to use the context of workload Cluster
 
-    ## Use the following command to use the context of Shared Service Cluster
-
-    # kubectl config use-context tkg160-shared-services-airgap-admin@tkg160-shared-services-airgap
-    Switched to context "tkg160-shared-services-airgap-admin@tkg160-shared-services-airgap".
-
+    kubectl config use-context sfo01w0tkgshared01-admin@sfo01w0tkgshared01
+    
+    Switched to context "sfo01w0tkgshared01-admin@sfo01w0tkgshared01".
     
     # Verify that ako pod gets deployed in avi-system namespace
 
      kubectl get pods -n avi-system
     NAME    READY   STATUS    RESTARTS   AGE
-    ako-0   1/1     Running   0          8m55s
+    ako-0   1/1     Running   0          73m
+
+    # verify the nodes and pods status by running the command:
+    kubectl get nodes -o wide
+
+    kubectl get pods -A 
      ```
     <!-- /* cSpell:enable */ -->
-    
-The shared services cluster is now successfully created, and you can proceed to deploying the workload clusters. 
+
+Now that the shared services cluster is successfully created.
 
 ## <a id=deploy-workload-cluster> </a> Deploy Tanzu Kubernetes Grid Workload Cluster
 
@@ -1619,21 +1470,21 @@ Deployment of the workload cluster** is done using a YAML similar to the shared 
 The following is a sample YAML for deploying the workload cluster.
 
 ```yaml
-CLUSTER_NAME: tkg160-workload-l7-airgap
+CLUSTER_NAME: sfo01w01workload01
 CLUSTER_PLAN: prod
 INFRASTRUCTURE_PROVIDER: vsphere
 ENABLE_CEIP_PARTICIPATION: "true"
 ENABLE_AUDIT_LOGGING: "true"
 CLUSTER_CIDR: 100.96.0.0/11
 SERVICE_CIDR: 100.64.0.0/13
-VSPHERE_SERVER: vcenter.lab.vmw
-VSPHERE_USERNAME: tkg-admin@vsphere.local
+VSPHERE_SERVER: sfo01w01vc01.sfo01.rainpole.local
+VSPHERE_USERNAME: administrator@vsphere.local
 VSPHERE_PASSWORD: <encoded:Vk13YXJlMSE=>
 VSPHERE_DATACENTER: /tkgm-internet-dc1
-VSPHERE_RESOURCE_POOL: /tkgm-internet-dc1/host/tkgm-internet-c1/Resources/tkg-workload01-components
-VSPHERE_DATASTORE: /tkgm-internet-dc1/datastore/vsanDatastore
-VSPHERE_FOLDER: /tkgm-internet-dc1/vm/tkg-workload01-components
-VSPHERE_NETWORK: /tkgm-internet-dc1/network/tkg_workload_pg
+VSPHERE_RESOURCE_POOL: /sfo01w01dc01/host/sfo01w01vc01/Resources/tkg-workload01-components
+VSPHERE_DATASTORE: /sfo01w01dc01/datastore/vsanDatastore
+VSPHERE_FOLDER: /sfo01w01dc01/vm/tkg-workload01-components
+VSPHERE_NETWORK: /sfo01w01dc01/network/sfo01-w01-vds01-tkgworkload
 VSPHERE_CONTROL_PLANE_ENDPOINT: #Leave blank as VIP network is configured in NSX ALB and IPAM is configured with VIP network
 VSPHERE_SSH_AUTHORIZED_KEY: ssh-rsa AAAA[...]== email@example.com
 VSPHERE_TLS_THUMBPRINT: DC:FA:81:1D:CA:08:21:AB:4E:15:BD:2B:AE:12:2C:6B:CA:65:49:B8
@@ -1656,32 +1507,35 @@ TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE: LS0t[...]tLS0tLQ==
 ENABLE_MHC: true
 IDENTITY_MANAGEMENT_TYPE: "none"
 ```
+To create Workload Cluster execute the following command:
+```bash
+tanzu cluster create --file config.yaml
+```
 Cluster creation roughly takes 15-20 minutes to complete. Verify the health of the cluster and apply the labels.
 
-
+**After the Workload cluster creation verify the cluster labels and ako pod status**
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
-     ## Connect to tkg management cluster
+    ## verify the workload  service cluster creation
 
-    # kubectl config use-context tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap
-    Switched to context "tkg160-mgmt-airgap-admin@tkg160-mgmt-airgap".
+    tanzu cluster list
+    NAME                  NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
+    
+    sfo01w01shared01    default    running  3/3           3/3      v1.24.9+vmware.1  <none>  prod   v1.24.9---vmware.1-tkg.1
 
+    sfo01w01workload01  default    running  3/3           3/3      v1.24.9+vmware.1  <none>  prod   v1.24.9---vmware.1-tkg.1
 
-    ## verify the workload cluster creation
+    ## Connect to tkg management cluster
 
-    # tanzu cluster list
-    NAME                           NAMESPACE  STATUS   CONTROLPLANE  WORKERS  KUBERNETES        ROLES   PLAN  TKR
-    tkg160-shared-services-airgap  default    running  3/3           3/3      v1.23.8+vmware.2  <none>  prod  v1.23.8---vmware.2-tkg.1
-    tkg160-workload-l7-airgap      default    running  3/3           3/3      v1.23.8+vmware.2  <none>  prod  v1.23.8---vmware.2-tkg.1
+    kubectl config use-context sfo01w01vc01-admin@sfo01w01vc01
 
+    ## Validate that TMC has applied the AVI_LABEL while deploying the cluster
 
-    ## Validate the cluster labels applied and AKO Deployment Config (ADC) used by the workload cluster
-
-     # kubectl get cluster tkg160-workload-l7-airgap --show-labels
-    NAME                        PHASE         AGE   VERSION   LABELS
-    tkg160-workload-l7-airgap   Provisioned   66m             networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-workload-l7-ingress,tanzuKubernetesRelease=v1.23.8---vmware.2-tkg.1,tkg.tanzu.vmware.com/cluster-name=tkg160-workload-l7-airgap,workload-l7-enabled=true
-
+    kubectl get cluster sfo01w01workload01 --show-labels
+    NAME                   PHASE         AGE    VERSION   LABELS
+    
+    sfo01w01workload01   Provisioned   105m             networking.tkg.tanzu.vmware.com/avi=tanzu-ako-for-workload-l7-ingress,tanzuKubernetesRelease=v1.249---vmware.1-tkg.1,tkg.tanzu.vmware.com/cluster-name=sfo01w01workload01,workload-l7-enabled=true
       ```
     <!-- /* cSpell:enable */ -->
 
@@ -1691,23 +1545,23 @@ Cluster creation roughly takes 15-20 minutes to complete. Verify the health of t
      ```bash
     ## Use the following command to get the admin context of workload Cluster.
 
-    # tanzu cluster kubeconfig get tkg160-workload-l7-airgap --admin
-    Credentials of cluster 'tkg160-workload-l7-airgap' have been saved
-    You can now access the cluster by running 'kubectl config use-context tkg160-workload-l7-airgap-admin@tkg160-workload-l7-airgap'
+    tanzu cluster kubeconfig get sfo01w01workload01 --admin
+    
+    Credentials of cluster 'sfo01w01workload01' have been saved
+    You can now access the cluster by running 'kubectl config use-context sfo01w01workload01-admin@sfo01w01workload01'
 
 
     ## Use the following command to use the context of workload Cluster
 
-    # kubectl config use-context tkg160-workload-l7-airgap-admin@tkg160-workload-l7-airgap
-    Switched to context "tkg160-workload-l7-airgap-admin@tkg160-workload-l7-airgap".
-
+    kubectl config use-context sfo01w01workload01-admin@sfo01w01workload01
+    
+    Switched to context "sfo01w01workload01-admin@sfo01w01workload01".
     
     # Verify that ako pod gets deployed in avi-system namespace
 
-     # kubectl get pods -n avi-system
-    NAME    READY   STATUS    RESTARTS      AGE
-    ako-0   1/1     Running   0             40m
-
+     kubectl get pods -n avi-system
+    NAME    READY   STATUS    RESTARTS   AGE
+    ako-0   1/1     Running   0          73m
 
     # verify the nodes and pods status by running the command:
     kubectl get nodes -o wide
@@ -1716,13 +1570,15 @@ Cluster creation roughly takes 15-20 minutes to complete. Verify the health of t
      ```
     <!-- /* cSpell:enable */ -->
 
+
 You can see that the workload cluster is successfully deployed and the AKO pod is deployed on the cluster. You can now deploy user-managed packages on this cluster.
 
 ## <a id=deploy-packages> </a> Deploy User-Managed Packages
 
 User-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
 
-Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.
+Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.<p>[Installing and Managing Packages with the Tanzu CLI
+](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-index.html)
 
 |**Function**|**Package**|**Location**|
 | --- | --- | --- |
@@ -1737,13 +1593,17 @@ User-managed packages can be installed via CLI by invoking the `tanzu package in
 
 Also, ensure that the tanzu-standard repository is configured on the cluster where you want to install the packages. By default, the newly deployed clusters should have the tanzu-standard repository configured.
 
-You can run the command `tanzu package repository list -n tanzu-package-repo-global` to verify this. Also, ensure that the repository status is `Reconcile succeeded`.
+You can run the command `tanzu package repository list -A` to verify this. Also, ensure that the repository status is `Reconcile succeeded`.
 
 ```bash
-]# tanzu package repository list -n tanzu-package-repo-global
+]# Add Private Registry to the workload Cluster 
+
+tanzu package repository add tanzu-standard --url harbor.tanzu.lab/tanzu-170/packages/standard/repo -n tkg-system
+
+# tanzu package repository list -A
 
 NAME            REPOSITORY                                        TAG     STATUS               DETAILS
-tanzu-standard  harbor-sa.lab.vmw/tkg-160/packages/standard/repo  v1.6.0  Reconcile succeeded
+tanzu-standard  harbor.tanzu.lab/tanzu-170/packages/standard/repo        Reconcile succeeded
 ```
 
 
@@ -1755,49 +1615,46 @@ The first package that you should install on your cluster is the [**cert-manager
 1. Capture the available Cert Manager package versions.
 
     ```bash
-    # tanzu package available list cert-manager.tanzu.vmware.com -n tanzu-package-repo-global
+    # tanzu package available list cert-manager.tanzu.vmware.com -A
 
     NAME                           VERSION               RELEASED-AT
-    cert-manager.tanzu.vmware.com  1.1.0+vmware.1-tkg.2  2020-11-24 18:00:00 +0000 UTC
-    cert-manager.tanzu.vmware.com  1.1.0+vmware.2-tkg.1  2020-11-24 18:00:00 +0000 UTC
-    cert-manager.tanzu.vmware.com  1.5.3+vmware.2-tkg.1  2021-08-23 17:22:51 +0000 UTC
-    cert-manager.tanzu.vmware.com  1.5.3+vmware.4-tkg.1  2021-08-23 17:22:51 +0000 UTC
-    cert-manager.tanzu.vmware.com  1.7.2+vmware.1-tkg.1  2021-10-29 12:00:00 +0000 UTC
+    cert-manager.tanzu.vmware.com  1.5.3+vmware.7-tkg.1  2021-08-23 18:00:00 +0000 UTC
+    cert-manager.tanzu.vmware.com  1.7.2+vmware.1-tkg.1  2021-10-29 18:00:00 +0000 UTC
+    cert-manager.tanzu.vmware.com  1.7.2+vmware.3-tkg.1  2021-10-29 17:22:51 +0000 UTC
     ```
 
 
 2. Install the `cert-manager` package.
 
-    Capture the latest version from the previous command, if there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.7.2+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command, if there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.7.2+vmware.3-tkg.2 for installation.
 
     The following command installs the `cert-manager` package:
 
     ```bash
     tanzu package install cert-manager --package-name cert-manager.tanzu.vmware.com --namespace package-cert-manager --version <AVAILABLE-PACKAGE-VERSION> --create-namespace
-    
-    ]# tanzu package install cert-manager --package-name cert-manager.tanzu.vmware.com --namespace cert-manager --version 1.7.2+vmware.1-tkg.1 --create-namespace
-    Installing package 'cert-manager.tanzu.vmware.com'
-    Creating namespace 'cert-manager'
-    Getting package metadata for 'cert-manager.tanzu.vmware.com'
-    Creating service account 'cert-manager-cert-manager-sa'
-    Creating cluster admin role 'cert-manager-cert-manager-cluster-role'
-    Creating cluster role binding 'cert-manager-cert-manager-cluster-rolebinding'
-    Creating package resource
-    Waiting for 'PackageInstall' reconciliation for 'cert-manager'
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
-    'PackageInstall' resource successfully reconciled
 
-    Added installed package 'cert-manager'
+    ]# tanzu package install cert-manager --package-name cert-manager.tanzu.vmware.com --namespace cert-manager-package --version 1.7.2+vmware.3-tkg.1 --create-namespace
+    ℹ   Installing package 'cert-manager.tanzu.vmware.com'
+    ℹ   Creating namespace 'cert-manager-package'
+    ℹ   Getting package metadata for 'cert-manager.tanzu.vmware.com'
+    ℹ   Creating service account 'cert-manager-cert-manager-package-sa'
+    ℹ   Creating cluster admin role 'cert-manager-cert-manager-package-cluster-role'
+    ℹ   Creating cluster role binding 'cert-manager-cert-manager-package-cluster-rolebinding'
+    ℹ   Creating package resource
+    ℹ   Waiting for 'PackageInstall' reconciliation for 'cert-manager'
+    ℹ   'PackageInstall' resource install status: Reconciling
+    ℹ   'PackageInstall' resource install status: ReconcileSucceeded
+    ℹ   'PackageInstall' resource successfully reconciled
+
     ```
 
 1. Confirm that the `cert-manager` package has been installed successfully and the status is `Reconcile succeeded`.
 
     ```bash
-   ]# tanzu package installed get cert-manager -n cert-manager
+   ]# tanzu package installed get cert-manager -n cert-manager-package
     NAME:                    cert-manager
     PACKAGE-NAME:            cert-manager.tanzu.vmware.com
-    PACKAGE-VERSION:         1.7.2+vmware.1-tkg.1
+    PACKAGE-VERSION:         1.7.2+vmware.3-tkg.1
     STATUS:                  Reconcile succeeded
     CONDITIONS:              [{ReconcileSucceeded True  }]
     USEFUL-ERROR-MESSAGE:
@@ -1848,48 +1705,46 @@ For a full list of user-configurable values, see [Configure the Contour Extensio
 1. Capture the available Contour package versions.
 
     ```bash
-    # tanzu package available list contour.tanzu.vmware.com -n tanzu-package-repo-global
+    # tanzu package available list contour.tanzu.vmware.com -A
 
     NAME                      VERSION                RELEASED-AT
-    contour.tanzu.vmware.com  1.17.1+vmware.1-tkg.1  2021-07-23 18:00:00 +0000 UTC
-    contour.tanzu.vmware.com  1.17.2+vmware.1-tkg.2  2021-07-23 18:00:00 +0000 UTC
-    contour.tanzu.vmware.com  1.17.2+vmware.1-tkg.3  2021-07-23 18:00:00 +0000 UTC
-    contour.tanzu.vmware.com  1.18.2+vmware.1-tkg.1  2021-10-05 00:00:00 +0000 UTC
-    contour.tanzu.vmware.com  1.20.2+vmware.1-tkg.1  2022-06-14 00:00:00 +0000 UTC
+    contour.tanzu.vmware.com  1.22.3+vmware.1-tkg.1  2022-12-12 18:00:00 +0000 UTC
     ```
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.20.2+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.22.3+vmware.1-tkg.1 for installation.
 
 1. Install the Contour package.
 
     ```bash
     tanzu package install contour --package-name contour.tanzu.vmware.com --version <AVAILABLE-PACKAGE-VERSION> --values-file <Path_to_contour-data-values.yaml_file> --namespace tanzu-system-contour --create-namespace
-    
-    # tanzu package install contour --package-name contour.tanzu.vmware.com --version 1.20.2+vmware.1-tkg.1 --values-file ./contour-data-values.yaml --namespace tanzu-system-ingress --create-namespace
 
-    Installing package 'contour.tanzu.vmware.com'
-    Creating namespace 'tanzu-system-ingress'
-    Getting package metadata for 'contour.tanzu.vmware.com'
-    Creating service account 'contour-tanzu-system-ingress-sa'
-    Creating cluster admin role 'contour-tanzu-system-ingress-cluster-role'
-    Creating cluster role binding 'contour-tanzu-system-ingress-cluster-rolebinding'
-    Creating secret 'contour-tanzu-system-ingress-values'
-    Creating package resource
-    Waiting for 'PackageInstall' reconciliation for 'contour'
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
+    # kubectl create namespace tanzu-system-ingress 
+    # kubectl create namespace tanzu-contour-ingress
+    #tanzu package install contour --package-name contour.tanzu.vmware.com --version 1.22.3+vmware.1-tkg.1 --values-file ./contour-data-values.yaml --namespace tanzu-contour-ingress
 
-    Added installed package 'contour'
+    ℹ   Installing package 'contour.tanzu.vmware.com'
+    ℹ   Creating namespace 'tanzu-system-ingress'
+    ℹ   Getting package metadata for 'contour.tanzu.vmware.com'
+    ℹ   Creating service account 'contour-tanzu-system-ingress-sa'
+    ℹ   Creating cluster admin role 'contour-tanzu-system-ingress-cluster-role'
+    ℹ   Creating cluster role binding 'contour-tanzu-system-ingress-cluster-rolebinding'
+    ℹ   Creating secret 'contour-tanzu-system-ingress-values'
+    ℹ   Creating package resource
+    ℹ   Waiting for 'PackageInstall' reconciliation for 'contour'
+    ℹ   'PackageInstall' resource install status: Reconciling
+    ℹ   'PackageInstall' resource install status: ReconcileSucceeded
+    ℹ
+        Added installed package 'contour'
     ```
 
 3. Confirm that the Contour package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get contour --namespace tanzu-system-ingress
+    # tanzu package installed get contour --namespace tanzu-contour-ingress
 
     NAME:                    contour
     PACKAGE-NAME:            contour.tanzu.vmware.com
-    PACKAGE-VERSION:         1.20.2+vmware.1-tkg.1
+    PACKAGE-VERSION:         1.22.3+vmware.1-tkg.1
     STATUS:                  Reconcile succeeded
     CONDITIONS:              [{ReconcileSucceeded True  }]
     USEFUL-ERROR-MESSAGE:
@@ -1915,11 +1770,10 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 
     - Retrieving package versions for harbor.tanzu.vmware.com...
 
-    NAME                     VERSION               RELEASED-AT                    NAMESPACE
-    harbor.tanzu.vmware.com  2.2.3+vmware.1-tkg.1  2021-07-07 18:00:00 +0000 UTC  tanzu-package-repo-global
-    harbor.tanzu.vmware.com  2.2.3+vmware.1-tkg.2  2021-07-07 18:00:00 +0000 UTC  tanzu-package-repo-global
-    harbor.tanzu.vmware.com  2.3.3+vmware.1-tkg.1  2021-09-28 06:05:00 +0000 UTC  tanzu-package-repo-global
-    harbor.tanzu.vmware.com  2.5.3+vmware.1-tkg.1  2021-09-28 06:05:00 +0000 UTC  tanzu-package-repo-global
+     NAME                     VERSION               RELEASED-AT                    NAMESPACE
+    harbor.tanzu.vmware.com  2.3.3+vmware.1-tkg.1  2021-09-28 18:00:00 +0000 UTC  tkg-system
+    harbor.tanzu.vmware.com  2.5.3+vmware.1-tkg.1  2021-09-28 18:00:00 +0000 UTC  tkg-system
+    harbor.tanzu.vmware.com  2.6.3+vmware.1-tkg.1  2021-09-28 06:05:00 +0000 UTC  tkg-system
     ```
 
 
@@ -1927,9 +1781,9 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 1. Create a configuration file named `harbor-data-values.yaml` by executing the following commands:
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages harbor.tanzu.vmware.com.2.5.3+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages harbor.tanzu.vmware.com.2.6.3+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
     
-    imgpkg pull -b $image_url -o /tmp/harbor-package
+    imgpkg pull -b $image_url -o /tmp/harbor-package --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
     cp /tmp/harbor-package/config/values.yaml harbor-data-values.yaml
     ```
@@ -1947,7 +1801,7 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
       - harborAdminPassword
       - secretKey
 
-    You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [Deploy Harbor into a Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-harbor-registry.html#deploy-harbor-into-a-cluster-5).
+    You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [Deploy Harbor into a Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-harbor.html).
 
 1. Remove the comments in the `harbor-data-values.yaml` file
 
@@ -1958,28 +1812,32 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
 1. Install the Harbor package by executing the following command:
 
     ```bash
-    # tanzu package install harbor --package-name harbor.tanzu.vmware.com --version 2.5.3+vmware.1-tkg.1 --values-file ./harbor-data-values.yaml --namespace tanzu-system-registry --create-namespace
+    # kubectl create namespace tanzu-system-registry
+    # kubectl create namespace tanzu-harbor-registry
+    # tanzu package install harbor --package-name harbor.tanzu.vmware.com --version 2.5.3+vmware.1-tkg.1 --values-file harbor-data-values.yaml --namespace tanzu-harbor-registry
 
-    Installing package 'harbor.tanzu.vmware.com'
-    Creating namespace 'tanzu-system-registry'
-    Getting package metadata for 'harbor.tanzu.vmware.com'
-    Creating service account 'harbor-tanzu-system-registry-sa'
-    Creating cluster admin role 'harbor-tanzu-system-registry-cluster-role'
-    Creating cluster role binding 'harbor-tanzu-system-registry-cluster-rolebinding'
-    Creating secret 'harbor-tanzu-system-registry-values'
-    Creating package resource
-    Waiting for 'PackageInstall' reconciliation for 'harbor'
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
-    'PackageInstall' resource successfully reconciled
-
-    Added installed package 'harbor'
+     8:01:14AM: Creating service account 'harbor-tanzu-system-registry-sa'
+     8:01:14AM: Creating cluster admin role 'harbor-tanzu-system-registry-cluster-role'
+     8:01:15AM: Creating cluster role binding 'harbor-tanzu-system-registry-cluster-rolebinding'
+     8:01:15AM: Creating secret 'harbor-tanzu-system-registry-values'
+     8:01:15AM: Creating overlay secrets
+     8:01:15AM: Creating package install resource
+     8:01:15AM: Waiting for PackageInstall reconciliation for 'harbor'
+     8:01:15AM: Fetch started (6s ago)
+            | 8:04:50AM:  L ongoing: waiting on pod/harbor-registry-78c99df744-v8psj (v1) namespace: tanzu-system-registry
+            | 8:04:50AM:     ^ Condition Ready is not True (False)
+            | 8:04:52AM: ok: reconcile deployment/harbor-registry (apps/v1) namespace: tanzu-system-registry
+            | 8:04:52AM: ---- applying complete [50/50 done] ----
+            | 8:04:52AM: ---- waiting complete [50/50 done] ----
+            | Succeeded
+    8:04:52AM: Deploy succeeded
     ```
 
 7. Confirm that the Harbor package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
     # tanzu package installed get harbor --namespace tanzu-system-registry
+
 
     NAME:                    harbor
     PACKAGE-NAME:            harbor.tanzu.vmware.com
@@ -1998,25 +1856,26 @@ Do the following to deploy Prometheus into a workload cluster:
 1. Capture the available Prometheus version.
 
     ```bash
-    # tanzu package available list prometheus.tanzu.vmware.com -n tanzu-package-repo-global
+    # tanzu package available list prometheus.tanzu.vmware.com -A
 
     NAME                         VERSION                RELEASED-AT
-    prometheus.tanzu.vmware.com  2.27.0+vmware.1-tkg.1  2021-05-12 18:00:00 +0000 UTC
     prometheus.tanzu.vmware.com  2.27.0+vmware.2-tkg.1  2021-05-12 18:00:00 +0000 UTC
     prometheus.tanzu.vmware.com  2.36.2+vmware.1-tkg.1  2022-06-23 18:00:00 +0000 UTC
+    prometheus.tanzu.vmware.com  2.37.0+vmware.1-tkg.1  2022-10-25 18:00:00 +0000 UTC
+
     ```
 
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version  2.36.2+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version  2.37.0+vmware.1-tkg.1 for installation.
 
 2. Retrieve the template of the Prometheus package’s default configuration:
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages prometheus.tanzu.vmware.com.2.36.2+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages prometheus.tanzu.vmware.com.2.37.0+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
 
-    imgpkg pull -b $image_url -o /tmp/prometheus-package-2.36.2+vmware.1-tkg.1
+    imgpkg pull -b $image_url -o /tmp/prometheus-package-2.37.0+vmware.1-tkg.1 --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
-    cp /tmp/prometheus-package-2.36.2+vmware.1-tkg.1/config/values.yaml prometheus-data-values.yaml
+    cp /tmp/prometheus-package-2.37.0+vmware.1-tkg.1/config/values.yaml prometheus-data-values.yaml
     ```
 
     This creates a configuration file named `prometheus-data-values.yaml` that you can modify.
@@ -2028,9 +1887,9 @@ Do the following to deploy Prometheus into a workload cluster:
     |Ingress.tlsCertificate.tls.crt|Null|<p><Full chain cert provided in Input file></p><p></p><p>Note: This is optional.</p>|
     |ingress.tlsCertificate.tls.key|Null|<p><Cert Key provided in Input file</p><p></p><p>Note: This is optional.</p>|
     |ingress.enabled|false|true|
-    |ingress.virtual_host_fqdn|prometheus.system.tanzu|prometheus.<your-domain>|
+    |ingress.virtual_host_fqdn|prometheus.system.tanzu|prometheus.your-domain|
 
-    To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-prometheus.html#config-table).
+    To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-prometheus.html).
 
 1. After you make any changes needed to your `prometheus-data-values.yaml` file, remove all comments in the file:
 
@@ -2041,31 +1900,37 @@ Do the following to deploy Prometheus into a workload cluster:
 1. Install Prometheus package.
 
     ```bash
-    # tanzu package install prometheus --package-name prometheus.tanzu.vmware.com --version 2.36.2+vmware.1-tkg.1 --values-file ./prometheus-data-values.yaml --namespace tanzu-system-monitoring --create-namespace
+    # kubectl create namespace tanzu-system-monitoring 
+    # kubectl create namespace tanzu-prometheus-monitoring
+    # tanzu package install prometheus --package-name prometheus.tanzu.vmware.com --version 2.37.0+vmware.1-tkg.1 --values-file prometheus-data-values.yaml --namespace tanzu-prometheus-monitoring
 
-    Installing package 'prometheus.tanzu.vmware.com'
-    Creating namespace 'tanzu-system-monitoring'
-    Getting package metadata for 'prometheus.tanzu.vmware.com'
-    Creating service account 'prometheus-tanzu-system-monitoring-sa'
-    Creating cluster admin role 'prometheus-tanzu-system-monitoring-cluster-role'
-    Creating cluster role binding 'prometheus-tanzu-system-monitoring-cluster-rolebinding'
-    Creating secret 'prometheus-tanzu-system-monitoring-values'
-    Creating package resource
-    Waiting for 'PackageInstall' reconciliation for 'prometheus'
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
-
-    Added installed package 'prometheus'
+    8:20:09AM: Creating service account 'prometheus-tanzu-system-monitoring-sa'
+    8:20:09AM: Creating cluster admin role 'prometheus-tanzu-system-monitoring-cluster-role'
+    8:20:09AM: Creating cluster role binding 'prometheus-tanzu-system-monitoring-cluster-rolebinding'
+    8:20:09AM: Creating secret 'prometheus-tanzu-system-monitoring-values'
+    8:20:09AM: Creating overlay secrets
+    8:20:09AM: Creating package install resource
+    8:20:09AM: Waiting for PackageInstall reconciliation for 'prometheus'
+ 
+            | 8:22:02AM:  L ok: waiting on replicaset/alertmanager-56f6ccfc64 (apps/v1) namespace: tanzu-system-monitoring
+            | 8:22:02AM:  L ok: waiting on pod/alertmanager-56f6ccfc64-h5tl9 (v1) namespace: tanzu-system-monitoring
+            | 8:22:03AM: ok: reconcile deployment/alertmanager (apps/v1) namespace: tanzu-system-monitoring
+            | 8:22:03AM: ---- waiting on 1 changes [35/36 done] ----
+            | 8:22:23AM: ok: reconcile deployment/prometheus-server (apps/v1) namespace: tanzu-system-monitoring
+            | 8:22:23AM: ---- applying complete [36/36 done] ----
+            | 8:22:23AM: ---- waiting complete [36/36 done] ----
+            | Succeeded
+    8:22:23AM: Deploy succeeded (1s ago)
     ```
 
 1. Confirm that the Prometheus package has been installed successfully and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get prometheus -n tanzu-system-monitoring
+    # tanzu package installed get prometheus -n tanzu-prometheus-monitoring
 
     NAME:                    prometheus
     PACKAGE-NAME:            prometheus.tanzu.vmware.com
-    PACKAGE-VERSION:         2.36.2+vmware.1-tkg.1
+    PACKAGE-VERSION:         2.37.0+vmware.1-tkg.1
     STATUS:                  Reconcile succeeded
     CONDITIONS:              [{ReconcileSucceeded True  }]
     USEFUL-ERROR-MESSAGE:
@@ -2083,9 +1948,9 @@ Do the following to deploy Prometheus into a workload cluster:
     # tanzu package available list grafana.tanzu.vmware.com -A
 
     NAME                      VERSION                RELEASED-AT                    NAMESPACE
-    grafana.tanzu.vmware.com  7.5.16+vmware.1-tkg.1  2022-05-19 18:00:00 +0000 UTC  tanzu-package-repo-global
-    grafana.tanzu.vmware.com  7.5.7+vmware.1-tkg.1   2021-05-19 18:00:00 +0000 UTC  tanzu-package-repo-global
-    grafana.tanzu.vmware.com  7.5.7+vmware.2-tkg.1   2021-05-19 18:00:00 +0000 UTC  tanzu-package-repo-global
+    grafana.tanzu.vmware.com  7.5.16+vmware.1-tkg.1  2022-05-19 18:00:00 +0000 UTC  tkg-system
+    grafana.tanzu.vmware.com  7.5.16+vmware.1-tkg.2  2022-05-19 18:00:00 +0000 UTC  tkg-system
+    grafana.tanzu.vmware.com  7.5.7+vmware.2-tkg.1   2021-05-19 18:00:00 +0000 UTC  tkg-system
     ```
 
     Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 7.5.16+vmware.1-tkg.1 for installation.
@@ -2093,21 +1958,24 @@ Do the following to deploy Prometheus into a workload cluster:
 2. Retrieve the template of the Grafana package’s default configuration.
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages grafana.tanzu.vmware.com.7.5.16+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages grafana.tanzu.vmware.com.7.5.16+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
 
-    imgpkg pull -b $image_url -o /tmp/grafana-package-7.5.16+vmware.1-tkg.1
+    imgpkg pull -b $image_url -o /tmp/grafana-package-7.5.16+vmware.1-tkg.1 --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
     cp /tmp/grafana-package-7.5.16+vmware.1-tkg.1/config/values.yaml grafana-data-values.yaml
     ```
 
-    This creates a configuration file named `grafana-data-values.yaml` that you can modify. For a full list of user-configurable values, see [Grafana Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-grafana.html#grafana-package-configuration-parameters-5).
+    This creates a configuration file named `grafana-data-values.yaml` that you can modify. For a full list of user-configurable values, see [Grafana Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-grafana.html).
 
 4. Edit grafana-data-values.yaml and replace the following with your custom values.
 
     |**Key**|**Default Value**|**Modified value**|
     | --- | --- | --- |
-    |virtual_host_fqdn|grafana.system.tanzu|grafana.<your-domain>|
     |secret.admin_password|Null|Your password in Base64 encoded format.|
+    |grafana.service.type	|LoadBalancer|NodePort|
+    |ingress.virtual_host_fqdn|grafana.system.tanzu	|User-Provided FQDN from Input File|
+    |ingress.tlsCertificate.tls.crt	|Null|Full chain cert provided in Input file|
+    |ingress.tlsCertificate.tls.key	|Null|Full chain cert provided in Input file|
 
 5. (Optional) Modify the Grafana data source configuration. 
 
@@ -2129,28 +1997,33 @@ Do the following to deploy Prometheus into a workload cluster:
 7. Install Grafana.
 
     ```bash
-   # tanzu package install grafana --package-name grafana.tanzu.vmware.com --version 7.5.16+vmware.1-tkg.1 --values-file grafana-data-values.yaml --namespace tanzu-system-dashboards --create-namespace
+   # kubectl create namespace tanzu-system-dashboards
+   # kubectl create namespace tanzu-grafana-dashboards
+   #  tanzu package install grafana --package-name grafana.tanzu.vmware.com --version 7.5.16+vmware.1-tkg.2 --values-file grafana-data-values.yaml --namespace tanzu-grafana-dashboards
 
-    Installing package 'grafana.tanzu.vmware.com'
-    Creating namespace 'tanzu-system-dashboards'
-    Getting package metadata for 'grafana.tanzu.vmware.com'
-    Creating service account 'grafana-tanzu-system-dashboards-sa'
-    Creating cluster admin role 'grafana-tanzu-system-dashboards-cluster-role'
-    Creating cluster role binding 'grafana-tanzu-system-dashboards-cluster-rolebinding'
-    Creating secret 'grafana-tanzu-system-dashboards-values'
-    Creating package resource
-    Waiting for 'PackageInstall' reconciliation for 'grafana'
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
-    'PackageInstall' resource successfully reconciled
-
-    Added installed package 'grafana'
+    8:12:41AM: Creating service account 'grafana-tanzu-system-dashboards-sa'
+    8:12:42AM: Creating cluster admin role 'grafana-tanzu-system-dashboards-cluster-role'
+    8:12:42AM: Creating cluster role binding 'grafana-tanzu-system-dashboards-cluster-rolebinding'
+    8:12:42AM: Creating secret 'grafana-tanzu-system-dashboards-values'
+    8:12:42AM: Creating overlay secrets
+    8:12:42AM: Creating package install resource
+    8:12:42AM: Waiting for PackageInstall reconciliation for 'grafana'
+            | 8:14:19AM: ongoing: reconcile deployment/grafana (apps/v1) namespace: tanzu-system-dashboards
+            | 8:14:19AM:  ^ Waiting for 1 unavailable replicas
+            | 8:14:19AM:  L ok: waiting on replicaset/grafana-58656c5f9b (apps/v1) namespace: tanzu-system-dashboards
+            | 8:14:19AM:  L ongoing: waiting on pod/grafana-58656c5f9b-mjphv (v1) namespace: tanzu-system-dashboards
+            | 8:14:19AM:     ^ Condition Ready is not True (False)
+            | 8:14:31AM: ok: reconcile deployment/grafana (apps/v1) namespace: tanzu-system-dashboards
+            | 8:14:31AM: ---- applying complete [18/18 done] ----
+            | 8:14:31AM: ---- waiting complete [18/18 done] ----
+            | Succeeded
+   8:14:31AM: Deploy succeeded
     ```
 
 1. Confirm that the Grafana package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get grafana -n tanzu-system-dashboards
+    # tanzu package installed get grafana -n tanzu-grafana-dashboards
 
     NAME:                    grafana
     PACKAGE-NAME:            grafana.tanzu.vmware.com
@@ -2175,22 +2048,22 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
 
     NAME                         VERSION                RELEASED-AT                    NAMESPACE
     fluent-bit.tanzu.vmware.com  1.7.5+vmware.1-tkg.1   2021-05-13 18:00:00 +0000 UTC  tanzu-package-repo-global
-    fluent-bit.tanzu.vmware.com  1.7.5+vmware.2-tkg.1   2021-05-13 18:00:00 +0000 UTC  tanzu-package-repo-global
     fluent-bit.tanzu.vmware.com  1.8.15+vmware.1-tkg.1  2022-05-24 18:00:00 +0000 UTC  tanzu-package-repo-global
+    fluent-bit.tanzu.vmware.com  1.9.5+vmware.1-tkg.1   2022-06-23 18:00:00 +0000 UTC   tkg-system
     ```
 
 
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.8.15+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.9.5+vmware.1-tkg.1  for installation.
 
 2.  Retrieve the template of the Fluent Bit package’s default configuration.
 
     ```bash
-    image_url=$(kubectl -n tanzu-package-repo-global get packages fluent-bit.tanzu.vmware.com.1.8.15+vmware.1-tkg.1 -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
+    image_url=$(kubectl -n tkg-system get packages fluent-bit.tanzu.vmware.com.1.9.5+vmware.1-tkg.1  -o jsonpath='{.spec.template.spec.fetch[0].imgpkgBundle.image}')
 
-    imgpkg pull -b $image_url -o /tmp/fluent-bit-1.8.15+vmware.1-tkg.1
+    imgpkg pull -b $image_url -o /tmp/fluent-bit-1.9.5+vmware.1-tkg.1 --registry-ca-cert-path /etc/docker/certs.d/harbor.tanzu.lab/ca.crt
 
-    cp /tmp/fluent-bit-1.8.15+vmware.1-tkg.1/config/values.yaml fluentbit-data-values.yaml
+    cp /tmp/fluent-bit-1.9.5+vmware.1-tkg.1/config/values.yaml fluentbit-data-values.yaml
     ```
 
 3. Modify the resulting `fluentbit-data-values.yaml` file and configure the endpoint as per your choice. A sample endpoint configuration for sending logs to vRealize Log Insight Cloud over HTTP is shown in the following example.
@@ -2216,30 +2089,32 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
 4. Deploy Fluent Bit.
 
     ```bash
-    # tanzu package install fluent-bit --package-name fluent-bit.tanzu.vmware.com --version 1.8.15+vmware.1-tkg.1 --namespace tanzu-system-logging --create-namespace
+    # kubectl create namespace tanzu-system-logging
+    # kubectl create namespace tanzu-fluent-bit-logging
 
-    Installing package 'fluent-bit.tanzu.vmware.com'
-    Creating namespace 'tanzu-system-logging'
-    Getting package metadata for 'fluent-bit.tanzu.vmware.com'
-    Creating service account 'fluent-bit-tanzu-system-logging-sa'
-    Creating cluster admin role 'fluent-bit-tanzu-system-logging-cluster-role'
-    Creating cluster role binding 'fluent-bit-tanzu-system-logging-cluster-rolebinding'
-    Creating package resource
-    Waiting for 'PackageInstall' reconciliation for 'fluent-bit'
-    'PackageInstall' resource install status: Reconciling
-    'PackageInstall' resource install status: ReconcileSucceeded
+     tanzu package install fluent-bit --package-name fluent-bit.tanzu.vmware.com --version 1.9.5+vmware.1-tkg.1 --namespace tanzu-fluent-bit-logging --values-file fluent-bit-data-values.yaml
 
+    ℹ   Installing package 'fluent-bit.tanzu.vmware.com'
+    ℹ   Getting package metadata for 'fluent-bit.tanzu.vmware.com'
+    ℹ   Creating service account 'fluent-bit-tanzu-fluent-bit-logging-sa'
+    ℹ   Creating cluster admin role 'fluent-bit-tanzu-fluent-bit-logging-cluster-role'
+    ℹ   Creating cluster role binding 'fluent-bit-tanzu-fluent-bit-logging-cluster-rolebinding'
+    ℹ   Creating package resource
+    ℹ   Waiting for 'PackageInstall' reconciliation for 'fluent-bit'
+    ℹ   'PackageInstall' resource install status: Reconciling
+    ℹ   'PackageInstall' resource install status: ReconcileSucceeded
+    ℹ
     Added installed package 'fluent-bit'
     ```
 
 5. Confirm that the Fluent Bit package has been installed and the status is `Reconcile succeeded`.
 
     ```bash
-    # tanzu package installed get fluent-bit -n tanzu-system-logging
+    # tanzu package installed get fluent-bit --namespace tanzu-fluent-bit-logging
 
     NAME:                    fluent-bit
     PACKAGE-NAME:            fluent-bit.tanzu.vmware.com
-    PACKAGE-VERSION:         1.8.15+vmware.1-tkg.1
+    PACKAGE-VERSION:         1.9.5+vmware.1-tkg.1
     STATUS:                  Reconcile succeeded
     CONDITIONS:              [{ReconcileSucceeded True  }]
     USEFUL-ERROR-MESSAGE:

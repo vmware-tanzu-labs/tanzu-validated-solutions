@@ -26,6 +26,7 @@ ECMP
 FIPS
 firewalling
 fluentbit
+fromtar
 Gbps
 Geneve
 grafana
