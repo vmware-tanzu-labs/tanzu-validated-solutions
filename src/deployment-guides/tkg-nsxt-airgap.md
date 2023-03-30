@@ -209,8 +209,6 @@ NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer
 
 NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment backed by NSX-T. This mode grants NSX Advanced Load Balancer controllers full write access to the vCenter or NSX which helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
 
-For a production-grade deployment, it is recommended to deploy 3 instances of the NSX Advanced Load Balancer controller for high availability and resiliency.
-
 The sample IP address and FQDN set for the NSX Advanced Load Balancer controllers is as follows:
 
 |**Controller Node**|**IP Address**|**FQDN**|
@@ -461,7 +459,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     | Parameter | Value |
     | --- | --- |
-    | High availability mode | N+M |
+    | High availability mode | Active/Active |
     | VS Placement | Compact |
     | Memory per Service Engine | 4 |
     | vCPU per Service Engine | 2 |
@@ -506,8 +504,6 @@ To configure IP address pools for the networks, follow this procedure:
    ![Change network settings 01](img/tkg-airgap-nsxt/alb36.png)
 
    Edit the `sfo01-w01-vds01-tkgclustervip` network and configure as following. The VRF Context for VIP network is set to NSX tier-1 gateway.
-
-   ![Change network settings - VRF context of VIP network](img/tkg-airgap-nsxt/alb37.png)
 
    Once the networks are configured, the configuration must look like the following image.
 
@@ -616,8 +612,6 @@ The bastion host needs to be deployed with the following hardware configuration:
 
 5. Download the [yq](https://github.com/mikefarah/yq) installation binary from [mikefarah / yq](https://github.com/mikefarah/yq/releases/tag/v4.25.2) GitHub repository.
 
-6. Download the [gen-publish-images](https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-totar.sh) script for pulling Tanzu Kubernetes Grid installation binaries from the Internet.
-
 ### Configure Bastion Host
 
 1. Install Tanzu CLI.
@@ -692,7 +686,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
    * The Image TAR files.
    * The YAML files
-1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
+1. Copy following Linux CLI packages from Bastion Host to  Bootstrap Machine.
 
    * VMware Tanzu CLI 2.1.0 for Linux
    * kubectl cluster CLI v1.24.9 for Linux
@@ -911,33 +905,6 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    ```
     sudo sysctl net/netfilter/nf_conntrack_max=131072
    ```
-
-### Import the Base Image Template in vCenter Server
-
-Before you proceed with the management cluster creation, ensure that the base image template is imported into vSphere and is available as a template. To import a base image template into vSphere:
-
-1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
-
-* For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.23.8 OVA.
-
-     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
-* For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
-
-    **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
-
-1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
-
-1. Select **Local file**, click the button to upload files, and select the downloaded OVA file on your local machine.
-
-1. Follow the installer prompts to deploy a VM from the OVA.
-
-1. Click **Finish** to deploy the VM. When the OVA deployment finishes, right-click the VM and select **Template** > **Convert to Template**.
-
-    **Note:** Do not power on the VM before you convert it to a template.
-
-1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
-
-For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
 ### <a id="importbaseimage"> </a> Import Base Image Template for Tanzu Kubernetes Grid Cluster Deployment
 
@@ -1646,7 +1613,6 @@ Tanzu Kubernetes Grid includes the following user-managed packages. These packag
 |**Function**|**Package**|**Location**|
 | --- | --- | --- |
 |Certificate Management|Cert Manager|Workload and shared services cluster|
-|Container networking|Multus|Workload cluster|
 |Container registry|Harbor|Shared services cluster|
 |Ingress control|Contour|Workload and shared services cluster|
 |Log forwarding|Fluent Bit|Workload cluster|
@@ -1654,7 +1620,7 @@ Tanzu Kubernetes Grid includes the following user-managed packages. These packag
 
 User-managed packages can be installed via CLI by invoking the `tanzu package install` command. Before installing the user-managed packages, ensure that you have switched to the context of the cluster where you want to install the packages.
 
-Also, ensure that the tanzu-standard repository is configured on the cluster where you want to install the packages. By default, the newly deployed clusters should have the tanzu-standard repository configured.
+Also, ensure that the tanzu-standard repository is configured on the cluster where you want to install the packages.
 
 You can run the command `tanzu package repository list -A` to verify this. Also, ensure that the repository status is `Reconcile succeeded`.
 
