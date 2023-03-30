@@ -499,12 +499,9 @@ To configure IP address pools for the networks, follow this procedure:
 
    The following snippet shows configuring one of the networks. For example: `sfo01-w01-vds01-albmanagement`
 
-   **Note**: Ensure that VRF Context for `sfo01-w01-vds01-albmanagement` network is set to `Global`.
-
-   ![Change network settings 01](img/tkg-airgap-nsxt/alb36.png)
-
-   Edit the `sfo01-w01-vds01-tkgclustervip` network and configure as following. The VRF Context for VIP network is set to NSX tier-1 gateway.
-
+   **Note**: Ensure that VRF Context for `sfo01-w01-vds01-albmanagement` network is set to `Global`.<p>
+   **Note**: Ensure that VRF Context for `sfo01-w01-vds01-tkgclustervip` network is set to NSX tier-1 gateway.
+   
    Once the networks are configured, the configuration must look like the following image.
 
    ![Network list after configuration](img/tkg-airgap-nsxt/alb38.png)
