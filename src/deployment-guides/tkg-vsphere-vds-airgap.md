@@ -130,7 +130,6 @@ Ensure the following:
 
 5. Download the [yq](https://github.com/mikefarah/yq) installation binary from [mikefarah / yq](https://github.com/mikefarah/yq/releases/tag/v4.25.2) GitHub repository.
 
-6. Download the [gen-publish-images](https://raw.githubusercontent.com/vmware-tanzu/tanzu-framework/e3de5b1557d9879dc814d771f431ce8945681c48/hack/gen-publish-images-totar.sh) script for pulling Tanzu Kubernetes Grid installation binaries from the Internet.
 
 ### Configure Bastion Host
 
@@ -206,7 +205,8 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
    * Image TAR files
    * YAML files
-1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
+
+1. Copy the following Linux CLI packages from Bastion Host.
 
    * VMware Tanzu CLI 2.1.0 for Linux
    * kubectl cluster CLI v1.24.9 for Linux
@@ -463,8 +463,6 @@ To import the OVA into the content library, see [Import Items to a Content Libra
 NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer that provides L4 - L7 load balancer support. It is recommended for vSphere deployments without NSX-T, or when there are unique scaling requirements.
 
 NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment. This mode grants NSX Advanced Load Balancer controllers full write access to vCenter that helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
-
-For a production-grade deployment, it is recommended to deploy three instances of the NSX Advanced Load Balancer controller for high availability and resiliency.  
 
 The following table provides a sample IP address and FQDN set for the NSX Advanced Load Balancer controllers:  
 
@@ -1591,7 +1589,7 @@ Tanzu Kubernetes Grid includes the following user-managed packages. These packag
 
 User-managed packages can be installed via CLI by invoking the `tanzu package install` command. Before installing the user-managed packages, ensure that you have switched to the context of the cluster where you want to install the packages.
 
-Also, ensure that the tanzu-standard repository is configured on the cluster where you want to install the packages. By default, the newly deployed clusters should have the tanzu-standard repository configured.
+Also, ensure that the tanzu-standard repository is configured on the cluster where you want to install the packages.
 
 You can run the command `tanzu package repository list -A` to verify this. Also, ensure that the repository status is `Reconcile succeeded`.
 
