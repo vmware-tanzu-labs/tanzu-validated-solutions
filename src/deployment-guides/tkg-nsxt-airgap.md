@@ -18,7 +18,7 @@ The following table provides the component versions and interoperability matrix 
 |NSX Advanced Load Balancer|22.1.2|
 |VMware NSX-T|3.2.1.2|
 
-For up-to-date information about which software versions can be used together, see the [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
+For latest information on software versions that can be used together, see the [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,9293&row=789,%262,%26912).
 
 ## <a id=prepare-environment-deployment-tkg> </a> Prepare the Environment for Deployment of Tanzu Kubernetes Grid
 
@@ -32,7 +32,7 @@ Before deploying Tanzu Kubernetes Grid in the your VMware NSX-T environment, ens
 
 
 - A vCenter with NSX-T backed environment.
-- Ensure that following NSX-T configurations are in place:
+- Ensure that following NSX-T configurations are complete. 
 
   **Note:** The following provides only a high-level overview of the required NSX-T configuration. For more information, see [NSX-T Data Center Installation Guide](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.2/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX-T Data Center Product Documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
 
@@ -43,11 +43,11 @@ Before deploying Tanzu Kubernetes Grid in the your VMware NSX-T environment, ens
   - Host and edge uplink profiles are in place.
   - Transport node profiles are created. This is not required if configuring NSX-T data center on each host instead of the cluster.
   - NSX-T data center configured on all hosts part of the vSphere cluster or clusters.
-  - Edge transport nodes and at least one edge cluster is created
+  - Edge transport nodes and at least one edge cluster is created.
   - Tier-0 uplink segments and tier-0 gateway is created.
   - Tier-0 router is peered with uplink L3 switch.
   - DHCP profile is created in NSX.
-- SDDC environment has the following objects in place:
+- SDDC environment has the following objects are available:
   - A vSphere cluster with at least three hosts on which vSphere DRS is enabled and NSX-T is successfully configured.
   - A dedicated resource pool to deploy the following Tanzu Kubernetes management cluster, shared services cluster, and workload clusters. The number of required resource pools depends on the number of workload clusters to be deployed.
   - VM folders to collect the Tanzu Kubernetes Grid VMs.
@@ -909,14 +909,14 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and download a Tanzu Kubernetes Grid OVA for the cluster nodes.
 
-* For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.24.9 OVA.
+ - For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.24.9 OVA.
 
      **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
-* For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
+ - For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
     **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
 
-1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
+2. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
 
 1. Select Local file, click the button to upload files, and go to the downloaded OVA file on your local machine.
 
@@ -1540,7 +1540,7 @@ tanzu cluster create --file config.yaml
 ```
 Cluster creation roughly takes 15-20 minutes to complete. Verify the health of the cluster and apply the labels.
 
-**After the Workload cluster creation verify the cluster labels and ako pod status**
+**Important**: After the Workload cluster creation verify the cluster labels and ako pod status.
 1. Connect to the Tanzu Management Cluster context and verify the cluster labels for the workload cluster.
     <!-- /* cSpell:disable */ -->
      ```bash
@@ -1652,7 +1652,7 @@ The first package that you should install on your cluster is the [**cert-manager
 
 2. Install the `cert-manager` package.
 
-    Capture the latest version from the previous command, if there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.7.2+vmware.3-tkg.2 for installation.
+    Capture the latest version from the previous command, if there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document makes use of version 1.7.2+vmware.3-tkg.2 for installation.
 
     The following command installs the `cert-manager` package:
 
@@ -1736,7 +1736,7 @@ For a full list of user-configurable values, see [Configure the Contour Extensio
     contour.tanzu.vmware.com  1.22.3+vmware.1-tkg.1  2022-12-12 18:00:00 +0000 UTC
     ```
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.22.3+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document makes use of version 1.22.3+vmware.1-tkg.1 for installation.
 
 1. Install the Contour package.
 
@@ -1891,7 +1891,7 @@ Do the following to deploy Prometheus into a workload cluster:
     ```
 
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version  2.37.0+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document makes use of version  2.37.0+vmware.1-tkg.1 for installation.
 
 2. Retrieve the template of the Prometheus package’s default configuration:
 
@@ -1978,7 +1978,7 @@ Do the following to deploy Prometheus into a workload cluster:
     grafana.tanzu.vmware.com  7.5.7+vmware.2-tkg.1   2021-05-19 18:00:00 +0000 UTC  tkg-system
     ```
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 7.5.16+vmware.1-tkg.1 for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document makes use of version 7.5.16+vmware.1-tkg.1 for installation.
 
 2. Retrieve the template of the Grafana package’s default configuration.
 
@@ -2079,7 +2079,7 @@ The example shown in this document uses HTTP endpoint `vRealize Log Insight` for
 
 
 
-    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document make use of version 1.9.5+vmware.1-tkg.1  for installation.
+    Capture the latest version from the previous command. If there are multiple versions available check the "RELEASED-AT" to collect the version of the latest one. This document makes use of version 1.9.5+vmware.1-tkg.1  for installation.
 
 2.  Retrieve the template of the Fluent Bit package’s default configuration.
 
