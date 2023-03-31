@@ -219,8 +219,6 @@ NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer
 
 NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment backed by NSX-T. This mode grants NSX Advanced Load Balancer controllers full write access to the vCenter or NSX which helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
 
-For a production-grade deployment, it is recommended to deploy 3 instances of the NSX Advanced Load Balancer controller for high availability and resiliency.
-
 The sample IP address and FQDN set for the NSX Advanced Load Balancer controllers is as follows:
 
 |**Controller Node**|**IP Address**|**FQDN**|
@@ -471,7 +469,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     | Parameter | Value |
     | --- | --- |
-    | High availability mode | N + M |
+    | High availability mode | Active/Active |
     | VS Placement | Compact |
     | Memory per Service Engine | 4 |
     | vCPU per Service Engine | 2 |
@@ -509,15 +507,10 @@ To configure IP address pools for the networks, follow this procedure:
    |sfo01-w01-vds01-albmanagement|No|172.16.170.0/24|172.16.170.10 - 172.16.170.200|
    |sfo01-w01-vds01-tkgclustervip|No|172.16.180.0/24|172.16.180.10 - 172.16.180.200|
 
-   The following snippet shows configuring one of the networks. For example: `sfo01-w01-vds01-albmanagement`
 
    **Note**: Ensure that VRF Context for `sfo01-w01-vds01-albmanagement` network is set to `Global`.
 
-   ![Change network settings 01](img/tko-on-vsphere-nsxt/alb36.png)
-
-   Edit the `sfo01-w01-vds01-tkgclustervip` network and configure as following. The VRF Context for VIP network is set to NSX tier-1 gateway.
-
-   ![Change network settings - VRF context of VIP network](img/tko-on-vsphere-nsxt/alb37.png)
+   **Note**: Ensure that VRF Context for  `sfo01-w01-vds01-tkgclustervip` network is set to NSX tier-1 gateway.
 
    Once the networks are configured, the configuration must look like the following image.
 
