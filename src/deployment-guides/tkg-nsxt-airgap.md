@@ -164,7 +164,7 @@ VMware NSX provides the option to add two kinds of segments: overlay-backed segm
 
 Create the overlay backed logical segments as shown in the [Overlay backed segments CIDR example](#cidrex). All these segments will be a part of the same overlay transport zone and they must be connected to the tier-1 gateway.
 
-The following procedure provides required details to create one such network which is required for the Tanzu for Kubernetes Operations deployment:
+The following procedure provides details to create one such network which is required for the Tanzu for Kubernetes Operations deployment:
 
 1. With admin privileges, log in to NSX Manager.
 
