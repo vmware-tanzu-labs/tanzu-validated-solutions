@@ -166,11 +166,11 @@ Create the overlay backed logical segments as shown in the [Overlay backed segme
 
 The following procedure provides required details to create one such network which is required for the Tanzu for Kubernetes Operations deployment:
 
-1. With admin privileges, log in to NSX Manager
+1. With admin privileges, log in to NSX Manager.
 
 1. Select **Networking** > **Segments**.
 
-1. Click **ADD SEGMENT** and enter a name for the segment. For example, `sfo01-w01-vds01-tkgmanagement`
+1. Click **ADD SEGMENT** and enter a name for the segment. For example, `sfo01-w01-vds01-tkgmanagement`.
 
 1. Under **Connected Gateway**, select the tier-1 gateway that you created earlier.
 
@@ -180,7 +180,7 @@ The following procedure provides required details to create one such network whi
 
    ![Segment configuration](img/tkg-airgap-nsxt/T1-gateway-04.png)
 
-    **Note:** The following  step is required only for Tanzu Kubernetes Grid management network, shared services network, and workload network.
+     **Note:** The following step is required only for Tanzu Kubernetes Grid management network, shared services network, and workload network.
 
 1. Click **SET DHCP CONFIG**.
 
@@ -192,7 +192,7 @@ The following procedure provides required details to create one such network whi
 
    1. Click **Options** and under **Select DHCP Options**, select **GENERIC OPTIONS**.
 
-   1. Click **ADD GENERIC OPTION**, Add **NTP servers (42)** and **Domain Search (119)**.
+   1. Click **ADD GENERIC OPTION**, add **NTP servers (42)** and **Domain Search (119)**.
 
       ![Apply DHCP configuration](img/tkg-airgap-nsxt/T1-gateway-06.png)
 
@@ -209,7 +209,7 @@ NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer
 
 NSX Advanced Load Balancer is deployed in Write Access Mode in the vSphere Environment backed by NSX-T. This mode grants NSX Advanced Load Balancer controllers full write access to the vCenter or NSX which helps in automatically creating, modifying, and removing service engines (SEs) and other resources as needed to adapt to changing traffic needs.
 
-The sample IP address and FQDN set for the NSX Advanced Load Balancer controllers is as follows:
+The sample IP address and FQDN set for the NSX Advanced Load Balancer controllers are as follows:
 
 |**Controller Node**|**IP Address**|**FQDN**|
 | --- | --- | --- |
@@ -220,7 +220,7 @@ The sample IP address and FQDN set for the NSX Advanced Load Balancer controller
 
 ### <a id="deploynsxalb"> </a> Deploy NSX Advanced Load Balancer
 
-As part of the prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **tkg-vsphere-alb-components**  and place it under the folder **tkg-vsphere-alb-components**.
+As a prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **tkg-vsphere-alb-components**  and place it under the folder **tkg-vsphere-alb-components**.
 
 To deploy NSX Advanced Load Balancer, complete the following steps.
 
@@ -287,7 +287,7 @@ This document focuses on enabling NSX Advanced Load Balancer using the license m
 
    ![License configuration 01](img/tkg-airgap-nsxt/alb08.png)
 
-2. Select Enterprise Tier as the license type and click **Save**.
+2. Select **Enterprise Tier** radio button as the license type and click **Save**.
 
    ![License configuration 02](img/tkg-airgap-nsxt/alb09.png)
 
@@ -299,9 +299,9 @@ This document focuses on enabling NSX Advanced Load Balancer using the license m
 
 In a production environment, it is recommended to deploy additional controller nodes and configure the controller cluster for high availability and disaster recovery. Adding 2 additional nodes to create a 3-node cluster provides node-level redundancy for the controller and also maximizes performance for CPU-intensive analytics functions.
 
-To run a 3-node controller cluster, you deploy the first node and perform the initial configuration, and set the cluster IP address. After that, you deploy and power on two more controller VMs, but you must not run the initial configuration wizard or change the admin password for these controllers VMs. The configuration of the first controller VM is assigned to the two new controller VMs.
+**Note**: To run a 3-node controller cluster, you deploy the first node and perform the initial configuration, and set the cluster IP address. After that, you deploy and power on two more controller VMs, but you must not run the initial configuration wizard or change the admin password for these controllers VMs. The configuration of the first controller VM is assigned to the two new controller VMs.
 
-The first controller of the cluster receives the Leader role. The second and third controllers work as Follower.
+The first controller of the cluster receives the Leader role. The second and third controllers work as the Follower.
 
 Complete the following steps to configure NSX Advanced Load Balancer cluster:
 
@@ -362,11 +362,11 @@ NSX Advanced Load Balancer requires credentials of VMware NSX and vCenter Server
 
 To create a new credential, navigate to **Administration** > **User Credentials** and click **Create**.
 
-1. Create NSX Credential: Select the credential type as NSX-T and provide a name for the credential. Under the section NSX-T Credentials, specify the username and password that NSX Advanced Load Balancer will use to authenticate with VMware NSX.
+1. Create NSX Credential: Select the  **Credential Type** as NSX-T from drop down and provide a name for the credential. Under the section NSX-T Credentials, specify the username and password that NSX Advanced Load Balancer will use to authenticate with VMware NSX.
 
 ![NSX Credential](img/tkg-airgap-nsxt/alb19.png)
 
-2. Create vCenter Credential: Select the credential type as vCenter and provide a name for the credential. Under the section vCenter Credentials, specify the username and password that NSX Advanced Load Balancer will use to authenticate with vCenter server.
+2. Create vCenter Credential: Select the **Credential type** as vCenter from drop down and provide a name for the credential. Under the section vCenter Credentials, specify the username and password that NSX Advanced Load Balancer will use to authenticate with vCenter server.
 
 ![NSX Credential](img/tkg-airgap-nsxt/alb20.png)
 
@@ -452,7 +452,7 @@ The following components are created in NSX Advanced Load Balancer.
      ![NSX-T cloud status](img/tkg-airgap-nsxt/alb30.png)
 
 12. Create a service engine group for Tanzu Kubernetes Grid management clusters: 
-    1.  Click on the Service Engine Group tab. 
+    1.  Click on the **Service Engine Group** tab. 
     2.  Under Select Cloud, choose the cloud created in the previous step, and click **Create**.
 
 13. Enter a name for the Tanzu Kubernetes Grid management service engine group and set the following parameters:  
@@ -468,7 +468,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     ![Create service engine group - basic settings](img/tkg-airgap-nsxt/alb31.png)
 
-    For advanced configuration, click on the Advanced tab. Specify the vCenter server endpoint by clicking on the Add vCenter option.
+    For advanced configuration, click on the **Advanced** tab. Specify the vCenter server endpoint by clicking on the Add vCenter option.
 
     ![Create service engine group - advanced settings 01](img/tkg-airgap-nsxt/alb32.png)
 
@@ -490,7 +490,7 @@ To configure IP address pools for the networks, follow this procedure:
 
    ![Configure IP address pool](img/tkg-airgap-nsxt/alb35.png)
 
-2. Click on the edit icon next for the network and configure as follows. Change the provided details as per your SDDC configuration.
+2. Click on the **Edit** icon next for the network and configure as follows. Change the provided details as per your SDDC configuration.
 
    |**Network Name**|**DHCP** |**Subnet**|**Static IP Pool**|
    | --- | --- | --- | --- |
@@ -628,7 +628,7 @@ The bastion host needs to be deployed with the following hardware configuration:
     buildDate: 2023-01-20
     sha: 3c34115bc-dirty
     ```
-1. Download the Images .
+1. Download the Images.
 
     Before performing this step, ensure that the disk partition where you download the images has 45 GB of available space.
 
@@ -673,7 +673,7 @@ For this deployment, a Photon-based virtual machine is used as the bootstrap mac
 
 The bootstrap machine must meet the following prerequisites:
 
-   * A minimum of 6 GB of RAM,  2-core CPU , 160 Storage GB .
+   * A minimum of 6 GB of RAM, 2-core CPU, 160 Storage GB.
    * System time is synchronized with a Network Time Protocol (NTP) server.
    * Docker and containerd binaries are installed. For instructions on how to install Docker, see [Docker documentation](https://docs.docker.com/engine/install/centos/).
    * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
@@ -681,8 +681,8 @@ The bootstrap machine must meet the following prerequisites:
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
 1. Copy  Files to  bootstrap Machine.<p>
    Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
-   * The Image TAR files.
-   * The YAML files
+   * Image TAR files
+   * YAML files
 1. Copy following Linux CLI packages from Bastion Host to  Bootstrap Machine.
 
    * VMware Tanzu CLI 2.1.0 for Linux
@@ -758,7 +758,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
       ✔  Done
       ```
 
-      By default the Tanzu global config file, `config.yaml`, which gets created when you first run `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Because there is no Internet in the environment, the commands fails after some time.
+      By default the Tanzu global config file, `config.yaml`, which gets created when you first run `tanzu init` command, points to the repository URL <https://projects.registry.vmware.com> to fetch the Tanzu plugins for installation. Since there is no Internet in the environment, the commands fails after some time.
 
       To ensure that Tanzu Kubernetes Grid always pulls images from the local private registry, run the Tanzu `export` command to add `TKG_CUSTOM_IMAGE_REPOSITORY` to the global Tanzu CLI configuration file, `~/.config/tanzu/config.yaml`. 
 
@@ -780,8 +780,8 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
       export TKG_CUSTOM_IMAGE_REPOSITORY_CA_CERTIFICATE LS0t[...]tLS0tLQ==
 
       ```
-  Note:If we reboot the VM , this setting will go to default 
-1. Initialize Tanzu Kubernetes Grid and Install Tanzu CLI plugins.
+   **Note**:If we reboot the VM , this setting will go to default 
+1. initialize Tanzu Kubernetes Grid and Install Tanzu CLI plugins.
 
       ```bash
       ### Initialize Tanzu Kubernetes Grid 
@@ -806,7 +806,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     - [kbld](https://carvel.dev/kbld/) - an image-building and resolution tool.
     - [imgpkg](https://carvel.dev/imgpkg/) - a tool that enables Kubernetes to store configurations and the associated container images as OCI images, and to transfer these images.
 
-    1. Install ytt
+    1. Install ytt.
 
         ```bash
         cd ./cli
@@ -815,7 +815,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
         chmod ugo+x ytt-linux-amd64-v0.43.1+vmware.1 &&  mv ./ytt-linux-amd64-v0.43.1+vmware.1 /usr/local/bin/ytt
         ```
-        Run `ytt --version` to check that the correct version of ytt is installed and executable
+        Run `ytt --version` to check that the correct version of ytt is installed and executable.
 
    1. Install kapp.
 
@@ -881,7 +881,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
 1. Create an SSH key-pair.
 
-    This is required for Tanzu CLI to connect to vSphere from the bootstrap machine.  The public key part of the generated key will be passed during the Tanzu Kubernetes Grid management cluster deployment.  
+    This is required for Tanzu CLI to connect to vSphere from the bootstrap machine. The public key part of the generated key will be passed during the Tanzu Kubernetes Grid management cluster deployment.  
 
     ```bash
     ### Generate public/Private key pair.
