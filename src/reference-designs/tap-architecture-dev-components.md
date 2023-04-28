@@ -35,13 +35,13 @@ The Application Accelerator user interface (UI) enables you to discover availabl
 
 Application Accelerator allows you to generate new projects from files in Git repositories. An `accelerator.yaml` file in the repository declares input options for the accelerator. Accelerator custom resources (CRs) control which repositories appear in the Application Accelerator UI. The Accelerator controller reconciles the CRs with a Flux2 Source Controller to fetch files from GitHub or GitLab.
 
-Refer to the [Tanzu Application Platform Accelerator](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/application-accelerator-about-application-accelerator.html) for more information.
+See [Tanzu Application Platform Accelerator](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/application-accelerator-about-application-accelerator.html) for more information.
 
 ## API Portal
 
 API portal enables API consumers to find APIs they can use in their own applications. API portal assembles its dashboard and detailed API documentation views by ingesting OpenAPI documentation from the source URLs.
 
-Refer to the [Tanzu Application Platform API portal](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-portal-install-api-portal.html) for more information.
+See [Tanzu Application Platform API portal](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-portal-install-api-portal.html) for more information.
 
 ## AppSSO
 
@@ -58,7 +58,7 @@ The following components must be installed on the `run` cluster.
 - **ClientRegistration** -  handles requests for the client id and client secret on behalf of an application, and defines the scopes allowable by the backend authentication server.
 - **OAuth2 Proxy** - a sidecar container deployed with an application for handling inbound and outbound authentication traffic to the end-user application in the same pod.
 
-Refer to below sample:
+See the following sample:
 
 ```
 Kind: AuthServer
@@ -111,7 +111,7 @@ spec:
 
 The settings in `ClientRegistration` contain the redirectUrl pointing to a page in the end-user application to be redirected to after successful authentication. The settings here also reference the AuthServer by its pod’s labels on behalf of the end-user application.
 
-Refer to the [Tanzu Application Platform AppSSO](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/app-sso-about.html) for more information.
+See [Tanzu Application Platform AppSSO](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/app-sso-about.html) for more information.
 
 ## API Auto Registration
 
@@ -131,7 +131,7 @@ API Auto Registration components are installed by the `run` and `full` profiles.
 - Workload configuration files must set the `register-api` property to true to enable this feature and include the `api_descriptor` parameter. For example: `apis.apps.tanzu.vmware.com/register-api: "true"`. 
 - To use the OpenAPI “TRY IT OUT” feature in Tanzu Application GUI, the Workload must configure Cross-origin Resource Sharing (CORS) to allow requests originating from the GUI.
 
-To learn more about API Auto Registration, refer to [API Auto Registration](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-auto-registration-about.html).
+To learn more about API Auto Registration, see [API Auto Registration](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-auto-registration-about.html).
 
 ## AppLiveView
 
@@ -215,6 +215,6 @@ grype:
 
 ## CI/CD Pipelines
 
-Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. Refer [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/tekton-tekton-about.html) for more information.
+Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. See [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/tekton-tekton-about.html) for more information.
 
-To learn more about all Tanzu Application Platform components refer to [Component documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/components.html).
+To learn more about all Tanzu Application Platform components, see [Component documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/components.html).

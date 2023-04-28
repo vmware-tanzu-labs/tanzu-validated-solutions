@@ -201,7 +201,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 ### Kubernetes Requirements - View Cluster
 
 * Supported Kubernetes versions are 1.24,1.25,1.26.
-* LoadBalancer for ingress controller (requires 1 external IP addresses).
+* LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
 * Logging is enabled and targets the desired application logging platform.
@@ -431,7 +431,7 @@ The following upgrade sequence is recommended:
 
 ## Tanzu Application Platform Networking
 
-To learn more about the Tanzu Application Platform most common cross clusters and external services scenarios networking in multi cluster kubernetes environment, refer to [Tanzu Application Platform Networking](tap-networking.md)
+To learn more about the most common cross-cluster and external-services networking scenarios in a multi-cluster Tanzu Application Platform Kubernetes environment, see [Tanzu Application Platform Networking](tap-networking.md)
 
 ## Services Architecture
 
@@ -495,7 +495,7 @@ The following metrics should be observed. If the values exceed service level obj
 
 ## Logging
 
-Logging for Tanzu Application Platform is handled by the upstream Kubernetes integration for both applications and internal system components. An external logging platform should be used for storing and searching those logs.  For logging integration, refer to the reference architecture of your platform or logging platform.
+Logging for Tanzu Application Platform is handled by the upstream Kubernetes integration for both applications and internal system components. An external logging platform should be used for storing and searching those logs.  For logging integration, see the reference architecture of your platform or logging platform.
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
@@ -505,7 +505,7 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity provider into Tanzu Application Platform.
 
-To use Pinniped, refer to [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-pinniped-login.html).
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-pinniped-login.html).
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
@@ -525,12 +525,12 @@ Two roles are for service accounts associated with the Tanzu Supply Chain:
 * `workload`
 * `deliverable`
 
-Refer to [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-overview.html) for more information.
+See [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-overview.html) for more information.
 
 ## Developer tools (Inner-Loop)
 
-Tanzu Application Platform allows developers to quickly build and test applications and provide many in-built developer friendly platform capabilities. To learn more about these capabilities, refer to [Tanzu Application Platform Developer Components](tap-architecture-dev-components.md).
+Tanzu Application Platform allows developers to quickly build and test applications and provide many in-built developer friendly platform capabilities. To learn more about these capabilities, see [Tanzu Application Platform Developer Components](tap-architecture-dev-components.md).
 
 ## Deployment Instructions
 
-For instructions on how to deploy this reference design, refer to [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/multicluster-installing-multicluster.html).
+For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/multicluster-installing-multicluster.html).

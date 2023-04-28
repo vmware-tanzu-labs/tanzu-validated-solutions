@@ -1,10 +1,10 @@
 # Tanzu Application Platform Networking
 
-Tanzu Application Platform Networking diagram describes the Tanzu Application Platform most common cross clusters and external services scenarios networking in multi cluster kubernetes environment. It describes high level egress and ingress networking flows between the Tanzu Application Platform components and with the external services. 
+The following Tanzu Application Platform networking diagram shows the most common cross-cluster and external-services networking scenarios in a multi cluster Kubernetes environment. The diagram shows the high level egress and ingress networking flows between the Tanzu Application Platform components and the external services.
 
 ![Tanzu Application Platform networking](img/tap-architecture-planning/tap-networking.jpg)
 
-Table describe the Tanzu Application Platform networking flow, shows in above diagram. 
+The following table describes the networking flow in the Tanzu Application Platform networking diagram.
 
 | Component / External Service | Source   | Destination | Port | Protocol | Description
 |---                             |---       |---          |---   |---       |---
