@@ -9,6 +9,7 @@ Appsso
 autoscaler
 Bitfusion
 bootstrapper
+buildpacks
 bursty
 CEIP
 CNAMES
@@ -26,6 +27,7 @@ ECMP
 FIPS
 firewalling
 fluentbit
+Fluxcd
 fromtar
 Gbps
 Geneve
@@ -41,6 +43,7 @@ Istio
 jumpbox
 kapp
 kbld
+Knative
 kube
 kubectl
 kubelet
