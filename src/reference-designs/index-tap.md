@@ -1,3 +1,9 @@
 # Tanzu Application Platform 1.5 Planning and Architecture Reference
 
-Tanzu Application Platform Planning and Architecture Reference provides a standard architecture for deploying Tanzu Application Platform (TAP) 1.5. The document covers topics such as Kubernetes requirements and cluster layout for Tanzu Application Platform. For guidance on how to deploy your particular Kubernetes distribution, see the reference architecture for that distribution.
+Tanzu Application Platform Planning and Architecture Reference provides a standard architecture for deploying Tanzu Application Platform (TAP) 1.5. The document covers topics such as Kubernetes requirements and cluster layout for Tanzu Application Platform. 
+
+| Topic   | Description  | 
+|---            |---                |
+[Tanzu Application Patform Architecture](./reference-designs/tap-architecture-planning.md) | Architecture for creating a production deployment | 
+[Tanzu Application Platform Developer Components (Inner-Loop)](./reference-designs/tap-architecture-dev-components.md) | List of Tanzu Application Platform developer components. | 
+[Tanzu Application Platform Networking](./reference-designs/tap-networking.md) | Common cross-cluster and external-services networking scenarios in a multi-cluster Tanzu Application Platform Kubernetes environment | 
