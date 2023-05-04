@@ -4,6 +4,6 @@ Tanzu Application Platform Planning and Architecture Reference provides a standa
 
 | Topic   | Description  | 
 |---            |---                |
-[Tanzu Application Patform Architecture](./reference-designs/tap-architecture-planning.md) | Architecture for creating a production deployment | 
-[Tanzu Application Platform Developer Components (Inner-Loop)](./reference-designs/tap-architecture-dev-components.md) | List of Tanzu Application Platform developer components. | 
-[Tanzu Application Platform Networking](./reference-designs/tap-networking.md) | Common cross-cluster and external-services networking scenarios in a multi-cluster Tanzu Application Platform Kubernetes environment | 
+[Tanzu Application Patform Architecture](tap-architecture-planning.md) | Architecture for creating a production deployment | 
+[Tanzu Application Platform Developer Components (Inner-Loop)](tap-architecture-dev-components.md) | List of Tanzu Application Platform developer components. | 
+[Tanzu Application Platform Networking](tap-networking.md) | Common cross-cluster and external-services networking scenarios in a multi-cluster Tanzu Application Platform Kubernetes environment | 
