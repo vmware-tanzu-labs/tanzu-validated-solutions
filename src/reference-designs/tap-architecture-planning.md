@@ -1,4 +1,4 @@
-# Tanzu Application Patform Architecture
+# Tanzu Application Platform Architecture
 
 This architecture gives you a path to creating a production deployment of Tanzu Application Platform (TAP) 1.5. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
