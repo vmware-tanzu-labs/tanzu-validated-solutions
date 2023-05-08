@@ -147,7 +147,6 @@ controller.source.apps.tanzu.vmware.com
 crossplane.tanzu.vmware.com 
 eventing.tanzu.vmware.com 
 fluxcd.source.controller.tanzu.vmware.com
-image-policy-webhook.signing.apps.tanzu.vmware.com
 namespace-provisioner.apps.tanzu.vmware.com
 ootb-delivery-basic.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
@@ -329,7 +328,6 @@ developer-conventions.tanzu.vmware.com
 eventing.tanzu.vmware.com 
 fluxcd.source.controller.tanzu.vmware.com
 grype.scanning.apps.tanzu.vmware.com
-image-policy-webhook.signing.apps.tanzu.vmware.com
 namespace-provisioner.apps.tanzu.vmware.com 
 ootb-delivery-basic.tanzu.vmware.com
 ootb-supply-chain-basic.tanzu.vmware.com
