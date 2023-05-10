@@ -1,6 +1,6 @@
-# Architecture Overview
+# Tanzu Application Platform Architecture
 
-This architecture gives you a path to creating a production deployment of Tanzu Application Platform 1.5. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+This architecture gives you a path to creating a production deployment of Tanzu Application Platform (TAP) 1.5. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
@@ -431,7 +431,7 @@ The following upgrade sequence is recommended:
 
 ## Tanzu Application Platform Networking
 
-To learn more about the most common cross-cluster and external-services networking scenarios in a multi-cluster Tanzu Application Platform Kubernetes environment, see [Tanzu Application Platform Networking](tap-networking.md)
+To learn more about the most common cross-cluster and external-services networking scenarios in a multi-cluster Tanzu Application Platform Kubernetes environment, see [Tanzu Application Platform Networking](tap-networking.md).
 
 ## Services Architecture
 
