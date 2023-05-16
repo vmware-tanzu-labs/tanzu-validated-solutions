@@ -224,7 +224,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
     ## Verify Tanzu CLI version
 
-     [root@tkg160-bootstrap ~] # tanzu version
+     # tanzu version
 
     version: v0.28.0
     buildDate: 2023-01-20
@@ -543,7 +543,7 @@ To configure NTP, go to **Administration** > **Settings** > **DNS/NTP > Edit** a
 
 ### <a id="nsx-alb-license"></a> NSX Advanced Load Balancer: Licensing
 
-This document focuses on enabling NSX Advanced Load Balancer using the license model: **Enterprise License (VMware NSX ALB Enterprise)**.
+You can configure the license tier as NSX ALB Enterprise or NSX ALB Essentials for Tanzu as per the feature requirement. This document focuses on enabling NSX Advanced Load Balancer using **Enterprise Tier (VMware NSX ALB Enterprise)** license model.
 
 1. To configure licensing, go to **Administration** > **Settings** > **Licensing** and click on the gear icon to change the license type to Enterprise. 
 
@@ -677,7 +677,9 @@ The following components are created in NSX Advanced Load Balancer.
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | High availability mode | Active/Active |
+    | High availability mode | Active/Active - NSX ALB Enterprise edition  <br> Active/Standby - NSX ALB Essentials for Tanzu edition |
+    | Enable Service Engine Self Election | Supported only with NSX ALB Enterprise edition|
+    |Memory for caching|Supported with NSX ALB Enterprise edition only, set value to 0 for essentials|
     | Memory per Service Engine | 4   |
     | vCPU per Service Engine | 2   |
 
@@ -1222,6 +1224,8 @@ Below are the changes in ADC Ingress section when compare to the default ADC.
 
 * **shardVSSize**: Virtual service size
 
+**Note:** NSX ALB L7 Ingress feature requires Enterprise edition license. If you do not wish to enable L7 feature/applied with ALB essentials for Tanzu license, disable the L7 feature by setting the value `disableIngressClass` to `true`
+
 The format of the AKODeploymentConfig YAML file for enabling NSX ALB L7 Ingress is as follows.
 
 <!-- /* cSpell:disable */ -->
@@ -1248,6 +1252,7 @@ spec:
   dataNetwork:
     cidr: <TKG-Workload-VIP-network-CIDR>
     name: <TKG-Workload-VIP-network-CIDR>
+  serviceEngineGroup: <Workload-Cluster-SEG>
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false                               # required
@@ -1259,7 +1264,7 @@ spec:
             - <TKG-Workload-Network-CIDR>
       serviceType: NodePortLocal                                # required
       shardVSSize: MEDIUM                                       # required
-  serviceEngineGroup: <Workload-Cluster-SEG>
+
 
 
 ```
@@ -1297,6 +1302,7 @@ spec:
   dataNetwork:
     cidr: 172.16.70.0/24
     name: sfo01-w01-vds01-tkgworkloadvip
+  serviceEngineGroup: sfo01w01segroup01
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false                               # required
@@ -1308,7 +1314,6 @@ spec:
             - 172.16.60.0/24
       serviceType: NodePortLocal                                # required
       shardVSSize: MEDIUM                                       # required
-  serviceEngineGroup: sfo01w01segroup01
 ```
 <!-- /* cSpell:enable */ -->
 
