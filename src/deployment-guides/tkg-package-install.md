@@ -79,7 +79,63 @@ For a full list of user-configurable values, see the official Contour [documenta
 After installing Contour, ensure that the installation status for the Contour package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Contour](img/tanzu-pkgs/tanzu-pkgs07.png)
+### Install ExternalDNS
 
+The ExternalDNS service publishes DNS records for applications to DNS servers, using a declarative, Kubernetes-native interface.ExternalDNS allows you to control DNS records dynamically via Kubernetes resources in a DNS provider-agnostic way. ExternalDNS synchronizes exposed Kubernetes Services and Ingresses with DNS providers.
+
+Dependencies to be installed: cert-manager, contour.
+
+we are using RFC2136 (BIND) Server method in this document.For more information, refer [ product documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-externaldns.html)
+
+
+To install the ExternalDNS package, click **Browse Packages** and **click the Contour tile on the Catalog page**. 
+
+Click **Install Package** to initiate the installation.
+
+![Screenshot of Contour package details screen](img/tanzu-pkgs/tanzu-pkgs050.png)
+
+Provide a name for the installed package and select the version that you want to install. You can customize your installation by entering the user-configurable values in YAML format under the **Overlay YAML** option.
+
+An example YAML file for customizing the installation of ExternalDNS follows.
+
+```yaml
+# Namespace in which to deploy ExternalDNS pods.
+namespace: tanzu-system-service-discovery
+
+# Deployment-related configuration.
+deployment:
+  args:
+    - --source=service
+    - --source=ingress
+    - --source=contour-httpproxy # Provide this to enable Contour HTTPProxy support. Must have Contour installed or ExternalDNS will fail.
+    - --domain-filter=DOMAIN # For example, k8s.example.org. Makes ExternalDNS see only the hosted zones matching provided domain, omit to process all available hosted zones.
+    - --policy=upsert-only # Prevents ExternalDNS from deleting any records, omit to enable full synchronization.
+    - --registry=txt
+    - --txt-owner-id=k8s
+    - --txt-prefix=external-dns- # Disambiguates TXT records from CNAME records.
+    - --provider=rfc2136
+    - --rfc2136-host=IP-ADDRESS-OF-RFC2136-DNS-SERVER
+    - --rfc2136-port=53
+    - --rfc2136-zone=DNS-ZONE # For example, k8s.example.org.
+    - --rfc2136-tsig-secret=TSIG-SECRET-FROM-STEP-1
+    - --rfc2136-tsig-secret-alg=hmac-sha256
+    - --rfc2136-tsig-keyname=TSIG-KEY-NAME # For example, externaldns-key.
+    - --rfc2136-tsig-axfr
+env: []
+securityContext: {}
+volumeMounts: []
+volumes: []
+```
+
+For a full list of user-configurable values, see the official ExternalDNS [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-externaldns.html)
+
+**Note:** You can leave the default settings if you don’t need to customize the package installation.
+
+![Screenshot of the ExternalDNS installation screen showing a YAML overlay file](img/tanzu-pkgs/tanzu-pkgs060.png)
+
+After installing ExternalDNS, ensure that the installation status for the ExternalDNS package on the **Installed Tanzu Packages** screen is **Green**.
+
+![Screenshot showing successful installation of ExternalDNS](img/tanzu-pkgs/tanzu-pkgs070.png)
 ### Install Harbor
 
 [Harbor](https://goharbor.io/) is an open-source container registry. The Harbor registry may be used as a private registry for container images that you want to deploy to Tanzu Kubernetes clusters.
@@ -231,7 +287,7 @@ After installing Fluent Bit, ensure that the installation status for the Fluent 
 
 ### Install Multus CNI
 
-[Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. With Multus CNI, you can create a multi-homed pod with multiple interfaces.
+[Multus CNI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-cni.html) is a container network interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. With Multus CNI, you can create a multi-homed pod with multiple interfaces.
 
 To install the Multus CNI package, repeat the steps for the package installation.  An example screenshot for Multus CNI installation follows.
 
@@ -240,3 +296,8 @@ To install the Multus CNI package, repeat the steps for the package installation
 After installing Multus CNI, ensure that the installation status for the Multus CNI package on the **Installed Tanzu Packages** screen is **Green**.
 
 ![Screenshot showing successful installation of Multus CNI](img/tanzu-pkgs/tanzu-pkgs17.png)
+
+After the Package installation we need to create custom resource definition (CRD) for NetworkAttachmentDefinition that defines the CNI configuration for network interfaces to be used by Multus CNI.
+
+1. [Multus on Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-multus.html)
+2. [Multus with Whereabouts on Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-whereabouts.html)
