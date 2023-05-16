@@ -328,8 +328,9 @@ The following components are created in NSX Advanced Load Balancer.
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | High availability mode | Active/Active <br> Active/Standby for NSX ALB Essentials for Tanzu edition|
+    | High availability mode | Active/Active - NSX ALB Enterprise edition  <br> Active/Standby - NSX ALB Essentials for Tanzu edition|
     | Enable Service Engine Self Election | Supported only with NSX ALB Enterprise edition|
+    | Memory for caching | Supported with NSX ALB Enterprise edition only, set value to `0` for essentials|
     | Memory per Service Engine | 4   |
     | vCPU per Service Engine | 2   |
 
