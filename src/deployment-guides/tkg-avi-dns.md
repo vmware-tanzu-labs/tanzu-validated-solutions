@@ -1,28 +1,28 @@
-# AVI DNS Virtual Service with TKGM
+# AVI DNS Virtual Service with Tanzu Kubernetes Grid 
 
-The Purpose of thie Document is to demonstrate how we can leverage AVI DNS Virtual Service to as a DNS Server for workload application.For More information Please refer [**Product Documentation**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) .
+The Purpose of the Document is to demonstrate how we can leverage AVI DNS Virtual Service to as a DNS Server for workload application.For More information Please refer [**Product Documentation**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) .
 
-AVI DNS Virtual Service is available only in **AVI Enterprice** license or more.For more information about AVI DNS Architecture please refer product [documentation](https://avinetworks.com/docs/latest/avi-dns-architecture/) 
+AVI DNS Virtual Service is available only in **AVI Enterprise** license or more.For more information about AVI DNS Architecture please refer product [documentation](https://avinetworks.com/docs/latest/avi-dns-architecture/) 
 
 ## General Instructions for Installing AVI DNS and L7 Ingress Service Provider.
 
 NSX ALB as in **L7 Ingress Service Provider**
 
-We will be Deploying NSX ALB L7 ingress in NodePortLocal mode in our infrastructure, For more information please refer NSX ALB as in L4+L7 Ingress Service Provider Session in Referance Architecture.
+We will be Deploying NSX ALB L7 ingress in NodePortLocal mode in our infrastructure, For more information please refer NSX ALB as in L4+L7 Ingress Service Provider Session in Reference Architecture.
 
 
 Link will be given here to our RA 
 
 L7 functionality will be enabled using AKO configuration files as part of the Management cluster deployment. 
 
-Deployment file will given here for referance.
+Deployment file will given here for reference.
 ### Create a Service Engine Group.
 To create or edit an SE group:
 
 1. Select Infrastructure > **Cloud Resources** and click on the cloud name (for example, sfow01vc01).
 2. Click on **CREATE** 
 
-   * Upate the Service Engine Group Name.
+   * Update the Service Engine Group Name.
    * Select High Availability to Active/Active.
    * VS Placement across Service Engines should be Compact.
 ### Update IPAM Profile
@@ -54,7 +54,7 @@ Settings
 
 ### Configuring DNS Name
 
-DNS Profile will be created as part of the Managment cluster creation.
+DNS Profile will be created as part of the Management cluster creation.
 
 Navigate to **Templates** > **IPAM/DNS Profiles** and Select the DNS **Virtual Service**
 by using the drop-down option.
