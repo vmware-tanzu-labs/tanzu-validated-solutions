@@ -2,11 +2,11 @@
 
 The Purpose of thie Document is to demonstrate how we can leverage AVI DNS Virtual Service to as a DNS Server for workload application.For More information Please refer [**Product Documentation**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) .
 
-AVI DNS Virtual Service is available only in AVI Enterprice license or more. 
+AVI DNS Virtual Service is available only in **AVI Enterprice** license or more.For more information about AVI DNS Architecture please refer product [documentation](https://avinetworks.com/docs/latest/avi-dns-architecture/) 
 
 ## General Instructions for Installing AVI DNS and L7 Ingress Service Provider.
 
-NSX ALB as in L7 Ingress Service Provider
+NSX ALB as in **L7 Ingress Service Provider**
 
 We will be Deploying NSX ALB L7 ingress in NodePortLocal mode in our infrastructure, For more information please refer NSX ALB as in L4+L7 Ingress Service Provider Session in Referance Architecture.
 
@@ -19,33 +19,36 @@ Deployment file will given here for referance.
 ### Create a Service Engine Group.
 To create or edit an SE group:
 
-1. Select Infrastructure > Clouds and click on the cloud name (for example, Default-Cloud).
-2. Select Service Engine Group to open the Service Engine Groups page, which lists the SE groups currently configured in Vantage.
-3. Click New Service Engine Group or click on an SE group name in the table.
+1. Select Infrastructure > **Cloud Resources** and click on the cloud name (for example, sfow01vc01).
+2. Click on **CREATE** 
 
-The create and edit popups for SE groups have identical properties. This popup includes the following tabs:
+   * Upate the Service Engine Group Name.
+   * Select High Availability to Active/Active.
+   * VS Placement across Service Engines should be Compact.
+### Update IPAM Profile
 
-* Upate the Service Engine Group Name.
-* Select High Availability to Active/Active.
-* VS Placement across Service Engines should be Compact.
+We will be using **sfo01-w01-vds01-albmanagement** network for DNS virtual Service IP.
 
-### Configuring DNS
+Navigate to **Templates** > **IPAM/DNS Profiles** and Edit the IPAM Profile.
 
-DNS Virtual Service
+Add the Network by selecting cloud under **Cloud** > **ADD** Select **sfo01-w01-vds01-albmanagement** > **SAVE**
+
+### Configuring DNS Virtual Service
+
 Starting with release 18.1.2, the DNS virtual service can be configured with IPv4 VIP, IPv6 VIP, or a dual VIP.
 
-Navigate to Applications > Virtual Services and click on Create Virtual Service (Advanced Setup) Select the Cloud. Configuration tabs associated with DNS are as explained below.
+Navigate to **Applications** > **Virtual Services** and click on **CREATE VIRTUAL SERVICE** (Advanced Setup) Select the Cloud Click **NEXT**. Configuration tabs associated with DNS are as explained below.
 
 Settings
 *  Update **Name**
 *  VS 
-*  **TCP/UDP Profile** Select System-UDP-Per-Pkt.
 *  **Application Profiles** Select Select System-DNS.
-*  In **VS VIP**  Select **Create VS VIP** Enter Name & under **VIP** Select **ADD** 
-
+*  **TCP/UDP Profile** Select System-UDP-Per-Pkt.
+*  In **VS VIP**  Select **Create VS VIP** Enter Name & under **General** Select **ADD** to add **VIP**
+   * **Enable VIP**
    * **Private IP** > **Auto-Allocate**
    * **IP Protocol** > **V4 Only**
-   * **VIP Address Allocation Network** > **sfo01-w01-vds01-tkgmanagementvip**
+   * **VIP Address Allocation Network** > **sfo01-w01-vds01-albmanagement**
    * **IPv4 Subnet** > Select the Defined network
 * Click **SAVE**
 
@@ -61,4 +64,6 @@ by using the drop-down option.
 ### Update AVI DNS Service
 
 Navigate to **Administration** > **DNS Service** and Select the DNS profile **Click** on pencil icon to **EDIT**.
+
+
 
