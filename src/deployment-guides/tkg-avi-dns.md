@@ -64,6 +64,3 @@ by using the drop-down option.
 ### Update AVI DNS Service
 
 Navigate to **Administration** > **DNS Service** and Select the DNS profile **Click** on pencil icon to **EDIT**.
-
-
-
