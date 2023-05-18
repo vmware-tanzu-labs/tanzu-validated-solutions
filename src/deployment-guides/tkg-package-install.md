@@ -88,7 +88,7 @@ Dependencies to be installed: cert-manager, contour.
 we are using RFC2136 (BIND) Server method in this document.For more information, refer [ product documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-externaldns.html)
 
 
-To install the ExternalDNS package, click **Browse Packages** and **click the Contour tile on the Catalog page**. 
+To install the ExternalDNS package, click **Browse Packages** and **click the ExternalDNS tile on the Catalog page**. 
 
 Click **Install Package** to initiate the installation.
 
