@@ -114,24 +114,24 @@ Each workload cluster integrates with NSX ALB by running an NSX ALB Kubernetes O
 
 ## NSX Advanced Load Balancer Licensing
 
-NSX ALB requires a license to enable and utilize the available load balancing features. The following are the various license editions supported for VMware Tanzu for Kubernetes Operations.
+NSX ALB requires a license to enable and utilize the available load balancing features. The following license editions are supported for VMware Tanzu for Kubernetes Operations:
 
-- VMware NSX Advance Load Balancer Enterprise Edition
-- VMware NSX Advanced Load Balancer essentials for Tanzu
+- VMware NSX Advance Load Balancer Enterprise Edition.
+- VMware NSX Advanced Load Balancer essentials for Tanzu.
 
-The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up to be in the Enterprise Edition licensing tier and it can be changed from one edition to another. For more information on NSX ALB Feature comparison, refer to [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-license-editions/#feature-comparison).
+The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-license-editions/#feature-comparison).
 
 ### VMware NSX ALB Enterprise Edition
 
-VMware NSX ALB Enterprise Edition is a fully-featured Avi Vantage license, which includes load balancing, GSLB, WAF, and all other features available on Avi Vantage.
+The VMware NSX ALB Enterprise Edition is a full-featured Avi Vantage license that includes load balancing, GSLB, WAF, and so on.
 
-For more information on VMware NSX ALB Enterprise edition, refer to [VMware NSX ALB Enterprise Edition](https://avinetworks.com/docs/22.1/license-management-starting-with-release-20.1.1/#enterprise-edition-license/).
+For more information about VMware NSX ALB Enterprise edition, see [VMware NSX ALB Enterprise Edition](https://avinetworks.com/docs/22.1/license-management-starting-with-release-20.1.1/#enterprise-edition-license/).
 
 
 ### VMware NSX Advanced Load Balancer essentials for Tanzu
-Starting with Avi Vantage release 20.1.2, VMware NSX ALB essentials for Tanzu edition is supported on Avi Vantage. NSX ALB essentials for Tanzu has been introduced to provide basic Layer 4 load balancing services for Tanzu Basic and Standard edition customers.
+VMware NSX ALB essentials for Tanzu edition is supported on Avi Vantage 20.1.2 and later. NSX ALB essentials for Tanzu has been introduced to provide basic Layer 4 load balancing services for VMware Tanzu Basic and Standard editions.
 
-For more information on VMware NSX ALB essentials for Tanzu edition, refer to [VMware NSX ALB essentials for Tanzu](https://avinetworks.com/docs/22.1/nsx-alb-essentials-for-tanzu/).
+For more information about VMware NSX ALB essentials for Tanzu edition, see [VMware NSX ALB essentials for Tanzu](https://avinetworks.com/docs/22.1/nsx-alb-essentials-for-tanzu/).
 
 
 
@@ -277,11 +277,11 @@ The following table provides the recommendations for configuring NSX ALB in a vS
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-| TKO-ALB-SE-001 | NSX ALB Service Engine High Availability set to Active/Active| Provides higher resiliency, optimum performance, and utilization compared to N+M and/or Active/Standby.| Requires NSX ALB Enterprise Licensing, only Active-Standby mode is supported with NSX ALB essentials for Tanzu license. <br> <br> Certain applications might not work in Active/  Active mode. For instance, applications that require preserving client IP use the Legacy Active/ Standby HA mode. |
+| TKO-ALB-SE-001 | NSX ALB Service Engine High Availability set to Active/Active| Provides higher resiliency, optimum performance, and utilization compared to N+M and/or Active/Standby.| Requires NSX ALB Enterprise Licensing. Only the Active/Standby mode is supported with NSX ALB essentials for Tanzu license. <br> <br> Certain applications might not work in the Active/Active mode. For example, applications that  preserve the client IP use the Legacy Active/Standby HA mode. |
 | TKO-ALB-SE-002 | Dedicated Service Engine Group for the TKG Management | SE resources are guaranteed for TKG Management Stack and provides data path segregation for Management and Tenant Application | Dedicated service engine Groups increase licensing cost. </p>|
 | TKO-ALB-SE-003 | Dedicated Service Engine Group for the TKG Workload Clusters Depending on the nature and type of workloads (dev/prod/test)|SE resources are guaranteed for single or set of workload clusters and provides data path segregation for Tenant Application hosted on workload clusters | Dedicated service engine Groups increase licensing cost. </p>|
-| TKO-ALB-SE-004 | Enable ALB Service Engine Self Elections | Enable SEs to elect a primary amongst themselves in the absence of connectivity to the NSX ALB controller. | Requires NSX ALB Enterprise Licensing, not supported with NSX ALB essentials for Tanzu license. |
-| TKO-ALB-SE-005 | Enable 'Dedicated dispatcher CPU' on Service Engine Groups that contain the Service Engine VMs of 4 or more vCPUs. <br> <br>Note: This setting should be enabled on SE Groups that are servicing applications and has high network requirements. | This will enable a dedicated core for packet processing enabling high packet pipeline on the Service Engine VMs.<br> Note: By default, the packet processing core also processes load-balancing flows.| Consume more Resources from Infrastructure.|
+| TKO-ALB-SE-004 | Enable ALB Service Engine Self Elections | Enable SEs to elect a primary amongst themselves in the absence of connectivity to the NSX ALB controller. | Requires NSX ALB Enterprise Licensing. This feature is not supported with NSX ALB essentials for Tanzu license. |
+| TKO-ALB-SE-005 | Enable 'Dedicated dispatcher CPU' on Service Engine Groups that contain the Service Engine VMs of 4 or more vCPUs. <br> <br>**Note:** This setting should be enabled on SE Groups that are servicing applications and has high network requirements. | This will enable a dedicated core for packet processing enabling high packet pipeline on the Service Engine VMs.<br> Note: By default, the packet processing core also processes load-balancing flows.| Consume more Resources from Infrastructure.|
 | TKO-ALB-SE-006 | Set 'Placement across the Service Engines' setting to 'Compact'.| This allows maximum utilization of capacity (Service Engine ).| None |
 | TKO-ALB-SE-007 | Set the SE size to a minimum 2vCPU and 4GB of Memory | This configuration should meet the most generic use case | For services that require higher throughput, these configuration needs to be investigated and modified accordingly.|
 | TKO-ALB-SE-008 | Under Compute policies Create a ‘VM-VM anti-affinity rule for SE engines part of the same SE group that prevents collocation of the Service Engine VMs on the same host.| vSphere will take care of placing the Service Engine VMs in a way that always ensures maximum HA for the Service Engines part of a Service Engine group. | Affinity Rules needs to be configured manually.|
@@ -351,7 +351,7 @@ This option does not have all the NSX ALB L7 ingress capabilities but uses it fo
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-ALB-L7-001 | Deploy NSX ALB L7 ingress in NodePortLocal mode.|1. Gives good Network hop efficiency. <br> 2. Helps to reduce the east-west traffic and encapsulation overhead. <br> 3.Service Engine groups are shared across clusters and the load-balancing persistence is also supported. |Supported only with Antrea CNI with IPV4 addressing. <br> <br> L7 Ingress feature requires NSX ALB Enterprise Licensing|
+|TKO-ALB-L7-001 | Deploy NSX ALB L7 ingress in NodePortLocal mode.| - Provides better Network hop efficiency. <br> - Helps to reduce the east-west traffic and encapsulation overhead. <br> - Shared Service Engine groups across clusters and supports the load-balancing persistence. |Supported with Antrea CNI with IPV4 addressing. <br> <br> To configure L7 Ingress, you need NSX ALB Enterprise Licensing.
 <br>
 
 ## Container Registry
