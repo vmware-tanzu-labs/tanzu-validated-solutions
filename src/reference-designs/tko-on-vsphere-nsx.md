@@ -14,13 +14,13 @@ The validated Bill of Materials that can be used to install Tanzu Kubernetes Gri
 
 |**Software Components**|**Version**|
 | --- | --- |
-|Tanzu Kubernetes Grid|2.1.0|
-|VMware vSphere ESXi|7.0 U3d and later|
-|VMware vCenter (VCSA)|7.0 U3d and later|
-|NSX Advanced Load Balancer|22.1.2|
-|VMware NSX|3.2.1.2|
+|Tanzu Kubernetes Grid|2.2.0|
+|VMware vSphere ESXi|7.0 U3g and later|
+|VMware vCenter (VCSA)|7.0 U3g and later|
+|NSX Advanced Load Balancer|22.1.3|
+|VMware NSX|4.1.0.0|
 
-For up-to-date information about which software versions can be used together, check the [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,8803&row=789,%262,%26912,).
+For up-to-date information about which software versions can be used together, check the [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,17050&row=789,%262,%26912,).
 
 ## Tanzu Kubernetes Grid Components
 
@@ -83,8 +83,8 @@ Tanzu Kubernetes Grid also supports [Multus](https://github.com/k8snetworkplumbi
 
 To provision a Tanzu Kubernetes cluster using a non-default CNI, see the following instructions:
 
-- [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-networking.html?hWord=N4IghgNiBcIMaQJZwPYgL5A)
-- [Implement Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-multus.html?hWord=N4IghgNiBcIMaQJZwPYgL5A)
+- [Deploy Tanzu Kubernetes clusters with Calico](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-networking.html#calico)
+- [Implement Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-packages-multus.html)
 
 Each CNI is suitable for a different use case. The following table lists some common use cases for the three CNIs that Tanzu Kubernetes Grid supports. This table helps you with information on selecting the right CNI in your Tanzu Kubernetes Grid implementation.
 
@@ -93,6 +93,16 @@ Each CNI is suitable for a different use case. The following table lists some co
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p></p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>Pros</p><p>- Provides an option to configure egress IP pool or static egress IP for Kubernetes workloads.</p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for network policies</p><p>- High network performance</p><p>- SCTP support</p><p>Cons</p><p>- No multicast support</p><p></p>|
 |Multus|Multus CNI provides multiple interfaces per each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SR-IOV, DPDK, OVS-DPDK, and VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
+
+## Deploy Pods with Routable, No-NAT IP Addresses (NSX)
+
+On vSphere with NSX networking and the Antrea container network interface (CNI), you can configure a workload clusters with routable IP addresses for its worker pods, bypassing network address translation (NAT) for external requests from and to the pods.
+
+Routable IP addresses on pods let you:
+
+- Trace outgoing requests to common shared services, because their source IP address is the routable pod IP address, not a NAT address.
+- Support authenticated incoming requests from the external internet directly to pods, bypassing NAT.
+
 
 ## Tanzu Kubernetes Grid Infrastructure Networking
 
@@ -141,11 +151,15 @@ IP address allocation for virtual services can be over DHCP or through NSX Advan
 
 ## Network Architecture
 
-For the deployment of Tanzu Kubernetes Grid in the VMware NSX environment, it is required to build separate networks for the Tanzu Kubernetes Grid management cluster and workload clusters, NSX Advanced Load Balancer management, and cluster-VIP network for control plane HA.
+For the deployment of Tanzu Kubernetes Grid in the VMware NSX environment, it is required to build separate networks for the Tanzu Kubernetes Grid management cluster and workload clusters, NSX Advanced Load Balancer management, cluster-VIP and workload VIP network for control plane HA and application load balancing/ingress.
 
-The network reference design can be mapped into this general framework.
+The network reference design can be mapped into this general framework. This design uses a single VIP network for control plane L4 load balancing and application L4/L7. This design is mostly suited for dev/test environment.
 
-![TKG with NSX-T Data Center Networking general network layout](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-3.png)
+![TKG with NSX-T Data Center Networking general network layout 01](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-3.png)
+
+Another reference design that can be implemented in production environment is shown below and it uses separate VIP network for the applications deployed in management/shared services and the workload cluster. 
+
+![TKG with NSX-T Data Center Networking general network layout 02](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-2.png)
 
 This topology enables the following benefits:
 
@@ -157,15 +171,18 @@ This topology enables the following benefits:
 
 ### <a id="netreq"> </a> Network Requirements
 
-As per the defined architecture, the list of required networks follows:
+As per the production architecture, the list of required networks follows:
 
 |**Network Type**|**DHCP Service**|<p>**Description & Recommendations**</p><p></p>|
 | --- | --- | --- |
-|NSX ALB Management Logical Segment|Optional|<p>NSX ALB controllers and SEs are attached to this network. </p><p></p><p>DHCP is not a mandatory requirement on this network as NSX ALB can handle IPAM services for a given network.</p>|
-|TKG Management Logical Segment|Yes|Control plane and worker nodes of TKG management cluster and shared service clusters are attached to this network.|
+|NSX ALB Management Logical Segment|Optional|<p>NSX ALB controllers and SEs are attached to this network. </p><p></p><p>DHCP is not a mandatory requirement on this network as NSX ALB can handle IPAM services for the management network.</p>|
+|TKG Management Logical Segment|Yes|Control plane and worker nodes of TKG management cluster are attached to this network.|
 |TKG Shared Service Logical Segment|Yes|Control plane and worker nodes of TKG shared services cluster are attached to this network.|
 |TKG Workload Logical Segment|Yes|Control plane and worker nodes of TKG workload clusters are attached to this network.|
-|TKG Cluster VIP Logical Segment|No|Virtual services for control plane HA of all TKG clusters (management, shared services, and workload)<br>Reserve sufficient IP addresses depending on the number of TKG clusters planned to be deployed in the environment, NSX Advanced Load Balancer takes care of IPAM on this network.|
+|TKG Management VIP Logical Segment|No|Virtual services for control plane HA of all TKG clusters (management, shared services, and workload)<br>Reserve sufficient IP addresses depending on the number of TKG clusters planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
+|TKG Workload VIP Logical Segment|No|Virtual services for applications deployed in the workload cluster. The applications can be of type Load balancer or Ingress<br>Reserve sufficient IP addresses depending on the number of applications planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
+
+**Note -** You can also select `TKG Workload VIP` network for control plane HA of the workload cluster if you wish so. 
 
 #### <a id="cidr"> </a> Subnet and CIDR Examples
 
@@ -174,10 +191,13 @@ For this demonstration, this document makes use of the following subnet CIDR for
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool in NSXT**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
 |NSX ALB Management Network|alb-mgmt-ls|172.19.71.1/27|N/A|172.19.71.6 - 172.19.71.30|
-|TKG Cluster VIP Network|tkg-cluster-vip|172.19.75.1/26|N/A|172.19.75.2 - 172.19.75.60|
+|TKG Management VIP Network|tkg-cluster-vip|172.19.75.1/26|N/A|172.19.75.2 - 172.19.75.60|
 |TKG Management Network|tkg-mgmt-ls|172.19.72.1/27|172.19.72.2 - 172.19.72.30|N/A|
 |TKG Shared Service Network|tkg-ss-ls|172.19.73.1/27|172.19.73.2 - 172.19.73.30|N/A|
 |TKG Workload Network|tkg-workload-ls|172.19.77.1/24|172.19.77.2- 172.19.77.251|N/A|
+|TKG Workload VIP Network|tkg-workload-vip-ls|172.19.77.1/24|172.19.77.2- 172.19.77.251|N/A|
+
+These networks are spread across the Tier-1 gateways shown in the reference architecture diagram. Appropriate firewall rules needs to be configured on the Tier-1 gateways for a successful deployment.
 
 ### <a id="fwreq"> </a> Firewall Requirements
 To prepare the firewall, you need to gather the following information:
@@ -187,7 +207,7 @@ To prepare the firewall, you need to gather the following information:
 3. TKG Management Network CIDR
 4. TKG Shared Services Network CIDR
 5. TKG Workload Network CIDR
-6. TKG Cluster VIP Address Range
+6. TKG Management VIP Address Range
 7. Client Machine IP Address
 8. Bootstrap machine IP Address
 9. Harbor registry IP address
@@ -196,17 +216,19 @@ To prepare the firewall, you need to gather the following information:
 12. NTP Server(s).
 13. NSX-T nodes and VIP address.
 
-|**Source**|**Destination**|**Protocol:Port**|**Description**|
-| --- | --- | --- | --- |
+|**Source**|**Destination**|**Protocol:Port**|**Description**|**Configured on**|
+| --- | --- | --- | --- |---|
+|NSX ALB controllers (NSX ALB Management Network)|vCenter and ESXi hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer management network CIDR|<p>DNS Server</p><p>NTP Server</p>|<p>UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time synchronization</p>|NSX ALB Tier-1 Gateway|
+|NSX ALB controllers (NSX ALB Management Network)|NSX-T nodes and VIP address|TCP:443|Allow NSX ALB to discover NSX objects|NSX ALB Tier-1 Gateway|
+|Client Machine|NSX ALB controllers and cluster VIP address|TCP:443|Access NSX ALB controller UI|NSX ALB Tier-1 Gateway|
+|Admin network|Bootstrap VM|SSH:22|To deploy, manage  and configure TKG clusters|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|vCenter IP|TCP:443|Allows components to access vCenter to create VMs and storage volumes|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|Harbor Registry|TCP:443|<p>Allows components to retrieve container images </p><p>This registry can be a local or a public image registry (projects.registry.vmware.com)</p>|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|TKG Cluster VIP Network |TCP:6443|For management cluster to configure workload cluster<br>Allow shared cluster to register with management cluster<br>Allow workload cluster to register with management cluster|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|NSX ALB controllers (NSX ALB management network)|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller|
-|NSX ALB controllers (NSX ALB Management Network)|vCenter and ESXi hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|
-|NSX Advanced Load Balancer management network CIDR|<p>DNS Server</p><p>NTP Server</p>|<p>UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time synchronization</p>|
-|NSX ALB controllers (NSX ALB Management Network)|NSX-T nodes and VIP address|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|
-|Admin network|Bootstrap VM|SSH:22|To deploy, manage  and configure TKG clusters|
+
 |deny-all|any|any|deny|
 
 ## Installation Experience
