@@ -165,7 +165,7 @@ For more information about VMware NSX ALB Enterprise edition, see [VMware NSX AL
 ### VMware NSX Advanced Load Balancer essentials for Tanzu
 Starting with Avi Vantage release 20.1.2, VMware NSX ALB essentials for Tanzu edition is supported on Avi Vantage. NSX ALB essentials for Tanzu has been introduced to provide basic Layer 4 load balancing services for Tanzu Basic and Standard edition customers.
 
-For more information on VMware NSX ALB essentials for Tanzu edition, refer to [VMware NSX ALB essentials for Tanzu](https://avinetworks.com/docs/22.1/nsx-alb-essentials-for-tanzu/).
+For more information on VMware NSX ALB essentials for Tanzu edition, see [VMware NSX ALB essentials for Tanzu](https://avinetworks.com/docs/22.1/nsx-alb-essentials-for-tanzu/).
 
 
 ## NSX Advanced Load Balancer Components
