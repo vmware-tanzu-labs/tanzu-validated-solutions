@@ -166,7 +166,7 @@ Ensure the following:
     ```
    The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. Copy the files to the bootstrap Machine after bootstrap Machine deployment.
+1. Copy the files to the bootstrap machine after bootstrap machine deployment.
 
     Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other medium:
    * Image TAR files
@@ -201,7 +201,7 @@ The bootstrap machine must meet the following prerequisites:
    * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
-1. Copy  Files to the bootstrap machine.<p>
+1. Copy files to the bootstrap machine.<p>
    Copy the following files downloaded in Bastion host through a USB thumb drive or other  medium:
    * Image TAR files
    * YAML files
