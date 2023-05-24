@@ -166,7 +166,7 @@ Ensure the following:
     ```
    The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. Copy the Files to the bootstrap Machine after bootstrap Machine deployment.
+1. Copy the files to the bootstrap Machine after bootstrap Machine deployment.
 
     Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other medium:
    * Image TAR files
