@@ -166,7 +166,7 @@ Ensure the following:
     ```
    The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. Copy the Files to the bootstrap Machine after bootstrap Machine deployment.
+1. Copy the files to the bootstrap machine after bootstrap machine deployment.
 
     Copy the following files to the offline machine, which is the bootstrap machine in the proxied or air-gapped environment, through a USB thumb drive or other medium:
    * Image TAR files
@@ -201,17 +201,17 @@ The bootstrap machine must meet the following prerequisites:
    * Ensure that the bootstrap VM is connected to Tanzu Kubernetes Grid management network, `sfo01-w01-vds01-tkgmanagement`.
 
 To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machine, follow the instructions below:
-1. Copy  Files to  bootstrap Machine.<p>
-   Copy the following files downloaded in Bastion Host through a USB thumb drive or other  medium.
+1. Copy files to the bootstrap machine.<p>
+   Copy the following files downloaded in Bastion host through a USB thumb drive or other  medium:
    * Image TAR files
    * YAML files
 
-1. Copy the following Linux CLI packages from Bastion Host.
+1. Copy the following Linux CLI packages from Bastion host:
 
    * VMware Tanzu CLI 2.1.0 for Linux
    * kubectl cluster CLI v1.24.9 for Linux
 
-1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
+1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools:
     ```bash
     ## Install required packages
     install tar, zip, unzip, wget
@@ -224,24 +224,24 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
     ## Verify Tanzu CLI version
 
-     [root@tkg160-bootstrap ~] # tanzu version
+     # tanzu version
 
     version: v0.28.0
     buildDate: 2023-01-20
     sha: 6288c751-dirty
     ```
-1. Install the isolated-cluster plugin on the offline bootstrap machine:
+1. Install the isolated-cluster plug-in on the offline bootstrap machine:
 
       ```bash
      tanzu plugin install isolated-cluster --local standalone-plugins/
 
       ```
-1. Log in to the Private Registry on the Offline Machine.
+1. Log in to the private registry on the offline machine:
       ```bash
      docker login <URL>
       ```
    **Note** If your private registry uses a self-signed certificate, save the CA certificate of the registry in "/etc/docker/certs.d/registry.example.com/ca.crt"
-1. Upload the Images to the Private Registry.
+1. Upload the images to the private registry:
       ```bash
      tanzu isolated-cluster upload-bundle --source-directory <SOURCE-DIRECTORY> --destination-repo <DESTINATION-REGISTRY> --ca-certificate <SECURITY-CERTIFICATE>
       ```
@@ -251,7 +251,7 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
     ```bash
      Example:- tanzu isolated-cluster upload-bundle --source-directory ./ --destination-repo registry.example.com/library --ca-certificate /etc/docker/certs.d/registry.example.com/ca.crt
       ```
-  **Note** we can Skip Step 3,4,5 if your Bastion host direct access to private registry . we can directly upload the files from Bastion to Private registry.
+  **Note** we can skip step 3, 4, and 5 if the Bastion host accesses the private registry directly. You can directly upload the files from the Bastion host to the private registry.
 
 1. Install the kubectl utility.
 
@@ -543,12 +543,12 @@ To configure NTP, go to **Administration** > **Settings** > **DNS/NTP > Edit** a
 
 ### <a id="nsx-alb-license"></a> NSX Advanced Load Balancer: Licensing
 
-This document focuses on enabling NSX Advanced Load Balancer using the license model: **Enterprise License (VMware NSX ALB Enterprise)**.
+You can configure the license tier as NSX ALB Enterprise or NSX ALB Essentials for VMware Tanzu as per the feature requirement. This section focuses on enabling NSX Advanced Load Balancer using **Enterprise Tier (VMware NSX ALB Enterprise)** license model.
 
-1. To configure licensing, go to **Administration** > **Settings** > **Licensing** and click on the gear icon to change the license type to Enterprise. 
+1. To configure licensing, go to **Administration** > **Settings** > **Licensing**, and click on the gear icon to change the license type to Enterprise. 
 
     ![License configuration - change licensing type](img/tkg-airgap-vsphere-deploy/12.ALB-Licensing-01.png)
-1. Select Enterprise Tier as the license type and click **Save**
+1. Select Enterprise Tier as the license type and click **Save**.
 
     ![License configuration - select Enterprise tier](img/tkg-airgap-vsphere-deploy/12.ALB-Licensing-02.png)
 
@@ -647,23 +647,23 @@ For information about mapping a specific service engine group to Tanzu Kubernete
 
     ![Enter cloud name](img/tkg-airgap-vsphere-deploy/22.ALB-Clouds-1.png)
 
-1. Under the **vCenter/vSphere** pane, enter information for * vCenter address*, *Username*, and *Password* fields and  click **CONNECT**.
+1. Under the **vCenter/vSphere** pane, specify the vCenter address, Username, and Password, and  click **CONNECT**.
 
     ![Enter infrastructure information for vCenter Cloud](img/tkg-airgap-vsphere-deploy/23.ALB-Clouds-2.png)
 
-1. Under the **Data Center** pane, choose the data center from the Data Center dropdown.Select **Content Library** for SE template and click **SAVE & LAUNCH**.
+1. Under the **Data Center** pane, choose the data center from the Data Center drop-down menu.Select **Content Library** for SE template and click **SAVE & LAUNCH**.
 
     ![Select data center](img/tkg-airgap-vsphere-deploy/24.ALB-Clouds-3.png)
 
-1. Select the Management Network from the **Management Network** drop down to choose the NSX Advanced Load Balancer management network for service engines. Enter a static IP address pool for SEs and VIP, and click **Complete**.
+1. Select the Management Network from the **Management Network** drop-down menu to choose the NSX Advanced Load Balancer management network for service engines. Enter a static IP address pool for SEs and VIP, and click **Complete**.
     ![Enter network information](img/tkg-airgap-vsphere-deploy/25.ALB-Clouds-4.png)
 
 1. Wait for the cloud to get configured and the status to turn green.
 
     ![Wait for completion](img/tkg-airgap-vsphere-deploy/26.ALB-Clouds-5.png)
 
-1. To create a service engine group for Tanzu Kubernetes Grid management clusters, under **Infrastructure** tab, go to **Cloud Resources** > **Service Engine Group**.
-From the **Select Cloud** drop down, select the cloud created in the previous step and click **Create**.<p>
+1. To create a service engine group for Tanzu Kubernetes Grid management clusters, under the **Infrastructure** tab, go to **Cloud Resources** > **Service Engine Group**.
+From the **Select Cloud** drop-down menu, select the cloud created in the previous step and click **Create**.<p>
 The following components are created in NSX Advanced Load Balancer.
 
    | **Object** | **Sample Name** |
@@ -677,7 +677,9 @@ The following components are created in NSX Advanced Load Balancer.
 
     | **Parameter** | **Value** |
     | --- | --- |
-    | High availability mode | Active/Active |
+    | High availability mode | Active/Active - NSX ALB Enterprise edition.  <br> Active/Standby - NSX ALB Essentials for Tanzu edition. |
+    | Enable Service Engine Self Election | Supported with NSX ALB Enterprise edition.|
+    |Memory for caching|Supported with NSX ALB Enterprise edition. You must set the value to 0 for essentials. |
     | Memory per Service Engine | 4   |
     | vCPU per Service Engine | 2   |
 
@@ -685,7 +687,7 @@ The following components are created in NSX Advanced Load Balancer.
 
     ![Create service engine group - basic settings](img/tkg-airgap-vsphere-deploy/27.ALB-SE.png)
 
-    For advanced configuration, click on the **Advanced tab**, specify a specific cluster and datastore for service engine placement, change the NSX_ALB SE folder name, and service engine name prefix, and click **Save**.
+    For advanced configuration, click on the **Advanced tab**, specify a specific cluster and datastore for service engine placement. AFter that, change the NSX_ALB SE folder name and service engine name prefix, and click **Save**.
 
     ![Create service engine group - advanced settings](img/tkg-airgap-vsphere-deploy/28.ALB-SE-Group2.png)  
 
@@ -1218,11 +1220,13 @@ Below are the changes in ADC Ingress section when compare to the default ADC.
 
 * **nodeNetworkList**: Provide the values for TKG workload network name and CIDR.
 
-* **serviceType**:  L7 Ingress type, recommended to use `NodePortLocal`
+* **serviceType**:  L7 Ingress type. We recommend to use `NodePortLocal`.
 
-* **shardVSSize**: Virtual service size
+* **shardVSSize**: Virtual service size.
 
-The format of the AKODeploymentConfig YAML file for enabling NSX ALB L7 Ingress is as follows.
+**Note:** NSX ALB L7 Ingress feature requires Enterprise edition license. If you do not wish to enable L7 feature/applied with ALB essentials for Tanzu license, disable the L7 feature by setting the value `disableIngressClass` to `true`.
+
+The format of the AKODeploymentConfig YAML file for enabling NSX ALB L7 Ingress is as follows:
 
 <!-- /* cSpell:disable */ -->
 ```yaml
@@ -1248,6 +1252,7 @@ spec:
   dataNetwork:
     cidr: <TKG-Workload-VIP-network-CIDR>
     name: <TKG-Workload-VIP-network-CIDR>
+  serviceEngineGroup: <Workload-Cluster-SEG>
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false                               # required
@@ -1259,13 +1264,13 @@ spec:
             - <TKG-Workload-Network-CIDR>
       serviceType: NodePortLocal                                # required
       shardVSSize: MEDIUM                                       # required
-  serviceEngineGroup: <Workload-Cluster-SEG>
+
 
 
 ```
 <!-- /* cSpell:enable */ -->
 
-The AKODeploymentConfig with sample values in place is as follows. You should add the respective NSX ALB label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
+The AKODeploymentConfig with sample values in place is as follows. You must add the respective NSX ALB label `workload-l7-enabled=true` while deploying shared services cluster to enforce this network configuration.
 
 * cloud: ​`sfo01w01vc01​`
 * service engine group: `sfo01w01segroup01`
@@ -1297,6 +1302,7 @@ spec:
   dataNetwork:
     cidr: 172.16.70.0/24
     name: sfo01-w01-vds01-tkgworkloadvip
+  serviceEngineGroup: sfo01w01segroup01
   extraConfigs:
     cniPlugin: antrea
     disableStaticRouteSync: false                               # required
@@ -1308,7 +1314,6 @@ spec:
             - 172.16.60.0/24
       serviceType: NodePortLocal                                # required
       shardVSSize: MEDIUM                                       # required
-  serviceEngineGroup: sfo01w01segroup01
 ```
 <!-- /* cSpell:enable */ -->
 
