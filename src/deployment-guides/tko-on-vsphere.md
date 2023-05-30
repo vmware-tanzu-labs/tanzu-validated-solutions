@@ -195,6 +195,7 @@ To configure NTP, go to **Administration** > **Settings** > **DNS/NTP > Edit** a
 ### <a id="nsx-alb-license"></a> NSX Advanced Load Balancer: Licensing
 
  You can configure the license tier as NSX ALB Enterprise or NSX ALB Essentials for VMware Tanzu as per the feature requirement. This section focuses on enabling NSX Advanced Load Balancer using **Enterprise Tier (VMware NSX ALB Enterprise)** license model.
+ 
 1. To configure licensing, go to **Administration**  > **Licensing** and click on the gear icon to change the license type to Enterprise. 
 
     ![License configuration - select Enterprise tier](img/tko-on-vsphere/12.ALB-Licensing-01.png)
