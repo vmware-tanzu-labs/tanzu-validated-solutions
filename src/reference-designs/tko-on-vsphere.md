@@ -177,7 +177,7 @@ For the deployment of Tanzu Kubernetes Grid in the vSphere environment, it is re
 
 The network reference design can be mapped into this general framework.
 
-![Tanzu for Kubernetes Grid network layout](img/tko-on-vsphere/tko-on-vsphere-nework-architecture.jpg)
+![Tanzu for Kubernetes Grid network layout](img/tko-on-vsphere/tko-on-vsphere-network-architecture.jpg)
 
 This topology enables the following benefits:
 
