@@ -175,7 +175,7 @@ IP address allocation for virtual services can be over DHCP or using NSX ALB in-
 
 For the deployment of Tanzu Kubernetes Grid in the vSphere environment, it is required to build separate networks for the Tanzu Kubernetes Grid management cluster and workload clusters, NSX ALB management, cluster-VIP network for control plane HA, Tanzu Kubernetes Grid management VIP or data network, and Tanzu Kubernetes Grid workload data or VIP network.
 
-The network reference design can be mapped into this general framework.
+The network reference design can be mapped into this general framework:
 
 ![Tanzu for Kubernetes Grid network layout](img/tko-on-vsphere/tko-on-vsphere-network-architecture.jpg)
 
@@ -213,7 +213,7 @@ The key network recommendations for a production-grade Tanzu Kubernetes Grid dep
 
 ### Subnet and CIDR Examples
 
-The deployment described in this document makes use of the following CIDR.
+For the purpose of demonstration, this document makes use of the following Subnet CIDR for TKO deployment:
 
 |**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
@@ -224,9 +224,9 @@ The deployment described in this document makes use of the following CIDR.
 |TKG Workload VIP Network|`sfo01-w01-vds01-tkgworkloadvip`|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
 |TKG Workload Segment|`sfo01-w01-vds01-tkgworkload`|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
 
-## 3 - Network Architecture
+## 3-Tier Network Architecture
 
-For POC environments and minimal networks requirement, you can proceed with 3 network architecture. In this design, we deploy the Tanzu Kubernetes Grid into 3 networks as Infrastructure Management Network, TKG Management Network and TKG Workload Network. This design allows us to use only 3 networks and ensures the isolation between Infra VMs, TKG Management and TKG Workload components. 
+For POC environments and minimal networks requirement, you can use the 3-tier network architecture. For this demonstration, we deployed Tanzu Kubernetes Grid into a 3-tier network as Infrastructure Management Network, TKG Management Network, and TKG Workload Network. This design allows you use only 3-tier network architectures. and ensures the isolation between Infra VMs, TKG Management. and TKG Workload components. 
 
 This network reference design can be mapped into this general framework:
 
@@ -235,19 +235,19 @@ This network reference design can be mapped into this general framework:
 
 
 This topology enables the following benefits:
-- Deploying the NSX ALB components on the existing infrastructure management network reduces an additional network usage. 
-- Isolate and separates the NSX ALB, SDDC management components (vCenter, ESX) from the VMware Tanzu Kubernetes Grid components.
-- TKG Mgmt Cluster VIP, TKG Mgmt Data VIP, TKG Mgmt can be clubbed together to a single network `TKG-Mgmt-Network`, which ensures all the TKG Management components are deployed in a common network and removes additional network overhead and firewall rules.
-- TKG Workload Cluster VIP, TKG Workload Data VIP, TKG Workload can be clubbed together to a single network `TKG-Workload-Network`, which ensures all the TKG Workload components are deployed in a common network.
-- Mgmt control plane/Data VIP and Workload control plane/Data VIP are separated into different networks to enhance isolation and security. 
+- Deploy the NSX ALB components on the existing infrastructure management network which reduces an additional network usage. 
+- Isolate and separate the NSX ALB, SDDC management components (vCenter and ESX) from the VMware Tanzu Kubernetes Grid components.
+- Club TKG Mgmt Cluster VIP, TKG Mgmt Data VIP, TKG Mgmt into a single network `TKG-Mgmt-Network`, that ensures that the TKG Management components are deployed in a common network, and removes additional network overhead and firewall rules.
+- Cliub TKG Workload Cluster VIP, TKG Workload Data VIP, TKG Workload into a single network `TKG-Workload-Network`, that ensures that the TKG Workload components are deployed in a common network.
+- Separate the Management control plane/Data VIP and the Workload control plane/Data VIP into different networks to enhance the isolation and security. 
 
 ### Network Requirements 
 
-|**Network Type**<p></p>|**DHCP Service**|<p>**Description & Recommendations**</p><p></p>|
+|**Network Type**<p></p>|**DHCP Service**|<p>**Description**</p><p></p>|
 | --- | --- | --- |
-|Infrastructure Management Network| Optional | NSX ALB controllers and SEs will be attached to this network. DHCP is not a mandatory requirement on this network as NSX ALB can take care of SE networking with IPAM. <p>This network also hosts core infrastructure components such as vCenter, ESXi hosts, DNS, NTP, etc. |
-|TKG Management Network| Yes | Control plane and worker nodes of the TKG Management cluster and Shared services clusters will be attached to this network. IP Assignment will be done through DHCP. <p> TKG Mgmt cluster VIP and TKG Mgmt Data VIP assignment is also done from the same network using NSX ALB Static IP Pool. <p> Ensure that DHCP range does not interfere with NSX ALB IP Block reservation.|
-|TKG Workload Network | Yes | Control plane and worker nodes of the TKG Workload cluster and Shared services clusters will be attached to this network. IP Assignment will be done through DHCP. <p> TKG Workload cluster VIP and TKG Workload Data VIP assignment is also done from the same network using NSX ALB Static IP Pool. <p> Ensure that DHCP range does not interfere with NSX ALB IP Block reservation.|
+|Infrastructure Management Network| Optional | NSX ALB controllers and Service Engines (SE) are attached to this network. DHCP is not a mandatory requirement on this network as NSX ALB manages the SE networking with IPAM. <p>This network also hosts core infrastructure components such as, vCenter, ESXi hosts, DNS, NTP, and so on. |
+|TKG Management Network| Yes | Control plane and worker nodes of the TKG Management cluster and the shared services clusters are attached to this network. The IP Assignment is managed through DHCP. <p> TKG Management cluster VIP and TKG Management Data VIP assignment is also managed from the same network using NSX ALB Static IP pool. <p> Ensure that DHCP range does not interfere with the NSX ALB IP Block reservation.|
+|TKG Workload Network | Yes | Control plane and worker nodes of the TKG Workload cluster and the shared services clusters are attached to this network. IP Assignment is managed done through DHCP. <p> TKG Workload cluster VIP and TKG Workload Data VIP assignment is also managed from the same network using NSX ALB Static IP pool. <p> Ensure that DHCP range does not interfere with the NSX ALB IP Block reservation.|
 
 ### Subnet and CIDR Examples:
 
@@ -274,16 +274,16 @@ To prepare the firewall, you need to gather the following information:
 |**Source**|**Destination**|**Protocol:Port**|**Description**|
 | --- | --- | --- | --- |
 |TKG management and workload networks|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|
-|TKG management and workload Networks|DHCP Server|UDP: 67, 68|Allows hosts to get DHCP addresses|
-|TKG management and workload Networks|vCenter IP|TCP:443|Allows components to access vCenter to create VMs and storage volumes|
-|TKG management, shared service, and workload cluster CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry can be a local or a public image registry (projects.registry.vmware.com)</p>|
+|TKG management and workload Networks|DHCP Server|UDP: 67, 68|Allows hosts to get DHCP addresses.|
+|TKG management and workload Networks|vCenter IP|TCP:443|Allows components to access vCenter to create VMs and storage volumes.|
+|TKG management, shared service, and workload cluster CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry can be a local or a public image registry (projects.registry.vmware.com).</p>|
 |TKG management cluster network|TKG cluster VIP network |TCP:6443|For management cluster to configure shared service and workload cluster.|
-|TKG shared service cluster network<br>(Required only if using a separate network for shared service cluster)|TKG cluster VIP network|TCP:6443|Allow shared cluster to register with management cluster|
-|TKG workload cluster network|TKG cluster VIP network <p><p>  **Note** In a 3-Network design, destination network is "TKG Mgmt Network"|TCP:6443|Allow workload cluster to register with management cluster|
-|TKG management, shared service, and workload Networks|NSX ALB Controllers (NSX ALB Management Network)|TCP:443|Allow NSX ALB Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB Controller|
-|NSX ALB Management Network |vCenter and ESXi Hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|
+|TKG shared service cluster network<br>(Required only if using a separate network for shared service cluster)|TKG cluster VIP network|TCP:6443|Allow shared cluster to register with management cluster.|
+|TKG workload cluster network|TKG cluster VIP network <p><p>  **Note** In a 3-tier Network design, destination network is "TKG Management Network"|TCP:6443|Allow workload cluster to register with management cluster.|
+|TKG management, shared service, and workload Networks|NSX ALB Controllers (NSX ALB Management Network)|TCP:443|Allow NSX ALB Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB Controller.|
+|NSX ALB Management Network |vCenter and ESXi Hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required.|
 |NSX ALB Controller Nodes |DNS server <br> NTP Server|TCP/UDP:53 <br> UDP:123|DNS Service <br> Time Synchronization|
-|Admin network|Bootstrap VM|SSH:22|To deploy, manage  and configure TKG clusters|
+|Admin network|Bootstrap VM|SSH:22|To deploy, manage  and configure TKG clusters.|
 |deny-all|any|any|deny|
 
 
