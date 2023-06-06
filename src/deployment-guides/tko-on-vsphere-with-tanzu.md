@@ -1,4 +1,4 @@
-# Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu
+# Deploy VMware Tanzu for Kubernetes Operations using vSphere with Tanzu
 
 This document outlines the steps for deploying Tanzu for Kubernetes Operations using vSphere with Tanzu in a vSphere environment backed by a Virtual Distributed Switch (VDS) and leveraging NSX Advanced Load Balancer (ALB) Enterprise Edition for L4/L7 load balancing and ingress.
 
