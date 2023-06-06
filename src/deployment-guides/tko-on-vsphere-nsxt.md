@@ -1,6 +1,6 @@
 # Deploy VMware Tanzu for Kubernetes Operations on VMware vSphere with VMware NSX-T
 
-This document provides step-by-step instructions for deploying Tanzu Kubernetes Operations in an Internet available vSphere environment backed by NSX-T Data Center networking.
+This document provides step-by-step instructions for deploying VMware Tanzu Kubernetes Operations in an Internet available vSphere environment backed by NSX-T Data Center networking.
 
 The scope of the document is limited to providing deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T](../reference-designs/tko-on-vsphere-nsx.md). It does not cover deployment procedures for the underlying SDDC components.
 
