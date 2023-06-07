@@ -226,7 +226,7 @@ For the purpose of demonstration, this document makes use of the following Subne
 
 ## 3-Tier Network Architecture
 
-For POC environments and minimal networks requirement, you can use the 3-tier network architecture. For this demonstration, we deployed Tanzu Kubernetes Grid into a 3-tier network as Infrastructure Management Network, TKG Management Network, and TKG Workload Network. This design allows you use only 3-tier network architectures. and ensures the isolation between Infra VMs, TKG Management. and TKG Workload components. 
+For POC environments and minimal networks requirement, you can proceed with 3 network architecture. In this design, we deploy the Tanzu Kubernetes Grid into 3 networks as Infrastructure Management Network, TKG Management Network and TKG Workload Network. This design allows us to use only 3 networks and ensures the isolation between Infra VMs, TKG Management and TKG Workload components. 
 
 This network reference design can be mapped into this general framework:
 
