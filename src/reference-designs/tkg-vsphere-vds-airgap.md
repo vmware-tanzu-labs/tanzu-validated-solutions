@@ -1,6 +1,6 @@
-# Tanzu Kubernetes Grid on vSphere Networking in an Air-Gapped Environment Reference Design
+# VMware Tanzu Kubernetes Grid on vSphere Networking in an Air-Gapped Environment Reference Design
 
-Tanzu for Kubernetes Operations(TKO) simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open-source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
+VMware Tanzu for Kubernetes Operations (informally known as TKO) simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open-source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
 An air-gapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This means a computer or network is disconnected from all other systems.
 
@@ -153,7 +153,7 @@ NSX ALB requires a license to enable and utilize the available load balancing fe
 - VMware NSX Advance Load Balancer Enterprise Edition.
 - VMware NSX Advanced Load Balancer essentials for Tanzu.
 
-The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-alb-license-editions/#feature-comparison).
+The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/latest/nsx-alb-license-editions/#feature-comparison).
 
 ### VMware NSX ALB Enterprise Edition
 

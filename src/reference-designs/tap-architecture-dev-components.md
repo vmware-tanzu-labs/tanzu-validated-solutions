@@ -1,6 +1,6 @@
-# Tanzu Application Platform Developer Components
+# VMware Tanzu Application Platform Developer Components
 
-Tanzu Application Platform provides development tools which allow developers to quickly build, test, deploy, and manage applications lifecycle.
+VMware Tanzu Application Platform (informally known as TAP) provides development tools which allow developers to quickly build, test, deploy, and manage applications lifecycle.
 
 ## Application Workloads
 

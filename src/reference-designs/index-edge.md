@@ -1,9 +1,9 @@
 # VMware Tanzu Edge Solution Reference Architecture 1.0
 Edge computing is gaining a lot of momentum for a variety of reasons that range from avoidance of latency, data volume, and bandwidth considerations to the need for autonomous disconnected operations, privacy, and security. These reasons are pushing businesses across all industries to run more and more applications at edge sites. Traditionally, these applications are run on VMs, but with the emergence of Kubernetes and microservices architectures, more applications are being containerized and there is a need for running a cloud native compute stack at the edge.
 
-For enterprises that already have remote offices and branch offices with a few servers running edge workloads, running modern, distributed applications across your edge sites can add a new layer of complexity. There is a significant difference between running a cloud native platform at the core data center versus running it at edge sites.
-
 The VMware Edge Compute Stack helps enterprises manage their edge sites with little or no local IT staff and enables them to run VM workloads at these sites. With the addition of VMware Tanzu, you can simplify how you architect and deploy a cloud native stack at hundreds or thousands of edge sites so that you can run cloud native applications at the edge.
+
+For enterprises that already have remote offices and branch offices with a few servers running edge workloads, running modern, distributed applications across your edge sites can add a new layer of complexity. There is a significant difference between running a cloud native platform at the core data center versus running it at edge sites.
 
 The Tanzu design for VMware Edge Compute Stack described here offers a best practice for running Tanzu at edge sites where the VMware Edge Compute Stack is already deployed. We will specifically address the following challenges at the edge:
 
