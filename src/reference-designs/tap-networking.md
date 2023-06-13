@@ -1,4 +1,4 @@
-# Tanzu Application Platform Networking
+# VMware Tanzu Application Platform Networking
 
 The following Tanzu Application Platform networking diagram shows the most common cross-cluster and external-services networking scenarios in a multi cluster Kubernetes environment. The diagram shows the high level egress and ingress networking flows between the Tanzu Application Platform components and the external services.
 
