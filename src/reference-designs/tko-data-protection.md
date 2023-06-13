@@ -1,8 +1,8 @@
-# Tanzu Kubernetes Grid Data Protection
+# VMware Tanzu Kubernetes Grid Data Protection
 
-Kubernetes maintains many states stored in the cluster itself in addition to your application state. Config maps, custom resource definitions, and secrets are all stored in the Kubernetes control plane. All of these are critical to your clusters’ operations. Protecting this data is just as critical as protecting any other element of your IT infrastructure, so it should be covered by data protection and your disaster recovery plan.
+Kubernetes maintains many states that are stored in the cluster itself in addition to your application state. Config maps, custom resource definitions, and secrets are all stored in the Kubernetes control plane. All of these are critical to your clusters’ operations. Protecting this data is just as critical as protecting any other element of your IT infrastructure, so it should be covered by data protection and your disaster recovery plan.
 
-Data Protection for Tanzu Kubernetes Grid workloads is provided by the Tanzu Mission Control data protection feature which is built upon an open-source foundation using the [Velero project](https://velero.io/), the most popular open-source project for Kubernetes data protection.
+Data Protection for Tanzu Kubernetes Grid workloads is provided by the Tanzu Mission Control (informally known as TMC) data protection feature which is built upon an open-source foundation using the [Velero project](https://velero.io/), the most popular open-source project for Kubernetes data protection.
 
 Using Tanzu Mission Control Data protection, you can back up and restore both stateless and stateful applications. Backups can be stored on AWS S3 or on any compatible S3 storage, giving you the flexibility to bring your own storage.
 

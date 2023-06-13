@@ -1,6 +1,6 @@
 ﻿# Authentication with Pinniped
 
-Tanzu Kubernetes Grid implements user authentication with [Pinniped](https://pinniped.dev/), an open-source authentication service for Kubernetes clusters. Pinniped allows you to plug external OpenID Connect (OIDC) or LDAP identity providers (IdP) into Tanzu Kubernetes (workload) clusters so that you can control user access to those clusters.
+VMware Tanzu Kubernetes Grid (informally known as TKG) implements user authentication with [Pinniped](https://pinniped.dev/), an open-source authentication service for Kubernetes clusters. Pinniped allows you to plug external OpenID Connect (OIDC) or LDAP identity providers (IdP) into Tanzu Kubernetes (workload) clusters so that you can control user access to those clusters.
 
 - For LDAP authentication, Pinniped uses [Dex](https://github.com/dexidp/dex/blob/master/README.md) as the endpoint to connect to your upstream LDAP IdP.
 - If you use OIDC, Pinniped provides its own endpoint, so Dex is not required. 
