@@ -1,6 +1,6 @@
-# Tanzu Application Platform Architecture
+# VMware Tanzu Application Platform Architecture
 
-This architecture gives you a path to creating a production deployment of Tanzu Application Platform (TAP) 1.5. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.5. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
