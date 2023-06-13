@@ -119,7 +119,7 @@ NSX ALB requires a license to enable and utilize the available load balancing fe
 - VMware NSX Advance Load Balancer Enterprise Edition.
 - VMware NSX Advanced Load Balancer essentials for Tanzu.
 
-The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-license-editions/#feature-comparison).
+The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-alb-license-editions/#feature-comparison).
 
 ### VMware NSX ALB Enterprise Edition
 
