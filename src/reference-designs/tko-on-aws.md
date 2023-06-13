@@ -1,7 +1,7 @@
 # VMware Tanzu for Kubernetes Operations on AWS Reference Design
 
 
-VMware Tanzu for Kubernetes Operations simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
+VMware Tanzu for Kubernetes Operations (informally known as TKO) simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. Tanzu for Kubernetes Operations delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations with Tanzu components on AWS.
 

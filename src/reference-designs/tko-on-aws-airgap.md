@@ -1,6 +1,6 @@
 # VMware Tanzu Kubernetes Grid on AWS Air-Gapped Reference Design
 
-VMware Tanzu Kubernetes Grid (multi-cloud) provides a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
+VMware Tanzu Kubernetes Grid (multi-cloud) provides a consistent, upstream-compatible, and regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Grid on AWS Networking in an air-gapped environment with Tanzu components on AWS. An air-gapped environment is a network security measure employed to ensure that a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This reference design is based on the architecture and components described in [VMware Tanzu Kubernetes Grid Reference Architecture 1.6](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/1.6/tko-reference-architecture/GUID-reference-designs-index.html).
 
