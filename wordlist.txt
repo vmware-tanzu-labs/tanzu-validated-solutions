@@ -80,6 +80,7 @@ SCST
 SCTP
 SDDC
 segroup
+snapshotting
 SNAT
 Snyk
 Sonobouy
@@ -108,8 +109,5 @@ VNET
 vsphere
 VXLAN
 Xeon
-Kubernetes
-snapshotting
-tkgmanagement
 xlarge
 xsmall
