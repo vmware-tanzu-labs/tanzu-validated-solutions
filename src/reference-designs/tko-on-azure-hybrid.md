@@ -4,7 +4,7 @@ _A validated augmentation for the [TKO on Azure reference architecture](tko-on-a
 
 ## Summary
 
-Building on the reference architecture provided for Tanzu for Kubernetes Operations (TKO) on Azure, this document outlines the modifications that should be considered for a hybrid-cloud architecture. This type of cloud architecture maintains some dependency or connectivity to on-prem networks and systems, and special considerations must be made to co-exist within this scenario. This reference architecture assumes on-premises connectivity via ExpressRoute or a VPN Gateway, private IP (i.e. not Internet-routable) only access, and _managed_ egress routing.
+Building on the reference architecture provided for Tanzu for Kubernetes Operations (informally known as TKO) on Azure, this document outlines the modifications that should be considered for a hybrid-cloud architecture. This type of cloud architecture maintains dependency or connectivity to on-premise networks and systems, and special considerations must be made to co-exist within this scenario. This reference architecture assumes on-premises connectivity via ExpressRoute or a VPN Gateway, private IP (i.e. not Internet-routable) only access, and _managed_ egress routing.
 
 The solution areas for a hybrid-cloud-accessible TKGm solution can be summarized as:
 

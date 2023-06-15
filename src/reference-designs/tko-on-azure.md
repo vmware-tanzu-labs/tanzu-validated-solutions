@@ -2,9 +2,7 @@
 
 VMware Tanzu simplifies the operation of Kubernetes in multi-cloud environment
 by centralizing management and governance for clusters and teams across
-on-premises, public clouds, and the edge. It delivers an open-source-aligned
-Kubernetes distribution with consistent operations and management to support
-infrastructure and app modernization.
+on-premises, public clouds, and the edge. This application delivers an open-source-aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations with Tanzu components on Microsoft Azure. This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
