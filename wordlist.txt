@@ -89,6 +89,7 @@ SR-IOV
 STIG
 subfolders
 tanzu
+tanzukubernetescluster
 Tekton
 templating
 TKG

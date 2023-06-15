@@ -22,7 +22,7 @@ For the latest information, see [VMware Product Interoperability Matrix](https:/
 
 vSphere with Tanzu Components
 
-- **Supervisor cluster:** When Workload Management is enabled on a vSphere cluster, it creates a Kuberetes layer within the ESXi hosts that are part of the cluster. A cluster that is enabled for Workload Management is called a Supervisor cluster. You can containerized workloads by creating upstream kubernetes clusters on the top of Supervisor cluster through the Tanzu Kubernetes Grid Service.
+- **Supervisor cluster:** When Workload Management is enabled on a vSphere cluster, it creates a Kubernetes layer within the ESXi hosts that are part of the cluster. A cluster that is enabled for Workload Management is called a Supervisor cluster. You can containerized workloads by creating upstream kubernetes clusters on the top of Supervisor cluster through the Tanzu Kubernetes Grid Service.
 
   The Supervisor Cluster runs on top of an SDDC layer that consists of 3 vSphere clusters for compute, NSX for networking and a shared storage such as VSAN.
   
@@ -275,7 +275,7 @@ The following table provides example entries for the required port groups. Creat
 |Network Type|Port Group Name|VLAN|Gateway CIDR|DHCP Enabled|IP Pool fo SE/VIP in NSX ALN|
 | :- | :- | :- | :- | :- | :- |
 |NSX ALB Management Network|sfo01-w01-albmanagement|1610|172\.16.10.1/27|Optional|172\.16.10.6-172.16.10.30|
-|TKG Supervisor Network|sfo01-w01-tkgmanagment|1640|172\.16.40.1/27|Optional|No|
+|TKG Supervisor Network|sfo01-w01-tkgmanagement|1640|172\.16.40.1/27|Optional|No|
 |TKG Workload Network|sfo01-w01-tkgworkload|1660|172\.16.60.1/24|Optional|No|
 |TKG Cluster VIP|sfo01-w01-tkgclustervip|1680|172\.16.80.1/26|No|172\.16.80.2-172.16.80.62|
 
