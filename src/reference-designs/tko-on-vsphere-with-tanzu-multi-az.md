@@ -370,7 +370,7 @@ The v1alpha3 API lets you create conformant kubernetes clusters of type TanzuKub
 
 Tanzu Kubernetes Clusters Networking 
 
-A Tanzu Kubernstes cluster provisioned by the Tanzu Kubernetes Grid supports the following Container Network Interface ( CNI ) options:
+A Tanzu Kubernetes cluster provisioned by the Tanzu Kubernetes Grid supports the following Container Network Interface ( CNI ) options:
 
 - Antrea
 - Calico
@@ -381,7 +381,7 @@ When you deploy a Tanzu Kubernetes cluster using the default configuration of Ta
 
 To provision a Tanzu Kubernetes cluster using Calico CNI, see [**Deploy Tanzu Kubernetes Clusters with Calico**](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-0787A2CC-0C57-44F8-B880-F0B8F5483E0F.html)
 
-Each CNI is suitable for a different use case. The following tables lists some common use cases for the CNI options that Tanzu Kubernetes Grid supports. This table will help you select the most appropriate CNI for your Tanzu Kubenetes clusters with Calico.
+Each CNI is suitable for a different use case. The following tables lists some common use cases for the CNI options that Tanzu Kubernetes Grid supports. This table will help you select the most appropriate CNI for your Tanzu Kubernetes clusters with Calico.
 
 
 |CNI|Use Case|Pros and Cons|
