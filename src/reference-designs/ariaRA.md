@@ -6,7 +6,7 @@ It delivers an open source aligned Kubernetes distribution with consistent opera
 
 vSphere with Tanzu transforms the vSphere cluster into a platform for running Kubernetes workloads in dedicated resource pools.  When vSphere with Tanzu enabled , it creates a kubernetes control plane directly in the hypervisor layer. You can then run kubernetes containers by creating an upstream highly-available kubernetes cluster through VMware Tanzu Kubernetes Grid Service and run your applications inside these clusters.
 
-When vSphere with Tanzu is getting integrated with Aria Portfolio , we are able to achive Unified Management using Aria Automation , Enterprise Level Monitoring with Aria operation and Enterprise Level Log in using Aria Operation for Logs. 
+When vSphere with Tanzu is getting integrated with Aria Portfolio , we are able to achieve Unified Management using Aria Automation , Enterprise Level Monitoring with Aria operation and Enterprise Level Log in using Aria Operation for Logs. 
 
 
 **VMware Aria Automation** 
@@ -77,7 +77,7 @@ VMware Identity Manager(vIDM), formerly known as VMware Workspace Portal, can be
 |Source|Destination|Protocol:Port|Description     |
 | :- | :- | :- | :- |
 |VMware Aria Automation Management IP.|Tanzu Kubernetes Clusters Control Plane VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|Aria Automation to Supervisor connectivity.|
-|VMware Aria Operation Primary, Replica, Data nodes, Remote Collectors.|Tanzu Kubernetes Clusters Control Plane VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p><p>cAdvisor – DaemonSet Port</p><p>(Default Port 31194)</p>|Aria Operation to TKC’s  for data collection using cAdvisor|
+|VMware Aria Operation Primary, Replica, Data nodes, Remote Collectors.|Tanzu Kubernetes Clusters Control Plane VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p><p>cAdvisor – DaemonSet Port</p><p>(Default Port 31194)</p>|Aria Operation to TKC  for data collection using cAdvisor|
 |VMware Aria Operation Primary, Replica, Data nodes, Remote Collectors and Cloud Proxies|Tanzu Kubernetes Clusters Control Plane VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p><p> </p>|Aria Operation to Tanzu Kubernetes Clusters for data collection using Prometheus|
 |Tanzu Kubernetes Workload Cluster  CIDR|vRealize Log Insight appliance|UDP:514|To collect logs from clusters using syslog protocol|
 
@@ -156,7 +156,7 @@ High Level Steps involved from Aria Automation
 
 1. We Start by creating a Kubernetes Zone which can be tagged to Project.
 1. Kubernetes Cluster Plans will be created for Production Clusters and Development Clusters.
-   It is recommended to use three controlplane nodes in Production Cluster Plans.
+   It is recommended to use three control plane nodes in Production Cluster Plans.
 1. Cloud Template will be created and associated with the respective project and Cluster Plan.
 1. Cloud Template will be released to Catalog so users can consume it from Service Broker.
 
@@ -186,11 +186,11 @@ Aria Operation integration with vCenter can discover and monitor the vSphere wit
 
 
 
-The key day two operations for an enterprise running Tanzu and/or Kubernetes clusters would typically include monitoring and troubleshooting the management and the Tanzu Kubernetes Clusters . With the radical and exponential increase in the amount of traffic and interconnected flows and relationships between containerised workloads, you need the most powerful and insightful monitoring tools..
+The key day two operations for an enterprise running Tanzu and/or Kubernetes clusters would typically include monitoring and troubleshooting the management and the Tanzu Kubernetes Clusters . With the radical and exponential increase in the amount of traffic and interconnected flows and relationships between containerized workloads, you need the most powerful and insightful monitoring tools..
 
-VMware Aria Operation For Monitoring provides insightful monitoring for your Tanzu and upstream Kubernetes clusters. This allows you to monitor your containerised clusters from a single pane of glass alongside the rest of your infrastructure.
+VMware Aria Operation For Monitoring provides insightful monitoring for your Tanzu and upstream Kubernetes clusters. This allows you to monitor your containerized clusters from a single pane of glass alongside the rest of your infrastructure.
 
-Aria Operation  management pack for kubernetes onboards Tanzu and Kubernetes clusters seamlessly onto Aria Operations expanding monitoring, troubleshooting and capacity planning capabilities to Tanzu and Kubernetes deployments.
+Aria Operation  management pack for kubernetes onboard Tanzu and Kubernetes clusters seamlessly onto Aria Operations expanding monitoring, troubleshooting and capacity planning capabilities to Tanzu and Kubernetes deployments.
 
 The Aria operation delivers intelligent operations management with application-to-storage visibility across physical, virtual, cloud and Kubernetes infrastructure. We can automate key processes and improve IT efficiency.
 
@@ -205,9 +205,9 @@ The Aria operation delivers intelligent operations management with application-t
 - Ensure to have the Kubernetes clusters deployed by vSphere with Tanzu.
 - VMware Aria Operations Manager retrieves the metrics directly from Prometheus or Container Advisor Daemonset for more information please refer Product [**documentation**](https://docs.vmware.com/en/VMware-Aria-Operations-for-Integrations/1.9/Management-Pack-for-Kubernetes/GUID-BD6B5510-4A16-412D-B5AD-43F74C300C91.html)
 
-**ollecting Metrics Using Container Advisor Daemonset** 
+**Collecting Metrics Using Container Advisor Daemonset** 
 
-Container Advisor (cAdvisor) helps you in understanding the resource usage and performance characteristics of the running containers. The cAdvisor collects, aggregates, processes, and exports information about running containers. For each container cAdvisor stores resource isolation parameters, historical resource usage, histograms of complete historical resource usage and network statistics. cAdvisor also supports multiple runtimes such as CRI-O, Docker, and container for metrics collection. cAdvisor can also be installed as a DaemonSet or kubelet.
+Container Advisor (cAdvisor) helps you in understanding the resource usage and performance characteristics of the running containers. The cAdvisor collects, aggregates, processes, and exports information about running containers. For each container cAdvisor stores resource isolation parameters, historical resource usage, histograms of complete historical resource usage and network statistics. cAdvisor also supports multiple runtime such as CRI-O, Docker, and container for metrics collection. cAdvisor can also be installed as a DaemonSet or kubelet.
 
 
 **Collecting Metrics  Using Prometheus**
