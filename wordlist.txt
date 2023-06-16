@@ -18,6 +18,7 @@ containerd
 CoreDNS
 CPUs
 CRD
+Daemonset
 datacenter
 DISA
 disambiguates
@@ -72,6 +73,7 @@ proxying
 rainpole
 restic
 routable
+runtimes
 saas
 schedulable
 scrapable
@@ -108,5 +110,3 @@ VNET
 vsphere
 VXLAN
 Xeon
-Daemonset
-runtimes
