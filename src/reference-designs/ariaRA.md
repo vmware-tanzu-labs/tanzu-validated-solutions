@@ -29,7 +29,7 @@ VMware Identity Manager(vIDM), formerly known as VMware Workspace Portal, can be
 
 **Aria Tanzu Portfolio Architecture**
 
-The following diagram explains the VMware Aria Portfolio architecture for vSpehere with Tanzu.
+The following diagram explains the VMware Aria Portfolio architecture for vSphere with Tanzu.
 
    ![Aria Tanzu Portfolio Architecture](img/ariaRA/ariara01.jpg)
 
@@ -89,7 +89,7 @@ You do not need access to Supervisor Cluster for creating Tanzu Kubernetes Clust
 
 You can segregate the access of your users so that they can only login to Service Broker for Creating/Updating/Deleting Tanzu Kubernetes Clusters.
 
-You can have Namespace Admins who can create Supervisor Cluster Namespaces from Aria Automation Console and assign it to the Required Kubernetes Zones without loggin into to vCenter.
+You can have Namespace Admins who can create Supervisor Cluster Namespaces from Aria Automation Console and assign it to the Required Kubernetes Zones without login into to vCenter.
 
 Tanzu Kubernetes Cluster Access is controlled in the `admin config` file available in Aria Automation Console. Only the authorized users will be able to download the admin config file. 
 
@@ -106,7 +106,7 @@ You can use the LDAP/Active Directory groups in Projects/Catalogs for controllin
 
 Aria Automation uses the same service account that is used to add Cloud Account to perform all Supervisor cluster operations.
 
-The service account needs the follwoing vCenter Roles for integrating  vSphere with Tanzu with Aria Automation:
+The service account needs the following vCenter Roles for integrating  vSphere with Tanzu with Aria Automation:
 
 - Allows disk decommission operations
 - Modify cluster-wide configuration
@@ -174,7 +174,7 @@ The key day-2 tasks for an enterprise running Tanzu and/or Kubernetes clusters w
 
 VMware Aria Operations For Monitoring provides insightful monitoring for your Tanzu and upstream Kubernetes clusters. This allows you to monitor your containerized clusters from a single pane of glass alongside the rest of your infrastructure.
 
-Aria Operations Management Pack for Kubernetes onboards Tanzu and Kubernetes clusters seamlessly onto Aria Operations expanding monitoring, troubleshooting, and capacity planning capabilities to Tanzu and Kubernetes deployments.
+Aria Operations Management Pack for Kubernetes on boards Tanzu and Kubernetes clusters seamlessly onto Aria Operations expanding monitoring, troubleshooting, and capacity planning capabilities to Tanzu and Kubernetes deployments.
 
 The Aria Operations delivers intelligent operations management with application-to-storage visibility across physical, virtual, cloud, and Kubernetes infrastructure. You can automate key processes and improve the infrastructure efficiency.
 
@@ -212,7 +212,7 @@ VMware Aria Operations for Logs (formerly known as vRealize Log Insight) provide
 
 You can use kubectl logs in real time for troubleshooting and debugging purposes. This usually does not scale beyond a couple of Kubernetes (K8s) Clusters. Even then, you will not retain any of the historical logs which might be required for deeper analysis or for auditing purposes. This is usually solved by having a centralized log management platform.
 
-FluentBit is one the most popular and utilized log processors for Kubernete. it is an open source data collector integrated with VMware Aria Operations for Logs, which lets you unify the data collection and consumption for a better understanding of the data.
+FluentBit is one the most popular and utilized log processors for Kubernetes. it is an open source data collector integrated with VMware Aria Operations for Logs, which lets you unify the data collection and consumption for a better understanding of the data.
 
 Fluentbit collects log events from log files and forwards the logs to a VMware Aria Operations for Logs server using the syslog protocol. VMware Aria Operations for Logs can analyze and store it.
 
