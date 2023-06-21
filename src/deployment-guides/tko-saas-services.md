@@ -167,7 +167,7 @@ You can register Tanzu Kubernetes Grid workload clusters for lifecycle managemen
   9.  (Optional) In **No proxy list**, specify a comma-separated list of outbound destinations that must bypass the proxy server.  
       ![Proxy Parameters](img/tko-saas-services/tmc-proxy-configuration02.png)
   10. Click **Create**. The proxy configuration is added to Tanzu Mission Control. Use this proxy configuration when you add a cluster that is sitting behind the proxy. Based on your environment, you can add multiple proxies in Tanzu Mission Control.  
-      ![](img/tko-saas-services/tmc-proxy-configuration03.png)  
+      ![Add Proxy Configuration](img/tko-saas-services/tmc-proxy-configuration03.png)  
 
 ## <a id=to> </a> Tanzu Observability
 
