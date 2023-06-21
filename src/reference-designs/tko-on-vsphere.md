@@ -224,9 +224,9 @@ For the purpose of demonstration, this document makes use of the following Subne
 |TKG Workload VIP Network|`sfo01-w01-vds01-tkgworkloadvip`|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
 |TKG Workload Segment|`sfo01-w01-vds01-tkgworkload`|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
 
-## 3-Tier Network Architecture
+## 3-Network Architecture
 
-For POC environments and minimal networks requirement, you can use the 3-tier network architecture. For this demonstration, we deployed Tanzu Kubernetes Grid into a 3-tier network as Infrastructure Management Network, TKG Management Network, and TKG Workload Network. This design allows you use only 3-tier network architectures. and ensures the isolation between Infra VMs, TKG Management. and TKG Workload components. 
+For POC environments and minimal networks requirement, you can proceed with 3 network architecture. In this design, we deploy the Tanzu Kubernetes Grid into 3 networks as Infrastructure Management Network, TKG Management Network and TKG Workload Network. This design allows us to use only 3 networks and ensures the isolation between Infra VMs, TKG Management and TKG Workload components. 
 
 This network reference design can be mapped into this general framework:
 
@@ -279,7 +279,7 @@ To prepare the firewall, you need to gather the following information:
 |TKG management, shared service, and workload cluster CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry can be a local or a public image registry (projects.registry.vmware.com).</p>|
 |TKG management cluster network|TKG cluster VIP network |TCP:6443|For management cluster to configure shared service and workload cluster.|
 |TKG shared service cluster network<br>(Required only if using a separate network for shared service cluster)|TKG cluster VIP network|TCP:6443|Allow shared cluster to register with management cluster.|
-|TKG workload cluster network|TKG cluster VIP network <p><p>  **Note** In a 3-tier Network design, destination network is "TKG Management Network"|TCP:6443|Allow workload cluster to register with management cluster.|
+|TKG workload cluster network|TKG cluster VIP network <p><p>  **Note** In a 3 network design, destination network is "TKG Management Network"|TCP:6443|Allow workload cluster to register with management cluster.|
 |TKG management, shared service, and workload Networks|NSX ALB Controllers (NSX ALB Management Network)|TCP:443|Allow NSX ALB Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB Controller.|
 |NSX ALB Management Network |vCenter and ESXi Hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required.|
 |NSX ALB Controller Nodes |DNS server <br> NTP Server|TCP/UDP:53 <br> UDP:123|DNS Service <br> Time Synchronization|
