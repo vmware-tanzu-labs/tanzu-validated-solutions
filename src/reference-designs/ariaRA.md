@@ -154,7 +154,7 @@ Perform the following day-1 tasks:
 
 - **Create Tanzu Supervisor Cluster:** Tanzu Kubernetes clusters are Kubernetes workload clusters in which your application workloads run. These clusters can be attached to SaaS solutions such as Tanzu Mission Control, Tanzu Observability, and Tanzu Service Mesh, which are part of Tanzu for Kubernetes Operations.
  
-Once the Aria Automation integration completes, you will be able to create Tanzu Kubernetes Clusters seamlessly using catalog requests without loggin in to the Supervisor Cluster . 
+Once the Aria Automation integration completes, you will be able to create Tanzu Kubernetes Clusters seamlessly using catalog requests without login in to the Supervisor Cluster . 
 
 Perform the following day-2 tasks on Tanzu Kubernetes Clusters in Aria Automation:
 
