@@ -216,20 +216,24 @@ To prepare the firewall, you need to gather the following information:
 12. NTP Server(s).
 13. NSX-T nodes and VIP address.
 
-|**Source**|**Destination**|**Protocol:Port**|**Description**|**Configured on**|
+|**Source**|**Destination**|**Protocol:Port**|**Description**|**Configured On**|
 | --- | --- | --- | --- |---|
-|NSX ALB controllers (NSX ALB Management Network)|vCenter and ESXi hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer controllers and Cluster IP address|vCenter and ESXi hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer controllers and Cluster IP address|NSX-T nodes and VIP address|TCP:443|Allow NSX ALB to discover NSX Objects (logical routers and logical segments etc)|NSX ALB Tier-1 Gateway|
 |NSX Advanced Load Balancer management network CIDR|<p>DNS Server</p><p>NTP Server</p>|<p>UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time synchronization</p>|NSX ALB Tier-1 Gateway|
-|NSX ALB controllers (NSX ALB Management Network)|NSX-T nodes and VIP address|TCP:443|Allow NSX ALB to discover NSX objects|NSX ALB Tier-1 Gateway|
-|Client Machine|NSX ALB controllers and cluster VIP address|TCP:443|Access NSX ALB controller UI|NSX ALB Tier-1 Gateway|
-|Admin network|Bootstrap VM|SSH:22|To deploy, manage  and configure TKG clusters|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|vCenter IP|TCP:443|Allows components to access vCenter to create VMs and storage volumes|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|Harbor Registry|TCP:443|<p>Allows components to retrieve container images </p><p>This registry can be a local or a public image registry (projects.registry.vmware.com)</p>|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|TKG Cluster VIP Network |TCP:6443|For management cluster to configure workload cluster<br>Allow shared cluster to register with management cluster<br>Allow workload cluster to register with management cluster|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p></p><p>TKG workload network CIDR</p>|NSX ALB controllers (NSX ALB management network)|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller|
-
-|deny-all|any|any|deny|
+|Client Machine|NSX Advanced Load Balancer controllers and Cluster IP address|TCP:443|To access NSX Advanced Load Balancer portal|NSX ALB Tier-1 Gateway|
+|Client Machine|Bootstrap VM IP address|SSH:22|To deploy,configure and manage TKG clusters.|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|vCenter Server|TCP:443|Allows components to access vCenter to create VMs and storage volumes|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|Harbor Registry|TCP:443|<p>Allows components to retrieve container images </p><p>This registry can be a local or a public image registry </p>|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|TKG Management VIP Network |TCP:6443|For management cluster to configure workload cluster<br>Allow shared cluster to register with management cluster|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|NSX Advanced Load Balancer management network CIDR|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller|TKG Mgmt Tier-1 Gateway|
+|TKG workload network CIDR|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|vCenter Server|TCP:443|Allows components to access vCenter to create VMs and storage volumes|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images </p><p>This registry can be a local or a public image registry </p>|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|TKG Management VIP Network |TCP:6443|Allow TKG workload clusters to register with TKG management cluster|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|NSX Advanced Load Balancer management network CIDR|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller|TKG Workload Tier-1 Gateway|
+|deny-all|any|any|deny|All Tier-1 gateways|
 
 ## Installation Experience
 
@@ -323,7 +327,7 @@ The following table provides the recommendations for configuring NSX Advanced Lo
 |TKO-ALB-004|Use static IP addresses for the NSX ALB controllers.|NSX ALB controller cluster uses management IP addresses to form and maintain quorum for the control plane cluster. Any changes to management IP addresses are disruptive.|NSX ALB Controller control plane might go down if the management IP addresses of the controller node change.|
 |TKO-ALB-005|Use NSX ALB IPAM for service engine data network and virtual services. |Guarantees IP address assignment for service engine data NICs and virtual services.|None|
 |TKO-ALB-006|Reserve an IP address in the NSX ALB management subnet to be used as the cluster IP address for the controller cluster.|NSX ALB portal is always accessible over cluster IP address regardless of a specific individual controller node failure.|None|
-|TKO-ALB-007|Shared service engines for the same type of workload (dev/test/prod) clusters.|Minimize the licensing cost.|<p>Each service engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing service engines can help reduce the licensing cost. </p>|
+|TKO-ALB-007|Share service engines for the same type of workload (dev/test/prod) clusters.|Minimize the licensing cost.|<p>Each service engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing service engines can help reduce the licensing cost. </p>|
 |TKO-ALB-008|Configure anti-affinity rules for the NSX ALB controller cluster.|This is to ensure that no two controllers end up in same ESXi host and thus avoid single point of failure.| Anti-affinity rules need to be created manually.|
 |TKO-ALB-009|Configure backup for the NSX ALB Controller cluster.|Backups are required if the NSX ALB Controller becomes inoperable or if the environment needs to be restored from a previous state.|To store backups, a SCP capable backup location is needed. SCP is the only supported protocol currently.|
 |TKO-ALB-010|Create an NSX-T Cloud connector on NSX Advanced Load Balancer controller for each NSX transport zone requiring load balancing.|An NSX-T Cloud connector configured on the NSX Advanced Load Balancer controller provides load balancing for workloads belonging to a transport zone on NSX-T.|None |
