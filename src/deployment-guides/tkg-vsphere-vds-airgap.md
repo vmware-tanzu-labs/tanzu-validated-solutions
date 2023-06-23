@@ -511,7 +511,7 @@ A new task for creating the virtual machine appears in the **Recent Tasks** pane
 
 After NSX Advanced Load Balancer is successfully deployed and running, go to NSX Advanced Load Balancer on your browser using the URL https://<em><IP/FQDN></em> and configure the basic system settings:
 
-1. Set admin password and click on **Create Account**.
+1. Set admin password and click **Create Account**.
 
     ![Set admin password and create account](img/tkg-airgap-vsphere-deploy/7.ALB-login.png)
 
