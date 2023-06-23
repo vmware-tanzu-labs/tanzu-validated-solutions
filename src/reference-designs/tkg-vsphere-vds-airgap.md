@@ -153,7 +153,7 @@ NSX ALB requires a license to enable and utilize the available load balancing fe
 - VMware NSX Advance Load Balancer Enterprise Edition.
 - VMware NSX Advanced Load Balancer essentials for Tanzu.
 
-The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-license-editions/#feature-comparison).
+The Enterprise Edition is the default licensing tier for an Avi Controller. A new Avi Controller is set up in the Enterprise Edition licensing tier, and the Controller can be switched from one edition to another. For more information about NSX ALB Feature comparison, see [NSX Advanced Load Balancer Editions](https://avinetworks.com/docs/22.1/nsx-alb-license-editions/#feature-comparison).
 
 ### VMware NSX ALB Enterprise Edition
 
@@ -254,10 +254,9 @@ For the purpose of demonstration, this document makes use of the following Subne
 |TKG Cluster VIP Network|`sfo01-w01-vds01-tkgclustervip`|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
 |TKG Workload VIP Network|`sfo01-w01-vds01-tkgworkloadvip`|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
 |TKG Workload Segment|`sfo01-w01-vds01-tkgshared	`|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
+## 3-Network Architecture
 
-## 3-Tier Network Architecture
-
-For POC environments and minimal networks requirement, you can use the 3-tier network architecture. For this demonstration, we deployed Tanzu Kubernetes Grid into a 3-tier network as Infrastructure Management Network, TKG Management Network, and TKG Workload Network. This design allows you use only 3-tier network architectures. and ensures the isolation between Infra VMs, TKG Management. and TKG Workload components.  
+For POC environments and minimal networks requirement, you can proceed with 3 network architecture. In this design, we deploy the Tanzu Kubernetes Grid into 3 networks as Infrastructure Management Network, TKG Management Network and TKG Workload Network. This design allows us to use only 3 networks and ensures the isolation between Infra VMs, TKG Management and TKG Workload components.   
 
 This network reference design can be mapped into this general framework:
 
@@ -317,7 +316,7 @@ The following table provides a list of firewall rules based on the assumption th
 |<p>TKG Management Network CIDR</p><p></p><p>TKG Workload Network CIDR.</p>|DHCP Server|UDP: 67, 68|Allows TKG nodes to get DHCP addresses.|
 |<p>TKG Management Network CIDR</p><p></p><p>TKG Workload Network CIDR.</p>|vCenter IP|TCP:443|Allows components to access vCenter to create VMs and Storage Volumes.|
 |<p>TKG Management Network CIDR</p><p></p><p>TKG Workload Network CIDR.</p>|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry needs to be a private registry.  </p>|
-|<p>TKG Management Network CIDR</p><p></p><p></p><p></p><p>TKG Workload Network CIDR.</p>|TKG Cluster VIP Range. p><p>  **Note** In a 3-tier Network design, destination network is "TKG Mgmt Network" |TCP:6443|<p>For the management cluster to configure shared services and workload clusters.</p><p></p><p>Allow Workload cluster to register with management cluster.</p>|
+|<p>TKG Management Network CIDR</p><p></p><p></p><p></p><p>TKG Workload Network CIDR.</p>|TKG Cluster VIP Range. p><p>  **Note** In a 3 Network design, destination network is "TKG Mgmt Network" |TCP:6443|<p>For the management cluster to configure shared services and workload clusters.</p><p></p><p>Allow Workload cluster to register with management cluster.</p>|
 |<p>TKG Management Network CIDR</p><p></p><p>TKG Workload Network CIDR.</p>|NSX ALB Controllers and Cluster IP Address.|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to Avi Controller.|
 |NSX Advanced Load Balancer Management Network |vCenter and ESXi Hosts|TCP:443|Allow NSX Advanced Load Balancer to discover vCenter objects and deploy SEs as required.|
 |NSX Advanced Load Balancer Controller Nodes |DNS server <br> NTP Server|TCP/UDP:53 <br> UDP:123|DNS Service <br> Time Synchronization|
