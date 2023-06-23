@@ -122,7 +122,7 @@ Before installing Tanzu Kubernetes grid into an air-gapped environment, a privat
  * Should use an RFC 1918 (private) address and remain routable to the Tanzu Kubernetes Grid clusters.
  * Should be configured with SSL certificates signed by a trusted CA.
  * Must not implement user authentication. For example, if you use a Harbor registry, the project must be public, not private.
- * Must have all the Tanzu Kubernetes Grid images uploaded before you start installing Tanzu Kubernetes grid. See [Copy installing Tanzu Kubernetes grid Images into an Air-gapped Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-image-copy-airgapped.html) for more details.
+ * Must have all the Tanzu Kubernetes Grid images uploaded before you start installing Tanzu Kubernetes grid. See [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-offline.html) for more details.
 
 ## Compliance and Security
 
@@ -175,7 +175,7 @@ To further this mission, and ensure that this information is readily available, 
 ### National Institute of Standards and Technology ([NIST](https://www.nist.gov/))
 
 Since 2014, the public sector has been required to develop, document, implement, and maintain information security of government information systems through a standardized approach or framework.  A major component of how this strategy is implemented relies on the security controls documented in NIST Special Publication 800-53, and the Risk Management Framework guidelines established in NIST SP 800-37.
-VMware maintains a partnership with the NIST Cybersecurity Center of Excellence (NCCoE) which includes validation of core VMware products including NSX, vSphere, vRealize, and Tanzu Kubernetes Grid. Refer to [Tanzu Kubernetes Grid NIST control]()https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-security-nist.html for more information.
+VMware maintains a partnership with the NIST Cybersecurity Center of Excellence (NCCoE) which includes validation of core VMware products including NSX, vSphere, vRealize, and Tanzu Kubernetes Grid. Refer to [Security](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-security-overview.html) for more information.
 
 ### Tanzu Kubernetes Grid Security Overview
 
@@ -329,7 +329,7 @@ The following pictures show some sample dashboards.
 
 ## Log Forwarding
 
-Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize, Log Insight Cloud, and Elasticsearch. See [Fluent Bit Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-logging-fluentbit.html) for various logging providers.
+Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize, Log Insight Cloud, and Elasticsearch. See [Fluent Bit Documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-fluentbit.html) for various logging providers.
 
 You can deploy Fluent Bit on any management cluster or Tanzu Kubernetes clusters from which you want to collect logs. First, configure an output plugin on the cluster from which you want to gather logs, depending on the endpoint that you use. Then deploy Fluent Bit on the cluster as a package.
 
