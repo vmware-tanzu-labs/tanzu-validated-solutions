@@ -32,7 +32,7 @@ Before deploying VMware Tanzu for Kubernetes Operations in an AWS air-gapped env
   * Has the latest version of jq installed.
   * Has AWS CLI installed.
   * Has the [Carvel Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/install-cli.html) installed, if you intend to install one or more of the optional packages provided by Tanzu Kubernetes Grid, such as Harbor.
-* **VMware Cloud**: Access to [VMware Cloud](https://customerconnect.vmware.com/login ) to download Tanzu CLI.
+* **VMware Cloud**: Access to [VMware Cloud](https://customerconnect.vmware.com/login) to download Tanzu CLI.
 
 For additional information about preparing to deploy Tanzu Kubernetes Grid on AWS, see [Prepare to Deploy Management Clusters to Amazon EC2](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-aws.html).
 
@@ -231,13 +231,11 @@ Copy the container images required to deploy Tanzu Kubernetes Grid on AWS to a p
 * Copy the images from the Tanzu Kubernetes Grid public registry and save them locally in tar format on an offline jumpbox.
 * Extract the images from the tar files and copy them to a private registry.
 
-See [Copy the container images required to deploy Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-image-copy-airgapped.html) for more detailed instructions.
+See [Copy the container images required to deploy Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-offline.html) for more detailed instructions.
 
 ### <a id=tkg-build-machine-img> </a> Tanzu Kubernetes Grid Build Machine Image
 
 If you have a requirement to build custom images, follow the steps in [Tanzu Kubernetes Grid Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
-
-VMware support FIPS-capable version of Tanzu Kubernetes Grid. Refer to [Tanzu Kubernetes Grid FIPS-Capable Version](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-prepare-deployment.html#fips) for more information.
 
 For compliance and security requirements VMware has published security overview whitepaper. Refer to [Tanzu Kubernetes Grid security overview whitepaper](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-security-overview.html) for more information.
 
@@ -370,5 +368,5 @@ For how to deploy a STIG-hardened management/FIPS cluster to an air-gapped AWS e
 
 ## <a id=upgrade-tkg> </a>Tanzu Kubernetes Grid Upgrade
 
-For information about how to upgrade to Tanzu Kubernetes Grid 1.6, see [Tanzu Kubernetes Grid Upgrade](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-upgrade-index.html).
+For information about how to upgrade to Tanzu Kubernetes Grid 2.1, see [Tanzu Kubernetes Grid Upgrade](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-upgrade-index.html).
  
