@@ -40,7 +40,7 @@ For more information about the the latest versions, see [VMware Product Interope
 - **VM Class in vSphere with Tanzu**: A VM class is a template that defines CPU, memory, and reservations for VMs. VM classes are used for VM deployment in a Supervisor Namespace. VM classes can be used by standalone VMs that run in a Supervisor Namespace, and by VMs hosting a Tanzu Kubernetes cluster. 
 VM Classes in a vSphere with Tanzu are broadly categorized into the following two groups:
 
-  - **Guaranteed**: Thhis class fully reserves its configured resources.
+  - **Guaranteed**: This class fully reserves its configured resources.
   - **Best-effort**: This class allows to be overcommitted.
 
   vSphere with Tanzu offers several default VM classes. You can either use the default VM classes, or create custom VM classes based on your application's requirements. The following screenshot shows the default VM classes that are available in vSphere with Tanzu.
@@ -73,7 +73,7 @@ VM Classes in a vSphere with Tanzu are broadly categorized into the following tw
 
 A three-zone Supervisor supports zonal storage, where a datastore is shared across all hosts in a single zone. Storage policies that you create for a Supervisor or for a namespace in a three-zone Supervisor must be topology aware and have the consumption domain enabled. For more information, see [Create Storage Policy for a Three-Zone Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-services-workloads/GUID-46783798-E3FD-49C6-BB62-C5EB09C2B82A.html).
 
-When you prepare storage resources for three-zone Supervisor, consider the followingparameters:
+When you prepare storage resources for three-zone Supervisor, consider the following parameters:
 
 - Storage in all three vSphere zones does not need to be of the same type. However, having uniform storage in all three clusters provides a consistent performance.
 - Create a storage policy that is compliant with shared storage in each of the clusters. The storage policy must be topology aware.
@@ -323,7 +323,7 @@ vSphere with Tanzu deployment starts with deploying the Supervisor cluster on th
 
 3. On the next page, provide a name for the Supervisor cluster, and select previously created three vSphere Zones.
 
-![Supervisor name and select vSpeher zones](./img/tko-on-vsphere-with-tanzu-multi-az/tko-on-vsphere-with-tanzu-multi-az-5.png)
+![Supervisor name and select vSphere zones](./img/tko-on-vsphere-with-tanzu-multi-az/tko-on-vsphere-with-tanzu-multi-az-5.png)
 
 This installation process takes you through the steps of deploying Supervisor cluster in your vSphere environment. Once the Supervisor cluster is deployed, you can use either [Tanzu Mission Control](https://tanzu.vmware.com/mission-control) or Kubectl utility to deploy the Tanzu Kubernetes Grid Clusters.
 
