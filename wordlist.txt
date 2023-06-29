@@ -80,6 +80,7 @@ SCST
 SCTP
 SDDC
 segroup
+snapshotting
 SNAT
 Snyk
 Sonobouy
@@ -88,6 +89,7 @@ SR-IOV
 STIG
 subfolders
 tanzu
+tanzukubernetescluster
 Tekton
 templating
 TKG
@@ -108,3 +110,5 @@ VNET
 vsphere
 VXLAN
 Xeon
+xlarge
+xsmall
