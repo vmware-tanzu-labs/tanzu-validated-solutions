@@ -1,6 +1,6 @@
 # VMware Tanzu Application Platform Networking
 
-The following Tanzu Application Platform networking diagram shows the most common cross-cluster and external-services networking scenarios in a multi cluster Kubernetes environment. The diagram shows the high level egress and ingress networking flows between the Tanzu Application Platform components and the external services.
+The following Tanzu Application Platform (informally known as TAP) networking diagram shows the most common cross-cluster and external-services networking scenarios in a multi cluster Kubernetes environment. The diagram shows the high level egress and ingress networking flows between the Tanzu Application Platform components and the external services.
 
 ![Tanzu Application Platform networking](img/tap-architecture-planning/tap-networking.jpg)
 
