@@ -20,7 +20,7 @@ The validated Bill of Materials that can be used to install Tanzu Kubernetes Gri
 |NSX Advanced Load Balancer|22.1.3|
 |VMware NSX|4.1.0.0|
 
-For up-to-date information about which software versions can be used together, check the [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,17050&row=789,%262,%26912,).
+For more information about the software versions can be used together, see [Interoperability Matrix](https://interopmatrix.vmware.com/Interoperability?col=551,17050&row=789,%262,%26912,).
 
 ## Tanzu Kubernetes Grid Components
 
@@ -94,14 +94,14 @@ Each CNI is suitable for a different use case. The following table lists some co
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p></p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p>|<p>Pros</p><p>- Support for network policies</p><p>- High network performance</p><p>- SCTP support</p><p>Cons</p><p>- No multicast support</p><p></p>|
 |Multus|Multus CNI provides multiple interfaces per each Kubernetes pod. Using Multus CRDs, you can specify which pods get which interfaces and allow different interfaces depending on the use case.|<p>Pros</p><p>- Separation of data/control planes.</p><p>- Separate security policies can be used for separate interfaces. </p><p>- Supports SR-IOV, DPDK, OVS-DPDK, and VPP workloads in Kubernetes with both cloud native and NFV based applications in Kubernetes.</p>|
 
-## Deploy Pods with Routable, No-NAT IP Addresses (NSX)
+## Deploy Pods with Routable and No-NAT IP Addresses (NSX)
 
 On vSphere with NSX networking and the Antrea container network interface (CNI), you can configure a workload clusters with routable IP addresses for its worker pods, bypassing network address translation (NAT) for external requests from and to the pods.
 
-Routable IP addresses on pods let you:
+You can perform the following tasks by uisng the routable IP addresses on pods:
 
-- Trace outgoing requests to common shared services, because their source IP address is the routable pod IP address, not a NAT address.
-- Support authenticated incoming requests from the external internet directly to pods, bypassing NAT.
+- Trace outgoing requests to common shared services, due to their source IP address is the routable pod IP address and not a NAT address.
+- Support authenticated incoming requests from the external internet directly to pods by bypassing NAT.
 
 
 ## Tanzu Kubernetes Grid Infrastructure Networking
@@ -151,13 +151,13 @@ IP address allocation for virtual services can be over DHCP or through NSX Advan
 
 ## Network Architecture
 
-For the deployment of Tanzu Kubernetes Grid in the VMware NSX environment, it is required to build separate networks for the Tanzu Kubernetes Grid management cluster and workload clusters, NSX Advanced Load Balancer management, cluster-VIP and workload VIP network for control plane HA and application load balancing/ingress.
+For the deployment of Tanzu Kubernetes Grid in the VMware NSX environment, it is required to build separate networks for the Tanzu Kubernetes Grid management clusters, workload clusters, NSX Advanced Load Balancer management, cluster-VIP, and workload VIP network for control plane HA and application load balancing/ingress.
 
 The network reference design can be mapped into this general framework. This design uses a single VIP network for control plane L4 load balancing and application L4/L7. This design is mostly suited for dev/test environment.
 
 ![TKG with NSX-T Data Center Networking general network layout 01](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-3.png)
 
-Another reference design that can be implemented in production environment is shown below and it uses separate VIP network for the applications deployed in management/shared services and the workload cluster. 
+Another reference design that can be implemented in production environment is shown below, and it uses separate VIP network for the applications deployed in management/shared services and the workload cluster. 
 
 ![TKG with NSX-T Data Center Networking general network layout 02](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-2.png)
 
@@ -171,7 +171,7 @@ This topology enables the following benefits:
 
 ### <a id="netreq"> </a> Network Requirements
 
-As per the production architecture, the list of required networks follows:
+As per the production architecture, the following list of networks are required:
 
 |**Network Type**|**DHCP Service**|<p>**Description & Recommendations**</p><p></p>|
 | --- | --- | --- |
@@ -179,8 +179,8 @@ As per the production architecture, the list of required networks follows:
 |TKG Management Logical Segment|Yes|Control plane and worker nodes of TKG management cluster are attached to this network.|
 |TKG Shared Service Logical Segment|Yes|Control plane and worker nodes of TKG shared services cluster are attached to this network.|
 |TKG Workload Logical Segment|Yes|Control plane and worker nodes of TKG workload clusters are attached to this network.|
-|TKG Management VIP Logical Segment|No|Virtual services for control plane HA of all TKG clusters (management, shared services, and workload)<br>Reserve sufficient IP addresses depending on the number of TKG clusters planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
-|TKG Workload VIP Logical Segment|No|Virtual services for applications deployed in the workload cluster. The applications can be of type Load balancer or Ingress<br>Reserve sufficient IP addresses depending on the number of applications planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
+|TKG Management VIP Logical Segment|No|Virtual services for control plane HA of all TKG clusters (management, shared services, and workload).<br>Reserve sufficient IP addresses depending on the number of TKG clusters planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
+|TKG Workload VIP Logical Segment|No|Virtual services for applications deployed in the workload cluster. The applications can be of type Load balancer or Ingress.<br>Reserve sufficient IP addresses depending on the number of applications planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
 
 **Note -** You can also select `TKG Workload VIP` network for control plane HA of the workload cluster if you wish so. 
 
@@ -197,13 +197,13 @@ For this demonstration, this document makes use of the following subnet CIDR for
 |TKG Workload Network|tkg-workload-ls|172.19.77.1/24|172.19.77.2- 172.19.77.251|N/A|
 |TKG Workload VIP Network|tkg-workload-vip-ls|172.19.77.1/24|172.19.77.2- 172.19.77.251|N/A|
 
-These networks are spread across the Tier-1 gateways shown in the reference architecture diagram. Appropriate firewall rules needs to be configured on the Tier-1 gateways for a successful deployment.
+These networks are spread across the tier-1 gateways shown in the reference architecture diagram. You must configure the appropriate firewall rules on the tier-1 gateways for a successful deployment.
 
 ### <a id="fwreq"> </a> Firewall Requirements
-To prepare the firewall, you need to gather the following information:
+To prepare the firewall, you must collect the following information:
 
-1. NSX ALB Controller nodes and Cluster IP address.
-2. NSX ALB Management Network CIDR.
+1. NSX ALB Controller nodes and Cluster IP address
+2. NSX ALB Management Network CIDR
 3. TKG Management Network CIDR
 4. TKG Shared Services Network CIDR
 5. TKG Workload Network CIDR
@@ -211,28 +211,28 @@ To prepare the firewall, you need to gather the following information:
 7. Client Machine IP Address
 8. Bootstrap machine IP Address
 9. Harbor registry IP address
-10. vCenter Server IP.
-11. DNS server IP(s).
-12. NTP Server(s).
+10. vCenter Server IP
+11. DNS server IP(s)
+12. NTP Server(s)
 13. NSX-T nodes and VIP address.
 
 |**Source**|**Destination**|**Protocol:Port**|**Description**|**Configured On**|
 | --- | --- | --- | --- |---|
-|NSX Advanced Load Balancer controllers and Cluster IP address|vCenter and ESXi hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required|NSX ALB Tier-1 Gateway|
-|NSX Advanced Load Balancer controllers and Cluster IP address|NSX-T nodes and VIP address|TCP:443|Allow NSX ALB to discover NSX Objects (logical routers and logical segments etc)|NSX ALB Tier-1 Gateway|
-|NSX Advanced Load Balancer management network CIDR|<p>DNS Server</p><p>NTP Server</p>|<p>UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time synchronization</p>|NSX ALB Tier-1 Gateway|
-|Client Machine|NSX Advanced Load Balancer controllers and Cluster IP address|TCP:443|To access NSX Advanced Load Balancer portal|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer controllers and Cluster IP address|vCenter and ESXi hosts|TCP:443|Allows NSX ALB to discover vCenter objects and deploy SEs as required.|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer controllers and Cluster IP address|NSX-T nodes and VIP address.|TCP:443|Allows NSX ALB to discover NSX Objects (logical routers and logical segments, and so on).|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer management network CIDR|<p>DNS Server.</p><p>NTP Server</p>|<p>UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time synchronization</p>|NSX ALB Tier-1 Gateway|
+|Client Machine|NSX Advanced Load Balancer controllers and Cluster IP address|TCP:443|To access NSX Advanced Load Balancer portal.|NSX ALB Tier-1 Gateway|
 |Client Machine|Bootstrap VM IP address|SSH:22|To deploy,configure and manage TKG clusters.|TKG Mgmt Tier-1 Gateway|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|TKG Mgmt Tier-1 Gateway|
 |<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|vCenter Server|TCP:443|Allows components to access vCenter to create VMs and storage volumes|TKG Mgmt Tier-1 Gateway|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|Harbor Registry|TCP:443|<p>Allows components to retrieve container images </p><p>This registry can be a local or a public image registry </p>|TKG Mgmt Tier-1 Gateway|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|TKG Management VIP Network |TCP:6443|For management cluster to configure workload cluster<br>Allow shared cluster to register with management cluster|TKG Mgmt Tier-1 Gateway|
-|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|NSX Advanced Load Balancer management network CIDR|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry can be a local or a public image registry. </p>|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|TKG Management VIP Network |TCP:6443|For management cluster to configure workload cluster.<br><br>Allows shared cluster to register with management cluster.|TKG Mgmt Tier-1 Gateway|
+|<p>TKG management network CIDR</p><p></p><p>TKG shared services network CIDR</p><p>|NSX Advanced Load Balancer management network CIDR|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller.|TKG Mgmt Tier-1 Gateway|
 |TKG workload network CIDR|DNS Server<br>NTP Server|UDP:53<br>UDP:123|DNS Service <br>Time Synchronization|TKG Workload Tier-1 Gateway|
-|TKG workload network CIDR|vCenter Server|TCP:443|Allows components to access vCenter to create VMs and storage volumes|TKG Workload Tier-1 Gateway|
-|TKG workload network CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images </p><p>This registry can be a local or a public image registry </p>|TKG Workload Tier-1 Gateway|
-|TKG workload network CIDR|TKG Management VIP Network |TCP:6443|Allow TKG workload clusters to register with TKG management cluster|TKG Workload Tier-1 Gateway|
-|TKG workload network CIDR|NSX Advanced Load Balancer management network CIDR|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|vCenter Server|TCP:443|Allows components to access vCenter to create VMs and storage volumes.|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry can be a local or a public image registry. </p>|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|TKG Management VIP Network |TCP:6443|Allow TKG workload clusters to register with TKG management cluster.|TKG Workload Tier-1 Gateway|
+|TKG workload network CIDR|NSX Advanced Load Balancer management network CIDR|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB controller.|TKG Workload Tier-1 Gateway|
 |deny-all|any|any|deny|All Tier-1 gateways|
 
 ## Installation Experience
