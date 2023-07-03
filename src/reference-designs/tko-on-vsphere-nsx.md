@@ -1,8 +1,8 @@
-# VMware Tanzu for Kubernetes Operations on vSphere with NSX-T Networking Reference Design
+# VMware Tanzu for Kubernetes Operations on vSphere with NSX Networking Reference Design
 
 VMware Tanzu simplifies operation of Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and application modernization.
 
-This document lays out a reference architecture related for VMware Tanzu for Kubernetes Operations when deployed on a vSphere environment backed by VMware NSX-T and offers a high-level overview of the different components.
+This document lays out a reference architecture related for VMware Tanzu for Kubernetes Operations when deployed on a vSphere environment backed by VMware NSX and offers a high-level overview of the different components.
 
 This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
@@ -10,7 +10,7 @@ This reference design is based on the architecture and components described in [
 
 ## Supported Component Matrix
 
-The validated Bill of Materials that can be used to install Tanzu Kubernetes Grid on your vSphere with NSX-T environment is as follows:
+The validated Bill of Materials that can be used to install Tanzu Kubernetes Grid on your vSphere with NSX environment is as follows:
 
 |**Software Components**|**Version**|
 | --- | --- |
@@ -98,7 +98,7 @@ Each CNI is suitable for a different use case. The following table lists some co
 
 On vSphere with NSX networking and the Antrea container network interface (CNI), you can configure a workload clusters with routable IP addresses for its worker pods, bypassing network address translation (NAT) for external requests from and to the pods.
 
-You can perform the following tasks by uisng the routable IP addresses on pods:
+You can perform the following tasks by using the routable IP addresses on pods:
 
 - Trace outgoing requests to common shared services, due to their source IP address is the routable pod IP address and not a NAT address.
 - Support authenticated incoming requests from the external internet directly to pods by bypassing NAT.
@@ -108,14 +108,14 @@ You can perform the following tasks by uisng the routable IP addresses on pods:
 
 Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks including:
 
-- VMware NSX-T Data Center Networking
+- VMware NSX Data Center Networking
 - vSphere Networking (VDS)
 
-**Note:** The scope of this document is limited to VMware NSX-T Data Center Networking with NSX Advanced Load Balancer Enterprise Edition.
+**Note:** The scope of this document is limited to VMware NSX Data Center Networking with NSX Advanced Load Balancer Enterprise Edition.
 
 ## Tanzu Kubernetes Grid on VMware NSX Data Center Networking with NSX Advanced Load Balancer
 
-When deployed on VMware NSX-T Networking, Tanzu Kubernetes Grid uses the NSX-T logical segments and gateways to provide connectivity to Kubernetes control plane VMs, worker nodes, services, and applications. All hosts from the cluster where Tanzu Kubernetes clusters are deployed are configured as NSX-T transport nodes, which provide network connectivity to the Kubernetes environment.
+When deployed on VMware NSX Networking, Tanzu Kubernetes Grid uses the NSX logical segments and gateways to provide connectivity to Kubernetes control plane VMs, worker nodes, services, and applications. All hosts from the cluster where Tanzu Kubernetes clusters are deployed are configured as NSX transport nodes, which provide network connectivity to the Kubernetes environment.
 
 You can configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid as:
 
@@ -155,11 +155,11 @@ For the deployment of Tanzu Kubernetes Grid in the VMware NSX environment, it is
 
 The network reference design can be mapped into this general framework. This design uses a single VIP network for control plane L4 load balancing and application L4/L7. This design is mostly suited for dev/test environment.
 
-![TKG with NSX-T Data Center Networking general network layout 01](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-3.png)
+![TKG with NSX Data Center Networking general network layout 01](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-3.png)
 
 Another reference design that can be implemented in production environment is shown below, and it uses separate VIP network for the applications deployed in management/shared services and the workload cluster. 
 
-![TKG with NSX-T Data Center Networking general network layout 02](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-2.png)
+![TKG with NSX Data Center Networking general network layout 02](img/tko-on-vsphere-nsx/tko-on-vsphere-nsxt-2.png)
 
 This topology enables the following benefits:
 
@@ -214,12 +214,12 @@ To prepare the firewall, you must collect the following information:
 10. vCenter Server IP
 11. DNS server IP(s)
 12. NTP Server(s)
-13. NSX-T nodes and VIP address.
+13. NSX nodes and VIP address.
 
 |**Source**|**Destination**|**Protocol:Port**|**Description**|**Configured On**|
 | --- | --- | --- | --- |---|
 |NSX Advanced Load Balancer controllers and Cluster IP address|vCenter and ESXi hosts|TCP:443|Allows NSX ALB to discover vCenter objects and deploy SEs as required.|NSX ALB Tier-1 Gateway|
-|NSX Advanced Load Balancer controllers and Cluster IP address|NSX-T nodes and VIP address.|TCP:443|Allows NSX ALB to discover NSX Objects (logical routers and logical segments, and so on).|NSX ALB Tier-1 Gateway|
+|NSX Advanced Load Balancer controllers and Cluster IP address|NSX nodes and VIP address.|TCP:443|Allows NSX ALB to discover NSX Objects (logical routers and logical segments, and so on).|NSX ALB Tier-1 Gateway|
 |NSX Advanced Load Balancer management network CIDR|<p>DNS Server.</p><p>NTP Server</p>|<p>UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time synchronization</p>|NSX ALB Tier-1 Gateway|
 |Client Machine|NSX Advanced Load Balancer controllers and Cluster IP address|TCP:443|To access NSX Advanced Load Balancer portal.|NSX ALB Tier-1 Gateway|
 |Client Machine|Bootstrap VM IP address|SSH:22|To deploy,configure and manage TKG clusters.|TKG Mgmt Tier-1 Gateway|
@@ -317,7 +317,7 @@ This option does not have all the NSX Advanced Load Balancer L7 ingress capabili
 
 ### NSX Advanced Load Balancer Recommendations
 
-The following table provides the recommendations for configuring NSX Advanced Load Balancer in a vSphere environment backed by NSX-T networking.
+The following table provides the recommendations for configuring NSX Advanced Load Balancer in a vSphere environment backed by NSX networking.
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
@@ -330,7 +330,7 @@ The following table provides the recommendations for configuring NSX Advanced Lo
 |TKO-ALB-007|Share service engines for the same type of workload (dev/test/prod) clusters.|Minimize the licensing cost.|<p>Each service engine contributes to the CPU core capacity associated with a license.</p><p></p><p>Sharing service engines can help reduce the licensing cost. </p>|
 |TKO-ALB-008|Configure anti-affinity rules for the NSX ALB controller cluster.|This is to ensure that no two controllers end up in same ESXi host and thus avoid single point of failure.| Anti-affinity rules need to be created manually.|
 |TKO-ALB-009|Configure backup for the NSX ALB Controller cluster.|Backups are required if the NSX ALB Controller becomes inoperable or if the environment needs to be restored from a previous state.|To store backups, a SCP capable backup location is needed. SCP is the only supported protocol currently.|
-|TKO-ALB-010|Create an NSX-T Cloud connector on NSX Advanced Load Balancer controller for each NSX transport zone requiring load balancing.|An NSX-T Cloud connector configured on the NSX Advanced Load Balancer controller provides load balancing for workloads belonging to a transport zone on NSX-T.|None |
+|TKO-ALB-010|Create an NSX-T Cloud connector on NSX Advanced Load Balancer controller for each NSX transport zone requiring load balancing.|An NSX-T Cloud connector configured on the NSX Advanced Load Balancer controller provides load balancing for workloads belonging to a transport zone on NSX.|None |
 |TKO-ALB-011|Replace default NSX ALB certificates with Custom CA or Public CA-signed certificates that contains  SAN entries of all Controller nodes |To establish a trusted connection with other infra components, and the default certificate doesn’t include SAN entries which is not acceptable by Tanzu. | None, </br> SAN entries are not applicable if using wild card certificate.<br> | 
 |TKO-ALB-012|Create a dedicated resource pool with appropriate reservations for NSX ALB controllers.|Guarantees the CPU and Memory allocation for NSX ALB Controllers and avoids performance degradation in case of resource contention.| None |
 |TKO-ALB-013|Configure Remote logging for NSX ALB Controller to send events on Syslog.|For operations teams to centrally monitor NSX ALB and escalate alerts events sent from the NSX ALB Controller.| Additional Operational Overhead.<br> Additional infrastructure Resource.|  
@@ -371,8 +371,8 @@ The key network recommendations for a production-grade Tanzu Kubernetes Grid dep
 |TKO-NET-001|Use separate logical segments for management cluster, shared services cluster, workload clusters, and VIP network.|To have a flexible firewall and security policies.|Sharing the same network for multiple clusters can complicate firewall rules creation.|
 |TKO-NET-002|Configure DHCP  for each TKG cluster network.|Tanzu Kubernetes Grid does not support static IP address assignments for Kubernetes VM components.|IP address pool can be used for the TKG clusters in absence of the DHCP.|
 |TKO-NET-003|Use NSX for configuring DHCP|This avoids setting up dedicated DHCP server for TKG.|For a simpler configuration, make use of the DHCP local server to provide DHCP services for required segments.|
-|TKO-NET-004|Create a overlay-backed NSX segment connected to a Tier-1 gateway for the SE management for the NSX-T Cloud of overlay type.|This network is used for the controller to the SE connectivity.|None|
-|TKO-NET-005|Create a overlay-backed NSX segment as data network for the NSX-T Cloud of overlay type.|The SEs are placed on overlay Segments created on Tier-1 gateway.|None|
+|TKO-NET-004|Create a overlay-backed NSX segment connected to a Tier-1 gateway for the SE management for the NSX Cloud of overlay type.|This network is used for the controller to the SE connectivity.|None|
+|TKO-NET-005|Create a overlay-backed NSX segment as data network for the NSX Cloud of overlay type.|The SEs are placed on overlay Segments created on Tier-1 gateway.|None|
 
 ### Tanzu Kubernetes Grid Clusters Recommendations
 
@@ -544,4 +544,4 @@ This plan meets many day-0 needs for quickly aligning product capabilities to fu
 
 ## Deployment Instructions
 
-For instructions on how to deploy this reference design, see [Deploy VMware Tanzu for Kubernetes Operations on VMware vSphere with VMware NSX-T](../deployment-guides/tko-on-vsphere-nsxt.md).
+For instructions on how to deploy this reference design, see [Deploy VMware Tanzu for Kubernetes Operations on VMware vSphere with VMware NSX](../deployment-guides/tko-on-vsphere-nsxt.md).
