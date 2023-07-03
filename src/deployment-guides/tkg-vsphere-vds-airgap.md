@@ -1,6 +1,6 @@
-﻿# Deploy Tanzu Kubernetes Grid on vSphere Networking in an Air-Gapped Environment
+﻿# Deploy VMware Tanzu Kubernetes Grid on vSphere Networking in an Air-Gapped Environment
 
-VMware Tanzu Kubernetes Grid (TKG) provides a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
+VMware Tanzu Kubernetes Grid (informally known as TKG) provides a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
 An air-gap installation method is used when the Tanzu Kubernetes Grid bootstrapper and cluster nodes components are unable to connect to the Internet to download the installation binaries from the public [VMware Registry](https://projects.registry.vmware.com/) during Tanzu Kubernetes Grid installation or upgrades. 
 

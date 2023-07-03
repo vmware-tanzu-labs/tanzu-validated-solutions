@@ -1,7 +1,6 @@
-# Deploy Tanzu for Kubernetes Operations on Microsoft Azure
-VMware Tanzu simplifies the operations of Kubernetes for multi-cloud deployments by centralizing management and governance for clusters and teams across on-premises, public clouds, and the edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
+# Deploy VMware Tanzu for Kubernetes Operations on Microsoft Azure
 
-This document provides a step-by-step guide for how to install and deploy Tanzu for Kubernetes operations on Microsoft Azure.
+VMware Tanzu simplifies the operations of Kubernetes for multi-cloud deployments by centralizing management and governance for clusters and teams across on-premises, public clouds, and the edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization. This document provides a step-by-step guide for installing and deploying VMware Tanzu for Kubernetes Operations (informally known as TKO) on Microsoft Azure.
 
 The scope of this document is limited to providing the deployment steps based on the following reference design. The reference design represents one of the two production-level reference designs described in [VMware Tanzu for Kubernetes Operations on Azure Reference Design](../reference-designs/tko-on-azure.md).
 

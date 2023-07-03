@@ -1,6 +1,8 @@
-# Tanzu Application Platform Deployment
+# VMware Tanzu Application Platform Deployment
 
-This deployment outlines the deployment steps for VMware Tanzu Application Platform 1.1 on a Kubernetes workload cluster. In accordance with the [Tanzu Application Platform Reference Design](../reference-designs/tap-architecture-planning.md), four clusters will be created:
+VMware Tanzu Application Platform (informally known as TAP) is a packaged set of components that helps developers and operators to more easily build, deploy, and manage apps on a Kubernetes platform.
+
+This deployment outlines the steps for deploying VMware Tanzu Application Platform 1.1 on a Kubernetes workload cluster. In accordance with the [Tanzu Application Platform Reference Design](../reference-designs/tap-architecture-planning.md), four clusters will be created:
 
 * Tanzu Application Platform Build Cluster
 * Tanzu Application Platform Run Cluster

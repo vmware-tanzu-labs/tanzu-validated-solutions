@@ -1,6 +1,6 @@
-# Deploy Tanzu for Kubernetes Operations on AWS
+# Deploy VMware Tanzu for Kubernetes Operations on AWS
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations (informally known as TKO) on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 
 ## Deploying with VMware Service Installer for Tanzu
  
