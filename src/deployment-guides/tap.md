@@ -26,7 +26,7 @@ Before deploying VMware Tanzu Application Platform, ensure that the following pr
 
 Additional details concerning prerequisites may be found in Tanzu Application Platform [documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-prerequisites.html).
 
-*Note:* Use the Kubernetes defaults `serviceDomain` of `cluster.local` in workload clusters where Tanzu Application Platform is deployed.
+>**Note** Use the Kubernetes defaults `serviceDomain` of `cluster.local` in workload clusters where Tanzu Application Platform is deployed.
 
 ## Overview of the Deployment Steps
 
@@ -279,7 +279,7 @@ Provide the following user inputs to set environments variables into commands an
 * `TAP_CNRS_DOMAIN` - cnrs app domain (could be sub domain  of main domain like example - run.customer0.io)
 * `TAP_ALV_DOMAIN` -  app live view app domain 
 <!-- /* cSpell:enable */ -->
-**Note** - Contour settings in tap-values-run.yaml must be modified if you are not using AWS.
+>**Note** Contour settings in tap-values-run.yaml must be modified if you are not using AWS.
 
  For more information, see [Run Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-run-sample.html) in the Tanzu Application Platform product documentation.
 

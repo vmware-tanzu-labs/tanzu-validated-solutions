@@ -82,7 +82,7 @@ Follow these steps to create an Internet-restricted (offline) AWS VPC or see [Wo
    2. Select DNS Hostname and click **Save**.
    3. Refer to [AWS Documentation](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-dns.html#vpc-dns-updating) for more information.
 
-**Note:** If you create multiple offline VPCs, also see [Getting started with transit gateways](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-getting-started.html) in AWS documentation to create an AWS transit gateway.
+> **Note** If you create multiple offline VPCs, also see [Getting started with transit gateways](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-getting-started.html) in AWS documentation to create an AWS transit gateway.
 
 6. Create a [VPC peering](https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-connection.html) connection between offline and Internet-connected VPC. If you have created the transit gateway, you can skip this step.
 
@@ -257,7 +257,7 @@ This section describes how to deploy a Tanzu Kubernetes Grid management cluster 
 
 Before creating a management cluster using the Tanzu CLI, define the base configuration for the cluster in a YAML file. Specify this file by using the `tanzu management-cluster create` command with the `--file` option.
 
-**Note** In the configuration file for the management cluster, enable the AWS internal load balancer as follows:
+> **Note** In the configuration file for the management cluster, enable the AWS internal load balancer as follows:
 
 `AWS_LOAD_BALANCER_SCHEME_INTERNAL: "true"`
 Using an internal load balancer scheme prevents the Kubernetes API server for the cluster from being accessed and routed over the Internet.
@@ -354,7 +354,7 @@ tanzu cluster delete <cluster_name>
 
 Use this procedure to delete the management cluster as well as all of the AWS objects that Tanzu Kubernetes Grid created, such as VPC, subnets, and NAT Gateways.
 
-**Note**: Be sure to wait until all the workload clusters have been reconciled before deleting the management cluster, or you will need to manually clean up the infrastructure.
+> **Note** Be sure to wait until all the workload clusters have been reconciled before deleting the management cluster, or you will need to manually clean up the infrastructure.
 
 Run the following command to delete the management cluster and related objects:
 

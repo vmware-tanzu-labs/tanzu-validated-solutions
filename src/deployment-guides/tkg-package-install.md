@@ -72,7 +72,7 @@ envoy:
 
 For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-contour.html)
 
-**Note:** You can leave the default settings if you don’t need to customize the package installation.
+> **Note** You can leave the default settings if you don’t need to customize the package installation.
 
 ![Screenshot of the Contour installation screen showing a YAML overlay file](img/tanzu-pkgs/tanzu-pkgs06.png)
 
@@ -86,7 +86,7 @@ After installing Contour, ensure that the installation status for the Contour pa
 
 To install the Harbor package, repeat the steps for package installation. An example YAML file for customizing Harbor deployment follows.
 
-**Note**: you will need to provide credentials where indicated.
+> **Note** you will need to provide credentials where indicated.
 
 ```yaml
 hostname: registry.tanzu.lab
@@ -161,7 +161,7 @@ After installing Prometheus, ensure that the installation status for the Prometh
 
 To install the Grafana package, repeat the steps for the package installation. An example YAML file for customizing Grafana deployment follows.
 
-**Note:** By default, Grafana is configured to use Prometheus as its data source. If you have customized the Prometheus deployment namespace and Prometheus is not deployed in the default namespace, **tanzu-system-monitoring**, you must change the Grafana data source configuration as shown in the YAML code that follows.
+> **Note** By default, Grafana is configured to use Prometheus as its data source. If you have customized the Prometheus deployment namespace and Prometheus is not deployed in the default namespace, **tanzu-system-monitoring**, you must change the Grafana data source configuration as shown in the YAML code that follows.
 
 ```yaml
 ingress:

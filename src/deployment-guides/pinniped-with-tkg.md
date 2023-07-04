@@ -121,7 +121,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
 
 2. Create a cluster configuration file by copying the configuration settings that you defined when you deployed your management cluster into a new file. In addition to the variables from the original management cluster configuration, include the following OIDC or LDAP identity provider details in the file:
 
-   **Note**: With the exception of IDENTITY_MANAGEMENT_TYPE, you need to set these variables only for management clusters. For workload clusters, set IDENTITY_MANAGEMENT_TYPE to the same value as in the management cluster.
+   >**Note** With the exception of IDENTITY_MANAGEMENT_TYPE, you need to set these variables only for management clusters. For workload clusters, set IDENTITY_MANAGEMENT_TYPE to the same value as in the management cluster.
 
    ```yaml
    # Identity management type. This must be "oidc" or "ldap".
@@ -266,7 +266,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
 
    The environment variable settings cause tanzu cluster create --dry-run to generate a Kubernetes secret, not a full cluster manifest.
 
-   **Note**: This command generates the manifest with default namespace, however you need to create the secret in tkg-system namespace for kapp controller to reconcile the core addon. So manually edit the file and change the namespace to “tkg-system”
+   >**Note** This command generates the manifest with default namespace, however you need to create the secret in tkg-system namespace for kapp controller to reconcile the core addon. So manually edit the file and change the namespace to “tkg-system”
 
 8. Review the secret and then apply it to the management cluster. For example:
 
@@ -287,7 +287,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
    ```
    <!-- /* cSpell:enable */ -->
 
-   **Note**: If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-update-addons.html#troubleshooting). 
+   >**Note** If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-update-addons.html#troubleshooting). 
 
 ## Complete the Identity Management Configuration on Management Cluster
 
@@ -400,7 +400,7 @@ If you configured the management cluster to use OIDC authentication, you must pr
 1. Under Login, update **Login redirect URIs** to include the address of the node in which the pinniped-supervisor is running. 
 1. Add the external IP address of the node at which the pinniped-supervisor service is running, that you noted in the previous procedure.
 
-   **Note**:  You must specify https, not http.
+   >**Note**  You must specify https instead of http.
 
    ![Specify callback URI for management cluster to OIDC identity provider](img/pinniped-with-tkg/01-pinniped-4.png)
 

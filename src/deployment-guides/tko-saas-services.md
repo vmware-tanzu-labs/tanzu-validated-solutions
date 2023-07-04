@@ -1,6 +1,6 @@
-# Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations
+# Configure Tanzu SaaS Components for VMware Tanzu for Kubernetes Operations
 
-VMware SaaS services for Tanzu for Kubernetes Operations provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the following VMware SaaS services.
+VMware SaaS services for Tanzu for Kubernetes Operations (informally known as TKO) provide additional Kubernetes lifecycle management, observability, and service mesh features. This document outlines the configuration needed to set up the following VMware SaaS services.
 
 * [Tanzu Mission Control](#tmc) (TMC)
 * [Tanzu Observability](#to) (TO)
@@ -14,7 +14,7 @@ You can manage your global portfolio of Kubernetes clusters from a centralized a
 * [Registering Tanzu Kubernetes Grid management cluster](#tmc-tkg-mgmt)
 * [Attaching the shared services and workload clusters](#tmc-tkg-wl)
 
-  **Note:** If the Tanzu Kubernetes Grid clusters are behind a proxy server, you'll need to import the proxy configuration object to Tanzu Mission Control before attaching the cluster.
+  > **Note** If the Tanzu Kubernetes Grid clusters are behind a proxy server, you'll need to import the proxy configuration object to Tanzu Mission Control before attaching the cluster.
 
 ### Manage Tanzu Kubernetes Cluster Lifecycle from Tanzu Mission Control
 
@@ -118,9 +118,9 @@ You can register Tanzu Kubernetes Grid workload clusters for lifecycle managemen
 
 2. (Conditionally required) Select a proxy configuration object for the cluster. You'll need to communicate through a proxy configuration object if the clusters are behind a proxy server.
 
-	**Note**: For instructions on configuring the proxy, see [Create a Proxy Configuration Object in Tanzu Mission Control](#configproxy)
+	> **Note** For instructions on configuring the proxy, see [Create a Proxy Configuration Object in Tanzu Mission Control](#configproxy)
 
-	**Note**: This document does not make use of proxy for workload clusters.
+	> **Note** This document does not make use of proxy for workload clusters.
 
 2. Click to toggle the **Set proxy for this cluster** option to **No**.
 
@@ -280,15 +280,14 @@ Do the following to onboard a Tanzu Kubernetes Cluster to Tanzu Service Mesh usi
 
      ![Add TSM Integration](img/tko-saas-services/tko-deploy-saas19.jpg)
 
-     Note: You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh. If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server.
+     > **Note** You don't need to provide proxy configuration settings for clusters managed by Tanzu Mission Control in Tanzu Service Mesh. If you attached a cluster that is running behind a proxy server to Tanzu Mission Control and enabled Tanzu Service Mesh on that cluster, Tanzu Mission Control automatically forwards the proxy configuration to Tanzu Service Mesh. The Tanzu Service Mesh agent on the cluster uses the proxy configuration to connect the cluster to Tanzu Service Mesh through the proxy server.
 
 4. In Add Tanzu Service Mesh integration you can choose to install Tanzu Service mesh on all namespaces or exclude specific namespaces.
 
-    Note:
-
-      - To install Tanzu Service Mesh in all the namespaces, select `Enable Tanzu Service Mesh on all Namespaces`. The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
-      - To exclude a specific namespace from Tanzu Service Mesh, choose Exclude Namespaces, select "Is Exactly" from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
-      - You can also specify the name of a namespace that you plan to create in the cluster at some point in the future.
+    > **Note**
+      >- To install Tanzu Service Mesh in all the namespaces, select `Enable Tanzu Service Mesh on all Namespaces`. The system namespaces on the cluster, such as kube-system, kube-public, and istio-system, are excluded from Tanzu Service Mesh by default.
+      >- To exclude a specific namespace from Tanzu Service Mesh, choose Exclude Namespaces, select "Is Exactly" from the left drop-down menu under Exclude Namespaces, and then enter or select the name of the namespace from the right drop-down menu.
+      >- You can also specify the name of a namespace that you plan to create in the cluster at some point in the future.
 
     ![Namespace Exclusion](img/tko-saas-services/tko-deploy-saas20.jpg)
 

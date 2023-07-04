@@ -14,7 +14,7 @@ The scope of this document is limited to providing the deployment steps based on
 
 3. This guide does not make any assumptions about your chosen tooling for security or DevOps, other than what is available with a default Azure subscription.
 
-**Note:** You can use this guide to deploy additional workload clusters and workload clusters of a different size. However, you'll need to make additional configuration changes. You can make these configuration changes after you have gone through the deployment steps provided in this document.
+> **Note** You can use this guide to deploy additional workload clusters and workload clusters of a different size. However, you'll need to make additional configuration changes. You can make these configuration changes after you have gone through the deployment steps provided in this document.
 
 ## Prerequisites
 Ensure that you have:
@@ -129,7 +129,7 @@ VMware recommends that you create the SP on the Azure Portal. However, if you pr
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
 * [Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azps-6.6.0)
 
-**Important:** To create an Azure Service Principal or Application Registration, you must be an **Administrator** in your Azure Active Directory tenant. Alternatively, all Users must have **App Registrations** set to **Yes**, which allows all Users to create an Azure Service Principal.
+>**Important** To create an Azure Service Principal or Application Registration, you must be an **Administrator** in your Azure Active Directory tenant. Alternatively, all Users must have **App Registrations** set to **Yes**, which allows all Users to create an Azure Service Principal.
 
 Do the following on the Azure portal to create an Azure Service Principal:
 
@@ -173,7 +173,7 @@ Do the following on the Azure portal to create an Azure Service Principal:
 
       Assign the roles through the Subscription scope. Depending on your security boundaries, you can also assign it at the Resource Group scope.
 
-      **Important:** To assign a role to the SP, you must have either the **Owner** role or **User Access Administration** role within the scope of the Azure subscription.
+      >**Important** To assign a role to the SP, you must have either the **Owner** role or **User Access Administration** role within the scope of the Azure subscription.
 
       1. Find your specific Subscription on the Azure Portal and go to **Access Control (IAM) > Roles**.
 
@@ -285,7 +285,7 @@ az login --service-principal --username $AZURECLIENTID --password $AZURECLIENTSE
 az vm image terms accept --publisher vmware-inc --offer tkg-capi --plan k8s-1dot21dot2-ubuntu-2004 --subscription $AZURESUBSCRIPTION
 ```
 
-**Note:** Because of permission issues, you will have to log out and log in to the bootstrap VM after installing Docker and before you download and install the Tanzu components.
+> **Note** Because of permission issues, you will have to log out and log in to the bootstrap VM after installing Docker and before you download and install the Tanzu components.
 
 If you prefer not to copy paste code, you can use the following sample script files:
 

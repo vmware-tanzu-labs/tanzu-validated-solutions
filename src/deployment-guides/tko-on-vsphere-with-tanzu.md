@@ -38,7 +38,7 @@ Ensure that your environment meets the following general requirements:
 - A user account with **Modify cluster-wide configuration** permissions.
 - NSX Advanced Load Balancer 22.1.2 OVA downloaded from [customer connect](https://customerconnect.vmware.com/) portal and readily available for deployment.
 
-**Note**: Tanzu Kubernetes Grid nodes will unable to resolve hostname with the “.local” domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623)
+> **Note** Tanzu Kubernetes Grid nodes will unable to resolve hostname with the “.local” domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623).
 
 For additional information on general prerequisites, see [vSphere with Tanzu product documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-7FF30A74-DDDD-4231-AAAE-0A92828B93CD.html).
 
@@ -87,7 +87,7 @@ Here are the high-level steps for deploying Tanzu Kubernetes operations on vSphe
 7.  [Integrate Tanzu Kubernetes Clusters with Tanzu Service Mesh](#integrate-tsm)
 8.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
 
-**Note:** Starting with vSphere 8, when you enable vSphere with Tanzu, you can configure either one-zone Supervisor mapped to one vSphere cluster or three-zone Supervisor mapped to three vSphere clusters.
+> **Note** Starting with vSphere 8, when you enable vSphere with Tanzu, you can configure either one-zone Supervisor mapped to one vSphere cluster or three-zone Supervisor mapped to three vSphere clusters.
 This document covers One-Zone supervisor deployment with VDS Networking and NSX Advanced Load Balancer. [Requirements for Cluster Supervisor Deployment with NSX Advanced Load Balancer and VDS Networking](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-7FF30A74-DDDD-4231-AAAE-0A92828B93CD.html).
 
 ## <a id="config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
@@ -272,7 +272,7 @@ The controller must send a certificate to clients to establish secure communicat
 
 The controller has a default self-signed certificate. But this certificate does not have the correct SAN. You must replace it with a valid or self-signed certificate that has the correct SAN. You can create a self-signed certificate or upload a CA-signed certificate.
 
-**Note:** This document makes use of a self-signed certificate.
+> **Note** This document makes use of a self-signed certificate.
 
 To replace the default certificate:
 
@@ -566,7 +566,7 @@ To create a new Supervisor namespace:
 
 5. Enter a name for the namespace and select the workload network for the namespace.
 
-   **Note:** The **Name** field accepts only lower case letters and hyphens.
+   > **Note** The **Name** field accepts only lower case letters and hyphens.
 
 6. Click **Create**. The namespace is created on the Supervisor Cluster.
 
@@ -636,7 +636,7 @@ Tanzu Mission Control is a centralized management platform for consistently oper
 
 By integrating Supervisor Cluster with Tanzu Mission Control (TMC) you are provided a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. It also allows you to deploy Tanzu Kubernetes clusters directly from Tanzu Mission Control portal and install user-managed packages leveraging the [TMC Catalog](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
 
-**Note:** This section uses the terms **Supervisor Cluster** and **management cluster** interchangeably.
+> **Note** This section uses the terms **Supervisor Cluster** and **management cluster** interchangeably.
 
 Ensure that the following are configured before you integrate Tanzu Kubernetes Grid with Tanzu Mission Control:
 
@@ -714,12 +714,12 @@ After Supervisor Cluster is registered with Tanzu Mission Control, deployment of
 5. Select the cluster group to which you want to attach your cluster and cluster class and click **next**. You can optionally enter a description and apply labels.
 
    ![Screenshot of Step 2: Name and Assign](img/tko-on-vsphere-with-tanzu/TKO-VWT59.png)
-    Note: You cannot change the cluster class after the workload cluster created.
+    > **Note** You cannot change the cluster class after the workload cluster created.
 6. On next page, you can optionally specify a proxy configuration to use for this cluster.
 
    ![Screenshot of Step 2: Name and Assign](img/tko-on-vsphere-with-tanzu/TKO-VWT59-a.png)
 
-   **Note:** This document doesn't cover the use of a proxy for vSphere with Tanzu. If your environment uses a proxy server to connect to the Internet, ensure the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Supervisor Cluster in the **No proxy list**, as explained in [Create a Proxy Configuration Object for a Tanzu Kubernetes Grid Service Cluster Running in vSphere with Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-B4760775-388A-45B5-A707-2191E9E4F41F.html#GUID-B4760775-388A-45B5-A707-2191E9E4F41F).
+   > **Note** This document doesn't cover the use of a proxy for vSphere with Tanzu. If your environment uses a proxy server to connect to the Internet, ensure the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Supervisor Cluster in the **No proxy list**, as explained in [Create a Proxy Configuration Object for a Tanzu Kubernetes Grid Service Cluster Running in vSphere with Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-B4760775-388A-45B5-A707-2191E9E4F41F.html#GUID-B4760775-388A-45B5-A707-2191E9E4F41F).
     
        
 7. Configure the Cluster network setting

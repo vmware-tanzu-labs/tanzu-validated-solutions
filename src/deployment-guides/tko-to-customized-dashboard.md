@@ -1,7 +1,7 @@
 ﻿
-# Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations
+# Customize Tanzu Observability Dashboard for VMware Tanzu for Kubernetes Operations
 
-Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your particular deployment. This document provides the steps to customize the dashboards to monitor the following Tanzu for Kubernetes Operations components:
+Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your specific deployment. This document provides the steps to customize the dashboards to monitor the following Tanzu for Kubernetes Operations (informally known as TKO) components:
 
 - Tanzu Kubernetes Grid Clusters
 - VMware vSphere
@@ -110,6 +110,6 @@ To create the Tanzu for Kubernetes Operations dashboards in Tanzu Observability,
 
 `curl -X 'POST' 'https://<wavefront-instance\_url>/api/v2/dashboard' -H 'accept: application/json' -H 'Content-Type: application/json' -H 'Authorization: Bearer <wavefront API access token>’ -d '@dashboard-reference.json'`
 
-**Note:** For information about how to generate a Wavefront API Access token, see [Managing API Tokens.](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token)
+>**Note** For information about how to generate a Wavefront API Access token, see [Managing API Tokens.](https://docs.wavefront.com/wavefront_api.html#generating-an-api-token).
 
 JSON files to create the Tanzu for Kubernetes Operations dashboards described in this document are available [here](https://github.com/vmware-tanzu-labs/tanzu-validated-solutions/tree/main/automation/tko-to-customized-dashboards-json-scripts).
