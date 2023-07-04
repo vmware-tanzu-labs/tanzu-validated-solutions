@@ -20,6 +20,7 @@ This is the table of contents from which the Tanzu for Kubernetes Operations Ref
         - [Deploy Tanzu for Kubernetes Operations using vSphere with Tanzu](./deployment-guides/tko-on-vsphere-with-tanzu.md)
     - [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX-T Reference Design](./reference-designs/tko-on-vsphere-with-tanzu-nsxt.md)
     - [VMware Tanzu for Kubernetes Operations using vSphere With Tanzu Multi-AZ Reference Architecture on VDS Networking](./reference-designs/tko-on-vsphere-with-tanzu-multi-az.md)
+    - [VMware Tanzu Kubernetes Grid Services Multi-AZ Reference Architecture on NSX Networking](./reference-designs/tko-on-vsphere-with-tanzu-multi-az-nsx.md)
 - [Authentication with Pinniped](./reference-designs/pinniped-with-tkg.md)
     - [Prepare External Identity Management](./deployment-guides/pinniped-with-tkg.md)
 - [Enable Data Protection on a Workload Cluster and Configure Backup](./deployment-guides/tkg-data-protection.md)
