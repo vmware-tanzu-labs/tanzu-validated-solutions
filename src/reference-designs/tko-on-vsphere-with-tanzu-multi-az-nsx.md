@@ -68,7 +68,7 @@ vSphere with Tanzu offers several default VM classes. You can either use the def
 
 A three-zone Supervisor supports zonal storage, where a datastore is shared across all hosts in a single zone. Storage policies that you create for a Supervisor or for a namespace in a three-zone Supervisor must be topology aware and have the consumption domain enabled. For more information, see [Create Storage Policy for a Three-Zone Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-services-workloads/GUID-46783798-E3FD-49C6-BB62-C5EB09C2B82A.html).
 
-When you prepare storage resources for three-zone Supervisor, consider the follwoing parameters:
+When you prepare storage resources for three-zone Supervisor, consider the following parameters:
 
 - Storage in all three vSphere zones does not need to be of the same type. However, having uniform storage in all three clusters provides a consistent performance.
 - Create a storage policy that is compliant with shared storage in each of the clusters. The storage policy must be topology aware.
@@ -95,7 +95,7 @@ The following table provides recommendations for configuring Storage Classes in 
 
 ## Identity and Access Management
 
-vSphere with Tanzu supports the follwoing two identity providers:
+vSphere with Tanzu supports the following two identity providers:
 
 - **vCenter Single Sign-On:** This is the default identity provider that is used to authenticate with vSphere with Tanzu environment, including the Supervisors and Tanzu Kubernetes Grid Clusters. vCenter SSO provides authentication for vSphere infrastructure and can integrate with AD/LDAP systems.
 
@@ -258,11 +258,11 @@ While deploying Supervisor by using vSphere 8 and above, you can select vSphere 
 
 vSphere with Tanzu deployment starts with deploying the Supervisor cluster on three vSphere Zones. The deployment is directly done from vCenter UI. The Get Started page lists the pre-requisite for the deployment:
 
-![vSpehre Deployment Get Started](./img/tko-on-vsphere-with-tanzu-multi-az-nsx/tko-on-vsphere-with-tanzu-multi-az-nsx-3.png)
+![vSphere Deployment Get Started](./img/tko-on-vsphere-with-tanzu-multi-az-nsx/tko-on-vsphere-with-tanzu-multi-az-nsx-3.png)
 
 1. In the vCenter UI, Select NSX as networking stack.
 
-![NSX Netowrking Stack](./img/tko-on-vsphere-with-tanzu-multi-az-nsx/tko-on-vsphere-with-tanzu-multi-az-nsx-4.png)
+![NSX Networking Stack](./img/tko-on-vsphere-with-tanzu-multi-az-nsx/tko-on-vsphere-with-tanzu-multi-az-nsx-4.png)
 
 2. On the next page, provide a name for the  Supervisor cluster, and select the previously created three vSphere Zones.
 
