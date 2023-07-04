@@ -1,6 +1,6 @@
-# Deploy Tanzu for Kubernetes Operations on vSphere
+# Deploy VMware Tanzu for Kubernetes Operations on vSphere
 
-This document provides step-by-step instructions for deploying and configuring Tanzu for Kubernetes Operations on a vSphere environment backed by a Virtual Distributed Switch (VDS).  
+This document provides step-by-step instructions for deploying and configuring VMware Tanzu for Kubernetes Operations (informally known as TKO) on a vSphere environment backed by a Virtual Distributed Switch (VDS).  
 
 The scope of the document is limited to providing the deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations on vSphere Reference Design](../reference-designs/tko-on-vsphere.md). This document does not cover any deployment procedures for the underlying SDDC components.
 
