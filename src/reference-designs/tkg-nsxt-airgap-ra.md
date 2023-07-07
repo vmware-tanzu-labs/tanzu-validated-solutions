@@ -1,6 +1,6 @@
 ﻿# VMware Tanzu Kubernetes Grid on vSphere with NSX-T Networking in Air-Gapped Environment Reference Design
 
-VMware Tanzu Kubernetes Grid (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
+VMware Tanzu Kubernetes Grid (informally known as TKG) (multi-cloud) provides organizations with a consistent, upstream-compatible, regional Kubernetes substrate that is ready for end-user workloads and ecosystem integrations.
 
 An air-gapped environment is a network security measure employed to ensure a computer or computer network is secure by physically isolating it from unsecured networks, such as the public Internet or an unsecured local area network. This means a computer or network is disconnected from all other systems.
 
@@ -143,7 +143,7 @@ Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks in
 - VMware NSX-T Data Center Networking
 - vSphere Networking (VDS)
 
-**Note:** The scope of this document is limited to NSX-T Data Center Networking with NSX Advanced load balancer Enterprise Edition.
+>**Note** The scope of this document is limited to NSX-T Data Center Networking with NSX Advanced load balancer Enterprise Edition.
 
 ## Tanzu Kubernetes Grid on NSX-T Networking with NSX Advanced Load Balancer
 

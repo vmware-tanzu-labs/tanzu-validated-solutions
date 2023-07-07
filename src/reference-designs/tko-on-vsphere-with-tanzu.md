@@ -132,7 +132,7 @@ You can deploy vSphere with Tanzu on various networking stacks, including:
 
 - vSphere Virtual Distributed Switch (VDS) Networking with NSX Advanced Load Balancer.
 
-**Note:** The scope of this discussion is limited to vSphere Networking (VDS) with NSX Advanced Load Balancer.
+>**Note** The scope of this discussion is limited to vSphere Networking (VDS) with NSX Advanced Load Balancer.
 
 ### vSphere with Tanzu on vSphere Networking with NSX Advanced Load Balancer
 
@@ -170,9 +170,9 @@ The network reference design can be mapped into this general framework.
 
 ![Diagram of network reference design](img/tko-on-vsphere-with-tanzu/tko-vwt08.jpg)
 
-**Note:** The network/portgroup designated for the workload cluster, carries both data and control traffic. Firewalls cannot be utilized to segregate traffic between workload clusters; instead, the underlying CNI must be employed as the main filtering system. Antrea CNI has the Custom Resource Definitions (CRDs) for firewall rules that can be enforce before Kubernetes network policy is added.
+>**Note** The network/portgroup designated for the workload cluster, carries both data and control traffic. Firewalls cannot be utilized to segregate traffic between workload clusters; instead, the underlying CNI must be employed as the main filtering system. Antrea CNI has the Custom Resource Definitions (CRDs) for firewall rules that can be enforce before Kubernetes network policy is added.
 
-**Note:** Based on your requirements, you can create additional networks for your workload cluster. These networks are also referred to as vSphere with Tanzu workload secondary network.
+>**Note** Based on your requirements, you can create additional networks for your workload cluster. These networks are also referred to as vSphere with Tanzu workload secondary network.
 
 This topology enables the following benefits:
 
@@ -244,7 +244,7 @@ The following table provides a list of firewall rules based on the assumption th
 |TKG Cluster VIP Range|TKG Workload Cluster CIDR|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|To interact with workload cluster and K8s applications|
 |vCenter Server|TKG Management Cluster CIDR|<p>TCP:443</p><p>TCP:6443</p><p>TCP:22 (optional)</p>||
 
-**Note:** For TMC, if the firewall does not allow wildcards, all IP addresses of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com need to be whitelisted.
+>**Note** For TMC, if the firewall does not allow wildcards, all IP addresses of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com need to be whitelisted.
 
 ## Deployment options
 
@@ -318,7 +318,7 @@ The following are the key network recommendations for a production-grade vSphere
 |TKO-TKGS-002|Deploy Supervisor cluster control plane nodes in large form factor.|Large form factor should suffice to integrate Supervisor Cluster with TMC and velero deployment.|Consume more Resources from Infrastructure.|
 |TKO-TKGS-003|Register Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Need outbound connectivity to internet for TMC registration.|
 
-**Note:** SaaS endpoints here refers to Tanzu Mission Control, Tanzu Service Mesh and Tanzu Observability. 
+>**Note** SaaS endpoints here refers to Tanzu Mission Control, Tanzu Service Mesh and Tanzu Observability. 
 
 ### Recommendations for Tanzu Kubernetes Clusters
 
