@@ -4,7 +4,7 @@ Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud 
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations on VMware Cloud on AWS.
 
-**Note:** The scope of this document is limited to Tanzu Kubernetes Grid (multi-cloud), which is a customer-managed solution.
+>**Note** The scope of this document is limited to Tanzu Kubernetes Grid (multi-cloud), which is a customer-managed solution.
 
 The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
@@ -117,7 +117,7 @@ You can deploy Tanzu Kubernetes Grid on various networking stacks, including:
 - VMware NSX-T Data Center Networking.
 - vSphere Networking (VDS) with NSX Advanced Load Balancer.
 
-**Note:** The scope of this document is limited to VMware NSX-T Data Center Networking with NSX Advanced Load Balancer.
+>**Note** The scope of this document is limited to VMware NSX-T Data Center Networking with NSX Advanced Load Balancer.
 
 ## Tanzu Kubernetes Grid on NSX-T Networking with NSX Advanced Load Balancer
 

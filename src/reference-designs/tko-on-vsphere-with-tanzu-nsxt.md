@@ -93,7 +93,7 @@ While the default vSAN storage policy can be used, administrators should evaluat
 
 Starting with vSphere 7.0 environments with vSAN, the vSphere CSI driver for Kubernetes also supports the creation of NFS File Volumes, which support ReadWriteMany access modes. This allows for provisioning volumes, which can be read and written from multiple pods simultaneously. To support this, you must enable vSAN File Service.
 
-**Note:** vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions.
+>**Note** vSAN File Service is available only in vSAN Enterprise and Enterprise Plus editions.
 
 ## Clustering on vSphere
 
@@ -123,7 +123,7 @@ vSphere with Tanzu can be deployed using the following:
 - vSphere Virtual Distributed Switch (VDS) Networking with HA proxy for Load Balancing
 - vSphere Virtual Distributed Switch (VDS) Networking with NSX Advanced Load Balancer
 
-**Note:** The scope of this document is limited to VMware NSX-T Data Center Networking.
+>**Note** The scope of this document is limited to VMware NSX-T Data Center Networking.
 
 ### vSphere with Tanzu on VMware NSX-T Data Center Networking
 
