@@ -1,4 +1,4 @@
-# Tanzu for Kubernetes Operations SaaS Integration
+# VMware Tanzu for Kubernetes Operations SaaS Integration
 
 The SaaS products in the VMware Tanzu portfolio are critical components for securing your IT infrastructure. VMware Tanzu Mission Control provides a centralized control plane for Kubernetes, and Tanzu Service Mesh provides a global control plane for service mesh networks. VMware Tanzu Observability by Wavefront offers observability and analytics for multi-cloud Kubernetes environments.
 

@@ -1,6 +1,6 @@
-# Deploy Tanzu for Kubernetes Operations on AWS
+# Deploy VMware Tanzu for Kubernetes Operations on AWS
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations (informally known as TKO) on AWS. The deployment is based on the reference design provided in [VMware Tanzu for Kubernetes Operations on AWS Reference Design](../reference-designs/tko-on-aws.md).
 
 ## Deploying with VMware Service Installer for Tanzu
  
@@ -23,7 +23,7 @@ For more information on AWS default service quotas, see [AWS service quotas](htt
 
 See [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-aws.html#aws-resources) for more details.
 
-**Note** : The number of VPCs will depend on the VPC architecture you have selected.
+> **Note** The number of VPCs will depend on the VPC architecture you have selected.
 
 * **Bootstrap Machine with AWS CLI Installed**: The bootstrap machine can be a local device such as a laptop, or a virtual machine running in, for example, VMware Workstation or Fusion. Install the AWS CLI on the bootstrap machine. You can get the AWS CLI through a package manager such as Homebrew, apt-get, or by downloading the CLI from [AWS CLI](https://aws.amazon.com/cli/). You will use the bootstrap machine to create the AWS VPC and jumpbox.
 
@@ -78,7 +78,7 @@ The following describes the steps to create your AWS environment and configure y
 
 3. Create the VPC. This deployment uses a single VPC for all clusters.
 
-	**Note**: Beware that 172.17.0.0/16 is the default docker0 subnet.
+	> **Note** Beware that 172.17.0.0/16 is the default docker0 subnet.
 
 	<!-- /* cSpell:disable */ -->
 	```bash
@@ -343,7 +343,7 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 	to the jumpbox then the interface will be available on that port instead
 	of port 8080.
 
-	**Note**: The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup. The screens shown were taken from the current
+	> **Note** The screens are provided to help you navigate the installer interface. Enter the values that are specific to your AWS setup. The screens shown were taken from the current
 	version at the time of writing and may differ slightly from other versions.
 
 3. Click **Deploy** on the **Amazon EC2** tile to start the management cluster setup on Amazon EC2.
@@ -413,7 +413,7 @@ This section describes how to deploy a Tanzu Kubernetes Grid management cluster 
 
 Before creating a management cluster using the Tanzu CLI, define the base configuration for the cluster in a YAML file. You specify this file by using the `--file` option of the `tanzu management-cluster create` command.
 
-**Note** - To avoid creating a public-facing load balancer you can set AWS_LOAD_BALANCER_SCHEME_INTERNAL to true in the cluster configuration file `AWS_LOAD_BALANCER_SCHEME_INTERNAL: true`
+> **Note** To avoid creating a public-facing load balancer you can set AWS_LOAD_BALANCER_SCHEME_INTERNAL to true in the cluster configuration file `AWS_LOAD_BALANCER_SCHEME_INTERNAL: true`.
 This setting customizes the management cluster’s load balancer to use an internal scheme, which means that its Kubernetes API server will not be accessible and routed over the Internet.
 
 For **Register with Tanzu Mission Control**, you can [Register a Management Cluster with Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-register_tmc.html) to generate Tanzu Mission Control url and set into `TMC_REGISTRATION_URL: <Tanzu Mission Control url>`
@@ -596,7 +596,7 @@ tanzu cluster delete <cluster_name>
 
 Use this procedure to delete the management cluster as well as all of the AWS objects Tanzu Kubernetes Grid created such as VPC, subnets and NAT Gateways.
 
-**Note**: Be sure to wait until all the workload clusters have been reconciled before deleting the management cluster or infrastructure will need to be manually cleaned up.
+> **Note** Be sure to wait until all the workload clusters have been reconciled before deleting the management cluster or infrastructure will need to be manually cleaned up.
 
 Running the following command will delete the objects.
 

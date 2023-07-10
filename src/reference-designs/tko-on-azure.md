@@ -2,13 +2,11 @@
 
 VMware Tanzu simplifies the operation of Kubernetes in multi-cloud environment
 by centralizing management and governance for clusters and teams across
-on-premises, public clouds, and the edge. It delivers an open-source-aligned
-Kubernetes distribution with consistent operations and management to support
-infrastructure and app modernization.
+on-premises, public clouds, and the edge. This application delivers an open-source-aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
 
 This document lays out a reference design for deploying VMware Tanzu for Kubernetes Operations with Tanzu components on Microsoft Azure. This reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
-> **Note:** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.6 on Microsoft Azure.
+> **Note** This reference design is supported and validated for customers deploying Tanzu Kubernetes Grid 1.6 on Microsoft Azure.
 
 ![Tanzu Standard component set](img/tko-on-azure/tkg-overview-azure.png)
 
@@ -20,7 +18,7 @@ The Tanzu Kubernetes Grid user interface (UI) provides a guided deployment exper
 
 ![TKG installer user interface](img/tko-on-azure/image004.png)
 
-> **Note:** When using a bootstrap machine or a jump box, you may not be able to use the Tanzu Kubernetes Grid UI to build your configuration of the management and workload clusters. In such cases, use the following sample YAML file to help kickstart the installation process.
+> **Note** When using a bootstrap machine or a jump box, you may not be able to use the Tanzu Kubernetes Grid UI to build your configuration of the management and workload clusters. In such cases, use the following sample YAML file to help kickstart the installation process.
 
 ```yaml
 AZURE_ENVIRONMENT: "AzurePublicCloud"
@@ -141,7 +139,7 @@ Before you begin your deployment, it is important to ensure that the necessary p
 - **Control Plane VMs/Subnet –** HTTPS Inbound/Outbound to Internet and SSH and Secure Kubectl (22, 443, and 6443) Inbound/Outbound within the VNet
 - **Worker Node VMs/Subnet –** Secure Kubectl (6443) Inbound/Outbound within the VNet
 
-> **Note:** HTTPS traffic to the bootstrap machine and the control plane nodes is required so that they can download the necessary container images for the clusters to function properly.
+> **Note** HTTPS traffic to the bootstrap machine and the control plane nodes is required so that they can download the necessary container images for the clusters to function properly.
 
 ### Virtual Machines
 
@@ -149,7 +147,7 @@ The primary component of the Tanzu Kubernetes Grid installation is the VMs that 
 
 VMware recommends that Resource Groups, VNets, subnets, and Network Security Groups are created before you start a deployment.
 
-> **Important:** All clusters are deployed in a highly available state across Availability Zones within a given Azure region. However, this does mean that regions that do not have Availability Zones will not support Tanzu Kubernetes Grid deployments.
+> **Important** All clusters are deployed in a highly available state across Availability Zones within a given Azure region. However, this does mean that regions that do not have Availability Zones will not support Tanzu Kubernetes Grid deployments.
 
 ### Azure Backup
 
@@ -176,7 +174,7 @@ This reference design uses a bootstrap machine that does cluster deployments usi
 
 Use of a public IP address for the Kubernetes API server is optional. You can host your Kubernetes API server on a private IP address. In fact, this reference design uses a private IP address. Access is provided through a public endpoint in a DMZ with a Web Application Firewall (WAF) or through some kind of VPN level connectivity, such as Express Route or Site-to-Site VPN with connectivity back to your on-premises network.
 
-> **Note:** Keep in mind that the default deployment of Tanzu Kubernetes Grid creates public facing clusters. Make sure you set `AZURE_ENABLE_PRIVATE_CLUSTER` to `true` if you want to deploy your Kubernetes clusters on a private IP address.
+> **Note** Keep in mind that the default deployment of Tanzu Kubernetes Grid creates public facing clusters. Make sure you set `AZURE_ENABLE_PRIVATE_CLUSTER` to `true` if you want to deploy your Kubernetes clusters on a private IP address.
 
 ## Container Registries
 Numerous container registry options are available, and you may already have one in place. Tanzu comes pre-packaged with its own registry, called Harbor, which can be made available directly within a Tanzu Kubernetes Grid workload cluster. If you are hosting your Kubernetes clusters on a private IP address as described in this reference design, the Harbor registry sits in a workload cluster in the same network architecture as all other clusters. This design allows only private traffic access to the container images.
@@ -207,7 +205,7 @@ There are many other options for publicly available container registries that ar
 
 Attaching clusters to Tanzu Mission Control allows you to manage your global portfolio of Kubernetes clusters.
 
-**Note:** Ensure that Tanzu Kubernetes clusters have outbound SSL-based connectivity to the Internet.
+>**Note** Ensure that Tanzu Kubernetes clusters have outbound SSL-based connectivity to the Internet.
 
 Tanzu Mission Control provides the following capabilities:
 
@@ -224,7 +222,7 @@ For a complete list of features that Tanzu Mission Control includes with Tanzu, 
 
 To attach your cluster for management through Tanzu Mission Control, navigate to **Clusters > Attach Cluster** on the Tanzu Mission Control console and follow the prompts.
 
-> **Note:** If a workload cluster under management requires a proxy to access the Internet, you can use the Tanzu Mission Control CLI to [generate the YAML](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-97672F56-2AD4-46E6-94E1-805ED38D06C7.html) necessary to install Tanzu Mission Control components on it.
+> **Note** If a workload cluster under management requires a proxy to access the Internet, you can use the Tanzu Mission Control CLI to [generate the YAML](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-97672F56-2AD4-46E6-94E1-805ED38D06C7.html) necessary to install Tanzu Mission Control components on it.
 
 ![Tanzu Mission Control attach cluster screen](img/tko-on-azure/tmc-attach-cluster-screen.png)
 
@@ -265,7 +263,7 @@ VMware recommends the following best practices for managing identities in cluste
 
 Using [VMware Tanzu Observability by Wavefront](https://tanzu.vmware.com/observability) significantly enhances observability. Tanzu Observability is a VMware SaaS application that collects and displays metrics and trace data from the full stack platform, as well as from applications. The service provides the ability to create alerts tuned by advanced analytics, assist in the troubleshooting of systems and to understand the impact of running production code.
 
-**Note:** Ensure that Tanzu Kubernetes clusters have outbound SSL-based connectivity to the Internet.
+>**Note** Ensure that Tanzu Kubernetes clusters have outbound SSL-based connectivity to the Internet.
 
 Tanzu Observability collects data from components in Azure, Kubernetes, and applications running within Kubernetes.
 
