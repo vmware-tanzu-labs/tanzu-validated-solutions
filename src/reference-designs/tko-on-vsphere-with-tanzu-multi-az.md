@@ -47,29 +47,28 @@ VM Classes in a vSphere with Tanzu are broadly categorized into the following tw
 
   - **Default VM Classes**:
 
+  |**Class**             |**CPU**|**Memory(GB)**|**Reserved CPU and Memory**|
+  | -------------------- | ----- | ------------ | ------------------------- |
+  |best-effort-xsmall    |2      |2             |No                         |
+  |best-effort-small     |2      |4             |No                         |
+  |best-effort-medium    |2      |8             |No                         |
+  |best-effort-large     |4      |16            |No                         |
+  |best-effort-xlarge    |4      |32            |No                         |
+  |best-effort-2xlarge   |8      |64            |No                         |
+  |best-effort-4xlarge   |16     |128           |No                         |
+  |best-effort-8xlarge   |32     |128           |No                         |
+  |guaranteed-xsmall     |2      |2             |Yes                        |
+  |guaranteed-small      |2      |4             |Yes                        |
+  |guaranteed-medium     |2      |8             |Yes                        |
+  |guaranteed-large      |4      |16            |Yes                        |
+  |guaranteed-xlarge     |4      |32            |Yes                        |
+  |guaranteed-2xlarge    |8      |64            |Yes                        |
+  |guaranteed-4xlarge    |16     |128           |Yes                        |
+  |guaranteed-8xlarge    |32     |128           |Yes                        |
 
-    |Class|CPU|Memory(GB)|Reserved CPU and Memory|
-    | :- | :- | :- | :- |
-    |best-effort-xsmall|2|2|No|
-    |best-effort-small|2|4|No|
-    |best-effort-medium|2|8|No|
-    |best-effort-large|4|16|No|
-    |best-effort-xlarge|4|32|No|
-    |best-effort-2xlarge|8|64|No|
-    |best-effort-4xlarge|16|128|No|
-    |best-effort-8xlarge|32|128|No|
-    |guaranteed-xsmall|2|2|Yes|
-    |guaranteed-small|2|4|Yes|
-    |guaranteed-medium|2|8|Yes|
-    |guaranteed-large|4|16|Yes|
-    |guaranteed-xlarge|4|32|Yes|
-    |guaranteed-2xlarge|8|64|Yes|
-    |guaranteed-4xlarge|16|128|Yes|
-    |guaranteed-8xlarge|32|128|Yes|
+ >**Note** If the default VM Classes are not meeting application compute and storage requirements, you can create custom VM Classes.
 
->**Note** If the default VM Classes are not meeting application compute and storage requirements, you can create custom VM Classes.
-
-- **Storage Classes in vSphere with Tanzu** :  A StorageClass allows the administrators to describe the classes of storage that they offer. Different classes can map to meet quality-of-service levels, to backup policies, or to arbitrary policies determined by the cluster administrators. The policies represent datastore and manage storage placement of such components and objects as control plane VMs, vSphere Pod ephemeral disks and container images. You might need policies for storage placement of persistent volumes and VM content libraries. 
+- **Storage Classes in vSphere with Tanzu**:  A StorageClass allows the administrators to describe the classes of storage that they offer. Different classes can map to meet quality-of-service levels, to backup policies, or to arbitrary policies determined by the cluster administrators. The policies represent datastore and manage storage placement of such components and objects as control plane VMs, vSphere Pod ephemeral disks and container images. You might need policies for storage placement of persistent volumes and VM content libraries. 
 
 A three-zone Supervisor supports zonal storage, where a datastore is shared across all hosts in a single zone. Storage policies that you create for a Supervisor or for a namespace in a three-zone Supervisor must be topology aware and have the consumption domain enabled. For more information, see [Create Storage Policy for a Three-Zone Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-services-workloads/GUID-46783798-E3FD-49C6-BB62-C5EB09C2B82A.html).
 
@@ -86,12 +85,12 @@ When you prepare storage resources for three-zone Supervisor, consider the follo
   - VSAN Stretched clusters
   - VMs with vGPU and instance storage
 
-The following table provides the recommendations for configuring Storage Classes in a vSphere with Tanzu environment:
+  The following table provides the recommendations for configuring Storage Classes in a vSphere with Tanzu environment:
 
 
-|Decision ID|Design Decision|Design Justification|Design Implications|
-| :- | :- | :- | :- |
-|TKO-TKGS-001|<p>Create custom Storage Classes/Profiles/Policies.</p><p></p>|<p>To provide different levels of QoS and SLA for prod and dev/test Kubernetes workloads.</p><p></p><p></p>|Storage Policies must include one datastore from each vSphere Zone.|
+  |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+  | ------------- | ----------------- | ---------------------- | --------------------- |
+  |TKO-TKGS-001   |<p>Create custom Storage Classes/Profiles/Policies.</p><p></p>|<p>To provide different levels of QoS and SLA for prod and dev/test Kubernetes workloads.</p><p></p><p></p>|Storage Policies must include one datastore from each vSphere Zone.|
 
 
 ## Identity and Access Management
@@ -124,9 +123,8 @@ For more information about the the maximum supported number, see [Configuration 
 ## Recommendations for using namespace in vSphere with Tanzu
 
 
-
-|Decision ID|Design Decision|Design Justification|Design Implications|
-| :- | :- | :- | :- |
+|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+| ------------- | ----------------- | ---------------------- | --------------------- |
 |TKO-TKGS-003|Create dedicated namespace to environment specific.|Segregate prod/dev/test cluster via assigning them to dedicated namespaces.|Clusters created within the namespace share the same access policies/quotas/network and storage resources.|
 |TKO-TKGS-004|Register external IDP with Supervisor or AD/LDAP with vCenter SSO.|Limit access to namespace based on role of users/groups.|NA|
 |TKO-TKGS-005|Enable namespace self-service.|Enables Dev-Ops users to create namespace in self-service manner.|The vSphere administrator must publish a namespace template to LDAP users/groups enabling them to create a namespace.|
@@ -173,8 +171,8 @@ NSX Advanced Load Balancer is deployed in write access mode in a vSphere environ
 - **NSX Advanced Load Balancer Controller:** NSX Advanced Load Balancer Controller manages Virtual Service objects and interacts with the vCenter Server infrastructure to manage the lifecycle of the SEs. It is the central repository for the configurations and policies related to services and management, and provides the portal for viewing the health of VirtualServices and SEs, and the associated analytics that NSX Advanced Load Balancer provides. The following table provides recommendations for configuring NSX Advanced Load Balancer in a vSphere with Tanzu environment:
 
 
-  |Decision ID|Design Decision|Design Justification|Design Implications|
-  | :- | :- | :- | :- |
+  |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+  | ------------- | ----------------- | ---------------------- | --------------------- |
   |TKO-NSXALB-001|Deploy 3 NSX ALB controller nodes, one to each vSphere Zone and make a cluster.|To achieve high-availability of the NSX ALB control plane when one of the vSphere clusters goes down.|NSX ALB network should be L2 stretched across three vSphere Zone.|
   |TKO-NSXALB-002|Deploy NSX ALB controller cluster nodes on a network dedicated to NSX-ALB.|To isolate NSX ALB traffic from infrastructure management traffic and Kubernetes workloads.|Additional VLAN is required.|
   |TKO-NSXALB-003|Use static IP addresses for the NSX ALB controllers.|NSX Advanced Load Balancer Controller cluster uses management IP addresses to form and maintain quorum for the control plane cluster. Any changes would be disruptive.|NA|
@@ -189,8 +187,8 @@ NSX Advanced Load Balancer is deployed in write access mode in a vSphere environ
 
 
 
-  |Decision ID|Design Decision|Design Justification|Design Implications|
-  | :- | :- | :- | :- |
+  |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+  | ------------- | ----------------- | ---------------------- | --------------------- |
   |TKO-ALB-SE-001|NSX ALB Service Engine High Availability set to Active/Active.|Provides higher resiliency, optimum performance, and utilization compared to N+M and/or Active/Standby.|<p>Requires NSX ALB Enterprise Licensing. Only the Active/Standby mode is supported with NSX ALB essentials for Tanzu license.</p><p></p><p>Certain applications might not work in the Active/Active mode. For example, applications that preserve the client IP use the Legacy Active/Standby HA mode.</p>|
   |TKO-ALB-SE-002|Enable ALB Service Engine Self Elections.|Enable SEs to elect a primary amongst themselves in the absence of connectivity to the NSX ALB controller.|Requires NSX ALB Enterprise Licensing. This feature is not supported with NSX ALB essentials for Tanzu license.|
   |TKO-ALB-SE-003|<p>Enable ‘Dedicated dispatcher CPU’ on Service Engine Groups that contain the Service Engine VMs of 4 or more vCPUs.</p><p></p><p>**Note:** This setting should be enabled on SE Groups that are servicing applications and have high network requirements.</p>|<p>This will enable a dedicated core for packet processing enabling high packet pipeline on the Service Engine VMs.</p><p>**Note:** By default, the packet processing core also processes load-balancing flows.</p>|Consume more Resources from Infrastructure.|
@@ -226,8 +224,8 @@ This topology enables the following benefits:
 The following table provides recommendations for networks:
 
 
-|Decision ID|Design Decision|Design Justification|Design Implications|
-| :- | :- | :- | :- |
+|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+| ------------- | ----------------- | ---------------------- | --------------------- |
 |TKO-NET-001|Use separate networks for Supervisor cluster and workload clusters.|To have a flexible firewall and security policies.|Sharing the same network for multiple clusters can complicate creation of firewall rules.|
 |TKO-NET-002|Use distinct port groups for network separation of Kubernetes workloads.|Isolate production Kubernetes clusters from dev/test clusters by placing them on distinct port groups.|Network mapping is done at the namespace level. All Kubernetes clusters created in a namespace connect to the same port group.|
 |TKO-NET-003|Use routable networks for Tanzu Kubernetes clusters.|Allow connectivity between the TKG clusters and infrastructure components.|<p>Networks that are used for Tanzu Kubernetes cluster traffic must be routable between each other and the Supervisor Cluster Management Network.</p><p></p>|
@@ -240,8 +238,8 @@ All ESXi hosts which are part of three vSphere clusters share a common VDS with 
 
 As per the reference architecture, the following table lists the network requirements:
 
-|Network Type|DHCP Service|Description|
-| :- | :- | :- |
+|**Network Type**|**DHCP Service**|**Description**|
+| -------------- | -------------- | ------------- |
 |NSX ALB Management Network|Optional|ALB Controllers and SEs will be attached to this network. |
 |TKG Supervisor Network|Optional|Supervisor cluster nodes will be attached to this network.|
 |TKG Workload Network|Optional|<p>Control Plane and Worker Nodes of the TKG workload cluster will be attached to this network.</p><p></p><p>The second interface of Supervisor nodes is also attached to this network.</p>|
@@ -254,8 +252,8 @@ As per the reference architecture, the following table lists the network require
 The following table provides sample entries for the required port groups. Create network entries with the port group name, VLAN ID, and CIDRs that are specific to your environment:
 
 
-|Network Type|Port Group Name|VLAN|Gateway CIDR|DHCP Enabled|IP Pool fo SE/VIP in NSX ALN|
-| :- | :- | :- | :- | :- | :- |
+|**Network Type**|**Port Group Name**|**VLAN**|**Gateway CIDR**|**DHCP Enabled**|**IP Pool fo SE/VIP in NSX ALB**|
+| -------------- | ----------------- | ------ | -------------- | -------------- | ---- |
 |NSX ALB Management Network|sfo01-w01-albmanagement|1610|172\.16.10.1/27|Optional|172\.16.10.6-172.16.10.30|
 |TKG Supervisor Network|sfo01-w01-tkgmanagement|1640|172\.16.40.1/27|Optional|No|
 |TKG Workload Network|sfo01-w01-tkgworkload|1660|172\.16.60.1/24|Optional|No|
@@ -268,21 +266,21 @@ The following table provides sample entries for the required port groups. Create
 To prepare the firewall, perform the following options:
 
 1. NSX Advanced Load Balancer Controller nodes and VIP addresses
-1. NSX Advanced Load Balancer Service Engine management IP address
-1. Supervisor Cluster network (Tanzu Kubernetes Grid Management) CIDR
-1. Tanzu Kubernetes Grid workload cluster CIDR
-1. Tanzu Kubernetes Grid cluster VIP address range
-1. Client machine IP address
-1. vCenter server IP address
-1. VMware Harbor registry IP address
-1. DNS server IP address(es)
-1. NTP server IP address(es)
+2. NSX Advanced Load Balancer Service Engine management IP address
+3. Supervisor Cluster network (Tanzu Kubernetes Grid Management) CIDR
+4. Tanzu Kubernetes Grid workload cluster CIDR
+5. Tanzu Kubernetes Grid cluster VIP address range
+6. Client machine IP address
+7. vCenter server IP address
+8. VMware Harbor registry IP address
+9. DNS server IP address(es)
+10. NTP server IP address(es)
 
 The following table provides a list of firewall rules based on the assumption that there is no firewall within a subnet/VLAN.
 
 
 |**Source**|**Destination**|**Protocol:Port**|**Description**|
-| :- | :- | :- | :- |
+| -------- | ------------- | --------------- | ------------- |
 |Client Machine|NSX Advanced Load Balancer Controller Nodes and VIP|TCP:443|Access NSX Advanced Load Balancer portal for configuration.|
 |Client Machine|vCenter Server|TCP:443|Access and configure WCP in vCenter.|
 |Client Machine|TKG Cluster VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|<p>TKG Cluster Access</p><p>Access the https workload</p><p>Access the http workload</p>|
@@ -331,8 +329,8 @@ The following tables list recommendations for deploying Supervisor Cluster.
 
 
 
-|Decision ID|Design Decision|Design Justification|Design Implications|
-| :- | :- | :- | :- |
+|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+| ------------- | ----------------- | ---------------------- | --------------------- |
 |TKO-TKGS-001|Deploy Supervisor cluster control plane nodes in large form factor.|Large form factor should suffice to integrate Supervisor cluster with TMC.|Consume more Resources from Infrastructure. |
 |TKO-TKGS-002|Register Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manages the life cycle of all Tanzu Kubernetes Clusters centrally.|Need outbound connectivity to the internet for TMC registration.|
 
@@ -363,16 +361,16 @@ To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kube
 Each CNI is suitable for a different use case. The following tables lists some common use cases for the CNI options that Tanzu Kubernetes Grid supports. This table will help you select the most appropriate CNI for your Tanzu Kubernetes clusters with Calico.
 
 
-|CNI|Use Case|Pros and Cons|
-| :- | :- | :- |
+|**CNI** |**Use Case** |**Pros and Cons** |
+| ------ | ----------- | ---------------- |
 |Antrea|<p>Enable Kubernetes pod networking with IP overlay networks using VXLAN or Geneve for encapsulation. Optionally encrypt node-to-node communication using IPSec packet encryption.</p><p>Antrea supports advanced network use cases like kernel bypass and network service mesh.</p>|<p>**Pros:**</p><p>- Antrea leverages Open vSwitch as the networking data plane. Open vSwitch supports both Linux and Windows.</p><p>- VMware supports the latest conformant Kubernetes and stable releases of Antrea.</p><p></p>|
 |Calico|<p>Calico is used in environments where factors like network performance, flexibility, and power are essential.</p><p>For routing packets between nodes, Calico leverages the BGP routing protocol instead of an overlay network. This eliminates the need to wrap packets with an encapsulation layer resulting in increased network performance for Kubernetes workloads.</p><p></p>|<p>**Pros:**</p><p></p><p>Support for Network Policies</p><p></p><p>High network performance</p><p></p><p>SCTP Support</p><p></p><p>**Cons:**</p><p></p><p>No multicast support.</p>|
 
 
 ### Recommendations for Tanzu Kubernetes Clusters
 
-|Decision ID|Design Decision|Design Justification|Design Implications|
-| :- | :- | :- | :- |
+|**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
+| ------------- | ----------------- | ---------------------- | --------------------- |
 |TKO-TKC-001|Deploy Tanzu Kubernetes clusters with prod plan and multiple worker nodes.|The prod plan provides high availability for the control plane.|Consume resources from Infrastructure.|
 |TKO-TKC-002|Assign storage policy as default policy during cluster deployment.|Packages installation and applications deployment requires storage policy defined as default.|Package and application installation might fail.|
 |TKO-TKC-003|Use guaranteed VM class for Tanzu Kubernetes clusters.|Guaranteed compute resources are always available for containerized workloads.|Could prevent automatic migration of nodes by DRS.|
@@ -392,7 +390,7 @@ Each ingress controller has its own advantages and disadvantages. The below tabl
 
 
 |**Ingress Controller**|**Use Cases**|
-| :- | :- |
+| -------------------- | ----------- |
 |Contour|<p>Use Contour when only north-south traffic is needed in a Kubernetes cluster. You can apply security policies for the north-south traffic by defining the policies in the manifest file for the application.</p><p>Contour is a reliable solution for simple Kubernetes workloads.</p><p></p>|
 |Istio|Use Istio ingress controller when you need to provide security, traffic direction, and insight within the cluster (east-west traffic) and between the cluster and the outside world (north-south traffic).|
 
@@ -408,10 +406,9 @@ When vSphere with Tanzu is deployed on VDS networking, you can deploy an externa
 You may use one of the following methods to install Harbor:
 
 - [Tanzu Kubernetes Grid Package deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html) : VMware recommends this installation method for general use cases. The Tanzu packages, including Harbor, must either be pulled directly from VMware or be hosted in an internal registry.
-- [VM-based deployment using docker-compose](https://goharbor.io/docs/latest/install-config/installation-prereqs/):  VMware recommends using this installation method when Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-restricted environment and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-less deployments. Do not use this method for hosting application images.
-- [Helm-based deployment to a Kubernetes cluster](https://goharbor.io/docs/latest/install-config/harbor-ha-helm/): This installation method might be preferred for those customers who have Helm configured. Helm deployments of Harbor are only supported by the Open Source community and not by VMware Global Support Services.
+- [VM-based deployment using OVA](https://goharbor.io/docs/latest/install-config/installation-prereqs/):  VMware recommends using this installation method when Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-restricted environment and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-less deployments. Do not use this method for hosting application images. Harbor registry is being shipped along with TKG binaries and can be downloaded from [here](https://customerconnect.vmware.com/en/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
-If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To configure the TKG2 cluster with private container registry, see [Integrate TKG 2 cluster with container registry](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-EC2C9619-2898-4574-8EF4-EA66CFCD52B9.html).
+If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. To configure the TKG cluster with private container registry, see [Integrate TKG 2 cluster with container registry](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-EC2C9619-2898-4574-8EF4-EA66CFCD52B9.html).
 
 ## Scale a Tanzu Kubernetes Grid Cluster
 
@@ -419,8 +416,8 @@ You can scale a TKG cluster on supervisor horizontally by changing the number of
 
 The following table lists the supported scaling operations for the TKG cluster:
 
-|Node|Horizontal Scale Out|Horizontal Scale In|Vertical Scale |Volume Scale|
-| :- | :- | :- | :- | :- |
+|**Node**|**Horizontal Scale Out**|**Horizontal Scale In**|**Vertical Scale** |**Volume Scale**|
+| ------ | ---------------------- | --------------------- | ----------------- | ------|
 |Control Plane|Yes|Yes|Yes|No|
 |Worker|Yes|Yes|Yes|Yes|
 
@@ -428,15 +425,14 @@ The following table lists the supported scaling operations for the TKG cluster:
 >- The number of control plane nodes must be odd, either 3 or 5.
 >- You can change the Worker node volumes can be changed after provisioning. However, the control plane node volumes cannot be changed.
 
-
 ## Backup And Restore
 
 There are the following two options for backing up and restoring stateless and stateful applications running on TKG Clusters on Supervisor:
 
 
 
-|Tool|Comments|
-| :- | :- |
+|**Tool**|**Comments**|
+| ------ | ---------- |
 |Velero plug-in for vSphere|<p>Both Kubernetes metadata and persistent volumes can be backed up and restored.</p><p>Velero snapshotting is used for persistent volumes with stateful applications.</p><p>Requires that the Velero Plugin for vSphere is also installed and configured on Supervisor.</p><p></p>|
 |Standalone Velero and Restic|<p>Both Kubernetes metadata and persistent volumes can be backed up and restored.</p><p>Restic is used for persistent volumes with stateful applications.</p><p>Use this approach if you require portability.</p><p></p>|
 
