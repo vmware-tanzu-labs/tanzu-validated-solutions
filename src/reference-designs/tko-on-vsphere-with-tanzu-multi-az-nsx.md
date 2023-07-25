@@ -162,7 +162,7 @@ You can enable Vsphere with Tanzu in the following environments:
 - vSphere backed with virtual Distributed Switch (VDS) Networking and HA proxy to provide Load Balancing capabilities.
 - vSphere backed with virtual Distributed Switch (VDS) Networking and NSX Advanced Load Balancer to provide Load Balancing capabilities.
 
-**Note:** The scope of this document is limited to VMware NSX Data Center Networking.
+>**Note** The scope of this document is limited to VMware NSX Data Center Networking.
 
 NSX provides network connectivity to the objects inside the Supervisor and external networks. Connectivity to the ESXi hosts comprises three vSphere clusters that are backed by VLAN backed port groups.
 
@@ -195,7 +195,8 @@ The following section explains the networking components and services included i
 
 ## Network Requirements
 
-The following table lists the required networks for the reference design: **Note:** Based on your business requirements, modify subnet range to fit the projected growth.
+The following table lists the required networks for the reference design: 
+> **Note** Based on your business requirements, modify subnet range to fit the projected growth.
 
 
 |**Network Type**|**Sample Recommendation**|**Description**|
@@ -249,7 +250,7 @@ The following table provides a list of firewall rules based on the assumption th
 |Platform Admins|Jumpbox|TCP:22|Management|
 |Kubernetes users|Ingress IP Range|<p>TCP:443</p><p>TCP:6443</p>|<p>Management. <br>You can further restrict to individual IPs for cluster access.</p><p></p>|
 
-Note: For Tanzu Mission Control (TMC), if the firewall does not allow wildcards, you just whitelist all IP addresses of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com.
+>**Note** For Tanzu Mission Control (TMC), if the firewall does not allow wildcards, you just whitelist all IP addresses of [account].tmc.cloud.vmware.com and extensions.aws-usw2.tmc.cloud.vmware.com.
 
 
 ## Installation Experience
@@ -282,7 +283,7 @@ The following tables list recommendations for deploying the Supervisor Cluster:
 |TKO-TKGS-001|Deploy Supervisor cluster control plane nodes in large form factor.|Large form factor should suffice to integrate Supervisor cluster with TMC.|Consume more resources from Infrastructure. |
 |TKO-TKGS-002|Register the Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters, and manages the life cycle of all Tanzu Kubernetes clusters centrally.|Need outbound connectivity to the internet for TMC registration.|
 
-**Note:** In this scenario, the SaaS endpoints refer to Tanzu Mission Control, Tanzu Service Mesh, and Tanzu Observability.
+>**Note** In this scenario, the SaaS endpoints refer to Tanzu Mission Control, Tanzu Service Mesh, and Tanzu Observability.
 
 ## vSphere Namespaces 
 
@@ -292,7 +293,7 @@ When you create a vSphere Namespace, a network segment is created which is deriv
 
 The typical use case for overriding Supervisor network settings is to provision a TKG cluster with routable pod networking. 
 
-**Note:** The Override supervisor network setting is only available if the Supervisor is configured with NSX networking.
+>**Note** The Override supervisor network setting is only available if the Supervisor is configured with NSX networking.
 
 **Recommendations for Using Namespace with Tanzu**
 
@@ -397,10 +398,9 @@ The following table lists the supported scaling operations for TKG cluster:
 |Control Plane|Yes|Yes|Yes|No|
 |Worker|Yes|Yes|Yes|Yes|
 
-**Note:**
-
-- The number of control plane nodes must be odd, either 3 or 5.
-- You can change the Worker node volumes after provisioning. However, you can not change the control plane node volumes.
+>**Note**
+>- The number of control plane nodes must be odd, either 3 or 5.
+>- You can change the Worker node volumes after provisioning. However, you can not change the control plane node volumes.
 
 ## Backup And Restore
 
@@ -414,7 +414,7 @@ There are following two options for backing up and restoring stateless and state
 
 To backup and restore workloads running on TKG Cluster on Zonal Supervisor, create a datastore and install Velero with Restic on Kubernetes cluster. For more information, see [Install and Configure Standalone Velero and Restic](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-6CC3E1B5-CDAB-453C-98FE-CB579BC6AAF0.html). 
 
-**Note:** Velero plug-in for vSphere runs as a pod which is not supported with Zonal Supervisor, and it requires NSX-T networking. For more information, see the prerequisites section of [Install and Configure the Velero Plugin for vSphere on Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-1E294812-0E8B-494B-9F6E-C8631FEB9403.html).
+>**Note** Velero plug-in for vSphere runs as a pod which is not supported with Zonal Supervisor, and it requires NSX-T networking. For more information, see the prerequisites section of [Install and Configure the Velero Plugin for vSphere on Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-1E294812-0E8B-494B-9F6E-C8631FEB9403.html).
 
 
 

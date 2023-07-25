@@ -111,7 +111,7 @@ Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks in
 - VMware NSX Data Center Networking
 - vSphere Networking (VDS)
 
-**Note:** The scope of this document is limited to VMware NSX Data Center Networking with NSX Advanced Load Balancer Enterprise Edition.
+>**Note** The scope of this document is limited to VMware NSX Data Center Networking with NSX Advanced Load Balancer Enterprise Edition.
 
 ## Tanzu Kubernetes Grid on VMware NSX Data Center Networking with NSX Advanced Load Balancer
 
@@ -182,7 +182,7 @@ As per the production architecture, the following list of networks are required:
 |TKG Management VIP Logical Segment|No|Virtual services for control plane HA of all TKG clusters (management, shared services, and workload).<br>Reserve sufficient IP addresses depending on the number of TKG clusters planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
 |TKG Workload VIP Logical Segment|No|Virtual services for applications deployed in the workload cluster. The applications can be of type Load balancer or Ingress.<br>Reserve sufficient IP addresses depending on the number of applications planned to be deployed in the environment. <br> NSX Advanced Load Balancer takes care of IPAM on this network.|
 
-**Note -** You can also select `TKG Workload VIP` network for control plane HA of the workload cluster if you wish so. 
+>**Note** You can also select `TKG Workload VIP` network for control plane HA of the workload cluster if you wish so. 
 
 #### <a id="cidr"> </a> Subnet and CIDR Examples
 
@@ -342,7 +342,7 @@ The following table provides the recommendations for configuring NSX Advanced Lo
 |TKO-ALB-SE-001|Configure SE Group for Active/Active HA mode.|Provides optimum resiliency, performance, and utilization.|Certain applications might not work in Active/Active mode. For instance, applications that require preserving client IP address. In such cases, use the legacy Active/Standby HA mode.|
 |TKO-ALB-SE-002|Configure anti-affinity rule for the SE VMs.|This is ensure that no two SEs in the same SE group end up on same ESXi Host and thus avoid single point of failure.|DRS must be enabled on vSphere cluster where SE VMs are deployed.|
 |TKO-ALB-SE-003|Configure CPU and Memory reservation for the SE VMs.|This is to ensure that service engines don’t compete with other VMs during resource contention.|CPU and memory reservation is configured at SE Group level.|
-|TKO-ALB-SE-004|Enable 'Dedicated dispatcher CPU' on SE groups that contain the SE VMs of 4 or more vCPUs.<br>Note: This setting must be enabled on SE groups that are servicing applications that have high network requirement.|This enables a dedicated core for packet processing enabling high packet pipeline on the SE VMs.|None.|
+|TKO-ALB-SE-004|Enable 'Dedicated dispatcher CPU' on SE groups that contain the SE VMs of 4 or more vCPUs.<br>**Note:** This setting must be enabled on SE groups that are servicing applications that have high network requirement.|This enables a dedicated core for packet processing enabling high packet pipeline on the SE VMs.|None.|
 |TKO-ALB-SE-005|Create multiple SE groups as desired to isolate applications.|Allows efficient isolation of applications for better capacity planning.<br> Allows flexibility of life-cycle-management.|Multi SE groups will increase the licensing cost.|
 |TKO-ALB-SE-006|Create separate service engine groups for TKG management and workload clusters.|Allows isolating the load balancing traffic of management cluster from shared services cluster and workload clusters.|Dedicated service engine groups increase licensing cost.|
 |TKO-ALB-SE-007|Set 'Placement across the Service Engines' setting to 'distributed'.|This allows maximum fault tolerance and even utilization of capacity.| None|

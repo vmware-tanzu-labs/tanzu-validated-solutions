@@ -1,6 +1,6 @@
 # Deploy VMware Tanzu for Kubernetes Operations on VMware vSphere with VMware NSX-T
 
-This document provides step-by-step instructions for deploying Tanzu Kubernetes Operations in an Internet available vSphere environment backed by NSX-T Data Center networking.
+This document provides step-by-step instructions for deploying VMware Tanzu Kubernetes Operations (informally known as TKO) in an Internet available vSphere environment backed by the NSX-T Data Center networking.
 
 The scope of the document is limited to providing deployment steps based on the reference design in [VMware Tanzu for Kubernetes Operations on vSphere with NSX-T](../reference-designs/tko-on-vsphere-nsx.md). It does not cover deployment procedures for the underlying SDDC components.
 
@@ -41,7 +41,7 @@ Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your en
 - A vCenter with NSX-T backed environment.
 - Ensure that following NSX-T configurations are in place:
 
-  **Note:** The following provides only a high-level overview of the required NSX-T configuration. For more information, see [NSX-T Data Center Installation Guide](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.2/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX-T Data Center Product Documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
+  > **Note** The following provides only a high-level overview of the required NSX-T configuration. For more information, see [NSX-T Data Center Installation Guide](https://docs.vmware.com/en/VMware-NSX-T-Data-Center/3.2/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX-T Data Center Product Documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
 
   - NSX-T manager instance is deployed and configured with Advanced or higher license.
   - vCenter Server that is associated with the NSX-T Data Center is configured as Compute Manager.
@@ -70,8 +70,8 @@ Before deploying Tanzu for Kubernetes Operations on vSphere, ensure that your en
     - Photon v3 Kubernetes v1.24.9 OVA and/or
     - Ubuntu 2004 Kubernetes v1.24.9 OVA  
 
-**Note**: You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.<p>
-**Note**: In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
+> **Note** You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.<p>
+> **Note** In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
 **Resource Pools and VM Folders:**
 
 The sample entries of the resource pools and folders that need to be created are as follows.
@@ -189,7 +189,7 @@ The following procedure provides required details to create one such network whi
 
    ![Segment configuration](img/tko-on-vsphere-nsxt/T1-gateway-04.png)
 
-    **Note:** The following  step is required only for Tanzu Kubernetes Grid management network, shared services network, and workload network.
+    > **Note** The following  step is required only for Tanzu Kubernetes Grid management network, shared services network, and workload network.
 
 1. Click **SET DHCP CONFIG**.
 
@@ -250,7 +250,7 @@ To deploy NSX Advanced Load Balancer, complete the following steps.
 
 A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX Advanced Load Balancer virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, navigate to NSX Advanced Load Balancer on your browser.  
 
-**Note**: While the system is booting up, a blank web page or a 503 status code may appear.  
+> **Note** While the system is booting up, a blank web page or a 503 status code may appear.  
 
 ### <a id="nsx-alb-init"> </a>NSX Advanced Load Balancer: Initial Setup
 
@@ -285,7 +285,7 @@ To configure NTP, navigate to **Administration** > **Settings** > **DNS/NTP > Ed
 
 Add your NTP server details and then click **Save**.
 
-**Note:** You may also delete the default NTP servers.
+> **Note** You may also delete the default NTP servers.
 
 ![NTP server configuration](img/tko-on-vsphere-nsxt/alb07.png)
 
@@ -339,7 +339,7 @@ The configuration of the primary (leader) controller is synchronized to the new 
 
 ![Controller status](img/tko-on-vsphere-nsxt/alb14.png)
 
-**Note:** In the following tasks, all NSX Advanced Load Balancer configurations are done by connecting to the NSX Advanced Load Balancer Controller Cluster IP/FQDN.
+> **Note** In the following tasks, all NSX Advanced Load Balancer configurations are done by connecting to the NSX Advanced Load Balancer Controller Cluster IP/FQDN.
 
 ### NSX Advanced Load Balancer: Certificate Management
 
@@ -391,11 +391,11 @@ NSX Advanced Load Balancer can be deployed in multiple environments for the same
 
 **Service Engine Group 2**: Service engines associated with this service engine group hosts virtual services for all load balancer functionalities requested by Tanzu Kubernetes Grid workload clusters mapped to this SE group.  
 
-**Note**:
 
-* Based on your requirements, you can create additional SE groups for the workload clusters.
-* Multiple workload clusters can be mapped to a single SE group.
-* A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
+> **Note**
+>- Based on your requirements, you can create additional SE groups for the workload clusters.
+>- Multiple workload clusters can be mapped to a single SE group.
+>- A Tanzu Kubernetes Grid cluster can be mapped to only one SE group for application load balancer services.
 
 For information about mapping a specific service engine group to Tanzu Kubernetes Grid workload cluster, see [Configure NSX Advanced Load Balancer in Tanzu Kubernetes Grid Workload Cluster](#workloadako).
 
@@ -508,9 +508,9 @@ To configure IP address pools for the networks, follow this procedure:
    |sfo01-w01-vds01-tkgclustervip|No|172.16.180.0/24|172.16.180.10 - 172.16.180.200|
 
 
-   **Note**: Ensure that VRF Context for `sfo01-w01-vds01-albmanagement` network is set to `Global`.
+   > **Note** Ensure that VRF Context for `sfo01-w01-vds01-albmanagement` network is set to `Global`.
 
-   **Note**: Ensure that VRF Context for  `sfo01-w01-vds01-tkgclustervip` network is set to NSX tier-1 gateway.
+   > **Note** Ensure that VRF Context for  `sfo01-w01-vds01-tkgclustervip` network is set to NSX tier-1 gateway.
 
    Once the networks are configured, the configuration must look like the following image.
 
@@ -750,10 +750,10 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 * For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.24.9 OVA.
 
-     **Note**: Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
+     > **Note** Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
 * For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
-    **Note**: Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
+    > **Note** Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
 
 1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
 
@@ -763,7 +763,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. Click **Finish** to deploy the VM. When the OVA deployment finishes, right-click the VM and select **Template** > **Convert to Template**.
 
-    **Note:** Do not power on the VM before you convert it to a template.
+    > **Note** Do not power on the VM before you convert it to a template.
 
 1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
 
@@ -850,11 +850,11 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
     * Management Cluster Control Plane VIP network Name: Select `sfo01-w01-vds01-tkgclustervip` network and the subnet associated with it.
     * Cluster Labels: To adhere to the architecture defining a label is mandatory. Provide required labels, for example, `type: management`.
 
-		**Note:** Based on your requirements, you may specify multiple labels.
+		> **Note** Based on your requirements, you may specify multiple labels.
 
          ![NSX ALB settings for management cluster - verify credentials](img/tko-on-vsphere-nsxt/tkg-installer-07.png)
 
-   **Note:** With above configurations, when Tanzu Kubernetes Grid clusters (shared services or workload) are tagged with label `type: management`, `ako` pod gets deployed on the cluster, and any applications hosted on the cluster that requires the load balancing service is exposed through network `sfo01-w01-vds01-tkgclustervip` and the virtual service is placed on SE group `sfo01m01segroup01`.
+   > **Note** With above configurations, when Tanzu Kubernetes Grid clusters (shared services or workload) are tagged with label `type: management`, `ako` pod gets deployed on the cluster, and any applications hosted on the cluster that requires the load balancing service is exposed through network `sfo01-w01-vds01-tkgclustervip` and the virtual service is placed on SE group `sfo01m01segroup01`.
                 
 1. (Optional) On the Metadata page, you can specify location and labels and click **Next**.
 
@@ -872,7 +872,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
     * For the `no-proxy` section:
 
       * For Tanzu Kubernetes Grid management and workload clusters, `localhost`, `127.0.0.1`, the values of `CLUSTER_CIDR` and `SERVICE_CIDR`, `.svc`, and `.svc.cluster.local` are appended along with the user specified values.
-    * **Note**: If the Kubernetes cluster needs to communicate with external services and infrastructure endpoints in your Tanzu Kubernetes Grid environment, ensure that those endpoints are reachable by your proxies or add them to `TKG_NO_PROXY`. Depending on your environment configuration, this may include, but is not limited to, your OIDC or LDAP server, Harbor, NSX, NSX Advanced Load Balancer, and vCenter.
+    * > **Note** If the Kubernetes cluster needs to communicate with external services and infrastructure endpoints in your Tanzu Kubernetes Grid environment, ensure that those endpoints are reachable by your proxies or add them to `TKG_NO_PROXY`. Depending on your environment configuration, this may include, but is not limited to, your OIDC or LDAP server, Harbor, NSX, NSX Advanced Load Balancer, and vCenter.
     * For vSphere, you must manually add the CIDR of Tanzu Kubernetes Grid management network and Cluster VIP networks that includes the IP address of your control plane endpoints, to `TKG_NO_PROXY`.
 
     ![Kubernetes Network page for management cluster](img/tko-on-vsphere-nsxt/tkg-installer-10.png)
@@ -885,7 +885,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
 1. Select the OS image that will be used for the management cluster deployment.
 
-    Note: This list will appear empty if you don’t have a compatible template present in your environment. Refer steps provided in [Import Base Image template for TKG Cluster deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
+    > **Note** This list will appear empty if you don’t have a compatible template present in your environment. Refer steps provided in [Import Base Image template for TKG Cluster deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-vsphere.html).
 
     ![OS image for management cluster](img/tko-on-vsphere-nsxt/tkg-installer-12.png)
 
@@ -1260,7 +1260,9 @@ The procedures for deploying a shared services cluster and workload cluster are 
 
 Another difference between the shared services cluster and workload clusters is that shared services clusters will be applied with the “Cluster Labels” which were defined while deploying the management cluster. This is to enforce that only shared service cluster will make use of the Tanzu Kubernetes Grid cluster VIP or data network for application load balancing purposes and the virtual services are deployed on “Service Engine Group 1”.
 
-After the management cluster is registered with Tanzu Mission Control, the deployment of the Tanzu Kubernetes clusters can be done in just a few clicks. The procedure for creating Tanzu Kubernetes clusters is as follows. <p>     **Note:** The scope of this document doesn't cover the use of a proxy for Tanzu Kubernetes Grid deployment. If your environment uses a proxy server to connect to the internet, ensure that the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Management Cluster in the **No proxy list**, as described in [Create a Proxy Configuration Object for a Tanzu Kubernetes Grid Service Cluster](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-B4760775-388A-45B5-A707-2191E9E4F41F.html).
+After the management cluster is registered with Tanzu Mission Control, the deployment of the Tanzu Kubernetes clusters can be done in just a few clicks. The procedure for creating Tanzu Kubernetes clusters is as follows. 
+
+> **Note** The scope of this document doesn't cover the use of a proxy for Tanzu Kubernetes Grid deployment. If your environment uses a proxy server to connect to the internet, ensure that the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Management Cluster in the **No proxy list**, as described in [Create a Proxy Configuration Object for a Tanzu Kubernetes Grid Service Cluster](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-B4760775-388A-45B5-A707-2191E9E4F41F.html).
 
 1. Navigate to the Clusters tab and click **Create Cluster**.
 

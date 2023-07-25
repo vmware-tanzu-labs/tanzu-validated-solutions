@@ -1,6 +1,6 @@
-# Deploy Tanzu Kubernetes Grid on AWS in an Air-Gapped Environment
+# Deploy VMware Tanzu Kubernetes Operations on AWS in an Air-Gapped Environment
 
-This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations on AWS in an air-gapped (Internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
+This document outlines the steps for deploying VMware Tanzu for Kubernetes Operations (informally known as TKO) on AWS in an air-gapped (Internet-restricted) environment. The deployment is based on the reference design provided in [VMware Tanzu Kubernetes Grid on AWS Airgap Reference Design](../reference-designs/tko-on-aws-airgap.md).
 
 ## Deploying with VMware Service Installer for Tanzu
 
@@ -8,7 +8,7 @@ You can use VMware Service Installer for VMware Tanzu to automate this deploymen
 
 VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
 
-To use Service Installer to automate this deployment, see [Deploying Tanzu Kubernetes Grid on Federal Air-gapped AWS VPC Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/1.4/service-installer/GUID-AWS%20-%20Federal%20Airgap-AWSFederalAirgap-DeploymentGuide.html).
+To use Service Installer to automate this deployment, see [Deploying Tanzu Kubernetes Grid on Federal Air-gapped AWS VPC Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/2.1/service-installer/GUID-AWS%20-%20Federal%20Airgap-AWSFederalAirgap-DeploymentGuide.html).
 
 Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
 
@@ -82,7 +82,7 @@ Follow these steps to create an Internet-restricted (offline) AWS VPC or see [Wo
    2. Select DNS Hostname and click **Save**.
    3. Refer to [AWS Documentation](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-dns.html#vpc-dns-updating) for more information.
 
-**Note:** If you create multiple offline VPCs, also see [Getting started with transit gateways](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-getting-started.html) in AWS documentation to create an AWS transit gateway.
+> **Note** If you create multiple offline VPCs, also see [Getting started with transit gateways](https://docs.aws.amazon.com/vpc/latest/tgw/tgw-getting-started.html) in AWS documentation to create an AWS transit gateway.
 
 6. Create a [VPC peering](https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-connection.html) connection between offline and Internet-connected VPC. If you have created the transit gateway, you can skip this step.
 
@@ -257,7 +257,7 @@ This section describes how to deploy a Tanzu Kubernetes Grid management cluster 
 
 Before creating a management cluster using the Tanzu CLI, define the base configuration for the cluster in a YAML file. Specify this file by using the `tanzu management-cluster create` command with the `--file` option.
 
-**Note** In the configuration file for the management cluster, enable the AWS internal load balancer as follows:
+> **Note** In the configuration file for the management cluster, enable the AWS internal load balancer as follows:
 
 `AWS_LOAD_BALANCER_SCHEME_INTERNAL: "true"`
 Using an internal load balancer scheme prevents the Kubernetes API server for the cluster from being accessed and routed over the Internet.
@@ -354,7 +354,7 @@ tanzu cluster delete <cluster_name>
 
 Use this procedure to delete the management cluster as well as all of the AWS objects that Tanzu Kubernetes Grid created, such as VPC, subnets, and NAT Gateways.
 
-**Note**: Be sure to wait until all the workload clusters have been reconciled before deleting the management cluster, or you will need to manually clean up the infrastructure.
+> **Note** Be sure to wait until all the workload clusters have been reconciled before deleting the management cluster, or you will need to manually clean up the infrastructure.
 
 Run the following command to delete the management cluster and related objects:
 

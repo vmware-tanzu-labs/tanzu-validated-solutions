@@ -1,6 +1,6 @@
 # VMware Tanzu for Kubernetes Operations on vSphere Reference Design
 
-Tanzu for Kubernetes Operations simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
+Tanzu for Kubernetes Operations (informally known as TKO) simplifies operating Kubernetes for multi-cloud deployment by centralizing management and governance for clusters and teams across on-premises, public clouds, and edge. It delivers an open source aligned Kubernetes distribution with consistent operations and management to support infrastructure and app modernization.
 
 This document describes a reference design for deploying VMware Tanzu for Kubernetes Operations on vSphere backed by vSphere Networking (VDS).
 
@@ -98,7 +98,7 @@ Tanzu Kubernetes Grid on vSphere can be deployed on various networking stacks in
 - VMware NSX-T Data Center Networking
 - vSphere Networking (VDS)
 
-**> Note** The scope of this document is limited to vSphere Networking.
+> **Note** The scope of this document is limited to vSphere Networking.
 
 ## Tanzu Kubernetes Grid on vSphere Networking with NSX Advanced Load Balancer
 
@@ -279,7 +279,7 @@ To prepare the firewall, you need to gather the following information:
 |TKG management, shared service, and workload cluster CIDR|Harbor Registry|TCP:443|<p>Allows components to retrieve container images. </p><p>This registry can be a local or a public image registry (projects.registry.vmware.com).</p>|
 |TKG management cluster network|TKG cluster VIP network |TCP:6443|For management cluster to configure shared service and workload cluster.|
 |TKG shared service cluster network<br>(Required only if using a separate network for shared service cluster)|TKG cluster VIP network|TCP:6443|Allow shared cluster to register with management cluster.|
-|TKG workload cluster network|TKG cluster VIP network <p><p>  **Note** In a 3 network design, destination network is "TKG Management Network"|TCP:6443|Allow workload cluster to register with management cluster.|
+|TKG workload cluster network|TKG cluster VIP network <p><p>  **Note:** In a 3 network design, destination network is "TKG Management Network"|TCP:6443|Allow workload cluster to register with management cluster.|
 |TKG management, shared service, and workload Networks|NSX ALB Controllers (NSX ALB Management Network)|TCP:443|Allow NSX ALB Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX ALB Controller.|
 |NSX ALB Management Network |vCenter and ESXi Hosts|TCP:443|Allow NSX ALB to discover vCenter objects and deploy SEs as required.|
 |NSX ALB Controller Nodes |DNS server <br> NTP Server|TCP/UDP:53 <br> UDP:123|DNS Service <br> Time Synchronization|
@@ -314,7 +314,7 @@ The following table provides the recommendations for configuring NSX ALB in a vS
 | TKO-ALB-SE-002 | Dedicated Service Engine Group for the TKG Management | SE resources are guaranteed for TKG Management Stack and provides data path segregation for Management and Tenant Application | Dedicated service engine Groups increase licensing cost. </p>|
 | TKO-ALB-SE-003 | Dedicated Service Engine Group for the TKG Workload Clusters Depending on the nature and type of workloads (dev/prod/test)|SE resources are guaranteed for single or set of workload clusters and provides data path segregation for Tenant Application hosted on workload clusters | Dedicated service engine Groups increase licensing cost. </p>|
 | TKO-ALB-SE-004 | Enable ALB Service Engine Self Elections | Enable SEs to elect a primary amongst themselves in the absence of connectivity to the NSX ALB controller. | Requires NSX ALB Enterprise Licensing. This feature is not supported with NSX ALB essentials for Tanzu license. |
-| TKO-ALB-SE-005 | Enable 'Dedicated dispatcher CPU' on Service Engine Groups that contain the Service Engine VMs of 4 or more vCPUs. <br> <br>**Note:** This setting should be enabled on SE Groups that are servicing applications and has high network requirements. | This will enable a dedicated core for packet processing enabling high packet pipeline on the Service Engine VMs.<br> Note: By default, the packet processing core also processes load-balancing flows.| Consume more Resources from Infrastructure.|
+| TKO-ALB-SE-005 | Enable 'Dedicated dispatcher CPU' on Service Engine Groups that contain the Service Engine VMs of 4 or more vCPUs. <br> <br>**Note:** This setting should be enabled on SE Groups that are servicing applications and has high network requirements. | This will enable a dedicated core for packet processing enabling high packet pipeline on the Service Engine VMs.<br> **Note:** By default, the packet processing core also processes load-balancing flows.| Consume more Resources from Infrastructure.|
 | TKO-ALB-SE-006 | Set 'Placement across the Service Engines' setting to 'Compact'.| This allows maximum utilization of capacity (Service Engine ).| None |
 | TKO-ALB-SE-007 | Set the SE size to a minimum 2vCPU and 4GB of Memory | This configuration should meet the most generic use case | For services that require higher throughput, these configuration needs to be investigated and modified accordingly.|
 | TKO-ALB-SE-008 | Under Compute policies Create a ‘VM-VM anti-affinity rule for SE engines part of the same SE group that prevents collocation of the Service Engine VMs on the same host.| vSphere will take care of placing the Service Engine VMs in a way that always ensures maximum HA for the Service Engines part of a Service Engine group. | Affinity Rules needs to be configured manually.|
