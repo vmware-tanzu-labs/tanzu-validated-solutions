@@ -297,7 +297,7 @@ The following tables list recommendations for deploying the Supervisor Cluster:
 
 >**Note** In this scenario, the SaaS endpoints refer to Tanzu Mission Control, Tanzu Service Mesh, and Tanzu Observability.
 
-The following tables list recommendations for deploying Tanzu Kuberentes Clusters on the Supervisor Cluster:
+The following tables list recommendations for deploying Tanzu Kubernetes Clusters on the Supervisor Cluster:
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
