@@ -68,7 +68,7 @@ Key aspects of a Cloud Account in vRealize Automation may include: <br>
   - **Authentication:** It includes the necessary credentials, such as API keys, access tokens, or service accounts, to authenticate and authorize Aria Automation to access and manage resources in the cloud environment.
   - **Region/Zone/Location:** Depending on the cloud provider, the Cloud Account may also specify the geographic region or availability zone to direct resource provisioning.
   - **Networking Configuration:** It may include network settings and configurations relevant to the cloud environment, such as virtual network settings, subnets, and security groups.
-  - **Resource Quotas:** Some cloud providers may have resource quotas and limits. The Cloud Account may include settings to enforce and manage these quotas to prevent overprovisioning.
+  - **Resource Quotas:** Some cloud providers may have resource quotas and limits. The Cloud Account may include settings to enforce and manage these quotas to prevent over provisioning.
 - **Resources:**  "Resources" refer to the various entities that can be provisioned and managed within the cloud environment. These resources can include virtual machines, storage volumes, networks, load balancers, security groups, kubernetes and other components that make up an application stack. Aria Automation allows you to define and manage these resources through blueprints and automation, enabling users to request and deploy them in a self-service manner.
 - **Project:** "Project" is a fundamental organizational construct used to manage and organize resources, policies, and permissions within the Aria Automation environment. A Project provides a logical boundary that allows administrators to control user access, enforce governance policies, and tailor the Aria Automation experience for specific environments or use cases. <br>
 Key aspects and functionalities of a Project in vRealize Automation include: <br>
@@ -82,7 +82,7 @@ Key aspects and functionalities of a Project in vRealize Automation include: <br
 - **Kubernetes Zone:** By leveraging Kubernetes Zones in vRealize Automation, administrators can define policy-based resource allocation and placement for Tanzu Kubernetes clusters and supervisor namespaces. This allows for efficient utilization of compute resources, adherence to governance policies, and effective management of Kubernetes workloads within the vSphere environment. Kubernetes Zones are assigned as resources to projects within Aria Automation. <br>
 "Kubernetes Zone" is a critical configuration element used to define and manage policy-based resource allocation and placement for Tanzu Kubernetes clusters and supervisor namespaces. Tanzu Kubernetes Grid (TKG) integration in Aria Automation allows for seamless provisioning and management of Kubernetes workloads within the vSphere environment. <br> 
 Key aspects and functionalities of a Kubernetes Zone in Aria Automation include:
-  - **Resource Allocation:** The Kubernetes Zone allows administrators to specify resource quotas and limits for Tanzu Kubernetes clusters and supervisor namespaces within the vSphere environment. This helps ensure efficient utilization of compute resources and prevents overprovisioning.
+  - **Resource Allocation:** The Kubernetes Zone allows administrators to specify resource quotas and limits for Tanzu Kubernetes clusters and supervisor namespaces within the vSphere environment. This helps ensure efficient utilization of compute resources and prevents over provisioning.
   - **Placement Policies:** Administrators can define placement policies within the Kubernetes Zone to determine where Tanzu Kubernetes clusters and supervisor namespaces are provisioned in the vSphere cluster. These policies may be based on factors such as resource availability, performance characteristics, or custom tags.
   - **Integration with vSphere:** The Kubernetes Zone seamlessly integrates with the vSphere infrastructure, allowing Aria Automation to leverage the underlying vSphere resources and virtual machines to deploy and manage Tanzu Kubernetes clusters.
   - **Scalability and Availability:** Kubernetes Zones in Aria Automation support the scalability and high availability requirements of Kubernetes workloads. This ensures that the environment can accommodate the growing demands of containerized applications.
@@ -152,7 +152,7 @@ Below section provides detailed overview on Integrating:
 
 - vSphere with Tanzu with Aria Automation Cloud Assembly
 - Monitoring Tanzu Clusters with VMware Aria Operations
-- Centralised Logging using VMware Aria Operations for Logs
+- Centralized Logging using VMware Aria Operations for Logs
 
 ### Tanzu with VMware Aria Automation
 
@@ -204,7 +204,7 @@ This page contains tabs for Clusters, Namespaces, Supervisor Clusters and Superv
     | Project Supervisor | No Access | This user group have no access to the Supervisor Namespace created under the project. |
 
 1. Create **Kubernetes Zone**: <br>
-Kubernetes zones enable cloud administrators to define policy-based placement of Tanzu Kubernetes clusters and supervisor namespaces used in Automation Assembler deployments. An administrator can navigate to **Infrastructure** > **Configure** > **Kubernetes Zone** use this page to specify what Supervisor clusters are available for provisioning of Supervisor namespaces and what properties are acceptable. Tagging the kubernetes zones appropriately is key to make use of ploicy-based placements of Supervisor Namespaces and Tanzu Kubernetes Clusters.  A Kubernetes Zone may point to Supervisor Cluster and/or Supervisor Namespaces. <br> 
+Kubernetes zones enable cloud administrators to define policy-based placement of Tanzu Kubernetes clusters and supervisor namespaces used in Automation Assembler deployments. An administrator can navigate to **Infrastructure** > **Configure** > **Kubernetes Zone** use this page to specify what Supervisor clusters are available for provisioning of Supervisor namespaces and what properties are acceptable. Tagging the kubernetes zones appropriately is key to make use of policy-based placements of Supervisor Namespaces and Tanzu Kubernetes Clusters.  A Kubernetes Zone may point to Supervisor Cluster and/or Supervisor Namespaces. <br> 
 Add supervisor clusters to enable supervisor namespace provisioning via this zone. And/Or add supervisor namespaces to enable kubernetes cluster provisioning <br> 
 A cloud administrator can assign priorities on multiple levels. <br>
     - Kubernetes zone priority within a project.
@@ -233,7 +233,7 @@ While creating a Cluster plan, you will be able to define:
         - Choose Default CNI: Antrea is the default CNI, you can override this to Calico
         - Customize POD and Service CIDR blocks
         - Provide HTTP and HTTPs proxy details
-        - Add additional Certificates to the Cluster Truststore
+        - Add additional Certificates to the Cluster Trust store
 
 1. Create **VMware Cloud Templates**: <br>
 When adding Kubernetes components to an Automation Assembler cloud template, you can enable users to create supervisor namespaces and Tanzu Kubernetes Clusters in various configurations. Typically, this choice depends on your access control requirements, how you have configured your Kubernetes components, and your deployment requirements. 
@@ -299,7 +299,7 @@ For further information regarding the aforementioned activities, please refer to
 
 VMware Aria Automation enables you to provision a vSphere with Tanzu Kubernetes deployment from Automation Assembler to leverage the vSphere 7.x or later native capabilities to deploy and manage Tanzu Kubernetes clusters. Through the catalog service provided by the Service Broker, developers can dynamically create and access Tanzu Kubernetes Clusters. 
 
-Once the cluster is successfully provisioned, users will be able to download the "admin" kubeconfig file and can access the cluster using `kubectl` utility
+Once the cluster is successfully provisioned, users will be able to download the "admin" kube config file and can access the cluster using `kubectl` utility
 
 ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-10.png)
 
@@ -325,7 +325,7 @@ The Aria Operations For Monitoring solution offers a single pane of glass view, 
 In addition to the native vCenter integration, you can enhance the monitoring capabilities by utilizing the Aria Operations Management Pack for Kubernetes
 
 
-### Centralised Logging using VMware Aria Operations for Logs
+### Centralized Logging using VMware Aria Operations for Logs
 
 ## Appendix
 
