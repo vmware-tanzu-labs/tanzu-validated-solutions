@@ -150,7 +150,7 @@ Ensure the following:
     buildDate: 2023-06-29
     sha: 8945351c
     ```
-1. Install the Tanzu CLI plugings
+1. Install the Tanzu CLI plugins
     ```
     tanzu plugin group search
     [i] Reading plugin inventory for "projects.registry.vmware.com/tanzu_cli/plugins/plugin-inventory:latest", this will take a few seconds.
@@ -186,7 +186,7 @@ Ensure the following:
     ```
    The image bundle in the form of TAR files, along with the publish-images-fromtar.yaml file, is downloaded . The YAML file defines the mapping between the images and the TAR files.
 
-1. Download the Taznu CLI plugins
+1. Download the Tanzu CLI plugins
 
     Download the plugin-inventory image along with all selected plugin images as a tar.gz file on the local disk of a machine which has internet access using the tanzu plugin download-bundle command.
     ```
@@ -208,7 +208,7 @@ Install the Harbor only if you don’t have any existing image repository in you
 
  Follow the instructions provided in [Deploy an Offline Harbor Registry on vSphere](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-harbor.html) to deploy and configure Harbor.
 
- Note: This VM-based harbor deployment is only supported for hosting hosting TKG system images in an internet-restricted or airgapped environment. To deploy a scalable and highly-available Harbor that can manage large numbers of images for hosted apps in a production environment, deploy the Harbor package to TKG clusters as described in [Install Harbor for Service Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html) in Creating and Managing TKG 2.3 Workload Clusters with the Tanzu CLI.
+ Note: This VM-based harbor deployment is only supported for hosting hosting TKG system images in an internet-restricted or air gap environment. To deploy a scalable and highly-available Harbor that can manage large numbers of images for hosted apps in a production environment, deploy the Harbor package to TKG clusters as described in [Install Harbor for Service Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html) in Creating and Managing TKG 2.3 Workload Clusters with the Tanzu CLI.
 
 ## <a id=configure-bootstrap> </a> Deploy and Configure Bootstrap VM
 
@@ -651,7 +651,7 @@ The default system-generated controller certificate generated for SSL/TSL connec
 
     ![Copy certificate contents](img/tkg-airgap-vsphere-deploy/19.ALB-Certificate-contents.png)
 
-1. To replace the certificate, go to **Administration** > **System Settings**, Edit it and under **Access** and replace the SSL/TSL certificate to previosuly created certificate and click **Save**.
+1. To replace the certificate, go to **Administration** > **System Settings**, Edit it and under **Access** and replace the SSL/TSL certificate to previously created certificate and click **Save**.
 
     ![Replace certificate](img/tkg-airgap-vsphere-deploy/20.ALB-Cert-replace.png)
 
