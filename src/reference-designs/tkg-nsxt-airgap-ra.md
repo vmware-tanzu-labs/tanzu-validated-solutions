@@ -412,7 +412,7 @@ The key network recommendations for a production-grade Tanzu Kubernetes Grid dep
 |TKO-NET-004|Create a overlay-backed NSX segment connected to a Tier-1 gateway for the SE management for the NSX-T Cloud of overlay type.|This network is used for the controller to the SE connectivity.|None|
 |TKO-NET-005|Create a overlay-backed NSX segment as data network for the NSX-T Cloud of overlay type.|The SEs are placed on overlay segments created on Tier-1 gateway.|None|
 
-With Tanxu Kubernetes Grid 2.3 and above, you can use Node IPAM, which simplifies the allocation and management of IP addresses for cluster nodes within the cluster. This eliminates the need for external DHCP configuration.
+With Tanzu Kubernetes Grid 2.3 and above, you can use Node IPAM, which simplifies the allocation and management of IP addresses for cluster nodes within the cluster. This eliminates the need for external DHCP configuration.
 
 Node IPAM can be configured for standalone management clusters on vSphere, and the associated class-based workload clusters that they manage. In the Tanzu Kubernetes Grid Management configuration file, a dedicated Node IPAM pool is defined for the management cluster only.
 
