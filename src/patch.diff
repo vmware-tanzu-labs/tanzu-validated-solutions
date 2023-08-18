@@ -1,0 +1,357 @@
+diff --git a/src/reference-designs/tap-architecture-dev-components.md b/src/reference-designs/tap-architecture-dev-components.md
+index cef4536..2085133 100644
+--- a/src/reference-designs/tap-architecture-dev-components.md
++++ b/src/reference-designs/tap-architecture-dev-components.md
+@@ -1,64 +1,61 @@
+ # VMware Tanzu Application Platform Developer Components
+ 
+ VMware Tanzu Application Platform (informally known as TAP) provides development tools which allow developers to quickly build, test, deploy, and manage applications lifecycle.
+ 
+ ## Application Workloads
+ 
+-Tanzu Application Platform allows developers to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, etc.
++Tanzu Application Platform allows developers to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, and so on.
+ 
+-When using the Out of the Box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are:
++While using the out-of-the-box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are as follows:
+ 
+ | Workload Type   | Description  | Indicators
+ |---            |---                |---
+ web | Scalable Web Applications | - Scales based on request load <br> - Automatically exposed by means of HTTP Ingress <br> - Does not perform background work <br> - Works with Service Bindings <br> - Stateless
+-server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or LoadBalancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
++server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or Load Balancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+ worker | Background Applications | - Does not provide network services <br> - Not exposed externally as a network service <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+ 
+ ## List of Tanzu Application Platform Developer Components (Inner-Loop)
+ 
+-Tanzu Application Platform Dev components include, but are not limited to, the following:
++Tanzu Application Platform Dev components include the following options:
++>**Note** The Tanzu Application Dev components are not limited to the below options only.
+ 
+ * Accelerator
+ * API Portal
+ * AppSSO
+ * API Auto Registration
+ * AppLiveView
+ * Supply Chain Security Tools (SCST) - Scan
+ 
+ ## Accelerator
+ 
+ The Application Accelerator user interface (UI) enables you to discover available accelerators, configure them, and generate new projects to download.
+ 
+ ### Accelerator Architecture
+ 
+ ![Accelerator Architecture](img/tap-architecture-planning/accelerator-arch.jpg)
+ 
+-Application Accelerator allows you to generate new projects from files in Git repositories. An `accelerator.yaml` file in the repository declares input options for the accelerator. Accelerator custom resources (CRs) control which repositories appear in the Application Accelerator UI. The Accelerator controller reconciles the CRs with a Flux2 Source Controller to fetch files from GitHub or GitLab.
+-
+-See [Tanzu Application Platform Accelerator](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/application-accelerator-about-application-accelerator.html) for more information.
++Application Accelerator allows you to generate new projects from files in Git repositories. An `accelerator.yaml` file in the repository declares input options for the accelerator. Accelerator custom resources (CRs) control which repositories appear in the Application Accelerator UI. The Accelerator controller reconciles the CRs with a Flux2 Source Controller to fetch files from GitHub or GitLab. For more information, see [Tanzu Application Platform Accelerator](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/application-accelerator-about-application-accelerator.html).
+ 
+ ## API Portal
+ 
+-API portal enables API consumers to find APIs they can use in their own applications. API portal assembles its dashboard and detailed API documentation views by ingesting OpenAPI documentation from the source URLs.
+-
+-See [Tanzu Application Platform API portal](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-portal-install-api-portal.html) for more information.
++API portal enables API consumers to find APIs they can use in their own applications. API portal assembles its dashboard and detailed API documentation views by ingesting OpenAPI documentation from the source URLs. For more information, see [Tanzu Application Platform API portal](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-portal-install-api-portal.html).
+ 
+ ## AppSSO
+ 
+-The AppSSO conforms to the OIDC standard, and enables the use of external identity providers for user management, registration, and authentication. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, etc.
++The AppSSO conforms to the OIDC standard, and enables the use of external identity providers for user management, registration, and authentication. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, and so on.
+ 
+ ### AppSSO Architecture
+ 
+ ![AppSSO Architecture](img/tap-architecture-planning/appsso-arch.jpg)
+ 
+-The following components must be installed on the `run` cluster.
++The following components must be installed on the `run` cluster:
+ 
+ - **IdentityProvider** - these include social media providers, such as, Google, Facebook, or SAML providers, such as, Active Directory.
+ - **AuthServer** - the intermediary between the identity provider and the client application, where one or more identity providers are defined.
+ - **ClientRegistration** -  handles requests for the client id and client secret on behalf of an application, and defines the scopes allowable by the backend authentication server.
+ - **OAuth2 Proxy** - a sidecar container deployed with an application for handling inbound and outbound authentication traffic to the end-user application in the same pod.
+ 
+ See the following sample:
+ 
+ ```
+ Kind: AuthServer
+@@ -77,21 +74,21 @@ spec:
+           - "openid"
+           - "other-scope"
+         authorizationUri: https://example.com/oauth2/authorize
+         tokenUri: https://example.com/oauth2/token
+         jwksUri: https://example.com/oauth2/jwks
+         claimMappings:
+           roles: my-oidc-provider-groups
+ 
+ ```
+ 
+-The values in the `identityProviders` section can be retrieved from the identity provider and set here. For example, the `issuerURI`, in this case, is `Auth0`. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, etc.
++The values in the `identityProviders` section can be retrieved from the identity provider and set here. For example, the `issuerURI`, in this case, is `Auth0`. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, and so on.
+ 
+ ```
+ kind: ClientRegistration
+ spec:
+    authServerSelector:
+       matchLabels:
+          name: my-first-auth-server
+          env: tutorial
+    redirectURIs:
+       - "http://test-app.example.com/oauth2/callback"
+@@ -102,43 +99,41 @@ spec:
+       - "authorization_code"
+    scopes:
+       - name: "openid"
+       - name: "email"
+       - name: "profile"
+       - name: "roles"
+       - name: "message.read"
+ 
+ ```
+ 
+-The settings in `ClientRegistration` contain the redirectUrl pointing to a page in the end-user application to be redirected to after successful authentication. The settings here also reference the AuthServer by its pod’s labels on behalf of the end-user application.
+-
+-See [Tanzu Application Platform AppSSO](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-about.html) for more information.
++The settings in `ClientRegistration` contain the redirectURL pointing to a page in the end-user application to be redirected to after successful authentication. The settings here also reference the AuthServer by its pod’s labels on behalf of the end-user application. For more information, see [Tanzu Application Platform AppSSO](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-about.html).
+ 
+ ## API Auto Registration
+ 
+ API Auto Registration automates the registration of API specifications defined in a workload’s configuration and makes them accessible in the Tanzu Application Platform GUI without additional steps. An automated workflow, using a supply chain, leverages API Auto Registration to create and manage a Kubernetes Custom Resource (CR) of kind [APIDescriptor](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-key-concepts.html). It automatically generates and provides API specifications in OpenAPI, AsyncAPI, GraphQL, or gRPC API formats to the Tanzu Application GUI [API Documentation plugin](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/tap-gui-plugins-api-docs.html).
+ 
+ ### Tanzu Application Platform GUI Automated Workflow
+ 
+ ![TAP GUI automated workflow](img/tap-architecture-planning/api-auto-regis-workflow.jpg)
+ 
+-The API Documentation plugin displays a list of APIs provided by components registered in the Catalog providing an easy way for developers to find APIs in a single location.
++The API Documentation plug-in displays a list of APIs provided by components registered in the Catalog providing an easy way for developers to find APIs in a single location.
+ 
+ API Auto Registration components are installed by the `run` and `full` profiles.
+ 
+ ### Recommendations
+ 
+ - The API Auto Registration package configuration in `run` clusters [must be updated](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-usage.html#update-values) to include the Tanzu Application Platform GUI URL allowing it to register workload APIs into the GUI in the `view` cluster.
+ - Workload configuration files must set the `register-api` property to true to enable this feature and include the `api_descriptor` parameter. For example: `apis.apps.tanzu.vmware.com/register-api: "true"`. 
+ - To use the OpenAPI “TRY IT OUT” feature in Tanzu Application GUI, the Workload must configure Cross-origin Resource Sharing (CORS) to allow requests originating from the GUI.
+ 
+-To learn more about API Auto Registration, see [API Auto Registration](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-about.html).
++For more information about API Auto Registration, see [API Auto Registration](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-about.html).
+ 
+ ## AppLiveView
+ 
+ Application Live View is a lightweight insights and troubleshooting tool that helps app developers and app operators to look inside running applications. The application provides information from inside the running processes using its HTTP endpoints, otherwise known as actuators. Application Live View uses those endpoints to get and interact with metric data from your application.
+ 
+ ### AppLiveView Cluster Architecture on Multi-Cluster Setup
+ 
+ ![AppLiveView Cluster Architecture](img/tap-architecture-planning/appliveview-arch.jpg)
+ 
+ The following packages are installed by default in a multi-cluster topology.
+@@ -169,34 +164,34 @@ appliveview_connector:
+     host: appliveview.${view_domain} #appliveview is default subdomain
+ 
+ ```
+ 
+ ### AppLiveView Dependencies
+ 
+ Application workloads require actuator endpoints to report metrics from within the application back to `appliveview` and viewable from the Tanzu Application Platform GUI portal.
+ 
+ ## Supply Chain Security Tools (SCST) - Scan
+ 
+-The Scan package includes enterprise-ready source code and container image scanning using Grype out of the box, with support planned for Snyk and Carbon Black. It integrates with the Tanzu Application Platform user interface by reading scan results from the SCST Store and displaying detailed reports of CVEs found by Scan during a build process. It can prevent software with vulnerabilities from being deployed in production environments through the use of scan policies to protect the network.
++The Scan package includes enterprise-ready source code and container image scanning using the out-of-the-box Grype, with support planned for Snyk and Carbon Black. It integrates with the Tanzu Application Platform user interface by reading scan results from the SCST Store and displaying detailed reports of CVEs found by Scan during a build process. It can prevent software with vulnerabilities from being deployed in production environments through the use of scan policies to protect the network.
+ 
+ ### SCST Architecture
+ 
+ ![SCST Architecture](img/tap-architecture-planning/scst-arch.jpg)
+ 
+-The following are installed by default in the `build` profile.
++By default, the following components are installed in the `build` profile:
+ 
+-- Scan Controller, enables the use of a scanner - packaged in `scanning.apps.tanzu.vmware.com`.
+-- Grype scanner, (OOTB), executes static source code and image scans - packaged in `grype.scanning.apps.tanzu.vmware.com`.
++- Scan Controller - enables the use of a scanner. This component is packaged in `scanning.apps.tanzu.vmware.com`.
++- Out-of-the-box Grype scanner - executes static source code and image scans - packaged in `grype.scanning.apps.tanzu.vmware.com`.
+ 
+-The Tanzu CLI plugins include the following.
++The Tanzu CLI plugins include the following:
+ 
+-- Insight, used to create configuration settings for ScanController, and for querying the SCST Store source and image scan results.
++- Insight - used to create configuration settings for ScanController, and for querying the SCST Store source and image scan results.
+ 
+ The relevant profile settings are only configured in the `build` profile.
+ 
+ ```
+ Profile: build
+ grype:
+   metadataStore:
+     url: https://metadata-store.${app_domain}
+     caSecret:
+         name: store-ca-cert
+@@ -208,13 +203,13 @@ grype:
+ 
+ ### SCST Dependencies
+ 
+ * Scan requires the installation of SCST Store on the `view` cluster to send and save the results of source and image scans.
+ 
+ * The `view` cluster certificate and token must be extracted and set in the `build` profile to enable the scanner components to communicate with the `view` cluster where the results of scans are stored and available for inquiry.
+ 
+ 
+ ## CI/CD Pipelines
+ 
+-Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. See [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/tekton-tekton-about.html) for more information.
++Tanzu Application Platform supports Tekton pipelines using the `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. For more information, see [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/tekton-tekton-about.html).
+ 
+ To learn more about all Tanzu Application Platform components, see [Component documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/components.html).
+diff --git a/src/reference-designs/tap-architecture-planning.md b/src/reference-designs/tap-architecture-planning.md
+index a56db23..91e8f26 100644
+--- a/src/reference-designs/tap-architecture-planning.md
++++ b/src/reference-designs/tap-architecture-planning.md
+@@ -34,21 +34,21 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
+ * Logging is enabled and targets the desired application logging platform.
+ * Monitoring is enabled and targets the desired application observability platform.
+ * Container Storage Interface (CSI) Driver is installed.
+ 
+ 
+ ### Recommendations - Build Cluster
+ 
+ * Spread across three availability zones (AZs) for high availability.
+ 
+ 
+-The Build Cluster includes the following packages (exact list may differ based on supply chain choice):
++The Build Cluster includes the following packages (exact list may differ based on the supply chain choice):
+ ```
+ base-jammy-builder-lite.buildpacks.tanzu.vmware.com 
+ base-jammy-stack-lite.buildpacks.tanzu.vmware.com
+ buildservice.tanzu.vmware.com
+ cartographer.tanzu.vmware.com
+ cert-manager.tanzu.vmware.com
+ contour.tanzu.vmware.com
+ controller.conventions.apps.tanzu.vmware.com
+ controller.source.apps.tanzu.vmware.com
+ conventions.appliveview.tanzu.vmware.com
+@@ -139,21 +139,21 @@ The Run Cluster's requirements are driven primarily by the applications that it
+ * 12 vCPUs available across all nodes.
+ * 100 GB of disk space available per node.
+ * Logging is enabled and targets the desired application logging platform.
+ * Monitoring is enabled and targets the desired application observability platform.
+ * Container Storage Interface (CSI) Driver is installed.
+ * A subdomain for the host name that you point at the tanzu-shared-ingress service’s external IP address.
+ 
+ ### Recommendations - Run Cluster
+ 
+ * Spread across three AZs for high availability.
+-* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
++* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
+ 
+ The Run Cluster includes the following packages:
+ ```
+ apis.apps.tanzu.vmware.com 
+ apiserver.appliveview.tanzu.vmware.com 
+ bitnami.services.tanzu.vmware.com
+ cartographer.tanzu.vmware.com
+ cert-manager.tanzu.vmware.com
+ cnrs.tanzu.vmware.com
+ connector.appliveview.tanzu.vmware.com
+@@ -223,21 +223,21 @@ The View Cluster's requirements are driven primarily by the respective applicati
+ * Logging is enabled and targets the desired application logging platform.
+ * Monitoring is enabled and targets the desired application observability platform.
+ * Container Storage Interface (CSI) Driver is installed.
+ * A subdomain for the host name that you point at the tanzu-shared-ingress service’s external IP address.
+ 
+ ### Recommendations - View Cluster
+ 
+ * Spread across three AZs for high availability.
+ * Utilize a PostgreSQL database for storing user preferences and manually created entities.
+ * Add Build and all Run Clusters service accounts into View Cluster config yaml to monitor runtime resources of apps in Tanzu Application Platform GUI.
+-* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
++* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
+ 
+ The View Cluster includes the following packages:
+ 
+ ```
+ accelerator.apps.tanzu.vmware.com
+ api-portal.tanzu.vmware.com
+ backend.appliveview.tanzu.vmware.com
+ cert-manager.tanzu.vmware.com
+ contour.tanzu.vmware.com
+ controller.source.apps.tanzu.vmware.com
+@@ -318,21 +318,21 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
+ * 100 GB of disk space available per node.
+ * Logging is enabled and targets the desired application logging platform.
+ * Monitoring is enabled and targets the desired application observability platform.
+ * Container Storage Interface (CSI) Driver is installed.
+ * A subdomain for the host name that you point at the tanzu-shared-ingress service’s external IP address.
+ 
+ 
+ ### Recommendations - Iterate Cluster
+ 
+ * Spread across three AZs for high availability.
+-* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform
++* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
+ 
+ The Iterate Cluster includes the following packages:
+ ```
+ apis.apps.tanzu.vmware.com
+ apiserver.appliveview.tanzu.vmware.com
+ base-jammy-builder-lite.buildpacks.tanzu.vmware.com
+ base-jammy-stack-lite.buildpacks.tanzu.vmware.com
+ bitnami.services.tanzu.vmware.com   
+ buildservice.tanzu.vmware.com
+ apiserver.appliveview.tanzu.vmware.com 
+@@ -470,21 +470,21 @@ External Cluster provides services operations with their specific life cycle and
+ |---            |---                |---            |---
+ |TAP-007  | Use external services and service clusters.         |  Utilizing external services allows the service operators to customize their cluster parameters for their specific services and manage their respective life cycles independently.   | Utilizing external clusters adds some technical complexity.
+ 
+ ### In-Cluster
+ 
+ Services can be deployed directly into the same cluster running Tanzu Application Platform. This kind of deployment is more suited to iterate and run cluster environments using `crossplane` package. Possible implementations include:
+ 
+   - same namespace
+   - different namespaces
+ 
+-The following diagram shows In-Cluster services with different namespaces.
++The following diagram shows the In-Cluster services with different namespaces.
+ 
+ ![In-Cluster services with different namespaces](img/tap-architecture-planning/in-cluster.jpg)
+ <!-- slides 80-82 https://onevmw-my.sharepoint.com/:p:/g/personal/mijames_vmware_com/EYK5tKWk83RFia7QHHkaAj0BUnnhenCjlto4qpYDY_ZyFw?e=NhmLnZ -->
+ 
+ ### External Cluster
+ 
+ External clusters allow services to have different infrastructure, security, and scaling requirements. External services clusters are the recommended way to provide rapid service provisioning to platform users.
+ 
+ ![External services clusters](img/tap-architecture-planning/external-cluster.jpg)
+ 
+@@ -535,29 +535,29 @@ There are multiple ways to set up authentication in a Tanzu Application Platform
+ To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-pinniped-login.html).
+ 
+ | Decision ID   | Design Decision   | Justification | Implication
+ |---            |---                |---            |---
+ |TAP-010 |Install Pinniped Supervisor into View Cluster. | View Cluster is the place to host all common components of Tanzu Application Platform. | None
+ 
+ ## Authorization
+ 
+ Tanzu Application Platform supports RBAC (role-based access control) authorization. It provide six default roles to set up permissions for users and service accounts within a namespace on a cluster that runs one of the Tanzu Application Platform profiles. Following are the default roles.
+ 
+-Four roles are for users:
++The following four roles are for users:
+  * `app-editor`
+  * `app-viewertekton`
+  * `app-operator`
+  * `service-operator`
+ 
+-Two roles are for service accounts associated with the Tanzu Supply Chain:
++The following two roles are for service accounts associated with the Tanzu Supply Chain:
+ * `workload`
+ * `deliverable`
+ 
+-See [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-overview.html) for more information.
++For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-overview.html).
+ 
+ ## Developer tools (Inner-Loop)
+ 
+ Tanzu Application Platform allows developers to quickly build and test applications and provide many in-built developer friendly platform capabilities. To learn more about these capabilities, see [Tanzu Application Platform Developer Components](tap-architecture-dev-components.md).
+ 
+ ## Deployment Instructions
+ 
+-For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/multicluster-installing-multicluster.html).
++For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/multicluster-installing-multicluster.html).
