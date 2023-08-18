@@ -1,6 +1,6 @@
 # VMware Tanzu Application Platform Architecture
 
-The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.5. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.6. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
@@ -26,9 +26,11 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 ### Kubernetes Requirements - Build Cluster
 
-* Supported Kubernetes versions are 1.24,1.25,1.26.
+* Supported Kubernetes versions are 1.25,1.26,1.27.
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* 12 vCPUs available across all nodes.
+* 100 GB of disk space available per node.
 * Logging is enabled and targets the desired application logging platform.
 * Monitoring is enabled and targets the desired application observability platform.
 * Container Storage Interface (CSI) Driver is installed.
@@ -39,8 +41,10 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 * Spread across three availability zones (AZs) for high availability.
 
 
-The Build Cluster includes the following packages (exact list may differ based on supply chain choice):
+The Build Cluster includes the following packages (exact list may differ based on the supply chain choice):
 ```
+base-jammy-builder-lite.buildpacks.tanzu.vmware.com 
+base-jammy-stack-lite.buildpacks.tanzu.vmware.com
 buildservice.tanzu.vmware.com
 cartographer.tanzu.vmware.com
 cert-manager.tanzu.vmware.com
@@ -48,17 +52,25 @@ contour.tanzu.vmware.com
 controller.conventions.apps.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
 conventions.appliveview.tanzu.vmware.com
+dotnet-core-lite.buildpacks.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
+go-lite.buildpacks.tanzu.vmware.com 
 grype.scanning.apps.tanzu.vmware.com
+java-lite.buildpacks.tanzu.vmware.com
+java-native-image-lite.buildpacks.tanzu.vmware.com
 namespace-provisioner.apps.tanzu.vmware.com 
+nodejs-lite.buildpacks.tanzu.vmware.com
 ootb-supply-chain-testing-scanning.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
+python-lite.buildpacks.tanzu.vmware.com
+ruby-lite.buildpacks.tanzu.vmware.com
 scanning.apps.tanzu.vmware.com
 spring-boot-conventions.tanzu.vmware.com
 tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
+web-servers-lite.buildpacks.tanzu.vmware.com 
 
 ```
 To install a Build Cluster, use the following `build` profile template:
@@ -120,10 +132,12 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 ### Kubernetes Requirements - Run Cluster
 
-* Supported Kubernetes versions are 1.24,1.25,1.26.
+* Supported Kubernetes versions are 1.25,1.26,1.27.
 * LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 16 GB per node.
+* 12 vCPUs available across all nodes.
+* 100 GB of disk space available per node.
 * Logging is enabled and targets the desired application logging platform.
 * Monitoring is enabled and targets the desired application observability platform.
 * Container Storage Interface (CSI) Driver is installed.
@@ -132,6 +146,7 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 ### Recommendations - Run Cluster
 
 * Spread across three AZs for high availability.
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
 
 The Run Cluster includes the following packages:
 ```
@@ -199,10 +214,12 @@ The View Cluster's requirements are driven primarily by the respective applicati
 
 ### Kubernetes Requirements - View Cluster
 
-* Supported Kubernetes versions are 1.24,1.25,1.26.
+* Supported Kubernetes versions are 1.25,1.26,1.27.
 * LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* 8 vCPUs available across all nodes.
+* 100 GB of disk space available per node.
 * Logging is enabled and targets the desired application logging platform.
 * Monitoring is enabled and targets the desired application observability platform.
 * Container Storage Interface (CSI) Driver is installed.
@@ -213,6 +230,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 * Spread across three AZs for high availability.
 * Utilize a PostgreSQL database for storing user preferences and manually created entities.
 * Add Build and all Run Clusters service accounts into View Cluster config yaml to monitor runtime resources of apps in Tanzu Application Platform GUI.
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
 
 The View Cluster includes the following packages:
 
@@ -226,7 +244,6 @@ controller.source.apps.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
 learningcenter.tanzu.vmware.com
 metadata-store.apps.tanzu.vmware.com
-tap-auth.tanzu.vmware.com
 tap-gui.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
@@ -293,10 +310,12 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 ### Kubernetes Requirements - Iterate Cluster
 
-* Supported Kubernetes versions are 1.24,1.25,1.26.
+* Supported Kubernetes versions are 1.25,1.26,1.27.
 * LoadBalancer for ingress controller (2 external IP addresses).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
+* 12 vCPUs available across all nodes.
+* 100 GB of disk space available per node.
 * Logging is enabled and targets the desired application logging platform.
 * Monitoring is enabled and targets the desired application observability platform.
 * Container Storage Interface (CSI) Driver is installed.
@@ -306,12 +325,14 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 ### Recommendations - Iterate Cluster
 
 * Spread across three AZs for high availability.
-* Install build profile build service with lite descriptor such as `descriptor_name: "lite"`.
+* Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
 
 The Iterate Cluster includes the following packages:
 ```
 apis.apps.tanzu.vmware.com
 apiserver.appliveview.tanzu.vmware.com
+base-jammy-builder-lite.buildpacks.tanzu.vmware.com
+base-jammy-stack-lite.buildpacks.tanzu.vmware.com
 bitnami.services.tanzu.vmware.com   
 buildservice.tanzu.vmware.com
 apiserver.appliveview.tanzu.vmware.com 
@@ -325,14 +346,21 @@ controller.conventions.apps.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
 crossplane.tanzu.vmware.com
 developer-conventions.tanzu.vmware.com
+dotnet-core-lite.buildpacks.tanzu.vmware.com
 eventing.tanzu.vmware.com 
 fluxcd.source.controller.tanzu.vmware.com
+go-lite.buildpacks.tanzu.vmware.com 
 grype.scanning.apps.tanzu.vmware.com
+java-lite.buildpacks.tanzu.vmware.com 
+java-native-image-lite-buildpack.tanzu.vmware.com
+local-source-proxy.apps.tanzu.vmware.com
 namespace-provisioner.apps.tanzu.vmware.com 
 ootb-delivery-basic.tanzu.vmware.com
 ootb-supply-chain-basic.tanzu.vmware.com
 ootb-templates.tanzu.vmware.com
-policy.apps.tanzu.vmware.com     
+policy.apps.tanzu.vmware.com
+python-lite-buildpack.tanzu.vmware.com
+ruby-lite-buildpack.tanzu.vmware.com     
 sso.apps.tanzu.vmware.com
 service-bindings.labs.vmware.com
 services-toolkit.tanzu.vmware.com
@@ -341,6 +369,7 @@ tap-auth.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
 tekton.tanzu.vmware.com
+web-servers-lite.buildpacks.tanzu.vmware.com
 
 ```
 
@@ -448,7 +477,7 @@ Services can be deployed directly into the same cluster running Tanzu Applicatio
   - same namespace
   - different namespaces
 
-The following diagram shows In-Cluster services with different namespaces.
+The following diagram shows the In-Cluster services with different namespaces.
 
 ![In-Cluster services with different namespaces](img/tap-architecture-planning/in-cluster.jpg)
 <!-- slides 80-82 https://onevmw-my.sharepoint.com/:p:/g/personal/mijames_vmware_com/EYK5tKWk83RFia7QHHkaAj0BUnnhenCjlto4qpYDY_ZyFw?e=NhmLnZ -->
@@ -503,7 +532,7 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity provider into Tanzu Application Platform.
 
-To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-pinniped-login.html).
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-pinniped-login.html).
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
@@ -513,17 +542,17 @@ To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https:/
 
 Tanzu Application Platform supports RBAC (role-based access control) authorization. It provide six default roles to set up permissions for users and service accounts within a namespace on a cluster that runs one of the Tanzu Application Platform profiles. Following are the default roles.
 
-Four roles are for users:
+The following four roles are for users:
  * `app-editor`
  * `app-viewertekton`
  * `app-operator`
  * `service-operator`
 
-Two roles are for service accounts associated with the Tanzu Supply Chain:
+The following two roles are for service accounts associated with the Tanzu Supply Chain:
 * `workload`
 * `deliverable`
 
-See [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/authn-authz-overview.html) for more information.
+For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-overview.html).
 
 ## Developer tools (Inner-Loop)
 
@@ -531,4 +560,4 @@ Tanzu Application Platform allows developers to quickly build and test applicati
 
 ## Deployment Instructions
 
-For instructions on how to deploy this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/multicluster-installing-multicluster.html).
+For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/multicluster-installing-multicluster.html).
