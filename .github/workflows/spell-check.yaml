@@ -11,13 +11,13 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8 
+          python-version: 3.11 
       - name: check for wrapped links
         run: |
           python scripts/wordlist.py check wordlist.txt
       - uses: actions/setup-node@v1
         name: Run spell check
         with:
-          node-version: "14"
+          node-version: "18"
       - run: npm install -g cspell
       - run: cspell --config ./cspell.json
