@@ -441,7 +441,7 @@ Before deploying the Supervisor Cluster, ensure the following:
 *   The vSphere cluster has HA & DRS enabled and DRS is configured in the fully-automated mode.
 *   The required port groups have been created on the distributed switch to provide networking to the Supervisor and workload clusters.
 *   Your vSphere cluster is licensed for Supervisor Cluster deployment.
-*   You have created a [Subscribed Content Library](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-6519328C-E4B7-46DE-BE2D-FC9CA0994C39.html) to automatically pull the latest Tanzu Kubernetes releases from the VMware repository.
+*   You have created a [Subscribed Content Library](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vm-administration/GUID-254B2CE8-20A8-43F0-90E8-3F6776C2C896.html) to automatically pull the latest Tanzu Kubernetes releases from the VMware repository.
 *   You have created a [storage policy](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-544286A2-A403-4CA5-9C73-8EFF261545E7.html) that will determine the datastore placement of the Kubernetes control plane VMs, containers, and images.
 * A user account with **Modify cluster-wide configuration** permissions is available.
 * NSX Advanced Load Balancer is deployed and configured as per instructions provided earlier.
@@ -550,7 +550,7 @@ where the `<supervisor-context-name>` is the IP address of the control plane VIP
 
 A vSphere Namespace is a tenancy boundary within vSphere with Tanzu and allows for sharing vSphere resources (computer, networking, storage) and enforcing resources limits with the underlying objects such as Tanzu Kubernetes Clusters. It also allows you to attach policies and permissions.
 
-Every workload cluster that you deploy runs in a Supervisor namespace. To learn more about namespaces, see the [vSphere with Tanzu documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-1544C9FE-0B23-434E-B823-C59EFC2F7309.html)
+Every workload cluster that you deploy runs in a Supervisor namespace. To learn more about namespaces, see the [vSphere with Tanzu documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-28B0AEA2-2947-4FDD-AA71-51E46E24BF53.html)
 
 To create a new Supervisor namespace:
 
@@ -572,7 +572,7 @@ To create a new Supervisor namespace:
 
    ![Screenshot of the Create Namespace screen](img/tko-on-vsphere-with-tanzu/TKO-VWT40.png)
 
-For additional product documentation, see [Create and Configure a vSphere Namespace](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-177C23C4-ED81-4ADD-89A2-61654C18201B.html).   
+For additional product documentation, see [Create and Configure a vSphere Namespace](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-services-workloads/GUID-177C23C4-ED81-4ADD-89A2-61654C18201B.html).   
 
 ### Configure Permissions for the Namespace
 
