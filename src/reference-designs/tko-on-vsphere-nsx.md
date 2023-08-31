@@ -209,13 +209,13 @@ As per the production architecture, the following list of networks are required:
 For this demonstration, this document uses the following subnet CIDR for Tanzu for Kubernetes Operations deployment.
 
 |**Network Type**|**Segment Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
-| --- | --- | --- | --- | --- |
-|NSX ALB Mgmt Network|`sfo01-w01-vds01-albmanagement-ls`|172.16.10.1/24|N/A|172.16.10.100- 172.16.10.200|
-|TKG Management Network|`sfo01-w01-vds01-tkgmanagement-ls`|172.16.40.1/24|172.16.40.100- 172.16.40.200|N/A|
-|TKG Mgmt VIP Network|`sfo01-w01-vds01-tkgmanagementvip-ls`|172.16.50.1/24|N/A|172.16.50.100- 172.16.50.200|
-|TKG Cluster VIP Network|`sfo01-w01-vds01-tkgclustervip-ls`|172.16.80.1/24|N/A|172.16.80.100- 172.16.80.200|
-|TKG Workload VIP Network|`sfo01-w01-vds01-tkgworkloadvip-ls`|172.16.70.1/24|N/A|172.16.70.100 - 172.16.70.200|
-|TKG Workload Segment|`sfo01-w01-vds01-tkgworkload-ls`|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
+| --- | --- | --- | --- | --- | 
+|NSX ALB Management Network|sfo01-w01-vds01-albmanagement|172.16.10.1/24|N/A|172.16.10.100 - 172.16.10.200|
+|TKG Management VIP Network|sfo01-w01-vds01-tkgclustervip|172.16.80.1/24|N/A|172.16.80.100 - 172.16.80.200|
+|TKG Management Network|sfo01-w01-vds01-tkgmanagement|172.16.40.1/24|172.16.40.100 - 172.16.40.200|N/A|
+|TKG Shared Service Network|sfo01-w01-vds01-tkgshared|172.16.50.1/24|172.16.50.100- 172.16.50.200|N/A|
+|TKG Workload Network|sfo01-w01-vds01-tkgworkload|172.16.60.1/24|172.16.60.100- 172.16.60.200|N/A|
+|TKG Workload VIP Network|sfo01-w01-vds01-workloadvip|172.16.70.1/24|172.16.70.100- 172.16.70.200|N/A|
 
 These networks are spread across the tier-1 gateways shown in the reference architecture diagram. You must configure the appropriate firewall rules on the tier-1 gateways for a successful deployment.
 
