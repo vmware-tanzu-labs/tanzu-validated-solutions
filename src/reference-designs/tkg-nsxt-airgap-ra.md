@@ -209,7 +209,7 @@ The network reference design can be mapped into this general framework. This des
 
 Another reference design that can be implemented in production environment is shown below, and it uses separate VIP network for the applications deployed in management/shared services and the workload cluster.
 
-![TKG General Network Layout](./img/tkg-nsxt-airgap/tko-nsxt-airgap02a.png)
+![TKG General Network Layout](./img/tkg-nsxt-airgap/tkg-nsxt-airgap02a.png)
 
 This topology enables the following benefits:
 
