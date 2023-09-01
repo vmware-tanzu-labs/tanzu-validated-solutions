@@ -1,6 +1,6 @@
 # VMware Tanzu for Kubernetes Operations using vSphere with Tanzu Reference Design
 
-vSphere with Tanzu transforms the vSphere cluster into a platform for running Kubernetes workloads in dedicated resource pools. When vSphere with Tanzu is enabled on a vSphere cluster, vSphere with Tanzu creates a Kubernetes control plane directly in the hypervisor layer. You can then run Kubernetes containers by creating upstream Kubernetes clusters through the VMware Tanzu Kubernetes Grid Service and run your applications inside these clusters.
+vSphere with Tanzu transforms the vSphere cluster into a platform for running Kubernetes workloads in dedicated resource pools. When vSphere with Tanzu is enabled on a vSphere cluster, vSphere with Tanzu creates a Kubernetes control plane directly in the hypervisor layer. You can then run Kubernetes containers by creating upstream Kubernetes clusters through the VMware Tanzu Kubernetes Grid Service, and run your applications inside these clusters.
 
 This document provides a reference design for deploying VMware Tanzu for Kubernetes Operations (informally known as TKO) on vSphere with Tanzu.
 
@@ -14,7 +14,7 @@ The following reference design is based on the architecture and components descr
 
   The Supervisor Cluster runs on top of an SDDC layer that consists of ESXi for compute, vSphere Distributed Switch for networking, and vSAN or another shared storage solution.
 
-- **vSphere Namespaces:** A vSphere Namespace is a tenancy boundary within vSphere with Tanzu. A vSphere Namespace allows for sharing vSphere resources (computer, networking, storage) and enforcing resource limits with the underlying objects such as Tanzu Kubernetes clusters. For each namespace, you configure role-based access control ( policies and permissions ), images library amd virtual machine classes.
+- **vSphere Namespaces:** A vSphere Namespace is a tenancy boundary within vSphere with Tanzu. A vSphere Namespace allows for sharing vSphere resources (computer, networking, storage), and enforcing resource limits with the underlying objects such as Tanzu Kubernetes clusters. For each namespace, you configure role-based access control ( policies and permissions ), images library, and virtual machine classes.
 
 - **Tanzu Kubernetes Grid Service:** Tanzu Kubernetes Grid Service (TKGS) allows you to create and manage ubiquitous Kubernetes clusters on a VMware vSphere infrastructure using the Kubernetes Cluster API. The Cluster API provides declarative, Kubernetes-style APIs for the creation, configuration, and management of the Tanzu Kubernetes Cluster.
 
@@ -24,7 +24,7 @@ The following reference design is based on the architecture and components descr
 
 - **VM Class in vSphere with Tanzu:** A VM class is a template that defines CPU, memory, and reservations for VMs. VM classes are used for VM deployment in a Supervisor Namespace. VM classes can be used by standalone VMs that run in a Supervisor Namespace and by VMs hosting a Tanzu Kubernetes cluster.
 
-  VM classes in vSphere with Tanzu are broadly categorized into two groups.
+  VM classes in vSphere with Tanzu are broadly categorized into the following groups:
 
      - **guaranteed:** The guaranteed class fully reserves its configured resources.
      - **best-effort:** The best-effort class allows resources to be overcommitted.
@@ -48,23 +48,23 @@ The following table provides recommendations for configuring VM Classes/Storage 
 
 ## vSphere with Tanzu Architecture
 
-The following diagram shows the high-level architecture of vSphere with Tanzu.
+The following diagram shows a high-level architecture of vSphere with Tanzu.
 
 ![Diagram of vSphere with Tanzu Architecture](img/tko-on-vsphere-with-tanzu/tko-vwt03.png)
 
-The Supervisor Cluster consists of the following:
+The Supervisor Cluster consists of the following components:
 
-*   **Kubernetes control plane VM:** Three Kubernetes control plane VMs in total are created on the hosts that are part of the Supervisor Cluster. The three control plane VMs are load-balanced as each one of them has its own IP address.
+*   **Kubernetes control plane VM:** Three Kubernetes control plane VMs in total are created on the hosts that are part of the Supervisor cluster. The three control plane VMs are load-balanced as each one of them has its own IP address.
 
-*   **Cluster API and Tanzu Kubernetes Grid Service:** These are modules that run on the Supervisor Cluster and enable the provisioning and management of Tanzu Kubernetes clusters.
+*   **Cluster API and Tanzu Kubernetes Grid Service:** These modules run on the Supervisor cluster and enable the provisioning and management of Tanzu Kubernetes clusters.
 
-The following diagram shows the general architecture of the Supervisor Cluster.
+The following diagram shows the general architecture of the Supervisor cluster.
 
 ![Diagram of Supervisor Cluster Architecture](img/tko-on-vsphere-with-tanzu/tko-vwt04.jpg)
 
-After a Supervisor Cluster is created, the vSphere administrator creates vSphere namespaces. When initially created, vSphere namespaces have unlimited resources within the Supervisor Cluster. The vSphere administrator defines the limits for CPU, memory, and storage, as well as the number of Kubernetes objects such as deployments, replica sets, persistent volumes, etc. that can run within the namespace. These limits are configured for each vSphere namespace.
+After a Supervisor cluster is created, the vSphere administrator creates vSphere namespaces. When initially created, vSphere namespaces have unlimited resources within the Supervisor cluster. The vSphere administrator defines the limits for CPU, memory, and storage, as well as the number of Kubernetes objects such as deployments, replica sets, persistent volumes, and so on. that can run within the namespace. These limits are configured for each vSphere namespace.
 
-For the maximum supported number, see the **vSphere with Tanzu [Configuration Maximums](https://configmax.esp.vmware.com/guest?vmwareproduct=vSphere&release=vSphere%208.0&categories=1-0,70-58,71-0)** guide.
+For more information about the maximum supported number, see the **vSphere with Tanzu [Configuration Maximums](https://configmax.esp.vmware.com/guest?vmwareproduct=vSphere&release=vSphere%208.0&categories=1-0,70-58,71-0)** guide.
 
 ![vSphere Namespace](img/tko-on-vsphere-with-tanzu/tko-vwt05.png)
 
@@ -228,19 +228,19 @@ The following table provides a list of firewall rules based on the assumption th
 | --- | --- | --- | --- |
 |Client Machine|NSX Advanced Load Balancer Controller Nodes and VIP|TCP:443|Access NSX Advanced Load Balancer portal for configuration.|
 |Client Machine|vCenter Server|TCP:443|Access and configure WCP in vCenter.|
-|Client Machine|TKG Cluster VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|<p>TKG Cluster Access</p><p>Access https workload</p><p>Access http workload</p>|
-|<p>Client Machine</p><p>(optional)</p>|<p>\*.tmc.cloud.vmware.com</p><p>console.cloud.vmware.com</p>|TCP:443|Access TMC portal, etc.|
+|Client Machine|TKG Cluster VIP Range|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|<p>TKG Cluster Access.</p><p>Access https workload.</p><p>Access http workload.</p>|
+|<p>Client Machine</p><p>(optional)</p>|<p>\*.tmc.cloud.vmware.com</p><p>console.cloud.vmware.com</p>|TCP:443|Access TMC portal, and so on.|
 |TKG Management and Workload Cluster CIDR|<p>DNS Server</p><p>NTP Server</p>|<p>TCP/UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time Synchronization</p>|
-|TKG Management Cluster CIDR|vCenter IP|TCP:443|Allow components to access vCenter to create VMs and Storage Volumes|
-|TKG Management and Workload Cluster CIDR|NSX Advanced Load Balancer controller nodes|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX Advanced Load Balancer Controller|
-|TKG Management and Workload Cluster CIDR|TKG Cluster VIP Range|TCP:6443|Allow Supervisor cluster to configure workload clusters|
+|TKG Management Cluster CIDR|vCenter IP|TCP:443|Allow components to access vCenter to create VMs and Storage Volumes.|
+|TKG Management and Workload Cluster CIDR|NSX Advanced Load Balancer controller nodes|TCP:443|Allow Avi Kubernetes Operator (AKO) and AKO Operator (AKOO) access to NSX Advanced Load Balancer Controller.|
+|TKG Management and Workload Cluster CIDR|TKG Cluster VIP Range|TCP:6443|Allow Supervisor cluster to configure workload clusters.|
 |TKG Management and Workload Cluster CIDR|Image Registry (Harbor) (If Private)|TCP:443|Allow components to retrieve container images.|
-|TKG Management and Workload Cluster CIDR|<p>wp-content.vmware.com</p><p>\*.tmc.cloud.vmware.com</p><p>Projects.registry.vmware.com</p>|TCP:443|Sync content library, pull TKG binaries, and interact with TMC|
-|TKG Management cluster CIDR|TKG Workload Cluster CIDR|TCP:6443|VM Operator and TKC VM communication|
-|TKG Workload Cluster CIDR|TKG Management Cluster CIDR|TCP:6443|Allow the TKG workload cluster to register with the Supervisor Cluster|
-|NSX Advanced Load Balancer Management Network|vCenter and ESXi Hosts|TCP:443|Allow NSX Advanced Load Balancer to discover vCenter objects and deploy SEs as required|
+|TKG Management and Workload Cluster CIDR|<p>wp-content.vmware.com</p><p>\*.tmc.cloud.vmware.com</p><p>Projects.registry.vmware.com</p>|TCP:443|Sync content library, pull TKG binaries, and interact with TMC.|
+|TKG Management cluster CIDR|TKG Workload Cluster CIDR|TCP:6443|VM Operator and TKC VM communication.|
+|TKG Workload Cluster CIDR|TKG Management Cluster CIDR|TCP:6443|Allow the TKG workload cluster to register with the Supervisor cluster.|
+|NSX Advanced Load Balancer Management Network|vCenter and ESXi Hosts|TCP:443|Allow NSX Advanced Load Balancer to discover vCenter objects and deploy SEs as required.|
 |NSX Advanced Load Balancer Controller Nodes|<p>DNS Server</p><p>NTP Server</p>|<p>TCP/UDP:53</p><p>UDP:123</p>|<p>DNS Service</p><p>Time Synchronization</p>|
-|TKG Cluster VIP Range|TKG Management Cluster CIDR|TCP:6443|To interact with supervisor cluster|
+|TKG Cluster VIP Range|TKG Management Cluster CIDR|TCP:6443|To interact with the Supervisor cluster.|
 |TKG Cluster VIP Range|TKG Workload Cluster CIDR|<p>TCP:6443</p><p>TCP:443</p><p>TCP:80</p>|To interact with workload cluster and K8s applications|
 |vCenter Server|TKG Management Cluster CIDR|<p>TCP:443</p><p>TCP:6443</p><p>TCP:22 (optional)</p>||
 
@@ -252,19 +252,17 @@ Starting with vSphere 8, when you enable vSphere with Tanzu, you can configure e
 
 ## Single-Zone Deployment of Supervisor
 
-A supervisor deployed on s single vSphere cluster has three control plane VMs, which reside on the ESXi hosts part of the cluster. A single zone is created for the Supervisor automatically or you can use a zone that is created in advance. In a Single-Zone deployment, cluster-level high availability is maintained through vSphere HA and can scale with vSphere with Tanzu setup by adding physical hosts to vSphere cluster that maps to the Supervisor. 
-You can run workloads through vSphere Pods, Tanzu Kubernetes Grid clusters and VMs when Supervisor is enabled with the NSX networking stack.
+A supervisor deployed on s single vSphere cluster has three control plane VMs, which reside on the ESXi hosts part of the cluster. A single zone is created for the Supervisor automatically or you can use a zone that is created in advance. In a Single-Zone deployment, cluster-level high availability is maintained through vSphere HA and can scale with vSphere with Tanzu setup by adding physical hosts to vSphere cluster that maps to the Supervisor. You can run workloads through vSphere Pods, Tanzu Kubernetes Grid clusters and VMs when Supervisor is enabled with the NSX networking stack.
 
 ## Three-Zone Deployment of Supervisor
 
-Configure each vSphere cluster as an independent failure domain and map it to the vSphere zone. In a Three-Zone deployment, all three vSphere clusters become one Supervisor and can
-provide :
+Configure each vSphere cluster as an independent failure domain and map it to the vSphere zone. In a Three-Zone deployment, all three vSphere clusters become one Supervisor and can provide :
 
 - Cluster-level high availability to the Supervisor as vSphere cluster is an independent failure domain.
 - Distribute the nodes of Tanzu Kubernetes Grid clusters across all three vSphere zones and provide availability via vSphere HA at cluster level.
 - Scale the Supervisor by adding hosts to each of the three vSphere clusters.
 
-For more information, see [Supervisor Architecture and Components](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-74EC2571-4352-4E15-838E-5F56C8C68D15.html)
+For more information, see [Supervisor Architecture and Components](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-74EC2571-4352-4E15-838E-5F56C8C68D15.html).
 
 ## Installation Experience
 
@@ -314,7 +312,7 @@ The following are the key network recommendations for a production-grade vSphere
 
 |**Decision ID**|**Design Decision**|**Design Justification**|**Design Implications**|
 | --- | --- | --- | --- |
-|TKO-TKGS-001|Create a Subscribed Content Library. |<p>Subscribed Content Library can automatically pull the latest OVAs used by the Tanzu Kubernetes Grid Service to build cluster nodes.</p><p>Using a subscribed content library facilitates template management as new versions can be pulled by initiating the library sync.</p>|<p>Local Content Library would require manual upload of images, suitable for air-gapped or Internet restricted environment.</p>|
+|TKO-TKGS-001|Create a Subscribed Content Library. |<p>Subscribed Content Library can automatically pull the latest OVAs used by the Tanzu Kubernetes Grid Service to build cluster nodes.</p><p>Using a subscribed content library facilitates template management as new versions can be pulled by initiating the library sync.</p>|<p>Local Content Library would require manual upload of images, suitable for air-gapped or Internet-restricted environment.</p>|
 |TKO-TKGS-002|Deploy Supervisor cluster control plane nodes in large form factor.|Large form factor should suffice to integrate Supervisor Cluster with TMC and velero deployment.|Consume more Resources from Infrastructure.|
 |TKO-TKGS-003|Register Supervisor cluster with Tanzu Mission Control.|Tanzu Mission Control automates the creation of the Tanzu Kubernetes clusters and manage the life cycle of all clusters centrally.|Need outbound connectivity to internet for TMC registration.|
 
@@ -349,7 +347,7 @@ Each ingress controller has pros and cons of its own. The below table provides g
 
 ### NSX Advanced Load Balancer Controller Configuration
 
-Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5,000 virtual services; 5,000 is a hard limit. For further details, see [Avi Controller Sizing](https://avinetworks.com/docs/22.1/avi-controller-sizing/).
+Regardless of NSX Advanced Load Balancer Controller configuration, each controller cluster can achieve up to 5,000 virtual services; 5,000 is a hard limit. For more information, see [Avi Controller Sizing](https://avinetworks.com/docs/22.1/avi-controller-sizing/).
 
 | Controller Size | VM Configuration    | Virtual Services | Avi SE Scale |
 | --------------- | ------------------- | ---------------- | ------------ |
@@ -402,7 +400,7 @@ To learn more about Tanzu Kubernetes Grid integration with Tanzu SaaS, see [Tanz
 
 ### Custom Tanzu Observability Dashboards
 
-Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your particular deployment. For information on how to customize Tanzu Observability dashboards for Tanzu for Kubernetes Operations, see [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](../deployment-guides/tko-to-customized-dashboard.md).
+Tanzu Observability provides various out-of-the-box dashboards. You can customize the dashboards for your particular deployment. For information about customizing Tanzu Observability dashboards for Tanzu for Kubernetes Operations, see [Customize Tanzu Observability Dashboard for Tanzu for Kubernetes Operations](../deployment-guides/tko-to-customized-dashboard.md).
 
 ## Summary
 
