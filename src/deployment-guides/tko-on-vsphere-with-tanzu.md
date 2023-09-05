@@ -57,10 +57,10 @@ This document uses the following port groups, subnet CIDRs, and VLANs. Replace t
 
 | Network Type               | Port Group Name | VLAN | Gateway CIDR   | DHCP Enabled | IP Pool for SE/VIP in NSX ALB       |
 | -------------------------- | --------------- | ---- | -------------- | ------------ | ----------------------------------- |
-| NSX ALB Management Network | sfo01-w01-vds01-albmanagement   | 1680 | 172.16.80.1/27 | No           | 172.16.80.6 - 172.16.80.30          |
-| TKG Management Network     | sfo01-w01-vds01-tkgmanagement   | 1681 | 172.16.81.1/27 | Yes          | No                                  |
-| TKG Workload Network01     | sfo01-w01-vds01-tkgworkload     | 1682 | 172.16.82.1/24 | Yes          | No                                  |
-| TKG VIP Network            | sfo01-w01-vds01-tkgclustervip   | 1683 | 172.16.83.1/26 | No           | 172.16.83.2 - 172.16.83.62|
+| NSX ALB Management Network | sfo01-w01-vds01-albmanagement   | 1680 | 192.168.10.1/27 | No           | 192.168.10.14 - 192.168.10.30          |
+| TKG Management Network     | sfo01-w01-vds01-tkgmanagement   | 1681 | 192.168.40.1/28 | Yes          | No                                  |
+| TKG Workload Network01     | sfo01-w01-vds01-tkgworkload     | 1682 | 192.168.60.1/24 | Yes          | No                                  |
+| TKG VIP Network            | sfo01-w01-vds01-tkgclustervip   | 1683 | 192.168.80.1/26 | No           | SE Pool:192.168.80.2 - 192.168.80.20 <br> TKG Cluster VIP Range: 192.168.80.21 - 192.168.80.60|
 
 ### <a id=firewall-requirements> </a> Firewall Requirements
 
@@ -102,10 +102,10 @@ The following table provides a sample IP address and FQDN set for the NSX Advanc
 
 | Controller Node    | IP Address  | FQDN                               |
 | ------------------ | ------------| -----------------------------------|
-| Node01 (Primary)   | 172.16.80.3 | sfo01albctlr01a.sfo01.rainpole.vmw |
-| Node02 (Secondary) | 172.16.80.4 | sfo01albctlr01b.sfo01.rainpole.vmw |
-| Node03 (Secondary) | 172.16.80.5 | sfo01albctlr01c.sfo01.rainpole.vmw |
-| Controller Cluster | 172.16.80.2 | sfo01albctlr01.sfo01.rainpole.vmw  |
+| Node01 (Primary)   | 192.168.10.3 | sfo01albctlr01a.sfo01.rainpole.vmw |
+| Node02 (Secondary) | 192.168.10.4 | sfo01albctlr01b.sfo01.rainpole.vmw |
+| Node03 (Secondary) | 192.168.10.5 | sfo01albctlr01c.sfo01.rainpole.vmw |
+| Controller Cluster | 192.168.10.2 | sfo01albctlr01.sfo01.rainpole.vmw  |
 
 ### Deploy NSX Advance Load Balancer Controller Node
 
@@ -122,9 +122,8 @@ Do the following to deploy NSX Advanced Load Balancer controller node:
    - Select the sfo01-w01-vds01-albmanagement port group for the Management Network.
    - Customize the configuration by providing Management Interface IP Address, Subnet Mask, and Default Gateway. The remaining fields are optional and can be left blank.
 
-   The following example shows the final configuration of the NSX Advanced Load Balancer controller node.
+   Complete the configuration and deploy NSX Advanced Load Balancer controller node.
 
-   ![Completed configuration of the NSX Advanced Load Balancer controller node](img/tko-on-vsphere-with-tanzu/TKO-VWT01.png)
 
  For more information, see the product documentation [Deploy the Controller](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F.html).
 
@@ -132,7 +131,7 @@ Do the following to deploy NSX Advanced Load Balancer controller node:
 
 After the controller VM is deployed and powered-on, configure the controller VM for your vSphere with Tanzu environment. The controller requires several post-deployment configuration parameters.
 
-On a browser, go to https://<https://<alb-ctlr01.tanzu.lab>/.
+On a browser, go to https://<https://sfo01albctlr01a.sfo01.rainpole.vmw>/.
 
 1. Configure an **Administrator Account** by setting up a password and optionally, an email address.
 
@@ -242,7 +241,6 @@ To configure the Controller cluster:
 
 1. Specify a name for the controller cluster and set the cluster IP address. This IP address should be from the NSX Advanced Load Balancer management network.
 
-   ![Screenshot of Controller tab on the Administration screen](img/tko-on-vsphere-with-tanzu/TKO-VWT16.png)
 
 2. In **Cluster Nodes**, specify the IP addresses of the two additional controllers that you have deployed.
 
@@ -260,7 +258,6 @@ You are automatically logged out of the controller node you are currently logged
 
 The first controller of the cluster receives the "Leader" role. The second and third controllers will work as "Follower".
 
-   ![Controller Role](img/tko-on-vsphere-with-tanzu/TKO-VWT19.png)
 
 After the controller cluster is deployed, use the controller cluster IP address for doing any additional configuration. Do not use the individual controller node IP address.
 
