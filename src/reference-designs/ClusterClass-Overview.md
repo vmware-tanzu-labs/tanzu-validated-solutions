@@ -4,7 +4,7 @@ ClusterClass is a feature in the Kubernetes Cluster API project that allows you 
 
 This can help you to simplify the process of creating and managing multiple Kubernetes clusters, and to make your clusters more consistent and reliable.
 
-![ClusterClass Components](./img/clusterclass/ClusterClass_Components.png)
+![ClusterClass Components](./img/clusterclass/ClusterClass_components.png)
 
 At a high level the [ClusterClass CRD](https://doc.crds.dev/github.com/kubernetes-sigs/cluster-api/cluster.x-k8s.io/ClusterClass/v1beta1) contains:
 
