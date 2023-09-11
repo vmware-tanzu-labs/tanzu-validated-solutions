@@ -30,7 +30,7 @@ The [ClusterClass CRD](https://doc.crds.dev/github.com/kubernetes-sigs/cluster-a
 ## Configuration of the cluster topology
 The configuration of cluster topology contains the following options:
 
-- A reference to the Cluster Class CRD.
+- A reference to the ClusterClass CRD.
 - Define the attributes that governs the Cluster's control plane. These attributes contain parameters such as, the count of replicas, alongside provisions for overriding or appending values to control plane metadata, nodeDrainTimeout, and control plane's MachineHealthCheck.
 - A list of machine deployments slated for creation, with each deployment uniquely characterized by:
   - The reference to the MachineDeployment class, which defines the templates to be used this specific MachineDeployment.
