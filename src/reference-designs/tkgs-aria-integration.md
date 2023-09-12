@@ -36,7 +36,7 @@ VM classes in vSphere with Tanzu are broadly categorized into two groups.
 
 ### VMware Aria 
 
-The VMware Aria Suite comprises several powerful VMware products designed to enhance and optimize various aspects of IT infrastructure and operations. These products include
+The VMware Aria Suite comprises several powerful VMware products designed to enhance and optimize various aspects of IT infrastructure and operations. These products include:
 
 #### Aria Automation
 
@@ -141,10 +141,9 @@ Benefits of Aria Operation for Logs.
 
 |**Source**|**Destination**|**Protocol:Port**| **Description**|
 | -------------- | ----------------------- | ------------- | ---------|
-|VMware Aria Automation Management IP | Tanzu Kubernetes Clusters Control Plane VIP Range |TCP:6443 <br> TCP:443 <br> TCP:80| Aria Automation to Supervisor connectivity.|
-|VMware Aria Operation Primary/Replica/Remote Collectors. | Tanzu Kubernetes Clusters Control Plane VIP Range | TCP:6443 <br> TCP:443 <br> TCP:80 <br> cAdvisor – DaemonSet Port(Default Port 31194) ||
-|VMware Aria Operation Primary/ Replica/ Data nodes/ Remote Collectors and Cloud Proxies | Tanzu Kubernetes Clusters Control Plane VIP Range | TCP:6443 <br> TCP:443 <br> TCP:80 | Aria Operation to Tanzu Kubernetes Clusters for data collection using Prometheus |
-|  Tanzu Kubernetes Workload Cluster Node CIDR |  vRealize Log Insight appliance | UDP:514 | Collect logs from TKC clusters using syslog protocol |
+|VMware Aria Automation Appliance Load Balanced VIP or FQDN | Supervisor Cluster (Ingress Network configured in Supervisor Cluster) |TCP:6443 <br> TCP:443 | Aria Automation to Supervisor connectivity.|
+|VMware Aria Operation Primary, Replica, Data nodes, Remote Collectors | Tanzu Kubernetes Clusters Control Plane VIP Range (Ingress Network configured in Supervisor Cluster) | TCP:6443 <br> TCP:443 | Collect Tanzu Kubernetes Cluster Metrics via Prometheus, an open-source systems monitoring and alerting toolkit <br> TCP:443 is applicable when Prometheus is exposed over Ingress or LoadBalancer |
+|Tanzu Kubernetes Workload Clusters (Egress Network configured in Supervisor Cluster) | VMware Aria Operations for Logs | UDP:514 | Forward logs to VMware Aria Operations for Logs |
 
 ## Tanzu Integration with Aria
 
@@ -318,14 +317,145 @@ These LCM operations offer increased flexibility and control to users when manag
 
 ### Monitoring Tanzu Clusters with VMware Aria Operations
 
-The Aria Operations For Monitoring solution offers a single pane of glass view, allowing you to monitor your containerized clusters alongside the rest of your infrastructure. This unified monitoring approach enables you to gain visibility into the performance, health, and resource utilization of your Tanzu and Kubernetes deployments. In addition to monitoring, Aria Operations delivers intelligent operations management with application-to-storage visibility across various infrastructure layers, including physical, virtual , and Kubernetes.
+The Aria Operations For Monitoring solution offers a single pane of glass view, allowing you to monitor your Tanzu Kuberentes clusters alongside the rest of your infrastructure. This unified monitoring approach enables you to gain visibility into the performance, health, and resource utilization of your entire infrastructure. In addition to monitoring, Aria Operations delivers intelligent operations management with application-to-storage visibility across various infrastructure layers, including physical, virtual , and Kubernetes.
+
+Its ability to monitor and collect data on objects in your systems environment makes VMware Aria Operations a critical tool in maintaining system uptime and ensuring ongoing good health for all system resources from virtual machines to applications to storage - across physical, virtual, and cloud infrastructures.
+
+
+
+#### Workload Management Inventory Objects
+
+VMware Aria Operations discovers the following workload management objects and their child objects using the vCenter adapter:
+
+- Tanzu Kubernetes cluster
+- vSphere Pods
+- Supervisor Namespace
+
+In the VMware Aria Operations inventory, the summary tab of the Supervisor Cluster indicates that it has workload management activated. The Supervisor Cluster contains specific objects that activate the capability to run Kubernetes workloads within ESXi. VMware Aria Operations collects metrics and data for the Supervisor Cluster. 
+
+- Namespaces contain virtual machines with k8s activated. They are called k8s control VMs. These VMs are managed by vSphere. Therefore, you cannot take action on these VMs from within VMware Aria Operations.
+- DevOps engineers can run workloads on containers running inside vSphere Pods. They can create Tanzu Kubernetes cluster inside a Supervisor Namespace.
+  - A vSphere Pod is a VM with a small footprint that runs one or more Linux containers. It is the equivalent of a Kubernetes pod.
+  - A Tanzu Kubernetes cluster is a full distribution of the open-source Kubernetes container orchestration software that is packaged, signed, and supported by VMware.
+- Workload management objects are excluded from the following workflows:
+  - Compliance
+  - Reclaim
+  - Right sizing
+  - Workload optimization
+
+##### Workload Management Dashboard
+
+VMware Aria Operations includes a broad set of simple to use, but customizable dashboards to get you started with monitoring your VMware environment. The predefined dashboards address several key questions including how you can troubleshoot your VMs, the workload distribution of your hosts, clusters, and datastores, the capacity of your data center, and information about the VMs. You can also view log details. 
+
+For the purpose of this document we will be focusing on below dashboards:
+
+- *Workload Management Inventory Dashboard:* <br>
+The Workload Management Inventory dashboards curates the Kubernetes inventory across all the Workload Management activated vSphere environments and displays it here. This includes an end to end topology map showcasing the health of all the objectes along with upstream and downstream dependencies. Upon clicking any object in the relationship tree, the related inventorty of Supervisor Clusters, Namespaces, Pods, Developer Managed VMs and Tanzu Kubernetes clusters can be viewed and exported from this dashboard. You can use the dashboard widgets in several ways.
+<br>
+  - Environment Summary: Provides a summary of the supervisor cluster and the child objects.
+  - Relationships: An interactive canvas where you can view the relationship between the different objects in the workload management inventory.
+  - Properties: View the properties related to the object in the environment.
+  - Metrics: View the metrics of the object.
+  - Supervisor Clusters: View the supervisor cluster functionality.
+  - Tanzu Kubernetes cluster: View the Tanzu Kubernetes cluster functionality.
+  - Virtual Machines: View VMs that belong to the object.
+  - vSphere Pods: View information about vSphere Pods.
+<br> <br>
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-13.png)
+
+- *Workload Management Configuration Dashboard:* <br>
+This dashboard provides a quick configuration summary of all the key objects associated with workload management such as Supervisor Clusters, Namespaces, vSphere Pods and Tanzu Kubernetes clusters. It is essential that the configuration is consistent across all the objects. Configuration drifts may result in inconsistent performance or availability of the applications leveraging workload management Kubernetes constructs. You can view the following widgets in the dashboard.
+  - Environment Summary
+  - Supervisor Cluster Versions
+  - Cluster Status
+  - Pod Data
+  - Supervisor Cluster Configuration Summary
+  - Pod Configuration Summary
+  - Kubernetes cluster Configuration Summary
+  - Namespace Configuration Summary
+  <br> <br>
+![cluster-view](./img/tkgs-aria-integration/tkgs-aria-14.png)
 
 #### Aria Operations Management Pack for Kubernetes
 
-In addition to the native vCenter integration, you can enhance the monitoring capabilities by utilizing the Aria Operations Management Pack for Kubernetes
+In addition to the native vCenter integration, you can enhance the monitoring capabilities by utilizing the Aria Operations Management Pack for Kubernetes. 
+
+Before you can use the VMware Aria Operations Management Pack for Kubernetes to monitor the Kubernetes clusters, you must prepare your VMware Aria Operations environment. You must make sure that VMware Aria Operations meets the following general requirements.
+
+- Ensure that you have installed VMware Aria Operations 8.1 or later.
+- Verify that you have installed VMware Aria Operations Management Pack for Kubernetes.
+- Ensure that you have a Kubernetes cluster deployed in your environment.
+- Ensure you have a service account created to access the cluster and obtain the inventory with read permissions.
+- Decide the mode of authentication for your Kubernetes cluster.
+- Decide if you want to use cAdvisor or Prometheus to monitor your Kubernetes environment.
+  - If you choose cAdvisor, then ensure that cAdvisor is running as a Kubelet or DaemonSet.
+  - If you choose Prometheus, then ensure that you have deployed a Prometheus in-cluster or have a separate instance of Prometheus deployed outside the cluster.
+
+Prometheus is an open-source systems monitoring and alerting toolkit. Tanzu Kubernetes Grid includes signed binaries for Prometheus that you can deploy on workload clusters to monitor cluster health and services. Refer [Deploy Prometheus on Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-packages-prometheus.html) for more details on deploying Prometheus.
+
+Aria Operations Management Pack for Kubernetes include custom dashboards, alerts and reports tailored to Kubernetes Environment. Refer [Alerts in VMware Aria Operations Management Pack for Kubernetes](https://docs.vmware.com/en/VMware-Aria-Operations-for-Integrations/1.9/Management-Pack-for-Kubernetes/GUID-8F0DF700-9FCD-40F9-8015-D4704E74B406.html), and [Reports in VMware Aria Operations Management Pack for Kubernetes](https://docs.vmware.com/en/VMware-Aria-Operations-for-Integrations/1.9/Management-Pack-for-Kubernetes/GUID-5BA3759F-7786-4BEF-93B9-30FA8BDD93A0.html) for more details.
 
 
-### Centralized Logging using VMware Aria Operations for Logs
+#### Dashboards in VMware Aria Operations Management Pack for Kubernetes
+
+You can use the dashboards to view and troubleshoot objects in your Kubernetes cluster eco-system that are monitored by VMware Aria Operations Management Pack for Kubernetes.
+
+- *Kubernetes Overview Dashboard:* <br>
+The overview dashboard provides an overall representation of Kubernetes environment, nodes, pods, and containers. The overview provides information of the overall health status of clusters, nodes, and pods with their respective historical trend and metric chart.
+  - Environment: The Kubernetes overview environment widget provides an overall view of Kubernetes adapter instances, its associated objects information, alerts, and health status of objects
+  - Nodes: The Kubernetes overview nodes widget provides detailed set of information of nodes, node properties, health status, metrics, and hierarchical representation of pod relationship
+  - Pods and Containers: The Kubernetes Overview pods and container widget provides detailed set of information of pods health status, hierarchical representation of pod relationship, metrics and so on
+  <br>
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-15.png)
+  <br>
+
+- *Kubernetes POD and Container Availability:* <br>
+This dashboard offers a heat map visualization that provides comprehensive details about the PODs and Containers within a cluster. By using this heat map, you can quickly and easily view important information about all the PODs and Containers associated with the entire cluster. <br>
+
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-16.png)
+
+- *Kubernetes Infrastructure Inventory Dashboard:* <br>
+This dashboard offers a comprehensive view of Kubernetes clusters and node inventory across all Kubernetes environments. It presents detailed information about the clusters, including their health status, resource utilization, and workload distribution. <br> 
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-17.png)
+
+- *Kubernetes Application Performance:* <br>
+This dashboard offers a detailed inventory of Kubernetes clusters, namespaces, and pods across all Kubernetes environments. It provides a comprehensive view of the current state of the Kubernetes infrastructure, including information on resource allocation, health status, and deployment details.
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-18.png)
+
+- *Kubernetes Application Inventory:* <br>
+With the help of this dashboard, you can gain valuable insights into the performance of your Kubernetes environment. It provides a clear and comprehensive view of key metrics, such as resource utilization, container health, and application performance. By monitoring these critical aspects, you can identify potential bottlenecks, optimize resource allocation, and ensure the overall efficiency and reliability of your Kubernetes infrastructure. 
+
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-19.png)
+
+
+
+### Centralized Logging for Tanzu Clusters with VMware Aria Operations for Logs
+
+VMware Aria Operations for Logs, formerly known as vRealize Log Insight (vRLI), is a robust log management and analytics solution. It is designed to gather, analyze, and present logs from diverse sources within your environment. By aggregating log data from various systems, applications, and devices, Aria Operations for Logs empowers administrators and operators to gain valuable insights into the overall performance and health of their infrastructure and applications.. 
+
+As part of the Tanzu package, one of the components that can be installed on Tanzu Kubernetes Clusters is Fluent Bit. Fluent Bit is a log forwarder that efficiently collects log data from various sources within the Kubernetes environment, including containers, applications, and system components. One of the key strengths of Fluent Bit is its support for multiple output endpoints. It allows log data to be forwarded to various destinations for further processing and analysis.
+
+  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-20.png)
+
+Fluent Bit can be seamlessly integrated with VMware Aria Operations for Logs by configuring it to use the syslog output endpoint. Syslog, a standard protocol for transmitting log messages over IP networks, is extensively supported by a range of log management and analytics solutions, including VMware Aria Operations for Logs. The integration between Fluent Bit and VMware Aria Operations for Logs enables administrators and developers to gain valuable insights into the performance and health of their Tanzu Kubernetes Clusters. Log data is seamlessly forwarded to VMware Aria Operations for Logs, where it can be analyzed, visualized, and monitored in real-time. This centralized logging approach simplifies log management and facilitates efficient troubleshooting and monitoring of the Tanzu Kubernetes environment, promoting a more robust and reliable application deployment. <br> 
+
+Key features and functionalities of Fluent Bit include:
+
+- **Log Collection:** Fluent Bit can collect log data from various sources, such as files, standard input, syslog, and container logs, making it versatile for different types of applications and environments.
+
+- **Parsing and Filtering:** It supports powerful log parsing and filtering capabilities, allowing users to extract relevant information from log messages and apply filters to include or exclude specific logs based on criteria.
+
+- **Output Integration:** Fluent Bit can forward log data to multiple destinations, including Arai Operation for Logs, Aria Operations for Logs Cloud, Elasticsearch, Kafka, Amazon S3, and many others. This flexibility enables seamless integration with various log storage and analytics platforms.
+
+- **Lightweight and Efficient:** Fluent Bit is designed to be lightweight and efficient, making it suitable for resource-constrained environments like edge devices and containers.
+
+- **Container Logging:** Fluent Bit is commonly used to collect and forward logs from containers, facilitating centralized log management and analysis in containerized environments.
+
+- **Scalability:** Fluent Bit is designed to handle high log volumes efficiently, making it suitable for large-scale and distributed environments.
+
+Refer the Tanzu documentation to Install FluentBit for log forwarding, which provides detailed instructions on how to install FluentBit. Additionally, to streamline the configuration process, you can refer to `Appendix C`, where a sample FluentBit data values file is available for your reference. This file offers a practical example of how to set up FluentBit with the appropriate data values to efficiently forward logs from Tanzu clusters to the desired log management destination. By following the documentation and utilizing the provided sample data values file, you can seamlessly implement log forwarding using FluentBit in your Tanzu environment.
+
+
 
 ## Appendix
 
@@ -440,4 +570,214 @@ Please ensure that the desired cluster plans created. A sample snippet of a Clus
     <!-- /* cSpell:enable */ -->
 
 For more configurable options, refer [Using arbitrary YAMLs with self-service namespace or cluster VCTs](https://docs.vmware.com/en/VMware-Aria-Automation/8.12/Using-Automation-Assembler/GUID-7BD71D53-A67B-4E3A-9E1C-7AA71C4F6B70.html#using-arbitrary-yamls-with-selfservice-namespace-or-cluster-vcts-2)
+
+
+### Appendix C
+
+Below is a sample FluentBit data values file for reference. This file provides a practical illustration of configuring FluentBit with the necessary data values to effectively forward logs from Tanzu clusters to the Aria Operations for Logs. <br>
+**Note:** Please make adjustments to the sections labeled `Record tkg_cluster` and `Record tkg_instance` within the `record_modifier` under `Filters` to ensure that the logs are appropriately tagged with the respective Cluster and Instance names.
+
+
+<!-- /* cSpell:disable */ -->
+```yaml
+
+namespace: "tanzu-system-logging"
+fluent_bit:
+  config:
+    service: |
+      [Service]
+        Flush         1
+        Log_Level     info
+        Daemon        off
+        Parsers_File  parsers.conf
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020     
+     inputs: |
+      #see https://docs.fluentbit.io/manual/pipeline/inputs
+      [INPUT]
+        Name              tail
+        Tag               kube.*
+        Path              /var/log/containers/*.log
+        Parser            cri
+        DB                /var/log/flb_kube.db
+        Mem_Buf_Limit     5MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+ 
+      [INPUT]
+        Name                systemd
+        Tag                 kube_systemd.*
+        Path                /var/log/journal
+        DB                  /var/log/flb_kube_systemd.db
+        Systemd_Filter      _SYSTEMD_UNIT=kubelet.service
+        Systemd_Filter      _SYSTEMD_UNIT=containerd.service
+        Read_From_Tail      On
+        Strip_Underscores   On
+ 
+      [INPUT]
+        Name              tail
+        Tag               apiserver_audit.*
+        Path              /var/log/kubernetes/audit.log
+        Parser            json
+        DB                /var/log/flb_kube_audit.db
+        Mem_Buf_Limit     50MB
+        Refresh_Interval  10
+        Skip_Long_Lines   On
+ 
+      [INPUT]
+        Name              tail
+        Tag               audit.*
+        Path              /var/log/audit/audit.log
+        Parser            logfmt
+        DB                /var/log/flb_system_audit.db
+        Mem_Buf_Limit     50MB
+        Refresh_Interval  10
+        Skip_Long_Lines   On 
+    outputs: |
+      # see https://docs.fluentbit.io/manual/pipeline/outputs
+      [OUTPUT]
+        Name              http
+        Match             *
+        Host              data.mgmt.cloud.vmware.com
+        Port              443
+        URI               /le-mans/v1/streams/ingestion-pipeline-stream
+        Header            Authorization Bearer <My API Key>
+        Format            json
+        tls               On
+        tls.verify        On     
+      
+    filters: |
+      #see https://docs.fluentbit.io/manual/pipeline/filters
+      [FILTER]
+        Name                record_modifier
+        Match               *
+        Record environment  tanzu_k8s_grid
+        Record log_type     kubernetes
+        Record tkg_cluster  <Cluster Name>
+        Record tkg_instance <vCenter Name>
+ 
+      [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Kube_Tag_Prefix     kube.var.log.containers.
+        Merge_Log           On
+        Merge_Log_Key       log_processed
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude Off
+ 
+      [FILTER]
+        Name                  modify
+        Match                 kube.*
+        Copy                  kubernetes k8s
+ 
+      [FILTER]
+        Name                  nest
+        Match                 kube.*
+        Operation             lift
+        Nested_Under          kubernetes     
+    parsers: |
+      # see https://docs.fluentbit.io/manual/pipeline/parsers
+      # see https://github.com/fluent/fluent-bit/blob/v1.8.15/conf/parsers.conf
+      [PARSER]
+          Name   apache
+          Format regex
+          Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+          Time_Key time
+          Time_Format %d/%b/%Y:%H:%M:%S %z
+ 
+      [PARSER]
+          Name   apache2
+          Format regex
+          Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^ ]*) +\S*)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+          Time_Key time
+          Time_Format %d/%b/%Y:%H:%M:%S %z
+ 
+      [PARSER]
+          Name   apache_error
+          Format regex
+          Regex  ^\[[^ ]* (?<time>[^\]]*)\] \[(?<level>[^\]]*)\](?: \[pid (?<pid>[^\]]*)\])?( \[client (?<client>[^\]]*)\])? (?<message>.*)$
+ 
+      [PARSER]
+          Name   nginx
+          Format regex
+          Regex ^(?<remote>[^ ]*) (?<host>[^ ]*) (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+          Time_Key time
+          Time_Format %d/%b/%Y:%H:%M:%S %z
+ 
+      [PARSER]
+          Name   json
+          Format json
+          Time_Key time
+          Time_Format %d/%b/%Y:%H:%M:%S %z
+ 
+      [PARSER]
+          Name        docker
+          Format      json
+          Time_Key    time
+          Time_Format %Y-%m-%dT%H:%M:%S.%L
+          Time_Keep   On
+ 
+      [PARSER]
+          Name        docker-daemon
+          Format      regex
+          Regex       time="(?<time>[^ ]*)" level=(?<level>[^ ]*) msg="(?<msg>[^ ].*)"
+          Time_Key    time
+          Time_Format %Y-%m-%dT%H:%M:%S.%L
+          Time_Keep   On
+ 
+      [PARSER]
+          # http://rubular.com/r/tjUt3Awgg4
+          Name cri
+          Format regex
+          Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+          Time_Key    time
+          Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+ 
+      [PARSER]
+          Name        logfmt
+          Format      logfmt
+ 
+      [PARSER]
+          Name        syslog-rfc5424
+          Format      regex
+          Regex       ^\<(?<pri>[0-9]{1,5})\>1 (?<time>[^ ]+) (?<host>[^ ]+) (?<ident>[^ ]+) (?<pid>[-0-9]+) (?<msgid>[^ ]+) (?<extradata>(\[(.*)\]|-)) (?<message>.+)$
+          Time_Key    time
+          Time_Format %Y-%m-%dT%H:%M:%S.%L
+          Time_Keep   On
+ 
+      [PARSER]
+          Name        syslog-rfc3164-local
+          Format      regex
+          Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
+          Time_Key    time
+          Time_Format %b %d %H:%M:%S
+          Time_Keep   On
+ 
+      [PARSER]
+          Name        syslog-rfc3164
+          Format      regex
+          Regex       /^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$/
+          Time_Key    time
+          Time_Format %b %d %H:%M:%S
+          Time_Format %Y-%m-%dT%H:%M:%S.%L
+          Time_Keep   On
+ 
+      [PARSER]
+          Name    kube-custom
+          Format  regex
+          Regex   (?<tag>[^.]+)?\.?(?<pod_name>[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)_(?<namespace_name>[^_]+)_(?<container_name>.+)-(?<docker_id>[a-z0-9]{64})\.log$     
+    streams: ""
+    plugins: ""
+  daemonset:
+    resources: { }
+    podAnnotations: { }
+    podLabels: { }
+```
+<!-- /* cSpell:enable */ -->
+
+Refer [Install Fluent Bit on Tanzu Kubrenetes Clusters for Log Forwarding](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-packages-fluentbit.html) and [Fluent Bit Official Documentation](https://docs.fluentbit.io/manual) for installing Fluent Bit on your Tanzu Kubernetes Cluster and for making any additional modifications to the data values file.
 
