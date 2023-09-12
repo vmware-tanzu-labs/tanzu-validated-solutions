@@ -27,7 +27,7 @@ The [ClusterClass CRD](https://doc.crds.dev/github.com/kubernetes-sigs/cluster-a
 [Cluster CRD](https://doc.crds.dev/github.com/kubernetes-sigs/cluster-api/cluster.x-k8s.io/Cluster/v1beta1) is used to create and manage the cluster's configuration and state, and delete Kubernetes clusters. For example, you can use the cluster object to update the Kubernetes version, the network configuration, or the number of nodes in the cluster.
 
 
-## Configuration of the cluster topology
+## Configuration of the Cluster topology
 The configuration of cluster topology contains the following options:
 
 - A reference to the ClusterClass CRD.
