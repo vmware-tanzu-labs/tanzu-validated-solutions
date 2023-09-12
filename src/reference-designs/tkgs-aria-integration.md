@@ -361,7 +361,7 @@ The Workload Management Inventory dashboards curates the Kubernetes inventory ac
   - Virtual Machines: View VMs that belong to the object.
   - vSphere Pods: View information about vSphere Pods.
 <br> <br>
-  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-13.png)
+![cluster-view](./img/tkgs-aria-integration/tkgs-aria-13.png)
 
 - *Workload Management Configuration Dashboard:* <br>
 This dashboard provides a quick configuration summary of all the key objects associated with workload management such as Supervisor Clusters, Namespaces, vSphere Pods and Tanzu Kubernetes clusters. It is essential that the configuration is consistent across all the objects. Configuration drifts may result in inconsistent performance or availability of the applications leveraging workload management Kubernetes constructs. You can view the following widgets in the dashboard.
@@ -406,7 +406,7 @@ The overview dashboard provides an overall representation of Kubernetes environm
   - Nodes: The Kubernetes overview nodes widget provides detailed set of information of nodes, node properties, health status, metrics, and hierarchical representation of pod relationship
   - Pods and Containers: The Kubernetes Overview pods and container widget provides detailed set of information of pods health status, hierarchical representation of pod relationship, metrics and so on
   <br>
-  ![cluster-view](./img/tkgs-aria-integration/tkgs-aria-15.png)
+![cluster-view](./img/tkgs-aria-integration/tkgs-aria-15.png)
   <br>
 
 - *Kubernetes POD and Container Availability:* <br>
