@@ -70,7 +70,7 @@ envoy:
  pspNames: "vmware-system-privileged"
 ```
 
-For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-contour.html)
+For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-contour.html)
 
 > **Note** You can leave the default settings if you don’t need to customize the package installation.
 
@@ -111,7 +111,7 @@ metrics:
   enabled: false
 ```
 
-For a full list of user-configurable values, see the official [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-harbor.html)
+For a full list of user-configurable values, see the official [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html)
 
 A screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation follows.
 
@@ -128,24 +128,16 @@ After installing Harbor, ensure that the installation status for the Harbor pack
 To install the Prometheus package, repeat the steps for package installation. An example YAML file for customizing Prometheus deployment follows.
 
 ```yaml
-namespace: tanzu-system-dashboards
-prometheus:
-  service:
-    type: LoadBalancer
-  pvc:
-    storageClassName: "vsan-default-storage-policy"
 ingress:
   enabled: true
-  virtual_host_fqdn: "prometheus.tanzu.lab"
-node_exporter:
-  daemonset:
-    hostNetwork: false
-alertmanager:
-  pvc:
-    storageClassName: "vsan-default-storage-policy"
+  virtual_host_fqdn: "prometheus.sfo01.rainpole.vmw"
+  prometheus_prefix: "/"
+  alertmanager_prefix: "/alertmanager/"
+  prometheusServicePort: 80
+  alertmanagerServicePort: 80
 ```
 
-For a full list of user-configurable values, see the official [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-prometheus.html)
+For a full list of user-configurable values, see the official [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-prometheus.html)
 
 An example screenshot of a customized Prometheus installation follows.
 
@@ -164,12 +156,14 @@ To install the Grafana package, repeat the steps for the package installation. A
 > **Note** By default, Grafana is configured to use Prometheus as its data source. If you have customized the Prometheus deployment namespace and Prometheus is not deployed in the default namespace, **tanzu-system-monitoring**, you must change the Grafana data source configuration as shown in the YAML code that follows.
 
 ```yaml
+grafana:
+  service:
+    type: NodePort
 ingress:
-  virtual_host_fqdn: grafana.tanzu.lab
-namespace: tanzu-system-monitoring
+  virtual_host_fqdn: "grafana.sfo01.rainpole.vmw"
 ```
 
-For a full list of user-configurable values, see the official [Grafana documentation]https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-grafana.html)
+For a full list of user-configurable values, see the official [Grafana documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-grafana.html)
 
 An example screenshot for customizing your Grafana installation follows.
 
@@ -185,11 +179,10 @@ After installing Grafana, ensure that the installation status for the Grafana pa
 
 You can use Fluent Bit to gather logs from management clusters or Tanzu Kubernetes clusters running in vSphere, Amazon EC2, and Azure. You can then forward them to a log storage provider such as [Elastic Search](https://www.elastic.co/), [Kafka](https://www.confluent.io/confluent-operator/), [Splunk](https://www.splunk.com/), or an HTTP endpoint.
 
-The example shown in this document uses an HTTP endpoint [vRealize Log Insight Cloud](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html) for forwarding logs from Tanzu Kubernetes clusters.
+The example shown in this document uses an HTTP endpoint [VMware Aria Operations for Logs](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html) for forwarding logs from Tanzu Kubernetes clusters.
 
-A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the official [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-fluentbit.html).
+A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the official [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-fluentbit.html).
 
-Before you add the following YAML code in TMC for installing Fluent Bit, you must [create an API key](https://vmc.techzone.vmware.com/resource/implement-centralized-logging-tanzu-kubernetes-grid-fluent-bit).
 
 ```yaml
 namespace: "tanzu-system-logging"
