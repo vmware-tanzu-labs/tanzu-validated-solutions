@@ -40,17 +40,15 @@ The configuration of cluster topology contains the following options:
 
 
 ## ClusterClass and Cluster CRD use cases in TKGm:
-- ### Private Image Repo Configuration
-  - **For New Clusters**: 
-    - <https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-secret.html#custom-ca>
-  - **For Existing Clusters**: 
-    - <https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-secret.html#add-custom-ca>
-- ### Node Resizing/Vertical Scaling(CPU, Memory)
+- Private Image Repo Configuration
+  - [For New Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-secret.html#custom-ca) 
+   
+  - [For Existing Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-secret.html#add-custom-c)
 
-  - <https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-scale.html#class-topology>
+- [Node Resizing/Vertical Scaling(CPU, Memory)](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.2/using-tkg-22/workload-clusters-scale.html#class-topology)
 
-- ### Creating Clusters using Custom ClusterClass
-  -  <https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-cclass.html>
+- [Creating Clusters using Custom ClusterClass](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-clusters-cclass.html)
+
 
 
 
