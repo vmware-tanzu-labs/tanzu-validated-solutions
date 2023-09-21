@@ -4,20 +4,12 @@ on:
   push:
 
 jobs:
-  spell-check:
+  spellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: setup python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      # https://github.com/streetsidesoftware/cspell-action
+      - uses: streetsidesoftware/cspell-action@v3
         with:
-          python-version: 3.8 
-      - name: check for wrapped links
-        run: |
-          python scripts/wordlist.py check wordlist.txt
-      - uses: actions/setup-node@v1
-        name: Run spell check
-        with:
-          node-version: "14"
-      - run: npm install -g cspell
-      - run: cspell --config ./cspell.json
+          incremental_files_only: true
+          config: '/cspell.json'
