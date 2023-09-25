@@ -8,21 +8,21 @@ You can install Tanzu packages via the CLI by invoking the `tanzu package instal
 
 ## General Instructions for Installing a Package from Tanzu Mission Control
 
-VMware recommends installing packages on Tanzu Kubernetes clusters through Tanzu Mission Control. The general procedure for using Tanzu Mission Control to install a single package on a particular cluster is as follows:
+We recommend installing packages on Tanzu Kubernetes clusters through Tanzu Mission Control. The general procedure for using Tanzu Mission Control to install a single package on a particular cluster is as follows:
 
-1. Log in to the Tanzu Mission Control portal and go to the **Catalog** page. On the **Available** tab, you'll see a set of tiles that represent the packages available for installation.
+1. Log in to the Tanzu Mission Control portal, and go to the **Catalog** page. On the **Available** tab, you'll see a set of tiles that represent the packages available for installation.
 
   ![Tanzu Mission Control Catalog page showing available packages](img/tanzu-pkgs/tanzu-pkgs01.png)
 
-1. From the dropdown list of clusters under **Available packages for cluster**, select the cluster on which to install a package.
+1. From the drop-down menu of clusters under **Available packages for cluster**, select the cluster on which to install a package.
 1. Select the package to install.
-1. On the package details screen for that package, click **Install Package**.
-1. Configure the package. (Details for configuring common packages follow.)
-1. Verify that the package is shown in the list of installed packages for that cluster and that the package **Status** is **Succeeded**.
+1. On the package details screen, click **Install Package**.
+1. Configure the package. (follow the details for configuring common packages).
+1. Verify that the package is shown in the list of installed packages for that cluster, and that the package **Status** is **Succeeded**.
 
 ### Install Cert-Manager
 
-The first package that you should install on your cluster is [**cert-manager**](https://github.com/cert-manager/cert-manager). This package adds certificates and certificate issuers as resource types in Kubernetes clusters and simplifies the process of obtaining, renewing, and using those certificates.
+The first package that you should install on your cluster is [**cert-manager**](https://github.com/cert-manager/cert-manager). This package adds certificates and certificate issuers as resource types in Kubernetes clusters, and simplifies the process of obtaining, renewing, and using those certificates.
 
 Click the cert-manager package tile on the **Catalog page** to navigate to the install package page. Click **Install Package** to navigate to the package details page. The package details page shows the metadata provided by the package author.
 
@@ -30,9 +30,9 @@ On the package details page, click **Install Package**.
 
 ![Screenshot of the cert-manager package details page](img/tanzu-pkgs/tanzu-pkgs02.png)
 
-On the **Install** page, provide a name for the installed instance of the package and select the version to install. You can customize the package installation by using the pencil icon under the Table View option to edit the configuration parameters.
+On the **Install** page, specify a name for the installed instance of the package, and select the version to install. You can customize the package installation by using the pencil icon under the Table View option to edit the configuration parameters.
 
-After supplying any custom parameters, click **Install Package** to initiate the installation.
+After specifying any custom parameters, click **Install Package** to initiate the installation.
 
 ![Screenshot of the cert-manager install screen](img/tanzu-pkgs/tanzu-pkgs03.png)
 
@@ -50,9 +50,9 @@ Click **Install Package** to initiate the installation.
 
 ![Screenshot of Contour package details screen](img/tanzu-pkgs/tanzu-pkgs05.png)
 
-Provide a name for the installed package and select the version that you want to install. You can customize your installation by entering the user-configurable values in YAML format under the **Overlay YAML** option.
+Specify a name for the installed package, and select the version that you want to install. You can customize your installation by entering the user-configurable values in YAML format under the **Overlay YAML** option.
 
-An example YAML file for customizing the installation of Contour follows.
+Below is a sample YAML file for customizing the installation of Contour:
 
 ```yaml
 infrastructure_provider: vsphere
@@ -70,9 +70,9 @@ envoy:
  pspNames: "vmware-system-privileged"
 ```
 
-For a full list of user-configurable values, see the official Contour [documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-contour.html)
+For a full list of user-configurable values, see the [Contour documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-contour.html).
 
-> **Note** You can leave the default settings if you don’t need to customize the package installation.
+> **Note** You can leave the default settings blank if you don’t want to customize the package installation.
 
 ![Screenshot of the Contour installation screen showing a YAML overlay file](img/tanzu-pkgs/tanzu-pkgs06.png)
 
@@ -84,36 +84,33 @@ After installing Contour, ensure that the installation status for the Contour pa
 
 [Harbor](https://goharbor.io/) is an open-source container registry. The Harbor registry may be used as a private registry for container images that you want to deploy to Tanzu Kubernetes clusters.
 
-To install the Harbor package, repeat the steps for package installation. An example YAML file for customizing Harbor deployment follows.
+To install the Harbor package, repeat the steps for package installation. Below is a sample YAML file for customizing Harbor deployment:
 
-> **Note** you will need to provide credentials where indicated.
+> **Note** Provide the credentials where indicated.
 
 ```yaml
-hostname: registry.tanzu.lab
+hostname: harbor-01.sfo01.rainpole.vmw
 enableContourHttpProxy: true
-harborAdminPassword: <insert harborAdminPassword>
-secretKey: <insert secretKey>
+harborAdminPassword: VMware1!
+secretKey: aeSNgoVci0crojzW
 database:
-  password: <insert database.password>
+  password: dPa054uRxSCbldWm
 core:
-  secret: <insert core.secret>
-  xsrfKey: <insert core.xsrfKey>
+  secret: xiS6goX67FVkmHIp
+  xsrfKey: JFvkk6QJn0A3NLipPg36pNJmgnaVhvdE
 jobservice:
-  secret: <insert jobservice.secret>
+  secret: HJVa7fqPCUMkRCkk
 registry:
-  secret: <insert registry.secret>
+  secret: jghq2gfXWt6f1ffK
 notary:
   enabled: true
 trivy:
   enabled: true
-  skipUpdate: false
-metrics:
-  enabled: false
 ```
 
-For a full list of user-configurable values, see the official [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html)
+For a full list of user-configurable values, see the [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html).
 
-A screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation follows.
+Below is a screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation:
 
 ![Screenshot of Harbor installation page showing a sample YAML customization file](img/tanzu-pkgs/tanzu-pkgs08.png)
 
@@ -137,9 +134,9 @@ ingress:
   alertmanagerServicePort: 80
 ```
 
-For a full list of user-configurable values, see the official [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-prometheus.html)
+For a full list of user-configurable values, see the [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-prometheus.html).
 
-An example screenshot of a customized Prometheus installation follows.
+Below is a sample screenshot of a customized Prometheus installation:
 
 ![Screenshot showing customized Prometheus installation](img/tanzu-pkgs/tanzu-pkgs10.png)
 
@@ -163,9 +160,9 @@ ingress:
   virtual_host_fqdn: "grafana.sfo01.rainpole.vmw"
 ```
 
-For a full list of user-configurable values, see the official [Grafana documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-grafana.html)
+For a full list of user-configurable values, see the [Grafana documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-grafana.html).
 
-An example screenshot for customizing your Grafana installation follows.
+Below is a sample screenshot for customizing your Grafana installation:
 
 ![Screenshot of Install Grafana screen showing custom YAML file](img/tanzu-pkgs/tanzu-pkgs12.png)
 
@@ -181,7 +178,7 @@ You can use Fluent Bit to gather logs from management clusters or Tanzu Kubernet
 
 The example shown in this document uses an HTTP endpoint [VMware Aria Operations for Logs](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html) for forwarding logs from Tanzu Kubernetes clusters.
 
-A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the official [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-fluentbit.html).
+A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-fluentbit.html).
 
 
 ```yaml
@@ -214,7 +211,7 @@ fluent_bit:
         Path /var/log/containers/*.log
 ```
 
-An example screenshot for fluent-bit installation follows.
+Below is a sample screenshot for fluent-bit installation:
 
 ![Screenshot showing Fluent Bit installation](img/tanzu-pkgs/tanzu-pkgs14.png)
 
