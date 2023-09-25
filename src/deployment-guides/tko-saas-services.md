@@ -27,7 +27,7 @@ Managing Tanzu Kubernetes Clusters lifecycle from Tanzu Mission Control involves
 
 Before managing Tanzu Kubernetes Grid clusters lifecycle from Tanzu Mission Control, complete the following:
 
-* Review [About Getting Started with VMware Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-getstart/GUID-6BCCD353-CE6A-494B-A1E4-72304DC9FA7F.html) for information about setting up and using VMware Tanzu Mission Control.
+* Review [About Getting Started with VMware Tanzu Mission Control](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tmc-getting-started/index-gs.html) for information about setting up and using VMware Tanzu Mission Control.
 * Ensure you have a subscription to Tanzu Mission Control.
 * Create a cluster group in Tanzu Mission Control.
 * Create a workspace in the Tanzu Mission Control.

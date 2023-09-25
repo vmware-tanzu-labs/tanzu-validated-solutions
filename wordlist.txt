@@ -19,6 +19,7 @@ CoreDNS
 CPUs
 CRD
 datacenter
+datacenters
 DISA
 disambiguates
 DNAT

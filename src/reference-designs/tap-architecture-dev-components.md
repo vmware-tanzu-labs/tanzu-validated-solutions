@@ -4,19 +4,20 @@ VMware Tanzu Application Platform (informally known as TAP) provides development
 
 ## Application Workloads
 
-Tanzu Application Platform allows developers to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, etc.
+Tanzu Application Platform allows developers to quickly build and test applications. You can turn source code into a workload that runs in a container with a URL. A workload allows users to choose application specifications, such as repository location, environment variables, service binding, and so on.
 
-When using the Out of the Box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are:
+While using the out-of-the-box Supply Chain, the `apps.tanzu.vmware.com/workload-type` annotation selects which style of deployment is suitable for your application. The valid values are as follows:
 
 | Workload Type   | Description  | Indicators
 |---            |---                |---
 web | Scalable Web Applications | - Scales based on request load <br> - Automatically exposed by means of HTTP Ingress <br> - Does not perform background work <br> - Works with Service Bindings <br> - Stateless
-server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or LoadBalancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
+server | Traditional Applications | - Provides HTTP or TCP services on the network <br> - Exposed by means of external Ingress or Load Balancer settings <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
 worker | Background Applications | - Does not provide network services <br> - Not exposed externally as a network service <br> - Might perform background work from a queue <br> - Works with Service Bindings <br> - Fixed scaling, no disk persistence
 
 ## List of Tanzu Application Platform Developer Components (Inner-Loop)
 
-Tanzu Application Platform Dev components include, but are not limited to, the following:
+Tanzu Application Platform Dev components include the following options:
+>**Note** The Tanzu Application Dev components are not limited to the below options only.
 
 * Accelerator
 * API Portal
@@ -33,25 +34,21 @@ The Application Accelerator user interface (UI) enables you to discover availabl
 
 ![Accelerator Architecture](img/tap-architecture-planning/accelerator-arch.jpg)
 
-Application Accelerator allows you to generate new projects from files in Git repositories. An `accelerator.yaml` file in the repository declares input options for the accelerator. Accelerator custom resources (CRs) control which repositories appear in the Application Accelerator UI. The Accelerator controller reconciles the CRs with a Flux2 Source Controller to fetch files from GitHub or GitLab.
-
-See [Tanzu Application Platform Accelerator](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/application-accelerator-about-application-accelerator.html) for more information.
+Application Accelerator allows you to generate new projects from files in Git repositories. An `accelerator.yaml` file in the repository declares input options for the accelerator. Accelerator custom resources (CRs) control which repositories appear in the Application Accelerator UI. The Accelerator controller reconciles the CRs with a Flux2 Source Controller to fetch files from GitHub or GitLab. For more information, see [Tanzu Application Platform Accelerator](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/application-accelerator-about-application-accelerator.html).
 
 ## API Portal
 
-API portal enables API consumers to find APIs they can use in their own applications. API portal assembles its dashboard and detailed API documentation views by ingesting OpenAPI documentation from the source URLs.
-
-See [Tanzu Application Platform API portal](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-portal-install-api-portal.html) for more information.
+API portal enables API consumers to find APIs they can use in their own applications. API portal assembles its dashboard and detailed API documentation views by ingesting OpenAPI documentation from the source URLs. For more information, see [Tanzu Application Platform API portal](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-portal-install-api-portal.html).
 
 ## AppSSO
 
-The AppSSO conforms to the OIDC standard, and enables the use of external identity providers for user management, registration, and authentication. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, etc.
+The AppSSO conforms to the OIDC standard, and enables the use of external identity providers for user management, registration, and authentication. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, and so on.
 
 ### AppSSO Architecture
 
 ![AppSSO Architecture](img/tap-architecture-planning/appsso-arch.jpg)
 
-The following components must be installed on the `run` cluster.
+The following components must be installed on the `run` cluster:
 
 - **IdentityProvider** - these include social media providers, such as, Google, Facebook, or SAML providers, such as, Active Directory.
 - **AuthServer** - the intermediary between the identity provider and the client application, where one or more identity providers are defined.
@@ -84,7 +81,7 @@ spec:
 
 ```
 
-The values in the `identityProviders` section can be retrieved from the identity provider and set here. For example, the `issuerURI`, in this case, is `Auth0`. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, etc.
+The values in the `identityProviders` section can be retrieved from the identity provider and set here. For example, the `issuerURI`, in this case, is `Auth0`. It supports OIDC providers such as Microsoft Active Directory, Okta, Google, Facebook, and so on.
 
 ```
 kind: ClientRegistration
@@ -109,29 +106,27 @@ spec:
 
 ```
 
-The settings in `ClientRegistration` contain the redirectUrl pointing to a page in the end-user application to be redirected to after successful authentication. The settings here also reference the AuthServer by its pod’s labels on behalf of the end-user application.
-
-See [Tanzu Application Platform AppSSO](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/app-sso-about.html) for more information.
+The settings in `ClientRegistration` contain the redirectURL pointing to a page in the end-user application to be redirected to after successful authentication. The settings here also reference the AuthServer by its pod’s labels on behalf of the end-user application. For more information, see [Tanzu Application Platform AppSSO](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-about.html).
 
 ## API Auto Registration
 
-API Auto Registration automates the registration of API specifications defined in a workload’s configuration and makes them accessible in the Tanzu Application Platform GUI without additional steps. An automated workflow, using a supply chain, leverages API Auto Registration to create and manage a Kubernetes Custom Resource (CR) of kind [APIDescriptor](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-auto-registration-key-concepts.html). It automatically generates and provides API specifications in OpenAPI, AsyncAPI, GraphQL, or gRPC API formats to the Tanzu Application GUI [API Documentation plugin](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/tap-gui-plugins-api-docs.html).
+API Auto Registration automates the registration of API specifications defined in a workload’s configuration and makes them accessible in the Tanzu Application Platform GUI without additional steps. An automated workflow, using a supply chain, leverages API Auto Registration to create and manage a Kubernetes Custom Resource (CR) of kind [APIDescriptor](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-key-concepts.html). It automatically generates and provides API specifications in OpenAPI, AsyncAPI, GraphQL, or gRPC API formats to the Tanzu Application GUI [API Documentation plugin](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/tap-gui-plugins-api-docs.html).
 
 ### Tanzu Application Platform GUI Automated Workflow
 
 ![TAP GUI automated workflow](img/tap-architecture-planning/api-auto-regis-workflow.jpg)
 
-The API Documentation plugin displays a list of APIs provided by components registered in the Catalog providing an easy way for developers to find APIs in a single location.
+The API Documentation plug-in displays a list of APIs provided by components registered in the Catalog providing an easy way for developers to find APIs in a single location.
 
 API Auto Registration components are installed by the `run` and `full` profiles.
 
 ### Recommendations
 
-- The API Auto Registration package configuration in `run` clusters [must be updated](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-auto-registration-usage.html#update-values) to include the Tanzu Application Platform GUI URL allowing it to register workload APIs into the GUI in the `view` cluster.
+- The API Auto Registration package configuration in `run` clusters [must be updated](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-usage.html#update-values) to include the Tanzu Application Platform GUI URL allowing it to register workload APIs into the GUI in the `view` cluster.
 - Workload configuration files must set the `register-api` property to true to enable this feature and include the `api_descriptor` parameter. For example: `apis.apps.tanzu.vmware.com/register-api: "true"`. 
 - To use the OpenAPI “TRY IT OUT” feature in Tanzu Application GUI, the Workload must configure Cross-origin Resource Sharing (CORS) to allow requests originating from the GUI.
 
-To learn more about API Auto Registration, see [API Auto Registration](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/api-auto-registration-about.html).
+For more information about API Auto Registration, see [API Auto Registration](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/api-auto-registration-about.html).
 
 ## AppLiveView
 
@@ -176,20 +171,20 @@ Application workloads require actuator endpoints to report metrics from within t
 
 ## Supply Chain Security Tools (SCST) - Scan
 
-The Scan package includes enterprise-ready source code and container image scanning using Grype out of the box, with support planned for Snyk and Carbon Black. It integrates with the Tanzu Application Platform user interface by reading scan results from the SCST Store and displaying detailed reports of CVEs found by Scan during a build process. It can prevent software with vulnerabilities from being deployed in production environments through the use of scan policies to protect the network.
+The Scan package includes enterprise-ready source code and container image scanning using the out-of-the-box Grype, with support planned for Snyk and Carbon Black. It integrates with the Tanzu Application Platform user interface by reading scan results from the SCST Store and displaying detailed reports of CVEs found by Scan during a build process. It can prevent software with vulnerabilities from being deployed in production environments through the use of scan policies to protect the network.
 
 ### SCST Architecture
 
 ![SCST Architecture](img/tap-architecture-planning/scst-arch.jpg)
 
-The following are installed by default in the `build` profile.
+By default, the following components are installed in the `build` profile:
 
-- Scan Controller, enables the use of a scanner - packaged in `scanning.apps.tanzu.vmware.com`.
-- Grype scanner, (OOTB), executes static source code and image scans - packaged in `grype.scanning.apps.tanzu.vmware.com`.
+- Scan Controller - enables the use of a scanner. This component is packaged in `scanning.apps.tanzu.vmware.com`.
+- Out-of-the-box Grype scanner - executes static source code and image scans - packaged in `grype.scanning.apps.tanzu.vmware.com`.
 
-The Tanzu CLI plugins include the following.
+The Tanzu CLI plugins include the following:
 
-- Insight, used to create configuration settings for ScanController, and for querying the SCST Store source and image scan results.
+- Insight - used to create configuration settings for ScanController, and for querying the SCST Store source and image scan results.
 
 The relevant profile settings are only configured in the `build` profile.
 
@@ -215,6 +210,6 @@ grype:
 
 ## CI/CD Pipelines
 
-Tanzu Application Platform supports Tekton pipelines using `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. See [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/tekton-tekton-about.html) for more information.
+Tanzu Application Platform supports Tekton pipelines using the `tekton-pipelines package`. It allows developers to build, test, and deploy across cloud providers and on-premises systems. For more information, see [Tekton documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/tekton-tekton-about.html).
 
-To learn more about all Tanzu Application Platform components, see [Component documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.5/tap/components.html).
+To learn more about all Tanzu Application Platform components, see [Component documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/components.html).
