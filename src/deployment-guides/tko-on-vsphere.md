@@ -10,7 +10,7 @@ You can use VMware Service Installer for VMware Tanzu to automate this deploymen
 
 VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
 
-To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with vSphere Distributed Switch Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/2.1/service-installer/GUID-index.html).
+To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with vSphere Distributed Switch Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/2.3.0/service-installer/GUID-index.html).
 
 Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
 
@@ -47,7 +47,7 @@ The general requirements for deploying Tanzu for Kubernetes Operations on vSpher
 * VM folders to collect the Tanzu Kubernetes Grid VMs.
 * A datastore with sufficient capacity for the control plane and worker node VM files.
 * Network Time Protocol (NTP) service running on all hosts and vCenter.
-* A host, server, or VM based on Linux, MacOS, or Windows that acts as your bootstrap machine and that has docker installed. For this deployment, a virtual machine based on Photon OS is used.
+* A host, server, or VM based on Linux, MacOS, or Windows that acts as your bootstrap machine, and that has docker installed. For this deployment, a virtual machine based on Photon OS is used.
 * Depending on the OS flavor of the bootstrap VM, download and configure the **kubectl cluster CLI 1.26.5** from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). As part of this documentation, refer to the section to configure required packages on the Photon OS machine.
 
 * Download **Tanzu CLI v0.90.1** from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/details?downloadGroup=TCLI-0901&productId=1431). Starting with TKG 2.3.0, [Tanzu Core CLI](https://customerconnect.vmware.com/downloads/details?downloadGroup=TCLI-0901&productId=1431) is now distributed separately from Tanzu Kubernetes Grid. For instructions on how to install the Tanzu CLI for use with Tanzu Kubernetes Grid, refer [Install the Tanzu CLI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/install-cli.html).
@@ -60,7 +60,7 @@ The general requirements for deploying Tanzu for Kubernetes Operations on vSpher
   * Photon v3 Kubernetes v1.26.5 OVA
   * Ubuntu 2004 Kubernetes v1.26.5 OVA  
 
-> **Note** You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and import them to deploy workload clusters on the intended Kubernetes versions.
+> **Note** You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x), and import them to deploy workload clusters on the intended Kubernetes versions.
 
 > **Note** In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
 
@@ -85,7 +85,7 @@ Ensure that the firewall is set up as described in [Firewall Requirements](https
 
 ## Subnet and CIDR Examples
 
-For this demonstration, this document makes use of the following CIDR for Tanzu for Kubernetes Operations deployment.
+For this demonstration, this document uses the following CIDR for Tanzu for Kubernetes Operations deployment.
 
 |**Network Type**|**Port Group Name**|**Gateway CIDR**|**DHCP Pool**|**NSX ALB IP Pool**|
 | --- | --- | --- | --- | --- |
@@ -125,7 +125,7 @@ The following table provides a sample IP address and FQDN set for the NSX Advanc
 |Node 3 Secondary |172.16.10.13|`sfo01albctlr01c.sfo01.rainpole.vmw`|
 |HA Address|172.16.10.10|`sfo01albctlr01.sfo01.rainpole.vmw`|
 
-Follow these steps to deploy and configure NSX Advanced Load Balancer:
+Perform the following steps to deploy and configure NSX Advanced Load Balancer:
 
 1. [Deploy NSX Advanced Load Balancer](#dep-nsx-alb)
 1. [NSX Advanced Load Balancer: Initial setup](#nsx-alb-init)
@@ -137,7 +137,7 @@ Follow these steps to deploy and configure NSX Advanced Load Balancer:
 
 ### <a id="dep-nsx-alb"> </a> Deploy NSX Advanced Load Balancer
 
-As a prerequisites, you must have the NSX Advanced Load Balancer 22.1.2 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“nsx-alb-components”**  and place it under the folder **“nsx-alb-components”**.
+As a prerequisite, you must have the NSX Advanced Load Balancer 22.1.3 OVA downloaded and imported to the content library. Deploy the NSX Advanced Load Balancer under the resource pool **“tkg-alb-components”**  and place it under the folder **“tkg-alb-components”**.
 
 To deploy NSX Advanced Load Balancer, complete the following steps.
 
@@ -145,8 +145,8 @@ To deploy NSX Advanced Load Balancer, complete the following steps.
 1. Select the content library under which the NSX Advanced Load Balancer OVA is placed.
 1. Click on **OVA & OVF Templates**.
 1. Right-click the NSX Advanced Load Balancer image and select **New VM from this Template**.
-1. On the Select name and folder page, enter a name and select a folder for the NSX Advanced Load Balancer VM as **nsx-alb-components**.
-1. On the Select a compute resource page, select the resource pool **nsx-alb-components**.
+1. On the Select name and folder page, enter a name and select a folder for the NSX Advanced Load Balancer VM as **tkg-alb-components**.
+1. On the Select a compute resource page, select the resource pool **tkg-alb-components**.
 1. On the Review details page, verify the template details and click **Next**.
 1. On the Select storage page, select a storage policy from the VM Storage Policy drop-down menu and choose the  datastore location where you want to store the virtual machine files.
 1. On the Select networks page, select the network **sfo01-w01-vds01-albmanagement** and click **Next**.
@@ -156,7 +156,7 @@ To deploy NSX Advanced Load Balancer, complete the following steps.
     ![Deployment of NSX Advanced Load Balancer](img/tko-on-vsphere/6-AVI-ova-config.png)
 
 A new task for creating the virtual machine appears in the **Recent Tasks** pane. After the task is complete, the NSX Advanced Load Balancer virtual machine is created on the selected resource. Power on the virtual machine and give it a few minutes for the system to boot. Upon successful boot up, go to NSX Advanced Load Balancer on your browser.  
-> **Note** While the system is booting up, a blank web page or a 503 status code may appear.  
+> **Note** While the system is booting up, a blank web page or a 503 status code might appear.  
 
 ### <a id="nsx-alb-init"> </a> NSX Advanced Load Balancer: Initial Setup
 
@@ -186,7 +186,7 @@ If you did not select the **Setup Cloud After** option before saving, the initia
 
 ### NSX Advanced Load Balancer: NTP Configuration
 
-To configure NTP, go to **Administration** > **System Settings** > Edit and under **DNS/NTP** tab, add your NTP server details and click **Save**.
+To configure NTP, go to **Administration** > **System Settings** > **Edit**, and under **DNS/NTP** tab, add your NTP server details and click **Save**.
 
 > **Note** You may also delete the default NTP servers.
 
@@ -210,11 +210,11 @@ To configure NTP, go to **Administration** > **System Settings** > Edit and unde
 
 ### <a id="nsx-alb-ha"> </a> NSX Advanced Load Balancer: Controller High Availability
 
-In a production environment, it is recommended to deploy additional controller nodes and configure the controller cluster for high availability and disaster recovery. Adding 2 additional nodes to create a 3-node cluster provides node-level redundancy for the controller and also maximizes performance for CPU-intensive analytics functions.
+In a production environment, we recommend to deploy additional controller nodes and configure the controller cluster for high availability and disaster recovery. Adding 2 additional nodes to create a 3-node cluster provides node-level redundancy for the controller and also maximizes performance for CPU-intensive analytics functions.
 
 To run a 3-node controller cluster, you deploy the first node and perform the initial configuration, and set the cluster IP address. After that, you deploy and power on two more controller VMs, but you must not run the initial configuration wizard or change the admin password for these controllers VMs. The configuration of the first controller VM is assigned to the two new controller VMs.
 
-The first controller of the cluster receives the Leader role. The second and third controllers work as Follower.
+The first controller of the cluster receives the Leader role. The second and third controllers work as the Follower.
 
 Perform the following steps to configure NSX Advanced Load Balancer cluster.
 
@@ -236,7 +236,7 @@ Perform the following steps to configure NSX Advanced Load Balancer cluster.
 
     After you complete these steps, the primary NSX Advanced Load Balancer controller becomes the leader for the cluster and invites the other controllers to the cluster as members.
 
-    NSX Advanced Load Balancer then performs a warm reboot of the cluster. This process can take approximately 10-15 minutes. You are automatically logged out of the controller node where you are currently logged in. Enter the cluster IP address in the browser, to see details about the cluster formation task.
+    NSX Advanced Load Balancer then performs a warm reboot of the cluster. This process can take approximately 10-15 minutes. You are automatically logged out of the controller node where you are currently logged in. To see details about the cluster formation task, enter the cluster IP address in the browser.
 
     ![Controller initialization](img/tko-on-vsphere/16.ALB-Controller-initialization.png)
 
@@ -260,7 +260,7 @@ The default system-generated controller certificate generated for SSL/TSL connec
     ![Self-signed certificate - Certificate tab](img/tko-on-vsphere/18.ALB-Certificate-02.png)
 
 1. After the certificate is created, capture the certificate contents as this is required while deploying the Tanzu Kubernetes Grid management cluster.
-  To capture the certificate content, click on the Download icon next to the certificate, and click **Copy to clipboard** under **Certificate**.
+  To capture the certificate content, click the **Download** icon next to the certificate, and click **Copy to clipboard** under **Certificate**.
 
     ![Copy certificate contents](img/tko-on-vsphere/19.ALB-Certificate-contents.png)
 
@@ -424,7 +424,7 @@ The deployment of the Tanzu Kubernetes Grid management and workload clusters is 
 
 The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure for a macOS or Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/install-cli.html).
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For information on how to configure for a macOS or Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/install-cli.html).
 
 The bootstrap machine must meet the following prerequisites:
 
@@ -437,8 +437,8 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
 
 1. Download and unpack the following Linux CLI packages from [VMware Tanzu Kubernetes Grid Download Product page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
 
-   * VMware Tanzu CLI 2.1.0 for Linux
-   * kubectl cluster cli v1.24.9 for Linux
+   * VMware Tanzu CLI v0.90.1 for Linux
+   * kubectl cluster cli v1.26.5 for Linux
 
 1. Execute the following commands to install Tanzu Kubernetes Grid CLI, kubectl CLIs, and Carvel tools.
     ```bash
@@ -477,13 +477,13 @@ To install Tanzu CLI, Tanzu Plugins, and Kubectl utility on the bootstrap machin
    ## List installed plugins
     [root@tkg160-bootstrap ~] # tanzu plugin list
     Standalone Plugins
-    NAME                DESCRIPTION                                                         TARGET      VERSION  STATUS
-    isolated-cluster    Prepopulating images/bundle for internet-restricted environments    global      v0.30.1  installed
-    pinniped-auth       Pinniped authentication operations (usually not directly invoked)   global      v0.30.1  installed
-    management-cluster  Kubernetes management cluster operations                            kubernetes  v0.30.1  installed
-    package             Tanzu package management                                            kubernetes  v0.30.1  installed
-    secret              Tanzu secret management                                             kubernetes  v0.30.1  installed
-    telemetry           configure cluster-wide settings for vmware tanzu telemetry          kubernetes  v0.30.1  installed
+    NAME                DESCRIPTION                                                        TARGET      VERSION  STATUS
+    isolated-cluster    Prepopulating images/bundle for internet-restricted environments   global      v0.30.1  installed
+    pinniped-auth       Pinniped authentication operations (usually not directly invoked)  global      v0.30.1  installed
+    management-cluster  Kubernetes management cluster operations                           kubernetes  v0.30.1  installed
+    package             Tanzu package management                                           kubernetes  v0.30.1  installed
+    secret              Tanzu secret management                                            kubernetes  v0.30.1  installed
+    telemetry           configure cluster-wide settings for vmware tanzu telemetry         kubernetes  v0.30.1  installed
 
     ## Install Kubectl CLI
     gunzip kubectl-linux-v1.26.5+vmware.2.gz
@@ -593,7 +593,7 @@ Before you proceed with the management cluster creation, ensure that the base im
      > **Note** Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-byoi-index.html).
 * For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
-    > > **Note** Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
+    > **Note** Make sure you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
 
 1. In the vSphere client, right-click an object in the vCenter Server inventory and select **Deploy OVF template**.
 
@@ -709,7 +709,7 @@ The following procedure provides the required steps to deploy Tanzu Kubernetes G
 
         ![NSX Advanced Load Balancer settings for management cluster](img/tko-on-vsphere/41-Mgmt-cluster-6.png)
 
-    > **Note** With the above configuration, all the Tanzu workload clusters use `sfo01-w01-vds01-tkgclustervip` for control plane VIP network and `sfo01-w01-vds01-tkgworkloadvip` for  data plane network by default. If you would like to configure separate VIP networks for workload control plane/data networks, create a custom AKO Deployment Config (ADC) and provide the respective `NSXALB_LABELS` in the workload cluster config file. For more information on network separation and custom ADC creation, see [Configure Separate VIP Networks and Service Engine Groups in Different Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-network-nsx-alb-cp-endpoint.html).
+    > **Note** With the above configuration, all the Tanzu workload clusters use `sfo01-w01-vds01-tkgclustervip` for control plane VIP network and `sfo01-w01-vds01-tkgworkloadvip` for  data plane network by default. If you would like to configure separate VIP networks for workload control plane/data networks, create a custom AKO Deployment Config (ADC) and provide the respective `AVI_LABELS` in the workload cluster config file. For more information on network separation and custom ADC creation, see [Configure Separate VIP Networks and Service Engine Groups in Different Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-network-nsx-alb-cp-endpoint.html).
 
 1. (Optional) On the Metadata page, you can specify location and labels and click **Next**.
 
@@ -1049,7 +1049,7 @@ akodeploymentconfig.networking.tkg.tanzu.vmware.com/tanzu-ako-for-workload-l7-in
 ```
 <!-- /* cSpell:enable */ -->
 
-Use the following command to list all AKODeploymentConfig created under the management cluster:
+Use the following command to list all `AKODeploymentConfig` created under the management cluster:
 
 <!-- /* cSpell:disable */ -->
 ```
@@ -1098,10 +1098,10 @@ After the management cluster is registered with Tanzu Mission Control, the deplo
 5. On the **Configure** page, specify the following:
 
    - In the **vCenter** and **tlsThumbprint** fields, enter the details for authentication.
-   - From the  **datacenter**, **resourcePool**, **folder**, **network**, and **datastore** drop down, select the required information.
+   - From the  **datacenter**, **resourcePool**, **folder**, **network**, and **datastore** drop-down menu, select the required information.
    - From the **template** drop down, select the Kubernetes version.The latest supported version is preselected for you. 
    - In the **sshAuthorizedKeys** field, enter the SSH key that was created earlier.
-   - Enable aviAPIServerHAProvider.
+   - Enable **aviAPIServerHAProvider**.
 
     ![Kubernetes version, network and storage options](img/tko-on-vsphere/68-shared-service-4.png)
 
@@ -1186,7 +1186,7 @@ Now that the shared services cluster is successfully created, you may proceed wi
      ```
     <!-- /* cSpell:enable */ -->
 
-Now that the shared services cluster is successfully created, you may proceed with deploying the Harbor package. For more information, see Install [Harbor in Deploy User-Managed Packages in Workload Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html)
+Now that the shared services cluster is successfully created, you may proceed with deploying the Harbor package. For more information, see [Install Harbor for Service Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html).
 
 ## <a id="dep-workload-cluster"> </a> Deploy Tanzu Kubernetes Grid Workload Clusters
 
@@ -1257,4 +1257,4 @@ You can now configure SaaS components and deploy user-managed packages on the cl
 
 For information on how to configure the SaaS components, see [Configure Tanzu SaaS Components for Tanzu for Kubernetes Operations](./tko-saas-services.md).
 
-For information on how to deploy user-managed packages, see [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).
+For more information about deploying user-managed packages, see [Deploy User-Managed Packages in Workload Clusters](./tkg-package-install.md).
