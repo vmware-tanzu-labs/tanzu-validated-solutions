@@ -102,6 +102,7 @@ For this demonstration, we used the following CIDR for Tanzu Kubernetes Grid dep
 
 Here are the high-level steps for deploying Tanzu Kubernetes Grid on NSX networking in an air-gapped environment:
 
+
 - [Configure T1 Gateway and Logical Segments in NSX Data Center](#configurensxt)
 - [Deploy and Configure NSX Advanced Load Balancer](#deploynsxalb)
 - [Configure Bastion Host](#configure-bastion)
@@ -111,6 +112,7 @@ Here are the high-level steps for deploying Tanzu Kubernetes Grid on NSX network
 - [Deploy Tanzu Kubernetes Grid Shared Service Cluster](#deploy-tkg-shared-services)
 - [Deploy Tanzu Kubernetes Grid Workload Cluster](#deploy-workload-cluster)
 - [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-packages)
+
 
 ## <a id="configurensxt"> </a> Configure T1 Gateway and Logical Segments in NSX-T Data Center
 As a prerequisite, an NSX-T backed vSphere environment must be configured with at least one tier-0 gateway. A tier-0 gateway performs the functions of a tier-0 logical router. It processes traffic between the logical and physical networks. For more information about creating and configuring a tier-0 gateway, see [NSX documentation](https://docs.vmware.com/en/VMware-NSX/4.1/administration/GUID-E9E62E02-C226-457D-B3A6-FE71E45628F7.html).
