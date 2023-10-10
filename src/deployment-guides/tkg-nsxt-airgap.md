@@ -101,6 +101,7 @@ For this demonstration, we used the following CIDR for Tanzu Kubernetes Grid dep
 ## <a id=tkg-deployment-workflow> </a> Tanzu Kubernetes Grid Deployment Workflow
 
 Here are the high-level steps for deploying Tanzu Kubernetes Grid on NSX networking in an air-gapped environment:
+
 - [Configure T1 Gateway and Logical Segments in NSX Data Center](#configurensxt)
 - [Deploy and Configure NSX Advanced Load Balancer](#deploynsxalb)
 - [Configure Bastion Host](#configure-bastion)
