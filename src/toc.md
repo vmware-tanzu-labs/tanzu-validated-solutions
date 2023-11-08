@@ -24,4 +24,5 @@ This is the table of contents from which the Tanzu for Kubernetes Operations Ref
 - [Authentication with Pinniped](./reference-designs/pinniped-with-tkg.md)
     - [Prepare External Identity Management](./deployment-guides/pinniped-with-tkg.md)
 - [Enable Data Protection on a Workload Cluster and Configure Backup](./deployment-guides/tkg-data-protection.md)
+- [Network Port Reference Sheet](./reference-designs/tanzu-ports.md)
 - [ClusterClass Overview](./reference-designs/ClusterClass-Overview.md)
