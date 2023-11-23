@@ -109,83 +109,58 @@ stats-health: malformed IP address: ::
 ```
 This was a change made in the Tanzu packaging of Contour, where as of TAP 1.3, the behavior of Contour was changed and it’s defaulting to IPv6 with IPv4 compatibility now. However, TKGi currently does not support IPv6.
 
-To work around this issue:
-1. Install TAP without contour package by adding it under `excluded_packages` field in `tap-values.yaml`:
-    ```bash
-    excluded_packages:
-    - contour.tanzu.vmware.com
-    profile: full
-    ```
-1. Install the contour package now and once the reconcillation failed due to envoy pods being stuck in container creating state , pause the reconcillation for contour. <br>
-    `# tanzu package installed pause contour -n tap-install`
-    
-1. Edit the contour deployment and update the IPV6 to IPV4 in args section of contour. <br>
-    Default contour arguments which comes as part of contour package:
-    ```bash
-        - args:
-    
-            - serve
-    
-            - --incluster
-    
-            - '--xds-address=::'
-    
-            - --xds-port=8001
-    
-            - '--stats-address=::'
-    
-            - '--http-address=::'
-    
-            - '--envoy-service-http-address=::'
-    
-            - '--envoy-service-https-address=::'
-    
-            - '--health-address=::'
-    
-            - --contour-cafile=/certs/ca.crt
-    
-            - --contour-cert-file=/certs/tls.crt
-    
-            - --contour-key-file=/certs/tls.key
-    
-            - --config-path=/config/contour.yaml
-    ```
+To resolve this, add a simple overlay which will change the flags passed to the Contour deployment and switch it to use IPv4 instead of IPv6.
 
-    change these flags to use IPv4 arguments.
+1. Create a secret in `tap-install` namespace with the overlay like bellow:
 
     ```bash
-        - args:
-    
-            - serve
-    
-            - --incluster
-    
-            - --xds-address=0.0.0.0
-    
-            - --xds-port=8001
-    
-            - --stats-address=0.0.0.0
-    
-            - --http-address=0.0.0.0
-    
-            - --envoy-service-http-address=0.0.0.0
-    
-            - --envoy-service-https-address=0.0.0.0
-    
-            - --health-address=0.0.0.0
-    
-            - --contour-cafile=/certs/ca.crt
-    
-            - --contour-cert-file=/certs/tls.crt
-    
-            - --contour-key-file=/certs/tls.key
-    
-            - --config-path=/config/contour.yaml
-
+    apiVersion: v1
+    kind: Secret
+    metadata:
+    name: overlay-fix-contour-ipv6
+    namespace: tap-install
+    stringData:
+    overlay-contour-fix-ipv6.yml: |
+        #@ load("@ytt:overlay", "overlay")
+        #@overlay/match by=overlay.subset({"kind": "Deployment"}),expects=1
+        ---
+        spec:
+        template:
+            spec:
+            containers:
+            #@overlay/match by=overlay.map_key("name")
+            - name: contour
+                #@overlay/replace
+                args:
+                - serve
+                - --incluster
+                - '--xds-address=0.0.0.0'
+                - --xds-port=8001
+                - '--stats-address=0.0.0.0'
+                - '--http-address=0.0.0.0'
+                - '--envoy-service-http-address=0.0.0.0'
+                - '--envoy-service-https-address=0.0.0.0'
+                - '--health-address=0.0.0.0'
+                - --contour-cafile=/certs/ca.crt
+                - --contour-cert-file=/certs/tls.crt
+                - --contour-key-file=/certs/tls.key
+                - --config-path=/config/contour.yaml
     ```
+1. Run the below command to create the secret with above overlay config: <br>
+    `kubectl apply -f contour-overlay-fix-ipv6.yaml`
 
-1. Once you update this, envoy pod gets an IPv4 address and comes to running state.
+1. Now update the `package_overlays` section in TAP values file to instruct TAP to use this overlay and apply it to the contour package. 
+    ```bash
+    package_overlays:
+    - name: contour
+    secrets:
+    - name: overlay-fix-contour-ipv6
+    ```
+1. Now Install tap using the below command: <br>
+    `tanzu package install tap --values-file tap-values.yaml -p tap.tanzu.vmware.com -v <TAP:VERSION> -n tap-install`
 
+1. Above contour overlay will be applied during TAP installation and the envoy pods will enter into a running state and contour will successfully deploy as expected Verify contour deployment post TAP installation by running the below command: <br>
+    `kubectl get deploy contour -n tanzu-system-ingress -o yaml`
 
 
 ## Appendix A : TAP Generated labels on workload pods: 
