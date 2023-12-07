@@ -1,11 +1,11 @@
-# TKGi Cluster Preparation for Installing Tanzu Application Platform
+# TKGi Cluster Preparation for Installing Tanzu Application Platform (applicable for POC deployments only)
 
 While Tanzu Application Platform (informally known as TAP) works on any conformant Kubernetes cluster, every Kubernetes distribution can have certain unexpected quirks. While deploying TAP on TKGi clusters, you might come across the following issues. In this document, we'll outline the following issues and learn about the workarounds: 
 
 - NSX Tags limitation for TAP workload deployment on TKGi clusters.
 - TAP installation fails with Contour package error as IPv6 is not enabled on TKGi clusters.
 
-> **NOTE:** These workaround steps are recommended for only POC deployments, and should not be applied in production environments. You must also review the TAP and TKGi release notes for workarounds of these issues.
+>**Note** These workaround steps are recommended only for the POC deployments, and should not be applied in production environments. You must also review the TAP and TKGi release notes for workarounds of these issues.
 
 
 ## NSX Tags Limitation for TAP Workload Deployment on TKGi Clusters:
