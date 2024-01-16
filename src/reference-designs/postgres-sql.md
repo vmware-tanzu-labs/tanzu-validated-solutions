@@ -30,7 +30,7 @@ Deployment Details:
 - Backend Tanzu Infrastructure: Configured with Tanzu Kubernetes Grid 2.3.0
 - Helm version: v3.8.1
 - VCenter: 8.0.2(22617221)
-- NSX: 4.1.0.2.0.21761691
+- NSX: 4.1.0.2(21761691)
 - Kubernetes: v1.25.6
 
 Installation:
