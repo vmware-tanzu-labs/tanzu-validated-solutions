@@ -313,7 +313,8 @@ Now we deploy a server workload using AVI L7 and expose it externally. Below dia
     # kubectl get ingress,svc,deploy -l carto.run/workload-name=tanzu-java-web-app
 
     NAME                                                    CLASS    HOSTS                                          ADDRESS          PORTS     AGE
-    ingress.networking.k8s.io/tanzu-java-web-app   <none>   spring-sensors-consumer-web.INGRESS-DOMAIN   34.111.111.111   80, 443   37s
+    ingress.networking.k8s.io/tanzu-java-web-app            avi-lb   tanzu-java-web-app.INGRESS-DOMAIN   34.111.111.111   80, 443   37s
+
 
     NAME                                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                              AGE
     service/tanzu-java-web-app                 ClusterIP   None             <none>        80/TCP                                               3d1h
