@@ -21,9 +21,10 @@ ClusterConfigTemplate is an object in the supply chain, which consists of resour
 
 The `server` workload type allows you to deploy traditional network applications on Tanzu Application Platform.
 
-Using an application workload specification, you can build and deploy application source code to a manually-scaled Kubernetes deployment which exposes an in-cluster Service endpoint. Then you can use AVI LoadBalancer(L4) Services or Ingress(L7) resources to expose these applications outside the cluster. For more information, see `Use server workloads` section in [TAP Documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/workloads-server.html). 
+Using an application workload specification, you can build and deploy application source code to a manually-scaled Kubernetes deployment which exposes an in-cluster Service endpoint. Subsequently, you have the option to use AVI LoadBalancer (L4) Services or Ingress (L7) resources to expose these applications beyond the cluster. For more information, see `Use server workloads` section in [TAP Documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/workloads-server.html). 
 
-Tanzu Application Platform allows you to create new workload types. You start by adding an Ingress resource to the `server-template ClusterConfigTemplate` when this new type of workload is created.
+
+Tanzu Application Platform allows you to create new workload types. In this example, we'll explore the steps for adding an Ingress resource to the `server-template ClusterConfigTemplate` when this new type of workload is created.
 
 1. Save the existing server-template in a local file by running:
     ```bash
@@ -127,7 +128,7 @@ Tanzu Application Platform allows you to create new workload types. You start by
     kind: Deployment
     metadata:
     name: #@ data.values.workload.metadata.name
-    annota,,,,,,,,,, tions:
+    annotations:
         kapp.k14s.io/update-strategy: "fallback-on-replace"
         ootb.apps.tanzu.vmware.com/servicebinding-workload: "true"
         kapp.k14s.io/change-rule: "upsert after upserting servicebinding.io/ServiceBindings"
@@ -310,6 +311,10 @@ Now we deploy a server workload using AVI L7 and expose it externally. Below dia
 1. After the process finishes, you will see the Deployment, Service and Ingress(L7) resources similar to:
     ```bash
     # kubectl get ingress,svc,deploy -l carto.run/workload-name=tanzu-java-web-app
+
+    NAME                                                    CLASS    HOSTS                                          ADDRESS          PORTS     AGE
+    ingress.networking.k8s.io/tanzu-java-web-app   <none>   spring-sensors-consumer-web.INGRESS-DOMAIN   34.111.111.111   80, 443   37s
+
     NAME                                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                              AGE
     service/tanzu-java-web-app                 ClusterIP   None             <none>        80/TCP                                               3d1h
     service/tanzu-java-web-app-00001           ClusterIP   100.68.55.248    <none>        80/TCP,443/TCP                                       3d1h
