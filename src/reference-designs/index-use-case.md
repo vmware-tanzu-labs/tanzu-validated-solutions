@@ -8,5 +8,5 @@ For more information about Tanzu, see [Tanzu Documentation](https://docs.vmware.
 
 By using the diverse portfolio of Tanzu, you can cater to a wide range of use cases enabling develpers to develop, test, and deploy applications:
 
-- [High Availability Failover in PostgreSQL backed by Tanzu](./reference-designs/postgres-sql.md)
+- [High Availability Failover in PostgreSQL backed by Tanzu](./postgres-sql.md)
 
