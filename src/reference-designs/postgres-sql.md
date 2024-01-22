@@ -52,7 +52,7 @@ The following component versions and interoperability matrix are supported with 
     # kubectl create ns standby
     ```
 
-1. Deploy the primary node.
+1. Deploy the primary node. You can download the sample `values-primary.yaml` file from [here](./resources/postgres-sql/values-primary.yaml).
     ```bash
     # helm install primary-repmgr oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n primary -f values-primary.yaml
     NAME: primary-repmgr
@@ -67,7 +67,7 @@ The following component versions and interoperability matrix are supported with 
     APP VERSION: 16.1.0
     ```
 
-1. Deploy the standby node.
+1. Deploy the standby node. You can download the sample `values-standby.yaml` file from [here](./resources/postgres-sql/values-standby.yaml).
     ```bash
     # helm install standby-repmgr oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n standby -f values-standby.yaml
     NAME: standby-repmgr
