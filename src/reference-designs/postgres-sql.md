@@ -2,7 +2,7 @@
 
 High Availability (HA) failover in PostgreSQL supported by Tanzu-powered backend infrastructure plays a pivotal role in the domain of database management. This ensures uninterrupted accessibility and data integrity, offering protection against hardware failures, network issues, and unforeseen circumstances. The resilience of PostgreSQL is realized through a harmony of resilient replication mechanisms, and tools seamlessly orchestrating automatic transitions between primary and standby nodes within the Tanzu environment.
 
-## Componets
+## Components
 The following components have been utilized for the deployment of PostgreSQL High Availability (HA) failover system:
 
 ### Tanzu Infrastructure Integration
@@ -52,7 +52,7 @@ The following component versions and interoperability matrix are supported with 
     # kubectl create ns standby
     ```
 
-1. Deploy the primary node.
+1. Deploy the primary node. You can download the sample `primary-values.yaml` file from [here](./resources/postgres-sql/primary-values.yaml)
     ```bash
     # helm install primary-repmgr oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n primary -f values-primary.yaml
     NAME: primary-repmgr
@@ -67,7 +67,7 @@ The following component versions and interoperability matrix are supported with 
     APP VERSION: 16.1.0
     ```
 
-1. Deploy the standby node.
+1. Deploy the standby node. You can download the sample `standby-values.yaml` file from [here](./resources/postgres-sql/standby-values.yaml)
     ```bash
     # helm install standby-repmgr oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n standby -f values-standby.yaml
     NAME: standby-repmgr
@@ -100,9 +100,9 @@ The following component versions and interoperability matrix are supported with 
             value: <primary-svc-name>.svc.cluster.local
     …
     ```
-    > **Note**
-        > - Update the parameters `REPMGR_PARTNER_NODES`, `REPMGR_PRIMARY_HOST` to reflect the cluster's topology.
-        > - In the scenario described above, the testing involves interactions between distinct namespaces. As a result, we utilized `svc.cluster.local` to address the nodes. If you're setting up PostgreSQL nodes in separate clusters, it is mandatory to update the addressing information with either the Fully Qualified Domain Name (FQDN) or the IP address corresponding to each node in the respective clusters.
+    > **Note** <br>
+        - Update the parameters `REPMGR_PARTNER_NODES`, `REPMGR_PRIMARY_HOST` to reflect the cluster's topology. <br>
+        - In the scenario described above, the testing involves interactions between distinct namespaces. As a result, we utilized `svc.cluster.local` to address the nodes. If you're setting up PostgreSQL nodes in separate clusters, it is mandatory to update the addressing information with either the Fully Qualified Domain Name (FQDN) or the IP address corresponding to each node in the respective clusters.
 
     ```bash
     # kubectl edit sts/standby-repmgr-postgresql-ha-postgresql -n standby
