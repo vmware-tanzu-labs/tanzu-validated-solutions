@@ -1,5 +1,6 @@
-# Tanzu Use Case Documentation
+# Tanzu Solution Workbooks
 
-This is the table of contents from which the Tanzu Use Case Documentation site is built.
+This is the table of contents from which the Tanzu Solution Workbooks Documentation site is built.
 
-- [High Availability Failover in PostgreSQL backed by VMware Tanzu](./reference-designs/postgres-sql.md)
+- [Tanzu Solution Workbooks](./reference-designs/index-use-case.md)
+    - [High Availability Failover in PostgreSQL backed by Tanzu](./reference-designs/postgres-sql.md)
