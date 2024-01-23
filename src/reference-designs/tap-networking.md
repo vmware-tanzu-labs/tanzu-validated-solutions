@@ -19,8 +19,7 @@ The following table describes the networking flow in the Tanzu Application Platf
 |AppSso | Contour ingress | Run, Iterate | 443 | https | User request to AppSSO with login token (via shared ingress).Contour/envoy proxy access appsso service inside cluster.
 |Contour ingress /Envoy proxy | External Load Balancer | Run,View,Iterate | 443,80 | https(443) , http(80) | Shared ingress for view/run/iterate cluster.
 |Fluxcd source controller | Run,Build | External git/helm repository | 443,80 | https(443) , http(80) | Traffic to pull or push from git repo from internet egress.
-|Learning Center | Contour ingress| View (Learning Center package)  | 443,80 | https(443) , http(80) | Traffic routes through shared ingress.Contour/envoy proxy access learning center service inside cluster.
-|Supply Chain Security Tools/Metadata| Build (security scan plugin)| View (Gui CVE Dashboard)  | 443 | https | Traffic routes through shared ingress to report the scan results to view gui cve’s dashboard.
+|Supply Chain Security Tools/Metadata| Build (security scan plug-in)| View (Gui CVE Dashboard)  | 443 | WebSocket | Traffic routes through shared ingress to report the scan results to view gui cve’s dashboard.
 |Tanzu Application Platform Gui web| Contour ingress| View (tap-gui package)  | 443 | https | Traffic routes through shared ingress for external web url. Contour/envoy proxy access tap-gui service inside cluster.
 |Gui backend| View | Gui backend DB(postgres)  | 5432 | tcp | Gui backend DB within the k8s cluster to persist tap gui data (read/write), this traffic remains in-cluster if the database is hosted inside the same cluster.
 |Tanzu Build Service| Build | Third party dependencies repositories  | 443 | https | Downloading artifacts necessary to compile applications in different languages (Python, Java, .NET, JavaScript, golang, etc.).

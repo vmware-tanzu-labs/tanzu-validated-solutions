@@ -1,6 +1,6 @@
 # VMware Tanzu Application Platform Architecture
 
-The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.6. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.7. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
@@ -16,7 +16,7 @@ For production deployments, VMware recommends two fully independent instances of
 |TAP-001  | Install using multiple clusters.         |  Utilizing multiple clusters allows you to separate your workloads and environments while still leveraging combined build infrastructure.   |  Multiple cluster design requires more installation effort and possibly more maintenance versus a single cluster design.
 |TAP-002  | Create an operator sandbox environment.  |  An operator sandbox environment allows platform operators to test upgrades and architectural changes before introducing them to production. |  An operator sandbox requires additional computer resources.
 |TAP-003  | Utilize a single Build Cluster and multiple Run Clusters  | Utilizing a single Build Cluster with multiple Run Clusters creates the correct production environment for the build system vs separating into dev/test/qa/prod build systems. Additionally, a single Build Cluster ensures that the container image does not change between environments.  A single Build Cluster is also easier to manage than separate components. |  *Changes lower environments are not as separated as having separate build environments.*
-|TAP-004  | Utilize a View Cluster  | Utilizing a single View Cluster with multiple Run Clusters creates the correct production perception for the common systems like learning portal, GUI, app resource monitoring, etc. |  None
+|TAP-004  | Utilize a View Cluster  | Utilizing a single View Cluster with multiple Run Clusters creates the correct production perception for the common systems like developer portal, app resource monitoring, appsso, and so on. |  None
 
 ## Build Cluster Requirements
 
@@ -26,7 +26,7 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 ### Kubernetes Requirements - Build Cluster
 
-* Supported Kubernetes versions are 1.25,1.26,1.27.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28.
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
 * 12 vCPUs available across all nodes.
@@ -132,7 +132,7 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 ### Kubernetes Requirements - Run Cluster
 
-* Supported Kubernetes versions are 1.25,1.26,1.27.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28.
 * LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 16 GB per node.
@@ -208,13 +208,13 @@ tap_telemetry:
 
 ## View Cluster Requirements
 
-The View Cluster is designed to run the web applications for Tanzu Application Platform. specifically, Tanzu Learning Center, Tanzu Application Portal GUI, and Tanzu API Portal.
+The View Cluster is designed to run the web applications for Tanzu Application Platform; specifically, Tanzu Application Portal GUI/Tanzu Developer Portal(TDP), and Tanzu API Portal.
 
 The View Cluster's requirements are driven primarily by the respective applications that it will be running.
 
 ### Kubernetes Requirements - View Cluster
 
-* Supported Kubernetes versions are 1.25,1.26,1.27.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28.
 * LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
@@ -228,7 +228,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 ### Recommendations - View Cluster
 
 * Spread across three AZs for high availability.
-* Utilize a PostgreSQL database for storing user preferences and manually created entities.
+* Utilize a PostgreSQL database with minimum 20 GB storage for storing user preferences and manually created entities.
 * Add Build and all Run Clusters service accounts into View Cluster config yaml to monitor runtime resources of apps in Tanzu Application Platform GUI.
 * Tanzu Service Mesh (TSM) is not installed or is restricted to namespaces that are not for Tanzu Application Platform.
 
@@ -242,12 +242,10 @@ cert-manager.tanzu.vmware.com
 contour.tanzu.vmware.com
 controller.source.apps.tanzu.vmware.com
 fluxcd.source.controller.tanzu.vmware.com
-learningcenter.tanzu.vmware.com
 metadata-store.apps.tanzu.vmware.com
 tap-gui.tanzu.vmware.com
 tap-telemetry.tanzu.vmware.com
 tap.tanzu.vmware.com
-workshops.learningcenter.tanzu.vmware.com
 
 ```
 
@@ -310,7 +308,7 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 ### Kubernetes Requirements - Iterate Cluster
 
-* Supported Kubernetes versions are 1.25,1.26,1.27.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28.
 * LoadBalancer for ingress controller (2 external IP addresses).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
@@ -532,7 +530,7 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity provider into Tanzu Application Platform.
 
-To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-pinniped-login.html).
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/authn-authz-pinniped-login.html).
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
@@ -552,7 +550,7 @@ The following two roles are for service accounts associated with the Tanzu Suppl
 * `workload`
 * `deliverable`
 
-For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/authn-authz-overview.html).
+For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/authn-authz-overview.html).
 
 ## Developer tools (Inner-Loop)
 
@@ -560,4 +558,4 @@ Tanzu Application Platform allows developers to quickly build and test applicati
 
 ## Deployment Instructions
 
-For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/multicluster-installing-multicluster.html).
+For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/multicluster-installing-multicluster.html).
