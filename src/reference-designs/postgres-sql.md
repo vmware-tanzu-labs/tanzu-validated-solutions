@@ -2,7 +2,7 @@
 
 High Availability (HA) failover in PostgreSQL supported by Tanzu-powered backend infrastructure plays a pivotal role in the domain of database management. This ensures uninterrupted accessibility and data integrity, offering protection against hardware failures, network issues, and unforeseen circumstances. The resilience of PostgreSQL is realized through a harmony of resilient replication mechanisms, and tools seamlessly orchestrating automatic transitions between primary and standby nodes within the Tanzu environment.
 
-## Componets
+## Components
 The following components have been utilized for the deployment of PostgreSQL High Availability (HA) failover system:
 
 ### Tanzu Infrastructure Integration
@@ -52,7 +52,7 @@ The following component versions and interoperability matrix are supported with 
     # kubectl create ns standby
     ```
 
-1. Deploy the primary node.
+1. Deploy the primary node. You can download the sample `primary-values.yaml` file from [here](./resources/postgres-sql/primary-values.yaml).
     ```bash
     # helm install primary-repmgr oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n primary -f values-primary.yaml
     NAME: primary-repmgr
@@ -67,7 +67,7 @@ The following component versions and interoperability matrix are supported with 
     APP VERSION: 16.1.0
     ```
 
-1. Deploy the standby node.
+1. Deploy the standby node. You can download the sample `standby-values.yaml` file from [here](./resources/postgres-sql/standby-values.yaml).
     ```bash
     # helm install standby-repmgr oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n standby -f values-standby.yaml
     NAME: standby-repmgr
@@ -100,9 +100,11 @@ The following component versions and interoperability matrix are supported with 
             value: <primary-svc-name>.svc.cluster.local
     …
     ```
+    > **Note** 
+        Update the parameters `REPMGR_PARTNER_NODES`, `REPMGR_PRIMARY_HOST` to reflect the cluster's topology.
+
     > **Note**
-        > - Update the parameters `REPMGR_PARTNER_NODES`, `REPMGR_PRIMARY_HOST` to reflect the cluster's topology.
-        > - In the scenario described above, the testing involves interactions between distinct namespaces. As a result, we utilized `svc.cluster.local` to address the nodes. If you're setting up PostgreSQL nodes in separate clusters, it is mandatory to update the addressing information with either the Fully Qualified Domain Name (FQDN) or the IP address corresponding to each node in the respective clusters.
+        In the scenario described above, the testing involves interactions between distinct namespaces. As a result, we utilized `svc.cluster.local` to address the nodes. If you're setting up PostgreSQL nodes in separate clusters, it is mandatory to update the addressing information with either the Fully Qualified Domain Name (FQDN) or the IP address corresponding to each node in the respective clusters.
 
     ```bash
     # kubectl edit sts/standby-repmgr-postgresql-ha-postgresql -n standby
@@ -124,7 +126,7 @@ The following component versions and interoperability matrix are supported with 
     …
     ```
 
-    > **Note**:  Update the `PGPOOL_BACKEND_NODES` parameter to recognize the new primary and standby nodes.
+    > **Note**  Update the `PGPOOL_BACKEND_NODES` parameter to recognize the new primary and standby nodes.
 
 1. Update the standby PGPool.
 
@@ -153,7 +155,7 @@ The following component versions and interoperability matrix are supported with 
         host     all             all        ::1/128                      md5
     …
     ```
-    > **Note**: Update the `pg_hba.conf` file to allow necessary host connections for replication, ensuring secure communication between the nodes.
+    > **Note** Update the `pg_hba.conf` file to allow necessary host connections for replication, ensuring secure communication between the nodes.
 
 1. Initiate Failover.  <br>
 To initiate the failover, the primary node is gracefully scaled down to zero replicas, allowing the standby node in different namespace to take over seamlessly so that we can verify it by checking the `kubectl` logs
@@ -203,6 +205,8 @@ The PostgreSQL HA failover mechanism enables the following benefits:
 ## Summary
 By integrating Tanzu infrastructure into our PostgreSQL High Availability (HA) failover solution within the dynamic realm of containerized environments, PostgreSQL's HA failover mechanisms, orchestrated through Kubernetes and Helm, extend beyond simple failover capabilities. <br> 
 They provide the following comprehensive suite of benefits that cater to the demands of modern applications:
+
+
 - **Reliability**: Continuous availability and automated failover ensure that the database remains reliable, even in the face of unexpected challenges.
 - **Resilience**: Data integrity is not just a feature but a foundational principle, safeguarding against potential data loss and ensuring a robust and resilient database infrastructure.
 - **Efficiency**: The automated management provided by repmgr reduces the burden on administrators, allowing them to focus on strategic tasks rather than firefighting during downtime.
