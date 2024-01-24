@@ -9,4 +9,5 @@ For more information about Tanzu, see [Tanzu Documentation](https://docs.vmware.
 By using the diverse portfolio of Tanzu, you can cater to a wide range of use cases enabling develpers to develop, test, and deploy applications:
 
 - [High Availability Failover in PostgreSQL backed by Tanzu](./postgres-sql.md)
+- [Exposing TAP Workloads Outside the Cluster Using AVI L4/L7](../solution-workbooks/tap-workloads-avi-l4-l7.md)
 
