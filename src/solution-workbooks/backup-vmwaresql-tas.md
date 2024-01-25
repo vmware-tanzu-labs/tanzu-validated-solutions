@@ -42,7 +42,7 @@ In this document, we'll demonstrate backing up a running MySQL service instance 
 
 - Configure an S3 compatible storage to store service instance data backup. For more information about supported blob store for MySQL backups, see the `configuring backups` section in [Installing and configuring VMware SQL with MySQL for Tanzu Application Service](https://docs.vmware.com/en/VMware-SQL-with-MySQL-for-Tanzu-Application-Service/3.1/mysql-for-tas/install-config.html#configuring-backups-12).
 
-    > **Note**: If you use `Minio` as S3 storage for backups, you must enable the `Force path style access to bucket` option under the `Backups` configuration in the `VMware SQL with MySQL for Tanzu Application Service` tile, particularly when accessing MinIO over an IP address. For more information, see the `Back Up to Amazon S3 or Ceph` section in [Configuring automated backups](https://docs.vmware.com/en/VMware-SQL-with-MySQL-for-Tanzu-Application-Service/3.1/mysql-for-tas/automated-backup.html#configure-backups-in-tanzu-operations-manager-6).
+    > **Note** If you use `Minio` as S3 storage for backups, you must enable the `Force path style access to bucket` option under the `Backups` configuration in the `VMware SQL with MySQL for Tanzu Application Service` tile, particularly when accessing MinIO over an IP address. For more information, see the `Back Up to Amazon S3 or Ceph` section in [Configuring automated backups](https://docs.vmware.com/en/VMware-SQL-with-MySQL-for-Tanzu-Application-Service/3.1/mysql-for-tas/automated-backup.html#configure-backups-in-tanzu-operations-manager-6).
 
 ## Backup a Service Instance Created with MySQL for TAS
 
