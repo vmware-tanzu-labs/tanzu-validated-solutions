@@ -1,4 +1,4 @@
-# Tanzu Solution Workbooks
+# Tanzu Solutions Workbooks
 
 Tanzu is a portfolio of products and services that helps organizations modernize their applications and infrastructure for the cloud-native era. It provides a full stack of capabilities for building, running, and managing modern applications on Kubernetes across any cloud or on-premises environment.
 
