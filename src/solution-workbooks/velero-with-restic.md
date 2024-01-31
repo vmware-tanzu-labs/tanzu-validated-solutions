@@ -1,4 +1,4 @@
-Install Velero with Restic in Tanzu Kubernetes Cluster
+# Install Velero with Restic in Tanzu Kubernetes Cluster
 
  [Velero](https://velero.io/docs), is an open source community standard tool to back up and restore TKG standalone management cluster infrastructure and workloads.
 
