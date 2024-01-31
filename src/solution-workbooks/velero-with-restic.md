@@ -34,14 +34,14 @@ Velero supports a variety of [storage providers](https://velero.io/docs/main/sup
 - An online cloud storage provider.
 - An on-premises object storage service such as MinIO, for proxied or air-gapped environments.
 
-Its recommended to dedicate a unique storage bucket to each cluster.
+Its recommended to dedicate a unique storage bucket to each cluster. 
 
-For this demonstration purpose, we deployed Minio which makes use of aws plugin
-1.  Deploy the Minio by applying the configuration file minio.yaml.
+For this demonstration purpose, we deployed Minio which makes use of aws plugin.
+1.  Deploy the Minio by applying the configuration file [minio.yaml](./resources/velero-with-restic/minio.yml).
     ```bash
     kubectl apply -f minio.yaml
     ```
-1. Connecto Minio console and create a S3 bucket to store the backups. 
+1. Connect to Minio console and create a S3 bucket to store the backups. 
 1. Save the credentials to a local file(`minio.creds`) to pass to the `--secret-file` option of velero install, for example:
     ```bash
     [default]
