@@ -99,7 +99,7 @@ In this section, we'll backup the data on a service instance created with MySQL 
     Getting status of service instance tas-db-medium in org system / space system as admin...
     [Thu Jan 18 05:21:33 UTC 2024] Status: Backup was successful. Uploaded 10.4M
     ```
-1. Validate that the backup file is available in the blob store, which is Minio in this demostration:
+1. Validate that the backup file is available in the blob store, which is Minio in this demonstration:
 
     ![Backup data in minio](img/backup-vmwaresql-tas/backup-data-minio.png)
 
