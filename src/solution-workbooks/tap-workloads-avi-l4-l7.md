@@ -27,7 +27,7 @@ Using an application workload specification, you can build and deploy applicatio
 
 Tanzu Application Platform allows you to create new workload types. In this example, we'll explore the steps for adding an Ingress resource to the `server-template ClusterConfigTemplate` when this new type of workload is created:
 
-1. Save the existing server-template in a local file by running the follwing command:
+1. Save the existing server-template in a local file by running the following command:
 
     ```bash
     kubectl get ClusterConfigTemplate server-template -o yaml > avi-l4-l7-server-template.yaml
