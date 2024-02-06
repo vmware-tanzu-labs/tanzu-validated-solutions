@@ -214,7 +214,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     ```bash
     yq eval -i '.metadata.name = "avi-l4-l7-server-template"' avi-l4-l7-server-template.yaml
     ```
-1. Create the new `ClusterConfigTemplate` by running the follwoing command:
+1. Create the new `ClusterConfigTemplate` by running the following command:
 
     ```bash
     kubectl apply -f avi-l4-l7-server-template.yaml
