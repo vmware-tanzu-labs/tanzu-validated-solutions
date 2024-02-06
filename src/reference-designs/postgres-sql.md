@@ -6,7 +6,7 @@ High Availability (HA) failover in PostgreSQL supported by Tanzu-powered backend
 The following components have been utilized for the deployment of PostgreSQL High Availability (HA) failover system:
 
 ### Tanzu Infrastructure Integration
-We leveraged Tanzu Kubernetes Grid (informally known as TKGm) 2.3.0 to create a well-configured and highly available infrastructure for our PostgreSQL deployment. The Tanzu Infrastructure played a important role in optimizing the deployment and management of PostgreSQL, adding further value to the failover capabilities.
+We leveraged Tanzu Kubernetes Grid (informally known as TKGm) 2.3.0 to create a well-configured and highly available infrastructure for our PostgreSQL deployment. The Tanzu Infrastructure played an important role in optimizing the deployment and management of PostgreSQL, adding further value to the failover capabilities.
 
 
 ### Centralized Management with Tanzu
@@ -158,7 +158,7 @@ The following component versions and interoperability matrix are supported with 
     > **Note** Update the `pg_hba.conf` file to allow necessary host connections for replication, ensuring secure communication between the nodes.
 
 1. Initiate Failover.  <br>
-To initiate the failover, the primary node is gracefully scaled down to zero replicas, allowing the standby node in different namespace to take over seamlessly so that we can verify it by checking the `kubectl` logs
+To initiate the failover, the primary node is gracefully scaled down to zero replicas, allowing the standby node in a different namespace to take over seamlessly so that we can verify it by checking the `kubectl` logs
 
     ```bash
     # kubectl scale sts/primary-repmgr-postgresql-ha-postgresql --replicas=0 -n primary
