@@ -8,23 +8,23 @@ Starting from Velero v1.10, except for using restic to do file-system level back
 
 To enhance crash consistency of the applications while in Velero filesystem backups, we highly recommend considering Application Quiescence. This can be achieved either by manually pausing the application or by utilizing Pre and Post-Backup Hooks.
 
-**Manual Approach**:
+- **Manual Approach**:
 
-- With a manual approach, achieving application quiescence typically involves stopping or pausing the application's processes or workloads.
-- This can be done by manually halting incoming traffic, shutting down pods or containers, or pausing application-specific processes to ensure data consistency during backup operations.
-- It often requires scripting or manual intervention to coordinate the quiescence process with the backup operation.
+    - With a manual approach, achieving application quiescence typically involves stopping or pausing the application's processes or workloads.
+    - This can be done by manually halting incoming traffic, shutting down pods or containers, or pausing application-specific processes to ensure data consistency during the backup operations.
+    - It often requires scripting or manual intervention to coordinate the quiescence process with the backup operation.
 
-**Pre and Post-Backup Hooks**:
+- **Pre and Post-Backup Hooks**:
 
-Velero provides hooks as a feature to facilitate the application quiescence process automatically before initiating a backup. These hooks allow you to define pre-backup and post-backup actions to be performed on application workloads. Before starting a backup, Velero can execute pre-backup hooks to quiesce the application by gracefully stopping processes, flushing caches, or any other necessary actions to ensure data consistency. After the backup is complete, post-backup hooks can be executed to resume normal application operations.
+    Velero provides hooks to automate the application quiescence process before initiating a backup. These hooks allow you define pre-backup and post-backup actions to be performed on the application workloads. Before starting a backup, Velero can execute pre-backup hooks to quiesce the application by gracefully stopping processes, flushing caches, or any other necessary actions to ensure data consistency. After the backup is complete, post-backup hooks can be executed to resume normal application operations.
 
-Using hooks for application quiescence offers several advantages:
+Using hooks for application quiescence offers the following advantages:
 
 - **Automation**: Hooks automate the quiescence process, reducing the need for manual intervention and scripting.
 - **Consistency**: By defining pre- and post-backup actions, you ensure consistency in the backup process across different environments.
 - **Integration**: Hooks integrate seamlessly with Velero's backup workflow, making it easier to manage backups and ensure data integrity.
 
-In summary, while a manual approach to application quiescence requires more effort and coordination, using hooks provided by Velero automates and streamlines the process, improving efficiency and consistency in Kubernetes backup operations.
+In summary, while a manual approach to application quiescence requires more effort and coordination, using hooks provided by Velero can automate and streamline the process. This also improves efficiency and consistency in Kubernetes backup operations.
 
 
 ## Install Velero on Tanzu Kubernetes Grid Cluster
@@ -139,4 +139,4 @@ To deploy the Velero Server to a workload cluster, you run the `velero install` 
 
 This document walks you through the procedure to install Velero on Tanzu Kubernetes Grid clusters. Once you install Velero, you can use it to backup and restore your Kubernetes workloads.
 
-By configuring Velero Filesystem backup appropriately and following best practices, you can achieve crash-consistent filesystem backups that accurately reflect the state of your applications and data, even in the event of unexpected failures or crashes. It's essential to thoroughly test your backup and recovery processes to validate their crash consistency and effectiveness in restoring data
+By configuring Velero filesystem backup appropriately and following the best practices, you can achieve crash-consistent filesystem backups that accurately reflect the state of your applications and data, even in the event of an unexpected failure or crash. It's essential to thoroughly test your backup and recovery processes to validate their crash consistency and effectiveness in restoring data.
