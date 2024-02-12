@@ -1,12 +1,12 @@
 # Installing Velero in Tanzu Kubernetes Cluster
 
- [Velero](https://velero.io/docs), is an open source community standard tool to back up and restore Tanzu Kubernetes Grid (informally known as TKG) workloads.
+ [Velero](https://velero.io/docs) is an open source community standard tool to back up and restore Tanzu Kubernetes Grid (informally known as TKG) workloads.
 
- Velero Filesystem backups can be crash-consistent only if configured correctly. Crash consistency ensures that the backed-up data reflects a consistent state of the application and filesystem at a specific point in time, even in the event of a system crash or failure.
+ The Velero Filesystem backups are crash-consistent only when configured correctly. Crash consistency ensures that the backed up data reflects a consistent state of the application and filesystem at a specific point in time, even in the event of a system crash or failure.
 
-Starting from Velero v1.10, except for using restic to do file-system level backup and restore, kopia is been integrated. Kopia provides snapshot-like functionality, allowing you to capture the state of your application at a specific point in time. These snapshots can be used for both backup and restore operations, providing a consistent view of your application state.
+Velero v1.10 and above is integrated with Kopia when you are not using restic to do file-system level backup and restore. Kopia provides snapshot-like functionality, allowing you to capture the state of your application at a specific point in time. These snapshots can be used for both backup and restore operations, providing a consistent view of your application state.
 
-It's crucial to acknowledge that Velero filesystem backup alone does not ensure application crash-consistency. Achieving application-level crash consistency in Velero filesystem backups typically requires additional measures such as Application Quiescence, which involves pausing the application or utilizing Pre and Post-Backup Hooks. These steps help maintain data integrity and ensure a smoother recovery process.
+It's crucial to acknowledge that the Velero filesystem backup alone does not ensure application crash-consistency. Achieving application-level crash consistency in Velero filesystem backups typically requires additional measures, such as, Application Quiescence, which involves pausing the application or utilizing Pre and Post-Backup Hooks. These steps help maintain data integrity, and ensure a better recovery process.
 
 
 - **Manual Approach**:
