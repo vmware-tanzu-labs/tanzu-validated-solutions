@@ -1,12 +1,13 @@
 # Installing Velero in Tanzu Kubernetes Cluster
 
- [Velero](https://velero.io/docs), is an open source community standard tool to back up and restore Tanzu Kubernetes Grid (informally known as TKG) standalone management cluster infrastructure and workloads.
+ [Velero](https://velero.io/docs), is an open source community standard tool to back up and restore Tanzu Kubernetes Grid (informally known as TKG) workloads.
 
  Velero Filesystem backups can be crash-consistent only if configured correctly. Crash consistency ensures that the backed-up data reflects a consistent state of the application and filesystem at a specific point in time, even in the event of a system crash or failure.
 
 Starting from Velero v1.10, except for using restic to do file-system level backup and restore, kopia is been integrated. Kopia provides snapshot-like functionality, allowing you to capture the state of your application at a specific point in time. These snapshots can be used for both backup and restore operations, providing a consistent view of your application state.
 
-To enhance crash consistency of the applications while in Velero filesystem backups, we highly recommend considering Application Quiescence. This can be achieved either by manually pausing the application or by utilizing Pre and Post-Backup Hooks.
+It's crucial to acknowledge that Velero filesystem backup alone does not ensure application crash-consistency. Achieving application-level crash consistency in Velero filesystem backups typically requires additional measures such as Application Quiescence, which involves pausing the application or utilizing Pre and Post-Backup Hooks. These steps help maintain data integrity and ensure a smoother recovery process.
+
 
 - **Manual Approach**:
 
@@ -69,7 +70,7 @@ Velero supports one of the following [storage providers](https://velero.io/docs/
 
 It's recommended to dedicate a unique storage bucket to each cluster. 
 
-For this demonstration purpose, we deployed Minio that uses an AWS plug-in.
+For this demonstration purpose, Minio has been considered which uses an AWS plug-in to provide S3 compatible object store.
 1.  Deploy the Minio by applying the configuration file [minio.yaml](./resources/velero-with-restic/minio.yml).
 
     ```bash
@@ -97,7 +98,7 @@ To deploy the Velero Server to a workload cluster, you run the `velero install` 
     - `--backup-location-config region=$REGION`: The AWS region the bucket is in
  
 
-1. To Install Velero, run the following command:
+1. A sample command to install Velero looks similar to:
 
     ```bash
     velero install --plugins projects.registry.vmware.com/tkg/velero/velero-plugin-for-aws:v1.7.1_vmware.1 \
@@ -114,11 +115,11 @@ To deploy the Velero Server to a workload cluster, you run the `velero install` 
 3. For an airgapped environments, ensure that required images are pulled from below locations and pushed to your local repository:
 
     ```bash
-    docker pull projects.registry.vmware.com/tkg/velero-plugin-for-aws:v1.7.1_vmware.1
-    docker pull projects.registry.vmware.com/tkg/velero:v1.11.1_vmware.1
+    docker pull projects.registry.vmware.com/tkg/velero-plugin-for-aws:<velero version>
+    docker pull projects.registry.vmware.com/tkg/velero:<velero-version>
     ```
 
-4. To Install Velero in air-gapped environments, run the following command:
+4. A sample command to install Velero in air-gapped environments, looks similar to:
 
 
     ```bash
