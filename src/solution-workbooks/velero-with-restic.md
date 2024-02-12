@@ -71,6 +71,7 @@ Velero supports one of the following [storage providers](https://velero.io/docs/
 It's recommended to dedicate a unique storage bucket to each cluster. 
 
 For this demonstration purpose, Minio has been considered which uses an AWS plug-in to provide S3 compatible object store.
+
 1.  Deploy the Minio by applying the configuration file [minio.yaml](./resources/velero-with-restic/minio.yml).
 
     ```bash
