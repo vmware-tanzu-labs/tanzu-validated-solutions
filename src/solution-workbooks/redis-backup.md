@@ -86,7 +86,7 @@ In this section, we'll use Velero to back up the Redis deployment including name
     
     exit
     ```
-1. Backup the Redis database by using velero:
+1. Back up the Redis database by using velero:
 
     ```bash
     # velero backup create redis-backup-05a --include-namespaces redis

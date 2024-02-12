@@ -128,7 +128,7 @@ In this section, we'll use Velero to back up the MongoDB deployment including na
             waitingForFlowControl: false,
             flowControlStats: { acquireCount: Long('1') }
         ```
-1. Create the backup using velero:
+1. Back up the database using velero:
 
     ```bash
     # velero backup create mongo-backup-01b --include-namespaces mongodb

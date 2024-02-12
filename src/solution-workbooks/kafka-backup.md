@@ -90,7 +90,7 @@ For this demonstration purpose, we use Helm to deploy Apache Kafka using Helm on
 
 In this section, we'll use Velero to back up the Apache Kafka deployment including namespace.
 
-1. Backup the database using velero:
+1. Back up the database using velero:
 
     ```bash
     # velero backup create kafka-backup-01b --include-namespaces kafka
