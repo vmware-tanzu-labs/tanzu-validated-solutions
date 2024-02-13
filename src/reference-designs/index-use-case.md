@@ -15,4 +15,7 @@ By using the diverse portfolio of Tanzu, you can cater to a wide range of use ca
 - [Backing Up and Restoring the Apache Kafka Deployments on Tanzu Kubernetes Grid](../solution-workbooks/kafka-backup.md)
 - [Backing Up and Restoring the MongoDB Deployments on Tanzu Kubernetes Grid](../solution-workbooks/mongodb-backup.md)
 - [Backing Up and Restoring the Redis Deployments on Tanzu Kubernetes Grid](../solution-workbooks/redis-backup.md)
+- [Backing Up and Restoring the KeyDB deployments on Tanzu Kubernetes Grid](../solution-workbooks/keydb-backup.md)
+- [Backing Up and Restoring the MariaDB Deployments on Tanzu Kubernetes Grid](../solution-workbooks/mariadb-backup.md)
+- [Backing Up and Restoring the Rabbitmq Deployments on Tanzu Kubernetes Grid](../solution-workbooks/rabbitmq-backup.md)
 
