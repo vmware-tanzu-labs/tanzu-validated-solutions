@@ -22,7 +22,7 @@ This document explains the process to back up and restore a MariaDB deployment o
 
 ## Deploy MariaDB Using Helm
 
-For this demonstration purpose, we use Helm to deploy MariaDB using Helm on source cluster, and upload data to it.
+For this demonstration purpose, we'll use Helm to deploy MariaDB using Helm on source cluster, and upload data to it.
 
 1. Create a new namespace `maria-db1` on source cluster for deploying the MariaDB Galera cluster.
 1. Deploy MariaDB Galera using Helm by running the following command:

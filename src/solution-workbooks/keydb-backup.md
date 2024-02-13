@@ -1,6 +1,6 @@
 # Backing Up and Restoring the KeyDB deployments on Tanzu Kubernetes Grid
 
-KeyDB is a open source in-memory data store with a number of advanced features for high availability and data optimization. Its a high performance fork of Redis with a focus on multi-threading, memory efficiency, and high throughput. KeyDB maintains full compatibility with the Redis protocol, modules, and scripts. All 16 default logical databases on each KeyDB instance can be used and standard KeyDB/Redis protocol is supported without any other limitations.
+KeyDB is an open source in-memory data store with a number of advanced features for high availability and data optimization. Its a high performance fork of Redis with a focus on multi-threading, memory efficiency, and high throughput. KeyDB maintains full compatibility with the Redis protocol, modules, and scripts. All 16 default logical databases on each KeyDB instance can be used and standard KeyDB/Redis protocol is supported without any other limitations.
 
 For this demonstration, we leveraged on Tanzu Kubernetes Grid 2.3.0 (Kubernetes 1.26.x) to create a well-configured and highly available infrastructure for our KeyDB deployment. The Tanzu Infrastructure played an important role in optimizing the deployment and management of KeyDB, adding further value to the backup and restore capabilities. 
 
@@ -77,7 +77,7 @@ In this section, we'll use Velero to back up the KeyDB deployment including name
     
     exit
     ```
-1. Backup the KeyDB database using velero:
+1. Back up the KeyDB database using velero:
 
     ```bash
     # velero backup create keydb-backup-01a --include-namespaces keydb
