@@ -34,7 +34,7 @@ For this demonstration purpose, we use Helm to deploy Rabbitmq using Helm on sou
     --set plugins=rabbitmq_management \
     --set replicaCount=3
     ```
-1. Validate the the Rabbitmq deployment is succesful:
+1. Validate the the Rabbitmq deployment is successful:
 
     ```bash
     # kubectl get all -n rabbitmq
