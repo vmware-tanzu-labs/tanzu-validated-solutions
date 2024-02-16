@@ -1,6 +1,6 @@
 # Exposing TAP Workloads Outside the Cluster Using AVI L4/L7
 
-VMware Tanzu Application Platform (informally known as TAP) is an advanced application development platform equipped with a comprehensive suite of developer tools. It provides developers with a well-defined route to production, facilitating the swift and secure development and deployment of software. This platform is adaptable to any compliant public cloud or on-premises Kubernetes (K8s) cluster, ensuring flexibility and ease of use in diverse computing environments.
+Tanzu Application Platform (informally known as TAP) is an advanced application development platform equipped with a comprehensive suite of developer tools. It provides developers with a well-defined route to production, facilitating the swift and secure development and deployment of software. This platform is adaptable to any compliant public cloud or on-premises Kubernetes (K8s) cluster, ensuring flexibility and ease of use in diverse computing environments.
 
 In this document, we'll explore how to leverage cartographer to template custom K8s resources (creating new workload types) by modifying the [ClusterConfigTemplate](https://cartographer.sh/docs/v0.3.0/reference/template/#clusterconfigtemplate) for deploying a workload which can be exposed outside the cluster using either AVI L4 or L7. 
 
