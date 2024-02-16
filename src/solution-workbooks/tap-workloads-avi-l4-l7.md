@@ -55,7 +55,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
         - secretName: #@ data.values.workload.metadata.name
         hosts:
             - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
-    rules:
+      rules:
         - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
             paths:
@@ -180,7 +180,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
         - secretName: #@ data.values.workload.metadata.name
         hosts:
             - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
-    rules:
+      rules:
         - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
             paths:
