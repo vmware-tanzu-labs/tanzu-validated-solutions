@@ -16,8 +16,6 @@ In this document, we'll explore how to leverage cartographer to template custom 
     mv yq_linux_amd64 /usr/local/bin/yq
     ```
 
-
-
 ## Create a New Server Workload Type in TAP
 
 The `server` workload type allows you deploy traditional network applications on Tanzu Application Platform.
@@ -39,31 +37,21 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     ```
 1. Next, add the `Ingress` resource snippet to `spec-ytt.yaml`. This step provides a sample `Ingress` resource snippet below. You must edit the `spec-ytt.yaml` file before adding the `Ingress` resource snippet:
 
-    - Replace `INGRESS-DOMAIN` with the Ingress domain that you set during the installation.
-    - Set the annotation `cert-manager.io/cluster-issuer` to the `shared.ingress_issuer` value configured during installation or leave it as `tap-ingress-selfsigned` to use the default annotation.
-    - This configuration is based on your workload service running on port 8080.
-    - `ingressClassName: #@ data.values.params.ingressClass`: This parameter is passed from the `workload.yaml` parameter section which specifies the ingress class name to be used while creating the ingress object.
-    - If `data.values.params.serviceType != "LoadBalancer"`: This condition is added to create the ingress resource based on the value assigned to the `serviceType` parameter from `workload.yaml`. 
-        - If the `serviceType = LoadBalancer`: The ingress object is not created. Only a K8s service of type LoadBalancer(AVI L4) is created.
-        - If the `serviceType != LoadBalancer`: The ingress object(AVI L7) is created along with a K8s service of type ClusterIp is created.
-
-    A sample Ingress resource snippet is shown below:
-
     ```bash
     #@ if data.values.params.serviceType != "LoadBalancer":
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
-    name: #@ data.values.workload.metadata.name
-    annotations:
+      name: #@ data.values.workload.metadata.name
+      annotations:
         cert-manager.io/cluster-issuer: tap-ingress-selfsigned
         ingress.kubernetes.io/force-ssl-redirect: "true"
         kubernetes.io/tls-acme: "true"
         kapp.k14s.io/change-rule: "upsert after upserting Services"
-    labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
     spec:
-    ingressClassName: #@ data.values.params.ingressClass
-    tls:
+      ingressClassName: #@ data.values.params.ingressClass
+      tls:
         - secretName: #@ data.values.workload.metadata.name
         hosts:
             - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
@@ -78,8 +66,20 @@ Tanzu Application Platform allows you to create new workload types. In this exam
                     name: #@ data.values.workload.metadata.name
                     port:
                     number: 8080
-    #@ end
+    #@ end    
     ```
+
+    Where:
+
+    - Replace `INGRESS-DOMAIN` with the Ingress domain that you set during the installation.
+    - Set the annotation `cert-manager.io/cluster-issuer` to the `shared.ingress_issuer` value configured during installation or leave it as `tap-ingress-selfsigned` to use the default annotation.
+    - This configuration is based on your workload service running on port 8080.
+    - `ingressClassName: #@ data.values.params.ingressClass`: This parameter is passed from the `workload.yaml` parameter section which specifies the ingress class name to be used while creating the ingress object.
+    - If `data.values.params.serviceType != "LoadBalancer"`: This condition is added to create the ingress resource based on the value assigned to the `serviceType` parameter from `workload.yaml`. 
+        - If the `serviceType = LoadBalancer`: The ingress object is not created. Only a K8s service of type LoadBalancer(AVI L4) is created.
+        - If the `serviceType != LoadBalancer`: The ingress object (AVI L7) is created along with a K8s service of type ClusterIp is created.
+
+    
 
 1. Add the `Ingress` resource snippet to the `spec-ytt.yaml` file and save. Look for the `Service` resource, and insert the snippet before the last `#@ end`. For example:
 
@@ -132,51 +132,51 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     apiVersion: apps/v1
     kind: Deployment
     metadata:
-    name: #@ data.values.workload.metadata.name
-    annotations:
+      name: #@ data.values.workload.metadata.name
+      annotations:
         kapp.k14s.io/update-strategy: "fallback-on-replace"
         ootb.apps.tanzu.vmware.com/servicebinding-workload: "true"
         kapp.k14s.io/change-rule: "upsert after upserting servicebinding.io/ServiceBindings"
-    labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
     spec:
-    selector:
+      selector:
         matchLabels: #@ data.values.config.metadata.labels
-    template: #@ data.values.config
+      template: #@ data.values.config
     ---
     apiVersion: v1
     kind: Service
     metadata:
-    name: #@ data.values.workload.metadata.name
-    labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+      name: #@ data.values.workload.metadata.name
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
     spec:
-    selector: #@ data.values.config.metadata.labels
-    type: #@ data.values.params.serviceType
-    ports:
-    #@ hasattr(data.values.params, "ports") and len(data.values.params.ports) or assert.fail("one or more ports param must be provided.")
-    #@ declared_ports = []
+      selector: #@ data.values.config.metadata.labels
+      type: #@ data.values.params.serviceType
+      ports:
+      #@ hasattr(data.values.params, "ports") and len(data.values.params.ports) or assert.fail("one or more ports param must be provided.")
+      #@ declared_ports = []
     #@ if "ports" in data.values.params:
-    #@   declared_ports = data.values.params.ports
-    #@ else:
-    #@   declared_ports = struct.encode([{ "containerPort": 8080, "port": 8080, "name": "http"}])
-    #@ end
-    #@ for p in merge_ports(declared_ports, data.values.config.spec.containers):
-    - #@ p
-    #@ end
+      #@   declared_ports = data.values.params.ports
+      #@ else:
+      #@   declared_ports = struct.encode([{ "containerPort": 8080, "port": 8080, "name": "http"}])
+      #@ end
+      #@ for p in merge_ports(declared_ports, data.values.config.spec.containers):
+      - #@ p
+      #@ end
     ---
     #@ if data.values.params.serviceType != "LoadBalancer":
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
-    name: #@ data.values.workload.metadata.name
-    annotations:
+      name: #@ data.values.workload.metadata.name
+      annotations:
         cert-manager.io/cluster-issuer: tap-ingress-selfsigned
         ingress.kubernetes.io/force-ssl-redirect: "true"
         kubernetes.io/tls-acme: "true"
         kapp.k14s.io/change-rule: "upsert after upserting Services"
-    labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "run", "carto.run/workload-name": data.values.workload.metadata.name })
     spec:
-    ingressClassName: #@ data.values.params.ingressClass
-    tls:
+      ingressClassName: #@ data.values.params.ingressClass
+      tls:
         - secretName: #@ data.values.workload.metadata.name
         hosts:
             - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
@@ -197,10 +197,10 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     apiVersion: v1
     kind: ConfigMap
     metadata:
-    name: #@ data.values.workload.metadata.name + "-server"
-    labels: #@ merge_labels({ "app.kubernetes.io/component": "config" })
+      name: #@ data.values.workload.metadata.name + "-server"
+      labels: #@ merge_labels({ "app.kubernetes.io/component": "config" })
     data:
-    delivery.yml: #@ yaml.encode(delivery())
+      delivery.yml: #@ yaml.encode(delivery())
     ```
 
 1. Add the above snippet to the `.spec.ytt` property in `avi-l4-l7-server-template.yaml` by running the following command:
@@ -297,7 +297,7 @@ In this section, we'll deploy a server workload using AVI L7, and expose it exte
         app.kubernetes.io/part-of: tanzu-java-web-app
         apps.tanzu.vmware.com/auto-configure-actuators: "true"
         apps.tanzu.vmware.com/has-tests: "true"
-        apps.tanzu.vmware.com/workload-type: l7-server
+        apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
     name: tanzu-java-web-app
     spec:
     params:
@@ -326,7 +326,7 @@ In this section, we'll deploy a server workload using AVI L7, and expose it exte
     # kubectl get ingress,svc,deploy -l carto.run/workload-name=tanzu-java-web-app
 
     NAME                                                    CLASS    HOSTS                                          ADDRESS          PORTS     AGE
-    ingress.networking.k8s.io/tanzu-java-web-app            avi-lb   tanzu-java-web-app.INGRESS-DOMAIN              34.111.111.111   80, 443   37s
+    ingress.networking.k8s.io/tanzu-java-web-app            avi-lb   tanzu-java-web-app.demo-ns.vds-cloud.vmw             34.111.111.111   80, 443   37s
 
 
     NAME                                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                              AGE
@@ -358,7 +358,7 @@ Now, let's deploy a server workload using AVI L4, and expose it externally. The 
         app.kubernetes.io/part-of: tanzu-java-web-app
         apps.tanzu.vmware.com/auto-configure-actuators: "true"
         apps.tanzu.vmware.com/has-tests: "true"
-        apps.tanzu.vmware.com/workload-type: l4-server
+        apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
     name: tanzu-java-web-app
     spec:
     params:
@@ -384,7 +384,7 @@ Now, let's deploy a server workload using AVI L4, and expose it externally. The 
     # kubectl get ingress,svc,deploy -l carto.run/workload-name=tanzu-java-web-app
 
     NAME                                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                              AGE
-    tanzu-java-web-app                     LoadBalancer 18.217.87.23      <none>        80/TCP                                               14d
+    tanzu-java-web-app                     LoadBalancer 192.168.170.6      <none>        80/TCP                                               14d
     tanzu-java-web-app-00001                ClusterIP   100.68.55.248     <none>        80/TCP,443/TCP                                       14d
     tanzu-java-web-app-00001-private        ClusterIP   100.66.160.115    <none>        80/TCP,443/TCP,9090/TCP,9091/TCP,8022/TCP,8012/TCP   14d
 
