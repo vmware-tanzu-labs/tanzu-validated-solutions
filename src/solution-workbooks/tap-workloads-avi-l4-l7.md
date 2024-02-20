@@ -52,20 +52,20 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     spec:
       ingressClassName: #@ data.values.params.ingressClass
       tls:
-        - secretName: #@ data.values.workload.metadata.name
+      - secretName: #@ data.values.workload.metadata.name
         hosts:
         - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
-    rules:
-        - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
+      rules:
+      - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
             paths:
             - pathType: Prefix
-                path: /
-                backend:
+              path: /
+              backend:
                 service:
-                    name: #@ data.values.workload.metadata.name
-                    port:
-                    number: 8080
+                   name: #@ data.values.workload.metadata.name
+                   port:
+                     number: 8080
     #@ end    
     ```
 
@@ -177,20 +177,20 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     spec:
       ingressClassName: #@ data.values.params.ingressClass
       tls:
-        - secretName: #@ data.values.workload.metadata.name
+      - secretName: #@ data.values.workload.metadata.name
         hosts:
         - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
-    rules:
-        - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
+      rules:
+      - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
             paths:
             - pathType: Prefix
-                path: /
-                backend:
+              path: /
+              backend:
                 service:
-                    name: #@ data.values.workload.metadata.name
-                    port:
-                    number: 8080
+                   name: #@ data.values.workload.metadata.name
+                   port:
+                     number: 8080
     #@ end
     #@ end
     ---
