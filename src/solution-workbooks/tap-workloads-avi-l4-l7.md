@@ -37,7 +37,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     ```
 1. Next, add the `Ingress` resource snippet to `spec-ytt.yaml`. This step provides a sample `Ingress` resource snippet below. You must edit the `spec-ytt.yaml` file before adding the `Ingress` resource snippet:
 
-    ```bash
+    ``` yaml
     #@ if data.values.params.serviceType != "LoadBalancer":
     apiVersion: networking.k8s.io/v1
     kind: Ingress
@@ -58,14 +58,14 @@ Tanzu Application Platform allows you to create new workload types. In this exam
       rules:
       - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
-            paths:
+          paths:
             - pathType: Prefix
               path: /
               backend:
                 service:
-                   name: #@ data.values.workload.metadata.name
-                   port:
-                     number: 8080
+                  name: #@ data.values.workload.metadata.name
+                  port:
+                    number: 8080
     #@ end    
     ```
 
@@ -83,7 +83,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
 
 1. Add the `Ingress` resource snippet to the `spec-ytt.yaml` file and save. Look for the `Service` resource, and insert the snippet before the last `#@ end`. For example:
 
-    ```bash
+    ``` yaml
     #@ load("@ytt:data", "data")
     #@ load("@ytt:yaml", "yaml")
     #@ load("@ytt:struct", "struct")
@@ -183,14 +183,14 @@ Tanzu Application Platform allows you to create new workload types. In this exam
       rules:
       - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
-            paths:
+          paths:
             - pathType: Prefix
               path: /
               backend:
                 service:
-                   name: #@ data.values.workload.metadata.name
-                   port:
-                     number: 8080
+                  name: #@ data.values.workload.metadata.name
+                  port:
+                    number: 8080
     #@ end
     #@ end
     ---
@@ -237,16 +237,16 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     ```
 1. Add the new workload type to the `tap-values.yaml` file. The new workload type is named `avi-l4-l7-server` and `cluster_config_template_name` is renamed to `avi-l4-l7-server-template`:
 
-    ```bash
+    ``` yaml
     ootb_supply_chain_basic:
-    supported_workloads:
-        - type: web
+      supported_workloads:
+      - type: web
         cluster_config_template_name: config-template
-        - type: server
+      - type: server
         cluster_config_template_name: server-template
-        - type: worker
+      - type: worker
         cluster_config_template_name: worker-template
-        - type: avi-l4-l7-server
+      - type: avi-l4-l7-server
         cluster_config_template_name: avi-l4-l7-server-template
     ```
 1. Update your Tanzu Application Platform installation as follows:
@@ -256,28 +256,28 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     ```
 1.  Provide the necessary privileges to the `deliverable` role to manage `Ingress` resources:
 
-    ```bash
+    ``` yaml
     cat <<EOF | kubectl apply -f -
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRole
     metadata:
     name: deliverable-with-ingress
     labels:
-        apps.tanzu.vmware.com/aggregate-to-deliverable: "true"
+    	apps.tanzu.vmware.com/aggregate-to-deliverable: "true"
     rules:
     - apiGroups:
-    - networking.k8s.io
-    resources:
-    - ingresses
-    verbs:
-    - get
-    - list
-    - watch
-    - create
-    - patch
-    - update
-    - delete
-    - deletecollection
+      - networking.k8s.io
+      resources:
+      - ingresses
+      verbs:
+      - get
+      - list
+      - watch
+      - create
+      - patch
+      - update
+      - delete
+      - deletecollection
     EOF
     ```
 1. To verify that the new workload type has been applied, check if the workload type is updated under the supply chain:
@@ -302,35 +302,34 @@ In this section, we'll deploy a server workload using AVI L7, and expose it exte
 ![Traffic flow of Server workload deployed behind AVI L7](img/tap-workloads-avi-l4-l7/tap-workload-avi-l7.jpg)
 
 1. Apply the below workload YAML to deploy the server application. Here, the parameter `ingressClass` specifies the ingressclass to be used while creating the ingress object.
-    ```bash
+    ``` yaml
     apiVersion: carto.run/v1alpha1
     kind: Workload
     metadata:
     generation: 1
     labels:
-        app.kubernetes.io/part-of: tanzu-java-web-app
-        apps.tanzu.vmware.com/auto-configure-actuators: "true"
-        apps.tanzu.vmware.com/has-tests: "true"
-        apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
+      app.kubernetes.io/part-of: tanzu-java-web-app
+      apps.tanzu.vmware.com/auto-configure-actuators: "true"
+      apps.tanzu.vmware.com/has-tests: "true"
+      apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
     name: tanzu-java-web-app
     spec:
-    params:
-    - name: scanning_source_policy
-        value: lax-scan-policy
-    - name: serviceType
-        value: ClusterIP
-    - name: scanning_image_policy
-        value: lax-scan-policy
-    - name: ingressClass
-        value: avi-lb
-    - name: testing_pipeline_matching_labels
-        value:
-        apps.tanzu.vmware.com/language: java
+      params:
+      - name: scanning_source_policy
+	    value: lax-scan-policy
+	  - name: serviceType
+	    value: ClusterIP
+	  - name: scanning_image_policy
+		value: lax-scan-policy
+	  - name: ingressClass
+		value: avi-lb
+	  - name: testing_pipeline_matching_labels
+		value: apps.tanzu.vmware.com/language: java
     serviceAccountName: default
     source:
-        git:
+      git:
         ref:
-            branch: main
+          branch: main
         url: <Git url with Application code>
     ```
 
@@ -363,34 +362,33 @@ Now, let's deploy a server workload using AVI L4, and expose it externally. The 
 ![Traffic flow of Server workload deployed behind AVI L7](img/tap-workloads-avi-l4-l7/tap-workload-avi-l4.jpg)
 
 1. Apply the below workload YAML to deploy the server application. The value assigned serviceType parameter is `LoadBalancer`, this creates a service of type LoadBalancer and the ingress object creation is skipped.
-    ```bash
+    ``` yaml
     apiVersion: carto.run/v1alpha1
     kind: Workload
     metadata:
     generation: 1
     labels:
-        app.kubernetes.io/part-of: tanzu-java-web-app
-        apps.tanzu.vmware.com/auto-configure-actuators: "true"
-        apps.tanzu.vmware.com/has-tests: "true"
-        apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
+	  app.kubernetes.io/part-of: tanzu-java-web-app
+	  apps.tanzu.vmware.com/auto-configure-actuators: "true"
+	  apps.tanzu.vmware.com/has-tests: "true"
+	  apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
     name: tanzu-java-web-app
     spec:
-    params:
-    - name: scanning_source_policy
+      params:
+      - name: scanning_source_policy
         value: lax-scan-policy
-    - name: serviceType
+      - name: serviceType
         value: LoadBalancer
-    - name: scanning_image_policy
+      - name: scanning_image_policy
         value: lax-scan-policy
-    - name: testing_pipeline_matching_labels
-        value:
-        apps.tanzu.vmware.com/language: java
-    serviceAccountName: default
-    source:
+      - name: testing_pipeline_matching_labels
+        value: apps.tanzu.vmware.com/language: java
+      serviceAccountName: default
+      source:
         git:
-        ref:
+          ref:
             branch: main
-        url: <Git url with Application code>
+          url: <Git url with Application code>
     ```
 1. Once the process completes, you'll see the Deployment and LoadBalancer Service(L4) resources similar to the following snippet:
 
@@ -412,3 +410,4 @@ Now, let's deploy a server workload using AVI L4, and expose it externally. The 
 
 ## Conclusion
 In this document, we have uncovered a powerful approach to streamline Kubernetes operations using supply chain objects. The supply chain does the heavy lifting to generate the necessary K8s Ingress objects. Also, during an application deployment, this feature helps Platform operators to generate a spectrum of K8s objects (configmaps, pvc’s, secrets, and so on) by defining the required conditions within the supply chain.
+```
