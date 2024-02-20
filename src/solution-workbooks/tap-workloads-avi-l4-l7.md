@@ -54,7 +54,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
       tls:
         - secretName: #@ data.values.workload.metadata.name
         hosts:
-            - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
+        - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
     rules:
         - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
@@ -179,7 +179,7 @@ Tanzu Application Platform allows you to create new workload types. In this exam
       tls:
         - secretName: #@ data.values.workload.metadata.name
         hosts:
-            - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
+        - #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
     rules:
         - host: #@ data.values.workload.metadata.name + ".tap-run-avi.cloud.vmw"
         http:
@@ -279,6 +279,20 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     - delete
     - deletecollection
     EOF
+    ```
+1. To verify that the new workload type has been applied, check if the workload type is updated under the supply chain:
+
+    ```bash
+    k get clustersupplychains source-test-scan-to-url -o yaml
+      selectorMatchExpressions:
+      - key: apps.tanzu.vmware.com/workload-type
+        operator: In
+        values:
+        - web
+        - server
+        - worker
+        - avi-l4-l7-server
+    status:
     ```
 
 ## Deploying a Server Workload Using AVI L7
