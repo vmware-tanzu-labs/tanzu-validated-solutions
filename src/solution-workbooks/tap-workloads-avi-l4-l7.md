@@ -9,7 +9,7 @@ In this document, we'll explore how to leverage cartographer to template custom 
 ## Prerequisites: 
 - [Tanzu Kubernetes Grid Cluster on vSphere](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-with-tanzu.html)
 - [Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap-reference-architecture/GUID-reference-designs-index-tap.html) 
-- Install the `yq` CLI on client machine. The `yq` CLI is a lightweight and portable command-line YAML processor. You can download `yq` by from [here](https://github.com/mikefarah/yq/releases/), and run the below commands to install.
+- Install the `yq` CLI on client machine. The `yq` CLI is a lightweight and portable command-line YAML processor. You can download `yq` by from [here](https://github.com/mikefarah/yq/releases/), and run the below commands to install the `yq`CLI.
 
     ```bash
     tar -zxvf yq_linux_amd64.tar.gz
