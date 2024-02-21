@@ -9,7 +9,7 @@ In this document, we'll explore how to leverage cartographer to template custom 
 ## Prerequisites: 
 - [Tanzu Kubernetes Grid Cluster on vSphere](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-with-tanzu.html)
 - [Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap-reference-architecture/GUID-reference-designs-index-tap.html) 
-- Install the `yq` CLI on client machine. The `yq` CLI is a lightweight and portable command-line YAML processor. You can download `yq` by from [here](https://github.com/mikefarah/yq/releases/), and run the below commands to install the `yq`CLI.
+- Install the `yq` CLI on client machine. The `yq` CLI is a lightweight and portable command-line YAML processor. You can download `yq` by from [here](https://github.com/mikefarah/yq/releases/), and run the below commands to install.
 
     ```bash
     tar -zxvf yq_linux_amd64.tar.gz
@@ -261,8 +261,8 @@ Tanzu Application Platform allows you to create new workload types. In this exam
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRole
     metadata:
-    name: deliverable-with-ingress
-    labels:
+      name: deliverable-with-ingress
+      labels:
     	apps.tanzu.vmware.com/aggregate-to-deliverable: "true"
     rules:
     - apiGroups:
@@ -306,13 +306,13 @@ In this section, we'll deploy a server workload using AVI L7, and expose it exte
     apiVersion: carto.run/v1alpha1
     kind: Workload
     metadata:
-    generation: 1
-    labels:
-      app.kubernetes.io/part-of: tanzu-java-web-app
-      apps.tanzu.vmware.com/auto-configure-actuators: "true"
-      apps.tanzu.vmware.com/has-tests: "true"
-      apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
-    name: tanzu-java-web-app
+      generation: 1
+      labels:
+        app.kubernetes.io/part-of: tanzu-java-web-app
+        apps.tanzu.vmware.com/auto-configure-actuators: "true"
+        apps.tanzu.vmware.com/has-tests: "true"
+        apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
+      name: tanzu-java-web-app
     spec:
       params:
       - name: scanning_source_policy
@@ -366,13 +366,13 @@ Now, let's deploy a server workload using AVI L4, and expose it externally. The 
     apiVersion: carto.run/v1alpha1
     kind: Workload
     metadata:
-    generation: 1
-    labels:
-	  app.kubernetes.io/part-of: tanzu-java-web-app
-	  apps.tanzu.vmware.com/auto-configure-actuators: "true"
-	  apps.tanzu.vmware.com/has-tests: "true"
-	  apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
-    name: tanzu-java-web-app
+      name: tanzu-java-web-app
+      generation: 1
+      labels:
+	    app.kubernetes.io/part-of: tanzu-java-web-app
+	    apps.tanzu.vmware.com/auto-configure-actuators: "true"
+	    apps.tanzu.vmware.com/has-tests: "true"
+	    apps.tanzu.vmware.com/workload-type: avi-l4-l7-server
     spec:
       params:
       - name: scanning_source_policy
