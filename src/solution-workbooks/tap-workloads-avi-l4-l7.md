@@ -320,17 +320,17 @@ In this section, we'll deploy a server workload using AVI L7, and expose it exte
 	  - name: serviceType
 	    value: ClusterIP
 	  - name: scanning_image_policy
-		value: lax-scan-policy
+        value: lax-scan-policy
 	  - name: ingressClass
-		value: avi-lb
+        value: avi-lb
 	  - name: testing_pipeline_matching_labels
-		value: apps.tanzu.vmware.com/language: java
-    serviceAccountName: default
-    source:
-      git:
-        ref:
-          branch: main
-        url: <Git url with Application code>
+        value: apps.tanzu.vmware.com/language: java
+      serviceAccountName: default
+      source:
+        git:
+          ref:
+            branch: main
+          url: <Git url with Application code>
     ```
 
 1. Once the process completes, you will see the Deployment, Service, and Ingress(L7) resources similar to the following snippet:
