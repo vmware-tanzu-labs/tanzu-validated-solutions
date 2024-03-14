@@ -1,6 +1,6 @@
 # VMware Tanzu Application Platform Architecture
 
-The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.7. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
+The VMware Tanzu Application Platform architecture provides a path to creating a production deployment of Tanzu Application Platform (informally known as TAP) 1.8. However, do not feel constrained to follow this exact path if your specific use cases warrant a different architecture.
 
 Design decisions enumerated in this document exemplify the main design issues you will encounter in planning your Tanzu Application Platform environment and the rationale behind a chosen solution path. Understanding these decisions can help provide a rationale for any necessary deviation from this architecture.
 
@@ -26,7 +26,7 @@ The Kubernetes Build Cluster will see bursty workloads as each build or series o
 
 ### Kubernetes Requirements - Build Cluster
 
-* Supported Kubernetes versions are 1.26, 1.27, 1.28.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28, 1.29.
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
 * 12 vCPUs available across all nodes.
@@ -80,7 +80,7 @@ ceip_policy_disclosed: FALSE-OR-TRUE-VALUE # Installation fails if this is not s
 
 shared:
   ingress_domain: "INGRESS-DOMAIN"
-  kubernetes_distribution: "openshift" # To be passed only for Openshift. Defaults to "".
+  kubernetes_distribution: "openshift" # To be passed only for OpenShift. Defaults to "".
   kubernetes_version: "K8S-VERSION"
   image_registry:
     project_path: "SERVER-NAME/REPO-NAME" # To be used by Build Service by appending "/buildservice" and used by Supply chain by appending "/workloads".
@@ -102,26 +102,30 @@ buildservice:
     namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
 supply_chain: testing_scanning
 ootb_supply_chain_testing_scanning: # Optional if the corresponding shared keys are provided.
+  source:
+    credentials_secret: "GIT-SOURCE-CREDENTIAL-SECRET-NAME" # (Optional) Defaults to "".
   registry:
     server: "SERVER-NAME"
     repository: "REPO-NAME"
   gitops:
-    ssh_secret: "SSH-SECRET-KEY" # (Optional) Defaults to "".
-grype:
-  namespace: "MY-DEV-NAMESPACE" # (Optional) Defaults to default namespace.
-  targetImagePullSecret: "TARGET-REGISTRY-CREDENTIALS-SECRET"
-  metadataStore:
-    url: METADATA-STORE-URL-ON-VIEW-CLUSTER
-    caSecret:
-        name: store-ca-cert
-        importFromNamespace: metadata-store-secrets
-    authSecret:
-        name: store-auth-token
-        importFromNamespace: metadata-store-secrets
-scanning:
-  metadataStore: {} # Deactivate the Supply Chain Security Tools - Store integration.
+    credentials_secret: "GITOPS-CREDENTIAL-SECRET-NAME" # (Optional) Defaults to "".
 tap_telemetry:
   customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating Tanzu Application Platform usage reports.
+
+app_scanning:
+  amr:
+    url: https://amr-graphql.VIEW-CLUSTER-INGRESS-DOMAIN # AMR GraphQL location at the View profile cluster.
+    accessToken: "AMR-GRAPHQL-READ-ACCESS-TOKEN"
+
+amr:
+  observer:
+    auth:
+      kubernetes_service_accounts:
+        enable: true
+    cloudevent_handler:
+      endpoint: https://amr-cloudevent-handler.VIEW-CLUSTER-INGRESS-DOMAIN # AMR CloudEvent Handler location at the View profile cluster.
+    ca_cert_data: |
+        "AMR-CLOUDEVENT-HANDLER-CA"
  ```
 
 ## Run Cluster Requirements
@@ -132,7 +136,7 @@ The Run Cluster's requirements are driven primarily by the applications that it 
 
 ### Kubernetes Requirements - Run Cluster
 
-* Supported Kubernetes versions are 1.26, 1.27, 1.28.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28, 1.29.
 * LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 16 GB per node.
@@ -182,7 +186,7 @@ ceip_policy_disclosed: FALSE-OR-TRUE-VALUE # Installation fails if this is not s
 
 shared:
   ingress_domain: INGRESS-DOMAIN
-  kubernetes_distribution: "openshift" # To be passed only for Openshift. Defaults to "".
+  kubernetes_distribution: "openshift" # To be passed only for OpenShift. Defaults to "".
   kubernetes_version: "K8S-VERSION"
   ca_cert_data: | # To be passed if using custom certificates.
     -----BEGIN CERTIFICATE-----
@@ -204,6 +208,16 @@ appliveview_connector:
 tap_telemetry:
   customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating Tanzu Application Platform usage reports.
 
+amr:
+  observer:
+    auth:
+      kubernetes_service_accounts:
+        enable: true
+    cloudevent_handler:
+      endpoint: https://amr-cloudevent-handler.VIEW-CLUSTER-INGRESS-DOMAIN # AMR CloudEvent Handler location at the View profile cluster.
+    ca_cert_data: |
+        "AMR-CLOUDEVENT-HANDLER-CA" 
+
 ```
 
 ## View Cluster Requirements
@@ -214,7 +228,7 @@ The View Cluster's requirements are driven primarily by the respective applicati
 
 ### Kubernetes Requirements - View Cluster
 
-* Supported Kubernetes versions are 1.26, 1.27, 1.28.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28, 1.29.
 * LoadBalancer for ingress controller (requires 1 external IP address).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
@@ -251,12 +265,13 @@ tap.tanzu.vmware.com
 
 To install a View Cluster, use the following `view` profile template:
 ```yaml
+
 profile: view
 ceip_policy_disclosed: FALSE-OR-TRUE-VALUE # Installation fails if this is not set to true. Not a string.
 
 shared:
   ingress_domain: "INGRESS-DOMAIN"
-  kubernetes_distribution: "openshift" # To be passed only for Openshift. Defaults to "".
+  kubernetes_distribution: "openshift" # To be passed only for OpenShift. Defaults to "".
   kubernetes_version: "K8S-VERSION"
   ca_cert_data: | # To be passed if using custom certificates.
     -----BEGIN CERTIFICATE-----
@@ -269,8 +284,9 @@ contour:
       type: LoadBalancer # NodePort can be used if your Kubernetes cluster doesn't support LoadBalancing.
 
 tap_gui:
-  service_type: ClusterIP
   app_config:
+    auth:
+      allowGuestAccess: true  # This allows unauthenticated users to log in to your portal. If you want to deactivate it, make sure you configure an alternative auth provider.
     catalog:
       locations:
         - type: url
@@ -297,6 +313,7 @@ appliveview:
 
 tap_telemetry:
   customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating Tanzu Application Platform usage reports.
+
  ```
 
 ## Iterate Cluster Requirements
@@ -308,7 +325,7 @@ The Iterate Cluster is for "inner loop" development iteration. Developers connec
 
 ### Kubernetes Requirements - Iterate Cluster
 
-* Supported Kubernetes versions are 1.26, 1.27, 1.28.
+* Supported Kubernetes versions are 1.26, 1.27, 1.28, 1.29.
 * LoadBalancer for ingress controller (2 external IP addresses).
 * Default storage class.
 * At least 16 GB available memory that is allocatable across clusters, with at least 8 GB per node.
@@ -371,7 +388,7 @@ web-servers-lite.buildpacks.tanzu.vmware.com
 
 ```
 
-To install a Iterate Cluster, use the following `iterate` profile template:
+To install an Iterate Cluster, use the following `iterate` profile template:
 ```yaml
 profile: iterate
 
@@ -381,9 +398,8 @@ shared:
   kubernetes_version: "K8S-VERSION"
   image_registry:
     project_path: "SERVER-NAME/REPO-NAME" # To be used by Build Service by appending "/buildservice" and used by Supply chain by appending "/workloads"
-    secret:
-      name: "KP-DEFAULT-REPO-SECRET"
-      namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+    username: "KP-DEFAULT-REPO-USERNAME"
+    password: "KP-DEFAULT-REPO-PASSWORD"
   ca_cert_data: | # To be passed if using custom certificates
   -----BEGIN CERTIFICATE-----
   MIIFXzCCA0egAwIBAgIJAJYm37SFocjlMA0GCSqGSIb3DQEBDQUAMEY...
@@ -393,20 +409,20 @@ ceip_policy_disclosed: FALSE-OR-TRUE-VALUE # Installation fails if this is not s
 
 # The above shared keys may be overridden in the below section.
 
-buildservice:
-# Takes the value from the shared section by default, but can be overridden by setting a different value.
+buildservice: # Optional if the corresponding shared keys are provided.
   kp_default_repository: "KP-DEFAULT-REPO"
-  kp_default_repository_secret:
-    name: "KP-DEFAULT-REPO-SECRET"
-    namespace: "KP-DEFAULT-REPO-SECRET-NAMESPACE"
+  kp_default_repository_username: "KP-DEFAULT-REPO-USERNAME"
+  kp_default_repository_password: "KP-DEFAULT-REPO-PASSWORD"
 
 supply_chain: basic
 ootb_supply_chain_basic: # Optional if the shared above mentioned shared keys are provided.
+  source:
+    credentials_secret: "GIT-SOURCE-CREDENTIAL-SECRET-NAME" # (Optional) Defaults to "".
   registry:
     server: "SERVER-NAME"
     repository: "REPO-NAME"
   gitops:
-    ssh_secret: "SSH-SECRET-KEY" # (Optional) Defaults to "".
+    credentials_secret: "GITOPS-CREDENTIAL-SECRET-NAME" # (Optional) Defaults to "".
 
 image_policy_webhook:
   allow_unmatched_tags: true
@@ -427,11 +443,12 @@ appliveview_connector:
 
 tap_telemetry:
   customer_entitlement_account_number: "CUSTOMER-ENTITLEMENT-ACCOUNT-NUMBER" # (Optional) Identify data for creating Tanzu Application Platform usage reports.
+
 ```
 
 ## Tanzu Application Platform Upgrade Approach
 
-When a new version of Tanzu Application Platform is released, we recommend that you first upgrade the operator sandbox environment.
+When a new version of Tanzu Application Platform is available, we recommend that you first upgrade the operator sandbox environment.
 
 Before upgrading the production environment, install a sample subset of applications and perform any applicable platform tests specific to your organization in the sandbox. Such tests may include building a representative set of applications and verifying that they still deploy successfully to your sandbox Run Cluster.
 
@@ -486,6 +503,8 @@ External clusters allow services to have different infrastructure, security, and
 
 ![External services clusters](img/tap-architecture-planning/external-cluster.jpg)
 
+**Note** - The experimental APIs developed to support external services cluster communication will be deprecated and are marked for removal in Tanzu Application Platform v1.9.
+
 ### External Injected
 
 Applications that consume services that do not adhere to the Kubernetes service binding specification require the usage of a K8s secret, implemented in the same app deployment containing the necessary connection details. This method provides the most flexibility and makes it possible to consume legacy services.
@@ -530,7 +549,7 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity provider into Tanzu Application Platform.
 
-To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/authn-authz-pinniped-login.html).
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/authn-authz-pinniped-login.html).
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
@@ -550,7 +569,7 @@ The following two roles are for service accounts associated with the Tanzu Suppl
 * `workload`
 * `deliverable`
 
-For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/authn-authz-overview.html).
+For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/authn-authz-overview.html).
 
 ## Developer tools (Inner-Loop)
 
@@ -558,4 +577,4 @@ Tanzu Application Platform allows developers to quickly build and test applicati
 
 ## Deployment Instructions
 
-For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/multicluster-installing-multicluster.html).
+For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/multicluster-installing-multicluster.html).
