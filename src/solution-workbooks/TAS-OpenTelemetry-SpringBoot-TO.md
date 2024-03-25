@@ -1,25 +1,25 @@
-# Instrumenting TAS OpenTelemetry (OTel) for Spring Boot application with Tanzu Observability (TO)/Wavefront 
+# Instrumenting TAS OpenTelemetry for Spring Boot Application with Tanzu Observability or Wavefront 
 
-The OpenTelemetry agent for Java based spring-boot application enables JMX profiling, tracing, eventing on any Java 8+ application and dynamically injects bytecode to capture telemetry from a number of popular libraries and frameworks. This provides the ability to gather telemetry data from a Java application without code changes.
+The OpenTelemetry (OTel) agent for Java based Spring Boot application enables JMX profiling, tracing, eventing on any Java 8+ application, and dynamically injects bytecode to capture telemetry from a number of popular libraries and frameworks. This provides the ability to gather telemetry data from a Java application without code changes.
 The OpenTelemetry Java agent uses `OTLP` exporter configured to send data to OpenTelemetry collector
 
-Here we will enable Spring Micrometer traces for a sample Spring boot application through the OpenTelemetry Java agent that is available with the latest [Java buildpack](https://github.com/cloudfoundry/java-buildpack.git) `v4.66.0`.
+For this demonstration, we've enabled the Spring Micrometer traces for a sample Spring Boot application through the OpenTelemetry Java agent that is available with the latest [Java buildpack](https://github.com/cloudfoundry/java-buildpack.git) `v4.66.0`.
 
-Before using the Buildpack to fetch the metrics, we need to enable OpenTelemetry Collector agent on the TAS side under Wavefront Nozzle tile settings.
+Before using the buildpack to fetch the metrics, we must enable OpenTelemetry Collector agent on TAS under the Wavefront Nozzle tile settings.
 
 ![OTEL](img/TAS-OpenTelemetry-SpringBoot-TO/image1.jpg)
 
 ## Configuring OTel on Tanzu Observability by Wavefront Nozzle
 
-In this section, we configure the OTel on Tanzu observability by configuraing few parameters in the TAS for Wavefront tile.
+In this section, we'll configure OTel on Tanzu Observability (TO) by configuraing few parameters in TAS for the Wavefront tile.
 
-1. On the TAS for Wavefront tile, add the below settings in the `Config` section under **Wavefront Proxy Config** > **Custom Proxy Configuration** > **Custom**.
+1. On TAS for Wavefront tile, add the below settings in the `Config` section under **Wavefront Proxy Config** > **Custom Proxy Configuration** > **Custom**.
     ```bash
     otlpGrpcListenerPorts=4317
     otlpHttpListenerPorts=4318
     otlpResourceAttrsOnMetricsIncluded=true
     ```
-1. Add a Pre-processing rule under the `Preprocessor Rules` section under **Wavefront Proxy Config** > **Custom Proxy Configuration** > **Custom**.
+1. Add a pre-processing rule under the `Preprocessor Rules` section under **Wavefront Proxy Config** > **Custom Proxy Configuration** > **Custom**.
     ```bash
     '4317':
     - rule    : drop_process_command
@@ -28,27 +28,27 @@ In this section, we configure the OTel on Tanzu observability by configuraing fe
     ```
 
     ![TAS-TO-Settings](img/TAS-OpenTelemetry-SpringBoot-TO/image2.jpg)
-1.	Save the changes and Apply.
-
-    > Note
-    Refer to the following documents for the parameter references.
+1.	Save the changes and click **Apply**.
+</br>For more information about the parameter references, see the following documents:
     - https://opentelemetry.io/docs/languages/java/automatic/
     - https://opentelemetry.io/docs/languages/java/automatic/spring-boot/
 
 
-## Deploying a sample spring-boot application and creating the service for Otel-Collector
+## Deploying a Sample Spring Boot Application and Creating the Service for Otel-Collector
 
-Next step is to create a spring-boot application with the java-buildpack (v4.66.0) that has the open-telemetry JAVA agent. TAS 5.0.4 has been used for this demonstration purpsoe.
+In the next step, we'll create a Spring Boot application with the java-buildpack (v4.66.0) that has the open-telemetry JAVA agent.
 
-The spring music application is cloned from https://github.com/cloudfoundry-samples/spring-music in the jumpbox.  
+> **Note** We've used TAS 5.0.4 for this demonstration purpsoe.
 
-1. Clone the Spring music applicaiton from [Github](https://github.com/cloudfoundry-samples/spring-music) to jumpbox.
+The spring-music app is cloned from https://github.com/cloudfoundry-samples/spring-music in the jumpbox.  
 
-1. Go to the spring-music directory and run:
+1. Clone the spring-music app from [Github](https://github.com/cloudfoundry-samples/spring-music) to jumpbox.
+
+1. Go to the spring-music directory and run the following command:
     ```bash
     $ cf push spring-music -f manifest.yml -b https://github.com/cloudfoundry/java-buildpack.git
     ```
-1. Check the application status:
+1. To check the application status, run the following command:
     ```bash
     $ cf app spring-music       
     Showing health and status for app spring-music in org otel-test / space otel-space as admin...
@@ -72,11 +72,11 @@ The spring music application is cloned from https://github.com/cloudfoundry-samp
     memory usage:   1024M
     There are no running instances of this process.
     ```
-1. Create a User-provided service for the Spring-Music application and bind to it.
+1. Create a user-provided service for the spring-music app and bind to it.
     ```bash
     $ cf cups spring-music-otel-collector -p '{"otel.exporter.otlp.endpoint":"http://wavefront-proxy.service.internal:4317","otel.exporter.otlp.metrics.temporality.preference":"delta","otel.resource.attributes":"application=spring-music,cluster=otel-test,shard=ap1","otel.traces.exporter":"otlp","otlp.metrics.exporter":"otlp","otel.exporter.otlp.protocol":"grpc","otel.service.name":"spring-music-svc","otel.jmx.target.system":"jetty,kafka-broker,tomcat","otel.javaagent.debug":"true"}'
     ```
-1. Bind the service to the spring-music application and restage the app.
+1. Bind the service to the spring-music app and restage the app.
     ```bash
     $ cf bind-service spring-music spring-music-otel-collector  && cf restage spring-music
 
@@ -102,7 +102,7 @@ The spring music application is cloned from https://github.com/cloudfoundry-samp
 
 ## Observing the Metrics in VMware Aria for Operations (Tanzu Observability)
 
-For Spring micrometer traces for the application, the data is populated in the Spring Boot Dashboard under Tanzu Observability portal
+For Spring micrometer traces for the application, the data is populated in the Spring Boot dashboard under the Tanzu Observability portal.
 
 ![Spring-boot-dashboard](img/TAS-OpenTelemetry-SpringBoot-TO/to-1.jpg)
 
@@ -110,17 +110,17 @@ For Spring micrometer traces for the application, the data is populated in the S
 
 ![JVM-Utilization](img/TAS-OpenTelemetry-SpringBoot-TO/to-2.jpg)
 
-**Garbage collection and Buffer pools**
+**Garbage collection and Buffer pools**:
 
 ![Garbage collection and Buffer pools](img/TAS-OpenTelemetry-SpringBoot-TO/to-3.jpg)
 
-**JDBC connections**
+**JDBC connections**:
 
 ![JDBC connections](img/TAS-OpenTelemetry-SpringBoot-TO/to-4.jpg)
 
 
 
-The telemetry data further enriches to provide tracing information, services call, operational tasks, latency between the classes and system calls
+The telemetry data further enriches to provide tracing information, services call, operational tasks, and latency between the classes and system calls:
 
 ![Temeletry Data](img/TAS-OpenTelemetry-SpringBoot-TO/to-5.jpg)
 
@@ -132,5 +132,5 @@ The telemetry data further enriches to provide tracing information, services cal
 
 ## Conclusion
 
-- The current implementation helps in getting Spring boot app tracing to TO tile from TAS through the wavefront proxy as existing TAS firehose doesn’t allow existing tracing metrics from the platform
-- Using Open Telemetry Javaagent in the buildpack allows the user to auto instrument most of the data required from the spring boot application without the need to configure manually. 
+- The current implementation helps in getting Spring Boot application tracing to TO tile from TAS through the wavefront proxy as existing TAS firehose doesn’t allow existing tracing metrics from the platform.
+- Using Open Telemetry Javaagent in the buildpack, the user can auto instrument most of the data required from the Spring Boot application without configuring them manually.
