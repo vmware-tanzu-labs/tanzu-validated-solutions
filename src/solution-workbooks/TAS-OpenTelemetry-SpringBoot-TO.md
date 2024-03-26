@@ -9,7 +9,7 @@ Before using the buildpack to fetch the metrics, we must enable OpenTelemetry Co
 
 ![OTEL](img/TAS-OpenTelemetry-SpringBoot-TO/image1.jpg)
 
-## Configuring OTel on Tanzu Observability by Wavefront Nozzle
+## Configure OTel on Tanzu Observability by Wavefront Nozzle
 
 In this section, we'll configure OTel on Tanzu Observability (TO) by configuraing few parameters in TAS for the Wavefront tile.
 
@@ -34,7 +34,7 @@ In this section, we'll configure OTel on Tanzu Observability (TO) by configurain
     - https://opentelemetry.io/docs/languages/java/automatic/spring-boot/
 
 
-## Deploying a Sample Spring Boot Application and Creating the Service for Otel-Collector
+## Deploy a Sample Spring Boot Application and Create the Service for Otel-Collector
 
 In the next step, we'll create a Spring Boot application with the java-buildpack (v4.66.0) that has the open-telemetry JAVA agent.
 
