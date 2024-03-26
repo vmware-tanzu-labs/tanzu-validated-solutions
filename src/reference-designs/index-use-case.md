@@ -18,4 +18,5 @@ By using the diverse portfolio of VMware Tanzu, you can cater to a wide range of
 - [Backing Up and Restoring the KeyDB deployments on Tanzu Kubernetes Grid](../solution-workbooks/keydb-backup.md)
 - [Backing Up and Restoring the MariaDB Deployments on Tanzu Kubernetes Grid](../solution-workbooks/mariadb-backup.md)
 - [Backing Up and Restoring the Rabbitmq Deployments on Tanzu Kubernetes Grid](../solution-workbooks/rabbitmq-backup.md)
+- [Instrumenting TAS OpenTelemetry for Spring Boot Application with Tanzu Observability or Wavefront](../solution-workbooks/TAS-OpenTelemetry-SpringBoot-TO.md)
 
