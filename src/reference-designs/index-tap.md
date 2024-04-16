@@ -1,6 +1,6 @@
-# VMware Tanzu Application Platform 1.7 Planning and Architecture Reference
+# VMware Tanzu Application Platform 1.8 Planning and Architecture Reference
 
-The VMware Tanzu Application Platform Planning and Architecture Reference provides a standard architecture for deploying VMware Tanzu Application Platform (informally known as TAP) 1.7. The document covers topics such as Kubernetes requirements and cluster layout for VMware Tanzu Application Platform. 
+The VMware Tanzu Application Platform Planning and Architecture Reference provides a standard architecture for deploying VMware Tanzu Application Platform (informally known as TAP) 1.8. The document covers topics such as Kubernetes requirements and cluster layout for VMware Tanzu Application Platform. 
 
 | Topic   | Description  | 
 |---            |---                |
