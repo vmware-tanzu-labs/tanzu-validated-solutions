@@ -89,7 +89,7 @@ For more information on configuring Velero and best practices, see [Installing V
 
 We will deploy a stateful application named `Guestbook` on the source cluster, and enter some messages for data persistence validation. We will also create an Ingress object for backing up this application and ensure to backup and restore this in the destination environment. 
 
-1. Deploy the Guestbook app on the TKGM cluster by following the steps mentioned [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-A6348191-D403-4CDA-9183-4F4C28A6B093.html). Please refer [here](./resources/tkgm-to-tkgs-stateful-app-migration/) for app config files.
+1. Deploy the Guestbook app on the TKGM cluster by following the steps mentioned [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-A6348191-D403-4CDA-9183-4F4C28A6B093.html). Please refer [here](./resources/tkgm-to-tkgs-stateful-app-migration/Guestbook-app-files.zip) for app config files.
 1. Add some data entries in the guestbook app before taking Velero backup and ensure that you see the new entries.
 ![Guestbook app](img/tkgm-to-tkgs-stateful-app-migration/image1.png)
 
