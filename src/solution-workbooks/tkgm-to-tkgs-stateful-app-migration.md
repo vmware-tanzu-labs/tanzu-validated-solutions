@@ -1,4 +1,4 @@
-# Migrating a Stateful Application from TKGm Cluster to TKGS Cluster
+# Migrating a Stateful Application from TKGm Cluster to TKGs Cluster
 
 The purpose of this document is to showcase the migration of stateful applications from TKGm based workload cluster to TKGs based workload cluster with data persistence. 
 
@@ -26,7 +26,7 @@ On the other hand, RTO refers to the maximum acceptable delay between the interr
 
 ## Environment Overview
 
-For this demonstration, we have configured two ESXi clusters part of the same Datacenter, with different storage and networking connectivity across the clusters. One cluster is configured with the TKGm environment and considered as the source environment. The other cluster is configured with TKGS and considered as the destination environment.
+For this demonstration, we have configured two ESXi clusters part of the same Datacenter, with different storage and networking connectivity across the clusters. One cluster is configured with the TKGm environment and considered as the source environment. The other cluster is configured with TKGs and considered as the destination environment.
 
 ### Source Environment - TKGm
 
@@ -49,7 +49,7 @@ TKGm environment is configured with a single management cluster and multiple wor
   tkg-standalone-mgmt-cl  tkg-system  running  1/1           1/1      v1.27.5+vmware.1  management  dev   v1.27.5---vmware.1-tkg.1
 ```
 
-### Destination Environment - TKGS
+### Destination Environment - TKGs
 
 We have configured the TKGs environment backed with NSX-T Networking by following the reference architecture specified in [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX Reference Design](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-with-tanzu-nsxt.html) with the following prerequisites: 
 
@@ -61,7 +61,7 @@ We have configured the TKGs environment backed with NSX-T Networking by followin
 |Tanzu Kubernetes Release(for workload clusters)|v1.26.13|
 |VMware NSX|4.1.0.2|
 
-We have enabled the Supervisor cluster, created a Supervisor Namespace, and deployed a Tanzu workload cluster. The TKGs environment is backed with NSX-T Networking and Contour is deployed as a Tanzu package on the workload cluster to provide L7 Ingress functionality. For more information about installing Tanzu packages on the TKGS workload cluster, see [Prepare to install Tanzu Packages](https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.2.1/tanzu-packages/prep.html). 
+We have enabled the Supervisor cluster, created a Supervisor Namespace, and deployed a Tanzu workload cluster. The TKGs environment is backed with NSX-T Networking and Contour is deployed as a Tanzu package on the workload cluster to provide L7 Ingress functionality. For more information about installing Tanzu packages on the TKGs workload cluster, see [Prepare to install Tanzu Packages](https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.2.1/tanzu-packages/prep.html). 
 
 ```bash
 # kubectl vsphere login --vsphere-username=administrator@vsphere.local --server=192.168.120.2 --tanzu-kubernetes-cluster-name tkgs-cluster-01 --insecure-skip-tls-verify
@@ -108,11 +108,11 @@ We'll deploy a stateful application named `Guestbook` on the source cluster, and
     # velero backup describe <backup name>
     ```
 
-## Restore the Backed-up Application on the TKGS Cluster Using Velero
+## Restore the Backed-up Application on the TKGs Cluster Using Velero
 
 In this section, we'll restore the backed-up application on the destination cluster, and ensure that all the objects are backed up and validate the data persistency.
 
-1. Restore the backed-up application to the TKGS workload cluster.
+1. Restore the backed-up application to the TKGs workload cluster.
 
     ```bash
     # velero restore create --from-backup <backup name>
@@ -132,7 +132,7 @@ In this section, we'll restore the backed-up application on the destination clus
 1. Update the Ingress object of the application and the `spec.ingressClass` name to match the IngressClass name on the destination cluster.
 1. Access the application and validate that the data is persistent after the migration. Also, make some new entries to the application to ensure the app runs fine on the destination. 
 
-## TKGm to TKGS Migration Observations
+## TKGm to TKGs Migration Observations
 
 In this section, we'll discuss about the issues that we encountered during the migration, and to troubleshoot them. 
 
@@ -195,7 +195,7 @@ You must ensure to change the IngressClass name after restoring the workloads on
 ## Appendix
 ### References
 - [Velero Storage classes config map](https://velero.io/docs/v1.13/restore-reference/#changing-pvpvc-storage-classes)
-- [Package Installation on TKGS cluster](https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.2.1/tanzu-packages/prep.html#supervisor-version-requirements-4)
+- [Package Installation on TKGs cluster](https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.2.1/tanzu-packages/prep.html#supervisor-version-requirements-4)
 - [NSX ALB L7 for TKGM](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-deployment-guides-tko-on-vsphere-nsxt.html#configure-ako-deployment-config-adc-for-workload-cluster-to-enable-nsx-alb-l7-ingress-with-nodeportlocal-mode-28)
 - [Guesbook config files]()
 - [App deployment steps](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-A6348191-D403-4CDA-9183-4F4C28A6B093.html)
