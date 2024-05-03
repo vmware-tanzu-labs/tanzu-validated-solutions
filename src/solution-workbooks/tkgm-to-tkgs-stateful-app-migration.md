@@ -1,6 +1,6 @@
 # Migrating a Stateful Application from TKGm Cluster to TKGs Cluster
 
-The purpose of this document is to showcase the migration of stateful applications from TKGm based workload cluster to TKGs based workload cluster with data persistence. 
+The purpose of this document is to showcase the migration of stateful applications from Tanzu Kubernetes Grid Management (informally known as TKGm) based workload cluster to Tanzu Kubernetes Grid Service (informally known as TKGs) based workload cluster with data persistence. 
 
 
 Migrating the stateful applications across Kubernetes clusters is not straightforward as compared to migrating the stateless applications. Because, the stateful applications would always be associated with stable system, network, and storage configurations. Due to this reason, the migration of stateful applications requires proper assessment, planning, and execution of migration.

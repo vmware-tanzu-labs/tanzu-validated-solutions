@@ -1,6 +1,6 @@
 # Reference Design for Migration from TKGm to TKGs (vSphere with Tanzu)
 
-With the proposed roadmap on Tanzu Kubernetes Grid with a management cluster (informally known as TKGm) continuity, existing customers need to have a mechanism to migrate to vSphere with Tanzu to retain the business continuity. The mechanism should enable seamless migration of Core Applications, utilizing their existing Infrastructure, Storage, Network, Security Policies, RBAC, authentication policies. The mechanism should also address very minimal or no additional purchase of software and solutions but utilize the existing solutions offerings from VMware.
+With the proposed roadmap on Tanzu Kubernetes Grid with a Management Cluster (informally known as TKGm) continuity, existing customers need to have a mechanism to migrate to Tanzu Kubernetes Grid Service (part of vSphere with Tanzu, informally known as TKGs) to retain the business continuity. The mechanism should enable seamless migration of Core Applications, utilizing their existing Infrastructure, Storage, Network, Security Policies, RBAC, and Authentication policies. The mechanism should also address very minimal or no additional purchase of software and solutions but utilize the existing solutions offerings from VMware.
 
 ## Intended Audience
 
