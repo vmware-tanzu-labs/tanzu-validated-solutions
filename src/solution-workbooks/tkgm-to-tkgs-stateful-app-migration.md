@@ -5,9 +5,10 @@ The purpose of this document is to showcase the migration of stateful applicatio
 
 Migrating the stateful applications across Kubernetes clusters is not straightforward as compared to migrating the stateless applications. Because, the stateful applications would always be associated with stable system, network, and storage configurations. Due to this reason, the migration of stateful applications requires proper assessment, planning, and execution of migration.
 
-For this demonstration, we used Velero to migrate a sample stateful application configured with an Ingress. Velero is an open source community standard tool to back up and restore TKG workloads. For more information about Velero installation, see [Installing Velero in Tanzu Kubernetes Cluster](https://docs.vmware.com/en/VMware-Tanzu-Reference-Architecture/services/tanzu-solutions-workbooks/solution-workbooks-velero-with-restic.html)
+For this demonstration, we used Velero to migrate a sample stateful application configured with an Ingress. Velero is an open source community standard tool to back up and restore TKG workloads. For more information about Velero installation, see [Installing Velero in Tanzu Kubernetes Cluster](https://docs.vmware.com/en/VMware-Tanzu-Reference-Architecture/services/tanzu-solutions-workbooks/solution-workbooks-velero-with-restic.html).
+
  
- ## Assumptions
+## Assumptions
 
 Below are few assumptions for the end users to consider:
 
