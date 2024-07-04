@@ -1,4 +1,4 @@
-﻿# Deploying Multi-site Spring Application using Tanzu Data on TAS
+﻿# Deploying Multi-Site Spring Application using Tanzu Data on TAS
 
 A multi-site application operates seamlessly across multiple locations, ensuring centralised management, consistency, and scalability. One of the critical aspects of multi-site applications is their robust data replication and restore capabilities, which are essential for minimizing downtime and maintaining operations continuity.
 
