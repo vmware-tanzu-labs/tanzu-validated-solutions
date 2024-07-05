@@ -14,3 +14,4 @@ This is the table of contents from which the VMware Tanzu Solutions Workbooks Do
     - [Backing Up and Restoring the MariaDB Deployments on Tanzu Kubernetes Grid](./solution-workbooks/mariadb-backup.md)
     - [Backing Up and Restoring the Rabbitmq Deployments on Tanzu Kubernetes Grid](./solution-workbooks/rabbitmq-backup.md)
     - [Instrumenting TAS OpenTelemetry for Spring Boot Application with Tanzu Observability or Wavefront](./solution-workbooks/TAS-OpenTelemetry-SpringBoot-TO.md)
+    - [Deploying Multi-Site Spring Application using TAS with Tanzu Data](./solution-workbooks/Deploy%20Multi-site%20Spring%20application%20using%20Tanzu%20Data%20on%20TAS.md)
