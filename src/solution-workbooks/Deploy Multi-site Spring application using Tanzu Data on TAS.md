@@ -4,7 +4,7 @@ A multi-site application operates seamlessly across multiple locations, ensuring
 
 In critical scenarios like banking, retail chains, healthcare networks, and government agencies, multi-site applications equipped with VMware Tanzu Data can be widely used to restore data quickly in case of system failures and disruptions. It ensures efficient operations and robust data recovery mechanisms to prevent production delays. It helps in replicating and restoring data in case of network outages and rapid recovery to maintain public services.
 
-The use case covered in this document demonstrates syncing big account information between two sites by enabling communication using VMware Tanzu Data Services. This solution workbook is using VMware Tanzu Data Services such as VMware Tanzu RabbitMQ, VMware Tanzu GemFire, VMware Tanzu Postgres, and Tanzu Platform for Cloud Foundry.
+The use case covered in this document demonstrates syncing big account information between two sites by enabling communication using VMware Tanzu Data Services. This solution workbook is using VMware Tanzu Data Services such as VMware Tanzu RabbitMQ, VMware Tanzu GemFire, VMware Tanzu Postgres, and Tanzu Platform for Cloud Foundry (formerly known as Tanzu Application Service).
 
 ## Supported Component Matrix
 
@@ -21,49 +21,49 @@ The validated bill of materials to install VMware Tanzu Data Services in multi-s
 
 Two regions/sites (active and passive) are required for this use case.
 
-> **Note** The scope of this document is limited to configuring replication between active and passive sites using VMware Tanzu Data Services.
+> **Note** The scope of this document is limited to configuring replication between active and passive sites using Tanzu Data Services.
 
 ### Region 1 (Active Region)
 
 - Region 1 is the cloud-native Spring application.
-- It is the main region where the applications and services exist. Also, the event streaming across various VMware Tanzu Data Services happens from this region.
+- It is the main region where the applications and services exist. Also, the event streaming across various Tanzu Data Services happens from this region.
 - It performs operations like creating bank accounts and generating account IDs. It also lists all the accounts opened in a particular bank using the bank ID.
-- The application receives User/bank details, sends them to RabbitMQ servers for exchange and publishes them to VMware Tanzu GemFire for cache management.
+- The application receives User/bank details, sends them to Tanzu RabbitMQ servers for exchange and publishes them to Tanzu GemFire for cache management.
 
 ### Region 2 (Passive Region)
 
 - Region 2 is the .NET Steeltoe application.
 - The passive region replicates the active region and is mainly used for achieving resiliency and data restoration.
-- RabbitMQ Servers (maintain stream of data in region 1), maintain global records for backup and recovery using Postgres.
+- Tanzu RabbitMQ Servers (maintain stream of data in region 1), maintain global records for backup and recovery using Postgres.
 
 ## VMware Tanzu Data Services
 
-VMware Tanzu Data Services provides robust disaster recovery (DR) solutions through several key features:
+Tanzu Data Services provides robust disaster recovery (DR) solutions through several key features:
 
 - **Automated Backups and Recovery**:
-  VMware Tanzu Data Services automate the backup processes, ensuring that data is regularly and consistently backed up. This reduces the risk of data loss and ensures that a recent copy of data is always available for recovery.
+  Tanzu Data Services automate the backup processes, ensuring that data is regularly and consistently backed up. This reduces the risk of data loss and ensures that a recent copy of data is always available for recovery.
 
 - **Replication**:
   Data is often replicated across multiple geographic locations. This geographic redundancy ensures that even if one location experiences a failure or disaster, the data is still available from another location.
 
 - **High Availability (HA)**:
-  VMware Tanzu Data Services are built with high availability in mind. This includes features like automatic failover, where the system can switch to a backup instance if the primary instance fails.
+  Tanzu Data Services are built with high availability in mind. This includes features like automatic failover, where the system can switch to a backup instance if the primary instance fails.
 
-By incorporating these features, VMware Tanzu Data Services offer a comprehensive and reliable disaster recovery solution that enhances overall efficiency and service quality for organizations across various sectors.
+By incorporating these features, Tanzu Data Services offer a comprehensive and reliable disaster recovery solution that enhances overall efficiency and service quality for organizations across various sectors.
 
 ### VMware Tanzu RabbitMQ
 
-VMware Tanzu RabbitMQ will exist in both Region 1 and Region 2. It can move, exchange and publish data between multiple regions to ensure data is seamlessly replicated for data recovery, ensuring no data loss even in case of any failovers.
+Tanzu RabbitMQ will exist in both Region 1 and Region 2. It can move, exchange and publish data between multiple regions to ensure data is seamlessly replicated for data recovery, ensuring no data loss even in case of any failovers.
 
 ### VMware Tanzu GemFire
 
-VMware Tanzu GemFire is significant for achieving low-latency in-memory data access.
+Tanzu GemFire is significant for achieving low-latency in-memory data access.
 
 ### VMware Tanzu Postgress
 
-VMware Tanzu Postgres establishes dedicated instances of Postgres databases and supports distributed high-availability (HA) systems.
+Tanzu Postgres establishes dedicated instances of Postgres databases and supports distributed high-availability (HA) systems.
 
-## Tanzu Application Service
+## Tanzu Platform for Cloud Foundry (formerly known as Tanzu Application Service)
 
 Deploying a multi-site application integrated with VMware Tanzu Data on Tanzu Platform for Cloud Foundry ensures high availability and effective disaster recovery for applications through several key features ensuring business continuity, and reliable service with robust disaster recovery capabilities.
 
@@ -71,11 +71,11 @@ Deploying a multi-site application integrated with VMware Tanzu Data on Tanzu Pl
 
 ![Reference-architecture](./img/multi-site-spring-app/app-01.png)
 
-## Deploy the multi-site Spring and .NET application using VMware Tanzu Data Services on Tanzu Platform for Cloud Foundry
+## Deploy the multi-site Spring and .NET application using Tanzu Data Services on Tanzu Platform for Cloud Foundry
 
 1. Install the **VMware Tanzu Data tiles** on Tanzu Platform for Cloud Foundry. For this scenario, we will install the following tiles- **VMware Tanzu RabbitMQ, VMware Tanzu GemFire** and **VMware Taznu Postgres**.
 
-2. Create services for **VMware Tanzu RabbitMQ**, **VMware Tanzu Gemfire** and **VMware Tanzu Postgres**, and validate service status.
+2. Create services for **VMware Tanzu RabbitMQ**, **VMware Tanzu GemFire** and **VMware Tanzu Postgres**, and validate service status.
 
    <!-- /* cSpell:disable */ -->
 
@@ -338,7 +338,7 @@ The application developer can use the following environment variables from `VCAP
 
 ## Configure VMware Tanzu RabbitMQ Servers using Federated Exchange
 
-Configure VMware Tanzu RabbitMQ Servers present in different regions to communicate with each other using Federated Exchanges.
+Configure Tanzu RabbitMQ Servers present in different regions to communicate with each other using Federated Exchanges.
 
 Federation exchange is a mechanism that allows a flow of messages through an exchange in one location (upstream) to be replicated to exchanges in other locations (downstream).
 
@@ -346,7 +346,7 @@ Federation exchange is a mechanism that allows a flow of messages through an exc
 
 **Downstream Server:** This is the secondary system responsible for transmitting the messages. It handles the federation exchange and queues the messages for further processing. Additionally, the connection to the upstream server is established and configured within this system.
 
-1. Login to Server 2 of RabbitMQ.
+1. Login to Server 2 of Tanzu RabbitMQ.
 
    The username, passwords, dashboard URL and other fields such as URI can be fetched using-
 
@@ -363,7 +363,7 @@ Federation exchange is a mechanism that allows a flow of messages through an exc
 2. Navigate to **Admin** > **Federation Upstreams** > Add a new upstream.
 3. Provide the values as given below and submit them using the **Add upstream** button:
    - **Name** - Provide a name of your choice.
-   - **URI** - Provide the URI of RabbitMQ from Region 1.
+   - **URI** - Provide the URI of Tanzu RabbitMQ from Region 1.
    - **Acknowledge Mode** - On confirm
    - **Exchange** - the name of the Exchange in Region 1 of RabbitMQ (check under the **Exchanges** tab). You can leave the other fields as it is.
 
@@ -377,7 +377,7 @@ Federation exchange is a mechanism that allows a flow of messages through an exc
 
 ![Policy-screenshot](./img/multi-site-spring-app/app-03.png)
 
-5. Create an Exchange in Region 2 of RabbitMQ with the same name as present in Region 1.
+5. Create an Exchange in Region 2 of Tanzu RabbitMQ with the same name as present in Region 1.
    Navigate to **Exchanges** and Add a new exchange.
    - **Name** - Name of the exchange (keep it the same as the one present in Region 1).
    - **Type** - topic
@@ -395,7 +395,7 @@ Federation exchange is a mechanism that allows a flow of messages through an exc
 
      Click **Bind** to submit.
 
-8. Now the user can publish messages from Region 1 and the data will be replicated in Region 2 of RabbitMQ automatically.
+8. Now the user can publish messages from Region 1 and the data will be replicated in Region 2 of Tanzu RabbitMQ automatically.
 
    - In Region 1 of RabbitMQ, navigate to **Exchanges** > **Publish Message**.
 
@@ -403,19 +403,19 @@ Federation exchange is a mechanism that allows a flow of messages through an exc
 
    ![Published-message](./img/multi-site-spring-app/app-05.png)
 
-9. In Region 2 of RabbitMQ, navigate to **Queues and Streams** > **Get messages**.
+9. In Region 2 of Tanzu RabbitMQ, navigate to **Queues and Streams** > **Get messages**.
 
    ![Message-queue](./img/multi-site-spring-app/app-06.png)
 
-   The data replication will be successful and you can view the message published from Region 1 of RabbitMQ in Region 2 of RabbitMQ.
+   The data replication will be successful and you can view the message published from Region 1 of Tanzu RabbitMQ in Region 2 of Tanzu RabbitMQ.
 
 ## Conclusion
 
 For broadcasting messages from one region to another, VMware Tanzu RabbitMQ ensures an instant replica for widespread accessibility. This leverages cross-site messaging within a distributed system.
 
-This helps in solving challenges such as, establishing and maintaining communication between multiple RabbitMQ clusters in various data centres.
+This helps in solving challenges such as, establishing and maintaining communication between multiple Tanzu RabbitMQ clusters in various data centres.
 
-VMware Tanzu GemFire acts as a low-latency in-memory caching database.
+Tanzu GemFire acts as a low-latency in-memory caching database.
 
 This implementation for data transfer guarantees systematic and automated message replication. It helps the client to achieve reliable multi-site data transfer without manual intervention.
 
