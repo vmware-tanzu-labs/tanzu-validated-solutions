@@ -4,7 +4,7 @@ The user-managed packages extend the core functionality of the Kubernetes cluste
 
 For example, you can install the Contour package to implement ingress control, the Harbor package to configure a private container registry, or the Fluent Bit, Grafana, and Prometheus packages to collect logs and metrics from your clusters.
 
-You can install Tanzu packages via the CLI by invoking the `tanzu package install` command or directly from Tanzu Mission Control by utilizing the [**TMC Catalog**](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
+You can install Tanzu packages via the CLI by invoking the `tanzu package install` command or directly from Tanzu Mission Control by utilizing the [**TMC Catalog**](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-using-GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
 
 ## General Instructions for Installing a Package from Tanzu Mission Control
 
@@ -176,7 +176,7 @@ After installing Grafana, ensure that the installation status for the Grafana pa
 
 You can use Fluent Bit to gather logs from management clusters or Tanzu Kubernetes clusters running in vSphere, Amazon EC2, and Azure. You can then forward them to a log storage provider such as [Elastic Search](https://www.elastic.co/), [Kafka](https://www.confluent.io/confluent-operator/), [Splunk](https://www.splunk.com/), or an HTTP endpoint.
 
-The example shown in this document uses an HTTP endpoint [VMware Aria Operations for Logs](https://docs.vmware.com/en/VMware-vRealize-Log-Insight-Cloud/index.html) for forwarding logs from Tanzu Kubernetes clusters.
+The example shown in this document uses an HTTP endpoint [VMware Aria Operations for Logs](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/vmware-cis/aria/aria-operations-for-logs/SaaS/using-vmware-aria-operations-for-logs-cloud.html) for forwarding logs from Tanzu Kubernetes clusters.
 
 A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-fluentbit.html).
 

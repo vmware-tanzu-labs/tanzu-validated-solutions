@@ -24,7 +24,7 @@ Before deploying VMware Tanzu Application Platform, ensure that the following pr
 * Accept the End User License Agreements (EULAs).
 * The Kubernetes CLI, kubectl, v1.20, v1.21 or v1.22, installed and authenticated with administrator rights for your target cluster.
 
-Additional details concerning prerequisites may be found in Tanzu Application Platform [documentation](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-prerequisites.html).
+Additional details concerning prerequisites may be found in Tanzu Application Platform [documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/overview.html).
 
 >**Note** Use the Kubernetes defaults `serviceDomain` of `cluster.local` in workload clusters where Tanzu Application Platform is deployed.
 
@@ -149,7 +149,7 @@ Provide following user inputs to set environment variables into commands and exe
 * `INSTALL_REGISTRY_USERNAME`- tanzu net username
 * `INSTALL_REGISTRY_PASSWORD` - tanzu net password
 
- For more information, see [Build Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-build-sample.html) in the Tanzu Application Platform product documentation.
+ For more information, see [Build Profile](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/multicluster-reference-tap-values-build-sample.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -281,7 +281,7 @@ Provide the following user inputs to set environments variables into commands an
 <!-- /* cSpell:enable */ -->
 >**Note** Contour settings in tap-values-run.yaml must be modified if you are not using AWS.
 
- For more information, see [Run Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-run-sample.html) in the Tanzu Application Platform product documentation.
+ For more information, see [Run Profile](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/multicluster-reference-tap-values-run-sample.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -355,7 +355,7 @@ Provide following user inputs to set environments variables into commands and ex
     See this [example](https://github.com/sendjainabhi/tap/blob/main/catalog-info.yaml)
 * `TAP_RUN_CLUSTER_NAME` - Run cluster name
 
- See [View Profile](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.1/tap/GUID-multicluster-reference-tap-values-view-sample.html) for more details.
+ See [View Profile](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/multicluster-reference-tap-values-view-sample.html) for more details.
 
 
 
@@ -559,7 +559,7 @@ Perform the steps outlined in [Configure developer namespaces to use installed p
 ### Deploy Sample Application
 See the steps to deploy and test the [sample application](#tap-sample-app).
 
-For more information, also see [Getting started with the Tanzu Application Platform](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-getting-started.html).
+For more information, also see [Getting started with the Tanzu Application Platform](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/getting-started.html).
 
 
 ## <a id=tap-full> </a> Set Up Tanzu Application Platform Iterate Cluster
@@ -752,12 +752,12 @@ kubectl get ksvc
 In the event of failure, use the following command to obtain failure details:
 `kubectl get packageinstall/<package> -n tap-install -o yaml`.
 
-See [Troubleshooting Tanzu Application Platform Tips](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-troubleshooting.html) for additional details.
+See [Troubleshooting Tanzu Application Platform Tips](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/troubleshooting.html) for additional details.
 
 
 ### Service Bindings for Kubernetes
 
-See [Service Bindings for Kubernetes](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-service-bindings-about.html) for additional details.
+See [Service Bindings for Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform-hub/saas/tanzu-platform/spaces-concepts-about-services.html#service-bindings) for additional details.
 
 
 ### Tanzu Application Platform GUI Auth Provider

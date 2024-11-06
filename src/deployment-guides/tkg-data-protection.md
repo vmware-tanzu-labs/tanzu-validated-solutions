@@ -9,11 +9,11 @@ Before you enable Data Protection on a workload cluster, ensure the following pr
 
 - The workload cluster that you want to protect is registered or attached with Tanzu Mission Control.
 
-- You have created a credential for Data Protection as per instructions provided in the Tanzu Mission Control [documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-4F349EE4-9C64-4243-84FF-D287F497A3D0.html).
+- You have created a credential for Data Protection as per instructions provided in the Tanzu Mission Control [documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-using-GUID-4F349EE4-9C64-4243-84FF-D287F497A3D0.html).
 
-- You have created a Target Location for Data Protection as per instructions provided in the Tanzu Mission Control [documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-867683CE-8AF0-4DC7-9121-81AD507EDB3B.html).
+- You have created a Target Location for Data Protection as per instructions provided in the Tanzu Mission Control [documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-using-GUID-867683CE-8AF0-4DC7-9121-81AD507EDB3B.html).
 
-For more information about protecting the data resources in your Kubernetes clusters, see Data Protection in [VMware Tanzu Mission Control Concepts](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-C16557BC-EB1B-4414-8E63-28AD92E0CAE5.html).
+For more information about protecting the data resources in your Kubernetes clusters, see Data Protection in [VMware Tanzu Mission Control Concepts](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-concepts-GUID-C16557BC-EB1B-4414-8E63-28AD92E0CAE5.html).
 
 ## Enable Data Protection on Workload Cluster
 

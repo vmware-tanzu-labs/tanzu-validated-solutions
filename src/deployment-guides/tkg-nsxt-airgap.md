@@ -34,7 +34,7 @@ Before deploying Tanzu Kubernetes Grid in the your VMware NSX environment, ensur
 - A vCenter with NSX backed environment.
 - Ensure that the following NSX configurations are complete:
 
-  > **Note** The following configurations provide only a high-level overview of the required NSX configuration. For more information, see [NSX Data Center Installation Guide](https://docs.vmware.com/en/VMware-NSX/4.1/installation/GUID-3E0C4CEC-D593-4395-84C4-150CD6285963.html) and [NSX Data Center Product Documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
+  > **Note** The following configurations provide only a high-level overview of the required NSX configuration. For more information, see [NSX Data Center Installation Guide](https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/installation-guide/nsx-transformers-installation-guide.html) and [NSX Data Center Product Documentation](https://techdocs.broadcom.com/us/en/vmware-cis/nsx.html).
 
   - NSX manager instance is deployed and configured with Advanced or higher license.
   - vCenter Server that is associated with the NSX Data Center is configured as Compute Manager.
@@ -54,17 +54,17 @@ Before deploying Tanzu Kubernetes Grid in the your VMware NSX environment, ensur
   - A datastore with sufficient capacity for the control plane and worker node VM files.
   - Network time protocol (NTP) service is running on all hosts and vCenter.
   - A host, server, or VM based on Linux, macOS, or Windows which acts as your bootstrap machine which has docker installed. For this deployment, a virtual machine based on Photon OS will be used.
-  - Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). To configure required packages on the Cent OS machine, see [Deploy and Configure Bootstrap Machine](#configurebootstrap):
+  - Depending on the OS flavor of the bootstrap VM, download and configure the following packages from [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid). To configure required packages on the Cent OS machine, see [Deploy and Configure Bootstrap Machine](#configurebootstrap):
     - Tanzu CLI 2.3.0
     - Kubectl cluster CLI 1.26.5
-  - A vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
+  - A vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-prep-vsphere.html).
   - Download and import NSX Advanced Load Balancer 22.1.3 OVA to Content Library.
-  - Download the following OVA files from [VMware Customer Connect](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x) and import to vCenter. Convert the imported VMs to templates:
+  - Download the following OVA files from [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid) and import to vCenter. Convert the imported VMs to templates:
     - Photon v3 Kubernetes v1.26.5 OVA and/or
     - Ubuntu 2004 Kubernetes v1.26.5 OVA  
 
-> **Note** You can also download supported older versions of Kubernetes from [VMware Customer Connect](https://customerconnect.vmware.com/en/downloads/details?downloadGroup=TKG-160&productId=988&rPId=93384) and import them to deploy workload clusters on the intended Kubernetes versions.<p>
-> **Note** In Tanzu Kubernetes Grid nodes, it is recommended not to use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623). 
+> **Note** You can also download supported older versions of Kubernetes from [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid) and import them to deploy workload clusters on the intended Kubernetes versions.<p>
+> **Note** In Tanzu Kubernetes Grid nodes, it is recommended not to use hostnames with ".local" domain suffix. For more information, see [KB article](https://knowledge.broadcom.com/external/article?legacyId=83623). 
 
 ### <a id=resource-pools-and-vm-folders> </a> Resource Pools and VM Folders
 
@@ -116,7 +116,7 @@ Here are the high-level steps for deploying Tanzu Kubernetes Grid on NSX network
 
 
 ## <a id="configurensxt"> </a> Configure T1 Gateway and Logical Segments in NSX-T Data Center
-As a prerequisite, an NSX-T backed vSphere environment must be configured with at least one tier-0 gateway. A tier-0 gateway performs the functions of a tier-0 logical router. It processes traffic between the logical and physical networks. For more information about creating and configuring a tier-0 gateway, see [NSX documentation](https://docs.vmware.com/en/VMware-NSX/4.1/administration/GUID-E9E62E02-C226-457D-B3A6-FE71E45628F7.html).
+As a prerequisite, an NSX-T backed vSphere environment must be configured with at least one tier-0 gateway. A tier-0 gateway performs the functions of a tier-0 logical router. It processes traffic between the logical and physical networks. For more information about creating and configuring a tier-0 gateway, see [NSX documentation](https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/tier-0-gateways.html).
 
 This procedure comprises the following tasks:
 
@@ -125,7 +125,7 @@ This procedure comprises the following tasks:
 
 ### Add a Tier-1 Gateway
 
-The tier-1 logical router must be connected to the tier-0 logical router to get the northbound physical router access. The following procedure provides the minimum required configuration to create a tier-1 gateway, which is adequate to successfully deploy the Tanzu for Kubernetes Operations stack. For a more advanced configuration, see the [NSX documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
+The tier-1 logical router must be connected to the tier-0 logical router to get the northbound physical router access. The following procedure provides the minimum required configuration to create a tier-1 gateway, which is adequate to successfully deploy the Tanzu for Kubernetes Operations stack. For a more advanced configuration, see the [NSX documentation](https://techdocs.broadcom.com/us/en/vmware-cis/nsx.html).
 
 1. With admin privileges, log in to NSX Manager.
 1. Select **Networking** > **Tier-1 Gateways**.
@@ -215,7 +215,7 @@ Repeat steps 1-7 to create all other required overlay-backed segments. Once comp
 
   ![List of created segments](img/tkg-airgap-nsxt/T1-gateway-07.png)
 
-Additionally, you can create the required inventory groups and firewall rules. For more information, see the [NSX Data Center Product Documentation](https://docs.vmware.com/en/VMware-NSX/index.html).
+Additionally, you can create the required inventory groups and firewall rules. For more information, see the [NSX Data Center Product Documentation](https://techdocs.broadcom.com/us/en/vmware-cis/nsx.html).
 
 ## <a id="deploynsxalb"> </a>   Deploy and Configure NSX Advanced Load Balancer
 NSX Advanced Load Balancer (ALB) is an enterprise-grade integrated load balancer that provides L4- L7 load balancer support. 
@@ -704,9 +704,9 @@ To install Harbor, deploy an operating system of your choice with the following 
 - Memory: 8 GB
 - Storage (HDD): 160 GB
 
-Follow the instructions provided in [Deploy an Offline Harbor Registry on vSphere](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-harbor.html) to deploy and configure Harbor.
+Follow the instructions provided in [Deploy an Offline Harbor Registry on vSphere](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-harbor.html) to deploy and configure Harbor.
 
->**Note:** This VM-based harbor deployment is only supported for hosting TKG system images in an internet-restricted or air-gapped environment. To deploy a scalable and highly-available Harbor that can manage large numbers of images for hosted apps in a production environment, deploy the Harbor package to TKG clusters as described in [Install Harbor for Service Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html) in Creating and Managing TKG 2.3 Workload Clusters with the Tanzu CLI.
+>**Note:** This VM-based harbor deployment is only supported for hosting TKG system images in an internet-restricted or air-gapped environment. To deploy a scalable and highly-available Harbor that can manage large numbers of images for hosted apps in a production environment, deploy the Harbor package to TKG clusters as described in [Install Harbor for Service Registry](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor.html) in Creating and Managing TKG 2.3 Workload Clusters with the Tanzu CLI.
 
 ## <a id=configure-bootstrap> </a> Deploy and Configure Bootstrap Machine
 
@@ -973,7 +973,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
  - For the management cluster, this must be either Photon or Ubuntu based Kubernetes v1.26.5 OVA.
 
-     > **Note** Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-byoi-index.html).
+     > **Note** Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-byoi-index.html).
  - For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
     > **Note** Ensure that you download the most recent OVA base image templates in the event of security patch releases. You can find updated base image templates that include security patches on the Tanzu Kubernetes Grid product download page.
@@ -990,7 +990,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
 
-For more information about creating the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
+For more information about creating the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
 
 
 ### Management Cluster Configuration Template
@@ -1143,7 +1143,7 @@ To create the Management Cluster, run the following command:
 tanzu management-cluster create --file config.yaml
 ```
 
-- For a full list of configurable values and to know more about the fields present in the template file, see [Create a Management Cluster Configuration File](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-deploy-file.html).
+- For a full list of configurable values and to know more about the fields present in the template file, see [Create a Management Cluster Configuration File](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-deploy-config-vsphere.html#file).
 
 - Create a file using the values provided in the template and save the file with the `.yaml` extension. A sample yaml file used for management cluster deployment is provided in the [Appendix section](#supplemental-information) for your reference.
 
@@ -1682,8 +1682,7 @@ You can see that the workload cluster is successfully deployed and the AKO pod i
 
 User-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
 
-Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.<p>[Installing and Managing Packages with the Tanzu CLI
-](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-index.html)
+Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.<p>[Installing and Managing Packages with the Tanzu CLI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-index.html)
 
 |**Function**|**Package**|**Location**|
 | --- | --- | --- |
@@ -1938,7 +1937,7 @@ Follow this procedure to deploy Harbor into a workload cluster or a shared servi
       - harborAdminPassword
       - secretKey
 
-    You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [Deploy Harbor into a Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html).
+    You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor-mc.html#deploy).
 
 1. Remove the comments in the `harbor-data-values.yaml` file.
 
