@@ -616,9 +616,9 @@ The bastion host needs to be deployed with the following hardware configuration:
 
    ![Docker installation binaries](img/tkg-airgap-nsxt/docker-installation-binaries.jpg)
 
-2. Download Harbor OVA from the [Customer Connect](https://customerconnect.vmware.com/en/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). 
+2. Download Harbor OVA from the [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid). 
 
-3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/22_1_x).
+3. Download the NSX Advanced Load Balancer OVA from [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20NSX-T%20Container%20Plug-in).
 
 4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). Tanzu CLI and plug-ins need to be installed on the bastion host and the bootstrap machine.
 
@@ -1682,7 +1682,7 @@ You can see that the workload cluster is successfully deployed and the AKO pod i
 
 User-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
 
-Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.<p>[Installing and Managing Packages with the Tanzu CLI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-index.html)
+Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment.<p>[Installing and Managing Packages with the Tanzu CLI](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/index.html)
 
 |**Function**|**Package**|**Location**|
 | --- | --- | --- |
@@ -1833,7 +1833,7 @@ certificates:
  renewBefore: 360h
 ```
 
-For a full list of user-configurable values, see [Configure the Contour Extension](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-contour.html).
+For a full list of user-configurable values, see [Configure the Contour Extension](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-contour.html).
 
 1. Capture the available Contour package versions.
 
@@ -2029,7 +2029,7 @@ Do the following to deploy Prometheus into a workload cluster:
     |ingress.enabled|false|true|
     |ingress.virtual_host_fqdn|prometheus.system.tanzu|prometheus.your-domain|
 
-    To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-prometheus.html).
+    To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html).
 
 1. After you make any changes needed to the `prometheus-data-values.yaml` file, remove all comments in the file:
 
@@ -2107,7 +2107,7 @@ Do the following to deploy Prometheus into a workload cluster:
     cp /tmp/grafana-package-9.5.1+vmware.2-tkg.1/config/values.yaml grafana-data-values.yaml
     ```
 
-    This creates a configuration file named `grafana-data-values.yaml` that you can modify. For a full list of user-configurable values, see [Grafana Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-grafana.html).
+    This creates a configuration file named `grafana-data-values.yaml` that you can modify. For a full list of user-configurable values, see [Grafana Package Configuration Parameters](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html).
 
 4. Edit grafana-data-values.yaml and replace the following with your custom values.
 

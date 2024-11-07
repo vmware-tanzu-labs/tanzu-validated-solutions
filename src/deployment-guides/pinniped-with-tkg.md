@@ -287,7 +287,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
    ```
    <!-- /* cSpell:enable */ -->
 
-   >**Note** If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-update-addons.html#troubleshooting). 
+   >**Note** If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-clusters-config-auto.html#troubleshoot). 
 
 ## Complete the Identity Management Configuration on Management Cluster
 
@@ -576,7 +576,7 @@ For more information on how to configure role-based access control (RBAC) in Tan
 
 ### Generate and Test a Non-Administrator `kubeconfig` File for the Tanzu Clusters
 
-This procedure allows you to test the login step of the authentication process if a browser is present on the machine on which you are running tanzu and kubectl commands. If the machine does not have a browser, see [Authenticate Users on a Machine Without a Browser](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#no-browser).
+This procedure allows you to test the login step of the authentication process if a browser is present on the machine on which you are running tanzu and kubectl commands. If the machine does not have a browser, see [Authenticate Users on a Machine Without a Browser](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html#no-browser).
 
 1. Export the regular `kubeconfig` for the management cluster to a local file, for example, /tmp/id_mgmt_test_kubeconfig. Note that the command does not include the --admin option, so the `kubeconfig` that is exported is the regular `kubeconfig`, not the admin version.
 

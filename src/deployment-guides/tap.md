@@ -106,7 +106,8 @@ yq --version
 
 ### <a id=tap-package-repo> </a>Step 2: Add the Tanzu Application Platform Package Repository
 
-To install kapp-controller on workload clusters that are deployed on vSphere with Tanzu (TKGS) using YAML files and Tanzu Kubernetes Grid API, see [Prepare a Tanzu Kubernetes Cluster Created by Using vSphere with Tanzu to Run Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-packages-prep-tkgs-kapp.html).
+Install kapp-controller on workload clusters that are deployed on vSphere with Tanzu (TKGS) using YAML files and Tanzu Kubernetes Grid API.
+
 <!-- /* cSpell:disable */ -->
 After installing `kapp-controller`, install [carvel-secretgen-controller](https://github.com/vmware-tanzu/carvel-secretgen-controller). Use the following command:
 <!-- /* cSpell:enable */ -->
@@ -586,7 +587,7 @@ Provide the following user inputs to set environment variables into commands and
 * `INSTALL_REGISTRY_PASSWORD` - tanzu net  password
 * `TAP_ITERATE_CNRS_DOMAIN` - tap iterate cluster cnrs domain
 
-For more information, see [Full Profile](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-install.html#full-profile) in the Tanzu Application Platform product documentation.
+For more information, see [Full Profile](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/install-online-profile.html) in the Tanzu Application Platform product documentation.
 
 ```bash
 set -e
@@ -762,4 +763,4 @@ See [Service Bindings for Kubernetes](https://techdocs.broadcom.com/us/en/vmware
 
 ### Tanzu Application Platform GUI Auth Provider
 
-See [Setting up a Tanzu Application Platform GUI authentication provider](https://docs.vmware.com/en/Tanzu-Application-Platform/1.1/tap/GUID-tap-gui-auth.html) for additional details.
+See [Setting up a Tanzu Application Platform GUI authentication provider](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/tap-gui-auth.html) for additional details.

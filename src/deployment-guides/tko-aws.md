@@ -21,15 +21,12 @@ Choose an AWS region where the Tanzu Kubernetes Grid (TKG) AMIs exist.
 * **AWS Resource Quotas**: Sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you plan to deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you deploy Tanzu Kubernetes Grid.
 For more information on AWS default service quotas, see [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) in the AWS documentation.
 
-See [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-aws.html#aws-resources) for more details.
-
 > **Note** The number of VPCs will depend on the VPC architecture you have selected.
 
 * **Bootstrap Machine with AWS CLI Installed**: The bootstrap machine can be a local device such as a laptop, or a virtual machine running in, for example, VMware Workstation or Fusion. Install the AWS CLI on the bootstrap machine. You can get the AWS CLI through a package manager such as Homebrew, apt-get, or by downloading the CLI from [AWS CLI](https://aws.amazon.com/cli/). You will use the bootstrap machine to create the AWS VPC and jumpbox.
 
 * **VMware Cloud**: Access to [Broadcom Support](https://support.broadcom.com) to download Tanzu CLI.
 
-For additional information about preparing to deploy Tanzu Kubernetes Grid on AWS, see [Prepare to Deploy Management Clusters to Amazon EC2](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-aws.html).
 
 ## Overview of the Deployment Steps
 
@@ -369,8 +366,7 @@ To deploy a management cluster from the Tanzu Kubernetes Grid installer interfac
 	- **Bastion Host**: Select Enable.
 	- **Machine Health Checks**: Select Enable.
 	- **AWS CloudFormation Stack**: Select this if this is the first time that you are
-	  deploying a management cluster to this AWS account, see
-		[Permissions Set by Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-mgmt-clusters-aws.html#iam-permissions) for more details.
+	  deploying a management cluster to this AWS account.
 	- **Availability Zone**: Select the three availability zones for your region.
 	- **VPC Public and Private Subnets**: Select the existing subnets on the VPC for each AZ.
 	- **Worker Node Instance Type**: Select the configuration for the worker node VMs.
@@ -495,7 +491,7 @@ For more information about deploying a management cluster from a configuration f
 
 During the deployment of the management cluster, either from the installer interface or from a configuration file using Tanzu CLI, Tanzu Kubernetes Grid creates a temporary management cluster using a Kubernetes in Docker, `kind`, cluster on the jumpbox.
 
-Tanzu Kubernetes Grid uses the temporary management cluster to provision the final management cluster on AWS. For information about how to examine and verify your Tanzu Kubernetes Grid management cluster deployment, see [Examine the Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-mgmt-clusters-verify-deployment.html).
+Tanzu Kubernetes Grid uses the temporary management cluster to provision the final management cluster on AWS. For information about how to examine and verify your Tanzu Kubernetes Grid management cluster deployment, see [Examine the Management Cluster Deployment](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-deploy-post-deploy.html).
 
 ## <a id=deploy-workload-cluster></a> Deploy Workload Clusters
 
@@ -521,11 +517,11 @@ tanzu cluster create <workload_cluster> --plan=prod --worker-machine-count 3 --d
 
 After the workload cluster is created, the current context changes to the new workload cluster.
 
-For more information on cluster lifecycle and management, see [Manage Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-cluster-lifecycle-index.html).
+For more information on cluster lifecycle and management, see [Manage Clusters](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-clusters-manage-index.html).
 
 ### Troubleshooting Tips for Tanzu Kubernetes Grid
 
-For tips to help you to troubleshoot common problems that you might encounter when installing Tanzu Kubernetes Grid and deploying Tanzu Kubernetes clusters, see [Troubleshooting Tips for Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-troubleshooting-tkg-tips.html).
+For tips to help you to troubleshoot common problems that you might encounter when installing Tanzu Kubernetes Grid and deploying Tanzu Kubernetes clusters, see [Troubleshooting Tips for Tanzu Kubernetes Grid](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-troubleshoot-mgmt-clusters.html).
 
 ## <a id=install-packages></a> Install and Configure Packages into Workload Clusters
 
@@ -543,19 +539,19 @@ Using the Tanzu CLI, you can install CLI-managed packages from the built-in `tan
 
 The following provide more information on installing VMware recommended CLI-managed packages:
 
-* [Install Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-cert-manager.html)
+* [Install Cert Manager](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-cert-mgr.html)
 
-* [Implement Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-ingress-contour.html)
+* [Implement Ingress Control with Contour](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-contour.html)
 
-* [Implement Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-logging-fluentbit.html)
+* [Implement Log Forwarding with Fluent Bit](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-fluentbit.html)
 
-* [Implement Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-monitoring.html)
+* [Implement Monitoring with Prometheus and Grafana](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html)
 
-* [Implement Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-cni-multus.html)
+* [Implement Multiple Pod Network Interfaces with Multus](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-cni.html)
 
-* [Implement Service Discovery with ExternalDNS](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-external-dns.html)
+* [Implement Service Discovery with ExternalDNS](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-externaldns.html)
 
-* [Deploy Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-harbor-registry.html)
+* [Deploy Harbor Registry as a Shared Service](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor-mc.html)
 
 If you want to deploy Harbor into a shared services cluster, create a shared services cluster if it is not already created. For instructions, see [Create a Shared Services Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-clusters-deploy.html#shared). Also, make sure you add `INFRASTRUCTURE_PROVIDER: aws`
 into shared service workload cluster config file.

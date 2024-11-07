@@ -70,7 +70,7 @@ envoy:
  pspNames: "vmware-system-privileged"
 ```
 
-For a full list of user-configurable values, see the [Contour documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-contour.html).
+For a full list of user-configurable values, see the [Contour documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-contour.html).
 
 > **Note** You can leave the default settings blank if you don’t want to customize the package installation.
 
@@ -108,7 +108,7 @@ trivy:
   enabled: true
 ```
 
-For a full list of user-configurable values, see the [Harbor documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html).
+For a full list of user-configurable values, see the [Harbor documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor.html).
 
 Below is a screenshot of the Harbor installation page showing a YAML file for customizing Harbor installation:
 
@@ -134,7 +134,7 @@ ingress:
   alertmanagerServicePort: 80
 ```
 
-For a full list of user-configurable values, see the [Prometheus documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-prometheus.html).
+For a full list of user-configurable values, see the [Prometheus documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html).
 
 Below is a sample screenshot of a customized Prometheus installation:
 
@@ -160,7 +160,7 @@ ingress:
   virtual_host_fqdn: "grafana.sfo01.rainpole.vmw"
 ```
 
-For a full list of user-configurable values, see the [Grafana documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-grafana.html).
+For a full list of user-configurable values, see the [Grafana documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html).
 
 Below is a sample screenshot for customizing your Grafana installation:
 
@@ -178,7 +178,7 @@ You can use Fluent Bit to gather logs from management clusters or Tanzu Kubernet
 
 The example shown in this document uses an HTTP endpoint [VMware Aria Operations for Logs](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/vmware-cis/aria/aria-operations-for-logs/SaaS/using-vmware-aria-operations-for-logs-cloud.html) for forwarding logs from Tanzu Kubernetes clusters.
 
-A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the [Fluent Bit documentation](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-fluentbit.html).
+A sample YAML file for configuring an http endpoint with Fluent Bit is provided as a reference here. For a full list of user-configurable values, see the [Fluent Bit documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-fluentbit.html).
 
 
 ```yaml
