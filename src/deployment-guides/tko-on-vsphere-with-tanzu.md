@@ -10,7 +10,7 @@ You can use VMware Service Installer for VMware Tanzu to automate this deploymen
  
 VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
  
-To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu and vSphere Distributed Switch Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/2.1/service-installer/GUID-index.html).
+To use Service Installer to automate this deployment, see [Deploying VMware Tanzu for Kubernetes Operations on vSphere with Tanzu and vSphere Distributed Switch Using Service Installer for VMware Tanzu](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/service-installer-for-vmware-tanzu/2-4-0/tnz-sivt/release-vSphere-Backed-by-VDS-TKGm-TKOonVsphereVDStkg.html).
  
 Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
 
@@ -36,11 +36,11 @@ Ensure that your environment meets the following general requirements:
   - A shared datastore with sufficient capacity for the control plane and worker node VM files.
 - Network Time Protocol (NTP) service running on all hosts and vCenter.
 - A user account with **Modify cluster-wide configuration** permissions.
-- NSX Advanced Load Balancer 22.1.2 OVA downloaded from [customer connect](https://customerconnect.vmware.com/) portal and readily available for deployment.
+- NSX Advanced Load Balancer 22.1.2 OVA downloaded from [Broadcom Support](https://support.broadcom.com) portal and readily available for deployment.
 
 > **Note** Tanzu Kubernetes Grid nodes will unable to resolve hostname with the “.local” domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623).
 
-For additional information on general prerequisites, see [vSphere with Tanzu product documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-7FF30A74-DDDD-4231-AAAE-0A92828B93CD.html).
+For additional information on general prerequisites, see [vSphere with Tanzu product documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx-advanced-load-balancer-and-vds-networking.html).
 
 ### <a id=network-requirements> </a> Network Requirements
 
@@ -88,7 +88,7 @@ Here are the high-level steps for deploying Tanzu Kubernetes operations on vSphe
 8.  [Deploy User-Managed Packages on Tanzu Kubernetes Grid Clusters](#deploy-user-managed-packages)
 
 > **Note** Starting with vSphere 8, when you enable vSphere with Tanzu, you can configure either one-zone Supervisor mapped to one vSphere cluster or three-zone Supervisor mapped to three vSphere clusters.
-This document covers One-Zone supervisor deployment with VDS Networking and NSX Advanced Load Balancer. [Requirements for Cluster Supervisor Deployment with NSX Advanced Load Balancer and VDS Networking](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-7FF30A74-DDDD-4231-AAAE-0A92828B93CD.html).
+This document covers One-Zone supervisor deployment with VDS Networking and NSX Advanced Load Balancer. [Requirements for Cluster Supervisor Deployment with NSX Advanced Load Balancer and VDS Networking](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx-advanced-load-balancer-and-vds-networking.html).
 
 ## <a id="config-nsxalb"> </a> Deploy and Configure NSX Advanced Load Balancer
 
@@ -125,7 +125,7 @@ Do the following to deploy NSX Advanced Load Balancer controller node:
    Complete the configuration and deploy NSX Advanced Load Balancer controller node.
 
 
- For more information, see the product documentation [Deploy the Controller](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F.html).
+ For more information, see the product documentation [Deploy the Controller](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/deploy-the-nsx-advanced-load-balancer-controller.html#GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F-en).
 
 ### Configure the Controller Node for your vSphere with Tanzu Environment
 
@@ -261,7 +261,7 @@ The first controller of the cluster receives the "Leader" role. The second and t
 
 After the controller cluster is deployed, use the controller cluster IP address for doing any additional configuration. Do not use the individual controller node IP address.
 
-  For additional product documentation, see [Deploy a Controller Cluster](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F.html).
+  For additional product documentation, see [Deploy a Controller Cluster](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/deploy-the-nsx-advanced-load-balancer-controller.html#GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F-en).
 
 ### Change NSX Advanced Load Balancer Portal Default Certificate
 
@@ -311,7 +311,7 @@ To add a self-signed certificate:
 
    ![Screenshot of the New Certificate (SSL/TLS) window](img/tko-on-vsphere-with-tanzu/TKO-VWT22.png)
 
-For additional product documentation, see [Assign a Certificate to the Controller](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F.html).
+For additional product documentation, see [Assign a Certificate to the Controller](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/deploy-the-nsx-advanced-load-balancer-controller.html#GUID-CBA041AB-DC1D-4EEC-8047-184F2CF2FE0F-en).
 
 ### Export NSX Advanced Load Balancer Certificate
 
@@ -329,7 +329,7 @@ Optionally, you can reconfigure the Default-Group to define the placement and nu
 
 This document uses the Default Service Engine Group without modification.
 
-For more information, see the product documentation [Configure a Service Engine Group](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D.html).
+For more information, see the product documentation [Configure a Service Engine Group](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/configure-a-service-engine-group.html#GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D-en).
 
 ### <a id=config-vip> </a> Configure a Virtual IP Subnet for the Data Network
 
@@ -355,7 +355,7 @@ To configure the VIP network:
 
 6. Click **Save** to close the VIP network configuration wizard.
 
-For more information, see the product documentation [Configure a Virtual IP Network](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D.html).
+For more information, see the product documentation [Configure a Virtual IP Network](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/configure-a-service-engine-group.html#GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D-en).
 
 ### Configure Default Gateway
 
@@ -379,7 +379,7 @@ To configure the default gateway:
 
   ![Screenshot of Edit Static Route screen](img/tko-on-vsphere-with-tanzu/TKO-VWT25.png)
 
-For additional product documentation, see [Configure Default Gateway](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D.html)
+For additional product documentation, see [Configure Default Gateway](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/configure-a-service-engine-group.html#GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D-en)
 
 ### Configure IPAM and DNS Profile
 
@@ -425,7 +425,7 @@ IPAM is required to allocate virtual IP addresses when virtual services get crea
 
 8. Verify that the status of the Default-Cloud configuration is green.
 
-For additional product documentation, see [Configure IPAM](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D.html).
+For additional product documentation, see [Configure IPAM](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-the-nsx-advanced-load-balancer/configure-a-service-engine-group.html#GUID-14A98969-3115-45AC-9F0D-AA5A8EA6E16D-en).
 
 ## <a id=deployTKGS> </a> Deploy Tanzu Kubernetes Grid Supervisor Cluster
 
@@ -438,8 +438,8 @@ Before deploying the Supervisor Cluster, ensure the following:
 *   The vSphere cluster has HA & DRS enabled and DRS is configured in the fully-automated mode.
 *   The required port groups have been created on the distributed switch to provide networking to the Supervisor and workload clusters.
 *   Your vSphere cluster is licensed for Supervisor Cluster deployment.
-*   You have created a [Subscribed Content Library](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vm-administration/GUID-254B2CE8-20A8-43F0-90E8-3F6776C2C896.html) to automatically pull the latest Tanzu Kubernetes releases from the VMware repository.
-*   You have created a [storage policy](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-544286A2-A403-4CA5-9C73-8EFF261545E7.html) that will determine the datastore placement of the Kubernetes control plane VMs, containers, and images.
+*   You have created a [Subscribed Content Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-virtual-machine-administration-guide-8-0/using-content-libraries.html) to automatically pull the latest Tanzu Kubernetes releases from the VMware repository.
+*   You have created a [storage policy](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/create-storage-policies-for-vsphere-iaas-control-plane.html) that will determine the datastore placement of the Kubernetes control plane VMs, containers, and images.
 * A user account with **Modify cluster-wide configuration** permissions is available.
 * NSX Advanced Load Balancer is deployed and configured as per instructions provided earlier.
 
@@ -511,7 +511,8 @@ The Supervisor Cluster gets an IP address from the VIP network that you configur
 
 In the backend, three supervisor Control Plane VMs are deployed in the vSphere namespace. A Virtual Service is created in the NSX Advanced Load Balancer with three Supervisor Control Plane nodes that are deployed in the process.
 
-For additional product documentation, see [Enable Workload Management with vSphere Networking](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-8D7D292B-43E9-4CB8-9E20-E4039B80BF9B.html).
+For additional product documentation, see [Enable Workload Management with vSphere Networking](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/deploy-a-one-zone-supervisor/deploy-a-supervisor-with-vds-networking.html
+).
 
 ### Download and Install the Kubernetes CLI Tools for vSphere
 
@@ -523,7 +524,7 @@ To download the Kubernetes CLI tool, connect to the URL https://<_control-plane-
 
 ![Screenshot of the download page for Kubernetes CLI Tools](img/tko-on-vsphere-with-tanzu/TKO-VWT38-1.png)
 
-For additional product documentation, see [Download and Install the Kubernetes CLI Tools for vSphere](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-0F6E45C4-3CB1-4562-9370-686668519FCA.html).
+For additional product documentation, see [Download and Install the Kubernetes CLI Tools for vSphere](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/connecting-to-vsphere-with-tanzu-clusters/download-and-install-the-kubernetes-cli-tools-for-vsphere.html).
 
 ### Connect to the Supervisor Cluster
 
@@ -547,7 +548,7 @@ where the `<supervisor-context-name>` is the IP address of the control plane VIP
 
 A vSphere Namespace is a tenancy boundary within vSphere with Tanzu and allows for sharing vSphere resources (computer, networking, storage) and enforcing resources limits with the underlying objects such as Tanzu Kubernetes Clusters. It also allows you to attach policies and permissions.
 
-Every workload cluster that you deploy runs in a Supervisor namespace. To learn more about namespaces, see the [vSphere with Tanzu documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-28B0AEA2-2947-4FDD-AA71-51E46E24BF53.html)
+Every workload cluster that you deploy runs in a Supervisor namespace. To learn more about namespaces, see the [vSphere with Tanzu documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0.html)
 
 To create a new Supervisor namespace:
 
@@ -569,7 +570,7 @@ To create a new Supervisor namespace:
 
    ![Screenshot of the Create Namespace screen](img/tko-on-vsphere-with-tanzu/TKO-VWT40.png)
 
-For additional product documentation, see [Create and Configure a vSphere Namespace](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-services-workloads/GUID-177C23C4-ED81-4ADD-89A2-61654C18201B.html).   
+For additional product documentation, see [Create and Configure a vSphere Namespace](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-services-and-workloads-8-0/configuring-and-managing-vsphere-namespaces/create-and-configure-a-vsphere-namespace.html).   
 
 ### Configure Permissions for the Namespace
 
@@ -609,7 +610,7 @@ The VM class is a VM specification that can be used to request a set of resource
 
 vSphere with Tanzu includes several default VM classes and each class has two editions: guaranteed and best effort. A guaranteed edition fully reserves the resources that a VM specification requests. A best-effort class edition does not and allows resources to be overcommitted.
 
-More than one VM Class can be associated with a namespace. To learn more about VM classes, see the [vSphere with Tanzu documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-5AC24EB3-30B2-4C9B-8AA5-9918665AD451.html).
+More than one VM Class can be associated with a namespace. To learn more about VM classes, see the [vSphere with Tanzu documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/configuring-vsphere-namespaces-for-hosting-tkg-service-clusters/using-vm-classes-with-tkg-service-clusters.html).
 
 To add a VM class to a namespace,
 
@@ -631,7 +632,7 @@ The namespace is fully configured now. You are ready to register your supervisor
 
 Tanzu Mission Control is a centralized management platform for consistently operating and securing your Kubernetes infrastructure and modern applications across multiple teams and clouds.
 
-By integrating Supervisor Cluster with Tanzu Mission Control (TMC) you are provided a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. It also allows you to deploy Tanzu Kubernetes clusters directly from Tanzu Mission Control portal and install user-managed packages leveraging the [TMC Catalog](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
+By integrating Supervisor Cluster with Tanzu Mission Control (TMC) you are provided a centralized administrative interface that enables you to manage your global portfolio of Kubernetes clusters. It also allows you to deploy Tanzu Kubernetes clusters directly from Tanzu Mission Control portal and install user-managed packages leveraging the [TMC Catalog](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-using-GUID-EF35646D-8762-41F1-95E5-D2F35ED71BA1.html) feature.
 
 > **Note** This section uses the terms **Supervisor Cluster** and **management cluster** interchangeably.
 
@@ -688,7 +689,7 @@ Do the following to register the Supervisor cluster with Tanzu Mission Control:
 
    After installing the agent, you can use the Tanzu Mission Control web interface to provision and manage Tanzu Kubernetes clusters.
 
-For additional product documentation, see [Integrate the Tanzu Kubernetes Grid Service on the Supervisor Cluster with Tanzu Mission Control](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-ED4417DC-592C-454A-8292-97F93BD76957.html).
+For additional product documentation, see [Integrate the Tanzu Kubernetes Grid Service on the Supervisor Cluster with Tanzu Mission Control](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/configuring-and-managing-a-supervisor-cluster/integrate-the-tanzu-kubernetes-grid-service-on-the-supvervisor-cluster-with-tanzu-mission-control.html).
 
 ## <a id=deploy-workload-cluster> </a>Deploy Tanzu Kubernetes Clusters (Workload Cluster)
 
@@ -716,7 +717,7 @@ After Supervisor Cluster is registered with Tanzu Mission Control, deployment of
 
    ![Screenshot of Step 2: Name and Assign](img/tko-on-vsphere-with-tanzu/TKO-VWT59-a.png)
 
-   > **Note** This document doesn't cover the use of a proxy for vSphere with Tanzu. If your environment uses a proxy server to connect to the Internet, ensure the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Supervisor Cluster in the **No proxy list**, as explained in [Create a Proxy Configuration Object for a Tanzu Kubernetes Grid Service Cluster Running in vSphere with Tanzu](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-B4760775-388A-45B5-A707-2191E9E4F41F.html#GUID-B4760775-388A-45B5-A707-2191E9E4F41F).
+   > **Note** This document doesn't cover the use of a proxy for vSphere with Tanzu. If your environment uses a proxy server to connect to the Internet, ensure the proxy configuration object includes the CIDRs for the pod, ingress, and egress from the workload network of the Supervisor Cluster in the **No proxy list**, as explained in [Create a Proxy Configuration Object for a Tanzu Kubernetes Grid Service Cluster Running in vSphere with Tanzu](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-using-GUID-B4760775-388A-45B5-A707-2191E9E4F41F.html).
     
        
 7. Configure the Cluster network setting
