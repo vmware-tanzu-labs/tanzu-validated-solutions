@@ -8,7 +8,7 @@ You can use VMware Service Installer for VMware Tanzu to automate this deploymen
 
 VMware Service Installer for Tanzu automates the deployment of the reference designs for Tanzu for Kubernetes Operations. It uses best practices for deploying and configuring the required Tanzu for Kubernetes Operations components.
 
-To use Service Installer to automate this deployment, see [Deploying Tanzu Kubernetes Grid on Federal Air-gapped AWS VPC Using Service Installer for VMware Tanzu](https://docs.vmware.com/en/Service-Installer-for-VMware-Tanzu/2.1/service-installer/GUID-AWS%20-%20Federal%20Airgap-AWSFederalAirgap-DeploymentGuide.html).
+To use Service Installer to automate this deployment, see [Deploying Tanzu Kubernetes Grid on Federal Air-gapped AWS VPC Using Service Installer for VMware Tanzu](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/service-installer-for-vmware-tanzu/2-4-0/tnz-sivt/release-AWS-Federal-Airgap-AWSFederalAirgap-DeploymentGuide.html).
 
 Alternatively, if you decide to manually deploy each component, follow the steps provided in this document.
 
@@ -18,23 +18,19 @@ Before deploying VMware Tanzu for Kubernetes Operations in an AWS air-gapped env
 
 * **AWS Account**: An IAM user account with **administrative privileges**.
 * **AWS Resource Quotas**: Sufficient quotas to support both the management cluster and the workload clusters in your deployment. Otherwise, the cluster deployments will fail. Depending on the number of workload clusters you plan to deploy, you may need to increase the AWS services quotas from their default values. You will need to increase the quota in every region in which you deploy Tanzu Kubernetes Grid.
-  For more information, follow these links:
-
-  * [Tanzu Kubernetes Grid resources in AWS account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-aws.html#aws-resources).
+  
   * [AWS service quotas](https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html) in the AWS.
 * **An Internet-connected Linux bootstrap machine**
   The bootstrap machine can be a local device such as a laptop or a virtual machine running in, for example, VMware Workstation or Fusion. You will use the bootstrap machine to create the AWS VPC and jumpbox. The bootstrap machine:
 
   * Is not inside the Internet-restricted environment or is able to access the domains listed in Proxy Server Allowlist.
   * Has the Docker client app installed.
-  * Has [imgpkg](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/install-cli.html) installed.
+  * Has [imgpkg](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/install-cli.html) installed.
   * Has the latest version of yq installed.
   * Has the latest version of jq installed.
   * Has AWS CLI installed.
-  * Has the [Carvel Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/install-cli.html) installed, if you intend to install one or more of the optional packages provided by Tanzu Kubernetes Grid, such as Harbor.
+  * Has the [Carvel Tools](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/install-cli.html) installed, if you intend to install one or more of the optional packages provided by Tanzu Kubernetes Grid, such as Harbor.
 * **VMware Cloud**: Access to [VMware Cloud](https://customerconnect.vmware.com/login) to download Tanzu CLI.
-
-For additional information about preparing to deploy Tanzu Kubernetes Grid on AWS, see [Prepare to Deploy Management Clusters to Amazon EC2](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-aws.html).
 
 ## Overview of the Deployment Steps
 
@@ -231,13 +227,13 @@ Copy the container images required to deploy Tanzu Kubernetes Grid on AWS to a p
 * Copy the images from the Tanzu Kubernetes Grid public registry and save them locally in tar format on an offline jumpbox.
 * Extract the images from the tar files and copy them to a private registry.
 
-See [Copy the container images required to deploy Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-offline.html) for more detailed instructions.
+See [Copy the container images required to deploy Tanzu Kubernetes Grid](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-prep-offline.html) for more detailed instructions.
 
 ### <a id=tkg-build-machine-img> </a> Tanzu Kubernetes Grid Build Machine Image
 
-If you have a requirement to build custom images, follow the steps in [Tanzu Kubernetes Grid Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-byoi-index.html).
+If you have a requirement to build custom images, follow the steps in [Tanzu Kubernetes Grid Build Machine Images](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-byoi-index.html).
 
-For compliance and security requirements VMware has published security overview whitepaper. Refer to [Tanzu Kubernetes Grid security overview whitepaper](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-security-overview.html) for more information.
+For compliance and security requirements VMware has published security overview whitepaper. Refer to [Tanzu Kubernetes Grid security overview whitepaper](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-security-overview.html) for more information.
 
 ## <a id=prepEnv> </a> Prepare an Internet-Restricted Environment
 
@@ -247,7 +243,7 @@ Set the IP address or FQDN of your local private registry as an environment vari
 
 `export TKG_CUSTOM_IMAGE_REPOSITORY="PRIVATE-REGISTRY"` Where PRIVATE-REGISTRY is the IP address or FQDN of your private registry and the name of the project. For example, `custom-image-repository.io/yourproject`.
 
-Follow the instructions in [Prepare an Internet-Restricted Environment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-reqs-prep-offline.html).
+Follow the instructions in [Prepare an Internet-Restricted Environment](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-prep-offline.html).
 
 ## <a id=install-tkg></a> Deploy a Tanzu Kubernetes Grid Management Cluster
 
@@ -274,7 +270,7 @@ For more information about deploying a management cluster from a configuration f
 
 When the management cluster is deployed, either from the installer interface or from a configuration file using Tanzu CLI, Tanzu Kubernetes Grid uses a Kubernetes in Docker kind cluster on the jumpbox to create a temporary management cluster. kind is a tool for running Kubernetes clusters locally using Docker containers as Kubernetes nodes.
 
-Tanzu Kubernetes Grid uses the temporary management cluster to provision the final management cluster on AWS. For information about how to examine and verify your Tanzu Kubernetes Grid management cluster deployment, see [Examine the Management Cluster Deployment](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-deploy-file.html).
+Tanzu Kubernetes Grid uses the temporary management cluster to provision the final management cluster on AWS. For information about how to examine and verify your Tanzu Kubernetes Grid management cluster deployment, see [Examine the Management Cluster Deployment](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-deploy-post-deploy.html).
 
 ## <a id=deploy-workload-cluster></a> Deploy Workload Clusters
 
@@ -296,41 +292,41 @@ tanzu cluster create <workload_cluster> --plan=prod --worker-machine-count 3 --d
 
 After the workload cluster is created, the current context changes to the new workload cluster.
 
-For more information on cluster lifecycle and management, see [Manage Clusters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-index.html).
+For more information on cluster lifecycle and management, see [Manage Clusters](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-index.html).
 
 ### Troubleshooting Tips for Tanzu Kubernetes Grid
 
-For tips to help you to troubleshoot common problems that you might encounter when installing Tanzu Kubernetes Grid and deploying Tanzu Kubernetes clusters, see [Troubleshooting Tips for Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-troubleshoot-mgmt-clusters.html).
+For tips to help you to troubleshoot common problems that you might encounter when installing Tanzu Kubernetes Grid and deploying Tanzu Kubernetes clusters, see [Troubleshooting Tips for Tanzu Kubernetes Grid](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-troubleshoot-mgmt-clusters.html).
 
 ## <a id=install-packages></a> Install and Configure Packages into Workload Clusters
 
-A package in Tanzu Kubernetes Grid is a collection of related software that supports or extends the core functionality of the Kubernetes cluster in which the package is installed. Tanzu Kubernetes Grid includes two types of packages, auto-managed packages and CLI-managed packages. For more information about packages in Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-index.html).
+A package in Tanzu Kubernetes Grid is a collection of related software that supports or extends the core functionality of the Kubernetes cluster in which the package is installed. Tanzu Kubernetes Grid includes two types of packages, auto-managed packages and CLI-managed packages. For more information about packages in Tanzu Kubernetes Grid, see [Install and Configure Packages](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-packages-index.html).
 
 ### Auto-Managed Packages
 
-Tanzu Kubernetes Grid automatically installs the auto-managed packages during cluster creation. For more information about auto-managed packages, see [Auto-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2/about-tkg/packages-index.html#auto).
+Tanzu Kubernetes Grid automatically installs the auto-managed packages during cluster creation. For more information about auto-managed packages, see [Auto-Managed Packages](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/about-tkg-packages-index.html#auto).
 
 ### CLI-Managed Packages
 
 A CLI-managed packages package is an optional component of a Kubernetes cluster that you can install and manage with the Tanzu CLI. These packages are installed after cluster creation. CLI-managed packages are grouped into package repositories in the Tanzu CLI. If a package repository that contains CLI-managed packages is available in the target cluster, you can use the Tanzu CLI to install and manage any of the packages from that repository.
 
-Using the Tanzu CLI, you can install cli-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, Fluent Bit, Grafana, Harbor, and Prometheus packages. See [CLI-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-ref.html) for more information.
+Using the Tanzu CLI, you can install cli-managed packages from the built-in `tanzu-standard` package repository or from package repositories that you add to your target cluster. From the `tanzu-standard` package repository, you can install the Cert Manager, Contour, Fluent Bit, Grafana, Harbor, and Prometheus packages. See [CLI-Managed Packages](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/about-tkg-packages-index.html#cli) for more information.
 
 **Recommended packages:**
 
-* **Cert Manager** for automating the management and issuance of TLS certificates. See [Installing Cert Manager](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-cert-mgr.html).
+* **Cert Manager** for automating the management and issuance of TLS certificates. See [Installing Cert Manager](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-cert-mgr.html).
 
-* **Contour** for ingress control. See [Implementing Ingress Control with Contour](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-contour.html).
+* **Contour** for ingress control. See [Implementing Ingress Control with Contour](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-contour.html).
   For use a private load balancer, set `service.beta.kubernetes.io/aws-load-balancer-internal: "true"` in the annotations for the service. This setting also applies to the Contour ingress and controls.
-* **Fluent Bit** for log processing and forwarding. See [Implementing Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-fluentbit.html)
+* **Fluent Bit** for log processing and forwarding. See [Implementing Log Forwarding with Fluent Bit](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-fluentbit.html)
 
-* **Prometheus** and **Grafana** for monitoring. See [Implementing Monitoring with Prometheus and Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-monitoring.html)
+* **Prometheus** and **Grafana** for monitoring. See [Implementing Monitoring with Prometheus and Grafana](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html)
 
-* **Multus** for multi networking. [Implementing Multiple Pod Network Interfaces with Multus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-multus.html)
+* **Multus** for multi networking. [Implementing Multiple Pod Network Interfaces with Multus](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-cni.html)
 
 ## <a id=logs></a> Logs and Troubleshooting
 
-For information about how to find the Tanzu Kubernetes Grid logs, how to troubleshoot frequently encountered Tanzu Kubernetes Grid issues, and how to use the Crash Recovery and Diagnostics tool, see [Logs and Troubleshooting](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-troubleshoot-index.html).
+For information about how to find the Tanzu Kubernetes Grid logs, how to troubleshoot frequently encountered Tanzu Kubernetes Grid issues, and how to use the Crash Recovery and Diagnostics tool, see [Logs and Troubleshooting](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-troubleshoot-index.html).
 
 ## <a id=cluster-mgmt> </a> Delete Clusters
 
@@ -362,11 +358,7 @@ Run the following command to delete the management cluster and related objects:
 tanzu cluster delete <management-cluster-name>
 ```
 
-## <a id="stig-fips"> </a>Air-Gapped STIG/FIPS Deployment on AWS
-
-For how to deploy a STIG-hardened management/FIPS cluster to an air-gapped AWS environment, see [Deploy a STIG-Hardened Management Cluster to an Air-gapped AWS VPC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.4/vmware-tanzu-kubernetes-grid-14/GUID-security-airgap-stig-aws.html).
-
 ## <a id=upgrade-tkg> </a>Tanzu Kubernetes Grid Upgrade
 
-For information about how to upgrade to Tanzu Kubernetes Grid 2.1, see [Tanzu Kubernetes Grid Upgrade](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/tkg-deploy-mc-21/mgmt-upgrade-index.html).
+For information about how to upgrade to Tanzu Kubernetes Grid 2.1, see [Tanzu Kubernetes Grid Upgrade](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-upgrade-index.html).
  

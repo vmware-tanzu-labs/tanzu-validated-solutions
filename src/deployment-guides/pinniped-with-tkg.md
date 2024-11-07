@@ -29,11 +29,11 @@ To use your company’s internal LDAPS server as the identity provider, obtain L
 
 To use OIDC as the identity provider, you must have an account with an identity provider that supports the OpenID Connect standard, for example, [Okta](https://www.okta.com/).
 
-For more information on using Okta as your OIDC provider, see [Register a Tanzu Kubernetes Grid Application in Okta](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#obtain-your-identity-provider-details-3).
+For more information on using Okta as your OIDC provider, see [Register a Tanzu Kubernetes Grid Application in Okta](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html#during).
 
 ### Configure LDAPS or OIDC Settings in Tanzu Kubernetes Grid
 
-When you are deploying your management cluster using the installer interface, configure LDAPS or OIDC in the Identity Management section. For instructions, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-mgmt-clusters-deploy-ui.html#id-mgmt) in Deploy Management Clusters with the Installer Interface.
+When you are deploying your management cluster using the installer interface, configure LDAPS or OIDC in the Identity Management section. For instructions, see [Configure Identity Management](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html) in Deploy Management Clusters with the Installer Interface.
 
 1. In the **Identity Management** section of the management cluster deployment UI, 
    1. Enable **Enable Identity Management Settings**.
@@ -104,9 +104,9 @@ To use your company’s internal LDAPS server as the identity provider, obtain L
 
 To use OIDC as the identity provider, you must have an account with an identity provider that supports the OpenID Connect standard, for example, [Okta](https://www.okta.com/).
 
-For more information on using Okta as your OIDC provider, see [Register a Tanzu Kubernetes Grid Application in Okta](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#obtain-your-identity-provider-details-3).
+For more information on using Okta as your OIDC provider, see [Register a Tanzu Kubernetes Grid Application in Okta](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html#during).
 
-For more information on obtaining your identity provider details, see [Obtain Your Identity Provider Details](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#idp).
+For more information on obtaining your identity provider details, see [Obtain Your Identity Provider Details](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html).
 
 ### Generate the Pinniped Add-on Secret for the Management Cluster and deploy Pinniped package
 
@@ -287,7 +287,7 @@ This procedure configures the Pinniped add-on and deploys the authentication com
    ```
    <!-- /* cSpell:enable */ -->
 
-   >**Note** If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-update-addons.html#troubleshooting). 
+   >**Note** If the Pinniped app reconcile fails, see [Troubleshooting Core Add-on Configuration](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-clusters-config-auto.html#troubleshoot). 
 
 ## Complete the Identity Management Configuration on Management Cluster
 
@@ -298,7 +298,7 @@ After deploying the management cluster, do the following to complete the identit
    - **OIDC**: Check the Status of an OIDC Identity Management Service.
    - **LDAP**: Check the Status of an LDAP Identity Management Service.
    - **OIDC**: Provide the Callback URI to the OIDC Provider.
-3. If you want to use regular, non-administrator `kubeconfig` files for access to the management cluster, after completing the configuration of identity management, configure RBAC by following the instructions in [Configure RBAC for a Management Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-rbac.html#rbac-mgmt).
+3. If you want to use regular, non-administrator `kubeconfig` files for access to the management cluster, after completing the configuration of identity management, configure RBAC by following the instructions in [Configure RBAC for a Management Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-rbac.html#rbac-mgmt).
 
 ## Connect kubectl to the Management Cluster
 
@@ -572,11 +572,11 @@ If a workload cluster was created before you enabled identity management for you
 
 To give users access to a management or a workload cluster, you generate a `kubeconfig` file and then share the file with those users. If you provide them with the administrator `kubeconfig` for the cluster, they have full access to the cluster and do not need to be authenticated. However, if you provide users with the regular `kubeconfig`, they must have a user account in your OIDC or LDAP identity provider and you must configure RBAC on the cluster to grant access permissions to the designated user.
 
-For more information on how to configure role-based access control (RBAC) in Tanzu Kubernetes Grid, see [Configure RBAC](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-rbac.html#rbac-mgmt).
+For more information on how to configure role-based access control (RBAC) in Tanzu Kubernetes Grid, see [Configure RBAC](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-rbac.html).
 
 ### Generate and Test a Non-Administrator `kubeconfig` File for the Tanzu Clusters
 
-This procedure allows you to test the login step of the authentication process if a browser is present on the machine on which you are running tanzu and kubectl commands. If the machine does not have a browser, see [Authenticate Users on a Machine Without a Browser](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html#no-browser).
+This procedure allows you to test the login step of the authentication process if a browser is present on the machine on which you are running tanzu and kubectl commands. If the machine does not have a browser, see [Authenticate Users on a Machine Without a Browser](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html#no-browser).
 
 1. Export the regular `kubeconfig` for the management cluster to a local file, for example, /tmp/id_mgmt_test_kubeconfig. Note that the command does not include the --admin option, so the `kubeconfig` that is exported is the regular `kubeconfig`, not the admin version.
 

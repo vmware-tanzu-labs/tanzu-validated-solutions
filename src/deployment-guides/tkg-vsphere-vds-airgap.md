@@ -39,7 +39,7 @@ Before deploying Tanzu Kubernetes Grid in vSphere environment, ensure that your 
   - Network Time Protocol (NTP) service is running on all ESXi hosts and vCenter, and time is synchronized from the centralized NTP servers.
   - A host/server/VM based on Linux that acts as your **bastion host** and is located **outside the Internet-restricted environment (i.e. connected to the Internet)**. The installation binaries for Tanzu Kubernetes Grid and NSX Advanced Load Balancer will be downloaded on this machine. You will need to transfer files from this bastion host to your Internet-restricted environment (proxy connection, shared drive, USB drive, sneakernet, and so on).
   - A host/server/VM **inside your Internet-restricted environment** based on Linux/Windows, which acts as your bootstrap machine and has Tanzu CLI, Kubectl and docker installed. This document uses a virtual machine based on CentOS. An internal Harbor registry will be installed on the same machine.
-- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
+- vSphere account with permissions as described in [Required Permissions for the vSphere Account](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
 
 > **Note** You can download and import supported older versions of Kubernetes in order to deploy workload clusters on the intended Kubernetes versions.
 > **Note** In Tanzu Kubernetes Grid nodes, it is recommended to not use hostnames with ".local" domain suffix. For more information, see [KB article](https://kb.vmware.com/s/article/83623)
@@ -125,11 +125,11 @@ You must ensure that the following options are available:
 
     ![code screen captures displaying the binaries](img/tkg-airgap-vsphere-deploy/docker-installation-binaries.jpg)
 
-2. Download Harbor OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/en/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). 
+2. Download Harbor OVA from [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid). 
 
-3. Download the NSX Advanced Load Balancer OVA from [VMware Customer Connect portal](https://customerconnect.vmware.com/downloads/info/slug/networking_security/vmware_nsx_advanced_load_balancer/22_1_x).
+3. Download the NSX Advanced Load Balancer OVA from [Broadcom Support](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20NSX-T%20Container%20Plug-in).
 
-4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). Tanzu CLI and its plug-ins need to be installed on the bastion host and the bootstrap machine. Starting with TKG 2.3.0, [Tanzu Core CLI](https://customerconnect.vmware.com/downloads/details?downloadGroup=TCLI-0901&productId=1431) is now distributed separately from Tanzu Kubernetes Grid. For more infromation about installing the Tanzu CLI for using with Tanzu Kubernetes Grid, see [Install the Tanzu CLI](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/install-cli.html).
+4. Download Tanzu CLI, Kubectl, and the Kubernetes OVA images from the [Tanzu Kubernetes Grid product download page](https://customerconnect.vmware.com/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x). Tanzu CLI and its plug-ins need to be installed on the bastion host and the bootstrap machine. Starting with TKG 2.3.0, [Tanzu Core CLI](https://customerconnect.vmware.com/downloads/details?downloadGroup=TCLI-0901&productId=1431) is now distributed separately from Tanzu Kubernetes Grid. For more infromation about installing the Tanzu CLI for using with Tanzu Kubernetes Grid, see [Install the Tanzu CLI](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/install-cli.html).
 
 5. Download the [yq](https://github.com/mikefarah/yq) installation binary from the [mikefarah / yq](https://github.com/mikefarah/yq/releases/tag/v4.25.2) GitHub repository.
 
@@ -209,9 +209,9 @@ You must ensure that the following options are available:
 Install Harbor only if you don’t have any existing image repository in your environment. 
 
 
- For more information about deploying and configuring Harbor, see [Deploy an Offline Harbor Registry on vSphere](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-harbor.html).
+ For more information about deploying and configuring Harbor, see [Deploy an Offline Harbor Registry on vSphere](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-harbor.html).
 
- >**Note** This VM-based harbor deployment is only supported for hosting the TKG system images in an internet-restricted or air-gapped environment. To deploy a scalable and highly-available Harbor that can manage large numbers of images for hosted apps in a production environment, deploy the Harbor package to TKG clusters as described in [Install Harbor for Service Registry](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html) in Creating and Managing TKG 2.3 Workload Clusters with the Tanzu CLI.
+ >**Note** This VM-based harbor deployment is only supported for hosting the TKG system images in an internet-restricted or air-gapped environment. To deploy a scalable and highly-available Harbor that can manage large numbers of images for hosted apps in a production environment, deploy the Harbor package to TKG clusters as described in [Install Harbor for Service Registry](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor.html) in Creating and Managing TKG 2.3 Workload Clusters with the Tanzu CLI.
 
 ## <a id=configure-bootstrap> </a> Deploy and Configure Bootstrap VM
 
@@ -219,7 +219,7 @@ The deployment of the Tanzu Kubernetes Grid management and workload clusters is 
 
 The bootstrap machine runs a local `kind` cluster when Tanzu Kubernetes Grid management cluster deployment is started. Once the `kind` cluster is fully initialized, the configuration is used to deploy the actual management cluster on the backend infrastructure. After the management cluster is fully configured, the local `kind` cluster is deleted and future configurations are performed with the Tanzu CLI.
 
-For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For more information about how configuring a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/install-cli.html).
+For this deployment, a Photon-based virtual machine is used as the bootstrap machine. For more information about how configuring a macOS or a Windows machine, see [Install the Tanzu CLI and Other Tools](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/install-cli.html).
 
 The bootstrap machine must meet the following prerequisites:
 
@@ -275,7 +275,7 @@ To install Tanzu CLI, Tanzu Plug-ins, and Kubectl utility on the bootstrap machi
 
      Login Succeeded
       ```
-   > **Note** If your private registry uses a self-signed certificate, save the CA certificate of the registry in `/etc/docker/certs.d/registry.example.com/ca.crt` and add certificate verification process by following the instructions in [Adding Certificate Configuration for the Custom Registry](https://docs.vmware.com/en/VMware-Tanzu-CLI/0.90.0/tanzu-cli/index.html#registry-certificate).
+   > **Note** If your private registry uses a self-signed certificate, save the CA certificate of the registry in `/etc/docker/certs.d/registry.example.com/ca.crt` and add certificate verification process by following the instructions in [Adding Certificate Configuration for the Custom Registry](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-cli/1-5/cli/index.html#registry-certificate).
 
 
 1. Upload the images to the private registry:
@@ -475,7 +475,7 @@ Before you proceed with the management cluster creation, ensure that the base im
 
     For the management cluster, download either a Photon or Ubuntu based Kubernetes v1.26.5 OVA.
 
-     > **Note** Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-byoi-index.html).
+     > **Note** Custom OVA with a custom Tanzu Kubernetes release (TKr) is also supported, as described in [Build Machine Images](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-byoi-index.html).
     
     For workload clusters, OVA can have any supported combination of OS and Kubernetes version, as packaged in a Tanzu Kubernetes release.
 
@@ -493,13 +493,13 @@ Before you proceed with the management cluster creation, ensure that the base im
 
 1. **If using non administrator SSO account**: In the VMs and Templates view, right-click the new template, select **Add Permission**, and assign the **tkg-user** to the template with the **TKG role**.
 
-For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
+For information about how to create the user and role for Tanzu Kubernetes Grid, see [Required Permissions for the vSphere Account](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-reqs-prep-vsphere.html#vsphere-permissions).
 
 ### Import NSX Advanced Load Balancer in Content Library
 
-Create a content library following the instructions provided in [Create a Library](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vm-administration/GUID-A58AF4FD-6CBE-4210-9E67-27EFBDCC1EF2.html) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library.
+Create a content library following the instructions provided in [Create a Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-virtual-machine-administration-guide-8-0/using-content-libraries/create-and-edit-a-content-library.html#GUID-A58AF4FD-6CBE-4210-9E67-27EFBDCC1EF2-en) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library.
 
-To import the OVA into the content library, see [Import Items to a Content Library](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vm-administration/GUID-B413FBAE-8FCB-4598-A3C2-8B6DDA772D5C.html).
+To import the OVA into the content library, see [Import Items to a Content Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-virtual-machine-administration-guide-8-0/using-content-libraries/how-to-populate-libraries-with-content.html#GUID-B413FBAE-8FCB-4598-A3C2-8B6DDA772D5C-en).
 
 ## <a id=configure-alb> </a> Deploy and Configure NSX Advanced Load Balancer
 
@@ -966,7 +966,7 @@ IDENTITY_MANAGEMENT_TYPE: "none"
 # LDAP_ROOT_CA_DATA_B64:
 ```
 
-For a full list of configurable values and to learn more about the fields present in the template file, see [Tanzu Configuration File Variable Reference](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/tkg-deploy-mc/mgmt-deploy-config-ref.html).
+For a full list of configurable values and to learn more about the fields present in the template file, see [Tanzu Configuration File Variable Reference](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/config-ref.html).
 
 Create a file using the values provided in the template and save the file with a `.yaml` extension. For more information about a sample YAML file to use for deploying a management cluster, see [Appendix Section](#supplemental-information). 
 
@@ -1630,7 +1630,7 @@ You can see that the workload cluster is successfully deployed and the AKO pod i
 User-managed packages are installed after workload cluster creation. These packages extend the core functionality of Kubernetes clusters created by Tanzu Kubernetes Grid. 
 
 Tanzu Kubernetes Grid includes the following user-managed packages. These packages provide in-cluster and shared services to the Kubernetes clusters that are running in your Tanzu Kubernetes Grid environment. For more information, see [Installing and Managing Packages with the Tanzu CLI
-](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-index.html).
+](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-packages-index.html).
 
 With TKG v2.3, the Tanzu Standard package repository is versioned and distributed separately from TKG, and its versioning is based on a date stamp. For TKG v2.3, the latest compatible Tanzu Standard repository version is v2023.7.13
 
@@ -1786,7 +1786,7 @@ certificates:
  renewBefore: 360h
 ```
 
-For a full list of user-configurable values, see [Configure the Contour Extension](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.1/using-tkg-21/workload-packages-contour.html).
+For a full list of user-configurable values, see [Configure the Contour Extension](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-contour.html).
 
 1. Capture the available Contour package versions.
 
@@ -1893,7 +1893,7 @@ Perform the following procedure to deploy Harbor into a workload cluster or a sh
       - harborAdminPassword
       - secretKey
 
-    You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [Deploy Harbor into a Cluster](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-harbor.html).
+    You can also change the values for other parameters to meet the requirements for your deployment. For the full list of the user-configurable values, see [Deploy Harbor into a Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor.html).
 
 1. Remove the comments in the `harbor-data-values.yaml` file.
 
@@ -1985,7 +1985,7 @@ Do the following to deploy Prometheus into a workload cluster:
     |ingress.enabled|false|true|
     |ingress.virtual_host_fqdn|prometheus.system.tanzu|prometheus.your-domain|
 
-    To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-prometheus.html).
+    To see a full list of user configurable configuration parameters, see [Prometheus Package Configuration Parameters](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html#params-prometheus-mc).
 
 1. After you make the necessary changes to your `prometheus-data-values.yaml` file, remove all comments in the file:
 
@@ -2063,7 +2063,7 @@ Do the following to deploy Prometheus into a workload cluster:
     cp /tmp/grafana-package-9.5.1+vmware.2-tkg.1/config/values.yaml grafana-data-values.yaml
     ```
 
-    This creates a configuration file named `grafana-data-values.yaml` that you can modify. For a full list of user-configurable values, see [Grafana Package Configuration Parameters](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/2.3/using-tkg/workload-packages-grafana.html).
+    This creates a configuration file named `grafana-data-values.yaml` that you can modify. For a full list of user-configurable values, see [Grafana Package Configuration Parameters](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html#params-grafana-mc).
 
 4. Edit grafana-data-values.yaml and replace the following with your custom values.
 
