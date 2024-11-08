@@ -98,7 +98,7 @@ This section provides a network overview for TKG clusters deployed with Supervis
 
 | | **Tanzu Kubernetes Grid** <br> (TKG with Management Cluster)| **vSphere with Tanzu** <br> (TKG with Supervisor Cluster)  |
 | --- | --- | --- |
-| Network topology | Tanzu Kubernetes Grid on vSphere with vSphere networking. <br> Tanzu Kubernetes Grid on vSphere with NSX-T networking.  <br> For more information, see [here](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-tko-vsphere-section.html). | Supervisor networking with VDS. <br> Supervisor Networking with NSX. <br> Supervisor networking with NSX and NSX Advanced Load Balancer (applicable for vSphere 8.0U2 or later, NSX 4.1.1 or later, NSX ALB 22.1.4 or later). <br> For more information, see [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-B156CDA6-B056-4D1C-BBC5-07D1A701E402.html#supervisor-networking-with-nsx-and-nsx-advanced-load-balancer-2). |
+| Network topology | Tanzu Kubernetes Grid on vSphere with vSphere networking. <br> Tanzu Kubernetes Grid on vSphere with NSX-T networking.  <br> For more information, see [here](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/tko-vsphere-section.html). | Supervisor networking with VDS. <br> Supervisor Networking with NSX. <br> Supervisor networking with NSX and NSX Advanced Load Balancer (applicable for vSphere 8.0U2 or later, NSX 4.1.1 or later, NSX ALB 22.1.4 or later). <br> For more information, see [here](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/supervisor-architecture-and-components/supervisor-networking.html). |
 | Pod networking | Antrea, Calico, or secondary Multus CNI | Antrea or Calico for Tanzu Kubernetes clusters (TKC). <br> NSX-T/VDS for vSphere Pod Service. |
 | Control plane LB options | Kube-vip <br> NSX-ALB | NSX-ALB <br> HA Proxy <br> NSX-T |
 | Application LB (L4) | NSX-ALB <br> Other networking providers like MetalLB, HA Proxy, F5 LB etc | NSX-ALB <br> NSX-T|
@@ -144,7 +144,7 @@ Depending on the topology that you implement for the Supervisor, you can use one
 
 ##### Key Network Considerations/Requirements
 
-This section provides key network requirements and considerations. For more information, see [Requirements for Cluster Supervisor Deployment with NSX Advanced Load Balancer and VDS Networking](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-7FF30A74-DDDD-4231-AAAE-0A92828B93CD.html).
+This section provides key network requirements and considerations. For more information, see [Requirements for Cluster Supervisor Deployment with NSX Advanced Load Balancer and VDS Networking](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx-advanced-load-balancer-and-vds-networking.html).
 
 | **Component** | **Minimum Quantity** | **Required Configuration** |
 | --- | --- | --- |
@@ -159,13 +159,13 @@ This section provides key network requirements and considerations. For more info
 
 #### Supervisor Deployment with NSX Networking
 
-A Supervisor that is configured with NSX, uses the software-based networks of the solution and an NSX Edge Load Balancer to provide connectivity to external services and DevOps users.  Review the system requirements for configuring vSphere with Tanzu on a vSphere cluster by using the NSX networking stack. For more information, see [Requirements for Cluster Supervisor Deployment with NSX](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-B1388E77-2EEC-41E2-8681-5AE549D50C77.html).
+A Supervisor that is configured with NSX, uses the software-based networks of the solution and an NSX Edge Load Balancer to provide connectivity to external services and DevOps users.  Review the system requirements for configuring vSphere with Tanzu on a vSphere cluster by using the NSX networking stack. For more information, see [Requirements for Cluster Supervisor Deployment with NSX](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx.html).
 
-You can distribute vSphere zones across different physical sites as long as the latency between the sites doesn't exceed 100 ms. For example, you can distribute the vSphere zones across two physical sites - one vSphere zone on the first site, and two vSphere zones on the second site.  For more information, see [Requirements for Zonal Supervisor with NSX](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-E95C685A-4774-4562-87AA-C6196CBB27AB.html).
+You can distribute vSphere zones across different physical sites as long as the latency between the sites doesn't exceed 100 ms. For example, you can distribute the vSphere zones across two physical sites - one vSphere zone on the first site, and two vSphere zones on the second site.  For more information, see [Requirements for Zonal Supervisor with NSX](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx.html).
 
 ##### Key Network Considerations/Requirements
 
-This section provides key network requirements and considerations; For more information, see [Requirements for Cluster Supervisor Deployment with NSX](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-B1388E77-2EEC-41E2-8681-5AE549D50C77.html).
+This section provides key network requirements and considerations; For more information, see [Requirements for Cluster Supervisor Deployment with NSX](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx.html).
 
 | **Component** | **Minimum Quantity** | **Required Configuration** |
 | --- | --- | --- |
@@ -185,7 +185,7 @@ This section provides key network requirements and considerations; For more info
 
 In a Supervisor environment that uses NSX as the networking stack, you can use the NSX Advanced Load Balancer for load balancing services. We recommend that any new TKG setup incorporating NSX within the infrastructure, might use this approach. This approach offers network segregation at the Supervisor Namespace level, utilises Distributed Firewall (DFW), employs overlays for East-West communication, and utilizes other NSX-T functionalities. 
 
-You can distribute vSphere zones across different physical sites as long as the latency between the sites doesn't exceed 100 ms. For example, you can distribute the vSphere zones across two physical sites - one vSphere zone on the first site, and two vSphere zones on the second site. For more information on Requirements for Zonal Supervisor with NSX and NSX Advanced Load Balancer, see [VMware Tanzu Documentation](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-DA06BCAC-EB07-45B1-BDBB-3DEF2D831CC5.html).
+You can distribute vSphere zones across different physical sites as long as the latency between the sites doesn't exceed 100 ms. For example, you can distribute the vSphere zones across two physical sites - one vSphere zone on the first site, and two vSphere zones on the second site. For more information on Requirements for Zonal Supervisor with NSX and NSX Advanced Load Balancer, see [VMware Tanzu Documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx-and-nsx-advanced-load-balancer.html).
 
 Key Points with this approach
 1. NSX ALB must be 22.1.X; refer to the VMware compatibility matrix depending on the finalised vSphere version.
@@ -194,7 +194,7 @@ Key Points with this approach
 
 ##### Key Network Considerations/Requirements
 
-This section provides key network requirements and considerations. For more information, see [Requirements for Cluster Supervisor Deployment with NSX and NSX Advanced Load Balancer](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-concepts-planning/GUID-55DFA68B-9FA5-4A48-93A5-C3FCD15EF27D.html).
+This section provides key network requirements and considerations. For more information, see [Requirements for Cluster Supervisor Deployment with NSX and NSX Advanced Load Balancer](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-concepts-and-planning-8-0/requirements-for-enabling-a-single-cluster-supervisor/requirements-for-cluster-supervisor-deployment-with-nsx-and-nsx-advanced-load-balancer.html).
 
 
 | **Component** | **Minimum Quantity** | **Required Configuration** |

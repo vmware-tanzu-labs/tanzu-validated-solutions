@@ -7,8 +7,8 @@ In this document, we'll explore how to leverage cartographer to template custom 
 `ClusterConfigTemplate` is an object in the supply chain, which consists of resources that are specified via Templates. Each template acts as a wrapper for existing Kubernetes resources, and allows them to be used with Cartographer.
 
 ## Prerequisites: 
-- [Tanzu Kubernetes Grid Cluster on vSphere](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-with-tanzu.html)
-- [Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap-reference-architecture/GUID-reference-designs-index-tap.html) 
+- [Tanzu Kubernetes Grid Cluster on vSphere](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/reference-designs-tko-on-vsphere-with-tanzu.html)
+- [Tanzu Application Platform](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-application-platform-reference-architecture/1-8/tap-ref-arch/reference-designs-index-tap.html) 
 - Install the `yq` CLI on client machine. The `yq` CLI is a lightweight and portable command-line YAML processor. You can download `yq` by from [here](https://github.com/mikefarah/yq/releases/), and run the below commands to install.
 
     ```bash
@@ -20,7 +20,7 @@ In this document, we'll explore how to leverage cartographer to template custom 
 
 The `server` workload type allows you deploy traditional network applications on Tanzu Application Platform.
 
-Using an application workload specification, you can build and deploy application source code to a manually-scaled Kubernetes deployment which exposes an in-cluster Service endpoint. Subsequently, you have the option to use AVI LoadBalancer (L4) Services or Ingress (L7) resources to expose these applications beyond the cluster. For more information, see the `Use server workloads` section in [TAP documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.7/tap/workloads-server.html). 
+Using an application workload specification, you can build and deploy application source code to a manually-scaled Kubernetes deployment which exposes an in-cluster Service endpoint. Subsequently, you have the option to use AVI LoadBalancer (L4) Services or Ingress (L7) resources to expose these applications beyond the cluster. For more information, see the `Use server workloads` section in [TAP documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/workloads-server.html). 
 
 
 Tanzu Application Platform allows you to create new workload types. In this example, we'll explore the steps for adding an Ingress resource to the `server-template ClusterConfigTemplate` when this new type of workload is created:
