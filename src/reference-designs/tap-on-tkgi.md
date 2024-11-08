@@ -21,7 +21,7 @@ segments/seg_b4ec3c10-c7d0-4d66-a02f-c99db10d783d_0/ports/port_62d9ebb9-913b-440
 
 ```
 
-TAP has a pre-defined list of system generated labels which are applied on TAP workloads. For more information about the list of TAP generated labels, see [Appendix A](#appendix-a--tap-generated-labels-on-workload-pods). Many of these labels are not necessarily useful for Security Policy creation in K8s. You can skip the translation of these labels as NSX tags to avoid breaching the limit on NSX. This can be achieved by using the `label_filtering_regex_list` parameter with [TKGI network profile](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid-Integrated-Edition/1.17/tkgi/GUID-network-profiles-define.html), which allows us to add a list of regex expressions defining the labels that must not be converted to NSX tags.
+TAP has a pre-defined list of system generated labels which are applied on TAP workloads. For more information about the list of TAP generated labels, see [Appendix A](#appendix-a--tap-generated-labels-on-workload-pods). Many of these labels are not necessarily useful for Security Policy creation in K8s. You can skip the translation of these labels as NSX tags to avoid breaching the limit on NSX. This can be achieved by using the `label_filtering_regex_list` parameter with [TKGI network profile](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid-integrated-edition/1-20/tkgi/network-profiles-define.html), which allows us to add a list of regex expressions defining the labels that must not be converted to NSX tags.
 
 To apply this configuration to TKGi clusters:
 
@@ -95,7 +95,7 @@ To apply this configuration to TKGi clusters:
 > **Note:**
 > - Ensure to use the required filters in the `label_filtering_regex_list` to skip the label to tags conversion. 
 > - You can not use the labels mentioned in the `label_filtering_regex_list` for K8S Network Policies/Security Policies as the respective tags are not available for firewall rule creation in NSX.
-> - Some of the Network profile parameters cannot be updated once you apply the Network Profile on the TKGi cluster. Ensure to review the network parameters list and create the network profile with all the required parameters in addition to `label_filtering_regex_list`. For more information about network parameters list that can be updated, see the [TKGi Network Profiles](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid-Integrated-Edition/1.17/tkgi/GUID-network-profiles-define.html#network-profile-parameters-11) documentation. 
+> - Some of the Network profile parameters cannot be updated once you apply the Network Profile on the TKGi cluster. Ensure to review the network parameters list and create the network profile with all the required parameters in addition to `label_filtering_regex_list`. For more information about network parameters list that can be updated, see the [TKGi Network Profiles](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid-integrated-edition/1-20/tkgi/network-profiles-define.html#network-profile-parameters-11) documentation. 
 
 
 ## TAP Installation Fails with Contour Package Error as IPv6 is Not Enabled on TKGi Clusters
