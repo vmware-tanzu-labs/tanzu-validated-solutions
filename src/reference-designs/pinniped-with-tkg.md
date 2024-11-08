@@ -5,7 +5,7 @@ VMware Tanzu Kubernetes Grid (informally known as TKG) implements user authentic
 - For LDAP authentication, Pinniped uses [Dex](https://github.com/dexidp/dex/blob/master/README.md) as the endpoint to connect to your upstream LDAP IdP.
 - If you use OIDC, Pinniped provides its own endpoint, so Dex is not required. 
 
-Pinniped and Dex run automatically as in-cluster services in your management clusters if you enable identity management. For instructions on how to enable identity management in Tanzu Kubernetes Grid, see [Configure Identity Management](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-iam-configure-id-mgmt.html).
+Pinniped and Dex run automatically as in-cluster services in your management clusters if you enable identity management. For instructions on how to enable identity management in Tanzu Kubernetes Grid, see [Configure Identity Management](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/mgmt-iam-configure-id-mgmt.html).
 
 ## Authentication Flow
 

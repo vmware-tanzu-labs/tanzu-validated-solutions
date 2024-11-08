@@ -35,4 +35,4 @@ If Tanzu Mission Control data protection does not handle all of your backup requ
 - In an internet-restricted or air-gapped environment, where the Tanzu Kubernetes clusters are not connected to the internet.
 - When a Kubernetes workload recovery is intended to be conducted in a cluster other than the source cluster.
 
-To learn more about Tanzu Mission Control data protection features, see the [Tanzu Mission Control product documentation](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-concepts/GUID-C16557BC-EB1B-4414-8E63-28AD92E0CAE5.html)
+To learn more about Tanzu Mission Control data protection features, see the [Tanzu Mission Control product documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-concepts-GUID-C16557BC-EB1B-4414-8E63-28AD92E0CAE5.html)
