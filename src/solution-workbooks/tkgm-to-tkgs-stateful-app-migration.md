@@ -5,7 +5,7 @@ The purpose of this document is to showcase the migration of stateful applicatio
 
 Migrating the stateful applications across Kubernetes clusters is not straightforward as compared to migrating the stateless applications. Because, the stateful applications would always be associated with stable system, network, and storage configurations. Due to this reason, the migration of stateful applications requires proper assessment, planning, and execution of migration.
 
-For this demonstration, we used Velero to migrate a sample stateful application configured with an Ingress. Velero is an open source community standard tool to back up and restore TKG workloads. For more information about Velero installation, see [Installing Velero in Tanzu Kubernetes Cluster](https://docs.vmware.com/en/VMware-Tanzu-Reference-Architecture/services/tanzu-solutions-workbooks/solution-workbooks-velero-with-restic.html).
+For this demonstration, we used Velero to migrate a sample stateful application configured with an Ingress. Velero is an open source community standard tool to back up and restore TKG workloads. For more information about Velero installation, see [Installing Velero in Tanzu Kubernetes Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-solutions-workbooks/services/tnz-use-cases/solution-workbooks-velero-with-restic.html).
 
  
 ## Assumptions
@@ -31,7 +31,7 @@ For this demonstration, we have configured two ESXi clusters part of the same Da
 
 ### Source Environment - TKGm
 
-We have configured the TKGm source environment backed with NSX-T Networking and NSX ALB as load balancer. This environment is configured by following the [VMware Tanzu for Kubernetes Operations on vSphere with NSX Networking Reference Design](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-nsx.html) with the following prerequisites:
+We have configured the TKGm source environment backed with NSX-T Networking and NSX ALB as load balancer. This environment is configured by following the [VMware Tanzu for Kubernetes Operations on vSphere with NSX Networking Reference Design](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/reference-designs-tko-on-vsphere-nsx.html) with the following prerequisites:
 
 |**Software Components**|**Version**|
 | --- | --- |
@@ -41,7 +41,7 @@ We have configured the TKGm source environment backed with NSX-T Networking and 
 |NSX Advanced Load Balancer|22.1.43|
 |VMware NSX|4.1.0.2|
 
-TKGm environment is configured with a single management cluster and multiple workload clusters for application deployment. The Workload clusters are configured with NSX ALB L7 with NodeportLocal mode for Application Ingress functionality. For more information about enabling the ALB L7 on TKGm, see [Configure ADC to enable NSX ALB L7](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-deployment-guides-tko-on-vsphere-nsxt.html#configure-ako-deployment-config-adc-for-workload-cluster-to-enable-nsx-alb-l7-ingress-with-nodeportlocal-mode-28).
+TKGm environment is configured with a single management cluster and multiple workload clusters for application deployment. The Workload clusters are configured with NSX ALB L7 with NodeportLocal mode for Application Ingress functionality. For more information about enabling the ALB L7 on TKGm, see [Configure ADC to enable NSX ALB L7](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/deployment-guides-tko-on-vsphere-nsxt.html#configure-ako-deployment-config-adc-for-workload-cluster-to-enable-nsx-alb-l7-ingress-with-nodeportlocal-mode-28).
 
 ```bash
 # tanzu cluster list -A --include-management-cluster
@@ -52,7 +52,7 @@ TKGm environment is configured with a single management cluster and multiple wor
 
 ### Destination Environment - TKGs
 
-We have configured the TKGs environment backed with NSX-T Networking by following the reference architecture specified in [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX Reference Design](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-with-tanzu-nsxt.html) with the following prerequisites: 
+We have configured the TKGs environment backed with NSX-T Networking by following the reference architecture specified in [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX Reference Design](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/reference-designs-tko-on-vsphere-nsx.html) with the following prerequisites: 
 
 |**Software Components**|**Version**|
 | --- | --- |
@@ -62,7 +62,7 @@ We have configured the TKGs environment backed with NSX-T Networking by followin
 |Tanzu Kubernetes Release(for workload clusters)|v1.26.13|
 |VMware NSX|4.1.0.2|
 
-We have enabled the Supervisor cluster, created a Supervisor Namespace, and deployed a Tanzu workload cluster. The TKGs environment is backed with NSX-T Networking and Contour is deployed as a Tanzu package on the workload cluster to provide L7 Ingress functionality. For more information about installing Tanzu packages on the TKGs workload cluster, see [Prepare to install Tanzu Packages](https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.2.1/tanzu-packages/prep.html). 
+We have enabled the Supervisor cluster, created a Supervisor Namespace, and deployed a Tanzu workload cluster. The TKGs environment is backed with NSX-T Networking and Contour is deployed as a Tanzu package on the workload cluster to provide L7 Ingress functionality. For more information about installing Tanzu packages on the TKGs workload cluster, see [Prepare to install Tanzu Packages](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/prep.html). 
 
 ```bash
 # kubectl vsphere login --vsphere-username=administrator@vsphere.local --server=192.168.120.2 --tanzu-kubernetes-cluster-name tkgs-cluster-01 --insecure-skip-tls-verify
@@ -86,13 +86,13 @@ Velero has been configured on Tanzu Kubernetes Clusters to backup and restore th
 - Configure a storage provider with buckets to store the backups. For this demonstration, we have used MinIO as the storage provider.
 - Configure Velero server on both the source and the destination Tanzu Kubernetes clusters. 
 
-For more information about configuring Velero and its best practices, see [Installing Velero in Tanzu Kubernetes Cluster](https://docs.vmware.com/en/VMware-Tanzu-Reference-Architecture/services/tanzu-solutions-workbooks/solution-workbooks-velero-with-restic.html).
+For more information about configuring Velero and its best practices, see [Installing Velero in Tanzu Kubernetes Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-solutions-workbooks/services/tnz-use-cases/solution-workbooks-velero-with-restic.html).
 
 ## Deploy Application on the TKGm Cluster and Back Up Using Velero
 
 We'll deploy a stateful application named `Guestbook` on the source cluster, and enter some messages for validating the data persistence. We'll also create an Ingress object for backing up this application and ensure to backup and restore this in the destination environment. 
 
-1. Deploy the Guestbook app on the TKGm cluster by following the steps specified [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-A6348191-D403-4CDA-9183-4F4C28A6B093.html). For more information about the application configuration files, see [here](./resources/tkgm-to-tkgs-stateful-app-migration/Guestbook-app-files.zip).
+1. Deploy the Guestbook app on the TKGm cluster by following the steps specified [here](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/deploying-workloads-on-tkg-service-clusters/deploy-the-guestbook-application-on-a-tkg-cluster.html). For more information about the application configuration files, see [here](./resources/tkgm-to-tkgs-stateful-app-migration/Guestbook-app-files.zip).
 1. Add some data entries in the guestbook app before taking Velero backup and ensure that you see the new entries.
 
     ![Guestbook app](img/tkgm-to-tkgs-stateful-app-migration/image1.png)
@@ -196,7 +196,7 @@ You must ensure to change the IngressClass name after restoring the workloads on
 ## Appendix
 ### References
 - [Velero Storage classes config map](https://velero.io/docs/v1.13/restore-reference/#changing-pvpvc-storage-classes)
-- [Package Installation on TKGs cluster](https://docs.vmware.com/en/VMware-Tanzu-Packages/2024.2.1/tanzu-packages/prep.html#supervisor-version-requirements-4)
-- [NSX ALB L7 for TKGM](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.3/tko-reference-architecture/GUID-deployment-guides-tko-on-vsphere-nsxt.html#configure-ako-deployment-config-adc-for-workload-cluster-to-enable-nsx-alb-l7-ingress-with-nodeportlocal-mode-28)
+- [Package Installation on TKGs cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/prep.html#supervisor-version-requirements-4)
+- [NSX ALB L7 for TKGM](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/deployment-guides-tko-on-vsphere-nsxt.html#configure-ako-deployment-config-adc-for-workload-cluster-to-enable-nsx-alb-l7-ingress-with-nodeportlocal-mode-28)
 - [Guesbook config files]()
-- [App deployment steps](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-A6348191-D403-4CDA-9183-4F4C28A6B093.html)
+- [App deployment steps](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/deploying-workloads-on-tkg-service-clusters/deploy-the-guestbook-application-on-a-tkg-cluster.html)

@@ -45,7 +45,7 @@ To back up and restore TKG clusters, you must ensure the following parameters:
 
 To install the Velero CLI on your client machine, perform the following steps:
 
-1. Go to the [Tanzu Kubernetes Grid downloads page](https://customerconnect.vmware.com/en/web/vmware/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x), and log in with your VMware Customer Connect credentials.
+1. Go to the [Tanzu Kubernetes Grid downloads page](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid), and log in with your Broadcom Support credentials.
 1. Under **Product Downloads**, click **Go to Downloads**.
 3. Select the respective Tanzu Kubernetes Grid version. 
 </br>Scroll down to the Velero entries and download the `Velero CLI.gz` file on your client machine OS. 
