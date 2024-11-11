@@ -17,7 +17,7 @@ The following components are used in the reference architecture:
 
 **[VMware Tanzu Kubernetes Grid](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5.html)** - Enables creation and lifecycle management operations of Kubernetes clusters.  
 
-**[vSphere with Tanzu](https://author-techdocs2-prod.adobecqms.net/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0.html)** - Transforms vSphere into a platform for running Kubernetes workloads natively on the hypervisor layer. When enabled on a vSphere cluster, vSphere with Tanzu provides the capability to run Kubernetes workloads directly on ESXi hosts and to create upstream Kubernetes clusters within dedicated resource pools.
+**[vSphere with Tanzu](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0.html)** - Transforms vSphere into a platform for running Kubernetes workloads natively on the hypervisor layer. When enabled on a vSphere cluster, vSphere with Tanzu provides the capability to run Kubernetes workloads directly on ESXi hosts and to create upstream Kubernetes clusters within dedicated resource pools.
 
 **[VMware Tanzu Mission Control](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/index-tmc-all.html)** - Provides a global view of Kubernetes clusters and allows for centralized policy management across all deployed and attached clusters.  
 
