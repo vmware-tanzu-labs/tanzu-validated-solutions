@@ -549,7 +549,7 @@ Logging for Tanzu Application Platform is handled by the upstream Kubernetes int
 
 There are multiple ways to set up authentication in a Tanzu Application Platform deployment. You can manage authentication at the infrastructure level with your Kubernetes provider. VMware recommends Pinniped for integrating your identity provider into Tanzu Application Platform.
 
-To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/authn-authz-pinniped-login.html).
+To use Pinniped, see [Installing Pinniped on Tanzu Application Platform](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/authn-authz-pinniped-install-guide.html) and [Login using Pinniped](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/authn-authz-pinniped-login.html).
 
 | Decision ID   | Design Decision   | Justification | Implication
 |---            |---                |---            |---
@@ -569,7 +569,7 @@ The following two roles are for service accounts associated with the Tanzu Suppl
 * `workload`
 * `deliverable`
 
-For more information, see [Tanzu Application Platform authorization](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/authn-authz-overview.html).
+For more information, see [Tanzu Application Platform authorization](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/authn-authz-overview.html).
 
 ## Developer tools (Inner-Loop)
 
@@ -577,4 +577,4 @@ Tanzu Application Platform allows developers to quickly build and test applicati
 
 ## Deployment Instructions
 
-For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.8/tap/multicluster-installing-multicluster.html).
+For more information about deploying this reference design, see [Deploy multi-cluster Tanzu Application Platform profiles](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-application-platform/1-12/tap/multicluster-installing-multicluster.html).

@@ -4,7 +4,7 @@ vSphere with Tanzu transforms vSphere into a platform for running Kubernetes wor
 
 This document lays out a reference design for deploying Supervisor on three vSphere Zones to provide cluster-level high-availability. Each vSphere Zone maps to one vSphere cluster.  A three-zone Supervisor only supports Tanzu Kubernetes clusters and VMs, it does not support vSphere Pods. This document does not cover any recommendations or deployment steps for underlying software-defined data center (SDDC) environments.
 
-For more information about the Non-Zonal Supervisor deployment, see [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX-T Reference Design](https://docs.vmware.com/en/VMware-Tanzu-for-Kubernetes-Operations/2.1/tko-reference-architecture/GUID-reference-designs-tko-on-vsphere-with-tanzu-nsxt.html).
+For more information about the Non-Zonal Supervisor deployment, see [VMware Tanzu for Kubernetes Operations using vSphere with Tanzu on NSX-T Reference Design](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-for-kubernetes-operations-reference-architecture/2-3/tko-ref-arch/reference-designs-tko-on-vsphere-with-tanzu-nsxt.html).
 
 The following reference design is based on the architecture and components described in [VMware Tanzu for Kubernetes Operations Reference Architecture](index.md).
 
@@ -69,7 +69,7 @@ The following table provides the component versions and interoperability matrix 
 
 - **Storage Classes in vSphere with Tanzu** :  A StorageClass allows the administrators to describe the classes of storage that they offer. Different storage classes can map to meet quality-of-service levels, to backup policies, or to arbitrary policies determined by the cluster administrators. The policies representing datastore can manage storage placement of such components and objects as control plane VMs, vsphere Pod ephemeral disks, and container images. You might need policies for storage placement of persistent volumes and VM content libraries. 
 
-A three-zone Supervisor supports zonal storage, where a datastore is shared across all hosts in a single zone. Storage policies that you create for a Supervisor or for a namespace in a three-zone Supervisor must be topology aware and have the consumption domain enabled. For more information, see [Create Storage Policy for a Three-Zone Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-services-workloads/GUID-46783798-E3FD-49C6-BB62-C5EB09C2B82A.html).
+A three-zone Supervisor supports zonal storage, where a datastore is shared across all hosts in a single zone. Storage policies that you create for a Supervisor or for a namespace in a three-zone Supervisor must be topology aware and have the consumption domain enabled. For more information, see [Create Storage Policy for a Three-Zone Supervisor](https://author-techdocs2-prod.adobecqms.net/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/vsphere-iaas-control-plane-services-and-workloads-8-0/using-persistent-storage-with-workloads-in-vsphere-iaas-control-plane/using-persistent-storage-on-a-three-zone-supervisor.html#GUID-46783798-E3FD-49C6-BB62-C5EB09C2B82A-en).
 
 When you prepare storage resources for three-zone Supervisor, consider the following parameters:
 
@@ -104,7 +104,7 @@ vSphere with Tanzu supports the following two identity providers:
 
   To authenticate using vCenter Single Sign-On, use vSphere plug-in for kubectl. Once authenticated, use kubectl to declaratively provision and manage the lifecycle of TKG clusters, deploy TKG cluster workloads.
 
-- **External Identity Provider:** You can configure a Supervisor with an external identity provider and support the [OpenID Connect protocol](https://openid.net/connect/). Once connected, the Supervisor functions as an OAuth 2.0 client, and uses the [Pinniped](https://pinniped.dev/) authentication service to connect to Tanzu Kubernetes Grid clusters by using the Tanzu CLI. Each Supervisor instance can support one external identity provider. For more information about the list of supported OIDC providers, see [Configure an External IDP](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-766CC14B-BE5D-427E-8EA5-1570F28C95DE.html).
+- **External Identity Provider:** You can configure a Supervisor with an external identity provider and support the [OpenID Connect protocol](https://openid.net/connect/). Once connected, the Supervisor functions as an OAuth 2.0 client, and uses the [Pinniped](https://pinniped.dev/) authentication service to connect to Tanzu Kubernetes Grid clusters by using the Tanzu CLI. Each Supervisor instance can support one external identity provider. For more information about the list of supported OIDC providers, see [Configure an External IDP](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/configuring-and-managing-a-supervisor-cluster/configure-an-external-idp-for-use-with-tkg-service-clusters.html).
 
 The Tanzu Kubernetes Grid (TKG) cluster permissions are set and scoped at the vSphere Namespace level. When permissions are set for Namespace, including identity source, users & groups, and roles, all these permissions apply to any TKG cluster deployed within that vSphere Namespace.
 
@@ -177,7 +177,7 @@ The following section explains the networking components and services included i
 - NSX Container Plugin (NCP) provides integration between NSX and Kubernetes. The main component of NCP runs in a container and communicates with the NSX manager and with the Kubernetes control plane. NCP monitors changes to containers and other resources and manages resources such as logical ports, segments, routers, and security groups for the containers by calling the NSX API.
 - By default, NCP creates one shared tier-1 gateway for system namespaces, and a tier-1 gateway and load balancer for each namespace. The tier-1 gateway for namespace is connected to the tier-0 gateway and a default segment.
 - System namespaces are namespaces that are used by the core components that are integral to functioning of the Supervisor and Tanzu Kubernetes Grid clusters. The shared network resources that include the tier-1 gateway, load balancer, and SNAT IP are grouped in a system namespace.
-- NSX Edge provides connectivity from external networks to the Supervisor resources. An NSX edge cluster normally includes at least two Edge nodes and has a load balancer that provides a redundancy to the Kube-API servers residing on control plane VMs and any application that must be published and be accessible from outside the Supervisor cluster. For more information, see [Install and Configure NSX for vSphere with Tanzu](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-installation-configuration/GUID-8D0E905F-9ABB-4CFB-A206-C027F847FAAC.html).
+- NSX Edge provides connectivity from external networks to the Supervisor resources. An NSX edge cluster normally includes at least two Edge nodes and has a load balancer that provides a redundancy to the Kube-API servers residing on control plane VMs and any application that must be published and be accessible from outside the Supervisor cluster. For more information, see [Install and Configure NSX for vSphere with Tanzu](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/installing-and-configuring-vsphere-iaas-control-plane-8-0/networking-for-vsphere-with-tanzu/install-and-configure-nsx-t-data-center-for-vsphere-with-tanzu.html).
 
 - A tier-0 gateway is associated with the NSX Edge cluster to provide routing to the external network. The uplink interfaces use either the dynamic routing, BGP, or static routing.
 - Each vSphere namespace has a separate network and set of networking resources shared by applications inside the namespace, such as tier-1 gateway, load balancer service, and SNAT IP address.
@@ -339,7 +339,7 @@ The CNI options are open-source software that provide networking for cluster pod
 
 When you deploy a Tanzu Kubernetes cluster using the default configuration, Antrea CNI is automatically enabled in the cluster.
 
-To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kubernetes Clusters with Calico](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-0787A2CC-0C57-44F8-B880-F0B8F5483E0F.html).
+To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kubernetes Clusters with Calico](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/provisioning-tkg-service-clusters/using-the-cluster-v1beta1-api/v1beta1-example-cluster-with-calico-cni.html).
 
 
 |**CNI**|**Use Case**|**Pros and Cons**|
@@ -354,7 +354,7 @@ To provision a Tanzu Kubernetes cluster using Calico CNI, see [Deploy Tanzu Kube
 vSphere with Tanzu does not ship a default ingress controller. You can use Any Tanzu-supported ingress controller. For example, Contour, an open-source controller for Kubernetes ingress routing. Contour is part of a Tanzu package and can be installed on any Tanzu Kubernetes cluster. Deploying Contour is a prerequisite for deploying Prometheus, Grafana, and Harbour on a workload cluster. You can also manually deploy AKO on the Tanzu Kubernetes cluster and make use of NSX Advanced Load Balancer as L7 ingress. However, this will require an enterprise license of NSX Advanced Load Balancer.
 
 
-For more information about Contour, see [Contour](https://projectcontour.io/) and [Ingress Using Contour](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-D540E8AA-38FE-41D8-9FF2-72C6EB17A721.html). 
+For more information about Contour, see [Contour](https://projectcontour.io/) and [Ingress Using Contour](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/deploying-workloads-on-tkg-service-clusters/ingress-using-contour.html). 
 
 [Tanzu Service Mesh](https://tanzu.vmware.com/service-mesh) also offers an Ingress controller based on [Istio](https://istio.io/). 
 
@@ -377,13 +377,13 @@ When vSphere with Tanzu is deployed on NSX networking, you can deploy an externa
 
 You can use one of the following methods to install Harbor:
 
-- [Tanzu Kubernetes Grid Package deployment:](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-packages-harbor-registry.html)** VMware recommends this installation method for general use cases. The Tanzu packages, including Harbor, must either be pulled directly from VMware or be hosted in an internal registry.
-- [VM-based deployment using OVA:](https://goharbor.io/docs/latest/install-config/installation-prereqs/) VMware recommends using this installation method in cases where Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-restricted environment, and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-less deployments. Do not use this method for hosting application images. Harbor registry is being shipped with TKG binaries and can be download from [here](https://customerconnect.vmware.com/en/downloads/info/slug/infrastructure_operations_management/vmware_tanzu_kubernetes_grid/2_x).
+- [Tanzu Kubernetes Grid Package deployment:](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor.html)** VMware recommends this installation method for general use cases. The Tanzu packages, including Harbor, must either be pulled directly from VMware or be hosted in an internal registry.
+- [VM-based deployment using OVA:](https://goharbor.io/docs/latest/install-config/installation-prereqs/) VMware recommends using this installation method in cases where Tanzu Kubernetes Grid is being installed in an air-gapped or Internet-restricted environment, and no pre-existing image registry exists to host the Tanzu Kubernetes Grid system images. VM-based deployments are only supported by VMware Global Support Services to host the system images for air-gapped or Internet-less deployments. Do not use this method for hosting application images. Harbor registry is being shipped with TKG binaries and can be download from [here](https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Tanzu%20Kubernetes%20Grid).
 
 
-If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. For more information, see [Trust Custom CA Certificates on Cluster Nodes](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.5/vmware-tanzu-kubernetes-grid-15/GUID-cluster-lifecycle-secrets.html#trust-custom-ca-certificates-in-new-clusters-6).
+If you are deploying Harbor without a publicly signed certificate, you must include the Harbor root CA in your Tanzu Kubernetes Grid clusters. For more information, see [Trust Custom CA Certificates on Cluster Nodes](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/workload-clusters-secret.html#custom-ca).
 
-To configure  TKG cluster with private container registry, see [Integrate TKG 2 cluster with container registry](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-EC2C9619-2898-4574-8EF4-EA66CFCD52B9.html).
+To configure  TKG cluster with private container registry, see [Integrate TKG 2 cluster with container registry](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/using-private-registries-with-tkg-service-clusters/integrate-tkg-service-clusters-with-a-private-container-registry.html).
 
 ## Scale a Tanzu Kubernetes Grid Cluster
 
@@ -412,9 +412,9 @@ There are following two options for backing up and restoring stateless and state
 |Velero plug-in for vSphere|<p>Both Kubernetes metadata and persistent volumes can be backed up and restored.</p><p>Velero snapshotting is used for persistent volumes with stateful applications.</p><p>Requires the Velero plug-in for vSphere installed and configured on Supervisor.</p><p></p>|
 |Standalone Velero and Restic|<p>Both Kubernetes metadata and persistent volumes can be backed up and restored.</p><p>Restic is used for persistent volumes with stateful applications.</p><p>Use this approach if you require portability.</p><p></p>|
 
-To backup and restore workloads running on TKG Cluster on Zonal Supervisor, create a datastore and install Velero with Restic on Kubernetes cluster. For more information, see [Install and Configure Standalone Velero and Restic](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-6CC3E1B5-CDAB-453C-98FE-CB579BC6AAF0.html). 
+To backup and restore workloads running on TKG Cluster on Zonal Supervisor, create a datastore and install Velero with Restic on Kubernetes cluster. For more information, see [Install and Configure Standalone Velero and Restic](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere-supervisor/8-0/using-tkg-service-with-vsphere-iaas-control-plane-8-0/backing-up-and-restoring-tkg-service-clusters-and-workloads/backup-and-restore-workloads-using-standalone-velero-with-restic/install-and-configure-standalone-velero-and-restic-on-tkg-clusters.html). 
 
->**Note** Velero plug-in for vSphere runs as a pod which is not supported with Zonal Supervisor, and it requires NSX-T networking. For more information, see the prerequisites section of [Install and Configure the Velero Plugin for vSphere on Supervisor](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-with-tanzu-tkg/GUID-1E294812-0E8B-494B-9F6E-C8631FEB9403.html).
+>**Note** Velero plug-in for vSphere runs as a pod which is not supported with Zonal Supervisor, and it requires NSX-T networking.
 
 
 
