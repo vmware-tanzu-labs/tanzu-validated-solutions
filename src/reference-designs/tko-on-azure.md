@@ -179,7 +179,7 @@ Use of a public IP address for the Kubernetes API server is optional. You can ho
 ## Container Registries
 Numerous container registry options are available, and you may already have one in place. Tanzu comes pre-packaged with its own registry, called Harbor, which can be made available directly within a Tanzu Kubernetes Grid workload cluster. If you are hosting your Kubernetes clusters on a private IP address as described in this reference design, the Harbor registry sits in a workload cluster in the same network architecture as all other clusters. This design allows only private traffic access to the container images.
 
-For more information, see [Deploy Harbor Registry as a Shared Service](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-harbor-registry.html).
+For more information, see [Deploy Harbor Registry as a Shared Service](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-harbor-mc.html).
 
 ### Azure Container Registry
 Microsoft Azure also provides a container registry as a service, called Azure Container Registry (ACR). This service can be deployed within your Azure subscription. It is deployed by default as a public service with a public endpoint. However, using Software Defined Networking (SDN) configurations, the Azure Container Registry can be linked directly into the Virtual Network where your Tanzu Kubernetes Grid clusters reside through a service called Private Endpoint. This limits your ACR so that is available only to traffic originating from your Virtual Network, thereby creating a completely private deployment.
@@ -222,7 +222,7 @@ For a complete list of features that Tanzu Mission Control includes with Tanzu, 
 
 To attach your cluster for management through Tanzu Mission Control, navigate to **Clusters > Attach Cluster** on the Tanzu Mission Control console and follow the prompts.
 
-> **Note** If a workload cluster under management requires a proxy to access the Internet, you can use the Tanzu Mission Control CLI to [generate the YAML](https://docs.vmware.com/en/VMware-Tanzu-Mission-Control/services/tanzumc-using/GUID-97672F56-2AD4-46E6-94E1-805ED38D06C7.html) necessary to install Tanzu Mission Control components on it.
+> **Note** If a workload cluster under management requires a proxy to access the Internet, you can use the Tanzu Mission Control CLI to [generate the YAML](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-mission-control/saas/tanzu-mission-control-documentation/tanzumc-using-GUID-97672F56-2AD4-46E6-94E1-805ED38D06C7.html) necessary to install Tanzu Mission Control components on it.
 
 ![Tanzu Mission Control attach cluster screen](img/tko-on-azure/tmc-attach-cluster-screen.png)
 
@@ -230,9 +230,9 @@ To attach your cluster for management through Tanzu Mission Control, navigate to
 
 Tanzu Kubernetes Grid requires load balancing for both the control plane and the workloads. Tanzu Kubernetes Grid on Azure uses Azure Load Balancer for control plane and workload clusters.
 
-For workloads, Tanzu Kubernetes Grid [Contour ingress controller package](hhttps://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-ingress-contour.html) can be used for layer 7 load balancing.
+For workloads, Tanzu Kubernetes Grid [Contour ingress controller package](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-contour.html) can be used for layer 7 load balancing.
 
-In Tanzu Kubernetes Grid, you can optionally [deploy the external-dns package](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-external-dns.html), which automates updating DNS records in Azure DNS associated with ingress resources or load balancing services. This can also automate away toil associated with DNS record management for externally exposed services.
+In Tanzu Kubernetes Grid, you can optionally [deploy the external-dns package](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-externaldns.html), which automates updating DNS records in Azure DNS associated with ingress resources or load balancing services. This can also automate away toil associated with DNS record management for externally exposed services.
 
 ## Authentication with Pinniped
 
@@ -283,7 +283,7 @@ Tanzu Observability provides various out-of-the-box dashboards. You can customiz
 
 ### Metrics Monitoring with Prometheus and Grafana (Alternative Solution)
 
-Tanzu Kubernetes Grid also supports [Prometheus](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-prometheus.html) and [Grafana](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-grafana.html) as alternative on-premise solutions for monitoring Kubernetes clusters.
+Tanzu Kubernetes Grid also supports [Prometheus](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html) and [Grafana](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-monitoring.html) as alternative on-premise solutions for monitoring Kubernetes clusters.
 
 Prometheus operates by exposing scrapable metrics endpoints for various monitoring targets throughout your cluster. Metrics are ingested by polling the endpoints on a set interval which are then stored in a time-series database. Metrics data can be explored via the [Prometheus Query Language interface](https://prometheus.io/docs/prometheus/latest/querying/basics/).  
 
@@ -295,11 +295,11 @@ The Tanzu Kubernetes Grid extensions bundles contain instructions and manifests 
 
 ![Tanzu Observability availability dashboard](img/tko-on-azure/tanzu-observability-availability-dashboard.png)
 
-Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-index.html). For more information about user-managed packages, see [User-Managed Packages](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-user-managed-index.html).
+Prometheus and Grafana are user-managed packages available with Tanzu Kubernetes Grid. For more information about packages bundled with Tanzu Kubernetes Grid, see [Install and Configure Packages](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/index.html). For more information about user-managed packages, see [User-Managed Packages](https://techdocs.broadcom.com/us/en/vmware-tanzu/standalone-components/tanzu-kubernetes-grid/2-5/tkg/about-tkg-packages-index.html).
 
 ### Log Forwarding
 
-Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize LogInsight, Elastic Search, and other logging aggregators. For information on configuring Fluent Bit to your logging provider, see [Implement Log Forwarding with Fluent Bit](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.6/vmware-tanzu-kubernetes-grid-16/GUID-packages-logging-fluentbit.html).  
+Tanzu also includes Fluent Bit for integration with logging platforms such as vRealize LogInsight, Elastic Search, and other logging aggregators. For information on configuring Fluent Bit to your logging provider, see [Implement Log Forwarding with Fluent Bit](https://techdocs.broadcom.com/us/en/vmware-tanzu/cli/tanzu-packages/latest/tnz-packages/packages-fluentbit.html).  
 
 ## Summary
 
