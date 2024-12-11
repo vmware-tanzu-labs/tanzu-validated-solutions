@@ -44,7 +44,8 @@ This document is intended for key stakeholders, including executives, IT decisio
     -   [General Recommendations on Configuring Spaces(In Progress)	45](#general-recommendations-on-configuring-spaces\(in-progress\))
     -   [RBAC in Tanzu Platform Self-Managed	46](#rbac-in-tanzu-platform-self-managed)  
 
-{#bill-of-materials}
+<a id=bill-of-materials> </a> 
+
 ### Bill Of Materials  
 Below is the validated Bill of Materials that can be used to install TKG on your vSphere environment today: 
 
@@ -56,7 +57,8 @@ Below is the validated Bill of Materials that can be used to install TKG on your
 | Tanzu Kubernetes Release | 1.28.x |
 | Tanzu Platform  | 10.0.0 |  
 
-{#vsphere-iaas-control-plane-key-components}
+<a id=vsphere-iaas-control-plane-key-components> </a> 
+
 ## vSphere IaaS control plane key Components  
 
 To deploy and utilize Tanzu Platform features and capabilities on a vSphere infrastructure, it is essential to configure the vSphere IaaS control plane. This IaaS control plane serves as the foundational layer, managing compute, storage, and networking resources required to support Kubernetes clusters and modern application workloads. Proper configuration ensures seamless integration with Tanzu services, enabling efficient workload management, scalability, and automation.   
@@ -103,7 +105,8 @@ Both containers and VMs utilize the same vSphere Namespace resources and can be 
 
 Overall, the Tanzu platform enables teams to deploy and manage Kubernetes clusters and modern applications efficiently. By leveraging this platform, businesses can enhance application resilience, reliability, and performance, aligning with industry-leading practices.
 
-{#overview-on-vcf-topology}
+<a id=overview-on-vcf-topology> </a> 
+
 ## Overview on VCF Topology  
 
 The Tanzu Platform will be deployed on a Tanzu Kubernetes Cluster (TKC) hosted on the vSphere IaaS control plane. The architecture of the Tanzu Platform on vSphere is influenced by the selected VMware Cloud Foundation (VCF) topology. For the scope of this document, the following VCF topology is considered.
@@ -115,7 +118,8 @@ The Tanzu Platform will be deployed on a Tanzu Kubernetes Cluster (TKC) hosted o
 
 >   **Note** This document offers a high-level overview of the Tanzu Platform Self-Managed (TP-SM) and does not include detailed design or recommendations for SDDC management components or the IaaS control plane. The information provided below serves only as a reference. Customers should evaluate and choose the most appropriate VCF topology based on their specific business and application needs. For more details on supported/recommended VCF topology refer to the official [VMware Cloud Foundation Design Guide](https://docs.vmware.com/en/VMware-Cloud-Foundation/5.2/vcf-design/GUID-5B0A8D19-E82C-49B6-BA36-D72FF0A4F9C7.html) 
 
-{#single-instance---multiple-availability-zones}
+<a id=single-instance---multiple-availability-zones> </a> 
+
 ### Single Instance \- Multiple Availability Zones  
 
 This approach utilizes a single VMware Cloud Foundation (VCF) instance, with the Management Domain deployed as a stretched vSAN cluster. All critical management components, including the Management vCenter, Workload vCenter, NSX Advanced Load Balancer (NSX ALB) instances, and other supporting infrastructure components, are hosted within this domain.
@@ -128,7 +132,8 @@ For more details on the design and its considerations refer to the [official doc
 
 ![](./img/tpsm-ag-on-vsphere/stretch-vsan.png)
 
-{#vcenter-server-for-vmware-cloud-foundation}
+<a id=vcenter-server-for-vmware-cloud-foundation> </a> 
+
 ### vCenter Server for VMware Cloud Foundation  
 
 Each workload domain is managed by a dedicated vCenter Server instance, responsible for overseeing customer workloads. These Workload vCenter Server instances reside within the management domain and share a common vCenter Single Sign-On (SSO) domain within the VMware Cloud Foundation instance.
@@ -137,25 +142,30 @@ For more details on design, recommendations, requirements and sizing guidelines,
 
 ![](./img/tpsm-ag-on-vsphere/vcenter-server-instance-diag.png)
 
-{#vsphere-cluster-design-for-vmware-cloud-foundation}
+<a id=vsphere-cluster-design-for-vmware-cloud-foundation> </a> 
+
 ### vSphere Cluster Design for VMware Cloud Foundation  
 
 The vSphere cluster design should account for the specific needs of standard, stretched, and remote clusters, as well as the life cycle management of ESXi hosts based on workload characteristics. This documentation focuses on standard workload clusters. **This documentation focuses exclusively on standard workload clusters.**
 
 ![](./img/tpsm-ag-on-vsphere/domain-esxi-diag.png)
 
-{#vsphere-networking-design-for-vmware-cloud-foundation}
+<a id=vsphere-networking-design-for-vmware-cloud-foundation> </a> 
+
 ### vSphere Networking Design for VMware Cloud Foundation  
 
 Designing vSphere networking requires careful consideration of vSphere Distributed Switches (VDS), distributed port groups, and VMkernel adapters within the VMware Cloud Foundation environment. Workload domains in VMware Cloud Foundation necessitate multiple port groups configured on the vSphere Distributed Switch.
 
 As per the best practices it is recommended to ​​use a single vSphere Distributed Switch per cluster. For more details on design, recommendations, and requirements refer to the [official documentation](https://docs.vmware.com/en/VMware-Cloud-Foundation/5.2/vcf-design/GUID-611238ED-60FE-4DEE-A735-0016640DE5DD.html).
 
-{#tanzu-platform-on-vsphere---dual-site-platform-architecture}
+<a id=tanzu-platform-on-vsphere---dual-site-platform-architecture> </a> 
+
 ## Tanzu Platform on vSphere \- Dual Site Platform Architecture  
 
 Based on the above VCF considerations, the following diagram provides a high-level overview of the vSphere platform architecture supporting Tanzu Platform deployment. 
-{#vsphere-management-domain-platform-architecture}
+
+<a id=vsphere-management-domain-platform-architecture> </a> 
+
 ### vSphere Management Domain Platform Architecture  
 
 ![](./img/tpsm-ag-on-vsphere/vs-mgmt-domain.png)
@@ -164,7 +174,8 @@ As shown in the diagram, a stretched vSAN cluster is being leveraged to host man
 
 In this documentation, the Management Domain is primarily leveraged to host the NSX Advanced Load Balancer (NSX ALB) Controllers. These NSX ALB controllers are essential for delivering load balancing services to both the IaaS control plane components and applications deployed on Tanzu Kubernetes Clusters (TKCs) managed by the Tanzu Platform Self-Managed (TP-SM).
 
-{#vsphere-workload-domain-platform-architecture}
+<a id=vsphere-workload-domain-platform-architecture> </a> 
+
 ### vSphere Workload Domain Platform Architecture  
 
 ![](./img/tpsm-ag-on-vsphere/vs-workload-domain.png)
@@ -193,14 +204,16 @@ As illustrated in the above diagram, each vSphere Cluster represents an availabi
 * **Workload Management**:  
   * In addition to TKCs, other workloads, including virtual machines and NSX ALB  Service Engines (SEs), are managed within this architecture, leveraging the distributed resources across zones.
 
-{#dual-site-high-level-design-for-tanzu-platform-on-vsphere}
+<a id=dual-site-high-level-design-for-tanzu-platform-on-vsphere> </a> 
+
 ## Dual Site High Level Design for Tanzu Platform on vSphere  
 
 The diagram illustrates the high-level design for deploying Tanzu Platform (TP) components on the IaaS control plane, utilizing VDS and NSX ALB for load balancing.
 
 ![](./img/tpsm-ag-on-vsphere/dual-site-design-diag.png)
 
-{#network-requirements}
+<a id=network-requirements> </a> 
+
 ### Network Requirements  
 
 As per the proposed architecture, all the Tanzu Components will be deployed on a VLAN backed Portgroup.  Below is the list of required vLAN Portgroups:
@@ -215,7 +228,8 @@ As per the proposed architecture, all the Tanzu Components will be deployed on a
 | Secondary Workload Network  | ​​/24 | The control plane and worker nodes of TKG workload clusters will connect to this network. As depicted in the diagram, this network is associated with a dedicated Supervisor namespace (Admin Namespace) utilized by the platform administrator to deploy TP-SM components on one of the TKCs. Optionally, this network can also be used to host TP Build and/or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
 | Additional Workload Network (One per availability zone)   | /24 | Additional workload networks can be created as needed to segregate TKCs. Depending on the requirements, these TKCs can be configured to function as either TP Build or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
 
-{#firewall-requirements}
+<a id=firewall-requirements> </a> 
+
 ### Firewall Requirements  
 
 Below are the minimum required firewall that’s required for the proposed architecture: 
@@ -234,7 +248,8 @@ Below are the minimum required firewall that’s required for the proposed archi
 | administration network CIDR(s) | IaaS Control Plane Mgmt Network Primary Workload Network  Secondary Workload Network Additional Workload Network/s TKG Control Plane/Application VIP Network vCenter Server | TCP: 443 TCP: 22TCP: 6443 | Allow administrators to manage IaaS control Plane via vCenter Connect to TP-SM endpoint over the port 443 Access the nodes via SSH Connect to Kube API Endpoints of Supervisor and/or TKCs  |
 | Developer network CIDR(s) | TKG Control Plane/Application VIP | TCP: 443 TCP/UDP: \<Application ports Exposed: 443/80/any  TCP: 6443(Optional) | Connect to TP-SM endpoint over the port 443 (UI/CLI) Access the applications hosted via Tanzu platform (Port 443/80/or any custom ports) Allow administrators to access TKCs. With sufficient privileges developers can access the K8s clusters if/when required |
 
-{#nsx-advanced-load-balancer}
+<a id=nsx-advanced-load-balancer> </a> 
+
 ## NSX Advanced Load Balancer  
 
 The NSX ALB Controller provides central control and management of the Service Engines. The AVI Controller runs on a VM and can be managed using its web interface, CLI, or REST API. 
@@ -252,7 +267,8 @@ The following are the core components of NSX ALB that will be leveraged for the 
 * **NSX ALB Service Engine** \- The Service Engines (SEs) are lightweight VMs that handle all data plane operations by receiving and executing instructions from the controller. The SEs perform load balancing and all client and server-facing network interactions.  
 * **Avi Kubernetes Operator (AKO)** \- It is a Kubernetes operator that runs as a pod in the Supervisor Cluster that provides load balancing functionality. AKO translates the required Kubernetes objects to NSX ALB objects and automates the implementation of services on the Service Engines (SE) via the NSX ALB Controller.
 
-{#nsx-alb-controller-cpu/memory-sizing}
+<a id=nsx-alb-controller-cpu/memory-sizing> </a> 
+
 ### NSX ALB Controller CPU/Memory Sizing  
 
 Regardless of NSX ALB Controller configuration, each Controller cluster can achieve up to 10000 virtual services, this is a hard limit.
@@ -266,7 +282,8 @@ For more details, refer to NSX ALB [documentation](https://docs.vmware.com/en/VM
 | Medium  | 10 vCPUS, 32 GB RAM  | 2000  | 100-200  |
 | Large  | 16 vCPUS, 48 GB RAM  | 10000 | 200-400  |
 
-{#nsx-alb-controller-storage-sizing}
+<a id=nsx-alb-controller-storage-sizing> </a> 
+
 ### NSX ALB Controller Storage Sizing  
 
 The amount of disk capacity to allocate to an Avi Controller is calculated based on the following parameters:  
@@ -281,7 +298,8 @@ Note the following:
 
 For more details on NSX ALB Controller Storage Sizing refer to [NSX Advanced Load Balancer Controller Sizing](https://docs.vmware.com/en/VMware-NSX-Advanced-Load-Balancer/22.1/Installation_Guide/GUID-6366FAA5-8FDF-4B0F-B170-1D846B6CAF86.html#allocating-disk-capacity-2)
 
-{#nsx-alb-controller-and-cloud-design}
+<a id=nsx-alb-controller-and-cloud-design> </a> 
+
 ### NSX ALB Controller and Cloud Design  
 
 NSX ALB Load Balancer is a software-based solution that provides real-time analytics and elastic application delivery services.It optimizes core web functions, including SSL termination and load balancing. 
@@ -323,7 +341,8 @@ In the diagram below, the NSX ALB instance in the AZ01 Fault Domain is selected 
 | NSXALB-CLOUD-02 | For each NSX ALB instance (AZ01 and AZ02), create a new cloud instance of type “VMware vCenter/vSphere ESX.”  | A vCenter Cloud must be configured in NSX ALB to discover VMs, data centers, networks, and hosts. It also facilitates the deployment, scaling (up or down), and lifecycle management of Service Engines (SEs). | NoneNote: In the proposed architecture, both NSX ALB instances point to a single vCenter. In environments with separate vCenters for each availability zone, each NSX ALB instance must map to its respective vCenter. |
 | NSXALB-CLOUD-03 | Create an IPAM profile for each NSX ALB instance and associate it with the vCenter Cloud object.  | The IPAM profile is necessary to manage IP addresses for the TKG Control Plane/Application VIP Network. | The IPAM profile should manage only a single network, specifically the TKG Control Plane/Application VIP Network. Adding multiple networks to this profile may disrupt IaaS control plane load balancing services  |
 
-{#nsx-alb-service-engine-groups-and-service-engines}
+<a id=nsx-alb-service-engine-groups-and-service-engines> </a> 
+
 ### NSX ALB Service Engine Groups and Service Engines  
 
 Service Engines (SEs) in NSX ALB are organized within groups, which define their sizing, placement, and high availability configurations. Each cloud environment includes at least one SE group.
@@ -334,7 +353,8 @@ NSX ALB Service Engines (SEs) are software entities deployed across bare metal s
 
 As distributed software, Service Engines support horizontal autoscaling within minutes, enabling them to act as service proxies for microservices.
 
-{#nsx-alb-service-engine-high-availability}
+<a id=nsx-alb-service-engine-high-availability> </a> 
+
 #### NSX ALB Service Engine High Availability  
 
 NSX ALB provides Service Engine (SE) redundancy within each SE group to ensure high availability. If an SE fails, the system automatically compensates by either spinning up a new SE or redistributing workloads, depending on the configured HA mode. SE high availability is managed at the SE group level, and NSX ALB supports the following HA models:
@@ -369,7 +389,8 @@ The following are the minimum design recommendations for configuring NSX ALB Ser
 |  | The minimum number of active Service Engines for the Virtual Service is set to 2 | Ensures that any Virtual Service is active on at least 2 Service Engines, which improves SLA in case of individual Service Engine failure | None |
 |  | NSX ALB Service engines placed in respective VI Workload domain/clusters | NSX ALB Service engines provide Load Balancing services for tenant workloads and applications. Placing NSX ALB SEs in the same workload domains as tenant applications ensures optimal performance by reducing latency and improving data locality | NSX ALB Service Engine (SE) components must be accounted for when sizing the workload clusters  |
 
-{#nsx-alb-gslb}
+<a id=nsx-alb-gslb> </a> 
+
 ### NSX ALB GSLB  
 
 Global server load balancing (GSLB) is the act of balancing an application’s load across instances of the application that have been deployed to multiple locations (typically, multiple data centers and/or public clouds). Application load at any one of those locations is usually managed by a “local” load balancer, which could be NSX ALB or a third-party ADC solution.
@@ -403,7 +424,8 @@ An NSX ALB Site can be configured as a Leader or a Follower, as mentioned in the
 
 ### interrupt 
 
-{#tanzu-platform-self-managed}
+<a id=tanzu-platform-self-managed> </a> 
+
 ## Tanzu Platform Self-Managed  
 
 The Tanzu Platform enables the building and deployment of applications by providing pipelines to streamline app deployment into production on the runtime of your choice:
@@ -413,7 +435,8 @@ The Tanzu Platform enables the building and deployment of applications by provid
 
 As this document focuses on leveraging the IaaS control plane provided by the VMware Cloud Foundation (VCF) infrastructure, the primary emphasis will be on design considerations for **Tanzu Platform’s Kubernetes Runtime**.
 
-{#tanzu-platform---component-architecture}
+<a id=tanzu-platform---component-architecture> </a> 
+
 ### Tanzu Platform \- Component Architecture  
 
 Tanzu platform consists of several components which enables platform engineers to build conformant and scalable Kubernetes environments while empowering DevOps teams to streamline application deployment using the Tanzu CLI and UI. 
@@ -428,7 +451,8 @@ Below is a highly simplified component architecture of Tanzu Platform
 
 An optional but significant component is the Global Server Load Balancer (GSLB). The platform supports integration with NSX ALB GSLB. Alternatively, a custom DNS provider can be used, requiring manual configuration of GSLB and related DNS entries.
 
-{#overview-of-tanzu-platform-for-kubernetes}
+<a id=overview-of-tanzu-platform-for-kubernetes> </a> 
+
 ### Overview of Tanzu Platform for Kubernetes  
 
 The diagram below provides a concise overview of how Platform Engineers and Developers can leverage the Tanzu Platform. Further details about App Engine, Space, and other components are covered in the subsequent sections.
@@ -463,12 +487,14 @@ The Tanzu Platform also supports the deployment of containerized applications on
 
 For more details, refer to the section “General Recommendations on Configuring Spaces,” which provides additional insights into leveraging Build and Run Clusters effectively.
 
-{#tanzu-platform-self-managed-deployment-guidelines}
+<a id=tanzu-platform-self-managed-deployment-guidelines> </a> 
+
 ### Tanzu Platform Self Managed Deployment Guidelines  
 
 This section provides a high-level overview on the Tanzu Platform Self-Managed Installation Flavors, profiles and Sizing of K8s Clusters
 
-{#tp-sm-control-plane-installation-flavor}
+<a id=tp-sm-control-plane-installation-flavor> </a> 
+
 #### TP-SM Control Plane Installation Flavor  
 
 The installation flavor defines which services and capabilities are available in the deployment. This allows you to tailor the installation for your needs. For the 10.x release, the following flavors are available: 
@@ -476,7 +502,8 @@ The installation flavor defines which services and capabilities are available in
 * **essentials**: This flavor installs Tanzu Platform, including features to support VMware Cloud Foundation inventory, Tanzu Platform for Cloud Foundry multi-foundation view, Tanzu Spring and Tanzu Salt.   
 * **full**: This flavor installs Tanzu Platform with the essentials features, and additionally enables features to support Kubernetes operations, Spaces, and build services. This is the default mode for installation.
 
-{#tp-sm-control-plane-installation-profile}
+<a id=tp-sm-control-plane-installation-profile> </a> 
+
 #### TP-SM Control Plane Installation Profile  
 
 Installation profile defines the resources required to deploy Tanzu Platform Self-Managed, which is correlated to how many resources you will be managing. It is possible to change profile later, if you need to expand your deployment. Select a profile that meets your current requirements and change profiles later as your requirements change.
@@ -492,7 +519,8 @@ For this release, you can choose from the following profiles:
 * **enterprise**  
   The enterprise profile is suitable for customers who require support for thousands of applications and resources. Select this profile initially only if you expect to support more resources than the regular profile. This profile allows you to create 6 projects with thousands of application instances, and manage up to 1000 clusters.
 
-{#tanzu-kubernetes-cluster-sizing-requirements-for-tp-sm-control-plane}
+<a id=tanzu-kubernetes-cluster-sizing-requirements-for-tp-sm-control-plane> </a> 
+
 #### Tanzu Kubernetes Cluster Sizing Requirements for TP-SM Control Plane  
 
 A TP-SM implementation is sized based on operational and scalability needs. The following table shows the specific resource requirements and load limits of the available installation profiles.
@@ -508,7 +536,8 @@ The sizing recommendations for Build and Run clusters are determined by the numb
 
 \*\*For Build Cluster we need to get some inputs from Engineering\*\*
 
-{#design-recommendations-for-tp-sm-on-vsphere-iaas-control-plane}
+<a id=design-recommendations-for-tp-sm-on-vsphere-iaas-control-plane> </a> 
+
 ### Design Recommendations for TP-SM on vSphere IaaS Control Plane  
 
 | ID  | Design Recommendations  | Justification  | Implication   |
@@ -524,7 +553,8 @@ The sizing recommendations for Build and Run clusters are determined by the numb
 |  | Install the [Local Consumption Interface](https://vsphere-tmm.github.io/Supervisor-Services/) (LCI) supervisor plugin for the vSphere IaaS Control Plane. | Provides the Local Consumption Interface (LCI) for managing Namespaces within vSphere Client UI and provides SSO authentication for [Cloud Consumption Interface (CCI)](https://docs.vmware.com/en/VMware-Aria-Automation/8.17/Using-Automation-Service-Broker/GUID-03D4F41F-D4A6-4350-91AE-F7A40FDC3C7D.html) in Aria Automation within VMware Cloud Foundation. |  |
 
 
-{#control-plane-and-tanzu-application-engine}
+<a id=control-plane-and-tanzu-application-engine> </a> 
+
 ### Control Plane and Tanzu Application Engine  
 
 The Tanzu Platform Control Plane, serves as a foundational framework rather than an end-user functional component. It offers a Kubernetes Resource Model (KRM) API but is not limited to Kubernetes, as it can also operate on Cloud Foundry (CF). 
@@ -563,7 +593,8 @@ Tanzu Platform enables you to configure network ingress to your applications so 
 
 For more details, refer to the official documentation on [Network Ingress](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/spaces-concepts-about-ingress.html)
 
-{#general-recommendations-on-configuring-spaces(in-progress)}
+<a id=general-recommendations-on-configuring-spaces(in-progress)> </a> 
+
 ### General Recommendations on Configuring Spaces (In Progress)  
 
 Before diving into specific recommendations for configuring spaces, it is crucial to first understand fundamental components such as **Projects**, **Cluster** **Groups**, **Availability** **Targets**, **Profiles**, **Capabilities**, and **Traits**. These elements are key to managing Kubernetes clusters efficiently and providing a resilient platform for developers to host their applications. Proper alignment of these components enables platform engineers to enhance the stability, scalability, and usability of the Tanzu Platform.
@@ -586,7 +617,8 @@ Availability Targets are groupings of clusters that define where applications ar
 
 Availability Targets ensure that a Namespace is provisioned across multiple fault-domains resulting in greater availability in the face of failure.  They are a coarse-grained selector that describes a collection of clusters that all exist within a given fault-domain.  Availability Targets aren’t prescriptive (they’re based on metadata labels), but are generally used to select Clusters within a given region or availability zone.  The goal is to identify discrete, disjoint collections of clusters so that if a failure happens (e.g. a power cut or network failure) the contents of the Space are running in another fault-domain that is unaffected.  It is unlikely that all the Clusters within an Availability Target can meet the requirements for a given Space (required Capabilities, requested resources), but at least one must in order for a Space to be scheduled within that Target. An Availability Target is not intended to deliver horizontal scale, but that may occur as a side-effect of the fault-tolerance.
 
-{#rbac-in-tanzu-platform-self-managed}
+<a id=rbac-in-tanzu-platform-self-managed> </a> 
+
 ### RBAC in Tanzu Platform Self-Managed  
 
 Tanzu Platform provides configurable Identity Provider (IdP) integration for user authentication. Authenticated users can log in to the Tanzu Platform, but they cannot view data or perform any actions until assigned a role by an administrator.
