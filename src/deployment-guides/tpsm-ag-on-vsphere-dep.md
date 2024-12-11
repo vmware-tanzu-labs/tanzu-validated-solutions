@@ -53,7 +53,7 @@ Several packages and plugins need to be downloaded to deploy and configure the c
   - [Upload Trivy DB Bundle](#upload-trivy-db-bundle)
 - [Deploy TPSM on Tanzu Kubernetes Cluster](#deploy-tpsm-on-tanzu-kubernetes-cluster)
 
-# <a id=bill-of-materials> </a> Bill of Materials
+## <a id=bill-of-materials> </a> Bill of Materials
 
 | Component | Version |
 | :---- | :---- |
@@ -63,7 +63,7 @@ Several packages and plugins need to be downloaded to deploy and configure the c
 | Tanzu Kubernetes Grid Service  | 3.0.0 |
 | TKC | v1.28.8---vmware.1-fips.1-tkg.2 |
 
-# <a id=download-all-required-plugins-and-binaries> </a> Download all required Plugins and Binaries  
+## <a id=download-all-required-plugins-and-binaries> </a> Download all required Plugins and Binaries  
 
 The **bastion host** serves as the machine with internet access, enabling it to download all the necessary plugins, binaries, and packages required to configure and manage various components. In this document, an **Ubuntu 22.04.4-based Bastion Host** is utilized for this purpose.  
 Below are the key plugins and packages that must be downloaded, each playing a critical role at different stages of the TPSM deployment process:
@@ -89,7 +89,7 @@ Below are the key plugins and packages that must be downloaded, each playing a c
 
 The following sections provide details on how to download the components mentioned above.
 
-## <a id=download-binaries-and-yaml-files-required-for-supervisor-services> </a> Download Binaries and YAML files required for Supervisor Services 
+### <a id=download-binaries-and-yaml-files-required-for-supervisor-services> </a> Download Binaries and YAML files required for Supervisor Services 
 
 This document focuses on enabling the Contour and Harbor Supervisor Services. For the full list of other supported Supervisor Services, refer to the [vSphere Supervisor Services](https://vsphere-tmm.github.io/Supervisor-Services/) documentation. 
 
@@ -101,7 +101,7 @@ mv ./imgpkg-linux-amd64 /usr/local/bin/imgpkg
 chmod +x /usr/local/bin/imgpkg
 ```
 
-### <a id=download-contour-binaries-and-associated-yaml-files> </a> Download Contour Binaries and associated YAML files  
+#### <a id=download-contour-binaries-and-associated-yaml-files> </a> Download Contour Binaries and associated YAML files  
 
 At the time of writing this document, the latest available version of the Contour Supervisor Service is “v1.28.2”. Refer to ​​[vSphere Supervisor Services](https://vsphere-tmm.github.io/Supervisor-Services/#contour-versions) page to check for the updated versions.  
 From the bastion, execute the following command to download the tarball.
@@ -113,7 +113,7 @@ imgpkg copy -b projects.packages.broadcom.com/tkg/packages/standard/contour:v1.2
 
 Download the `contour.yml` and `contour-data-values.yml` files required for enabling the Contour Supervisor Service. These files can be accessed through the [vSphere Supervisor Services](https://vsphere-tmm.github.io/Supervisor-Services/#contour-versions)  page. The `contour.yml` file can be obtained by selecting the appropriate Contour version, and the `contour-data-values.yml` can be downloaded from the "Contour Sample values.yaml" section in the same vSphere Supervisor Services page.
 
-### <a id=download-harbor-binaries-and-associated-yaml-files> </a> Download Harbor Binaries and associated YAML files  
+#### <a id=download-harbor-binaries-and-associated-yaml-files> </a> Download Harbor Binaries and associated YAML files  
 
 At the time of writing this document, the latest available version of the Harbor Supervisor Service is “v2.9.1”. Refer to ​​[vSphere Supervisor Services](https://vsphere-tmm.github.io/Supervisor-Services/#harbor-versions) page to check for the compatibility/availability of updated versions.  
 From the bastion, execute the following command to download the tarball:
@@ -125,7 +125,7 @@ imgpkg copy -b projects.packages.broadcom.com/tkg/packages/standard/harbor:v2.9.
 
 Download the `harbor.yml` and `harbor-data-values.yml` files required for enabling the Contour Supervisor Service. These files can be accessed through the [vSphere Supervisor Services](https://vsphere-tmm.github.io/Supervisor-Services/#cloud-native-registry-service)  page. The `harbor.yml` file can be obtained by selecting the appropriate harbor version, and the `harboe-data-values.yml` can be downloaded from the "Harbor Sample values.yaml" section in the same vSphere Supervisor Services page.
 
-## <a id=download-tanzu-cli-and-tanzu-plugins> </a> Download Tanzu CLI and Tanzu Plugins  
+### <a id=download-tanzu-cli-and-tanzu-plugins> </a> Download Tanzu CLI and Tanzu Plugins  
 
 Tanzu CLI allows admins/users to manage and interact with the Tanzu Kubernetes Grid (TKG) environment. Tanzu CLI supports a plugin architecture, where additional functionalities can be enabled through plugins. These plugins allow the CLI to handle more specialized tasks, typically related to specific components or services in the Tanzu ecosystem.
 
@@ -163,7 +163,7 @@ tanzu plugin group search -n vmware-vsphere/default --show-details
 tanzu plugin download-bundle --group vmware-vsphere/default:v8.0.3 --to-tar  ./vmware-vsphere-plugin.tar.gz
 ```
 
-## <a id=download-tanzu-packages> </a> Download Tanzu Packages  
+### <a id=download-tanzu-packages> </a> Download Tanzu Packages  
 
 Tanzu Packages enable administrators and users to use the Tanzu CLI or Carvel Custom Resources to add and manage common services and add-ons on Kubernetes clusters. With Tanzu Packages, you can deploy various packages to Tanzu Kubernetes Clusters, such as cert-manager, Contour, Prometheus, Grafana, and more.
 
@@ -178,7 +178,7 @@ imgpkg tag list -i projects.registry.vmware.com/tkg/packages/standard/repo
 imgpkg copy -b projects.registry.vmware.com/tkg/packages/standard/repo:v2024.8.21 --to-tar ./tanzu-packages.tar
 ```
 
-## <a id=download-trivy-db-bundle> </a> Download Trivy DB Bundle  
+### <a id=download-trivy-db-bundle> </a> Download Trivy DB Bundle  
 
 TPSM makes use of trivy scanner for detecting vulnerabilities in the platform and deployed applications. Since the deployment is in Internet Restricted environment, we need to download the bundle from [ghcr.io/aquasecurity/trivy-db](http://ghcr.io/aquasecurity/trivy-db) and later upload it to Harbor repository.
 
@@ -186,7 +186,7 @@ TPSM makes use of trivy scanner for detecting vulnerabilities in the platform an
 imgpkg copy -i ghcr.io/aquasecurity/trivy-db:2 --to-tar trivy-db.tar
 ```
 
-## <a id=summary> </a> Summary  
+### <a id=summary> </a> Summary  
 
 In this section, the following files, binaries, and packages have been successfully downloaded and need to be transferred to the Admin host.   
 The Admin host, which is a server or VM with access to the vSphere infrastructure, is assumed to have no internet connectivity, so all necessary files were downloaded using the bastion host.
@@ -206,7 +206,7 @@ The Admin host, which is a server or VM with access to the vSphere infrastructur
 * Trivy DB `(trivy-db.tar)`
 
 
-# <a id=deploy-harbor-ova-in-vcenter> </a> Deploy Harbor OVA in vCenter  
+## <a id=deploy-harbor-ova-in-vcenter> </a> Deploy Harbor OVA in vCenter  
 
 Deploying the Harbor OVA follows the same process as deploying any other OVA in vCenter. During the "Customize Template" step, provide the following required details:
 
@@ -224,7 +224,7 @@ Once Harbor is deployed and in running state, we need to obtain the harbor certi
 
 **This repository will be exclusively used for uploading the binaries necessary to enable Supervisor services like Contour and Harbor. It will not be utilized for any other purpose.**
 
-# <a id=configure-admin-machine> </a> Configure Admin Machine  
+## <a id=configure-admin-machine> </a> Configure Admin Machine  
 
 The Admin host is essential to the deployment process, performing crucial tasks such as uploading binaries and image bundles to the repository, deploying Tanzu Kubernetes Clusters, and configuring the TPSM platform. Serving as the control center, this machine enables effective deployment management and repository coordination. 
 
@@ -238,12 +238,12 @@ In this document, an Ubuntu 22.04.4 machine with **Docker installed** is used as
 
 The Harbor OVA does not need to be transferred to this Admin host; however, it should be placed in a location accessible from vCenter to allow for direct deployment of the OVA on vCenter.
 
-## <a id=install-carvel-tools> </a> Install Carvel Tools  
+### <a id=install-carvel-tools> </a> Install Carvel Tools  
 
 Carvel packages are essential at different stages of the TPSM deployment process. The TPSM bundle includes the necessary Carvel packages. 
 
 ```
-## Untar the TPSM Bundle
+### Untar the TPSM Bundle
 tar -xvzf /<path-to-bundle>/tp-k8s-1.0.0-sep-2024-rc.21-v88282bc.tar.gz
 ```
 
@@ -275,7 +275,7 @@ kbld version
 velero version
 ```
 
-## <a id=download-and-install-kubectl-and-kubectl-vsphere-cli> </a> Download and Install kubectl and kubectl-vsphere CLI  
+### <a id=download-and-install-kubectl-and-kubectl-vsphere-cli> </a> Download and Install kubectl and kubectl-vsphere CLI  
 
 “`kubectl`” is the command-line tool used to interact with Kubernetes clusters. It allows users to manage and inspect resources within a Kubernetes environment.  
 “`kubectl-vsphere`” is a VMware-specific plugin for `kubectl` that allows administrators and developers to manage VMware Tanzu Kubernetes clusters (TKC) running on vSphere. It integrates with the Supervisor Cluster (the control plane that manages Tanzu clusters) and extends `kubectl` with commands specific to VMware's Tanzu Kubernetes Grid Service.
@@ -298,7 +298,7 @@ kubectl version
 kubectl vsphere version
 ```
 
-## <a id=add-the-harbor-ova-certificate-to-trust-store> </a> Add the Harbor OVA certificate to Trust Store  
+### <a id=add-the-harbor-ova-certificate-to-trust-store> </a> Add the Harbor OVA certificate to Trust Store  
 
 Use below commands to add the harbor certificate to Admin host's trust store. 
 
@@ -327,11 +327,11 @@ Login Succeeded
 =====
 ```
 
-# <a id=install-contour-as-a-supervisor-service> </a> Install Contour as a Supervisor Service  
+## <a id=install-contour-as-a-supervisor-service> </a> Install Contour as a Supervisor Service  
 
 Before enabling the Harbor Supervisor Service, it is required to first enable the Contour Supervisor Service. The following steps provide the necessary guidance for enabling the Contour service in an internet-restricted environment. 
 
-## <a id=upload-contour-binaries-to-harbor> </a> Upload Contour Binaries to Harbor  
+### <a id=upload-contour-binaries-to-harbor> </a> Upload Contour Binaries to Harbor  
 
 The initial step involves uploading the Contour binaries to the Harbor image repository that was previously deployed. Follow the instructions below to upload the Contour binaries. Before uploading the Contour Binaries, create a public repo in Harbor.
 
@@ -351,7 +351,7 @@ export IMGPKG_REGISTRY_PASSWORD_0=<password>
 imgpkg copy --tar /<path-to-bundle>/contour-v1.28.2.tar --to-repo $IMGPKG_REGISTRY_HOSTNAME_01/<project_name>/contour-1.28.2 --cosign-signatures
 ```
 
-## <a id=register-contour-supervisor-service-to-vcenter> </a> Register Contour Supervisor Service to vCenter  
+### <a id=register-contour-supervisor-service-to-vcenter> </a> Register Contour Supervisor Service to vCenter  
 
 Once the images have been uploaded to the local image repo, the next step is to register Contour as a Supervisor Service in vCenter. Verify that the “`contour.yml`” file has been successfully copied.
 
@@ -379,7 +379,7 @@ To add Contour as a Supervisor Service, log in to vCenter and navigate to **Work
 
 ![](./img/tpsm-ag-on-vsphere/add-contour-service.png)
 
-## <a id=install-contour-service> </a> Install Contour Service  
+### <a id=install-contour-service> </a> Install Contour Service  
 
 The next step is to install the Contour Supervisor Service. Before proceeding, ensure that the `contour-data-values.yml` file has been successfully copied, as it is required for the installation.
 
@@ -395,12 +395,12 @@ In NSX ALB, a new virtual service named ”`domain-xyz--svc-contour-domain-xyz-e
 
 ![](./img/tpsm-ag-on-vsphere/virtual-svcs.png)
 
-# <a id=install-harbor-as-a-supervisor-service> </a> Install Harbor as a Supervisor Service  
+## <a id=install-harbor-as-a-supervisor-service> </a> Install Harbor as a Supervisor Service  
 
 The Harbor Supervisor Service provides a robust and scalable container image registry integrated with the Tanzu platform. It enables secure storage, management, and distribution of container images and Helm charts, ensuring that deployments are reliable and consistent.   
 The following steps provide the necessary guidance for enabling the Harbor service in an internet-restricted environment. 
 
-## <a id=upload-harbor-binaries-to-harbor(vm)> </a> Upload Harbor Binaries to Harbor(VM)  
+### <a id=upload-harbor-binaries-to-harbor(vm)> </a> Upload Harbor Binaries to Harbor(VM)  
 
 During the setup of Contour, a public project was created in the temporary image repository to store the binaries needed for enabling the Supervisor Services. This existing project can be used, or a new project may be created. For the purposes of this document, the previously created project will be utilized.
 
@@ -418,7 +418,7 @@ export IMGPKG_REGISTRY_PASSWORD_0=<password>
 imgpkg copy --tar /<path-to-bundle>/harbor-v2.9.1.tar --to-repo $IMGPKG_REGISTRY_HOSTNAME_1/<project_name>/harbor-v2.9.1 --cosign-signatures
 ```
 
-## <a id=register-harbor-supervisor-service-to-vcenter> </a> Register Harbor Supervisor Service to vCenter  
+### <a id=register-harbor-supervisor-service-to-vcenter> </a> Register Harbor Supervisor Service to vCenter  
 
 Once the images have been uploaded to the local image repo, the next step is to register Harbor as a Supervisor Service in vCenter. Verify that the “`harbor.yml`” file has been successfully copied.
 
@@ -445,7 +445,7 @@ Once the images have been uploaded to the local image repo, the next step is to 
 To add Harbor as a Supervisor Service, log in to vCenter and navigate to **Workload Management** \-\> **Services**. Click on **Add New Service**, upload the modified `harbor.yml` file, and then click **Finish**. Now we have the harbor service added and the status of "Active" and "1" Active Version  
 ![](./img/tpsm-ag-on-vsphere/sup-svc-harbor-registered.png)
 
-## <a id=install-harbor-service> </a> Install Harbor Service  
+### <a id=install-harbor-service> </a> Install Harbor Service  
 
 The next step is to install the Harbor Supervisor Service. Before proceeding, ensure that the `harbor-data-values.yml` file has been successfully copied, as it is required for the installation.
 
@@ -628,7 +628,7 @@ Login Succeeded
 =====
 ```
 
-# <a id=install-tanzu-cli-and-plugins-on-admin-machine> </a> Install Tanzu CLI and Plugins on Admin Machine  
+## <a id=install-tanzu-cli-and-plugins-on-admin-machine> </a> Install Tanzu CLI and Plugins on Admin Machine  
 
 The “`tanzu-cli-linux_amd64`” and ”`vmware-vsphere-plugin.tar.gz`” files downloaded in the previous section will be utilized here.
 
@@ -699,7 +699,7 @@ tanzu plugin install --group vmware-vsphere/default
 tanzu plugin list
 ```
 
-# <a id=upload-tanzu-packages-to-harbor(supervisor-service)> </a> Upload Tanzu Packages to Harbor(Supervisor Service)  
+## <a id=upload-tanzu-packages-to-harbor(supervisor-service)> </a> Upload Tanzu Packages to Harbor(Supervisor Service)  
 
 Tanzu Packages enable administrators and users to use the Tanzu CLI or Carvel Custom Resources to add and manage common services and add-ons on Kubernetes clusters. With Tanzu Packages, you can deploy various packages to Tanzu Kubernetes Clusters(TKC), such as cert-manager, Contour, Prometheus, Grafana and more.
 
@@ -727,7 +727,7 @@ imgpkg copy --tar /<path-to-tarball>/tanzu-packages.tar --to-repo $IMGPKG_REGIST
 admin	imgpkg copy --tar tanzu-packages.tar --to-repo harbor-wcp.tanzu.lab/tanzu-packages/packages/standard/repo
 ```
 
-# <a id=deploy-tanzu-kubernetes-cluster(tkc)> </a> Deploy Tanzu Kubernetes Cluster (TKC)  
+## <a id=deploy-tanzu-kubernetes-cluster(tkc)> </a> Deploy Tanzu Kubernetes Cluster (TKC)  
 
 In this section, we will create a new Tanzu Kubernetes Cluster where the TPSM components will be installed.  
 Before proceeding, ensure the following prerequisites are met:
@@ -876,7 +876,7 @@ Kubectl get cluster
 kubectl describe cluster <Cluster-Name>
 ```
 
-## <a id=install-cert-manager> </a> Install cert Manager  
+### <a id=install-cert-manager> </a> Install cert Manager  
 
 To install the cert-manager, we need to first add the package repository to the Tanzu Kubernetes Cluster
 
@@ -938,7 +938,7 @@ tanzu package install cert-manager --package cert-manager.tanzu.vmware.com --nam
 
 In case the package installation fails, label the `cert-manager` namespace with `pod-security.kubernetes.io/enforce=privileged` and delete all the ReplicaSets under the `cert-manager` namespace. This will prompt the deployment to recreate the ReplicaSets and the necessary pods.
 
-# <a id=upload-tpsm-bundle-to-harbor-repo(supervisor-service)> </a> Upload TPSM Bundle to Harbor Repo(Supervisor Service)  
+## <a id=upload-tpsm-bundle-to-harbor-repo(supervisor-service)> </a> Upload TPSM Bundle to Harbor Repo(Supervisor Service)  
 
 To deploy TPSM, the `tp-k8s-1.0.0-sep-2024-rc.21-v88282bc.tar.gz` and `trivy-db.tar`  
  ​​binaries that were downloaded earlier need to be uploaded to Harbor Supervisor Service Repo. Follow the instructions below to complete this step.
@@ -962,7 +962,7 @@ All the specified tar bundles, including the **Trivy DB** bundle, must be upload
 
 ![](./img/tpsm-ag-on-vsphere/new-proj-tp4k8s.png)
 
-## <a id=upload-tanzu-platform-sm-binaries> </a> Upload Tanzu Platform-SM Binaries  
+### <a id=upload-tanzu-platform-sm-binaries> </a> Upload Tanzu Platform-SM Binaries  
 
 Execute the following commands from the Admin host to upload the TPSM package to the Harbor Supervisor Service repository.
 
@@ -979,7 +979,7 @@ imgpkg copy --tar /<path-to-bundle>/tanzusm-1.0.0-sep-2024-rc.21-v88282bc.tar --
 imgpkg copy --tar ./tanzusm-1.0.0-sep-2024-rc.21-v88282bc.tar --to-repo=harbor-wcp.tanzu.lab/tp4k8s/1.0.0-sep-2024-rc.21-v88282bc/repo
 ```
 
-## <a id=upload-tmc-extensions> </a> Upload TMC Extensions  
+### <a id=upload-tmc-extensions> </a> Upload TMC Extensions  
 
 Use the `tanzu-sm-installer` CLI to push TMC extensions(`agent-images.tar`). Within the directory where the `tp-k8s-1.0.0-sep-2024-rc.21-v88282bc.tar.gz` file was extracted, the tanzu-sm-installer CLI can be found at `./cli_bundle/linux/amd64`
 
@@ -996,7 +996,7 @@ export REGISTRY_ENDPOINT=<REGISTRY_URL>
 ./cli_bundle/linux/amd64/tanzu-sm-installer push tmc-extensions -a "admin:VMware1!" -r "${REGISTRY_ENDPOINT}> </a>/tp4k8s/1.0.0-sep-2024-rc.21-v88282bc/repo" -f ./agent-images.tar
 ```
 
-## <a id=upload-collector-bundle> </a> Upload Collector Bundle  
+### <a id=upload-collector-bundle> </a> Upload Collector Bundle  
 
 Use the `tanzu-sm-installer` CLI to push the collector bundle (`tanzusm-collector.tar`).
 
@@ -1015,7 +1015,7 @@ export REGISTRY_ENDPOINT=<REGISTRY_URL>
 
 ```
 
-## <a id=upload-trivy-db-bundle> </a> Upload Trivy DB Bundle  
+### <a id=upload-trivy-db-bundle> </a> Upload Trivy DB Bundle  
 
 Use following imgpkg command to upload the Trivy DB to Harbor Repo
 
@@ -1035,7 +1035,7 @@ imgpkg copy --tar /<path-to-bundle>/<path-to-file.trivy-db.tar> --to-repo=$IMGPK
 imgpkg copy --tar trivy-db.tar --to-repo=$IMGPKG_REGISTRY_HOSTNAME_1/tp4k8s/aquasecurity/trivy-db
 ```
 
-# <a id=deploy-tpsm-on-tanzu-kubernetes-cluster> </a> Deploy TPSM on Tanzu Kubernetes Cluster  
+## <a id=deploy-tpsm-on-tanzu-kubernetes-cluster> </a> Deploy TPSM on Tanzu Kubernetes Cluster  
 
 Now we have all the required packages pushed to Harbor Supervisor repo, follow below instructions to deploy the TPSM.
 
