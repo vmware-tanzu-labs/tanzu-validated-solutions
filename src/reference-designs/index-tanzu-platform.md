@@ -1,7 +1,9 @@
 # VMware Tanzu Platform 10.0 Reference Architecture   
 
-This is the top-level landing page for the VMware Tanzu Platform Reference Architecture. 
+Tanzu Platform is an application development and deployment platform that helps you to modernize your applications and infrastructure to continuously deliver better software to production.  
 
-(coming soon)
+-   [Tanzu Platform Self-Managed on vSphere - Dual-Site Reference Design](./tpsm-ag-on-vsphere-ref.md)  
+-   [Deploy Tanzu Platform Self-Managed on vSphere in an Air-Gapped Environment](../deployment-guides/tpsm-ag-on-vsphere-dep.md)  
+
 
 &nbsp; 
