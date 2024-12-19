@@ -32,18 +32,17 @@ This document is intended for key stakeholders, including executives, IT decisio
     -   [NSX ALB Service Engine Groups and Service Engines](#nsx-alb-service-engine-groups-and-service-engines)
         -   [NSX ALB Service Engine High Availability](#nsx-alb-service-engine-high-availability)
     -   [NSX ALB GSLB](#nsx-alb-gslb)
--   [Tanzu Platform \- Self-Managed](#tanzu-platform-self-managed)
+-   [Tanzu Platform \- Self Managed](#tanzu-platform-self-managed)
     -   [Tanzu Platform \- Component Architecture](#tanzu-platform---component-architecture)
     -   [Overview of Tanzu Platform for Kubernetes](#overview-of-tanzu-platform-for-kubernetes)
-    -   [Tanzu Platform Self-Managed Deployment Guidelines](#tanzu-platform-self-managed-deployment-guidelines)
+    -   [Tanzu Platform Self Managed Deployment Guidelines](#tanzu-platform-self-managed-deployment-guidelines)
         -   [TP-SM Control Plane Installation Flavor](#tp-sm-control-plane-installation-flavor)
         -   [TP-SM Control Plane Installation Profile](#tp-sm-control-plane-installation-profile)
         -   [Tanzu Kubernetes Cluster Sizing Requirements for TP-SM Control Plane](#tanzu-kubernetes-cluster-sizing-requirements-for-tp-sm-control-plane)
     -   [Design Recommendations for TP-SM on vSphere IaaS Control Plane](#design-recommendations-for-tp-sm-on-vsphere-iaas-control-plane)
     -   [Control Plane and Tanzu Application Engine](#control-plane-and-tanzu-application-engine)
-    -   [Key Concepts of Tanzu Platform](#key-concepts-of-tanzu-platform)
-    -   [Sample Space Scheduling Workflow](#sample-space-scheduling-workflow)
-        -   [RBAC in Tanzu Platform Self-Managed](#rbac-in-tanzu-platform-self-managed)  
+    -   [General Recommendations on Configuring Spaces(In Progress)](#general-recommendations-on-configuring-spaces\(in-progress\))
+    -   [RBAC in Tanzu Platform Self-Managed](#rbac-in-tanzu-platform-self-managed)  
 
 <a id=bill-of-materials> </a> 
 
@@ -54,7 +53,7 @@ Below is the validated Bill of Materials that can be used to install TKG on your
 | :---- | :---- |
 | vSphere ESXi | 8.0.3 |
 | vCenter | 8.0.3 |
-| NSX Advanced Load balancer | 22.1.5 |
+| NSX Advanced Load balancer | 22.1.5 and above |
 | Tanzu Kubernetes Release | 1.28.x |
 | Tanzu Platform  | 10.0.0 |  
 
@@ -98,9 +97,7 @@ Although a vSphere Namespace serves a similar function to a Kubernetes namespace
 
 Both containers and VMs utilize the same vSphere Namespace resources and can be managed through a unified vSphere IaaS control plane interface. 
 
-**vSphere Pod**: A vSphere Pod is a lightweight VM designed to run one or more Linux containers. Each vSphere Pod is precisely sized for its specific workload, with explicit resource reservations for storage, memory, and CPU, ensuring that only the required resources are allocated. vSphere Pods are supported exclusively on Supervisors configured with NSX as the networking stack. 
-
-**Note:** NSX is essential for deploying vSphere Pods. However, since this document focuses on vSphere Distributed Switch, vSphere Pods are not covered in detail.
+**vSphere Pod**: A vSphere Pod is a lightweight VM designed to run one or more Linux containers. Each vSphere Pod is precisely sized for its specific workload, with explicit resource reservations for storage, memory, and CPU, ensuring that only the required resources are allocated.
 
 **NSX Advanced Load Balancer (NSX ALB)**: NSX ALB integrates seamlessly with the vSphere IaaS control plane, providing dynamically scalable load balancing endpoints for both the control plane and applications. In its default configuration, NSX ALB acts as a load balancer, delivering L4 load balancing solutions for applications hosted on Tanzu Kubernetes Grid. It also features a Kubernetes operator hosted on the Supervisor cluster that integrates with the Kubernetes API to manage the lifecycle of load balancing for workloads.
 
@@ -147,7 +144,7 @@ For more details on design, recommendations, requirements and sizing guidelines,
 
 ### vSphere Cluster Design for VMware Cloud Foundation  
 
-The vSphere cluster design should account for the specific needs of standard, stretched, and remote clusters, as well as the life cycle management of ESXi hosts based on workload characteristics. This documentation focuses on standard workload clusters. **This documentation focuses exclusively on standard workload clusters.**
+The vSphere cluster design should account for the specific needs of standard, stretched, and remote clusters, as well as the life cycle management of ESXi hosts based on workload characteristics.  **This documentation focuses on standard workload clusters.**
 
 ![](./img/tpsm-ag-on-vsphere/domain-esxi-diag.png)
 
@@ -195,10 +192,10 @@ As illustrated in the above diagram, each vSphere Cluster represents an availabi
   * **Key Point:** Stretched networks are not a requirement for all networks, it is essential to stretch the VIP network. For additional details, refer to the **Network Requirements** section of this document.  
 * **Supervisor Services and Tanzu Kubernetes Clusters (TKCs)**:  
   * Supervisor Services are enabled independently on each vSphere Zone (mapped to the vSphere Cluster), enabling the deployment of TKCs within the supervisor namespace of each vSphere Zone.   
-    TP-SM components are deployed to a dedicated TKCs, while a group of TKCs (Cluster Group) will be designated as the availability target to host applications via the Tanzu Platform.  
+    TP-SM components are deployed to a dedicated TKC, while a group of TKCs (Cluster Group) will be leveraged to host applications via the Tanzu Platform.  
     **Important Note**: Supervisor namespaces and Kubernetes cluster nodes are confined to their respective availability zones and do not span across sites. This ensures isolation and simplifies management within each zone.  
 * **NSX Advanced Load Balancer**  
-  * Each site will have its own instance of NSX Advanced Load Balancer (ALB) to provide L4 load balancing for the Supervisor Control Plane, TKC control plane, and applications deployed on the TKC.  
+  * Each site will have its own instance of NSX Advanced Load Balancer (ALB) to provide L4 load balancing for the Supervisor Control Plane, TKC control plane, and applications deployed on the TKCs.  
   * The NSX ALB will also be configured to manage Global Server Load Balancing (GSLB) services, ensuring efficient traffic distribution and high availability for applications hosted on TKCs (Run Cluster) through the Tanzu Platform.  
 * **Storage Considerations**:  
   * Storage is configured locally within each Availability Zone, meaning that vSphere datastores (Block or NFS) are not stretched across the availability zones. Each zone utilizes its own local storage resources to support the deployed workloads and Kubernetes clusters.   
@@ -223,11 +220,11 @@ As per the proposed architecture, all the Tanzu Components will be deployed on a
 | :---- | :---- | :---- | :---- |
 | NSX ALB Management Network | /27 | The NSX Advanced Load Balancer (NSX ALB) controller nodes at both sites will connect to this network, which is part of the management domain. Based on the VCF Management Domain topology outlined in this documentation, it is assumed that the Management Domain/Cluster is stretched across both sites, along with the associated networks. **Note**:  If the management domain is not stretched and a dedicated management domain is used per site, two separate networks must be configured, one at each site. This document does not cover scenarios with a single standard (non-stretched) management domain in a multi-site environment, as this configuration is not recommended. | Stretched |
 | NSX ALB SE Management Network   | /24 | The management interface of the Service Engines (SEs) will connect to this network, and its sizing must align with the Service Engine group configuration at each site. **Considerations: Number of Networks:** One network per availability zone is recommended. **Stretched Network Option:** This network can optionally be stretched across both zones, allowing the same network to be used for SE management at both sites. In such cases, the subnet must be sized to accommodate the total number of Service Engines across both sites. The available IP addresses should then be divided into two distinct blocks, with each block assigned to the NSX ALB instance in the respective availability zone. | Optional |
-| TKG Control Plane/Application VIP Network  | /24 | This network is used for hosting L4 Virtual Services for Control plane HA of all Kubernetes clusters (Supervisor and Workload) and to host Virtual services for the applications deployed on the Tanzu Kubernetes Clusters (TKC) Reserve sufficient IPs depending on the number of TKG clusters and applications planned to be deployed in the environment. **Considerations:** **IP Allocation:** Reserve an adequate pool of IP addresses based on the number of planned TKG clusters and applications at both sites. **Number of Networks:** One. **Network Configuration:** This network must be stretched across both sites. The available IP addresses should be divided into three distinct blocks: **Block 1:** Added to the DHCP range in the NSX ALB instance at the primary site. **Block 2:** Added to the DHCP range in the NSX ALB instance at the secondary site. **Block 3:** This block, containing a single IP address, is added to the DHCP range of the NSX ALB instance at the primary site where TP-SM is deployed. The IP address is used to expose the TP-SM instance. In the event of a TP-SM recovery at the secondary site, this IP block must be reassigned to the NSX ALB instance at the secondary site to maintain service continuity. | Stretched |
-| IaaS Control Plane Mgmt Network  | /27 | Supervisor Cluster nodes will utilize this network, with each cluster requiring a reserved block of five IP addresses. Initially, two Supervisor Clusters (one at each site) will be deployed, necessitating two such blocks. **Considerations: Number of Networks:** One network per availability zone is recommended. **Stretched Network Option:** If the network is stretched, the same network can be used by both the supervisor cluster, in such case reserve two blocks of five IP addresses from the same network to accommodate both sites. | Optional |
+| TKG Control Plane/Application VIP Network  | /24 | This network is used for hosting L4 Virtual Services for Control plane HA of all Kubernetes clusters (Supervisor and Workload) and to host Virtual services for the applications deployed on the Tanzu Kubernetes Clusters (TKC). Reserve sufficient IPs depending on the number of TKG clusters and applications planned to be deployed in the environment. **Considerations:** **IP Allocation:** Reserve an adequate pool of IP addresses based on the number of planned TKG clusters and applications at both sites. **Number of Networks:** One. **Network Configuration:** This network must be stretched across both sites. The available IP addresses should be divided into three distinct blocks: **Block 1:** Added to the Static IP Pool range in the NSX ALB instance at the primary site. **Block 2:** Added to the Static IP Pool range in the NSX ALB instance at the secondary site. **Block 3:** This block, containing a single IP address, is added to the Static IP Pool range of the NSX ALB instance at the primary site where TP-SM is deployed. The IP address is used to expose the TP-SM instance. In the event of a TP-SM recovery at the secondary site, this IP block must be reassigned to the NSX ALB instance at the secondary site to maintain service continuity. | Stretched |
+| IaaS Control Plane Mgmt Network  | /27 | Supervisor Cluster nodes will utilize this network, with each cluster requiring a reserved block of five consecutive IP addresses. Initially, two Supervisor Clusters (one at each site) will be deployed, necessitating two such blocks. **Considerations: Number of Networks:** One network per availability zone is recommended. **Stretched Network Option:** If the network is stretched, the same network can be used by both the supervisor cluster, in such case reserve two blocks of five consecutive IP addresses from the same network to accommodate both sites. | Optional |
 | Primary Workload Network   | /24 | The second interface of the Supervisor nodes will be connected to this network, requiring 3 IP addresses per Supervisor cluster. Supervisor services such as Harbor, Contour, and Velero vSphere services will be deployed as vSphere Pods and will consume IPs from this range. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the primary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
 | Secondary Workload Network  | ​​/24 | The control plane and worker nodes of TKG workload clusters will connect to this network. As depicted in the diagram, this network is associated with a dedicated Supervisor namespace (Admin Namespace) utilized by the platform administrator to deploy TP-SM components on one of the TKCs. Optionally, this network can also be used to host TP Build and/or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
-| Additional Workload Network (One per availability zone)   | /24 | Additional workload networks can be created as needed to segregate TKCs. Depending on the requirements, these TKCs can be configured to function as either TP Build or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
+| Additional Workload Network/s  | /24 | Additional workload networks can be created as needed to segregate TKCs. Depending on the requirements, these TKCs can be configured to function as either TP Build or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
 
 <a id=firewall-requirements> </a> 
 
@@ -404,9 +401,10 @@ An NSX ALB Site can be configured as a Leader or a Follower, as mentioned in the
 **Key Points:** 
 
 * Before configuring the GSLB deployment, identify the GSLB subdomain. The GSLB subdomain is a part of your domain for which NSX Advanced Load Balancer will be authoritative. Each of the GSLB subdomains is a subdomain for which a delegation is configured on the corporate DNS server so that NSX Advanced Load Balancer DNS servers are authoritative for that particular subdomain.  
-* The domain configured here will be utilized in the Tanzu Platform Domain configuration. One of the components in the TP-SM (UCP) will automatically configure the necessary GSLB services when a developer deploys an application on k8s cluster (Space) managed by the Tanzu Platform.  More details on UCP and Space are covered in [Tanzu Platform \- Self-Managed](#tanzu-platform-self-managed).
+* The domain configured here will be utilized in the Tanzu Platform Domain configuration. One of the components in the TP-SM (UCP) will automatically configure the necessary GSLB services when a developer deploys an application on k8s cluster (Space) managed by the Tanzu Platform.  
+  more details on UCP and Space are covered in the Tanzu Platform \- Self Managed Section in this document.
 
-**Key functions of NSX ALB GSLB**
+**Key functions of NSX ALB GSLB**:
 
 * Definition and ongoing synchronization/maintenance of the GSLB configuration \- responsibility of NSX ALB Controller   
 * Monitoring the health of configuration components \- responsibility shared by NSX ALB Controllers and Service Engines  
@@ -430,8 +428,8 @@ An NSX ALB Site can be configured as a Leader or a Follower, as mentioned in the
 
 The Tanzu Platform enables the building and deployment of applications by providing pipelines to streamline app deployment into production on the runtime of your choice:
 
-* **Tanzu Platform for Cloud Foundry**: Tanzu Platform for Cloud Foundry allows platform engineers to build public and private clouds with VMware’s implementation of the Cloud Foundry open source project. App developers and operators develop, deploy, and manage apps on those clouds. You can attach your Cloud Foundry environment to Tanzu Platform, and monitor its infrastructure and running applications from the Tanzu Platform UI.  
-* **Tanzu Platform for Kubernetes**: Tanzu Platform for Kubernetes is the Kubernetes runtime for Tanzu Platform, exposed by the Tanzu Platform UI and the Tanzu CLI. It helps platform engineers to build conformant and replicable Kubernetes environments, and DevOps engineers to push applications into production, both in the Tanzu Platform UI and with the Tanzu CLI.
+* **Cloud Foundry**: Tanzu Platform allows platform engineers to build public and private clouds with VMware’s implementation of the Cloud Foundry open source project. App developers and operators develop, deploy, and manage apps on those clouds. You can attach your Cloud Foundry environment to Tanzu Platform, and monitor its infrastructure and running applications from the Tanzu Platform UI.  
+* **Tanzu Kubernetes Cluster**: Tanzu Kubernetes Clusters provide Kubernetes runtime for the Tanzu Platform, exposed by the Tanzu Platform UI and the Tanzu CLI. It helps platform engineers to build conformant and replicable Kubernetes environments, and DevOps engineers to push applications into production, both in the Tanzu Platform UI and with the Tanzu CLI.
 
 As this document focuses on leveraging the IaaS control plane provided by the VMware Cloud Foundation (VCF) infrastructure, the primary emphasis will be on design considerations for **Tanzu Platform’s Kubernetes Runtime**.
 
@@ -448,6 +446,7 @@ For the Tanzu Platform to function effectively, integration with identity provid
 Below is a highly simplified component architecture of Tanzu Platform
 
 ![](./img/tpsm-ag-on-vsphere/tp-comp-arch.png)
+* Not officially supported
 
 An optional but significant component is the Global Server Load Balancer (GSLB). The platform supports integration with NSX ALB GSLB. Alternatively, a custom DNS provider can be used, requiring manual configuration of GSLB and related DNS entries.
 
@@ -485,11 +484,9 @@ The Tanzu Platform allows developers to build containerized applications on dedi
 **Tanzu Run Cluster:**  
 The Tanzu Platform also supports the deployment of containerized applications on dedicated Tanzu Kubernetes Run Clusters. These Run Clusters leverage the “ContainerApp” capability, which, when installed on a TKC, enables it to operate as a Run Cluster.
 
-For more details, refer to the section “General Recommendations on Configuring Spaces,” which provides additional insights into leveraging Build and Run Clusters effectively.
-
 <a id=tanzu-platform-self-managed-deployment-guidelines> </a> 
 
-### Tanzu Platform Self-Managed Deployment Guidelines  
+### Tanzu Platform Self Managed Deployment Guidelines  
 
 This section provides a high-level overview on the Tanzu Platform Self-Managed Installation Flavors, profiles and Sizing of K8s Clusters
 
@@ -527,14 +524,10 @@ A TP-SM implementation is sized based on operational and scalability needs. The 
 
 | Installation Profile  | Usage Limits | Resource Requirements |
 | :---- | :---- | :---- |
-| evaluation | Ingest: 20 RPSQuery: 2 QPSConcurrent assessments: 2Application instances: 10Resource dimension: 2 projects, 2 spaces, 20 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 3vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
-| foundation | Ingest: 100 RPSQuery: 20 QPSConcurrent assessments: 50Application instances: 5000Resource dimension: 4 projects, 10 spaces, 100 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 9vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
-| regular | Ingest: 200 RPSQuery: 50 QPSConcurrent assessments: 100Application instances: 15000Resource dimension: 6 projects, 20 spaces, 500 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 10vCPUs per node: 12Memory per node: 48 GBStorage per node: 40 GB |
-| enterprise | Ingest: 500 RPSQuery: 100 QPSConcurrent assessments: 200Application instances: 30000Resource dimension: 6 projects, 30 spaces, 1000 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 11vCPUs per node: 16Memory per node: 64 GBStorage per node: 40 GB |
-
-The sizing recommendations for Build and Run clusters are determined by the number of concurrent builds and the applications deployed on the respective target clusters.
-
-\*\*For Build Cluster we need to get some inputs from Engineering\*\*
+| evaluation | Ingest: 20 RPSQuery: 2 QPSApplication instances: 10Resource dimension: 2 projects, 2 spaces, 20 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 3vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
+| foundation | Ingest: 100 RPSQuery: 20 QPSApplication instances: 5000Resource dimension: 4 projects, 10 spaces, 100 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 9vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
+| regular | Ingest: 200 RPSQuery: 50 QPSApplication instances: 15000Resource dimension: 6 projects, 20 spaces, 500 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 10vCPUs per node: 12Memory per node: 48 GBStorage per node: 40 GB |
+| enterprise | Ingest: 500 RPSQuery: 100 QPSApplication instances: 30000Resource dimension: 6 projects, 30 spaces, 1000 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 11vCPUs per node: 16Memory per node: 64 GBStorage per node: 40 GB |
 
 <a id=design-recommendations-for-tp-sm-on-vsphere-iaas-control-plane> </a> 
 
@@ -549,8 +542,7 @@ The sizing recommendations for Build and Run clusters are determined by the numb
 | DD-TPSM-BLD-01 | One or more Supervisor Namespace to host Tanzu Build Clusters | This approach streamlines the management of build clusters. It enables simplified handling of underlying compute and storage resources for a single or a group of build clusters. Access controls can be applied at the Supervisor Namespace level, ensuring that unauthorized users cannot access the namespace and its associated Tanzu Kubernetes Clusters (TKC). Platform engineers gain better visibility into build cluster usage, allowing them to scale the clusters horizontally or vertically based on demand. | None |
 | DD-TPSM-BLD-02 | Deploy build clusters at both sites/zones. | Having build clusters deployed across multiple sites enhances resiliency, ensuring continuity during disasters or planned maintenance activities. | None |
 | DD-TPSM-RUN-01 | One or more Supervisor Namespace to host Tanzu Run Clusters | Depending on the business requirement, platform admin can choose to deploy one or more Supervisor Namespaces to host Tanzu Run Clusters. | None |
-| DD-TPSM-RUN-02 | Deploy Run clusters at both sites/zones. | Having Run clusters deployed and configured across multiple sites enhances resiliency for the applications deployed by the developers, ensuring continuity during disasters or planned maintenance activities. | NSX ALB provides GSLB services for these applications. GSLB records are automatically created by UCP For more details refer to the “General Recommendations on Configuring Spaces” section in this document |
-|  | Install the [Local Consumption Interface](https://vsphere-tmm.github.io/Supervisor-Services/) (LCI) supervisor plugin for the vSphere IaaS Control Plane. | Provides the Local Consumption Interface (LCI) for managing Namespaces within vSphere Client UI and provides SSO authentication for [Cloud Consumption Interface (CCI)](https://docs.vmware.com/en/VMware-Aria-Automation/8.17/Using-Automation-Service-Broker/GUID-03D4F41F-D4A6-4350-91AE-F7A40FDC3C7D.html) in Aria Automation within VMware Cloud Foundation. |  |
+| DD-TPSM-RUN-02 | Deploy Run clusters at both sites/zones. | Having Run clusters deployed and configured across multiple sites enhances resiliency for the applications deployed by the developers, ensuring continuity during disasters or planned maintenance activities. | NSX ALB provides GSLB services for these applications. Upon integration GSLB records are automatically created by Tanzu Platform Control Plane |
 
 
 <a id=control-plane-and-tanzu-application-engine> </a> 
@@ -565,7 +557,7 @@ Tanzu Application Engine/UCP which builds on top of the Control plane provides a
 
 **Spaces**   
 Spaces serve as an API interface for Application Developers while allowing Platform Engineers and Operator roles to contribute to an application-aware environment. Each Space acts as a logical abstraction where Application Developers can deploy workloads aligned with the Space's configuration.   
-A Space is created by composing Profiles, into which Traits and Capabilities are curated by domain experts. For example, a Network Operator may define an Ingress Gateway Trait as part of a Space's configuration. General Recommendations on Configuring Spaces is provided in the **below section**, and for more information refer to the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/spaces-concepts-about-spaces.html).
+A Space is created by composing Profiles, into which Traits and Capabilities are curated by domain experts. For example, a Network Operator may define an Ingress Gateway Trait as part of a Space's configuration. For additional details, refer to the **"Key Concepts of Tanzu Platform" section** in this document, and consult the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/spaces-concepts-about-spaces.html) for more information.
 
 **Build**  
 The Tanzu Platform allows developers to build container applications locally or on the server, targeting Kubernetes or Cloud Foundry. Using the *tanzu build* command, developers can leverage curated configurations retrieved from the Tanzu Control Plane. Local builds utilize the Docker Daemon on the user’s computer and primarily rely on buildpacks. Remote builds, on the other hand, are executed transparently through the Tanzu Platform, abstracting the complexity from users and ensuring a seamless experience.  
@@ -595,155 +587,143 @@ For more details, refer to the official documentation on [Network Ingress](https
 
 <a id=key-concepts-of-tanzu-platform> </a> 
 
-### **Key Concepts of Tanzu Platform**  
-This section provides conceptual information about features and objects in Tanzu Platform. 
+### Key Concepts of Tanzu Platform  
 
-**Project**  
+Below section provides conceptual information about key concepts of Tanzu Platform. 
 
-In the Tanzu Platform for Kubernetes, resources are organized within a project, which serves as a logical grouping for  Tanzu Platform for Tanzu Platform for Kubernetes resources. Before creating any resources, it is necessary to first create a project.  
+**Project**
+
+In the Tanzu Platform for Kubernetes, resources are organized within a project, which serves as a logical grouping for  Tanzu Platform for Tanzu Platform for Kubernetes resources. Before creating any resources, it is necessary to first create a project. 
 
 A project streamlines the management of packages, configurations, and role-based access controls (RBAC) for all clusters in a cluster group, eliminating the need to manage each cluster individually. Creating a project requires either Organization Admin or Organization Owner roles.
 
-**Cluster Groups**  
+**Cluster Groups**
 
-Cluster groups on the Tanzu Platform provide a way to logically group Kubernetes clusters, enabling platform engineers to apply configurations consistently across all clusters within a group.  
+Cluster groups on the Tanzu Platform provide a way to logically group Kubernetes clusters, enabling platform engineers to apply configurations consistently across all clusters within a group. 
 
 Each project created in the Tanzu Platform includes one or more Run and Build cluster groups with the necessary Capabilities applied to support application environments.
 
-**Availability Targets**  
+**Availability Targets**
 
-Availability Targets are groupings of clusters that define where applications are scheduled. With Availability Targets, platform teams can abstract sets of clusters into logical groups that provide compute capacity without requiring their developers to know exactly which cluster their workload cluster is running on.  
+Availability Targets are groupings of clusters that define where applications are scheduled. With Availability Targets, platform teams can abstract sets of clusters into logical groups that provide compute capacity without requiring their developers to know exactly which cluster their workload cluster is running on.
 
 Availability Targets ensure that a Namespace is provisioned across multiple fault-domains resulting in greater availability in the face of failure.  They are a coarse-grained selector that describes a collection of clusters that all exist within a given fault-domain.  
 
 Availability Targets aren’t prescriptive (they’re based on metadata labels), but are generally used to select Clusters within a given region or availability zone.  The goal is to identify discrete, disjoint collections of clusters so that if a failure happens (e.g. a power cut or network failure) the contents of the Space are running in another fault-domain that is unaffected.  
+It is unlikely that all the Clusters within an Availability Target can meet the requirements for a given Space (required Capabilities, requested resources), but at least one must in order for a Space to be scheduled within that Target. An Availability Target is not intended to deliver horizontal scale, but that may occur as a side-effect of the fault-tolerance.
 
-It is unlikely that all the Clusters within an Availability Target can meet the requirements for a given Space (required Capabilities, requested resources), but at least one must in order for a Space to be scheduled within that Target. An Availability Target is not intended to deliver horizontal scale, but that may occur as a side-effect of the fault-tolerance.  
+**Capabilities**
 
-**Capabilities**  
+Capabilities represent a set of [Group, Version, and Kind (GVK)](https://book.kubebuilder.io/cronjob-tutorial/gvks.html) objects available within a Kubernetes cluster, defining specific functionalities or features for users. They play a key role in Space scheduling, where a Space must match the required Capabilities to be scheduled on a cluster.
 
-Capabilities represent a set of [Group, Version, and Kind (GVK)](https://book.kubebuilder.io/cronjob-tutorial/gvks.html) objects available within a Kubernetes cluster, defining specific functionalities or features for users. They play a key role in Space scheduling, where a Space must match the required Capabilities to be scheduled on a cluster.  
+**Add Image**
 
-![](./img/tpsm-ag-on-vsphere/spaces-diagram.png)
+For **Platform Engineers**: Capabilities represent a set of Group, Version, and Kind (GVK) objects available within a Kubernetes cluster, defining specific functionalities or features for users. Platform engineers curate these features by installing packages on clusters. These packages include APIs, custom resource definitions (CRDs), and controllers that enable specific functionalities. 
+When a package that includes the capability.tanzu.vmware.com/provides annotation is installed on a cluster, that cluster is considered to provide a given Capability. Engineers decide which Capabilities to provide by selecting the relevant packages, thereby controlling the types of workloads supported on each cluster.
 
-For **Platform Engineers**, Capabilities represent a set of Group, Version, and Kind (GVK) objects available within a Kubernetes cluster, defining specific functionalities or features for users. Platform engineers curate these features by installing packages on clusters. These packages include APIs, custom resource definitions (CRDs), and controllers that enable specific functionalities.   
+For **Developers**: Capabilities play a key role in enabling application functionality. When deploying applications within a Space, developers can leverage the platform’s APIs and features, such as service-binding, ingress, and fluxcd-helm. 
 
-When a package that includes the `capability.tanzu.vmware.com/provides` annotation is installed on a cluster, that cluster is considered to provide a given Capability. Engineers decide which Capabilities to provide by selecting the relevant packages, thereby controlling the types of workloads supported on each cluster.
+**Profiles**
 
-For **Developers**, Capabilities play a key role in enabling application functionality. When deploying applications within a Space, developers can leverage the platform’s APIs and features, such as `service-binding`, `ingress`, and `fluxcd-helm`. 
+Profiles are groups of required Capabilities that act as reusable building blocks for defining application environment characteristics. Platform builders can create custom Profiles to curate the types of workloads their platform supports, while platform users can reference these Profiles to understand the APIs available on the platform.
 
-**Profiles**  
+Spaces use Profiles to define the APIs and CRDs (as Capabilities) available in the Space. By including Profiles, a Space transitively requires all Capabilities specified by those Profiles. A Space can only be scheduled on a cluster that provides all the required Capabilities for its included Profiles.
 
-Profiles are groups of required Capabilities that act as reusable building blocks for defining application environment characteristics. Platform builders can create custom Profiles to curate the types of workloads their platform supports, while platform users can reference these Profiles to understand the APIs available on the platform.  
-
-Spaces use Profiles to define the APIs and CRDs (as Capabilities) available in the Space. By including Profiles, a Space transitively requires all Capabilities specified by those Profiles. A Space can only be scheduled on a cluster that provides all the required Capabilities for its included Profiles.  
-
-For instance, a platform builder familiar with deploying Spring applications might create a Spring Profile that includes the spring-cloud-gateway and service-binding Capabilities. This Profile provides a reusable way to set up environments for Spring applications. A Spring application team can use this Profile to create a Space in a standardized, company-approved manner. If the team needs a gateway, they can use the Spring Cloud Gateway CRDs included in the Profile to configure their own gateway. By standardizing Profiles, the platform ensures consistency in how Spring applications are deployed across the organization.  
+For example, a platform builder familiar with deploying Spring applications might create a Spring Profile that includes the spring-cloud-gateway and service-binding Capabilities. This Profile provides a reusable way to set up environments for Spring applications. A Spring application team can use this Profile to create a Space in a standardized, company-approved manner. If the team needs a gateway, they can use the Spring Cloud Gateway CRDs included in the Profile to configure their own gateway. By standardizing Profiles, the platform ensures consistency in how Spring applications are deployed across the organization.
 
 **Traits**
 
-Traits are collections of Kubernetes resources deployed into Spaces during their creation. They provide pre-configured, consistent content, simplifying the setup of Kubernetes resources for developers. By including Traits in Profiles, platform builders enable reusable content and streamline the configuration process for Spaces.  
+Traits are collections of Kubernetes resources deployed into Spaces during their creation. They provide pre-configured, consistent content, simplifying the setup of Kubernetes resources for developers. By including Traits in Profiles, platform builders enable reusable content and streamline the configuration process for Spaces.
 
-Expanding on this example, the platform team identifies inefficiencies as teams repeatedly configure a Spring Cloud Gateway. To address this, the platform builder develops a Trait with a pre-configured Spring Cloud Gateway resource linked to the company’s central audit tool. This Trait is included in the Spring Profile, ensuring that all Spaces using this profile automatically inherit the pre-approved configuration, streamlining workflows and enforcing security policies.  
+Expanding on above example, the platform team identifies inefficiencies as teams repeatedly configure a Spring Cloud Gateway. To address this, the platform builder develops a Trait with a pre-configured Spring Cloud Gateway resource linked to the company’s central audit tool. This Trait is included in the Spring Profile, ensuring that all Spaces using this profile automatically inherit the pre-approved configuration, streamlining workflows and enforcing security policies.
 
-While Traits simplify the delivery of reusable content, they are not suited for application-specific Kubernetes resources. For instance, databases often require unique configurations. In such cases, tools like `tanzu service create` should be used to create ServiceBindings directly in the Space. Most organizations limit Traits to delivering identical resources, ensuring simplicity and operational efficiency.  
+While Traits simplify the delivery of reusable content, they are not suited for application-specific Kubernetes resources. For instance, databases often require unique configurations. In such cases, tools like _tanzu service create_ should be used to create ServiceBindings directly in the Space. Most organizations limit Traits to delivering identical resources, ensuring simplicity and operational efficiency.
 
 **Space Scheduling**
+Spaces are scheduled onto clusters in a manner similar to how Kubernetes schedules pods onto nodes within a cluster. The platform continuously monitors changes to cluster creation and deletion, the capabilities offered by these clusters, and each Space’s configuration. Based on these observations, Spaces are recalculated and updated as needed to determine where they should be scheduled.
 
-​​Spaces are scheduled onto clusters in a manner similar to how Kubernetes schedules pods onto nodes within a cluster. The platform continuously monitors changes to cluster creation and deletion, the capabilities offered by these clusters, and each Space’s configuration. Based on these observations, Spaces are recalculated and updated as needed to determine where they should be scheduled.  
+Each Space’s required Capability and Availability Target metadata undergoes a multitier filtering process to identify suitable clusters:
 
-Each Space’s required Capability and Availability Target metadata undergoes a multitier filtering process to identify suitable clusters:  
+* For each requested Availability Target, identify all eligible clusters.
+* Filter these clusters to those providing all Capabilities required by the Space.
+* Further filter the clusters to those with sufficient resources, such as CPU and RAM, to host the Space.
+* From the resulting list, select a cluster and assign it to the Space.
 
-* For each requested Availability Target, identify all eligible clusters.  
-* Filter these clusters to those providing all Capabilities required by the Space.  
-* Further filter the clusters to those with sufficient resources, such as CPU and RAM, to host the Space.  
-* From the resulting list, select a cluster and assign it to the Space.  
+The selection process uses a stable algorithm, ensuring the same cluster is chosen unless it fails to meet the criteria. Once a cluster is assigned, a namespace is created, and the Space’s content is continuously synced.
 
-The selection process uses a stable algorithm, ensuring the same cluster is chosen unless it fails to meet the criteria. Once a cluster is assigned, a namespace is created, and the Space’s content is continuously synced.  
+For more detailed information on above mentioned concepts, refer to [Concepts in Tanzu Platform for Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/saas/tnz-platform/spaces-concepts-index.html)
 
-For more detailed information on above mentioned concepts, refer to [Concepts in Tanzu Platform for Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/saas/tnz-platform/spaces-concepts-index.html).  
-
-<a id=sample-space-scheduling-workflow> </a> 
-
-### **Sample Space Scheduling Workflow**  
-
-Below diagram shows how Tanzu Platform components such as **Projects**, **Cluster** **Groups**, **Availability** **Targets**, **Profiles**, **Capabilities**, and **Traits** work together to provide a secure, scalable and resilient platform for the business applications.  
-
-![](./img/tpsm-ag-on-vsphere/sample-space-schedule.png)
-
-As depicted in the diagram, the structure consists of:  
-
-**Projects and Cluster Groups:**  
-
-* **Project** \- Project \-01  
-* **Cluster Group A** :  Includes two clusters  
-  * Cluster 01 (in AZ01) \- Labeled “Zone: AZ01”  
-  * Cluster 02(in AZ02) \- Labeled “Zone: AZ02”  
-* **Cluster Group B** : Includes two clusters   
-  * Cluster 03 (in AZ01) \- Labeled “Zone: AZ01”  
-  * Cluster 04 (in AZ02) \- Labeled “Zone: AZ02”
-
-**Capabilities:**  
-Platform Engineers determine the Capabilities based on application needs by selecting relevant packages, thereby defining supported workloads for each cluster:  
-
-* **A1, B1, C1** (e.g., ContainerApp, Ingress, Service Binding)  
-* **A2, B2, C2** (e.g., ContainerApp, FluxCD, Spring Cloud Gateway)  
-* **A3, B3, C3** (e.g., ContainerApp, Bitnami Services, Crossplane)
-
-**Profiles**  
-
-* **Profile A** Includes Traits and Capabilities for A1, B1, C1  
-* **Profile B** Includes Traits and Capabilities for A2, B2, C2  
-* **Profile C** Includes Traits and Capabilities for A3, B3, C3
-
-**Availability Targets**  
-
-* **AT-01:** Includes clusters labeled with Zone: AZ01 and Zone: AZ02  
-* **AT-02:** Includes clusters labeled with Zone: AZ02
-
-**Spaces**  
-
-* **Space 01** For Space 01 to be scheduled by the space scheduler, the Kubernetes cluster/s must meet following criteria:  
-  * From the cluster part of Availability Target AT-01, identify the clusters which have all required capabilities installed (A1, B1, C1).  
-  * Ensure sufficient compute resources are available on the target cluster/s.  
-
-  With the replicas set to 2, this Space will be scheduled on **Cluster-01** and **Cluster-02**, as both clusters provide the required capabilities (**A1, B1, C1**). When an application is deployed in this Space, it will be deployed across both clusters, and the Tanzu Platform Control Plane will automatically create the necessary GSLB (Global Server Load Balancer) records in NSX ALB.  
-
-  > **Note** As this Space and applications are scheduled on Cluster-01, deployed in AZ01, and Cluster-02, deployed in AZ02, the applications deployed within this Space exhibit resilience against both site-level and cluster-level failure scenarios. This configuration ensures high availability by distributing workloads across multiple availability zones.  
-
-* **Space 02** For Space 02 to be scheduled by the space scheduler, the Kubernetes cluster/s must meet following criteria  
-  * From the cluster part of Availability Target AT-01, identify the clusters which have all required capabilities installed (A2, B2, C2).  
-  * Ensure sufficient compute resources are available on the target cluster/s.  
-
-  With the replicas set to 3, this Space will be scheduled on **Cluster-01**, **Cluster-02**, and **Cluster-3** as all three clusters provide the required capabilities (**A2, B2, C2**). When an application is deployed in this Space, it will be deployed across all three clusters, and the Tanzu Platform Control Plane will automatically create the necessary GSLB (Global Server Load Balancer) records in NSX ALB.  
-
-  > **Note** As this Space is scheduled on Cluster-01 & Cluster-03, deployed in AZ01, and Cluster-02, deployed in AZ02, the applications deployed within this Space exhibit resilience against both site-level and cluster-level failure scenarios. This configuration ensures high availability by distributing workloads across multiple availability zones.
-
-* **Space 03** For Space 03 to be scheduled by the space scheduler, the Kubernetes cluster/s must meet following criteria  
-  * From the cluster part of Availability Target AT-02, identify the clusters which have all required capabilities installed (A3, B3, C3).  
-  * Ensure sufficient compute resources are available on the target cluster/s.
-
-  As replicas set on this space is 1, this space will be scheduled either on Cluster-02 or Cluster-04, as both these clusters contain the required capabilities (A3, B3, C3) based on the compute resources availability.  
-
-  With the replicas set to 1, this Space will be scheduled on either **Cluster-02** or **Cluster-04**, as both clusters provide the required capabilities (**A3, B3, C3**). When an application is deployed in this Space, it will be hosted on one of these clusters, and the Tanzu Platform Control Plane will automatically configure the necessary GSLB (Global Server Load Balancer) records in **NSX ALB** but with only one Virtual service pointed to it.  
-
-  > **Note** Since this Space is scheduled on either **Cluster-02** or **Cluster-04**, both located in **AZ02**, the applications deployed within this Space lack resilience against site-level or cluster-level failures. This configuration is therefore more suitable for non-production environments.  
 
 <a id=rbac-in-tanzu-platform-self-managed> </a> 
+
+### Sample Space Scheduling Workflow
+Below diagram shows how Tanzu Platform components such as **Projects**, **Cluster Groups**, **Availability Targets**, **Profiles**, **Capabilities**, and **Traits** work together to provide a secure, scalable and resilient platform for the business applications.
+
+**Add Image**
+
+As depicted in the diagram, the structure consists of:
+
+**Projects and Cluster Groups**
+* Project - Project -01
+* Cluster Group A :  Includes two clusters  
+  * Cluster 01 (in AZ01) - Labeled “Zone: AZ01”
+  * Cluster 02(in AZ02) - Labeled “Zone: AZ02”
+* Cluster Group B :  Includes two clusters  
+  * Cluster 03 (in AZ01) - Labeled “Zone: AZ01”
+  * Cluster 04 (in AZ02) - Labeled “Zone: AZ02” 
+
+**Capabilities**
+Platform Engineers determine the Capabilities based on application needs by selecting relevant packages, thereby defining supported workloads for each cluster
+* **A1, B1, C1** (e.g., ContainerApp, Ingress, Service Binding)
+* **A2, B2, C2** (e.g., ContainerApp, FluxCD, Spring Cloud Gateway)
+* **A3, B3, C3** (e.g., ContainerApp, Bitnami Services, Crossplane)
+
+**Profiles**
+* **Profile A**: Includes Traits and Capabilities for A1, B1, C1
+* **Profile B**: Includes Traits and Capabilities for A2, B2, C2
+* **Profile C**: Includes Traits and Capabilities for A3, B3, C3
+
+**Availability Targets**
+* AT-01: Includes clusters labeled with _Zone: AZ01_ and _Zone: AZ02_
+* AT-02: Includes clusters labeled with _Zone: AZ02_
+
+**Spaces**
+* **Space 01**: For Space 01 to be scheduled by the space scheduler, the Kubernetes Cluster/s must meet following criteria  
+  * From the cluster part of Availability Target AT-01, identify the clusters which have all required capabilities installed (A1, B1, C1).
+  * Ensure sufficient compute resources are available on the target cluster/s
+
+   With the replicas set to 2, this Space will be scheduled on **Cluster-01** and **Cluster-02**, as both clusters provide the required capabilities (**A1, B1, C1**). When an application is deployed in this Space, it will be deployed across both clusters, and the Tanzu Platform Control Plane will automatically create the necessary GSLB (Global Server Load Balancer) records in NSX ALB.
+**Note**: As this Space and applications are scheduled on Cluster-01, deployed in AZ01, and Cluster-02, deployed in AZ02, the applications deployed within this Space exhibit resilience against both site-level and cluster-level failure scenarios. This configuration ensures high availability by distributing workloads across multiple availability zones.
+
+* **Space 02**: For Space 02 to be scheduled by the space scheduler, the Kubernetes Cluster/s must meet following criteria
+  * From the cluster part of Availability Target AT-01, identify the clusters which have all required capabilities installed (A2, B2, C2).
+  * Ensure sufficient compute resources are available on the target cluster/s
+  
+  With the replicas set to 3, this Space will be scheduled on **Cluster-01**, **Cluster-02**, and **Cluster-3** as all three clusters provide the required capabilities (**A2, B2, C2**). When an application is deployed in this Space, it will be deployed across all three clusters, and the Tanzu Platform Control Plane will automatically create the necessary GSLB (Global Server Load Balancer) records in NSX ALB
+**Note**: As this Space is scheduled on Cluster-01 & Cluster-03, deployed in AZ01, and Cluster-02, deployed in AZ02, the applications deployed within this Space exhibit resilience against both site-level and cluster-level failure scenarios. This configuration ensures high availability by distributing workloads across multiple availability zones.
+
+* **Space 03**: For Space 03 to be scheduled by the space scheduler, the Kubernetes Cluster/s must meet following criteria
+  * From the cluster part of Availability Target AT-02, identify the clusters which have all required capabilities installed (A3, B3, C3).
+  * Ensure sufficient compute resources are available on the target cluster/s
+  
+  As replicas set on this space is 1, this space will be scheduled either on Cluster-02 or Cluster-04, as both these clusters contain the required capabilities (A3, B3, C3) based on the compute resources availability
+With the replicas set to 1, this Space will be scheduled on either **Cluster-02 or Cluster-04**, as both clusters provide the required capabilities (**A3, B3, C3**). When an application is deployed in this Space, it will be hosted on one of these clusters, and the Tanzu Platform Control Plane will automatically configure the necessary GSLB (Global Server Load Balancer) records in NSX ALB but with only one Virtual service pointed to it.
+**Note**: Since this Space is scheduled on either Cluster-02 or Cluster-04, both located in AZ02, the applications deployed within this Space lack resilience against site-level or cluster-level failures. This configuration is therefore more suitable for non-production environments.
+
 
 ### RBAC in Tanzu Platform Self-Managed  
 
 Tanzu Platform provides configurable Identity Provider (IdP) integration for user authentication. Authenticated users can log in to the Tanzu Platform, but they cannot view data or perform any actions until assigned a role by an administrator.
 
 **Built-in Admin Role**  
-During the deployment of the TP-SM Control Plane, a built-in Super Admin user, `tanzu_platform_admin`, is automatically created. The password for this user is specified in the deployment configuration file.  
+During the deployment of the TP-SM Control Plane, a built-in Super Admin user, **tanzu\_platform\_admin**, is automatically created. The password for this user is specified in the deployment configuration file. 
 
-Initially, Platform Engineers use this account to log in to the platform. From there, they can add additional users or user groups and assign them the necessary roles and scopes as required.  
+Initially, Platform Engineers use this account to log in to the platform. From there, they can add additional users or user groups and assign them the necessary roles and scopes as required.
 
 **Role Binding**  
-A role binding is the association of a user or group with a specific role and scope. The scope determines the area where the assigned role is applicable, such as a Project, Space, or other hierarchical levels.  
+A role binding is the association of a user or group with a specific role and scope. The scope determines the area where the assigned role is applicable, such as a Project, Space, or other hierarchical levels.
 
-Users with administrative privileges in a given scope can create, update, or delete role bindings within that scope or any of its sub-scopes. For example, an administrator at the Project level can manage role bindings for that Project and its sub-scopes, such as Application Spaces, Cluster Groups, and Clusters.  
+Users with administrative privileges in a given scope can create, update, or delete role bindings within that scope or any of its sub-scopes. For example, an administrator at the Project level can manage role bindings for that Project and its sub-scopes, such as Application Spaces, Cluster Groups, and Clusters.
 
 **Supported Identities in Role Bindings**
 
@@ -753,7 +733,7 @@ Users with administrative privileges in a given scope can create, update, or del
   Represents a group defined in the IdP. When a role binding is created for a group, all users mapped to that group in the IdP inherit the assigned role and scope. This eliminates the need to create individual role bindings for each user. Member users can view the group role binding.
 
 **Supported Scope Types in Role Bindings**  
-Role bindings can be defined for the following scope types:  
+Role bindings can be defined for the following scope types:
 
 * Global  
 * Project  
@@ -765,6 +745,8 @@ Role bindings can be defined for the following scope types:
 * Application Space
 
 For more details on the above mentioned scope, see [RBAC reference](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/users-projects-reference-index.html). To create and configure Role Bindings and Scope, see [Configure role-based access control](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/users-projects-configure-rbac.html)
+
+Certificates and Trusts
 
 
 &nbsp; 
