@@ -43,7 +43,7 @@ This document is intended for key stakeholders, including executives, IT decisio
     -   [Control Plane and Tanzu Application Engine](#control-plane-and-tanzu-application-engine)
     -   [Key Concepts of Tanzu Platform](#key-concepts-of-tanzu-platform)
     -   [Sample Space Scheduling Workflow](#sample-space-scheduling-workflow)
-        -   [RBAC in Tanzu Platform Self-Managed](#rbac-in-tanzu-platform-self-managed)  
+    -   [RBAC in Tanzu Platform Self-Managed](#rbac-in-tanzu-platform-self-managed)  
 
 <a id=bill-of-materials> </a> 
 
@@ -54,7 +54,7 @@ Below is the validated Bill of Materials that can be used to install TKG on your
 | :---- | :---- |
 | vSphere ESXi | 8.0.3 |
 | vCenter | 8.0.3 |
-| NSX Advanced Load balancer | 22.1.5 |
+| NSX Advanced Load balancer | 22.1.5 and above |
 | Tanzu Kubernetes Release | 1.28.x |
 | Tanzu Platform  | 10.0.0 |  
 
@@ -98,9 +98,7 @@ Although a vSphere Namespace serves a similar function to a Kubernetes namespace
 
 Both containers and VMs utilize the same vSphere Namespace resources and can be managed through a unified vSphere IaaS control plane interface. 
 
-**vSphere Pod**: A vSphere Pod is a lightweight VM designed to run one or more Linux containers. Each vSphere Pod is precisely sized for its specific workload, with explicit resource reservations for storage, memory, and CPU, ensuring that only the required resources are allocated. vSphere Pods are supported exclusively on Supervisors configured with NSX as the networking stack. 
-
-**Note:** NSX is essential for deploying vSphere Pods. However, since this document focuses on vSphere Distributed Switch, vSphere Pods are not covered in detail.
+**vSphere Pod**: A vSphere Pod is a lightweight VM designed to run one or more Linux containers. Each vSphere Pod is precisely sized for its specific workload, with explicit resource reservations for storage, memory, and CPU, ensuring that only the required resources are allocated. 
 
 **NSX Advanced Load Balancer (NSX ALB)**: NSX ALB integrates seamlessly with the vSphere IaaS control plane, providing dynamically scalable load balancing endpoints for both the control plane and applications. In its default configuration, NSX ALB acts as a load balancer, delivering L4 load balancing solutions for applications hosted on Tanzu Kubernetes Grid. It also features a Kubernetes operator hosted on the Supervisor cluster that integrates with the Kubernetes API to manage the lifecycle of load balancing for workloads.
 
@@ -147,7 +145,7 @@ For more details on design, recommendations, requirements and sizing guidelines,
 
 ### vSphere Cluster Design for VMware Cloud Foundation  
 
-The vSphere cluster design should account for the specific needs of standard, stretched, and remote clusters, as well as the life cycle management of ESXi hosts based on workload characteristics. This documentation focuses on standard workload clusters. **This documentation focuses exclusively on standard workload clusters.**
+The vSphere cluster design should account for the specific needs of standard, stretched, and remote clusters, as well as the life cycle management of ESXi hosts based on workload characteristics. **This documentation focuses on standard workload clusters.**
 
 ![](./img/tpsm-ag-on-vsphere/domain-esxi-diag.png)
 
@@ -195,10 +193,10 @@ As illustrated in the above diagram, each vSphere Cluster represents an availabi
   * **Key Point:** Stretched networks are not a requirement for all networks, it is essential to stretch the VIP network. For additional details, refer to the **Network Requirements** section of this document.  
 * **Supervisor Services and Tanzu Kubernetes Clusters (TKCs)**:  
   * Supervisor Services are enabled independently on each vSphere Zone (mapped to the vSphere Cluster), enabling the deployment of TKCs within the supervisor namespace of each vSphere Zone.   
-    TP-SM components are deployed to a dedicated TKCs, while a group of TKCs (Cluster Group) will be designated as the availability target to host applications via the Tanzu Platform.  
+    TP-SM components are deployed to a dedicated TKC, while a group of TKCs (Cluster Group) will be leveraged to host applications via the Tanzu Platform.  
     **Important Note**: Supervisor namespaces and Kubernetes cluster nodes are confined to their respective availability zones and do not span across sites. This ensures isolation and simplifies management within each zone.  
 * **NSX Advanced Load Balancer**  
-  * Each site will have its own instance of NSX Advanced Load Balancer (ALB) to provide L4 load balancing for the Supervisor Control Plane, TKC control plane, and applications deployed on the TKC.  
+  * Each site will have its own instance of NSX Advanced Load Balancer (ALB) to provide L4 load balancing for the Supervisor Control Plane, TKC control plane, and applications deployed on the TKCs.  
   * The NSX ALB will also be configured to manage Global Server Load Balancing (GSLB) services, ensuring efficient traffic distribution and high availability for applications hosted on TKCs (Run Cluster) through the Tanzu Platform.  
 * **Storage Considerations**:  
   * Storage is configured locally within each Availability Zone, meaning that vSphere datastores (Block or NFS) are not stretched across the availability zones. Each zone utilizes its own local storage resources to support the deployed workloads and Kubernetes clusters.   
@@ -224,10 +222,10 @@ As per the proposed architecture, all the Tanzu Components will be deployed on a
 | NSX ALB Management Network | /27 | The NSX Advanced Load Balancer (NSX ALB) controller nodes at both sites will connect to this network, which is part of the management domain. Based on the VCF Management Domain topology outlined in this documentation, it is assumed that the Management Domain/Cluster is stretched across both sites, along with the associated networks. **Note**:  If the management domain is not stretched and a dedicated management domain is used per site, two separate networks must be configured, one at each site. This document does not cover scenarios with a single standard (non-stretched) management domain in a multi-site environment, as this configuration is not recommended. | Stretched |
 | NSX ALB SE Management Network   | /24 | The management interface of the Service Engines (SEs) will connect to this network, and its sizing must align with the Service Engine group configuration at each site. **Considerations: Number of Networks:** One network per availability zone is recommended. **Stretched Network Option:** This network can optionally be stretched across both zones, allowing the same network to be used for SE management at both sites. In such cases, the subnet must be sized to accommodate the total number of Service Engines across both sites. The available IP addresses should then be divided into two distinct blocks, with each block assigned to the NSX ALB instance in the respective availability zone. | Optional |
 | TKG Control Plane/Application VIP Network  | /24 | This network is used for hosting L4 Virtual Services for Control plane HA of all Kubernetes clusters (Supervisor and Workload) and to host Virtual services for the applications deployed on the Tanzu Kubernetes Clusters (TKC) Reserve sufficient IPs depending on the number of TKG clusters and applications planned to be deployed in the environment. **Considerations:** **IP Allocation:** Reserve an adequate pool of IP addresses based on the number of planned TKG clusters and applications at both sites. **Number of Networks:** One. **Network Configuration:** This network must be stretched across both sites. The available IP addresses should be divided into three distinct blocks: **Block 1:** Added to the DHCP range in the NSX ALB instance at the primary site. **Block 2:** Added to the DHCP range in the NSX ALB instance at the secondary site. **Block 3:** This block, containing a single IP address, is added to the DHCP range of the NSX ALB instance at the primary site where TP-SM is deployed. The IP address is used to expose the TP-SM instance. In the event of a TP-SM recovery at the secondary site, this IP block must be reassigned to the NSX ALB instance at the secondary site to maintain service continuity. | Stretched |
-| IaaS Control Plane Mgmt Network  | /27 | Supervisor Cluster nodes will utilize this network, with each cluster requiring a reserved block of five IP addresses. Initially, two Supervisor Clusters (one at each site) will be deployed, necessitating two such blocks. **Considerations: Number of Networks:** One network per availability zone is recommended. **Stretched Network Option:** If the network is stretched, the same network can be used by both the supervisor cluster, in such case reserve two blocks of five IP addresses from the same network to accommodate both sites. | Optional |
+| IaaS Control Plane Mgmt Network  | /27 | Supervisor Cluster nodes will utilize this network, with each cluster requiring a reserved block of five consecutive IP addresses. Initially, two Supervisor Clusters (one at each site) will be deployed, necessitating two such blocks. **Considerations: Number of Networks:** One network per availability zone is recommended. **Stretched Network Option:** If the network is stretched, the same network can be used by both the supervisor cluster, in such case reserve two blocks of five consecutive IP addresses from the same network to accommodate both sites. | Optional |
 | Primary Workload Network   | /24 | The second interface of the Supervisor nodes will be connected to this network, requiring 3 IP addresses per Supervisor cluster. Supervisor services such as Harbor, Contour, and Velero vSphere services will be deployed as vSphere Pods and will consume IPs from this range. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the primary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
 | Secondary Workload Network  | ​​/24 | The control plane and worker nodes of TKG workload clusters will connect to this network. As depicted in the diagram, this network is associated with a dedicated Supervisor namespace (Admin Namespace) utilized by the platform administrator to deploy TP-SM components on one of the TKCs. Optionally, this network can also be used to host TP Build and/or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
-| Additional Workload Network (One per availability zone)   | /24 | Additional workload networks can be created as needed to segregate TKCs. Depending on the requirements, these TKCs can be configured to function as either TP Build or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
+| Additional Workload Network/s  | /24 | Additional workload networks can be created as needed to segregate TKCs. Depending on the requirements, these TKCs can be configured to function as either TP Build or Run clusters. **Considerations:** **Number of Networks**: One network per availability zone is recommended. **Stretched Network Option**: This network can optionally be stretched across both sites. In such cases, the same network can be used as the secondary workload network at both sites. The network should be divided into two blocks, with each block allocated to the respective site. | Optional |
 
 <a id=firewall-requirements> </a> 
 
@@ -430,8 +428,8 @@ An NSX ALB Site can be configured as a Leader or a Follower, as mentioned in the
 
 The Tanzu Platform enables the building and deployment of applications by providing pipelines to streamline app deployment into production on the runtime of your choice:
 
-* **Tanzu Platform for Cloud Foundry**: Tanzu Platform for Cloud Foundry allows platform engineers to build public and private clouds with VMware’s implementation of the Cloud Foundry open source project. App developers and operators develop, deploy, and manage apps on those clouds. You can attach your Cloud Foundry environment to Tanzu Platform, and monitor its infrastructure and running applications from the Tanzu Platform UI.  
-* **Tanzu Platform for Kubernetes**: Tanzu Platform for Kubernetes is the Kubernetes runtime for Tanzu Platform, exposed by the Tanzu Platform UI and the Tanzu CLI. It helps platform engineers to build conformant and replicable Kubernetes environments, and DevOps engineers to push applications into production, both in the Tanzu Platform UI and with the Tanzu CLI.
+* **Cloud Foundry**: Tanzu Platform allows platform engineers to build public and private clouds with VMware’s implementation of the Cloud Foundry open source project. App developers and operators develop, deploy, and manage apps on those clouds. You can attach your Cloud Foundry environment to Tanzu Platform, and monitor its infrastructure and running applications from the Tanzu Platform UI.  
+* **Tanzu Kubernetes Cluster**: Tanzu Kubernetes Clusters provide the runtime for Tanzu Platform, exposed by the Tanzu Platform UI and the Tanzu CLI. It helps platform engineers to build conformant and replicable Kubernetes environments, and DevOps engineers to push applications into production, both in the Tanzu Platform UI and with the Tanzu CLI.
 
 As this document focuses on leveraging the IaaS control plane provided by the VMware Cloud Foundation (VCF) infrastructure, the primary emphasis will be on design considerations for **Tanzu Platform’s Kubernetes Runtime**.
 
@@ -448,6 +446,8 @@ For the Tanzu Platform to function effectively, integration with identity provid
 Below is a highly simplified component architecture of Tanzu Platform
 
 ![](./img/tpsm-ag-on-vsphere/tp-comp-arch.png)
+
+* Not officially supported
 
 An optional but significant component is the Global Server Load Balancer (GSLB). The platform supports integration with NSX ALB GSLB. Alternatively, a custom DNS provider can be used, requiring manual configuration of GSLB and related DNS entries.
 
@@ -484,8 +484,6 @@ The Tanzu Platform allows developers to build containerized applications on dedi
 
 **Tanzu Run Cluster:**  
 The Tanzu Platform also supports the deployment of containerized applications on dedicated Tanzu Kubernetes Run Clusters. These Run Clusters leverage the “ContainerApp” capability, which, when installed on a TKC, enables it to operate as a Run Cluster.
-
-For more details, refer to the section “General Recommendations on Configuring Spaces,” which provides additional insights into leveraging Build and Run Clusters effectively.
 
 <a id=tanzu-platform-self-managed-deployment-guidelines> </a> 
 
@@ -527,14 +525,10 @@ A TP-SM implementation is sized based on operational and scalability needs. The 
 
 | Installation Profile  | Usage Limits | Resource Requirements |
 | :---- | :---- | :---- |
-| evaluation | Ingest: 20 RPSQuery: 2 QPSConcurrent assessments: 2Application instances: 10Resource dimension: 2 projects, 2 spaces, 20 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 3vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
-| foundation | Ingest: 100 RPSQuery: 20 QPSConcurrent assessments: 50Application instances: 5000Resource dimension: 4 projects, 10 spaces, 100 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 9vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
-| regular | Ingest: 200 RPSQuery: 50 QPSConcurrent assessments: 100Application instances: 15000Resource dimension: 6 projects, 20 spaces, 500 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 10vCPUs per node: 12Memory per node: 48 GBStorage per node: 40 GB |
-| enterprise | Ingest: 500 RPSQuery: 100 QPSConcurrent assessments: 200Application instances: 30000Resource dimension: 6 projects, 30 spaces, 1000 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 11vCPUs per node: 16Memory per node: 64 GBStorage per node: 40 GB |
-
-The sizing recommendations for Build and Run clusters are determined by the number of concurrent builds and the applications deployed on the respective target clusters.
-
-\*\*For Build Cluster we need to get some inputs from Engineering\*\*
+| evaluation | Ingest: 20 RPSQuery: 2 QPSApplication instances: 10Resource dimension: 2 projects, 2 spaces, 20 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 3vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
+| foundation | Ingest: 100 RPSQuery: 20 QPSApplication instances: 5000Resource dimension: 4 projects, 10 spaces, 100 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 9vCPUs per node: 8Memory per node: 32 GBStorage per node: 40 GB |
+| regular | Ingest: 200 RPSQuery: 50 QPSApplication instances: 15000Resource dimension: 6 projects, 20 spaces, 500 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 10vCPUs per node: 12Memory per node: 48 GBStorage per node: 40 GB |
+| enterprise | Ingest: 500 RPSQuery: 100 QPSApplication instances: 30000Resource dimension: 6 projects, 30 spaces, 1000 clusters (Run \+ Build) | **Control plane**Nodes: 3vCPUs per node: 4Memory per node: 16GBStorage per node: 20GB **Workers**Nodes: 11vCPUs per node: 16Memory per node: 64 GBStorage per node: 40 GB |
 
 <a id=design-recommendations-for-tp-sm-on-vsphere-iaas-control-plane> </a> 
 
@@ -549,9 +543,7 @@ The sizing recommendations for Build and Run clusters are determined by the numb
 | DD-TPSM-BLD-01 | One or more Supervisor Namespace to host Tanzu Build Clusters | This approach streamlines the management of build clusters. It enables simplified handling of underlying compute and storage resources for a single or a group of build clusters. Access controls can be applied at the Supervisor Namespace level, ensuring that unauthorized users cannot access the namespace and its associated Tanzu Kubernetes Clusters (TKC). Platform engineers gain better visibility into build cluster usage, allowing them to scale the clusters horizontally or vertically based on demand. | None |
 | DD-TPSM-BLD-02 | Deploy build clusters at both sites/zones. | Having build clusters deployed across multiple sites enhances resiliency, ensuring continuity during disasters or planned maintenance activities. | None |
 | DD-TPSM-RUN-01 | One or more Supervisor Namespace to host Tanzu Run Clusters | Depending on the business requirement, platform admin can choose to deploy one or more Supervisor Namespaces to host Tanzu Run Clusters. | None |
-| DD-TPSM-RUN-02 | Deploy Run clusters at both sites/zones. | Having Run clusters deployed and configured across multiple sites enhances resiliency for the applications deployed by the developers, ensuring continuity during disasters or planned maintenance activities. | NSX ALB provides GSLB services for these applications. GSLB records are automatically created by UCP For more details refer to the “General Recommendations on Configuring Spaces” section in this document |
-|  | Install the [Local Consumption Interface](https://vsphere-tmm.github.io/Supervisor-Services/) (LCI) supervisor plugin for the vSphere IaaS Control Plane. | Provides the Local Consumption Interface (LCI) for managing Namespaces within vSphere Client UI and provides SSO authentication for [Cloud Consumption Interface (CCI)](https://docs.vmware.com/en/VMware-Aria-Automation/8.17/Using-Automation-Service-Broker/GUID-03D4F41F-D4A6-4350-91AE-F7A40FDC3C7D.html) in Aria Automation within VMware Cloud Foundation. |  |
-
+| DD-TPSM-RUN-02 | Deploy Run clusters at both sites/zones. | Having Run clusters deployed and configured across multiple sites enhances resiliency for the applications deployed by the developers, ensuring continuity during disasters or planned maintenance activities. | NSX ALB provides GSLB services for these applications. Upon integration GSLB records are automatically created by Tanzu Platform Control Plane |
 
 <a id=control-plane-and-tanzu-application-engine> </a> 
 
@@ -565,7 +557,7 @@ Tanzu Application Engine/UCP which builds on top of the Control plane provides a
 
 **Spaces**   
 Spaces serve as an API interface for Application Developers while allowing Platform Engineers and Operator roles to contribute to an application-aware environment. Each Space acts as a logical abstraction where Application Developers can deploy workloads aligned with the Space's configuration.   
-A Space is created by composing Profiles, into which Traits and Capabilities are curated by domain experts. For example, a Network Operator may define an Ingress Gateway Trait as part of a Space's configuration. General Recommendations on Configuring Spaces is provided in the **below section**, and for more information refer to the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/spaces-concepts-about-spaces.html).
+A Space is created by composing Profiles, into which Traits and Capabilities are curated by domain experts. For example, a Network Operator may define an Ingress Gateway Trait as part of a Space's configuration. For additional details, refer to the **"Key Concepts of Tanzu Platform" section** in this document, and consult the [official documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/tanzu-platform/10-0/tnz-platform/spaces-concepts-about-spaces.html) for more information.  
 
 **Build**  
 The Tanzu Platform allows developers to build container applications locally or on the server, targeting Kubernetes or Cloud Foundry. Using the *tanzu build* command, developers can leverage curated configurations retrieved from the Tanzu Control Plane. Local builds utilize the Docker Daemon on the user’s computer and primarily rely on buildpacks. Remote builds, on the other hand, are executed transparently through the Tanzu Platform, abstracting the complexity from users and ensuring a seamless experience.  
@@ -596,7 +588,7 @@ For more details, refer to the official documentation on [Network Ingress](https
 <a id=key-concepts-of-tanzu-platform> </a> 
 
 ### **Key Concepts of Tanzu Platform**  
-This section provides conceptual information about features and objects in Tanzu Platform. 
+This section provides conceptual information about key concepts of Tanzu Platform. 
 
 **Project**  
 
@@ -638,7 +630,7 @@ Profiles are groups of required Capabilities that act as reusable building block
 
 Spaces use Profiles to define the APIs and CRDs (as Capabilities) available in the Space. By including Profiles, a Space transitively requires all Capabilities specified by those Profiles. A Space can only be scheduled on a cluster that provides all the required Capabilities for its included Profiles.  
 
-For instance, a platform builder familiar with deploying Spring applications might create a Spring Profile that includes the spring-cloud-gateway and service-binding Capabilities. This Profile provides a reusable way to set up environments for Spring applications. A Spring application team can use this Profile to create a Space in a standardized, company-approved manner. If the team needs a gateway, they can use the Spring Cloud Gateway CRDs included in the Profile to configure their own gateway. By standardizing Profiles, the platform ensures consistency in how Spring applications are deployed across the organization.  
+For example, a platform builder familiar with deploying Spring applications might create a Spring Profile that includes the spring-cloud-gateway and service-binding Capabilities. This Profile provides a reusable way to set up environments for Spring applications. A Spring application team can use this Profile to create a Space in a standardized, company-approved manner. If the team needs a gateway, they can use the Spring Cloud Gateway CRDs included in the Profile to configure their own gateway. By standardizing Profiles, the platform ensures consistency in how Spring applications are deployed across the organization.  
 
 **Traits**
 
@@ -667,7 +659,7 @@ For more detailed information on above mentioned concepts, refer to [Concepts in
 
 ### **Sample Space Scheduling Workflow**  
 
-Below diagram shows how Tanzu Platform components such as **Projects**, **Cluster** **Groups**, **Availability** **Targets**, **Profiles**, **Capabilities**, and **Traits** work together to provide a secure, scalable and resilient platform for the business applications.  
+The following diagram shows how Tanzu Platform components such as **Projects**, **Cluster** **Groups**, **Availability Targets**, **Profiles**, **Capabilities**, and **Traits** work together to provide a secure, scalable and resilient platform for the business applications.  
 
 ![](./img/tpsm-ag-on-vsphere/sample-space-schedule.png)
 
