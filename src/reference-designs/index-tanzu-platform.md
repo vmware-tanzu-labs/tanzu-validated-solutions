@@ -3,7 +3,6 @@
 Tanzu Platform is an application development and deployment platform that helps you to modernize your applications and infrastructure to continuously deliver better software to production.  
 
 -   [Tanzu Platform Self-Managed on vSphere - Dual-Site Reference Design](./tpsm-ag-on-vsphere-ref.md)  
--   [Deploy Tanzu Platform Self-Managed on vSphere in an Air-Gapped Environment](../deployment-guides/tpsm-ag-on-vsphere-dep.md)  
 
 
 &nbsp; 
