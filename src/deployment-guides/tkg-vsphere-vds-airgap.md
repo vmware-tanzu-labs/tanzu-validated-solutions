@@ -497,9 +497,9 @@ For information about how to create the user and role for Tanzu Kubernetes Grid,
 
 ### Import NSX Advanced Load Balancer in Content Library
 
-Create a content library following the instructions provided in [Create a Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-virtual-machine-administration-guide-8-0/using-content-libraries/create-and-edit-a-content-library.html#GUID-A58AF4FD-6CBE-4210-9E67-27EFBDCC1EF2-en) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library.
+Create a content library following the instructions provided in [Create a Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/create-and-edit-a-content-library.html) in VMware vSphere documentation. You will store the NSX Advanced Load Balancer OVA in the library.
 
-To import the OVA into the content library, see [Import Items to a Content Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-virtual-machine-administration-guide-8-0/using-content-libraries/how-to-populate-libraries-with-content.html#GUID-B413FBAE-8FCB-4598-A3C2-8B6DDA772D5C-en).
+To import the OVA into the content library, see [Import Items to a Content Library](https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/how-to-populate-libraries-with-content.html).
 
 ## <a id=configure-alb> </a> Deploy and Configure NSX Advanced Load Balancer
 
