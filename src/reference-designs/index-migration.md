@@ -4,6 +4,6 @@ The VMware Tanzu migration guides section serves as a comprehensive resource hub
 
 For more information about VMware Tanzu, see [VMware Tanzu Documentation](https://techdocs.broadcom.com/us/en/vmware-tanzu.html).
 
-- [Reference Design for Migration from TKGm to TKGs (vSphere with Tanzu)](../solution-workbooks/tkgm-to-tkgs-migration-reference-design.md)
-    - [Migrating a Stateful Application from TKGm Cluster to TKGs Cluster](../solution-workbooks/tkgm-to-tkgs-stateful-app-migration.md)
+- [Reference Design for Migrating from VMware Tanzu Kubernetes Grid with a management cluster to VMware vSphere Supervisor](../solution-workbooks/tkgm-to-tkgs-migration-reference-design.md)
+    - [Migrate a Stateful App from TKG with a management cluster to VKS](../solution-workbooks/tkgm-to-tkgs-stateful-app-migration.md)
 
