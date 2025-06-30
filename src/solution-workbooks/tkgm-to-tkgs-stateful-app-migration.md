@@ -1,3 +1,7 @@
-# Migrating a Stateful Application from TKGm Cluster to TKGs Cluster
+# Migrate a Stateful App from TKG with a management cluster to VKS
 
-<!-- TKGm to TKGS migration doc has moved to https://github.gwd.broadcom.net/TNZ/tkg-docs/tree/main/tkg-2.x-pubs/migrate -->
+<!-- The source files for the TKGm to TKGS migration doc have moved to https://github.gwd.broadcom.net/TNZ/tkg-docs/tree/main/tkg-2.x-pubs/migrate -->
+
+> **Important** Tanzu Kubernetes Grid v2.5.4 is the final enterprise release of TKG. Consult your Broadcom account team or Broadcom Support for information about how to migrate your workloads to vSphere Supervisor and vSphere Kubernetes Service (VKS - formerly known as TKG Service). You can see the end of life dates for TKG versions in the [Broadcom product lifecycle matrix](https://support.broadcom.com/group/ecx/productlifecycle). VMware recommends that you use the vSphere Supervisor rather than Tanzu Kubernetes Grid (TKG) with a standalone management cluster. The vSphere Supervisor is closely integrated with vSphere, so offers a more streamlined user experience than using a standalone management cluster. Using Tanzu Kubernetes Grid with a standalone management cluster is only recommended for certain use cases.
+
+The content of this migration guide has [moved into the TKG 2.5 documentation](https://author-techdocs2-prod.adobecqms.net/us/en/vmware-tanzu/reference-architectures/tanzu-migration-guides/services/migration-tnz/solution-workbooks-tkgm-to-tkgs-stateful-app-migration.html).
