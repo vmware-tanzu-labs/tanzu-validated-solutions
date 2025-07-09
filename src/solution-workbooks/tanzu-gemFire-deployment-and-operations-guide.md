@@ -54,7 +54,7 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
   * Locators help with member discovery and load balancing within a Tanzu GemFire cluster.
 
   * Clients connect to a list of locators, which dynamically maintain a list of active servers for efficient request routing.  
-    For more information on Locators refer: [Locators](#locators-locators) 
+    For more information on Locators refer: [Locators](#locators) 
 
 * **Servers**
 
@@ -64,7 +64,7 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
   * Can be scaled horizontally to improve performance and ensure high availability.
 
-    For more information on Servers refer: [Servers](#server-server)  
+    For more information on Servers refer: [Servers](#server)  
 
 * **Gateway Sender and Receiver**
 
@@ -76,7 +76,7 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
   * Together, they enable real-time data synchronization, disaster recovery, and multi-site availability across geographically distributed environments.
 
-    For more information refer: [Gateway Sender and Receiver](#gateway-senders-and-receivers-gateway-senders-and-receivers)
+    For more information refer: [Gateway Sender and Receiver](#gateway-senders-and-receivers)
 
 * **Management and Monitoring tools**
 
@@ -239,7 +239,7 @@ Below is a breakdown of the recommended subnet sizing and purpose of each requir
 # **Firewall Requirements** 
 
 The table below lists the **minimum firewall rules** needed to support communication between components in the architecture:  
-**Note:** Below firewall requirements are provided assuming that all GemFire Components are on a single network, if your design make use of multiple networks, refer to the next section on  [Port Configuration for Tanzu GemFire](##port-configuration-for-tanzu-gemfire-port-configuration-for-tanzu-gemfire)
+**Note:** Below firewall requirements are provided assuming that all GemFire Components are on a single network, if your design make use of multiple networks, refer to the next section on  [Port Configuration for Tanzu GemFire](#port-configuration-for-tanzu-gemfire)
 
 | Source | Destination | Protocol:Port | Description |
 | ----- | ----- | ----- | ----- |
@@ -368,7 +368,7 @@ All region types in GemFire are based on Partitioned or Replicated modes, with a
 * PARTITION\_PERSISTENT: Partitioned region with disk persistence.  
 * REPLICATE\_PERSISTENT: Replicated region with disk persistence.  
 * LOCAL: Region is confined to one server, not distributed.  
-  For more information on Region refer: [Creating Regions in Tanzu GemFire](##creating-regions-in-tanzu-gemfire-creating-regions-in-tanzu-gemfire)
+  For more information on Region refer: [Creating Regions in Tanzu GemFire](#creating-regions-in-tanzu-gemfire)
 
 ### **Best Practices for Cache Servers**
 
