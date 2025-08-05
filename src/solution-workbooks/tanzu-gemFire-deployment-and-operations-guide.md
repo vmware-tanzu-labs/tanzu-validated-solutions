@@ -4,17 +4,17 @@ This document focuses on the deployment and management of Tanzu GemFire on a sel
 
 ## Audience
 
-This document is intended for a broad range of stakeholders involved in the adoption and management of **Tanzu GemFire**, including:
+This document is intended for a broad range of stakeholders involved in the adoption and management of Tanzu GemFire, including:
 
-* **Executives and IT Decision-Makers** seeking to align in-memory data management strategies with business objectives and digital transformation initiatives.
+* Executives and IT Decision-Makers seeking to align in-memory data management strategies with business objectives and digital transformation initiatives.
 
-* **Infrastructure and Cloud Architects** responsible for designing resilient, scalable, and secure platforms to support distributed caching, real-time analytics, and data replication across environments.
+* Infrastructure and Cloud Architects responsible for designing resilient, scalable, and secure platforms to support distributed caching, real-time analytics, and data replication across environments.
 
-* **Platform Engineering and DevOps Teams** tasked with deploying, operating, and maintaining Tanzu GemFire on Kubernetes and virtualized infrastructure.
+* Platform Engineering and DevOps Teams tasked with deploying, operating, and maintaining Tanzu GemFire on Kubernetes and virtualized infrastructure.
 
-* **Application Owners and Developers** focused on leveraging in-memory data grids to enhance application speed, fault tolerance, and horizontal scalability.
+* Application Owners and Developers focused on leveraging in-memory data grids to enhance application speed, fault tolerance, and horizontal scalability.
 
-* **Enterprise Modernization Teams** engaged in transforming legacy architectures by introducing low-latency, high-availability data layers to support modern, cloud-native workloads.
+* Enterprise Modernization Teams engaged in transforming legacy architectures by introducing low-latency, high-availability data layers to support modern, cloud-native workloads.
 
 This document also supports individuals driving strategic efforts to improve data availability, performance and operational efficiency across hybrid and multi-site deployments.
 
@@ -29,7 +29,7 @@ Below is the validated Bill of Materials (BoM) that can be used to install Tanzu
 | NSX Advanced Load balancer | 22.1.5 |
 | GemFire | 10.1.3 |
 
-## Introduction to Tanzu GemFire**
+## Introduction to Tanzu GemFire
 
 VMware GemFire is a high-performance in-memory data grid that enables applications to access and process large amounts of data with ultra-low latency. Designed for real-time transactional and analytical workloads, it ensures fast data access, fault tolerance and scalability across distributed environments. By keeping data in memory instead of relying on traditional disk storage, GemFire significantly speeds up processing times, making it ideal for industries like finance, e-commerce, where real-time insights and rapid decision-making are crucial.
 
@@ -45,14 +45,14 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
 **Note**: In GemFire, a member refers to any process locator, server, or client that participates in the distributed system. Members collaborate to manage data, distribute load, and maintain cluster state through coordinated communication.
 
-* **Locators**
+* Locators**
 
   * Locators help with member discovery and load balancing within a Tanzu GemFire cluster.
 
   * Clients connect to a list of locators, which dynamically maintain a list of active servers for efficient request routing.
     For more information on Locators refer: [Locators](#locators)
 
-* **Servers**
+* Servers**
 
   * Store and manage data, execute queries, and handle transactions.
 
@@ -62,7 +62,7 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
     For more information on Servers refer: [Servers](#server)
 
-* **Gateway Sender and Receiver**
+* Gateway Sender and Receiver**
 
   * Enable cross-cluster data replication in Tanzu GemFire WAN deployments.
 
@@ -74,11 +74,11 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
     For more information refer: [Gateway Sender and Receiver](#gateway-senders-and-receivers)
 
-* **Management and Monitoring tools**
+* Management and Monitoring tools**
 
   * Tanzu GemFire provides several tools for administration and monitoring:
 
-    * **gfsh (GemFire Shell)**
+    * gfsh (GemFire Shell)**
 
       * Command-line tool for managing Tanzu GemFire applications.
 
@@ -86,19 +86,19 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
       * Can execute commands from within applications.
 
-    * **Tanzu GemFire Pulse**
+    * Tanzu GemFire Pulse**
 
       * Web-based UI for monitoring deployments.
 
       * Provides an integrated view of all cluster members.
         **Note**: Tanzu GemFire 10.1 deprecates Pulse in favor of the VMware Tanzu GemFire Management Console, which will replace it in a future release.
 
-    * **Pulse Data Browser**
+    * Pulse Data Browser**
 
       * A visual tool for executing OQL queries on Tanzu GemFire data.
         **Note:** In Tanzu GemFire 10.1, Pulse is deprecated and has been integrated into the VMware Tanzu GemFire Management Console. Pulse is scheduled to be removed in a future release.
 
-  * **Tanzu GemFire Management Console**
+  * Tanzu GemFire Management Console**
 
     * Gain full visibility and control over multiple clusters through a unified UI. Easily monitor cluster health, visualize topology, configure regions, and manage disk stores for streamlined operations.
 
@@ -108,31 +108,31 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 
 ### Key Features of Tanzu GemFire**
 
-* **High Read-and-Write Throughput**: Tanzu GemFire supports high throughput with fast data access, concurrent memory structures and optimized distribution. Data can be replicated or partitioned across systems to improve read and write speeds. This setup boosts overall throughput, with limits only dependent on network capacity.
+* High Read-and-Write Throughput: Tanzu GemFire supports high throughput with fast data access, concurrent memory structures and optimized distribution. Data can be replicated or partitioned across systems to improve read and write speeds. This setup boosts overall throughput, with limits only dependent on network capacity.
 
-* **Low and Predictable Latency:**: With a streamlined caching layer, Tanzu GemFire minimizes delays by reducing context switches between threads. Data is efficiently distributed, and subscription management ensures better CPU and bandwidth usage, resulting in faster response times and lower latency.
+* Low and Predictable Latency:: With a streamlined caching layer, Tanzu GemFire minimizes delays by reducing context switches between threads. Data is efficiently distributed, and subscription management ensures better CPU and bandwidth usage, resulting in faster response times and lower latency.
 
-* **High Scalability**: Tanzu GemFire can scale easily by distributing data across multiple servers, ensuring balanced load and consistent performance. As demand grows, the system can dynamically add servers, manage data copies, and handle bursts of traffic without sacrificing response time.
+* High Scalability: Tanzu GemFire can scale easily by distributing data across multiple servers, ensuring balanced load and consistent performance. As demand grows, the system can dynamically add servers, manage data copies, and handle bursts of traffic without sacrificing response time.
 
-* **Continuous Availability**: Tanzu GemFire ensures high availability with data replication and failover mechanisms. Data can be saved on disk synchronously or asynchronously, and if a server fails, another takes over to ensure continuous service without data loss or interruptions.
+* Continuous Availability: Tanzu GemFire ensures high availability with data replication and failover mechanisms. Data can be saved on disk synchronously or asynchronously, and if a server fails, another takes over to ensure continuous service without data loss or interruptions.
 
-* **Reliable Event Notifications**: Tanzu GemFire provides a reliable publish/subscribe system that ensures events are delivered with the related data to subscribers. This eliminates the need for separate database access, offering faster, more efficient event processing.
+* Reliable Event Notifications: Tanzu GemFire provides a reliable publish/subscribe system that ensures events are delivered with the related data to subscribers. This eliminates the need for separate database access, offering faster, more efficient event processing.
 
-* **Parallelized Application Behavior on Data Stores**: You can execute business logic across multiple system members, improving efficiency by processing data where it is stored. This reduces network traffic and speeds up calculations, making operations faster, especially for data-heavy tasks.
+* Parallelized Application Behavior on Data Stores: You can execute business logic across multiple system members, improving efficiency by processing data where it is stored. This reduces network traffic and speeds up calculations, making operations faster, especially for data-heavy tasks.
 
-* **Shared-Nothing Disk Persistence**: Each Tanzu GemFire member manages its own data storage, ensuring that disk or cache failures in one member don’t affect others. This “shared nothing” approach increases performance and reliability by isolating disk management.
+* Shared-Nothing Disk Persistence: Each Tanzu GemFire member manages its own data storage, ensuring that disk or cache failures in one member don’t affect others. This “shared nothing” approach increases performance and reliability by isolating disk management.
 
-* **Reduced Cost of Ownership**: With tiered caching, Tanzu GemFire reduces costs by using local memory caches and minimizing the need for frequent database access. This lowers overall transaction costs and improves efficiency by avoiding costly database operations.
+* Reduced Cost of Ownership: With tiered caching, Tanzu GemFire reduces costs by using local memory caches and minimizing the need for frequent database access. This lowers overall transaction costs and improves efficiency by avoiding costly database operations.
 
-* **Single-Hop Capability for Client/Server**: Tanzu GemFire allows clients to directly access the server holding their data, avoiding multiple hops. This improves performance by making data access quicker and more efficient.
+* Single-Hop Capability for Client/Server: Tanzu GemFire allows clients to directly access the server holding their data, avoiding multiple hops. This improves performance by making data access quicker and more efficient.
 
-* **Client/Server Security**: Each user in a client application is given access to a specific subset of data, enhancing security and control. Users are authenticated with their own credentials, ensuring data privacy and proper access levels across the system.
+* Client/Server Security: Each user in a client application is given access to a specific subset of data, enhancing security and control. Users are authenticated with their own credentials, ensuring data privacy and proper access levels across the system.
 
-* **Multisite Data Distribution**: Tanzu GemFire supports data distribution across geographically dispersed sites. Using gateway sender configurations, the system ensures reliable communication between data centers, allowing scalability without sacrificing performance or data consistency.
+* Multisite Data Distribution: Tanzu GemFire supports data distribution across geographically dispersed sites. Using gateway sender configurations, the system ensures reliable communication between data centers, allowing scalability without sacrificing performance or data consistency.
 
-* **Continuous Querying**: Tanzu GemFire allows complex queries to run continuously, enabling real-time data updates for applications. This is achieved through Object Query Language, which simplifies querying for dynamic, real-time data processing.
+* Continuous Querying: Tanzu GemFire allows complex queries to run continuously, enabling real-time data updates for applications. This is achieved through Object Query Language, which simplifies querying for dynamic, real-time data processing.
 
-* **Heterogeneous Data Sharing**: Applications written in different languages (C\#, C++, Java) can share business objects seamlessly without needing complex transformation layers. Changes in one application automatically trigger updates in others, facilitating smooth integration between different platforms.
+* Heterogeneous Data Sharing: Applications written in different languages (C\#, C++, Java) can share business objects seamlessly without needing complex transformation layers. Changes in one application automatically trigger updates in others, facilitating smooth integration between different platforms.
 
 ### Supported Platforms for Tanzu GemFire
 
@@ -168,49 +168,49 @@ The diagram above illustrates a Tanzu GemFire deployment on vSphere with WAN rep
 
 **Key Points:**
 
-* **vSphere Clusters:**
+* vSphere Clusters:
 
   * This setup consists of two independent vSphere clusters, each representing a distinct region (Site 01 and Site 02).
 
   * This design ensures fault isolation, allowing workloads to remain resilient and recoverable across Availability Zones (AZs).
 
-* **Network Configuration:**
+* Network Configuration:
 
   * Each vSphere cluster is connected to a dedicated vSphere Distributed Switch (vDS) to manage network traffic within that Region.
 
   * The VIP network must be stretched across Availability Zones (AZs) if the GemFire deployment spans multiple AZs within the same region. However, extending the VIP network across regions is not required.
 
-* **Storage Considerations:**
+* Storage Considerations:
 
   * Each cluster has its own vSphere Datastore (Block/NFS) to store workload and infrastructure data.
 
   * Storage is not stretched between zones, ensuring independence and reducing cross-site dependencies.
 
-* **Workload Management:**
+* Workload Management:
 
   * The workload domains manage both Tanzu GemFire clusters and NSX ALB Service Engines (SEs).
 
   * By leveraging separate Clusters, workloads benefit from isolation, scalability and simplified management.
 
-* **Workloads and Load Balancing:**
+* Workloads and Load Balancing:
 
   * The workloads include Tanzu GemFire VMs and NSX Advanced Load Balancer (AVI SEs) to handle traffic distribution.
 
   * Each region deploys its own NSX Advanced Load Balancer instance to provide L4/L7 load balancing for workloads.
 
-* **Site-Level Deployment Details**
-  * **Site 01 (Primary \- AZ01)**
+* Site-Level Deployment Details**
+  * Site 01 (Primary \- AZ01)**
     * Two Locator VMs for peer discovery and cluster coordination
     * Two Cache Server VMs that host data regions and serve client requests
     * Gateway Sender/Receiver component to transmit region events to Site 02
     * Managed by vCenter Server-01, with compute resources provisioned via ESXi transport nodes in a dedicated Workload Cluster
 
-  * **Site 02 (Standby \- AZ02)**
+  * Site 02 (Standby \- AZ02)**
     * One Locator VM and Two Cache Server VMs, mirroring the primary site's configuration
     * Gateway Receiver/Sender component to receive WAN updates and optionally support reverse replication
     * Managed independently by vCenter Server-02, with its own Workload Cluster (AZ02)
 
-* **WAN Replication and High Availability**
+* WAN Replication and High Availability**
   * Gateway Sender in Site 01 transmits region events to the Gateway Receiver in Site 02\.
   * This supports Active-Standby replication, ensuring that critical data is mirrored across regions for disaster recovery.
   * Site 02 remains on standby and can quickly become active if Site 01 experiences downtime.
@@ -229,12 +229,12 @@ Below is a breakdown of the recommended subnet sizing and purpose of each requir
 | Network | Minimum/ Recommended Subnet Requirement | Description |
 | :---- | :---- | :---- |
 | GemFire Network | /24 | For the purpose of this document, all Tanzu GemFire components are deployed within the same network. However, for enhanced security and improved network isolation, it is recommended to consider placing Locators and Cache Servers on separate networks. Furthermore, depending on the use case, server groups participating in a data region can be distributed across multiple networks or port groups to support segmentation, scalability, or tenant-level isolation. |
-| NSX ALB Management Network | /27 | Hosts NSX ALB controllers and the management interfaces of Service Engines (SEs). **Recommended:** One management network per region. **Note:**  If the management domain is not stretched and a dedicated management domain is used per site, two separate networks must be configured, one at each site. This document does not cover scenarios with a stretched management domain in a multi-site environment. |
-| VIP Network  | /28 | Used to host L4 Virtual Services (e.g., Locators, Gateway Senders) for GemFire WAN replication. **Recommended:** One network per region for redundancy. |
+| NSX ALB Management Network | /27 | Hosts NSX ALB controllers and the management interfaces of Service Engines (SEs). Recommended: One management network per region. Note:  If the management domain is not stretched and a dedicated management domain is used per site, two separate networks must be configured, one at each site. This document does not cover scenarios with a stretched management domain in a multi-site environment. |
+| VIP Network  | /28 | Used to host L4 Virtual Services (e.g., Locators, Gateway Senders) for GemFire WAN replication. Recommended: One network per region for redundancy. |
 
 ## Firewall Requirements**
 
-The table below lists the **minimum firewall rules** needed to support communication between components in the architecture:
+The table below lists the minimum firewall rules needed to support communication between components in the architecture:
 **Note:** Below firewall requirements are provided assuming that all GemFire Components are on a single network, if your design make use of multiple networks, refer to the next section on  [Port Configuration for Tanzu GemFire](#port-configuration-for-tanzu-gemfire)
 
 | Source | Destination | Protocol:Port | Description |
@@ -335,11 +335,11 @@ In a highly available partitioned region, each member (server) holds a mix of pr
 **Read and Write Behavior in HA Regions**
 GemFire handles reads and writes differently in partitioned regions with redundancy:
 
-* **Read Operations:** GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
+* Read Operations: GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
   For example, in the figure below, M1 is reading keys A, C, and D. It retrieves A from its local cache, while C and D are fetched from other members that hold those keys, selected at random.
   ![HA-PR](img/gemfire-images/image4.png)
 
-* **Write Operations (put/create):** Write requests are directed to the primary copy of the key. The data is then synchronously replicated to all designated secondary copies. Additionally, events are delivered to clients according to their configured subscription attributes.
+* Write Operations (put/create): Write requests are directed to the primary copy of the key. The data is then synchronously replicated to all designated secondary copies. Additionally, events are delivered to clients according to their configured subscription attributes.
 
 
 This approach enables high availability and strong consistency without sacrificing performance.
@@ -409,7 +409,7 @@ High availability is built into GemFire’s WAN architecture. For serial gateway
 
 A Gateway Receiver in Tanzu GemFire is a server-side component that listens for incoming region events from remote clusters and applies them to local regions. Each member can host one receiver, and having multiple receivers across a cluster enables load balancing and high availability. Senders connect automatically to any available receiver without explicit bindings, and connections can be rebalanced using the rebalance gateway-sender command or the GatewaySender.rebalance() API. For successful replication, both clusters must have matching region definitions. If a region is missing on the receiving side, incoming events will fail. Gateway Receivers play a vital role in completing the WAN replication flow by ensuring seamless and distributed data ingestion across sites.
 
-##  **​Cluster Sizing Considerations for Tanzu GemFire**
+##  ​Cluster Sizing Considerations for Tanzu GemFire**
 
 Sizing a Tanzu GemFire deployment involves both calculation and practical testing. While estimates can be made, experimentation is necessary to determine accurate values for key sizing parameters that work well in real-world scenarios. This process requires testing with representative data and workloads, starting with a small scale to understand how the system behaves. Testing is essential because memory overhead can vary significantly depending on the data and workload, making it difficult to calculate precisely. The overhead is influenced by many factors, including the Java runtime environment (JVM) and its memory management system.
 
@@ -421,15 +421,15 @@ Memory is the primary resource for storing data in Tanzu GemFire and should be t
 
 To size a GemFire cluster effectively, follow these steps:
 
-1. **Domain Object Sizing**: Estimate the size of your domain objects, then calculate total memory requirements based on the number of entries.
+1. Domain Object Sizing: Estimate the size of your domain objects, then calculate total memory requirements based on the number of entries.
 
-2. **Estimating Total Memory and System Requirements**: Use tools like the [sizing spreadsheet](https://techdocs.broadcom.com/content/dam/broadcom/techdocs/us/en/assets/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/attachments-system_sizing_worksheet.xlsx) to estimate memory needs and system resources, accounting for GemFire region overhead. This does not account for other overhead, but provides a starting point.
+2. Estimating Total Memory and System Requirements: Use tools like the [sizing spreadsheet](https://techdocs.broadcom.com/content/dam/broadcom/techdocs/us/en/assets/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/attachments-system_sizing_worksheet.xlsx) to estimate memory needs and system resources, accounting for GemFire region overhead. This does not account for other overhead, but provides a starting point.
 
-3. **Vertical Sizing**: Begin by configuring a three-node cluster and test the "building block" for a single node. This helps determine the appropriate node size and workload configuration.
+3. Vertical Sizing: Begin by configuring a three-node cluster and test the "building block" for a single node. This helps determine the appropriate node size and workload configuration.
 
-4. **Scale-Out Validation**: Test and adjust the configuration to ensure the system scales linearly and performs well as you expand.
+4. Scale-Out Validation: Test and adjust the configuration to ensure the system scales linearly and performs well as you expand.
 
-5. **Projection to Full Scale**: Use the results from scale-out testing to finalize the configuration for your desired capacity and service-level agreement (SLA).
+5. Projection to Full Scale: Use the results from scale-out testing to finalize the configuration for your desired capacity and service-level agreement (SLA).
 
 
 
@@ -437,25 +437,25 @@ To size a GemFire cluster effectively, follow these steps:
 
 Here are some general recommendations to guide your capacity planning:
 
-* **Data Node Heap Size**:
+* Data Node Heap Size:
 
   * Up to 32GB: Smaller data volumes (a few hundred GB) with low latency requirements.
 
   * 64GB+: Larger data volumes (500GB or more).
 
-* **CPU Cores per Data Node**:
+* CPU Cores per Data Node:
 
   * 2 to 4 cores: Development and smaller heaps.
 
   * 6 to 8 cores: Production, performance testing, and larger heaps.
 
-* **Network Bandwidth**:
+* Network Bandwidth:
 
   * 1GbE: Development.
 
   * High bandwidth (10GbE or more): Production and performance testing.
 
-* **Disk Storage**:
+* Disk Storage:
 
   * DAS or SAN: Recommended for all environments.
 
@@ -465,11 +465,11 @@ More information on Sizing refer: [https://techdocs.broadcom.com/us/en/vmware-ta
 
 ## Management and Monitoring Tools
 
-Tanzu GemFire provides powerful tools for managing and monitoring your distributed data grid environment. The two primary tools are the **GFSH command-line interface** and the **Tanzu GemFire Management Console (GMC)**.
+Tanzu GemFire provides powerful tools for managing and monitoring your distributed data grid environment. The two primary tools are the GFSH command-line interface and the Tanzu GemFire Management Console (GMC)**.
 
 ### GFSH Command-Line Tool
 
-The **GemFire Shell (gfsh)** is the recommended command-line interface for configuring, managing and monitoring the Tanzu GemFire cluster. It allows you to:
+The GemFire Shell (gfsh) is the recommended command-line interface for configuring, managing and monitoring the Tanzu GemFire cluster. It allows you to:
 
 * Start and stop locators and cache servers
 * Create, modify, or destroy regions
@@ -489,7 +489,7 @@ More information on GFSH refer:
 
 ### Tanzu GemFire Management Console
 
-The **Tanzu GemFire Management Console (GMC)** is a browser-based interface that simplifies day-to-day operations and provides visual insights into your GemFire clusters. With GMC, you can:
+The Tanzu GemFire Management Console (GMC) is a browser-based interface that simplifies day-to-day operations and provides visual insights into your GemFire clusters. With GMC, you can:
 
 * Monitor multiple clusters in a single UI
 * View and manage regions and disk stores
@@ -503,13 +503,13 @@ The console is ideal for both routine operations and troubleshooting, providing 
 
 More information on GMC refer: [https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-GemFire-management-console/1-3/gf-mc/index.html](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-3/gf-mc/index.html)
 
-##  **References
+##  References
 
-* **About Tanzu GemFire:** [Tanzu GemFire Overview – Broadcom Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/getting_started-gemfire_overview.html)
-* **Installing GemFire on Linux (TAR File):**  [Install GemFire Using a Compressed TAR – Broadcom Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/getting_started-installation-install_standalone.html)
-* **Installing the GemFire Management Console (GMC):** [GMC Installation Guide – Broadcom Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-3/gf-mc/install.html)
-* **Installing Java (Oracle JDK Manual Download):** [Java Manual Installation – Oracle](https://www.java.com/en/download/help/windows_manual_download.html)
-* **Installing Apache Maven:** [Maven Installation Guide – Apache](https://maven.apache.org/install.html)
+* About Tanzu GemFire: [Tanzu GemFire Overview – Broadcom Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/getting_started-gemfire_overview.html)
+* Installing GemFire on Linux (TAR File):  [Install GemFire Using a Compressed TAR – Broadcom Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/getting_started-installation-install_standalone.html)
+* Installing the GemFire Management Console (GMC): [GMC Installation Guide – Broadcom Docs](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire-management-console/1-3/gf-mc/install.html)
+* Installing Java (Oracle JDK Manual Download): [Java Manual Installation – Oracle](https://www.java.com/en/download/help/windows_manual_download.html)
+* Installing Apache Maven: [Maven Installation Guide – Apache](https://maven.apache.org/install.html)
 
 ## Appendix
 
@@ -533,8 +533,8 @@ The locator creates a locator.dat file in its directory, which stores membership
 
 Note:
 
-* **Only one locator** can run per process instance.
-* The locator must be **started before any servers** to allow them to discover and join the system.
+* Only one locator can run per process instance.
+* The locator must be started before any servers to allow them to discover and join the system.
 
 #### Locator Configuration and Log Files
 
@@ -550,7 +550,7 @@ Always retain locator.dat if you plan to restart a locator in the same cluster. 
 
 #### Restarting Locators
 
-If you restart a locator, make sure the same working directory is used to maintain the cluster state via the persisted locator.dat file. In production, always run **multiple locators** for redundancy. If one goes down, others can still coordinate cluster discovery.
+If you restart a locator, make sure the same working directory is used to maintain the cluster state via the persisted locator.dat file. In production, always run multiple locators for redundancy. If one goes down, others can still coordinate cluster discovery.
 
 #### Managing Tanzu GemFire Locators
 
@@ -741,7 +741,7 @@ This creates a receiver on server2, ready to accept events from a remote sender.
 | \--maximum-time-between-pings | Ping timeout (default: 60 seconds). |
 | \--gateway-transport-filter | Optional custom transport filter class. |
 
- **Example**:
+ Example:
 
 ```shell
 gfsh> create gateway-receiver --members=server2 --start-port=50510 --end-port=50520
@@ -772,7 +772,7 @@ There’s no separate stop command for receivers since they are tightly coupled 
 
 ### Creating Regions in Tanzu GemFire
 
-In Tanzu GemFire, a **region** is a fundamental data container that stores key/value pairs and supports distributed caching, querying, and data replication across cluster members. Regions can be configured for different use cases, including partitioned caching for scalability or replicated caching for redundancy.
+In Tanzu GemFire, a region is a fundamental data container that stores key/value pairs and supports distributed caching, querying, and data replication across cluster members. Regions can be configured for different use cases, including partitioned caching for scalability or replicated caching for redundancy.
 
 #### Create a Region with gfsh
 
@@ -796,7 +796,7 @@ This command:
 | REPLICATE | Full copy of data on each server; good for small datasets. |
 | REPLICATE\_PERSISTENT | Replicated with disk persistence for durability. |
 
-**Key Options:**
+**Key Options:
 
 | Option | Purpose |
 | ----- | ----- |
