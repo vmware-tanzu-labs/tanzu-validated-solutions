@@ -4,7 +4,7 @@ VMware GemFire is a high-performance in-memory data grid that enables applicatio
 
 One of the most powerful features of VMware GemFire is its ability to replicate and distribute data across multiple nodes, ensuring high availability and resilience. It supports multi-region replication (WAN) and primary-standby setups, allowing businesses to maintain synchronized data across different locations. This ensures business continuity and disaster recovery, even in the event of network failures. GemFire’s partitioned regions allow large datasets to be efficiently spread across multiple servers, making horizontal scaling seamless and efficient.
 
-  - [Key Components and Features of Tanzu GemFire]()
+  - [Key Components and Features of Tanzu GemFire](./components-features.md)
   - [High-Level Architecture of a Tanzu GemFire Deployment](./architecture.md)
   - [Locators and Servers](./locators.md)
   - [Regions](./regions.md)
