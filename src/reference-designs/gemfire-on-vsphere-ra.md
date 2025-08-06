@@ -32,16 +32,7 @@ Below is the validated Bill of Materials (BoM) that can be used to install Tanzu
 ## In this document
 
 - [Introduction to Tanzu GemFire](./gemfire/intro.md)
-  - [High-Level Architecture of a Tanzu GemFire Deployment](./gemfire/architecture.md)
-  - [Locators and Servers](./gemfire/locators.md)
-  - [Regions](./gemfire/regions.md)
-  - [Gateway Senders and Receivers](./gemfire/gateway.md)
-  - [​Cluster Sizing Considerations for Tanzu GemFire](./gemfire/sizing.md)
-  - [Management and Monitoring](./gemfire/manage-monitor.md)
-- [Text](link.md)
-  - [Run a Tanzu GemFire Locator](./gemfire/run-locator.md)
-  - [Run a Tanzu GemFire Server](./gemfire/run-server.md)
-  - [Create Regions in Tanzu GemFire](./gemfire/create-regions.md)
+- [Perform Tanzu GemFire Operations](./gemfire/operations.md)
 
 ##  General References
 
