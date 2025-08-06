@@ -15,4 +15,4 @@ This is the table of contents for the **Tanzu Data** *Reference Architecture* do
     - [Perform Tanzu GemFire Operations](./reference-designs/gemfire/operations.md)
       - [Run a Tanzu GemFire Locator](./reference-designs/gemfire/run-locator.md)
       - [Run a Tanzu GemFire Server](./reference-designs/gemfire/run-server.md)
-      - [Create Regions in Tanzu GemFire](./gemfire/create-regions.md)
+      - [Create Regions in Tanzu GemFire](./reference-designs/gemfire/create-regions.md)
