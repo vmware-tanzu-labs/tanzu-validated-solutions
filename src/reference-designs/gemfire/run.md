@@ -1,4 +1,4 @@
-# Perform Tanzu GemFire Operations
+# Run Tanzu GemFire on vSphere
 
 - [Run a Tanzu GemFire Locator](./run-locator.md)
 - [Run a Tanzu GemFire Server](./run-server.md)

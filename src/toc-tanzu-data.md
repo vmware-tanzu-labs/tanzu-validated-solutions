@@ -12,7 +12,7 @@ This is the table of contents for the **Tanzu Data** *Reference Architecture* do
          - [Gateway Senders and Receivers](./reference-designs/gemfire/gateway.md)
          - [​Cluster Sizing Considerations for Tanzu GemFire](./reference-designs/gemfire/sizing.md)
          - [Management and Monitoring](./reference-designs/gemfire/manage-monitor.md)
-      - [Perform Tanzu GemFire Operations](./reference-designs/gemfire/operations.md)
+      - [Run Tanzu GemFire on vSphere](./reference-designs/gemfire/run.md)
          - [Run a Tanzu GemFire Locator](./reference-designs/gemfire/run-locator.md)
          - [Run a Tanzu GemFire Server](./reference-designs/gemfire/run-server.md)
          - [Create Regions in Tanzu GemFire](./reference-designs/gemfire/create-regions.md)
