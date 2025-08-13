@@ -2,25 +2,22 @@
 
 The *Deploy and Manage VMware Tanzu GemFire on vSphere* reference architecture describes the deployment and management of VMware Tanzu GemFire on self-managed, multi-region vSphere infrastructure. It leverages vSphere Distributed Switch (vDS) for network virtualization and NSX Advanced Load Balancer (NSX ALB) for traffic distribution and high availability. The guide provides architectural best practices, deployment strategies and operational recommendations to support a scalable, high-performance and fault-tolerant GemFire deployment within an enterprise-grade vSphere environment.
 
-## Audience
+## Intended Audience
 
-This document is intended for a broad range of stakeholders involved in the adoption and management of Tanzu GemFire, including:
+This document is intended for the following stakeholders involved in the adoption and management of Tanzu GemFire, including:
 
-* Executives and IT Decision-Makers seeking to align in-memory data management strategies with business objectives and digital transformation initiatives.
-
-* Infrastructure and Cloud Architects responsible for designing resilient, scalable, and secure platforms to support distributed caching, real-time analytics, and data replication across environments.
-
-* Platform Engineering and DevOps Teams tasked with deploying, operating, and maintaining Tanzu GemFire on Kubernetes and virtualized infrastructure.
-
-* Application Owners and Developers focused on leveraging in-memory data grids to enhance application speed, fault tolerance, and horizontal scalability.
-
-* Enterprise Modernization Teams engaged in transforming legacy architectures by introducing low-latency, high-availability data layers to support modern, cloud-native workloads.
-
-This document also supports individuals driving strategic efforts to improve data availability, performance and operational efficiency across hybrid and multi-site deployments.
+|Role|What do they need to do?|
+|---|---|
+|Executives and IT decision-makers|Align in-memory data management strategies with business objectives and digital transformation initiatives.|
+|Infrastructure and cloud architects|Design resilient, scalable, and secure platforms to support distributed caching, real-time analytics, and data replication across environments.|
+|Platform engineers and DevOps teams|Deploy, operate, and maintain Tanzu GemFire on Kubernetes and virtualized infrastructure.|
+|Application owners and developers|Use in-memory data grids to enhance application speed, fault tolerance, and horizontal scalability.|
+|Enterprise modernization teams|Transform legacy architectures by implementing low-latency, high-availability data layers to support modern, cloud-native workloads.|
+|Any role|Drive strategic efforts to improve data availability, performance and operational efficiency across hybrid and multi-site deployments.|
 
 ## Bill Of Materials
 
-Below is the validated Bill of Materials (BoM) that can be used to install Tanzu GemFire on your vSphere environment today:
+The procedures in this documented were validated by using the following components, that are available today to install Tanzu GemFire in a vSphere environment:
 
 | Software Components  | Version  |
 | :---- | :---- |
