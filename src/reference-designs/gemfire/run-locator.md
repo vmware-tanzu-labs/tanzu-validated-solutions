@@ -1,6 +1,8 @@
 # Running a Tanzu GemFire Locator
 
-To start a Tanzu GemFire cluster, the first component you bring up is the locator. It acts as the cluster coordinator, helping all other members find each other and join the system. Run a locator as a standalone process, typically using the GemFire Shell (gfsh) and configure it to support both peer discovery and client load balancing.
+To start a Tanzu GemFire cluster, the first component you bring up is the locator. It acts as the cluster coordinator, helping members find each other and join the system. Run a locator as a standalone process, typically using the GemFire Shell (gfsh) and configure it to support both peer discovery and client load balancing.
+
+Tanzu GemFire Locators can be lightweight, but they are mission-critical for keeping your cluster running, scalable, and highly available. From local server discovery to global WAN replication, the locator is the backbone of your system’s coordination.
 
 ## Start a locator using gfsh
 
@@ -10,34 +12,34 @@ gfsh> start locator --name=locator1 --port=10334 --dir=locator1
 
 This command:
 
-* Starts the locator with the name locator1
+* Starts the locator with the name `locator1`
 * Listens on port 10334 (default)
-* Uses the specified working directory locator1
+* Uses the specified working directory `locator1`
 
-The locator creates a locator.dat file in its directory, which stores membership and configuration data. This file is important for rejoining or recovering the cluster if the locator is restarted.
+The locator creates a `locator.dat` file in its directory, which stores membership and configuration data. This file is important for rejoining or recovering the cluster if the locator is restarted.
 
-Note:
+>**Note**
 
-* Only one locator can run per process instance.
-* The locator must be started before any servers to allow them to discover and join the system.
+>* Only one locator can run per process instance.
+>* The locator must be started before any servers to allow them to discover and join the system.
 
 ## Locator Configuration and Log Files
 
-When you start a locator using gfsh, a working directory is specified using the \--dir option. This directory holds critical files:
+When you start a locator using gfsh, specify a working directory using the `--dir` option. This directory holds critical files:
 
 | File | Description |
 | ----- | ----- |
-| locator.log | Main log file for the locator process. All startup info, warnings, and errors are logged here. |
-| locator.dat | Stores cluster membership information and state. Used for reconnection after restarts. |
-| statArchive.gfs | Contains performance statistics, useful for monitoring and analysis. |
+| `locator.log` | Main log file for the locator process. All startup info, warnings, and errors are logged here. |
+| `locator.dat` | Stores cluster membership information and state. Used for reconnection after restarts. |
+| `statArchive.gfs` | Contains performance statistics, useful for monitoring and analysis. |
 
-Always retain locator.dat if you plan to restart a locator in the same cluster. Deleting it may cause cluster inconsistency.
+Always retain `locator.dat` if you plan to restart a locator in the same cluster. Deleting it can cause cluster inconsistency.
 
 ## Restarting Locators
 
-If you restart a locator, make sure the same working directory is used to maintain the cluster state via the persisted locator.dat file. In production, always run multiple locators for redundancy. If one goes down, others can still coordinate cluster discovery.
+If you restart a locator, make sure the same working directory is used to maintain the cluster state via the persisted `locator.dat` file. In production, always run multiple locators for redundancy. This provides redundancy, so if one goes down, others can still coordinate discovery.
 
-## Managing Tanzu GemFire Locators
+## Check Locator Status
 
 Check the status of a locator using the status locator command:
 
@@ -45,7 +47,7 @@ Check the status of a locator using the status locator command:
 gfsh> status locator --dir=locator1
 ```
 
-This will tell you if the locator is currently running, along with its process ID and other metadata.
+This command shows whether the locator is running, along with its process ID and other metadata.
 
 It's helpful for:
 
@@ -55,7 +57,7 @@ It's helpful for:
 
 ## Stopping the Locator
 
-To shut down a locator gracefully, use the stop locator command:
+To shut down a locator gracefully, use the `stop locator` command:
 
 ```shell
 gfsh> stop locator --name=locator1
@@ -67,7 +69,7 @@ If needed, you can also stop it by pointing to its directory:
 gfsh> stop locator --dir=locator1
 ```
 
-Avoid killing the locator process directly that may prevent it from cleaning up internal metadata and files like locator.dat.
+Avoid killing the locator process directly, as this can prevent cleanup of internal metadata and files like `locator.dat`.
 
 ## Locators in Multi-Site (WAN) Deployments
 
@@ -85,13 +87,13 @@ This allows:
 * Automatic failover and recovery of gateway connections
 * Scalability across geographically distributed clusters
 
-**Best Practice**: Run at least two locators per site, and ensure proper network connectivity between remote locators for resilience.
+## Best Practice
 
-Tanzu GemFire Locators may be lightweight, but they are mission-critical for keeping your cluster running, scalable, and highly available. From local server discovery to global WAN replication, the locator is the backbone of your system’s coordination.
+Run at least two locators per site, and ensure proper network connectivity between remote locators for resilience.
 
 Be sure to:
 
-* Maintain clean log directories
-* Monitor locator status regularly
-* Stop and restart them gracefully
-* Configure remote locators in WAN setups
+* Maintain clean log directories.
+* Monitor locator status regularly.
+* Stop and restart them gracefully.
+* Configure remote locators in WAN setups.
