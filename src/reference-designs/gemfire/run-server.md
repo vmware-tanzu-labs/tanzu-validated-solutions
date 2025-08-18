@@ -2,7 +2,7 @@
 
 After starting the locator, the next step in building your Tanzu GemFire cluster is to bring up one or more servers. A GemFire server is where your application data resides; it hosts regions, responds to client operations and participates in distributed caching.
 
-**Start a Server with gfsh**
+## Start a Server with gfsh
 
 To start a server using the GemFire Shell (gfsh), use the following command:
 
@@ -81,7 +81,8 @@ This command:
 * Points it to remote distributed system ID 2
 * Installs the sender on member server1
 
-**Important**: The configuration for a given \--id must be identical across all servers hosting that gateway sender.
+>**Important**
+>The configuration for a given \--id must be identical across all servers hosting that gateway sender.
 
 **Key Gateway Sender Options**
 
@@ -115,9 +116,11 @@ gfsh> create gateway-receiver --members=server2
 ```
 
 This creates a receiver on server2, ready to accept events from a remote sender.
-**Note:** You can have only one receiver per member and the port is selected from a default or configured range.
 
-**Key Gateway Receiver Options**
+>**Note**
+>You can have only one receiver per member, and the port is selected from a default or configured range.
+
+### Key Gateway Receiver Options
 
 | Parameter | Description |
 | ----- | ----- |
@@ -150,7 +153,7 @@ gfsh> stop server --name=server2
 
 There’s no separate stop command for receivers since they are tightly coupled to the server lifecycle. Gateway senders and receivers are essential for enabling WAN replication between GemFire clusters. They offer flexible configurations to optimize throughput, event batching, ordering, and persistence.
 
-**Best Practices**:
+## Best Practices
 
 * Always use identical configuration across all members hosting a given sender.
 * Ensure sender and receiver buffer sizes match.
