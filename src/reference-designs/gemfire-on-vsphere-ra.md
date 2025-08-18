@@ -23,7 +23,7 @@ The procedures in this document were validated by using the following infrastruc
 | :---- | :---- |
 | vSphere ESXi | 8.0.3 |
 | vCenter | 8.0.3 |
-| NSX Advanced Load balancer | 22.1.5 |
+| NSX Advanced Load Balancer | 22.1.5 |
 | Tanzu GemFire | 10.1.3 |
 | Tanzu GemFire Management Console | 1.3.1 |
 
