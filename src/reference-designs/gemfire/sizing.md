@@ -13,7 +13,7 @@ To size a GemFire cluster effectively, follow these steps:
 1. Calculate Domain Object Size: Estimate the size of your domain objects, then calculate total memory requirements based on the number of entries.
 
 2. Estimate Total Memory and System Requirements: Use tools like the
-[sizing spreadsheet](../../attachments/system_sizing_v1.xlsx) to estimate memory needs and system resources, accounting for GemFire region overhead. This does not account for other overhead, but provides a starting point.[test](../../../attachments/system_sizing_v1.xlsx)
+[sizing spreadsheet](../../attachments/system_sizing_v1.xlsx) to estimate memory needs and system resources, accounting for GemFire region overhead. This does not account for other overhead, but provides a starting point.
 
 3. Perform Vertical Sizing: Configure a three-node cluster and test the "building block" for a single node. This helps determine the appropriate node size and workload configuration.
 
