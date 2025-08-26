@@ -18,14 +18,15 @@ Serial Gateway Senders send region events through a single, ordered queue to a r
 
 ## Parallel Gateway Senders
 
-Parallel Gateway Senders let each server that hosts a partitioned region send its own events to a remote site. Each server uses its own queue, allowing multiple servers to send data at the same time. This setup scales easily and works well for high-speed data use cases where event order across partitions doesn’t need to be preserved. As you add more servers, both storage and replication capacity grow with little extra effort.
+Parallel Gateway Senders allow each server that hosts a partitioned region to send its own events to a remote site using a dedicated queue. This enables concurrent replication, making the setup highly scalable for high-throughput use cases where preserving event order across partitions is not required. As you add more servers, both storage and replication capacity increase with minimal additional configuration.
 
 ![PGR](images/image3.png)
 
 ## High Availability
 
-High availability is built into GemFire’s WAN architecture. For serial gateway senders, only one primary sender is active at a time, while backup instances stand by. If the primary fails, GemFire automatically promotes a secondary without disrupting replication. Parallel senders offer even greater resilience; each server with a primary partition sends events independently. If a server fails, a redundant partition owner takes over seamlessly, maintaining smooth data replication and fault-tolerance.
+High availability is built into the GemFire WAN architecture. With serial gateway senders, only one primary sender is active at a time, while backup instances stand by. If the primary fails, GemFire automatically promotes a secondary without disrupting replication. Parallel senders offer even greater resilience. Each server with a primary partition sends events independently, and if a server fails, a redundant partition owner takes over seamlessly, preserving continuous replication and fault tolerance.
 
 ## Gateway Receiver
 
-A Gateway Receiver in Tanzu GemFire is a server-side component that listens for incoming region events from remote clusters and applies them to local regions. Each member can host one receiver. Multiple receivers across a cluster enable load balancing and high availability. Senders connect automatically to any available receiver without explicit bindings, and connections can be rebalanced using the `rebalance gateway-sender` command or the `GatewaySender.rebalance()` API. For successful replication, both clusters must have matching region definitions. If a region is missing on the receiving side, incoming events will fail. Gateway Receivers play a vital role in completing the WAN replication flow by ensuring seamless and distributed data ingestion across sites.
+A Gateway Receiver in Tanzu GemFire is a server-side component that listens for incoming region events from remote clusters and applies them to local regions. Each member can host one receiver. Multiple receivers across a cluster enable load balancing and high availability. Senders connect automatically to any available receiver without explicit bindings, and connections can be rebalanced using the `rebalance gateway-sender` command or the `GatewaySender.rebalance()` API. For successful replication, both clusters must have matching region definitions. If a region is missing on the receiving side, incoming events will fail. Gateway Receivers play a vital role in completing the WAN replication flow by ensuring seamless  and distributed data ingestion across sites.
+
