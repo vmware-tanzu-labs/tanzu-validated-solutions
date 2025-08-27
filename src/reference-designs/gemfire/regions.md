@@ -9,7 +9,7 @@ A Partitioned Region divides its data across multiple servers in the cluster. Ea
 
 ![PR](images/image5.png)
 
-From the application’s perspective, this partitioned structure is invisible. The region appears as a single logical dataset, accessible in full from any member even if that member stores only part of the data locally. For each server where the region is defined, you can configure how much memory it uses. A server can also host the region with no local data, acting purely as a read/write proxy.
+To application, this partitioned structure is invisible. The region appears as a single logical dataset, accessible in full from any member even if that member stores only part of the data locally. For each server where the region is defined, you can configure how much memory it uses. A server can also host the region with no local data, acting purely as a read/write proxy.
 
 A single cluster can host multiple partitioned regions, and servers can host multiple regions simultaneously. Partitioned and replicated regions can also coexist in the same cluster.
 
@@ -19,13 +19,15 @@ Summary:
 * Can support data redundancy with backup copies.
 * Scales well for large datasets and write-heavy workloads.
 
-Other variations exist (like PARTITION\_PERSISTENT, REPLICATE\_PERSISTENT, LOCAL), but all are based on these two fundamental designs.
+Other variations exist such as PARTITION\_PERSISTENT, REPLICATE\_PERSISTENT, LOCAL), but they are all based on these two fundamental designs.
 
 ## High Availability for Partitioned Regions
 
-In a highly available partitioned region, each member (server) holds a mix of primary and secondary (redundant) data copies to ensure continuous operation even if a member fails. If a server hosting a primary copy goes down, Tanzu GemFire automatically promotes a secondary copy to primary, avoiding service interruption. Although this may temporarily reduce redundancy, no data is lost. The system then works to restore redundancy by copying the data to another available member. However, if too many members fail within a short time, there is still a risk of data loss despite redundancy being enabled.
+In a highly available partitioned region, each member (server) holds a mix of primary and secondary (redundant) data copies to ensure continuous operation even if a member fails. If a server hosting a primary copy fails, Tanzu GemFire automatically promotes a secondary copy to primary, avoiding service interruption. While this temporarily reduce redundancy, no data is lost. The system restores redundancy by copying the data to another available member. However, if too many members fail within a short time, there is still a risk of data loss despite redundancy being enabled.
 
-**Read and Write Behavior in HA Regions**
+
+### Read and Write Behavior in HA Regions
+
 GemFire handles reads and writes differently in partitioned regions with redundancy:
 
 * Read Operations: GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
@@ -65,6 +67,6 @@ All region types in GemFire are based on Partitioned or Replicated modes, with a
 * Use redundant partitioned regions for high availability and scalability.
 * Monitor heap usage and configure eviction policies to prevent memory overuse.
 * Enable JMX metrics and statistics for observability and performance tuning.
-* In production, run servers on dedicated nodes; avoid colocating with locators unless in test or dev environments.
+* In production, run servers on dedicated nodes; avoid co-locating with locators unless in test or dev environments.
 
 A Tanzu GemFire Cache Server is where your data lives and operates. Each server joins as a member, connects via locators, and hosts one or more regions which are the primary interface for your application’s data.
