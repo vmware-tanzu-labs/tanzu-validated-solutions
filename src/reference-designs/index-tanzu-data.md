@@ -7,14 +7,3 @@ The Tanzu Data Reference Architecture documentation includes the following subje
 - [Deploy and Manage Tanzu GemFire on vSphere](./gemfire-on-vsphere-ra.md)
 - More reference architectures will be added, so check back for additions and updates to this document.
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>

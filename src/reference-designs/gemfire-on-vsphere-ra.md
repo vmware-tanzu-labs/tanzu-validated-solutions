@@ -13,7 +13,7 @@ This document is intended for all stakeholders involved in the adoption and mana
 |Platform engineers and DevOps teams|Deploy, operate, and maintain Tanzu GemFire on Kubernetes and virtualized infrastructure.|
 |Application owners and developers|Use in-memory data grids to enhance application speed, fault tolerance, and horizontal scalability.|
 |Enterprise modernization teams|Transform legacy architectures by implementing low-latency, high-availability data layers to support modern, cloud-native workloads.|
-|Multiple personas|Drive strategic efforts to improve data availability, performance and operational efficiency across hybrid and multi-site deployments.|
+|Multiple personas|Drive strategic efforts to improve data availability, performance, and operational efficiency across hybrid and multi-site deployments.|
 
 ## Bill Of Materials
 
