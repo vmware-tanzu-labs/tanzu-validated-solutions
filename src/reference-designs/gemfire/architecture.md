@@ -44,12 +44,12 @@ This section provides a high-level overview of the Tanzu GemFire deployment arch
 
 ### Site-Level Deployment Details
 
-    | Feature                  | Site 01 (Primary – AZ01)                                                                 | Site 02 (Standby – AZ02)                                                       |
-    |---------------------------|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
-    | **Locators**              | Two Locator VMs for peer discovery and cluster coordination                              | One Locator VM                                                                 |
-    | **Cache Servers**         | Two Cache Server VMs that host data regions and serve client requests                    | Two Cache Server VMs, mirroring the primary site’s configuration               |
-    | **Gateway Components**    | Gateway Sender/Receiver to transmit region events to Site 02                         | Gateway Receiver/Sender to receive WAN updates and optionally support reverse replication |
-    | **Management**            | Managed by vCenter Server-01, with compute resources via ESXi transport nodes in a dedicated Workload Cluster | Managed independently by vCenter Server-02, with its own Workload Cluster (AZ02) |
+| Feature                  | Site 01 (Primary – AZ01)                                                                 | Site 02 (Standby – AZ02)                                                       |
+|---------------------------|------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| **Locators**              | Two Locator VMs for peer discovery and cluster coordination                              | One Locator VM                                                                 |
+| **Cache Servers**         | Two Cache Server VMs that host data regions and serve client requests                    | Two Cache Server VMs, mirroring the primary site’s configuration               |
+| **Gateway Components**    | Gateway Sender/Receiver to transmit region events to Site 02                         | Gateway Receiver/Sender to receive WAN updates and optionally support reverse replication |
+| **Management**            | Managed by vCenter Server-01, with compute resources via ESXi transport nodes in a dedicated Workload Cluster | Managed independently by vCenter Server-02, with its own Workload Cluster (AZ02) |
 
 ### WAN Replication and High Availability
 

@@ -1,6 +1,6 @@
 # Run Tanzu GemFire on vSphere
 
-This following topics explain how to deploy and run VMware Tanzu GemFire on a vSphere environment. It covers the essential steps for starting a locator, bringing up one or more servers, and creating regions.
+The following topics explain how to deploy and run VMware Tanzu GemFire on a vSphere environment. It covers the essential steps for starting a locator, bringing up one or more servers, and creating regions.
 
 - [Run a Tanzu GemFire Locator](./run-locator.md)
 - [Run a Tanzu GemFire Server](./run-server.md)

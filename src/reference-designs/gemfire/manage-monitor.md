@@ -15,7 +15,7 @@ The Tanzu GemFire Shell (gfsh) is the recommended command-line interface for con
 * Launch monitoring tools and shut down the cluster
 * Save and manage shared cluster configurations
 
-Run gfsh in its own interactive shell or invoke commands directly from the operating system command line. Use scripting to automate tasks, and connect to remote clusters over HTTP. With shared configuration support, use gfsh to define reusable settings across the cluster. Locators store and synchronize these settings in files such as `cluster.xml` and `cluster.properties`.
+Run gfsh in its own interactive shell or invoke commands directly from the operating system command line. Use scripting to automate tasks and connect to remote clusters over HTTP. With shared configuration support, use gfsh to define reusable settings across the cluster. Locators store and synchronize these settings in files such as `cluster.xml` and `cluster.properties`.
 
 For more information about gfsh, see:
 

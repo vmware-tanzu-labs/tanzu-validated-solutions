@@ -2,7 +2,7 @@
 
 This topic explains how to run a VMware Tanzu GemFire Server, the core component that hosts your application data, manages regions, and participates in distributed caching. It covers starting, configuring, monitoring, and stopping servers, as well as configuring WAN replication using gateway senders and receivers.
 
-After starting the locator, the next step in building your Tanzu GemFire cluster is to bring up one or more servers. A Tanzu GemFire server is where your application data resides; it hosts regions, responds to client operations and participates in distributed caching.
+After starting the locator, the next step in building your Tanzu GemFire cluster is to bring up one or more servers. A Tanzu GemFire server is where your application data resides; it hosts regions, responds to client operations, and participates in distributed caching.
 
 ## Start a Server with gfsh
 
@@ -57,7 +57,7 @@ gfsh> stop server --dir=server1
 
 Gracefully stopping the server ensures that all in-flight operations are completed and internal state is saved cleanly. Avoid killing the process manually unless absolutely necessary. Use stop server to avoid region corruption or loss of queued events in WAN or async setups.
 
-A Tanzu GemFire server is where your application’s data lives. It’s designed for performance, scalability, and reliability but it’s important to manage it correctly.
+A Tanzu GemFire server is where your application’s data lives. It’s designed for performance, scalability, and reliability, but it’s important to manage it correctly.
 
 Be sure to:
 
@@ -100,7 +100,7 @@ This command:
 | \--gateway-event-filter | Optional custom filter class to skip events. |
 | \--group-transaction-events | Ensures all events from a transaction are sent in the same batch. |
 
-These settings allow you to fine-tune how the sender queues, processes and delivers data to the remote site.
+These settings allow you to fine-tune how the sender queues, processes, and delivers data to the remote site.
 
 **Example**:
 

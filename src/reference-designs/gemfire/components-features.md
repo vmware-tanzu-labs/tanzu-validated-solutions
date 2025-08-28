@@ -22,7 +22,7 @@ Tanzu GemFire relies on several key components to manage data, handle client req
   * Locators help with member discovery and load balancing within a Tanzu GemFire cluster.
 
   * Clients connect to locators, which dynamically maintain a list of active servers for efficient request routing.
-    For more information on Locators, see [Locators](#locators).
+    For more information on locators, see [Locators](#locators).
 
 ### Servers
 
@@ -42,9 +42,7 @@ Tanzu GemFire relies on several key components to manage data, handle client req
 
   * They support serial and parallel modes to balance between event ordering and throughput.
 
-  * Together, they enable real-time data synchronization, disaster recovery, and multi-site availability across geographically distributed environments.
-
-    For more information, see [Gateway Sender and Receiver](#gateway-senders-and-receivers)
+  * Together, they enable real-time data synchronization, disaster recovery, and multi-site availability across geographically distributed environments. For more information, see [Gateway Sender and Receiver](#gateway-senders-and-receivers).
 
 ### Management and Monitoring Tools
 

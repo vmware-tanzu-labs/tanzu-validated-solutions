@@ -60,7 +60,6 @@ All region types in Tanzu GemFire are based on Partitioned or Replicated modes, 
 * PARTITION\_PERSISTENT: Partitioned region with disk persistence.
 * REPLICATE\_PERSISTENT: Replicated region with disk persistence.
 * LOCAL: Region is confined to one server, not distributed.
-  For more information on Region refer: [Creating Regions in Tanzu GemFire](#creating-regions-in-tanzu-gemfire)
 
 ## Best Practices for Cache Servers
 
