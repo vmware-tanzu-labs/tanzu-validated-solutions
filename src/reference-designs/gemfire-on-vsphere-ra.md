@@ -17,7 +17,7 @@ This document is intended for all stakeholders involved in the adoption and mana
 
 ## Bill Of Materials
 
-The procedures in this document were validated by using the following infrastructure components and software versions, which are available today to install Tanzu GemFire in a vSphere environment:
+The procedures in this document were validated by using the following infrastructure components and software versions, are available today to install Tanzu GemFire in a vSphere environment:
 
 | Software Components  | Version  |
 | :---- | :---- |
@@ -27,7 +27,7 @@ The procedures in this document were validated by using the following infrastruc
 | Tanzu GemFire | 10.1.3 |
 | Tanzu GemFire Management Console | 1.3.1 |
 
-## In this Reference Architecture
+## Reference architecture contents
 
 The *Deploy and Manage VMware Tanzu GemFire on vSphere* reference architecture is divided into the following sections:
 
