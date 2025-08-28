@@ -1,6 +1,6 @@
 # High-Level Architecture of Tanzu GemFire Deployment
 
-This topic outlines a high-level Tanzu GemFire deployment on vSphere with WAN replication, highlighting architecture, cluster setup, and strategies for high availability and scalability across multiple regions.
+This topic outlines a high-level VMware Tanzu GemFire deployment on vSphere with WAN replication, highlighting architecture, cluster setup, and strategies for high availability and scalability across multiple regions.
 
 ## Deployment Architecture Diagram
 
@@ -22,7 +22,7 @@ This section provides a high-level overview of the Tanzu GemFire deployment arch
 
   * Each vSphere cluster is connected to a dedicated vSphere Distributed Switch (vDS) to manage network traffic within that region.
 
-  * The VIP network must be stretched across Availability Zones (AZs) if the GemFire deployment spans multiple AZs within the same region. However, extending the VIP network across regions is not required.
+  * The VIP network must be stretched across Availability Zones (AZs) if the Tanzu GemFire deployment spans multiple AZs within the same region. However, extending the VIP network across regions is not required.
 
 ### Storage Considerations
 
@@ -62,22 +62,22 @@ This architecture provides high availability, fault tolerance, and scalability b
 
 ## Network Requirements
 
-As per the proposed deployment architecture, all GemFire VMs will be provisioned on VLAN-backed port groups. This setup ensures proper isolation, segmentation, and high availability across multiple regions.
+As per the proposed deployment architecture, all Tanzu GemFire VMs will be provisioned on VLAN-backed port groups. This setup ensures proper isolation, segmentation, and high availability across multiple regions.
 
-For the purpose of this document, we are assuming that NSX Advanced Load Balancer (NSX ALB) will be used as the load balancer for GemFire clusters. During failover scenarios, NSX ALB will facilitate seamless traffic redirection between active and standby GemFire nodes.
+For the purpose of this document, we are assuming that NSX Advanced Load Balancer (NSX ALB) will be used as the load balancer for Tanzu GemFire clusters. During failover scenarios, NSX ALB will facilitate seamless traffic redirection between active and standby Tanzu GemFire nodes.
 
 Below is a breakdown of the recommended subnet sizing and purpose of each required network segment.
 
 | Network | Minimum/ Recommended Subnet Requirement | Description |
 | :---- | :---- | :---- |
-| GemFire Network | /24 | All Tanzu GemFire components are deployed within the same network. However, for enhanced security and improved network isolation, consider placing Locators and Cache Servers on separate networks. Depending on the use case, server groups participating in a data region can be distributed across multiple networks or port groups to support segmentation, scalability, or tenant-level isolation. |
+| Tanzu GemFire Network | /24 | All Tanzu GemFire components are deployed within the same network. However, for enhanced security and improved network isolation, consider placing Locators and Cache Servers on separate networks. Depending on the use case, server groups participating in a data region can be distributed across multiple networks or port groups to support segmentation, scalability, or tenant-level isolation. |
 | NSX ALB Management Network | /27 | Hosts NSX ALB controllers and the management interfaces of Service Engines (SEs). Recommended: One management network per region. Note: If the management domain is not stretched and a dedicated management domain is used per site, two separate networks must be configured, one at each site. This document does not cover scenarios with a stretched management domain in a multi-site environment. |
-| VIP Network  | /28 | Used to host L4 Virtual Services (e.g., Locators, Gateway Senders) for GemFire WAN replication. Recommended: One network per region for redundancy. |
+| VIP Network  | /28 | Used to host L4 Virtual Services such as Locators, Gateway Senders) for Tanzu GemFire WAN replication. Recommended: One network per region for redundancy. |
 
 ## Firewall Requirements
 
 The table below lists the minimum firewall rules needed to support communication between components in the architecture.
-These requirements assume all GemFire components are on a single network; if your design uses multiple networks,
+These requirements assume all Tanzu GemFire components are on a single network; if your design uses multiple networks,
 see the next section [Port Configuration for Tanzu GemFire](#port-configuration-for-tanzu-gemfire).
 
 | Source | Destination | Protocol:Port | Description |
@@ -95,11 +95,11 @@ If your environment uses segmented or isolated networks, ensure the following po
 
 | Name | Source | Destination | Protocol | Description |
 | ----- | ----- | ----- | ----- | ----- |
-| Cache Server Port | Client Applications | GemFire Server | TCP | Default: 40404\. Accepts client connections and supports server-to-server communication. Configurable via XML, API, or GFSH. |
-| HTTP Service Port | Admin UI, REST Clients | GemFire Server (HTTP) | HTTP | Default: 7070\. Used for REST APIs and Pulse UI access. Must be open if HTTP-based services are used. |
+| Cache Server Port | Client Applications | Tanzu GemFire Server | TCP | Default: 40404\. Accepts client connections and supports server-to-server communication. Configurable via XML, API, or GFSH. |
+| HTTP Service Port | Admin UI, REST Clients | Tanzu GemFire Server (HTTP) | HTTP | Default: 7070\. Used for REST APIs and Pulse UI access. Must be open if HTTP-based services are used. |
 | Locator Port | Cluster Members, Clients | Locator | TCP | Default: 10334\. Used for cluster discovery and client/server connection routing. Required for clients and members to locate servers. |
 | Membership Port Range | Servers and Locators | Servers and Locators | TCP | Range: 41000–61000. Ephemeral ports for internal cluster communication. Must be accessible between servers and locators within and across sites. |
-| Memcached Port | Memcached Clients | GemFire Server (Memcached) | TCP | Optional. Not set by default. Must be enabled explicitly to support Memcached protocol access. |
+| Memcached Port | Memcached Clients | Tanzu GemFire Server (Memcached) | TCP | Optional. Not set by default. Must be enabled explicitly to support Memcached protocol access. |
 | JMX Manager Port | Admin Tools (e.g., JConsole) | Locator / JMX Manager | RMI/TCP | Default: 1099\. Used for exposing JMX metrics to external tools for monitoring and diagnostics. |
 | Internal TCP Port | Servers and Locators | Servers and Locators | TCP | Ephemeral or configured TCP port. Used for internal TCP-based messaging. Firewalls must allow the assigned ports. |
 | Gateway Sender Connection | Gateway Sender (Active Site) | Gateway Receiver (Standby Site) | TCP | Uses hostname-for-senders. Defines where senders initiate WAN event transfer. |

@@ -1,8 +1,8 @@
 # Running a Tanzu GemFire Locator
 
-This topic explains how to run a Tanzu GemFire Locator, the cluster coordinator that enables member discovery, client load balancing, and WAN replication. It covers starting, configuring, monitoring, and stopping locators to ensure cluster availability and resilience.
+This topic explains how to run a VMware Tanzu GemFire Locator, the cluster coordinator that enables member discovery, client load balancing, and WAN replication. It covers starting, configuring, monitoring, and stopping locators to ensure cluster availability and resilience.
 
-To start a Tanzu GemFire cluster, the first component you bring up is the locator. It acts as the cluster coordinator, helping members find each other and join the system. Run a locator as a standalone process, typically using the GemFire Shell (gfsh) and configure it to support both peer discovery and client load balancing.
+To start a Tanzu GemFire cluster, the first component you bring up is the locator. It acts as the cluster coordinator, helping members find each other and join the system. Run a locator as a standalone process, typically using the Tanzu GemFire Shell (gfsh) and configure it to support both peer discovery and client load balancing.
 
 Tanzu GemFire Locators can be lightweight, but they are mission-critical for keeping your cluster running, scalable, and highly available. From local server discovery to global WAN replication, the locator is the backbone of your system’s coordination.
 

@@ -8,10 +8,10 @@ Tanzu GemFire is an in-memory, distributed data grid that provides high-performa
 
 ![Components](images/image1.png)
 
-This diagram illustrates the architecture of a Tanzu GemFire distributed system, showing the interaction between cache clients, servers, and locators. Cache clients maintain a local cache and connect to a farm of GemFire servers, which store and manage distributed cache data. The locator plays a crucial role in discovery and load balancing by tracking active servers and directing clients to the least-loaded server. Clients request server information from the locator, which responds with optimal server details. Once connected, clients send and receive cache data while also receiving server events. Servers share address and load information with the locator to ensure efficient client routing and system scalability.
+This diagram illustrates the architecture of a Tanzu GemFire distributed system, showing the interaction between cache clients, servers, and locators. Cache clients maintain a local cache and connect to a farm of Tanzu GemFire servers, which store and manage distributed cache data. The locator plays a crucial role in discovery and load balancing by tracking active servers and directing clients to the least-loaded server. Clients request server information from the locator, which responds with optimal server details. Once connected, clients send and receive cache data while also receiving server events. Servers share address and load information with the locator to ensure efficient client routing and system scalability.
 
 >**Note**
->In GemFire, a member refers to any process locator, server, or client that participates in the distributed system. Members collaborate to manage data, distribute load, and maintain cluster state through coordinated communication.
+>In Tanzu GemFire, a member refers to any process locator, server, or client that participates in the distributed system. Members collaborate to manage data, distribute load, and maintain cluster state through coordinated communication.
 
 ## Core Components
 
@@ -75,7 +75,7 @@ Tanzu GemFire relies on several key components to manage data, handle client req
 
     * Accelerate deployment and troubleshooting with the ability to deploy or remove JAR files, execute functions, access a web-based gfsh, manage gateways and senders, and quickly search and review cluster logs.
 
-  * For more information, see the [official Tanzu GemFire documentation.](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-0/gf/managing-management-mm_overview.html).
+  * For more information, see the [official Tanzu GemFire documentation.](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/managing-management-mm_overview.html).
 
 ## Core Features
 
@@ -113,7 +113,7 @@ Tanzu GemFire production systems can be run on the following platforms:
 
 * Windows Server: Versions including 2012 R2, 2016, 2019, and 2022\.
 
-For cloud environments, you can run VMware Tanzu GemFire on:
+For cloud environments, you can run Tanzu GemFire on:
 
 * Amazon Web Services (AWS)
 
@@ -125,7 +125,7 @@ For cloud environments, you can run VMware Tanzu GemFire on:
 
 * Kubernetes
 
-For development environments, VMware Tanzu GemFire is supported on:
+For development environments, Tanzu GemFire is supported on:
 
 * macOS
 

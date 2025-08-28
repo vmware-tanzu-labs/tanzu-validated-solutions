@@ -1,8 +1,8 @@
 # Regions
 
-This topic introduces Tanzu GemFire regions, explaining how partitioned and replicated regions manage data across servers for scalability, high availability, and performance.
+This topic introduces VMware Tanzu GemFire regions, explaining how partitioned and replicated regions manage data across servers for scalability, high availability, and performance.
 
-A region in GemFire is a distributed, in-memory data structure similar to a map. Cache servers host regions, which store and serve your application’s data.
+A region in TTanzu GemFire is a distributed, in-memory data structure similar to a map. Cache servers host regions, which store and serve your application’s data.
 There are two primary types of regions, based on how data is distributed across servers:
 
 ## Partitioned Region
@@ -29,9 +29,9 @@ In a highly available partitioned region, each member (server) holds a mix of pr
 
 ### Read and Write Behavior in HA Regions
 
-GemFire handles reads and writes differently in partitioned regions with redundancy:
+Tanzu GemFire handles reads and writes differently in partitioned regions with redundancy:
 
-* Read Operations: GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
+* Read Operations: Tanzu GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
   For example, in the figure below, M1 is reading keys A, C, and D. It retrieves A from its local cache, while C and D are fetched from other members that hold those keys, selected at random.
   ![HA-PR](images/image4.png)
 
@@ -55,7 +55,7 @@ This model provides strong availability and fast reads, since every hosting serv
 * Suitable for read-heavy or globally needed datasets.
 * Best for small to medium-sized data.
 
-All region types in GemFire are based on Partitioned or Replicated modes, with added capabilities. Some common variants include:
+All region types in Tanzu GemFire are based on Partitioned or Replicated modes, with added capabilities. Some common variants include:
 
 * PARTITION\_PERSISTENT: Partitioned region with disk persistence.
 * REPLICATE\_PERSISTENT: Replicated region with disk persistence.

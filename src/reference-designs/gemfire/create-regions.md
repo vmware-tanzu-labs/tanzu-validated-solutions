@@ -1,6 +1,6 @@
 # Creating Regions in Tanzu GemFire
 
-This topic introduces how to create and manage regions in Tanzu GemFire, the core data containers for storing key/value pairs across a distributed cluster. It covers region types, key configuration options, best practices, and basic lifecycle commands to help you build scalable, high-availability caching architectures.
+This topic introduces how to create and manage regions in VMware Tanzu GemFire, the core data containers for storing key/value pairs across a distributed cluster. It covers region types, key configuration options, best practices, and basic lifecycle commands to help you build scalable, high-availability caching architectures.
 
 In Tanzu GemFire, a region is a fundamental data container that stores key/value pairs and supports distributed caching, querying, and data replication across cluster members. Regions can be configured for different use cases, including partitioned caching for scalability or replicated caching for redundancy.
 
@@ -49,15 +49,13 @@ This command:
 
 ### Best Practices for Configuring Regions
 
-When designing your GemFire regions:
+When designing your Tanzu GemFire regions:
 
 * Use PARTITION\_REDUNDANT for production workloads needing high availability.
 * Set memory limits and eviction policies to avoid resource exhaustion.
 * Monitor region health and performance through built-in statistics.
 
-
 ### Create a Partitioned Region with Redundancy
-
 
 ```
 gfsh> create region --name=CustomerData --type=PARTITION_REDUNDANT --redundant-copies=1  --total-max-memory=1024 --total-num-buckets=113

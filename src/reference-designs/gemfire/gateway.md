@@ -1,6 +1,6 @@
 # Gateway Senders and Receivers
 
-This topic explains Tanzu GemFire Gateway Senders and Receivers, the key components for WAN replication. It covers how senders transmit region events to remote clusters, how receivers apply those events locally, and how different sender modes support scalability, ordering, and high availability.
+This topic explains VMware Tanzu GemFire Gateway Senders and Receivers, the key components for WAN replication. It covers how senders transmit region events to remote clusters, how receivers apply those events locally, and how different sender modes support scalability, ordering, and high availability.
 
 In a WAN (Wide Area Network) configuration, Gateway Senders are the core components that enable cross-site data replication in Tanzu GemFire. These senders act as outbound data pipelines, transmitting region events from one cluster to another. On the receiving end, Gateway Receivers process those incoming events and apply changes to the appropriate regions.
 
@@ -10,7 +10,7 @@ You can configure:
 * Parallel gateway senders to improve throughput and concurrency.
 * Serial gateway senders to maintain strict event ordering.
 
-Depending on your replication strategy, GemFire supports two sender modes:
+Depending on your replication strategy, Tanzu GemFire supports two sender modes:
 
 ## Serial Gateway Senders
 
@@ -26,7 +26,7 @@ Parallel Gateway Senders allow each server that hosts a partitioned region to se
 
 ## High Availability
 
-High availability is built into the GemFire WAN architecture. With serial gateway senders, only one primary sender is active at a time, while backup instances stand by. If the primary fails, GemFire automatically promotes a secondary without disrupting replication. Parallel senders offer even greater resilience. Each server with a primary partition sends events independently, and if a server fails, a redundant partition owner takes over seamlessly, preserving continuous replication and fault tolerance.
+High availability is built into the Tanzu GemFire WAN architecture. With serial gateway senders, only one primary sender is active at a time, while backup instances stand by. If the primary fails, Tanzu GemFire automatically promotes a secondary without disrupting replication. Parallel senders offer even greater resilience. Each server with a primary partition sends events independently, and if a server fails, a redundant partition owner takes over seamlessly, preserving continuous replication and fault tolerance.
 
 ## Gateway Receiver
 

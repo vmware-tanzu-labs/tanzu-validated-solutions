@@ -1,6 +1,6 @@
 #  ​Cluster Sizing Considerations for Tanzu GemFire
 
-This topic covers key factors, processes, and practical guidance for estimating memory, CPU, network, and storage requirements in Tanzu GemFire, and emphasizes the importance of testing with representative workloads to validate your cluster configuration.
+This topic covers key factors, processes, and practical guidance for estimating memory, CPU, network, and storage requirements in VMware Tanzu GemFire, and emphasizes the importance of testing with representative workloads to validate your cluster configuration.
 
 Sizing a Tanzu GemFire deployment involves both calculation and practical testing. While estimates can be made, experimentation is necessary to determine accurate values for key sizing parameters that work well in real-world scenarios. This process requires using representative data and workloads, starting at a small scale to understand system behavior. Testing is essential because memory overhead can vary significantly depending on the data and workload, making it difficult to calculate precisely. The overhead is influenced by many factors, including the Java runtime environment (JVM) and its memory management system.
 
@@ -10,7 +10,7 @@ Memory is the primary resource for storing data in Tanzu GemFire and should be t
 
 ## Sizing Process
 
-Sizing a GemFire cluster involves iterative testing and measurement. To size a GemFire cluster effectively, follow these steps:
+Sizing a Tanzu GemFire cluster involves iterative testing and measurement. To size a Tanzu GemFire cluster effectively, follow these steps:
 
 1. Domain Object Sizing: Estimate the size of your domain objects, then calculate total memory requirements based on the number of entries.
 
@@ -50,4 +50,4 @@ Here are some general recommendations to guide your capacity planning:
 
   * NAS: Not recommended due to performance and resilience issues.
 
-For more information on sizing, see [Sizing a VMware Tanzu GemFire Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/configuring-cluster_config-cluster_sizing.html#vertical-sizing) in the Tanzu GemFire documentation. 
+For more information on sizing, see [Sizing a VMware Tanzu GemFire Cluster](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-1/gf/configuring-cluster_config-cluster_sizing.html#vertical-sizing) in the Tanzu GemFire documentation.

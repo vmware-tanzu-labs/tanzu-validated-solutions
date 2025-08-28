@@ -1,12 +1,12 @@
 # Running a Tanzu GemFire Server
 
-This topic explains how to run a Tanzu GemFire Server, the core component that hosts your application data, manages regions, and participates in distributed caching. It covers starting, configuring, monitoring, and stopping servers, as well as configuring WAN replication using gateway senders and receivers.
+This topic explains how to run a VMware Tanzu GemFire Server, the core component that hosts your application data, manages regions, and participates in distributed caching. It covers starting, configuring, monitoring, and stopping servers, as well as configuring WAN replication using gateway senders and receivers.
 
-After starting the locator, the next step in building your Tanzu GemFire cluster is to bring up one or more servers. A GemFire server is where your application data resides; it hosts regions, responds to client operations and participates in distributed caching.
+After starting the locator, the next step in building your Tanzu GemFire cluster is to bring up one or more servers. A Tanzu GemFire server is where your application data resides; it hosts regions, responds to client operations and participates in distributed caching.
 
 ## Start a Server with gfsh
 
-To start a server using the GemFire Shell (gfsh), use the following command:
+To start a server using the Tanzu GemFire Shell (gfsh), use the following command:
 
 ```shell
 gfsh> start server --name=server1 --locators=localhost[10334] --dir=server1
@@ -26,10 +26,10 @@ Once started, the server creates a set of files in the specified directory. Thes
 
 | File | Description |
 | ----- | ----- |
-| server.log | The main log file for all server events and diagnostics. |
-| statArchive.gfs | Performance statistics and runtime metrics. |
-| server.pid | Contains the process ID of the running server (useful for monitoring or termination). |
-| GemFire.properties | Optional configuration overrides (if present). |
+| `server.log` | The main log file for all server events and diagnostics. |
+| `statArchive.gfs` | Performance statistics and runtime metrics. |
+| `server.pid` | Contains the process ID of the running server (useful for monitoring or termination). |
+| `gemFire.properties` | Optional configuration overrides (if present). |
 
 ## Check Server Status
 
@@ -68,7 +68,7 @@ Be sure to:
 
 ## Configuring Gateway Senders and Receivers for WAN Replication
 
-When you're building multi-site deployments with Tanzu GemFire, enabling data replication across geographically distributed clusters is critical. That’s where gateway senders and gateway receivers come in. They form the backbone of WAN (Wide Area Network) replication in GemFire, allowing region events to flow from one site to another.
+When you're building multi-site deployments with Tanzu GemFire, enabling data replication across geographically distributed clusters is critical. That’s where gateway senders and gateway receivers come in. They form the backbone of WAN replication in Tanzu GemFire, allowing region events to flow from one site to another.
 
 ## Creating Gateway Sender
 
@@ -153,7 +153,7 @@ To stop a receiver (by stopping the server it's on):
 gfsh> stop server --name=server2
 ```
 
-There’s no separate stop command for receivers since they are tightly coupled to the server lifecycle. Gateway senders and receivers are essential for enabling WAN replication between GemFire clusters. They offer flexible configurations to optimize throughput, event batching, ordering, and persistence.
+There’s no separate stop command for receivers since they are tightly coupled to the server lifecycle. Gateway senders and receivers are essential for enabling WAN replication between Tanzu GemFire clusters. They offer flexible configurations to optimize throughput, event batching, ordering, and persistence.
 
 ## Best Practices
 
