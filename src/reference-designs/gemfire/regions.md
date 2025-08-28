@@ -2,7 +2,7 @@
 
 This topic introduces VMware Tanzu GemFire regions, explaining how partitioned and replicated regions manage data across servers for scalability, high availability, and performance.
 
-A region in TTanzu GemFire is a distributed, in-memory data structure similar to a map. Cache servers host regions, which store and serve your application’s data.
+A region in Tanzu GemFire is a distributed, in-memory data structure similar to a map. Cache servers host regions, which store and serve your application’s data.
 There are two primary types of regions, based on how data is distributed across servers:
 
 ## Partitioned Region
@@ -11,7 +11,7 @@ A Partitioned Region divides its data across multiple servers in the cluster. Ea
 
 ![PR](images/image5.png)
 
-To application, this partitioned structure is invisible. The region appears as a single logical dataset, accessible in full from any member even if that member stores only part of the data locally. For each server where the region is defined, you can configure how much memory it uses. A server can also host the region with no local data, acting purely as a read/write proxy.
+To the application, this partitioned structure is invisible. The region appears as a single logical dataset, accessible in full from any member even if that member stores only part of the data locally. For each server where the region is defined, you can configure how much memory it uses. A server can also host the region with no local data, acting purely as a read/write proxy.
 
 A single cluster can host multiple partitioned regions, and servers can host multiple regions simultaneously. Partitioned and replicated regions can also coexist in the same cluster.
 
@@ -21,7 +21,7 @@ A single cluster can host multiple partitioned regions, and servers can host mul
 * Can support data redundancy with backup copies.
 * Scales well for large datasets and write-heavy workloads.
 
-Other variations exist such as PARTITION\_PERSISTENT, REPLICATE\_PERSISTENT, LOCAL, but they are all based on these two fundamental designs.
+Other variations exist such as `PARTITION\_PERSISTENT, REPLICATE\_PERSISTENT, LOCAL`, but they are all based on these two fundamental designs.
 
 ### High Availability for Partitioned Regions
 
@@ -31,7 +31,7 @@ In a highly available partitioned region, each member (server) holds a mix of pr
 
 Tanzu GemFire handles reads and writes differently in partitioned regions with redundancy:
 
-* Read Operations: Tanzu GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
+* Read Operations: Tanzu GemFire first attempts to read from the local cache if the data is available. If not, it retrieves the data from another member that holds a copy, typically chosen at random. This approach supports efficient scaling for read-heavy workloads across multiple members.
   For example, in the figure below, M1 is reading keys A, C, and D. It retrieves A from its local cache, while C and D are fetched from other members that hold those keys, selected at random.
   ![HA-PR](images/image4.png)
 

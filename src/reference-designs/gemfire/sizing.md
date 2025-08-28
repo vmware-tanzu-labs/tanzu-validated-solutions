@@ -1,4 +1,4 @@
-#  ​Cluster Sizing Considerations for Tanzu GemFire
+# ​Cluster Sizing Considerations for Tanzu GemFire
 
 This topic covers key factors, processes, and practical guidance for estimating memory, CPU, network, and storage requirements in VMware Tanzu GemFire, and emphasizes the importance of testing with representative workloads to validate your cluster configuration.
 

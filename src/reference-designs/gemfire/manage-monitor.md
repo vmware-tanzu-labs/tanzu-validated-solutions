@@ -1,6 +1,6 @@
 # Management and Monitoring
 
-This topic introduces the primary tools for managing and monitoring VMware Tanzu GemFire clusters: the gfsh command-line interface and the browser-based Management Console. Together, they enable administrators to efficiently configure, observe, and maintain cluster operations.
+This topic introduces the primary tools for managing and monitoring VMware Tanzu GemFire clusters: the gfsh command-line interface and the browser-based VMware Tanzu GemFire Management Console. Together, they enable administrators to efficiently configure, observe, and maintain cluster operations.
 
 ## gfsh Command-Line Tool
 
@@ -25,7 +25,7 @@ For more information about gfsh, see:
 
 ## Tanzu GemFire Management Console
 
-The Tanzu GemFire Management Console is a browser-based interface that simplifies day-to-day operations and provides visual insights into your Tanzu GemFire clusters. Use Tanzu GemFire Management Console to
+The Tanzu GemFire Management Console is a browser-based interface that simplifies day-to-day operations and provides visual insights into your Tanzu GemFire clusters. Use Tanzu GemFire Management Console to:
 
 * Monitor multiple clusters in a single UI
 * View and manage regions and disk stores

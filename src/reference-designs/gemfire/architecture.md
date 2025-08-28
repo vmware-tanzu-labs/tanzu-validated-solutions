@@ -4,7 +4,7 @@ This topic outlines a high-level VMware Tanzu GemFire deployment on vSphere with
 
 ## Deployment Architecture Diagram
 
-The diagram above illustrates a Tanzu GemFire deployment on vSphere with WAN replication enabled, designed to support a highly available, fault-tolerant Active-Standby topology across two independent vSphere regions.
+This diagram illustrates a Tanzu GemFire deployment on vSphere with WAN replication enabled, designed to support a highly available, fault-tolerant Active-Standby topology across two independent vSphere regions.
 
   ![Architecture](images/image6.png)
 

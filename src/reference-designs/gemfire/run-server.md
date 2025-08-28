@@ -29,7 +29,7 @@ Once started, the server creates a set of files in the specified directory. Thes
 | `server.log` | The main log file for all server events and diagnostics. |
 | `statArchive.gfs` | Performance statistics and runtime metrics. |
 | `server.pid` | Contains the process ID of the running server (useful for monitoring or termination). |
-| `gemFire.properties` | Optional configuration overrides (if present). |
+| `gemfire.properties` | Optional configuration overrides (if present). |
 
 ## Check Server Status
 

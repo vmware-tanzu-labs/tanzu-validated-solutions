@@ -14,7 +14,7 @@ Depending on your replication strategy, Tanzu GemFire supports two sender modes:
 
 ## Serial Gateway Senders
 
-Serial Gateway Senders send region events through a single, ordered queue to a remote site. This ensures that events are delivered in the exact order they were created, which is important when the sequence of updates matters. However, since all events go through one queue, performance may slow down under heavy load. To improve scalability, you can assign different regions to separate serial senders. This spreads the load while still keeping the correct event order within each region.
+Serial Gateway Senders send region events through a single, ordered queue to a remote site. This ensures that events are delivered in the exact order they were created, which is important when the sequence of updates matters. However, since all events go through one queue, performance may slow down under heavy load. To improve scalability, you can assign different regions to separate serial senders. This spreads the load while still keeping the correct event order within each region. The following diagram illustrates how a Serial Gateway Sender transmits region events to a remote cluster in a strictly ordered sequence, ensuring event order is preserved across the WAN.
 
 ![SGR](images/image2.png)
 

@@ -3,7 +3,7 @@
 This topic explains the roles and functions of VMware Tanzu GemFire Locators and Servers, highlighting how they work together to ensure cluster coordination, data availability, and efficient client request handling.
 
 - **Tanzu GemFire Locator**: A lightweight process that plays a central role in system coordination.
-- **Tanzu GemFire Server**:  A process that hosts data regions, handles read and write operations, and serves requests from both clients and peer members in the cluster.
+- **Tanzu GemFire Server**: A process that hosts data regions, handles read and write operations, and serves requests from both clients and peer members in the cluster.
 
 ## Locators
 
@@ -33,7 +33,7 @@ Tanzu GemFire locators can operate in different modes depending on your setup:
 
 By acting as the discovery, coordination, and client routing layer, the Tanzu GemFire Locator forms the backbone of your cluster’s connectivity. A well-configured locator setup ensures your distributed system remains connected, balanced, and resilient, even as it scales across regions and data centers.
 
-## Server
+## Servers
 
 A Tanzu GemFire Server:
 
