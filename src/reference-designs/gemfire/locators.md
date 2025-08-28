@@ -1,6 +1,9 @@
 # Locators and Servers
 
-A Tanzu GemFire Locator is a lightweight process that plays a central role in system coordination. A Server is a process that hosts data regions, handles read and write operations, and serves requests from both clients and peer members in the cluster.
+This topic explains the roles and functions of Tanzu GemFire Locators and Servers, highlighting how they work together to ensure cluster coordination, data availability, and efficient client request handling.
+
+- **Tanzu GemFire Locator**: A lightweight process that plays a central role in system coordination.
+- **Tanzu GemFire Server**:  A process that hosts data regions, handles read and write operations, and serves requests from both clients and peer members in the cluster.
 
 ## Locators
 

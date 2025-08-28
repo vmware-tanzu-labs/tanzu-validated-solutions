@@ -1,8 +1,12 @@
 # High-Level Architecture of Tanzu GemFire Deployment
 
-  ![Architecture](images/image6.png)
+This topic outlines a high-level Tanzu GemFire deployment on vSphere with WAN replication, highlighting architecture, cluster setup, and strategies for high availability and scalability across multiple regions.
+
+## Deployment Architecture Diagram
 
 The diagram above illustrates a Tanzu GemFire deployment on vSphere with WAN replication enabled, designed to support a highly available, fault-tolerant Active-Standby topology across two independent vSphere regions.
+
+  ![Architecture](images/image6.png)
 
 ## Architecture Summary
 

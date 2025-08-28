@@ -1,5 +1,7 @@
 # Creating Regions in Tanzu GemFire
 
+This topic introduces how to create and manage regions in Tanzu GemFire, the core data containers for storing key/value pairs across a distributed cluster. It covers region types, key configuration options, best practices, and basic lifecycle commands to help you build scalable, high-availability caching architectures.
+
 In Tanzu GemFire, a region is a fundamental data container that stores key/value pairs and supports distributed caching, querying, and data replication across cluster members. Regions can be configured for different use cases, including partitioned caching for scalability or replicated caching for redundancy.
 
 ## Create a Region with gfsh

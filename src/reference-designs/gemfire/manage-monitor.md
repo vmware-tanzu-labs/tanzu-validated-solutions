@@ -1,6 +1,6 @@
 # Management and Monitoring
 
-Tanzu GemFire provides powerful tools for managing and monitoring your distributed data grid environment. The two primary tools are the gfsh command-line interface and the Tanzu GemFire Management Console.
+This topic introduces the primary tools for managing and monitoring Tanzu GemFire clusters: the gfsh command-line interface and the browser-based Management Console. Together, they enable administrators to efficiently configure, observe, and maintain cluster operations.
 
 ## gfsh Command-Line Tool
 

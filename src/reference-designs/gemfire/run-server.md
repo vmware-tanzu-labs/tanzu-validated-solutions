@@ -1,5 +1,7 @@
 # Running a Tanzu GemFire Server
 
+This topic explains how to run a Tanzu GemFire Server, the core component that hosts your application data, manages regions, and participates in distributed caching. It covers starting, configuring, monitoring, and stopping servers, as well as configuring WAN replication using gateway senders and receivers.
+
 After starting the locator, the next step in building your Tanzu GemFire cluster is to bring up one or more servers. A GemFire server is where your application data resides; it hosts regions, responds to client operations and participates in distributed caching.
 
 ## Start a Server with gfsh

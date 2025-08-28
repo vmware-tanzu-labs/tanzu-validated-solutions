@@ -1,4 +1,8 @@
-# Key Components and Features of Tanzu GemFire
+# Core Components and Features of Tanzu GemFire
+
+This topic summarizes the key components, features, and supported platforms of VMware Tanzu GemFire, highlighting its distributed architecture, high-performance in-memory storage, and real-time data capabilities.
+
+## Tanzu GemFire Overview
 
 Tanzu GemFire is an in-memory, distributed data grid that provides high-performance data storage, real-time querying, and seamless scalability.
 
@@ -9,7 +13,7 @@ This diagram illustrates the architecture of a Tanzu GemFire distributed system,
 >**Note**
 >In GemFire, a member refers to any process locator, server, or client that participates in the distributed system. Members collaborate to manage data, distribute load, and maintain cluster state through coordinated communication.
 
-## Key Components
+## Core Components
 
 Tanzu GemFire relies on several key components to manage data, handle client requests, and maintain cluster coordination. This section provides an overview of each component and its role.
 
@@ -30,7 +34,7 @@ Tanzu GemFire relies on several key components to manage data, handle client req
 
     For more information on Servers, see [Servers](#server)
 
-### Gateway Sender and Receiver
+### Gateway Senders and Receivers
 
   * Enable cross-cluster data replication in Tanzu GemFire WAN deployments.
 
@@ -73,7 +77,7 @@ Tanzu GemFire relies on several key components to manage data, handle client req
 
   * For more information, see the [official Tanzu GemFire documentation.](https://techdocs.broadcom.com/us/en/vmware-tanzu/data-solutions/tanzu-gemfire/10-0/gf/managing-management-mm_overview.html).
 
-## Key Features
+## Core Features
 
 * High Read-and-Write Throughput: Supports fast access using concurrent memory structures and optimized distribution. Replicates or partitions data across systems to increase throughput, limited only by network capacity.
 
@@ -101,7 +105,7 @@ Tanzu GemFire relies on several key components to manage data, handle client req
 
 * Heterogeneous Data Sharing: Allows applications written in different languages (C\#, C++, Java) to share business objects seamlessly without needing complex transformation layers. Changes in one application automatically trigger updates in others, facilitating smooth integration between different platforms.
 
-## Supported Platforms for Tanzu GemFire
+## Supported Platforms
 
 Tanzu GemFire production systems can be run on the following platforms:
 
