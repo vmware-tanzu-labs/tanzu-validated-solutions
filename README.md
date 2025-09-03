@@ -1,5 +1,13 @@
 # tanzu-validated-solutions
 
+## Branch/Build
+
+No versioning is used, `main` contains latest always.
+
+[Staging](https://author-techdocs2-prod.adobecqms.net/content/broadcom/techdocs/us/en/vmware-tanzu/reference-architectures/tanzu-data-reference-architecture/documentation/tanzu-data-ra/reference-designs-index-tanzu-data.html)
+[Prod](https://techdocs.broadcom.com/us/en/vmware-tanzu/reference-architectures/tanzu-data-reference-architecture/documentation/tanzu-data-ra/reference-designs-index-tanzu-data.html)
+[DocWork Build](https://docworks.broadcom.net/one/scene?permalink=uniqueId%3DMarkdown-Project-5351)
+
 ## Overview
 
 This repository provides Reference Designs and Deployment Guides for Tanzu products. This content represents best-practices advice for designing and deploying Tanzu solutions to production environments.
